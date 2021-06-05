@@ -22,4 +22,18 @@ const loginUser = asyncHandler(async (_, res) => {
 	}
 });
 
-export { loginUser };
+/**
+ * @desc Refresh Navotar Token using Server Token
+ * @route GET /api/users/navotar/refresh
+ * @access PRIVATE
+ */
+const refreshNavotarToken = asyncHandler(async (_, res) => {
+	try {
+		const navotar_access = await getNavotarAccessToken(CLIENT_ID, CLIENT_SECRET);
+		res.status(200).json({ token: navotar_access, message: "Success" });
+	} catch (error) {
+		throw new Error(error);
+	}
+});
+
+export { loginUser, refreshNavotarToken };

@@ -1,8 +1,10 @@
 import express from "express";
-import { loginUser } from "./controllers/userController";
+import { protect } from "../middlewares/authMiddleware";
+import { loginUser, refreshNavotarToken } from "./controllers/userController";
 
 const router = express.Router();
 
 router.route("/login").get(loginUser);
+router.route("/navotar/refresh").get(protect, refreshNavotarToken);
 
 export default router;
