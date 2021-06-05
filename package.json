@@ -1,0 +1,20 @@
+{
+	"name": "rsuite-navigation-app",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server/build/index.js",
+	"scripts": {
+		"client": "npm start --prefix client",
+		"server": "npm run dev --prefix server",
+		"build:client": "npm run build --prefix client",
+		"build:server": "npm run build --prefix server",
+		"dev": "concurrently \"npm run server\" \"npm run client\""
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {},
+	"dependencies": {
+		"concurrently": "^6.2.0"
+	}
+}
