@@ -8,13 +8,15 @@
 		"server": "npm run dev --prefix server",
 		"build:client": "npm run build --prefix client",
 		"build:server": "npm run build --prefix server",
-		"dev": "concurrently \"npm run server\" \"npm run client\""
+		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"serve:client": "serve -s client/build"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {},
 	"dependencies": {
-		"concurrently": "^6.2.0"
+		"concurrently": "^6.2.0",
+		"serve": "^11.3.2"
 	}
 }

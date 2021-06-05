@@ -5,8 +5,8 @@ import "rsuite/dist/styles/rsuite-default.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuthUserState } from "./redux/store";
-import { logInUser } from "./redux/slices/authUser";
-import { performAuth } from "./api/authApi";
+import { refreshAccessToken } from "./redux/slices/authUser";
+import { refreshAuth } from "./api/authApi";
 
 import { Alert } from "rsuite";
 
@@ -17,7 +17,6 @@ import AdminSettingsPage from "./pages/Admin";
 import StartSplashPage from "./pages/StartSplash";
 
 import NotFoundPage from "./pages/NotFound";
-import { ALERT_DURATION } from "./utils/APP_CONSTANTS";
 
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch();
@@ -30,19 +29,15 @@ const App: React.FunctionComponent = () => {
 
 		const refreshInterval = setInterval(async () => {
 			try {
-				const data = await performAuth();
+				const data = await refreshAuth();
 
 				if (data.tokenExpiresAt === null) return;
-				dispatch(
-					logInUser({
-						token: data.token,
-						userId: data.userId,
-						clientId: data.clientId,
-						tokenExpiresAt: data.tokenExpiresAt,
-					})
-				);
+				dispatch(refreshAccessToken({ token: data.token, tokenExpiresAt: data.tokenExpiresAt }));
 			} catch (error) {
-				Alert.error(error.message, ALERT_DURATION);
+				Alert.warning(
+					"There was an error refreshing your access token. You will be logged out in less that 1 minute.",
+					12000
+				);
 			}
 		}, expiryTime * 1000 - 60000);
 

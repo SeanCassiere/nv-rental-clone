@@ -5,13 +5,16 @@ export const LOCAL_STORAGE_PREFIX = "NAV_GHI";
 
 const getTokenFromLocalStorage = (): {
 	token: string;
+	refreshToken: string;
 	userId: string;
 	clientId: string;
 	tokenExpiresAt: number;
 } | null => {
 	const fromStorage = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}_TOKEN`) ?? null;
+	const fromStorageRefresh = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}_REFRESH_TOKEN`) ?? null;
 
 	if (fromStorage === null) return null;
+	if (fromStorageRefresh === null) return null;
 
 	try {
 		const { client_navotar_clientid, client_navotar_userid, exp } = jwtDecode(fromStorage) as JWTReturnAuthToken;
@@ -24,6 +27,7 @@ const getTokenFromLocalStorage = (): {
 
 		return {
 			token: fromStorage,
+			refreshToken: fromStorageRefresh,
 			userId: client_navotar_userid,
 			clientId: client_navotar_clientid,
 			tokenExpiresAt: exp,

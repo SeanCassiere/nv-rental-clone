@@ -22,6 +22,7 @@ const AuthModal: React.FunctionComponent = () => {
 			dispatch(
 				logInUser({
 					token: data.token,
+					refreshToken: data.refreshToken,
 					userId: data.userId,
 					clientId: data.clientId,
 					tokenExpiresAt: data.tokenExpiresAt,
