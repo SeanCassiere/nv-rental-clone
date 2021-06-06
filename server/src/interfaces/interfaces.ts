@@ -16,3 +16,12 @@ export interface AuthReturn {
 	token_type: string;
 	scope: string;
 }
+
+export interface NavotarClientFeature {
+	featureName: string;
+	clientFeatureId: number;
+	clientId: number;
+	featureId: number;
+	flag: string | null;
+	value: string | null;
+}
