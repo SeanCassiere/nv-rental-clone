@@ -22,7 +22,7 @@ const store = configureStore({
 	middleware: [...getDefaultMiddleware()],
 });
 
-type RootState = ReturnType<typeof store.getState>;
+type RootState = ReturnType<typeof combinedReducer>;
 
 export const selectAuthUserState = (state: RootState) => state.authUser;
 export const selectSearchAgreementsState = (state: RootState) => state.searchAgreements;
