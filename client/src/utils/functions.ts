@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import { JWTReturnAuthToken } from "../api/authApi";
+import { JWTReturnAuthToken } from "../interfaces/authentication";
 
 export const LOCAL_STORAGE_PREFIX = "NAV_GHI";
 

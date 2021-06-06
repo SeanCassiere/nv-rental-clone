@@ -3,29 +3,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../../utils/functions";
 import { RootState } from "../../store";
-
-interface AuthReturn {
-	token: string;
-	refreshToken: string;
-	message: string;
-}
-
-interface RefreshReturn {
-	token: string;
-	message: string;
-}
-
-interface JWTReturnAuthToken {
-	aud: string;
-	client_id: string;
-	client_navotar_clientid: string;
-	client_navotar_userid: string;
-	exp: number;
-	iat: number;
-	iss: string;
-	jti: string;
-	nbf: number;
-}
+import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../../interfaces/authentication";
 
 const AUTH_URL = process.env.REACT_APP_SERVER_URL || "";
 
