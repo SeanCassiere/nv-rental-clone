@@ -10,6 +10,7 @@ import { Alert } from "rsuite";
 
 import DashboardPage from "./pages/Dashboard";
 import AgreementSearchPage from "./pages/AgreementSearch";
+import AgreementViewPage from "./pages/AgreementView";
 import AdminSettingsPage from "./pages/Admin";
 
 import StartSplashPage from "./pages/StartSplash";
@@ -48,7 +49,7 @@ const App: React.FunctionComponent = () => {
 				<Route exact path='/customers' component={AgreementSearchPage} />
 
 				<Route exact path='/agreements' component={AgreementSearchPage} />
-				<Route exact path='/agreements/:id' component={DashboardPage} />
+				<Route exact path='/agreements/:id' component={AgreementViewPage} />
 				<Route exact path='/agreements/:id/edit' component={DashboardPage} />
 				<Route exact path='/agreements/:id/checkin' component={DashboardPage} />
 

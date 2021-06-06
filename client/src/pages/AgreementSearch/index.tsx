@@ -37,10 +37,20 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 
 	return (
 		<AppPageContainer>
-			<Panel header={<b>Agreements</b>} bordered style={{ marginBottom: 10 }} collapsible defaultExpanded>
-				<Button onClick={handleRefreshList}>
-					<Icon icon='refresh' />
-				</Button>
+			<Panel
+				header={
+					<h5>
+						Agreements&nbsp;
+						<Button onClick={handleRefreshList}>
+							<Icon icon='refresh' />
+						</Button>
+					</h5>
+				}
+				bordered
+				style={{ marginBottom: 10 }}
+				collapsible
+				defaultExpanded
+			>
 				Agreement Search page
 			</Panel>
 			<Table height={505} data={data} loading={isSearching} shouldUpdateScroll={false}>
@@ -116,7 +126,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 					<Cell dataKey='CreatedByName' />
 				</Column>
 
-				<Column width={130} fixed='right'>
+				<Column minWidth={150} flexGrow={1}>
 					<HeaderCell>Action</HeaderCell>
 
 					<Cell>
