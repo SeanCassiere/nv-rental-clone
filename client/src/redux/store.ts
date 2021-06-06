@@ -12,7 +12,7 @@ const combinedReducer = combineReducers({
 const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
 	if (action.type === "authUser/logOutUser") {
 		LOCAL_STORAGE_FUNCTIONS.clearLocalStorageTokens();
-		state = {} as RootState;
+		state = undefined as RootState;
 	}
 	return combinedReducer(state, action);
 };
