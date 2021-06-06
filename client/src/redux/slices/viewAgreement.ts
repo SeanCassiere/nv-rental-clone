@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AgreementDataFull } from "../../interfaces/agreement";
 
 import { fakeViewAgreementData } from "../../utils/fakeData";
+import { fetchAgreementThunk } from "./thunks/viewAgreementThunks";
 
 interface ViewAgreementSliceState {
 	agreement: AgreementDataFull | null;
@@ -12,7 +13,7 @@ interface ViewAgreementSliceState {
 }
 
 const initialStateData: ViewAgreementSliceState = {
-	agreement: fakeViewAgreementData,
+	agreement: null,
 	isSearching: false,
 	isError: false,
 	error: "",
@@ -26,6 +27,23 @@ export const viewAgreementsSlice = createSlice({
 		refreshAgreementSummary: (state, action: PayloadAction<string>) => {
 			state.lastRanSearch = action.payload;
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(fetchAgreementThunk.pending, (state) => {
+			state.isSearching = true;
+			state.agreement = null;
+			state.isError = false;
+			state.error = "";
+		});
+		builder.addCase(fetchAgreementThunk.fulfilled, (state, action) => {
+			state.agreement = action.payload.agreement;
+			state.isSearching = false;
+			state.lastRanSearch = action.payload.lastRunSearch;
+		});
+		builder.addCase(fetchAgreementThunk.rejected, (state, action) => {
+			state.isError = true;
+			state.error = action.payload as string;
+		});
 	},
 });
 
