@@ -7,7 +7,7 @@ import AppPageContainer from "../../components/AppPageContainer";
 import AgreementInformation from "./AgreementInformation";
 import AgreementChargesSummary from "./AgreementChargesSummary";
 import { fetchAgreementThunk } from "../../redux/slices/thunks/viewAgreementThunks";
-import { selectAuthUserState, selectViewAgreementState } from "../../redux/store";
+import { AppDispatch, selectAuthUserState, selectViewAgreementState } from "../../redux/store";
 import { refreshAgreementSummary } from "../../redux/slices/viewAgreement";
 import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
 
@@ -16,24 +16,25 @@ type PageParams = {
 };
 
 const AgreementViewPage = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const history = useHistory();
 
 	const { clientId, userId } = useSelector(selectAuthUserState);
-	const { lastRanSearch, isError, error: searchError } = useSelector(selectViewAgreementState);
+	const { lastRanSearch, isError, error: searchError, agreement } = useSelector(selectViewAgreementState);
 	const { id } = useParams<PageParams>();
 
 	React.useEffect(() => {
 		const currentTime = Math.floor(Date.now());
-		const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 15000) : Math.floor(Date.now());
+		const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 1000) : Math.floor(Date.now());
 
 		// Skip searching if already search in the last 30 secs
 		if (lastSearch > currentTime) return;
-
 		if (!clientId || !userId) return;
 
-		dispatch(fetchAgreementThunk(id));
-	}, [id, dispatch, lastRanSearch, clientId, userId]);
+		const promise = dispatch(fetchAgreementThunk(id));
+
+		return () => promise.abort();
+	}, [id, dispatch, lastRanSearch, clientId, userId, agreement]);
 
 	React.useEffect(() => {
 		if (isError) Alert.error(searchError, ALERT_DURATION);

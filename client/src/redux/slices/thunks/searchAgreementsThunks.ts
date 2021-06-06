@@ -10,6 +10,9 @@ export const fetchAgreementsThunk = createAsyncThunk<
 	{ limit: number },
 	{ rejectValue: string }
 >("searchAgreements/fetchAgreements", async ({ limit }, thunkApi) => {
+	const source = axios.CancelToken.source();
+	thunkApi.signal.addEventListener("abort", () => source.cancel());
+
 	const state = thunkApi.getState() as RootState;
 	const authUser = state.authUser;
 
@@ -23,6 +26,7 @@ export const fetchAgreementsThunk = createAsyncThunk<
 			UserId: authUser.userId,
 			PageSize: limit,
 		},
+		cancelToken: source.token,
 	});
 
 	if (response.status === 400) return thunkApi.rejectWithValue(response.statusText);

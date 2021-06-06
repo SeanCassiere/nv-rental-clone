@@ -39,9 +39,7 @@ export const SearchAgreementsSlice = createSlice({
 		});
 		builder.addCase(fetchAgreementsThunk.rejected, (state, action) => {
 			state.isError = true;
-			if (action.payload) {
-				state.error = action.payload;
-			}
+			state.error = action.error.message as string;
 		});
 	},
 });

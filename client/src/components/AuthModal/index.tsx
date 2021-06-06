@@ -2,13 +2,13 @@ import React from "react";
 import { Modal, Button, Alert } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuthUserState } from "../../redux/store";
+import { AppDispatch, selectAuthUserState } from "../../redux/store";
 
 import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
 import { loginUserThunk } from "../../redux/slices/thunks/authUserThunks";
 
 const AuthModal: React.FunctionComponent = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const { isLoggedIn, isAuthenticating, error: loginError } = useSelector(selectAuthUserState);
 
 	React.useEffect(() => {

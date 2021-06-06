@@ -6,6 +6,9 @@ import { RootState } from "../../store";
 const BASE_URL = process.env.REACT_APP_BASE_URL || "";
 
 export const fetchAgreementThunk = createAsyncThunk("viewAgreement/fetchAgreement", async (id: string, thunkApi) => {
+	const source = axios.CancelToken.source();
+	thunkApi.signal.addEventListener("abort", () => source.cancel());
+
 	const state = thunkApi.getState() as RootState;
 	const authUser = state.authUser;
 
@@ -17,6 +20,7 @@ export const fetchAgreementThunk = createAsyncThunk("viewAgreement/fetchAgreemen
 		params: {
 			clientId: authUser.clientId,
 		},
+		cancelToken: source.token,
 	});
 
 	if (response.status !== 200) return thunkApi.rejectWithValue(response.statusText);

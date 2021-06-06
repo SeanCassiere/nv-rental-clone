@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Table, Panel, Button, Icon } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
+import { AppDispatch, selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
 import { fetchAgreementsThunk } from "../../redux/slices/thunks/searchAgreementsThunks";
 import { refreshLastSearchDate } from "../../redux/slices/searchAgreements";
 
@@ -13,7 +13,7 @@ import { AgreementInList } from "../../interfaces/agreement";
 const { Column, HeaderCell, Cell } = Table;
 
 const AgreementSearchPage: React.FunctionComponent = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
 	const { agreements: data, isSearching, lastRanSearch } = useSelector(selectSearchAgreementsState);
 
@@ -26,7 +26,9 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 
 		if (!clientId || !userId) return;
 
-		dispatch(fetchAgreementsThunk({ limit: 10 }));
+		const promise = dispatch(fetchAgreementsThunk({ limit: 10 }));
+
+		return () => promise.abort();
 	}, [dispatch, lastRanSearch, token, clientId, userId]);
 
 	const handleRefreshList = React.useCallback(() => {

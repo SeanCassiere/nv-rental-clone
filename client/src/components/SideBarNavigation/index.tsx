@@ -4,10 +4,11 @@ import { Sidenav, Nav, Icon, Navbar, Sidebar, Modal, Button } from "rsuite";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 
 const PrimaryComponent: React.FunctionComponent = () => {
 	const history = useHistory();
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
 	const [showModal, setShowModal] = React.useState(false);
 

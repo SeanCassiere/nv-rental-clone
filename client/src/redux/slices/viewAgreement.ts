@@ -40,8 +40,12 @@ export const viewAgreementsSlice = createSlice({
 			state.lastRanSearch = action.payload.lastRunSearch;
 		});
 		builder.addCase(fetchAgreementThunk.rejected, (state, action) => {
-			state.isError = true;
-			state.error = action.payload as string;
+			console.log(action.error);
+			if (action.error.message !== "Aborted") {
+				state.isError = true;
+				state.error = action.error.message as string;
+			}
+			state.agreement = null;
 		});
 	},
 });

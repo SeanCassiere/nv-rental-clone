@@ -4,7 +4,7 @@ import "rsuite/dist/styles/rsuite-default.css";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuthUserState } from "./redux/store";
+import { AppDispatch, selectAuthUserState } from "./redux/store";
 
 import { Alert } from "rsuite";
 
@@ -19,7 +19,7 @@ import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/slices/thunks/authUserThunks";
 
 const App: React.FunctionComponent = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const { isLoggedIn, tokenExpiresAt, error: loginError } = useSelector(selectAuthUserState);
 
 	React.useEffect(() => {
