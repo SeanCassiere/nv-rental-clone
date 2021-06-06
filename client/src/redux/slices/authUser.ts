@@ -47,9 +47,6 @@ export const authUserSlice = createSlice({
 	name: "authUser",
 	initialState: initialStateData,
 	reducers: {
-		isAuth: (state, action: PayloadAction<boolean>) => {
-			state.isAuthenticating = action.payload;
-		},
 		refreshAccessToken: (state, action: PayloadAction<{ token: string; tokenExpiresAt: number }>) => {
 			state.token = action.payload.token;
 			state.tokenExpiresAt = action.payload.tokenExpiresAt;

@@ -105,13 +105,13 @@ const RowItem: React.FunctionComponent<{
 	if (loading) {
 		return (
 			<Row>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} md={14}>
+				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={14}>
 					{label}
 				</Col>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} md={5}>
+				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={6} md={5}>
 					<Placeholder.Graph width={80} height={20} active />
 				</Col>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} md={5}>
+				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={6} md={5}>
 					<Placeholder.Graph width={80} height={20} active />
 				</Col>
 			</Row>
@@ -120,13 +120,13 @@ const RowItem: React.FunctionComponent<{
 
 	return (
 		<Row>
-			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} md={14}>
+			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={12}>
 				{label}
 			</Col>
-			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} md={5}>
+			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
 				{leftColText === 0 ? `${currency}${value.toFixed(2)}` : leftColText ? `${currency}${value.toFixed(2)}` : <></>}
 			</Col>
-			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} md={5}>
+			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
 				{rightColText === 0 ? (
 					`${currency}${value.toFixed(2)}`
 				) : rightColText ? (

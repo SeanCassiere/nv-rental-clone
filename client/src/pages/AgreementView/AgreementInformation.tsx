@@ -29,7 +29,11 @@ const AgreementInformation = () => {
 				<RowItem
 					loading={isSearching}
 					label='Vehicle'
-					text={`${agreement?.vehicleMakeName}&nbsp;${agreement?.modelName}&nbsp;${agreement?.year}`}
+					text={
+						<>
+							{agreement?.vehicleMakeName}&nbsp;{agreement?.modelName}&nbsp;{agreement?.year}
+						</>
+					}
 				/>
 				<RowItem loading={isSearching} label='Vehicle No.' text={`${agreement?.vehicleNo}`} />
 				<RowItem loading={isSearching} label='Type' text={`${agreement?.vehicleType}`} />
@@ -50,14 +54,14 @@ const AgreementInformation = () => {
 
 const RowItem: React.FunctionComponent<{
 	label: string | React.ReactNode;
-	text: string;
+	text: string | React.ReactNode;
 	loading: boolean;
 }> = React.memo(({ label, text, loading }) => {
 	if (loading) {
 		return (
 			<Row>
 				<Col componentClass={ColItem} md={12}>
-					{label}
+					<b>{label}</b>
 				</Col>
 				<Col componentClass={ColItem} md={12}>
 					<Placeholder.Graph width={150} height={20} active />
@@ -69,7 +73,7 @@ const RowItem: React.FunctionComponent<{
 	return (
 		<Row>
 			<Col componentClass={ColItem} md={12}>
-				{label}
+				<b>{label}</b>
 			</Col>
 			<Col componentClass={ColItem} md={12}>
 				{text}

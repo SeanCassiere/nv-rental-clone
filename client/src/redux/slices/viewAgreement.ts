@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AgreementDataFull } from "../../interfaces/agreement";
 
-import { fakeViewAgreementData } from "../../utils/fakeData";
 import { fetchAgreementThunk } from "./thunks/viewAgreementThunks";
 
 interface ViewAgreementSliceState {

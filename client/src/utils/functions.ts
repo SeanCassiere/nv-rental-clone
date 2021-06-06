@@ -44,6 +44,7 @@ const getTokenFromLocalStorage = (): {
 const clearLocalStorageTokens = () => {
 	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_TOKEN`);
 	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_REFRESH_TOKEN`);
+	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_CLIENT_FEATURES`);
 };
 
 const setTokenToLocalStorage = (token: string): boolean => {

@@ -126,7 +126,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 					<Cell dataKey='CreatedByName' />
 				</Column>
 
-				<Column minWidth={150} flexGrow={1}>
+				<Column minWidth={150} flexGrow={1} fixed='right'>
 					<HeaderCell>Action</HeaderCell>
 
 					<Cell>
