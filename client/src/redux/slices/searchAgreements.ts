@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AgreementInList } from "../../interfaces/agreement";
+import { fetchAgreementsThunk } from "./thunks/searchAgreementsThunks";
 
 interface SearchAgreementsSliceState {
 	agreements: AgreementInList[];
@@ -7,7 +8,6 @@ interface SearchAgreementsSliceState {
 	isError: boolean;
 	error: string;
 	lastRanSearch: string | null;
-	redoSearch: boolean;
 }
 
 const initialStateData: SearchAgreementsSliceState = {
@@ -16,39 +16,36 @@ const initialStateData: SearchAgreementsSliceState = {
 	isError: false,
 	error: "",
 	lastRanSearch: null,
-	redoSearch: false,
 };
 
 export const SearchAgreementsSlice = createSlice({
 	name: "searchAgreements",
 	initialState: initialStateData,
 	reducers: {
-		searchingAgreements: (state) => {
+		refreshLastSearchDate: (state, action: PayloadAction<string>) => {
+			state.lastRanSearch = action.payload;
+		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(fetchAgreementsThunk.pending, (state) => {
 			state.isSearching = true;
 			state.isError = false;
-			state.redoSearch = false;
-		},
-		foundAgreements: (state, action: PayloadAction<{ agreements: AgreementInList[]; lastRanSearch: string }>) => {
+		});
+		builder.addCase(fetchAgreementsThunk.fulfilled, (state, action) => {
 			state.isSearching = false;
 			state.isError = false;
 			state.agreements = action.payload.agreements;
-			state.lastRanSearch = action.payload.lastRanSearch;
-			state.redoSearch = false;
-		},
-		errorAgreements: (state, action: PayloadAction<string>) => {
-			state.agreements = [];
-			state.isSearching = false;
+			state.lastRanSearch = action.payload.lastRunSearch;
+		});
+		builder.addCase(fetchAgreementsThunk.rejected, (state, action) => {
 			state.isError = true;
-			state.error = action.payload;
-			state.redoSearch = false;
-		},
-		refreshLastSearchDate: (state) => {
-			state.redoSearch = true;
-		},
+			if (action.payload) {
+				state.error = action.payload;
+			}
+		});
 	},
 });
 
-export const { searchingAgreements, foundAgreements, errorAgreements, refreshLastSearchDate } =
-	SearchAgreementsSlice.actions;
+export const { refreshLastSearchDate } = SearchAgreementsSlice.actions;
 
 export default SearchAgreementsSlice.reducer;

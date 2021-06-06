@@ -4,49 +4,35 @@ import { Table, Panel, Button, Icon } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
+import { fetchAgreementsThunk } from "../../redux/slices/thunks/searchAgreementsThunks";
+import { refreshLastSearchDate } from "../../redux/slices/searchAgreements";
 
 import AppPageContainer from "../../components/AppPageContainer";
-import {
-	errorAgreements,
-	foundAgreements,
-	refreshLastSearchDate,
-	searchingAgreements,
-} from "../../redux/slices/searchAgreements";
 import { AgreementInList } from "../../interfaces/agreement";
-
-import { getAgreementsInList } from "../../api/agreementMethods";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const AgreementSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
-	const { agreements: data, isSearching, lastRanSearch, redoSearch } = useSelector(selectSearchAgreementsState);
+	const { agreements: data, isSearching, lastRanSearch } = useSelector(selectSearchAgreementsState);
 
 	React.useEffect(() => {
-		if (!redoSearch) {
-			const currentTime = Math.floor(Date.now());
-			const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 30000) : Math.floor(Date.now());
+		const currentTime = Math.floor(Date.now());
+		const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 30000) : Math.floor(Date.now());
 
-			// Skip searching if already search in the last 30 secs
-			if (lastSearch > currentTime) return;
-		}
+		// Skip searching if already search in the last 30 secs
+		if (lastSearch > currentTime) return;
+
 		if (!clientId || !userId) return;
 
-		dispatch(searchingAgreements());
-
-		getAgreementsInList({ token, clientId, userId })
-			.then(({ agreements }) => {
-				const currentDateTime = new Date();
-				dispatch(foundAgreements({ agreements, lastRanSearch: currentDateTime.toUTCString() }));
-			})
-			.catch((e) => {
-				dispatch(errorAgreements(e.response));
-			});
-	}, [dispatch, lastRanSearch, token, clientId, userId, redoSearch]);
+		dispatch(fetchAgreementsThunk({ limit: 10 }));
+	}, [dispatch, lastRanSearch, token, clientId, userId]);
 
 	const handleRefreshList = React.useCallback(() => {
-		dispatch(refreshLastSearchDate());
+		const currentTime = new Date();
+		currentTime.setDate(currentTime.getDate() - 120);
+		dispatch(refreshLastSearchDate(currentTime.toUTCString()));
 	}, [dispatch]);
 
 	return (
