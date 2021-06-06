@@ -1,7 +1,8 @@
 export interface AuthReturn {
+	message: string;
 	token: string;
 	refreshToken: string;
-	message: string;
+	features: NavotarClientFeature[];
 }
 
 export interface RefreshReturn {
@@ -19,4 +20,13 @@ export interface JWTReturnAuthToken {
 	iss: string;
 	jti: string;
 	nbf: number;
+}
+
+export interface NavotarClientFeature {
+	featureName: string;
+	clientFeatureId: number;
+	clientId: number;
+	featureId: number;
+	flag: string | null;
+	value: string | null;
 }

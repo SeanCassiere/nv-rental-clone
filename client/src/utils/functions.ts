@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import { JWTReturnAuthToken } from "../interfaces/authentication";
+import { JWTReturnAuthToken, NavotarClientFeature } from "../interfaces/authentication";
 
 export const LOCAL_STORAGE_PREFIX = "NAV_GHI";
 
@@ -9,12 +9,15 @@ const getTokenFromLocalStorage = (): {
 	userId: string;
 	clientId: string;
 	tokenExpiresAt: number;
+	clientFeatures: NavotarClientFeature[];
 } | null => {
 	const fromStorage = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}_TOKEN`) ?? null;
 	const fromStorageRefresh = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}_REFRESH_TOKEN`) ?? null;
+	const fromStorageClientFeatures = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}_CLIENT_FEATURES`) ?? null;
 
 	if (fromStorage === null) return null;
 	if (fromStorageRefresh === null) return null;
+	if (fromStorageClientFeatures === null) return null;
 
 	try {
 		const { client_navotar_clientid, client_navotar_userid, exp } = jwtDecode(fromStorage) as JWTReturnAuthToken;
@@ -31,6 +34,7 @@ const getTokenFromLocalStorage = (): {
 			userId: client_navotar_userid,
 			clientId: client_navotar_clientid,
 			tokenExpiresAt: exp,
+			clientFeatures: JSON.parse(fromStorageClientFeatures),
 		};
 	} catch (_) {
 		return null;
@@ -60,11 +64,21 @@ const setRefreshTokenToLocalStorage = (refreshToken: string) => {
 	}
 };
 
+const setClientFeaturesToLocalStorage = (features: NavotarClientFeature[]) => {
+	try {
+		localStorage.setItem(`${LOCAL_STORAGE_PREFIX}_CLIENT_FEATURES`, JSON.stringify(features));
+		return true;
+	} catch (error) {
+		return false;
+	}
+};
+
 const LOCAL_STORAGE_FUNCTIONS = {
 	getTokenFromLocalStorage,
 	clearLocalStorageTokens,
 	setTokenToLocalStorage,
 	setRefreshTokenToLocalStorage,
+	setClientFeaturesToLocalStorage,
 };
 
 export { LOCAL_STORAGE_FUNCTIONS };

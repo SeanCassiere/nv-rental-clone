@@ -19,6 +19,7 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 	try {
 		LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
 		LOCAL_STORAGE_FUNCTIONS.setRefreshTokenToLocalStorage(data.refreshToken);
+		LOCAL_STORAGE_FUNCTIONS.setClientFeaturesToLocalStorage(data.features);
 	} catch (error) {
 		return thunkApi.rejectWithValue("Could not save the tokens to local storage");
 	}
@@ -32,6 +33,7 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 			clientId: client_navotar_clientid,
 			userId: client_navotar_userid,
 			tokenExpiresAt: exp,
+			clientFeatures: data.features,
 		};
 	} catch (error) {
 		return thunkApi.rejectWithValue("Could not decode the access token");
