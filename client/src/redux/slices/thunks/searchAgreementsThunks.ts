@@ -25,9 +25,9 @@ export const fetchAgreementsThunk = createAsyncThunk<
 		},
 	});
 
-	if (response.status === 400) thunkApi.rejectWithValue(response.statusText);
-	if (response.status === 401) thunkApi.rejectWithValue(response.statusText);
-	if (response.status === 500) thunkApi.rejectWithValue(response.statusText);
+	if (response.status === 400) return thunkApi.rejectWithValue(response.statusText);
+	if (response.status === 401) return thunkApi.rejectWithValue(response.statusText);
+	if (response.status === 500) return thunkApi.rejectWithValue(response.statusText);
 
 	const currentDateTime = new Date();
 	return { agreements: response.data as AgreementInList[], lastRunSearch: currentDateTime.toUTCString() };

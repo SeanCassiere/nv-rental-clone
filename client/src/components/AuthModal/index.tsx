@@ -3,35 +3,20 @@ import { Modal, Button, Alert } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuthUserState } from "../../redux/store";
-import { isAuth, logInUser } from "../../redux/slices/authUser";
 
-import { performAuth } from "../../api/authApi";
 import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
+import { loginUserThunk } from "../../redux/slices/thunks/authUserThunks";
 
 const AuthModal: React.FunctionComponent = () => {
 	const dispatch = useDispatch();
-	const { isLoggedIn, isAuthenticating } = useSelector(selectAuthUserState);
+	const { isLoggedIn, isAuthenticating, error: loginError } = useSelector(selectAuthUserState);
+
+	React.useEffect(() => {
+		if (loginError) Alert.error(loginError, ALERT_DURATION);
+	}, [loginError]);
 
 	const handleAuth = React.useCallback(async () => {
-		dispatch(isAuth(true));
-		try {
-			const data = await performAuth();
-
-			if (data.tokenExpiresAt === null) return;
-
-			dispatch(
-				logInUser({
-					token: data.token,
-					refreshToken: data.refreshToken,
-					userId: data.userId,
-					clientId: data.clientId,
-					tokenExpiresAt: data.tokenExpiresAt,
-				})
-			);
-		} catch (error) {
-			dispatch(isAuth(false));
-			Alert.error(`Auth failed. Reason: ${error.message}`, ALERT_DURATION);
-		}
+		dispatch(loginUserThunk());
 	}, [dispatch]);
 
 	return (

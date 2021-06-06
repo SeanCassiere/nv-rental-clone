@@ -42,6 +42,29 @@ const clearLocalStorageTokens = () => {
 	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_REFRESH_TOKEN`);
 };
 
-const LOCAL_STORAGE_FUNCTIONS = { getTokenFromLocalStorage, clearLocalStorageTokens };
+const setTokenToLocalStorage = (token: string): boolean => {
+	try {
+		localStorage.setItem(`${LOCAL_STORAGE_PREFIX}_TOKEN`, token);
+		return true;
+	} catch (error) {
+		return false;
+	}
+};
+
+const setRefreshTokenToLocalStorage = (refreshToken: string) => {
+	try {
+		localStorage.setItem(`${LOCAL_STORAGE_PREFIX}_REFRESH_TOKEN`, refreshToken);
+		return true;
+	} catch (error) {
+		return false;
+	}
+};
+
+const LOCAL_STORAGE_FUNCTIONS = {
+	getTokenFromLocalStorage,
+	clearLocalStorageTokens,
+	setTokenToLocalStorage,
+	setRefreshTokenToLocalStorage,
+};
 
 export { LOCAL_STORAGE_FUNCTIONS };
