@@ -57,14 +57,6 @@ export const authUserSlice = createSlice({
 			state.clientId = action.payload.clientId;
 			state.isAuthenticating = false;
 		},
-		logOutUser: (state) => {
-			state.token = "";
-			state.refreshToken = "";
-			state.isLoggedIn = false;
-			state.userId = null;
-			state.clientId = null;
-			state.tokenExpiresAt = null;
-		},
 		isAuth: (state, action: PayloadAction<boolean>) => {
 			state.isAuthenticating = action.payload;
 		},
@@ -75,6 +67,6 @@ export const authUserSlice = createSlice({
 	},
 });
 
-export const { logInUser, logOutUser, isAuth, refreshAccessToken } = authUserSlice.actions;
+export const { logInUser, isAuth, refreshAccessToken } = authUserSlice.actions;
 
 export default authUserSlice.reducer;

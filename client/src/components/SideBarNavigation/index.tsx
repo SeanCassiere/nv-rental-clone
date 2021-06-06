@@ -4,8 +4,6 @@ import { Sidenav, Nav, Icon, Navbar, Sidebar, Modal, Button } from "rsuite";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { logOutUser } from "../../redux/slices/authUser";
-import { LOCAL_STORAGE_PREFIX } from "../../utils/functions";
 
 const PrimaryComponent: React.FunctionComponent = () => {
 	const history = useHistory();
@@ -22,8 +20,7 @@ const PrimaryComponent: React.FunctionComponent = () => {
 	}, [setShowModal]);
 
 	const triggerLogOut = React.useCallback(() => {
-		dispatch(logOutUser());
-		localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_TOKEN`);
+		dispatch({ type: "authUser/logOutUser" });
 		setShowModal(false);
 		history.push("/");
 	}, [dispatch, history]);

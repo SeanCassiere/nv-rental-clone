@@ -1,13 +1,25 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware, Reducer, AnyAction, combineReducers } from "@reduxjs/toolkit";
+import { LOCAL_STORAGE_FUNCTIONS } from "../utils/functions";
 
 import authUserSlice from "./slices/authUser";
 import SearchAgreementsSlice from "./slices/searchAgreements";
 
+const combinedReducer = combineReducers({
+	authUser: authUserSlice,
+	searchAgreements: SearchAgreementsSlice,
+});
+
+const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
+	if (action.type === "authUser/logOutUser") {
+		LOCAL_STORAGE_FUNCTIONS.clearLocalStorageTokens();
+		state = {} as RootState;
+	}
+	return combinedReducer(state, action);
+};
+
 const store = configureStore({
-	reducer: {
-		authUser: authUserSlice,
-		searchAgreements: SearchAgreementsSlice,
-	},
+	reducer: rootReducer,
+	middleware: [...getDefaultMiddleware()],
 });
 
 type RootState = ReturnType<typeof store.getState>;

@@ -37,6 +37,11 @@ const getTokenFromLocalStorage = (): {
 	}
 };
 
-const LOCAL_STORAGE_FUNCTIONS = { getTokenFromLocalStorage };
+const clearLocalStorageTokens = () => {
+	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_TOKEN`);
+	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_REFRESH_TOKEN`);
+};
+
+const LOCAL_STORAGE_FUNCTIONS = { getTokenFromLocalStorage, clearLocalStorageTokens };
 
 export { LOCAL_STORAGE_FUNCTIONS };
