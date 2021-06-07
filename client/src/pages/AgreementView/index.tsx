@@ -1,82 +1,80 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Col, Row, Panel, Button, Icon, Alert } from "rsuite";
+import { Grid, Col, Row, Panel, Message } from "rsuite";
 
 import AppPageContainer from "../../components/AppPageContainer";
+import ViewPageHeader from "../../components/ViewPageHeader";
+
 import AgreementInformation from "./AgreementInformation";
 import AgreementChargesSummary from "./AgreementChargesSummary";
+import CustomerInformation from "./CustomerInformation";
+import OtherAgreementSummary from "./OtherAgreementSummary";
+import DepositInformationPanel from "./DepositInformationPanel";
+
 import { fetchAgreementThunk } from "../../redux/slices/thunks/viewAgreementThunks";
-import { AppDispatch, selectAuthUserState, selectViewAgreementState } from "../../redux/store";
-import { refreshAgreementSummary } from "../../redux/slices/viewAgreement";
-import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
+import { AppDispatch, selectViewAgreementState } from "../../redux/store";
+import { clearViewAgreementState } from "../../redux/slices/viewAgreement";
 
 type PageParams = {
 	id: string;
 };
 
-const AgreementViewPage = () => {
+const AgreementViewPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const history = useHistory();
+	const [refreshNow, setRefreshNow] = React.useState(1);
 
-	const { clientId, userId } = useSelector(selectAuthUserState);
-	const { lastRanSearch, isError, error: searchError, agreement } = useSelector(selectViewAgreementState);
+	const { isError, error: searchError } = useSelector(selectViewAgreementState);
 	const { id } = useParams<PageParams>();
 
 	React.useEffect(() => {
-		const currentTime = Math.floor(Date.now());
-		const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 1000) : Math.floor(Date.now());
-
-		// Skip searching if already search in the last 30 secs
-		if (lastSearch > currentTime) return;
-		if (!clientId || !userId) return;
-
 		const promise = dispatch(fetchAgreementThunk(id));
 
-		return () => promise.abort();
-	}, [id, dispatch, lastRanSearch, clientId, userId, agreement]);
-
-	React.useEffect(() => {
-		if (isError) Alert.error(searchError, ALERT_DURATION);
-	}, [isError, searchError]);
+		return () => {
+			promise.abort();
+			dispatch(clearViewAgreementState());
+		};
+	}, [id, dispatch, refreshNow]);
 
 	const handleRefreshList = React.useCallback(() => {
-		const currentTime = new Date();
-		currentTime.setDate(currentTime.getDate() - 120);
-		dispatch(refreshAgreementSummary(currentTime.toUTCString()));
-	}, [dispatch]);
+		setRefreshNow((n) => n + 1);
+	}, [setRefreshNow]);
 
 	const handleGoBack = React.useCallback(() => {
-		history.goBack();
+		history.push("/agreements");
 	}, [history]);
 
 	return (
 		<AppPageContainer>
 			<Panel
+				bodyFill
 				header={
-					<h5>
-						<Button onClick={handleGoBack}>
-							<Icon icon='chevron-left' />
-						</Button>
-						&nbsp;View Agreement&nbsp;
-						<Button onClick={handleRefreshList}>
-							<Icon icon='refresh' />
-						</Button>
-					</h5>
+					<ViewPageHeader
+						title='View Agreement'
+						goBackFunction={handleGoBack}
+						refreshFunction={handleRefreshList}
+						refresh
+						back
+					/>
 				}
 				style={{ height: "100%" }}
-				bordered
 			>
+				{isError && (
+					<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
+				)}
 				<Grid fluid>
 					<Row>
-						<Col md={7}>
-							<AgreementInformation />
-						</Col>
-						<Col md={9}>
-							<AgreementChargesSummary />
-						</Col>
 						<Col md={8}>
 							<AgreementInformation />
+							<CustomerInformation />
+						</Col>
+						<Col md={8}>
+							<AgreementChargesSummary />
+							<DepositInformationPanel />
+						</Col>
+						<Col md={8}>
+							<OtherAgreementSummary />
 						</Col>
 					</Row>
 				</Grid>
@@ -85,4 +83,4 @@ const AgreementViewPage = () => {
 	);
 };
 
-export default AgreementViewPage;
+export default React.memo(AgreementViewPage);

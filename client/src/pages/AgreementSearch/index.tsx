@@ -1,6 +1,6 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Table, Panel, Button, Icon } from "rsuite";
+import { Table, Panel, Message } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
@@ -8,6 +8,8 @@ import { fetchAgreementsThunk } from "../../redux/slices/thunks/searchAgreements
 import { refreshLastSearchDate } from "../../redux/slices/searchAgreements";
 
 import AppPageContainer from "../../components/AppPageContainer";
+import ViewPageHeader from "../../components/ViewPageHeader";
+
 import { AgreementInList } from "../../interfaces/agreement";
 
 const { Column, HeaderCell, Cell } = Table;
@@ -15,7 +17,13 @@ const { Column, HeaderCell, Cell } = Table;
 const AgreementSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
-	const { agreements: data, isSearching, lastRanSearch } = useSelector(selectSearchAgreementsState);
+	const {
+		agreements: data,
+		isSearching,
+		lastRanSearch,
+		isError,
+		error: searchError,
+	} = useSelector(selectSearchAgreementsState);
 
 	React.useEffect(() => {
 		const currentTime = Math.floor(Date.now());
@@ -40,14 +48,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 	return (
 		<AppPageContainer>
 			<Panel
-				header={
-					<h5>
-						Agreements&nbsp;
-						<Button onClick={handleRefreshList}>
-							<Icon icon='refresh' />
-						</Button>
-					</h5>
-				}
+				header={<ViewPageHeader title='Search Agreements' refreshFunction={handleRefreshList} refresh />}
 				bordered
 				style={{ marginBottom: 10 }}
 				collapsible
@@ -55,6 +56,9 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 			>
 				Agreement Search page
 			</Panel>
+			{isError && (
+				<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
+			)}
 			<Table height={505} data={data} loading={isSearching} shouldUpdateScroll={false}>
 				<Column width={110}>
 					<HeaderCell>Agreement No.</HeaderCell>

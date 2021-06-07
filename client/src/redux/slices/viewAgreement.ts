@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { AgreementDataFull } from "../../interfaces/agreement";
 
 import { fetchAgreementThunk } from "./thunks/viewAgreementThunks";
@@ -8,7 +8,6 @@ interface ViewAgreementSliceState {
 	isSearching: boolean;
 	isError: boolean;
 	error: string;
-	lastRanSearch: string | null;
 }
 
 const initialStateData: ViewAgreementSliceState = {
@@ -16,15 +15,14 @@ const initialStateData: ViewAgreementSliceState = {
 	isSearching: false,
 	isError: false,
 	error: "",
-	lastRanSearch: null,
 };
 
 export const viewAgreementsSlice = createSlice({
 	name: "viewAgreement",
 	initialState: initialStateData,
 	reducers: {
-		refreshAgreementSummary: (state, action: PayloadAction<string>) => {
-			state.lastRanSearch = action.payload;
+		clearViewAgreementState: (state) => {
+			state.agreement = null;
 		},
 	},
 	extraReducers: (builder) => {
@@ -37,10 +35,8 @@ export const viewAgreementsSlice = createSlice({
 		builder.addCase(fetchAgreementThunk.fulfilled, (state, action) => {
 			state.agreement = action.payload.agreement;
 			state.isSearching = false;
-			state.lastRanSearch = action.payload.lastRunSearch;
 		});
 		builder.addCase(fetchAgreementThunk.rejected, (state, action) => {
-			console.log(action.error);
 			if (action.error.message !== "Aborted") {
 				state.isError = true;
 				state.error = action.error.message as string;
@@ -50,6 +46,6 @@ export const viewAgreementsSlice = createSlice({
 	},
 });
 
-export const { refreshAgreementSummary } = viewAgreementsSlice.actions;
+export const { clearViewAgreementState } = viewAgreementsSlice.actions;
 
 export default viewAgreementsSlice.reducer;

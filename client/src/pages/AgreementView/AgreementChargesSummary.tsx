@@ -6,76 +6,40 @@ import { useSelector } from "react-redux";
 import { selectViewAgreementState } from "../../redux/store";
 import styled from "styled-components";
 
-const AgreementChargesSummary = () => {
+const AgreementChargesSummary: React.FunctionComponent = () => {
 	const { agreement, isSearching } = useSelector(selectViewAgreementState);
+
+	if (isSearching)
+		return (
+			<Panel header='Agreement Summary' style={{ marginBottom: 10 }} bordered>
+				<Placeholder.Grid rows={16} columns={3} />
+			</Panel>
+		);
 
 	return (
 		<Panel header='Agreement Summary' style={{ marginBottom: 10 }} bordered>
 			<Grid fluid>
-				<RowItem
-					label='Total Rate Charges'
-					leftColText={agreement?.initialRateTotal}
-					currency='$'
-					loading={isSearching}
-				/>
-				<RowItem
-					label='Promotion Discount'
-					rightColText={agreement?.promotionDiscount}
-					currency='$'
-					loading={isSearching}
-				/>
-				<RowItem
-					label='Final Base Rate'
-					leftColText={agreement?.finalRateTotal}
-					currency='$'
-					loading={isSearching}
-					bold
-				/>
-				<RowItem
-					label='Total Miscellaneous Charges'
-					leftColText={agreement?.totMisChargTaxable}
-					currency='$'
-					loading={isSearching}
-					bold
-				/>
+				<RowItem label='Total Rate Charges' leftColText={agreement?.initialRateTotal} currency='$' />
+				<RowItem label='Promotion Discount' rightColText={agreement?.promotionDiscount} currency='$' />
+				<RowItem label='Final Base Rate' leftColText={agreement?.finalRateTotal} currency='$' bold />
+				<RowItem label='Total Miscellaneous Charges' leftColText={agreement?.totMisChargTaxable} currency='$' bold />
 				<RowItem
 					label='Total Miscellaneous Charges (No Tax)'
 					leftColText={agreement?.totMisChargNonTaxable}
 					currency='$'
-					loading={isSearching}
 					bold
 				/>
-				<RowItem
-					label='Extra Mileage Charges'
-					leftColText={agreement?.extraKMCharge}
-					currency='$'
-					loading={isSearching}
-				/>
-				<RowItem
-					label='Extra Duration Charges'
-					leftColText={agreement?.extraDayCharge}
-					currency='$'
-					loading={isSearching}
-				/>
-				<RowItem label='Subtotal' leftColText={agreement?.subTotal} currency='$' loading={isSearching} bold />
-				<RowItem label='Tax Charges' leftColText={agreement?.totalTax} currency='$' loading={isSearching} bold />
-				<RowItem label='Fuel Charges' leftColText={agreement?.extraFuelCharge} currency='$' loading={isSearching} />
-				<RowItem
-					label='Additional Charges'
-					leftColText={agreement?.additionalCharge}
-					currency='$'
-					loading={isSearching}
-				/>
-				<RowItem
-					label='Agreement Charges'
-					leftColText={agreement?.additionalCharges}
-					currency='$'
-					loading={isSearching}
-				/>
-				<RowItem label='Total' leftColText={agreement?.totalAmount} currency='$' loading={isSearching} bold />
-				<RowItem label='Amount Paid' leftColText={agreement?.amountPaid} currency='$' loading={isSearching} />
-				<RowItem label='Write Off' leftColText={agreement?.discount} currency='$' loading={isSearching} />
-				<RowItem label='Balance Due' leftColText={agreement?.balanceDue} currency='$' loading={isSearching} bold />
+				<RowItem label='Extra Mileage Charges' leftColText={agreement?.extraKMCharge} currency='$' />
+				<RowItem label='Extra Duration Charges' leftColText={agreement?.extraDayCharge} currency='$' />
+				<RowItem label='Subtotal' leftColText={agreement?.subTotal} currency='$' bold />
+				<RowItem label='Tax Charges' leftColText={agreement?.totalTax} currency='$' bold />
+				<RowItem label='Fuel Charges' leftColText={agreement?.extraFuelCharge} currency='$' />
+				<RowItem label='Additional Charges' leftColText={agreement?.additionalCharge} currency='$' />
+				<RowItem label='Agreement Charges' leftColText={agreement?.additionalCharges} currency='$' />
+				<RowItem label='Total' leftColText={agreement?.totalAmount} currency='$' bold />
+				<RowItem label='Amount Paid' leftColText={agreement?.amountPaid} currency='$' />
+				<RowItem label='Write Off' leftColText={agreement?.discount} currency='$' />
+				<RowItem label='Balance Due' leftColText={agreement?.balanceDue} currency='$' bold />
 			</Grid>
 		</Panel>
 	);
@@ -87,8 +51,7 @@ const RowItem: React.FunctionComponent<{
 	rightColText?: number | null | undefined;
 	bold?: true;
 	currency: string;
-	loading: boolean;
-}> = React.memo(({ label, leftColText, rightColText, bold, currency, loading }) => {
+}> = React.memo(({ label, leftColText, rightColText, bold, currency }) => {
 	const [value, setValue] = React.useState<number>(0);
 
 	React.useEffect(() => {
@@ -102,25 +65,10 @@ const RowItem: React.FunctionComponent<{
 			setValue(rightColText);
 		}
 	}, [leftColText, rightColText]);
-	if (loading) {
-		return (
-			<Row>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={14}>
-					{label}
-				</Col>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={6} md={5}>
-					<Placeholder.Graph width={80} height={20} active />
-				</Col>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={6} md={5}>
-					<Placeholder.Graph width={80} height={20} active />
-				</Col>
-			</Row>
-		);
-	}
 
 	return (
 		<Row>
-			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={12}>
+			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={14}>
 				{label}
 			</Col>
 			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>

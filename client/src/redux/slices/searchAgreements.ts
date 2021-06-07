@@ -38,8 +38,11 @@ export const SearchAgreementsSlice = createSlice({
 			state.lastRanSearch = action.payload.lastRunSearch;
 		});
 		builder.addCase(fetchAgreementsThunk.rejected, (state, action) => {
-			state.isError = true;
-			state.error = action.error.message as string;
+			if (action.error.message !== "Aborted") {
+				state.isError = true;
+				state.error = action.error.message as string;
+			}
+			state.isSearching = false;
 		});
 	},
 });

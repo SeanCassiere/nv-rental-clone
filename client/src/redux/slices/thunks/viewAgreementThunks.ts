@@ -25,6 +25,5 @@ export const fetchAgreementThunk = createAsyncThunk("viewAgreement/fetchAgreemen
 
 	if (response.status !== 200) return thunkApi.rejectWithValue(response.statusText);
 
-	const currentDateTime = new Date();
-	return { agreement: response.data as AgreementDataFull, lastRunSearch: currentDateTime.toUTCString() };
+	return { agreement: response.data as AgreementDataFull };
 });

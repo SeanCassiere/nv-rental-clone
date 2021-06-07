@@ -1,4 +1,5 @@
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { Panel, Grid, Row, Col, Placeholder } from "rsuite";
 import { useSelector } from "react-redux";
 
@@ -23,11 +24,16 @@ const AgreementInformation = () => {
 		}
 	}, [agreement]);
 
+	if (isSearching)
+		return (
+			<Panel header='Agreement Information' style={{ marginBottom: 10 }} bordered>
+				<Placeholder.Grid rows={13} columns={2} />
+			</Panel>
+		);
 	return (
 		<Panel header='Agreement Information' bordered style={{ marginBottom: 10 }}>
 			<Grid fluid>
 				<RowItem
-					loading={isSearching}
 					label='Vehicle'
 					text={
 						<>
@@ -35,18 +41,21 @@ const AgreementInformation = () => {
 						</>
 					}
 				/>
-				<RowItem loading={isSearching} label='Vehicle No.' text={`${agreement?.vehicleNo}`} />
-				<RowItem loading={isSearching} label='Type' text={`${agreement?.vehicleType}`} />
-				<RowItem loading={isSearching} label='License No.' text={`${agreement?.licenseNo}`} />
-				<RowItem loading={isSearching} label='Check-Out Location' text={`${agreement?.checkoutLocationName}`} />
-				<RowItem loading={isSearching} label={<>Check-Out Date &amp; Time</>} text={`${checkOutDate}`} />
-				<RowItem loading={isSearching} label='Check-In Location' text={`${agreement?.returnLocationName}`} />
-				<RowItem loading={isSearching} label={<>Check-In Date &amp; Time</>} text={`${checkInDate}`} />
-				<RowItem loading={isSearching} label='Check-Out Mileage' text={`${agreement?.odometerOut}`} />
-				<RowItem loading={isSearching} label='Fuel Out' text={`${agreement?.fuelLevelOut}`} />
-				<RowItem loading={isSearching} label='Created By' text={`${agreement?.createdByName}`} />
-				<RowItem loading={isSearching} label='Last Updated By' text={`${agreement?.lastUpdatedBy}`} />
-				<RowItem loading={isSearching} label='Checked In By' text={`${agreement?.checkedInByName}`} />
+				<RowItem
+					label='Vehicle No.'
+					text={<RouterLink to={`/vehicles/${agreement?.vehicleId}`}>{agreement?.vehicleNo}</RouterLink>}
+				/>
+				<RowItem label='Type' text={agreement?.vehicleType} />
+				<RowItem label='License No.' text={agreement?.licenseNo} />
+				<RowItem label='Check-Out Location' text={agreement?.checkoutLocationName} />
+				<RowItem label={<>Check-Out Date &amp; Time</>} text={`${checkOutDate}`} />
+				<RowItem label='Check-In Location' text={agreement?.returnLocationName} />
+				<RowItem label={<>Check-In Date &amp; Time</>} text={`${checkInDate}`} />
+				<RowItem label='Check-Out Mileage' text={agreement?.odometerOut} />
+				<RowItem label='Fuel Out' text={agreement?.fuelLevelOut} />
+				<RowItem label='Created By' text={agreement?.createdByName} />
+				<RowItem label='Last Updated By' text={agreement?.lastUpdatedBy} />
+				<RowItem label='Checked In By' text={agreement?.checkedInByName} />
 			</Grid>
 		</Panel>
 	);
@@ -55,28 +64,14 @@ const AgreementInformation = () => {
 const RowItem: React.FunctionComponent<{
 	label: string | React.ReactNode;
 	text: string | React.ReactNode;
-	loading: boolean;
-}> = React.memo(({ label, text, loading }) => {
-	if (loading) {
-		return (
-			<Row>
-				<Col componentClass={ColItem} md={12}>
-					<b>{label}</b>
-				</Col>
-				<Col componentClass={ColItem} md={12}>
-					<Placeholder.Graph width={150} height={20} active />
-				</Col>
-			</Row>
-		);
-	}
-
+}> = React.memo(({ label, text }) => {
 	return (
 		<Row>
 			<Col componentClass={ColItem} md={12}>
 				<b>{label}</b>
 			</Col>
 			<Col componentClass={ColItem} md={12}>
-				{text}
+				{text ? text : <></>}
 			</Col>
 		</Row>
 	);

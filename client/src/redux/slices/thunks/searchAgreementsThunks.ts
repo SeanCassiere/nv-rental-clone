@@ -24,14 +24,13 @@ export const fetchAgreementsThunk = createAsyncThunk<
 		params: {
 			ClientId: authUser.clientId,
 			UserId: authUser.userId,
+			Page: 1,
 			PageSize: limit,
 		},
 		cancelToken: source.token,
 	});
 
-	if (response.status === 400) return thunkApi.rejectWithValue(response.statusText);
-	if (response.status === 401) return thunkApi.rejectWithValue(response.statusText);
-	if (response.status === 500) return thunkApi.rejectWithValue(response.statusText);
+	if (response.status !== 200) return thunkApi.rejectWithValue(response.statusText);
 
 	const currentDateTime = new Date();
 	return { agreements: response.data as AgreementInList[], lastRunSearch: currentDateTime.toUTCString() };

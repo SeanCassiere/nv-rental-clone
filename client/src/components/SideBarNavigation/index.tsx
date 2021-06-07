@@ -22,8 +22,8 @@ const PrimaryComponent: React.FunctionComponent = () => {
 
 	const triggerLogOut = React.useCallback(() => {
 		dispatch({ type: "authUser/logOutUser" });
-		setShowModal(false);
 		history.push("/");
+		setShowModal(false);
 	}, [dispatch, history]);
 
 	return (
