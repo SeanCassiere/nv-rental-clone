@@ -1,7 +1,16 @@
 import jwtDecode from "jwt-decode";
 import { JWTReturnAuthToken, NavotarClientFeature } from "../interfaces/authentication";
+import { ThemeOptions } from "../redux/slices/appConfigSlice";
 
 export const LOCAL_STORAGE_PREFIX = "NAV_GHI";
+
+const getThemeFromLocalStorage = (): ThemeOptions => {
+	const themeFromStorage = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}_THEME`) || null;
+	if (themeFromStorage) {
+		if (themeFromStorage === "dark") return "dark";
+	}
+	return "light";
+};
 
 const getTokenFromLocalStorage = (): {
 	token: string;
@@ -74,12 +83,23 @@ const setClientFeaturesToLocalStorage = (features: NavotarClientFeature[]) => {
 	}
 };
 
+const setThemeToLocalStorage = (theme: ThemeOptions) => {
+	try {
+		localStorage.setItem(`${LOCAL_STORAGE_PREFIX}_THEME`, theme);
+		return true;
+	} catch (error) {
+		return false;
+	}
+};
+
 const LOCAL_STORAGE_FUNCTIONS = {
 	getTokenFromLocalStorage,
 	clearLocalStorageTokens,
 	setTokenToLocalStorage,
 	setRefreshTokenToLocalStorage,
 	setClientFeaturesToLocalStorage,
+	getThemeFromLocalStorage,
+	setThemeToLocalStorage,
 };
 
 export { LOCAL_STORAGE_FUNCTIONS };

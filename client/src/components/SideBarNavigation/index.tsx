@@ -1,10 +1,11 @@
 import React from "react";
-import { Sidenav, Nav, Icon, Navbar, Sidebar, Modal, Button } from "rsuite";
+import { Sidenav, Nav, Icon, Navbar, Sidebar, Modal, Button, Dropdown } from "rsuite";
 
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, selectAppConfigState } from "../../redux/store";
+import { switchTheme } from "../../redux/slices/appConfigSlice";
 
 const PrimaryComponent: React.FunctionComponent = () => {
 	const history = useHistory();
@@ -64,6 +65,8 @@ const pagesKeyList = [
 ];
 
 const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }> = ({ showLogoutModal }) => {
+	const dispatch = useDispatch<AppDispatch>();
+	const { theme } = useSelector(selectAppConfigState);
 	const [expanded, setExpanded] = React.useState(false);
 	const [activeKey, setActiveKey] = React.useState("dashboard");
 
@@ -107,7 +110,7 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 
 	return (
 		<div className='full-sidebar'>
-			<Sidebar className='sidebar-app-container' width={expanded ? 210 : 56} collapsible>
+			<Sidebar className='sidebar-app-container' width={expanded ? 250 : 56} collapsible>
 				<Sidenav
 					expanded={expanded}
 					activeKey={activeKey}
@@ -172,14 +175,28 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 				<Navbar appearance='default' className='nav-toggle'>
 					<Navbar.Body>
 						<Nav>
-							<Nav.Item icon={<Icon icon='sign-out' size='lg' style={{ paddingLeft: 2 }} />} onClick={showLogoutModal}>
-								{expanded && <span style={{ marginLeft: 12 }}>Log Out</span>}
-							</Nav.Item>
+							<Dropdown
+								placement='topStart'
+								trigger='click'
+								renderTitle={() => {
+									return <Icon style={{ ...iconStyles, textAlign: "center" }} icon='cog' />;
+								}}
+							>
+								<Dropdown.Item onClick={() => dispatch(switchTheme(theme))}>
+									<Icon icon={theme === "light" ? "moon-o" : "sun-o"} />
+									&nbsp;
+									{theme === "light" ? <>Dark</> : <>Light</>}&nbsp;Mode
+								</Dropdown.Item>
+								<Dropdown.Item onClick={showLogoutModal}>
+									<Icon icon='sign-out' />
+									&nbsp;Sign out
+								</Dropdown.Item>
+							</Dropdown>
 						</Nav>
 
 						<Nav pullRight id='nav-switch'>
 							<Nav.Item onClick={handleToggle} style={{ width: 56, textAlign: "center" }}>
-								<Icon icon={expanded ? "angle-left" : "angle-right"} size='lg' />
+								<Icon icon={expanded ? "angle-left" : "angle-right"} />
 							</Nav.Item>
 						</Nav>
 					</Navbar.Body>
@@ -187,6 +204,12 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 			</Sidebar>
 		</div>
 	);
+};
+
+const iconStyles = {
+	width: 56,
+	height: 56,
+	lineHeight: "56px",
 };
 
 export default PrimaryComponent;

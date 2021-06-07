@@ -6,7 +6,7 @@ import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAuthUserState } from "./redux/store";
+import { AppDispatch, selectAppConfigState, selectAuthUserState } from "./redux/store";
 
 import { Alert } from "rsuite";
 
@@ -26,6 +26,7 @@ const themes = { light: "/styles/rsuite-default.css", dark: "/styles/rsuite-dark
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { isLoggedIn, tokenExpiresAt, error: loginError, token, refreshToken } = useSelector(selectAuthUserState);
+	const { theme } = useSelector(selectAppConfigState);
 
 	React.useEffect(() => {
 		if (!isLoggedIn || !tokenExpiresAt) return;
@@ -46,7 +47,7 @@ const App: React.FunctionComponent = () => {
 	}, [loginError]);
 
 	return (
-		<ThemeSwitcherProvider themeMap={themes} defaultTheme='dark'>
+		<ThemeSwitcherProvider themeMap={themes} defaultTheme={theme}>
 			<Router>
 				<Switch>
 					<Route exact path='/' component={StartSplashPage} />

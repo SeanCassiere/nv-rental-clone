@@ -5,8 +5,10 @@ import authUserSlice from "./slices/authUserSlice";
 import searchAgreementsSlice from "./slices/searchAgreementsSlice";
 import searchCustomersSlice from "./slices/searchCustomersSlice";
 import viewAgreementSlice from "./slices/viewAgreementSlice";
+import appConfigSlice from "./slices/appConfigSlice";
 
 const combinedReducer = combineReducers({
+	appConfig: appConfigSlice,
 	authUser: authUserSlice,
 	searchAgreements: searchAgreementsSlice,
 	searchCustomers: searchCustomersSlice,
@@ -30,6 +32,7 @@ export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof combinedReducer>;
 
 // State Slice Data selectors
+export const selectAppConfigState = (state: RootState) => state.appConfig;
 export const selectAuthUserState = (state: RootState) => state.authUser;
 export const selectSearchAgreementsState = (state: RootState) => state.searchAgreements;
 export const selectSearchCustomersState = (state: RootState) => state.searchCustomers;
