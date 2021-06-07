@@ -51,7 +51,6 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 				header={<ViewPageHeader title='Search Agreements' refreshFunction={handleRefreshList} refresh />}
 				bordered
 				style={{ marginBottom: 10 }}
-				collapsible
 				defaultExpanded
 			>
 				Agreement Search page

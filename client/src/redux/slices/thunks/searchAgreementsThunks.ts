@@ -1,9 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import appAxiosInstance from "../../../api/appAxiosInstance";
 import { AgreementInList } from "../../../interfaces/agreement";
 import { RootState } from "../../store";
-
-const BASE_URL = process.env.REACT_APP_BASE_URL || "";
 
 export const fetchAgreementsThunk = createAsyncThunk<
 	{ agreements: AgreementInList[]; lastRunSearch: string },
@@ -16,7 +15,7 @@ export const fetchAgreementsThunk = createAsyncThunk<
 	const state = thunkApi.getState() as RootState;
 	const authUser = state.authUser;
 
-	const response = await axios.get(`${BASE_URL}/Agreements`, {
+	const response = await appAxiosInstance.get(`/Agreements`, {
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${authUser.token}`,

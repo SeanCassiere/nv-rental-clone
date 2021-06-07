@@ -10,6 +10,7 @@ import { Alert } from "rsuite";
 
 import DashboardPage from "./pages/Dashboard";
 import AgreementSearchPage from "./pages/AgreementSearch";
+import CustomerSearchPage from "./pages/CustomerSearch";
 import AgreementViewPage from "./pages/AgreementView";
 import AdminSettingsPage from "./pages/Admin";
 
@@ -20,19 +21,21 @@ import { refreshAuthTokenThunk } from "./redux/slices/thunks/authUserThunks";
 
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
-	const { isLoggedIn, tokenExpiresAt, error: loginError } = useSelector(selectAuthUserState);
+	const { isLoggedIn, tokenExpiresAt, error: loginError, token, refreshToken } = useSelector(selectAuthUserState);
 
 	React.useEffect(() => {
 		if (!isLoggedIn || !tokenExpiresAt) return;
+		if (token === "" || refreshToken === "") return;
 
 		const expiryTime = tokenExpiresAt - Math.round(Date.now() / 1000);
 
 		const refreshInterval = setInterval(async () => {
+			// Refresh the access token 60 secs before the Navotar token expires
 			dispatch(refreshAuthTokenThunk());
-		}, expiryTime * 1000 - 60000);
+		}, expiryTime * 1000 - 60);
 
 		return () => clearInterval(refreshInterval);
-	}, [isLoggedIn, tokenExpiresAt, dispatch]);
+	}, [isLoggedIn, tokenExpiresAt, dispatch, token, refreshToken]);
 
 	React.useEffect(() => {
 		if (loginError) Alert.warning(loginError, 120000);
@@ -46,7 +49,8 @@ const App: React.FunctionComponent = () => {
 				<Route exact path='/vehicles' component={AgreementSearchPage} />
 				<Route exact path='/gps' component={AgreementSearchPage} />
 				<Route exact path='/reservations' component={AgreementSearchPage} />
-				<Route exact path='/customers' component={AgreementSearchPage} />
+
+				<Route exact path='/customers' component={CustomerSearchPage} />
 
 				<Route exact path='/agreements' component={AgreementSearchPage} />
 				<Route exact path='/agreements/:id' component={AgreementViewPage} />

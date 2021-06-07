@@ -145,9 +145,9 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 							>
 								Reservations
 							</Nav.Item> */}
-							{/* <Nav.Item eventKey='customers' icon={<Icon icon='group' />} componentClass={RouterLink} to='/customers'>
+							<Nav.Item eventKey='customers' icon={<Icon icon='group' />} componentClass={RouterLink} to='/customers'>
 								Customers
-							</Nav.Item> */}
+							</Nav.Item>
 							<Nav.Item
 								eventKey='agreements'
 								icon={<Icon icon='signing' />}

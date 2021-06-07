@@ -1,9 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import appAxios from "../../../api/appAxiosInstance";
 import { AgreementDataFull } from "../../../interfaces/agreement";
 import { RootState } from "../../store";
-
-const BASE_URL = process.env.REACT_APP_BASE_URL || "";
 
 export const fetchAgreementThunk = createAsyncThunk("viewAgreement/fetchAgreement", async (id: string, thunkApi) => {
 	const source = axios.CancelToken.source();
@@ -12,7 +11,7 @@ export const fetchAgreementThunk = createAsyncThunk("viewAgreement/fetchAgreemen
 	const state = thunkApi.getState() as RootState;
 	const authUser = state.authUser;
 
-	const response = await axios.get(`${BASE_URL}/Agreements/${id}`, {
+	const response = await appAxios.get(`/Agreements/${id}`, {
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${authUser.token}`,
