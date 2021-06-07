@@ -1,6 +1,8 @@
 import React from "react";
 import "./App.css";
-import "rsuite/dist/styles/rsuite-default.css";
+// import "rsuite/dist/styles/rsuite-default.css";
+
+import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,6 +20,8 @@ import StartSplashPage from "./pages/StartSplash";
 
 import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
+
+const themes = { light: "/styles/rsuite-default.css", dark: "/styles/rsuite-dark.min.css" };
 
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -42,27 +46,29 @@ const App: React.FunctionComponent = () => {
 	}, [loginError]);
 
 	return (
-		<Router>
-			<Switch>
-				<Route exact path='/' component={StartSplashPage} />
-				<Route exact path='/dashboard' component={DashboardPage} />
-				<Route exact path='/vehicles' component={AgreementSearchPage} />
-				<Route exact path='/gps' component={AgreementSearchPage} />
-				<Route exact path='/reservations' component={AgreementSearchPage} />
+		<ThemeSwitcherProvider themeMap={themes} defaultTheme='dark'>
+			<Router>
+				<Switch>
+					<Route exact path='/' component={StartSplashPage} />
+					<Route exact path='/dashboard' component={DashboardPage} />
+					<Route exact path='/vehicles' component={AgreementSearchPage} />
+					<Route exact path='/gps' component={AgreementSearchPage} />
+					<Route exact path='/reservations' component={AgreementSearchPage} />
 
-				<Route exact path='/customers' component={CustomerSearchPage} />
+					<Route exact path='/customers' component={CustomerSearchPage} />
 
-				<Route exact path='/agreements' component={AgreementSearchPage} />
-				<Route exact path='/agreements/:id' component={AgreementViewPage} />
-				<Route exact path='/agreements/:id/edit' component={DashboardPage} />
-				<Route exact path='/agreements/:id/checkin' component={DashboardPage} />
+					<Route exact path='/agreements' component={AgreementSearchPage} />
+					<Route exact path='/agreements/:id' component={AgreementViewPage} />
+					<Route exact path='/agreements/:id/edit' component={DashboardPage} />
+					<Route exact path='/agreements/:id/checkin' component={DashboardPage} />
 
-				<Route exact path='/claims' component={AgreementSearchPage} />
-				<Route exact path='/reports' component={AgreementSearchPage} />
-				<Route exact path='/admin' component={AdminSettingsPage} />
-				<Route component={NotFoundPage} />
-			</Switch>
-		</Router>
+					<Route exact path='/claims' component={AgreementSearchPage} />
+					<Route exact path='/reports' component={AgreementSearchPage} />
+					<Route exact path='/admin' component={AdminSettingsPage} />
+					<Route component={NotFoundPage} />
+				</Switch>
+			</Router>
+		</ThemeSwitcherProvider>
 	);
 };
 
