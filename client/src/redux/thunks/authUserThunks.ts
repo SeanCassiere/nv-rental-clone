@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { LOCAL_STORAGE_FUNCTIONS } from "../../../utils/functions";
-import { RootState } from "../../store";
-import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../../interfaces/authentication";
+import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
+import { RootState } from "../store";
+import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../interfaces/authentication";
 
 const AUTH_URL = process.env.REACT_APP_SERVER_URL || "";
 

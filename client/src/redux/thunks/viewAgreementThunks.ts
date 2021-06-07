@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import appAxios from "../../../api/appAxiosInstance";
-import { AgreementDataFull } from "../../../interfaces/agreement";
-import { RootState } from "../../store";
+import appAxios from "../../api/appAxiosInstance";
+import { AgreementDataFull } from "../../interfaces/agreement";
+import { RootState } from "../store";
 
 export const fetchAgreementThunk = createAsyncThunk("viewAgreement/fetchAgreement", async (id: string, thunkApi) => {
 	const source = axios.CancelToken.source();

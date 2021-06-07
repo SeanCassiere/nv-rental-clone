@@ -8,8 +8,8 @@ import { AppDispatch, selectAuthUserState, selectSearchCustomersState } from "..
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
 import { CustomersInList } from "../../interfaces/customers";
-import { fetchCustomersThunk } from "../../redux/slices/thunks/searchCustomersThunks";
-import { refreshLastCustomersSearchDate } from "../../redux/slices/searchCustomers";
+import { fetchCustomersThunk } from "../../redux/thunks/searchCustomersThunks";
+import { refreshLastCustomersSearchDate } from "../../redux/slices/searchCustomersSlice";
 
 const { Column, HeaderCell, Cell } = Table;
 

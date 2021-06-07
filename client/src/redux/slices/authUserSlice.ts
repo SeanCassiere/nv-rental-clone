@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { NavotarClientFeature } from "../../interfaces/authentication";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
-import { loginUserThunk, refreshAuthTokenThunk } from "./thunks/authUserThunks";
+import { loginUserThunk, refreshAuthTokenThunk } from "../thunks/authUserThunks";
 
 interface AuthUserSliceState {
 	token: string;

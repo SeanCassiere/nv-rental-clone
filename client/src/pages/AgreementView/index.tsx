@@ -12,9 +12,9 @@ import CustomerInformation from "./CustomerInformation";
 import OtherAgreementSummary from "./OtherAgreementSummary";
 import DepositInformationPanel from "./DepositInformationPanel";
 
-import { fetchAgreementThunk } from "../../redux/slices/thunks/viewAgreementThunks";
+import { fetchAgreementThunk } from "../../redux/thunks/viewAgreementThunks";
 import { AppDispatch, selectViewAgreementState } from "../../redux/store";
-import { clearViewAgreementState } from "../../redux/slices/viewAgreement";
+import { clearViewAgreementState } from "../../redux/slices/viewAgreementSlice";
 
 type PageParams = {
 	id: string;

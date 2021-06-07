@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import appAxiosInstance from "../../../api/appAxiosInstance";
-import { AgreementInList } from "../../../interfaces/agreement";
-import { RootState } from "../../store";
+import appAxiosInstance from "../../api/appAxiosInstance";
+import { AgreementInList } from "../../interfaces/agreement";
+import { RootState } from "../store";
 
 export const fetchAgreementsThunk = createAsyncThunk<
 	{ agreements: AgreementInList[]; lastRunSearch: string },

@@ -17,7 +17,7 @@ import AdminSettingsPage from "./pages/Admin";
 import StartSplashPage from "./pages/StartSplash";
 
 import NotFoundPage from "./pages/NotFound";
-import { refreshAuthTokenThunk } from "./redux/slices/thunks/authUserThunks";
+import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
 
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();

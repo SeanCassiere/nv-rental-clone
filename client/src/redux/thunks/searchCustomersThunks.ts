@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import appAxiosInstance from "../../../api/appAxiosInstance";
-import { CustomersInList } from "../../../interfaces/customers";
-import { RootState } from "../../store";
+import appAxiosInstance from "../../api/appAxiosInstance";
+import { CustomersInList } from "../../interfaces/customers";
+import { RootState } from "../store";
 
 export const fetchCustomersThunk = createAsyncThunk(
 	"searchCustomers/fetchCustomers",

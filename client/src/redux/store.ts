@@ -1,10 +1,10 @@
 import { configureStore, getDefaultMiddleware, Reducer, AnyAction, combineReducers } from "@reduxjs/toolkit";
 import { LOCAL_STORAGE_FUNCTIONS } from "../utils/functions";
 
-import authUserSlice from "./slices/authUser";
-import searchAgreementsSlice from "./slices/searchAgreements";
-import searchCustomersSlice from "./slices/searchCustomers";
-import viewAgreementSlice from "./slices/viewAgreement";
+import authUserSlice from "./slices/authUserSlice";
+import searchAgreementsSlice from "./slices/searchAgreementsSlice";
+import searchCustomersSlice from "./slices/searchCustomersSlice";
+import viewAgreementSlice from "./slices/viewAgreementSlice";
 
 const combinedReducer = combineReducers({
 	authUser: authUserSlice,

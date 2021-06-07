@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAuthUserState } from "../../redux/store";
 
 import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
-import { loginUserThunk } from "../../redux/slices/thunks/authUserThunks";
+import { loginUserThunk } from "../../redux/thunks/authUserThunks";
 
 const AuthModal: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();

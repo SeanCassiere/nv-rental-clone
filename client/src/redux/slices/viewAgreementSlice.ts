@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AgreementDataFull } from "../../interfaces/agreement";
 
-import { fetchAgreementThunk } from "./thunks/viewAgreementThunks";
+import { fetchAgreementThunk } from "../thunks/viewAgreementThunks";
 
 interface ViewAgreementSliceState {
 	agreement: AgreementDataFull | null;
