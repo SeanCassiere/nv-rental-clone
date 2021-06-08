@@ -42,7 +42,7 @@ const AgreementViewPage: React.FunctionComponent = () => {
 	}, [setRefreshNow]);
 
 	const handleGoBack = React.useCallback(() => {
-		history.push("/agreements");
+		history.goBack();
 	}, [history]);
 
 	return (

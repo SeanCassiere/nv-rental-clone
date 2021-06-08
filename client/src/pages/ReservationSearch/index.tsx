@@ -1,29 +1,29 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Table, Panel, Message } from "rsuite";
+import { Table, Panel, Message, Icon } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
-import { fetchAgreementsThunk } from "../../redux/thunks/searchAgreementsThunks";
-import { refreshLastSearchDate } from "../../redux/slices/searchAgreementsSlice";
+import { AppDispatch, selectAuthUserState, selectSearchReservationsState } from "../../redux/store";
+import { fetchReservationsThunk } from "../../redux/thunks/searchReservationsThunks";
 
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
 
-import { AgreementInList } from "../../interfaces/agreement";
+import { ReservationsInList } from "../../interfaces/reservations";
+import { refreshLastReservationSearchDate } from "../../redux/slices/searchReservationsSlice";
 
 const { Column, HeaderCell, Cell } = Table;
 
-const AgreementSearchPage: React.FunctionComponent = () => {
+const ReservationSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
 	const {
-		agreements: data,
+		reservations: data,
 		isSearching,
 		lastRanSearch,
 		isError,
 		error: searchError,
-	} = useSelector(selectSearchAgreementsState);
+	} = useSelector(selectSearchReservationsState);
 
 	React.useEffect(() => {
 		const currentTime = Math.floor(Date.now());
@@ -34,7 +34,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 
 		if (!clientId || !userId) return;
 
-		const promise = dispatch(fetchAgreementsThunk({ limit: 15 }));
+		const promise = dispatch(fetchReservationsThunk({ limit: 15 }));
 
 		return () => promise.abort();
 	}, [dispatch, lastRanSearch, token, clientId, userId]);
@@ -42,26 +42,26 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 	const handleRefreshList = React.useCallback(() => {
 		const currentTime = new Date();
 		currentTime.setDate(currentTime.getDate() - 120);
-		dispatch(refreshLastSearchDate(currentTime.toUTCString()));
+		dispatch(refreshLastReservationSearchDate(currentTime.toUTCString()));
 	}, [dispatch]);
 
 	return (
 		<AppPageContainer>
 			<Panel
-				header={<ViewPageHeader title='Search Agreements' refreshFunction={handleRefreshList} refresh />}
+				header={<ViewPageHeader title='Search Reservations' refreshFunction={handleRefreshList} refresh />}
 				bordered
 				style={{ marginBottom: 10 }}
 				defaultExpanded
 			>
-				Agreement Search page
+				Reservations Search page
 			</Panel>
 			{isError && (
 				<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 			)}
 			<Table height={500} bordered data={data} loading={isSearching} shouldUpdateScroll={false}>
 				<Column width={110}>
-					<HeaderCell>Agreement No.</HeaderCell>
-					<Cell dataKey='AgreementNumber' />
+					<HeaderCell>Reservation No.</HeaderCell>
+					<Cell dataKey='ReservationNumber' />
 				</Column>
 
 				<Column width={100}>
@@ -74,11 +74,20 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 					<Cell dataKey='LicenseNo' />
 				</Column>
 
+				<Column width={200}>
+					<HeaderCell>Customer Name</HeaderCell>
+					<Cell>
+						{(rowData: ReservationsInList) => {
+							return <>{rowData.FirstName + " " + rowData.LastName}</>;
+						}}
+					</Cell>
+				</Column>
+
 				<Column width={120}>
 					<HeaderCell>Check-Out Date</HeaderCell>
 					<Cell>
-						{(rowData: AgreementInList) => {
-							const date = new Date(rowData.CheckoutDate);
+						{(rowData: ReservationsInList) => {
+							const date = new Date(rowData.StartDate);
 							return <>{date.toLocaleDateString()}</>;
 						}}
 					</Cell>
@@ -87,65 +96,56 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 				<Column width={120}>
 					<HeaderCell>Check-In Date</HeaderCell>
 					<Cell>
-						{(rowData: AgreementInList) => {
-							const date = new Date(rowData.CheckinDate);
+						{(rowData: ReservationsInList) => {
+							const date = new Date(rowData.EndDate);
 							return <>{date.toLocaleDateString()}</>;
 						}}
 					</Cell>
 				</Column>
 
 				<Column width={200}>
-					<HeaderCell>Customer Name</HeaderCell>
-					<Cell>
-						{(rowData: AgreementInList) => {
-							return <>{rowData.FirstName + " " + rowData.LastName}</>;
-						}}
-					</Cell>
-				</Column>
-
-				<Column width={150}>
-					<HeaderCell>Status</HeaderCell>
-					<Cell>
-						{(rowData: AgreementInList) => {
-							const status = rowData.AgreementStatusName;
-							if (status === "Close") return <span style={{ color: "#D75252" }}>Closed</span>;
-							if (status === "Pending_Payment") return <span style={{ color: "#9119A4" }}>Pending Payments</span>;
-							if (status === "Open") return <span style={{ color: "#069F2E" }}>Open</span>;
-							return <>{rowData.AgreementStatusName}</>;
-						}}
-					</Cell>
+					<HeaderCell>Location Name</HeaderCell>
+					<Cell dataKey='StartLocationName' />
 				</Column>
 
 				<Column width={120}>
 					<HeaderCell>Created Date</HeaderCell>
 					<Cell>
-						{(rowData: AgreementInList) => {
+						{(rowData: ReservationsInList) => {
 							const date = new Date(rowData.CreatedDate);
 							return <>{date.toLocaleDateString()}</>;
 						}}
 					</Cell>
 				</Column>
 
-				<Column width={180}>
-					<HeaderCell>Created By</HeaderCell>
-					<Cell dataKey='CreatedByName' />
+				<Column width={100}>
+					<HeaderCell>Status</HeaderCell>
+					<Cell dataKey='ReservationStatus' />
+				</Column>
+
+				<Column width={100}>
+					<HeaderCell>Type</HeaderCell>
+					<Cell dataKey='ReservationType' />
 				</Column>
 
 				<Column minWidth={150} flexGrow={1} fixed='right'>
 					<HeaderCell>Action</HeaderCell>
 
 					<Cell>
-						{(rowData: AgreementInList) => {
-							const status = rowData.AgreementStatusName;
+						{(rowData: ReservationsInList) => {
+							const status = rowData.AgreementId;
 							return (
 								<span>
-									<RouterLink to={`/agreements/${rowData.AgreementId}`}>View</RouterLink>
+									<RouterLink to={`/reservations/${rowData.ReserveId}`}>View</RouterLink>
 									&nbsp;|&nbsp;
-									<RouterLink to={`/agreements/${rowData.AgreementId}/edit`}>Edit</RouterLink>
-									{status === "Open" && (
+									<RouterLink to={`/reservations/${rowData.ReserveId}/edit`}>Edit</RouterLink>
+									{status && (
 										<>
 											&nbsp;|&nbsp;
-											<RouterLink to={`/agreements/${rowData.AgreementId}/checkin`}>Check In</RouterLink>
+											<RouterLink to={`/agreements/${rowData.AgreementId}`}>
+												<Icon icon='arrow-circle-o-right' />
+												&nbsp;Agreement
+											</RouterLink>
 										</>
 									)}
 								</span>
@@ -158,4 +158,4 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 	);
 };
 
-export default AgreementSearchPage;
+export default ReservationSearchPage;

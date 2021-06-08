@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-// import "rsuite/dist/styles/rsuite-default.css";
 
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 
@@ -12,6 +11,7 @@ import { Alert } from "rsuite";
 
 import DashboardPage from "./pages/Dashboard";
 import AgreementSearchPage from "./pages/AgreementSearch";
+import ReservationSearchPage from "./pages/ReservationSearch";
 import CustomerSearchPage from "./pages/CustomerSearch";
 import AgreementViewPage from "./pages/AgreementView";
 import AdminSettingsPage from "./pages/Admin";
@@ -52,19 +52,25 @@ const App: React.FunctionComponent = () => {
 				<Switch>
 					<Route exact path='/' component={StartSplashPage} />
 					<Route exact path='/dashboard' component={DashboardPage} />
+
 					<Route exact path='/vehicles' component={AgreementSearchPage} />
-					<Route exact path='/gps' component={AgreementSearchPage} />
-					<Route exact path='/reservations' component={AgreementSearchPage} />
+					<Route exact path='/vehicles/:id' component={DashboardPage} />
+
+					{/* <Route exact path='/gps' component={AgreementSearchPage} /> */}
+
+					<Route exact path='/reservations' component={ReservationSearchPage} />
+					{/* <Route exact path='/reservations/:id' component={DashboardPage} /> */}
 
 					<Route exact path='/customers' component={CustomerSearchPage} />
+					{/* <Route exact path='/customers/:id/edit' component={DashboardPage} /> */}
 
 					<Route exact path='/agreements' component={AgreementSearchPage} />
 					<Route exact path='/agreements/:id' component={AgreementViewPage} />
-					<Route exact path='/agreements/:id/edit' component={DashboardPage} />
-					<Route exact path='/agreements/:id/checkin' component={DashboardPage} />
+					{/* <Route exact path='/agreements/:id/edit' component={DashboardPage} /> */}
+					{/* <Route exact path='/agreements/:id/checkin' component={DashboardPage} /> */}
 
-					<Route exact path='/claims' component={AgreementSearchPage} />
-					<Route exact path='/reports' component={AgreementSearchPage} />
+					{/* <Route exact path='/claims' component={AgreementSearchPage} /> */}
+					{/* <Route exact path='/reports' component={AgreementSearchPage} /> */}
 					<Route exact path='/admin' component={AdminSettingsPage} />
 					<Route component={NotFoundPage} />
 				</Switch>

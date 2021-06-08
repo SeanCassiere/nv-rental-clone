@@ -32,7 +32,7 @@ const CustomerSearchPage: React.FunctionComponent = () => {
 		if (lastSearch > currentTime) return;
 		if (!clientId || !userId) return;
 
-		const promise = dispatch(fetchCustomersThunk({ limit: 10 }));
+		const promise = dispatch(fetchCustomersThunk({ limit: 15 }));
 		return () => promise.abort();
 	}, [dispatch, lastRanSearch, token, clientId, userId]);
 
@@ -55,7 +55,7 @@ const CustomerSearchPage: React.FunctionComponent = () => {
 			{isError && (
 				<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 			)}
-			<Table height={505} data={data} loading={isSearching} shouldUpdateScroll={false}>
+			<Table height={500} bordered data={data} loading={isSearching} shouldUpdateScroll={false}>
 				<Column width={120}>
 					<HeaderCell>First Name</HeaderCell>
 					<Cell dataKey='FirstName' />
