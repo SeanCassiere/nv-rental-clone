@@ -1,9 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { RootState } from "../store";
 import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../interfaces/authentication";
+import { setClientFeatures } from "../slices/appConfigSlice";
 
 const AUTH_URL = process.env.REACT_APP_SERVER_URL || "";
 
@@ -27,13 +29,13 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 	try {
 		const decoded: JWTReturnAuthToken = jwtDecode(data.token);
 		const { client_navotar_clientid, client_navotar_userid, exp } = decoded;
+		thunkApi.dispatch(setClientFeatures(data.features));
 		return {
 			token: data.token,
 			refreshToken: data.refreshToken,
 			clientId: client_navotar_clientid,
 			userId: client_navotar_userid,
 			tokenExpiresAt: exp,
-			clientFeatures: data.features,
 		};
 	} catch (error) {
 		return thunkApi.rejectWithValue("Could not decode the access token");

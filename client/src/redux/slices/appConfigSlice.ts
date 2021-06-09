@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { NavotarClientFeature } from "../../interfaces/authentication";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 
 export type ThemeOptions = "light" | "dark";
 
 interface AppConfigSliceState {
 	theme: ThemeOptions;
+	clientFeatures: NavotarClientFeature[];
 }
 
-let initialStateData: AppConfigSliceState;
-const callTheme = LOCAL_STORAGE_FUNCTIONS.getThemeFromLocalStorage();
-initialStateData = {
-	theme: callTheme,
+const initialStateData: AppConfigSliceState = {
+	theme: LOCAL_STORAGE_FUNCTIONS.getThemeFromLocalStorage(),
+	clientFeatures: [],
 };
 
 export const appConfigSlice = createSlice({
@@ -22,9 +23,12 @@ export const appConfigSlice = createSlice({
 			if (action.payload === "dark") state.theme = "light";
 			LOCAL_STORAGE_FUNCTIONS.setThemeToLocalStorage(state.theme);
 		},
+		setClientFeatures: (state, action: PayloadAction<NavotarClientFeature[]>) => {
+			state.clientFeatures = action.payload;
+		},
 	},
 });
 
-export const { switchTheme } = appConfigSlice.actions;
+export const { switchTheme, setClientFeatures } = appConfigSlice.actions;
 
 export default appConfigSlice.reducer;

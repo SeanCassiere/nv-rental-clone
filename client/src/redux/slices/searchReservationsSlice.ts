@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ReservationsInList } from "../../interfaces/reservations";
-import { fakeReservationsList } from "../../utils/fakeData";
 import { fetchReservationsThunk } from "../thunks/searchReservationsThunks";
 
 interface SearchReservationsSliceState {

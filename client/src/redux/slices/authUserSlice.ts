@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { NavotarClientFeature } from "../../interfaces/authentication";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { loginUserThunk, refreshAuthTokenThunk } from "../thunks/authUserThunks";
 
@@ -12,7 +11,6 @@ interface AuthUserSliceState {
 	userId: string | null;
 	clientId: string | null;
 	error: string | null;
-	clientFeatures: NavotarClientFeature[];
 }
 
 let initialStateData: AuthUserSliceState;
@@ -25,7 +23,6 @@ initialStateData = {
 	userId: null,
 	clientId: null,
 	error: null,
-	clientFeatures: [],
 };
 
 const callLocal = LOCAL_STORAGE_FUNCTIONS.getTokenFromLocalStorage();
@@ -39,7 +36,6 @@ if (callLocal) {
 		userId: callLocal.userId,
 		clientId: callLocal.clientId,
 		error: null,
-		clientFeatures: callLocal.clientFeatures,
 	};
 }
 
@@ -69,12 +65,11 @@ export const authUserSlice = createSlice({
 				state.clientId = action.payload.clientId;
 				state.userId = action.payload.userId;
 				state.isLoggedIn = true;
-				state.clientFeatures = action.payload.clientFeatures;
 			}
 		});
 		builder.addCase(loginUserThunk.rejected, (state, action) => {
 			if (action.payload) {
-				state.error = action.payload as string;
+				state.error = action.error.message as string;
 				state.isAuthenticating = false;
 			}
 		});
@@ -83,7 +78,8 @@ export const authUserSlice = createSlice({
 			state.tokenExpiresAt = action.payload.tokenExpiresAt;
 		});
 		builder.addCase(refreshAuthTokenThunk.rejected, (state, action) => {
-			state.error = action.payload as string;
+			state.error = action.error.message as string;
+			state.isAuthenticating = false;
 		});
 	},
 });
