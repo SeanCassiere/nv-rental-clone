@@ -22,7 +22,7 @@ export const SearchAgreementsSlice = createSlice({
 	name: "searchAgreements",
 	initialState: initialStateData,
 	reducers: {
-		refreshLastSearchDate: (state, action: PayloadAction<string>) => {
+		refreshLastAgreementsSearchDate: (state, action: PayloadAction<string>) => {
 			state.lastRanSearch = action.payload;
 		},
 	},
@@ -47,6 +47,6 @@ export const SearchAgreementsSlice = createSlice({
 	},
 });
 
-export const { refreshLastSearchDate } = SearchAgreementsSlice.actions;
+export const { refreshLastAgreementsSearchDate } = SearchAgreementsSlice.actions;
 
 export default SearchAgreementsSlice.reducer;

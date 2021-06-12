@@ -5,7 +5,7 @@ import { Table, Panel, Message } from "rsuite";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
 import { fetchAgreementsThunk } from "../../redux/thunks/searchAgreementsThunks";
-import { refreshLastSearchDate } from "../../redux/slices/searchAgreementsSlice";
+import { refreshLastAgreementsSearchDate } from "../../redux/slices/searchAgreementsSlice";
 
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
@@ -42,7 +42,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 	const handleRefreshList = React.useCallback(() => {
 		const currentTime = new Date();
 		currentTime.setDate(currentTime.getDate() - 120);
-		dispatch(refreshLastSearchDate(currentTime.toUTCString()));
+		dispatch(refreshLastAgreementsSearchDate(currentTime.toUTCString()));
 	}, [dispatch]);
 
 	return (

@@ -134,9 +134,9 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 							>
 								Dashboard
 							</Nav.Item>
-							{/* <Nav.Item eventKey='vehicles' icon={<Icon icon='car' />} componentClass={RouterLink} to='/vehicles'>
+							<Nav.Item eventKey='vehicles' icon={<Icon icon='car' />} componentClass={RouterLink} to='/vehicles'>
 								Vehicles
-							</Nav.Item> */}
+							</Nav.Item>
 							{/* <Nav.Item eventKey='gps' icon={<Icon icon='explore' />} componentClass={RouterLink} to='/gps'>
 								GPS
 							</Nav.Item> */}

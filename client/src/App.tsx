@@ -13,6 +13,7 @@ import DashboardPage from "./pages/Dashboard";
 import AgreementSearchPage from "./pages/AgreementSearch";
 import ReservationSearchPage from "./pages/ReservationSearch";
 import CustomerSearchPage from "./pages/CustomerSearch";
+import VehicleSearchPage from "./pages/VehicleSearch";
 import AgreementViewPage from "./pages/AgreementView";
 import AdminSettingsPage from "./pages/Admin";
 
@@ -53,8 +54,8 @@ const App: React.FunctionComponent = () => {
 					<Route exact path='/' component={StartSplashPage} />
 					<Route exact path='/dashboard' component={DashboardPage} />
 
-					<Route exact path='/vehicles' component={AgreementSearchPage} />
-					<Route exact path='/vehicles/:id' component={DashboardPage} />
+					<Route exact path='/vehicles' component={VehicleSearchPage} />
+					{/* <Route exact path='/vehicles/:id' component={DashboardPage} /> */}
 
 					{/* <Route exact path='/gps' component={AgreementSearchPage} /> */}
 

@@ -7,6 +7,7 @@ import searchCustomersSlice from "./slices/searchCustomersSlice";
 import viewAgreementSlice from "./slices/viewAgreementSlice";
 import appConfigSlice from "./slices/appConfigSlice";
 import searchReservationsSlice from "./slices/searchReservationsSlice";
+import searchVehiclesSlice from "./slices/searchVehiclesSlice";
 
 const combinedReducer = combineReducers({
 	appConfig: appConfigSlice,
@@ -15,12 +16,13 @@ const combinedReducer = combineReducers({
 	viewAgreement: viewAgreementSlice,
 	searchCustomers: searchCustomersSlice,
 	searchReservations: searchReservationsSlice,
+	searchVehicles: searchVehiclesSlice,
 });
 
 const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
 	if (action.type === "authUser/logOutUser") {
 		LOCAL_STORAGE_FUNCTIONS.clearLocalStorageTokens();
-		state = undefined as RootState;
+		state = {} as RootState;
 	}
 	return combinedReducer(state, action);
 };
@@ -37,8 +39,9 @@ export type RootState = ReturnType<typeof combinedReducer>;
 export const selectAppConfigState = (state: RootState) => state.appConfig;
 export const selectAuthUserState = (state: RootState) => state.authUser;
 export const selectSearchAgreementsState = (state: RootState) => state.searchAgreements;
-export const selectSearchReservationsState = (state: RootState) => state.searchReservations;
-export const selectSearchCustomersState = (state: RootState) => state.searchCustomers;
 export const selectViewAgreementState = (state: RootState) => state.viewAgreement;
+export const selectSearchCustomersState = (state: RootState) => state.searchCustomers;
+export const selectSearchReservationsState = (state: RootState) => state.searchReservations;
+export const selectSearchVehiclesState = (state: RootState) => state.searchVehicles;
 
 export default store;
