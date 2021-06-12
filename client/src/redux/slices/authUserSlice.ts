@@ -65,6 +65,7 @@ export const authUserSlice = createSlice({
 				state.clientId = action.payload.clientId;
 				state.userId = action.payload.userId;
 				state.isLoggedIn = true;
+				state.isAuthenticating = false;
 			}
 		});
 		builder.addCase(loginUserThunk.rejected, (state, action) => {

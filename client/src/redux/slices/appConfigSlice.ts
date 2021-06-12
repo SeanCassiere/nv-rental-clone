@@ -11,7 +11,7 @@ interface AppConfigSliceState {
 
 const initialStateData: AppConfigSliceState = {
 	theme: LOCAL_STORAGE_FUNCTIONS.getThemeFromLocalStorage(),
-	clientFeatures: [],
+	clientFeatures: LOCAL_STORAGE_FUNCTIONS.getClientFeaturesFromLocalStorage(),
 };
 
 export const appConfigSlice = createSlice({
