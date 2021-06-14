@@ -6,10 +6,11 @@ const ViewPageHeader: React.FunctionComponent<{
 	refreshFunction?: () => void;
 	back?: true;
 	refresh?: true;
+	small?: true;
 	title: string | React.ReactNode;
-}> = React.memo(({ goBackFunction, refreshFunction, back, refresh, title }) => {
+}> = React.memo(({ goBackFunction, refreshFunction, back, refresh, title, small }) => {
 	return (
-		<h5>
+		<h5 style={{ fontSize: small ? "1em" : "1.2em", fontWeight: small ? 500 : 900 }}>
 			{back && goBackFunction && (
 				<>
 					<Button onClick={goBackFunction}>
