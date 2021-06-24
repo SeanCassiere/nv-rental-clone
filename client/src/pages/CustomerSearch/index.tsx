@@ -1,9 +1,10 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Table, Panel, Message } from "rsuite";
+import Moment from "react-moment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAuthUserState, selectSearchCustomersState } from "../../redux/store";
+import { AppDispatch, selectAppConfigState, selectAuthUserState, selectSearchCustomersState } from "../../redux/store";
 
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
@@ -16,6 +17,7 @@ const { Column, HeaderCell, Cell } = Table;
 const CustomerSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
+	const { dates } = useSelector(selectAppConfigState);
 	const {
 		customers: data,
 		isError,
@@ -81,8 +83,7 @@ const CustomerSearchPage: React.FunctionComponent = () => {
 					<Cell>
 						{(rowData: CustomersInList) => {
 							if (rowData.DateOfbirth) {
-								const date = new Date(rowData.DateOfbirth);
-								return <>{date.toLocaleDateString()}</>;
+								return <Moment format={dates.dateShort}>{rowData.DateOfbirth}</Moment>;
 							}
 						}}
 					</Cell>

@@ -14,16 +14,18 @@ interface AppConfigSliceState {
 		dateLong: string;
 		dateTimeLong: string;
 	};
+	error: string | null;
 }
 
 const initialStateData: AppConfigSliceState = {
 	theme: LOCAL_STORAGE_FUNCTIONS.getThemeFromLocalStorage(),
 	clientFeatures: [],
 	dates: {
-		dateShort: "MM/dd/yy",
-		dateLong: "MM/dd/yyyy",
-		dateTimeLong: "MM/dd/yyyy HH:mm",
+		dateShort: "MM/DD/YYYY",
+		dateLong: "MM/DD/YYYY",
+		dateTimeLong: "MM/DD/YYYY HH:mm a",
 	},
+	error: null,
 };
 
 export const appConfigSlice = createSlice({
@@ -36,16 +38,19 @@ export const appConfigSlice = createSlice({
 			LOCAL_STORAGE_FUNCTIONS.setThemeToLocalStorage(state.theme);
 		},
 		setDateShort: (state, action: PayloadAction<string>) => {
-			state.dates.dateShort = action.payload;
+			state.dates.dateShort = action.payload.toUpperCase();
 		},
 		setDateLong: (state, action: PayloadAction<string>) => {
-			state.dates.dateLong = action.payload;
+			state.dates.dateLong = action.payload.toUpperCase();
 		},
 		setDateTimeLong: (state, action: PayloadAction<string>) => {
 			state.dates.dateTimeLong = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
+		builder.addCase(fetchClientFeaturesThunk.rejected, (state, action) => {
+			state.error = action.error?.message as string;
+		});
 		builder.addCase(fetchClientFeaturesThunk.fulfilled, (state, action) => {
 			state.clientFeatures = action.payload;
 		});
