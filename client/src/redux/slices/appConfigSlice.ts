@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { NavotarClientFeature } from "../../interfaces/authentication";
+
+import { fetchClientFeaturesThunk } from "../thunks/appConfigThunks";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 
 export type ThemeOptions = "light" | "dark";
@@ -7,11 +9,23 @@ export type ThemeOptions = "light" | "dark";
 interface AppConfigSliceState {
 	theme: ThemeOptions;
 	clientFeatures: NavotarClientFeature[];
+	dates: {
+		dateShort: string;
+		dateLong: string;
+		dateTimeLong: string;
+	};
+	error: string | null;
 }
 
 const initialStateData: AppConfigSliceState = {
 	theme: LOCAL_STORAGE_FUNCTIONS.getThemeFromLocalStorage(),
-	clientFeatures: LOCAL_STORAGE_FUNCTIONS.getClientFeaturesFromLocalStorage(),
+	clientFeatures: [],
+	dates: {
+		dateShort: "MM/DD/YYYY",
+		dateLong: "MM/DD/YYYY",
+		dateTimeLong: "MM/DD/YYYY HH:mm a",
+	},
+	error: null,
 };
 
 export const appConfigSlice = createSlice({
@@ -23,12 +37,26 @@ export const appConfigSlice = createSlice({
 			if (action.payload === "dark") state.theme = "light";
 			LOCAL_STORAGE_FUNCTIONS.setThemeToLocalStorage(state.theme);
 		},
-		setClientFeatures: (state, action: PayloadAction<NavotarClientFeature[]>) => {
-			state.clientFeatures = action.payload;
+		setDateShort: (state, action: PayloadAction<string>) => {
+			state.dates.dateShort = action.payload.toUpperCase();
 		},
+		setDateLong: (state, action: PayloadAction<string>) => {
+			state.dates.dateLong = action.payload.toUpperCase();
+		},
+		setDateTimeLong: (state, action: PayloadAction<string>) => {
+			state.dates.dateTimeLong = action.payload;
+		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(fetchClientFeaturesThunk.rejected, (state, action) => {
+			state.error = action.error?.message as string;
+		});
+		builder.addCase(fetchClientFeaturesThunk.fulfilled, (state, action) => {
+			state.clientFeatures = action.payload;
+		});
 	},
 });
 
-export const { switchTheme, setClientFeatures } = appConfigSlice.actions;
+export const { switchTheme, setDateShort, setDateLong, setDateTimeLong } = appConfigSlice.actions;
 
 export default appConfigSlice.reducer;

@@ -1,28 +1,15 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Panel, Grid, Row, Col, Placeholder } from "rsuite";
+import Moment from "react-moment";
 import { useSelector } from "react-redux";
 
-import { selectViewAgreementState } from "../../redux/store";
+import { selectAppConfigState, selectViewAgreementState } from "../../redux/store";
 import styled from "styled-components";
 
 const AgreementInformation = () => {
 	const { agreement, isSearching } = useSelector(selectViewAgreementState);
-
-	const [checkInDate, setCheckInDate] = React.useState("");
-	const [checkOutDate, setCheckOutDate] = React.useState("");
-
-	React.useEffect(() => {
-		if (!agreement) return;
-		if (agreement.checkinDate) {
-			const date = new Date(agreement.checkinDate);
-			setCheckInDate(`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`);
-		}
-		if (agreement.checkoutDate) {
-			const date = new Date(agreement.checkoutDate);
-			setCheckOutDate(`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`);
-		}
-	}, [agreement]);
+	const { dates } = useSelector(selectAppConfigState);
 
 	if (isSearching)
 		return (
@@ -48,9 +35,15 @@ const AgreementInformation = () => {
 				<RowItem label='Type' text={agreement?.vehicleType} />
 				<RowItem label='License No.' text={agreement?.licenseNo} />
 				<RowItem label='Check-Out Location' text={agreement?.checkoutLocationName} />
-				<RowItem label={<>Check-Out Date &amp; Time</>} text={`${checkOutDate}`} />
+				<RowItem
+					label={<>Check-Out Date &amp; Time</>}
+					text={<Moment format={dates.dateTimeLong}>{agreement?.checkoutDate}</Moment>}
+				/>
 				<RowItem label='Check-In Location' text={agreement?.returnLocationName} />
-				<RowItem label={<>Check-In Date &amp; Time</>} text={`${checkInDate}`} />
+				<RowItem
+					label={<>Check-In Date &amp; Time</>}
+					text={<Moment format={dates.dateTimeLong}>{agreement?.checkinDate}</Moment>}
+				/>
 				<RowItem label='Check-Out Mileage' text={agreement?.odometerOut} />
 				<RowItem label='Fuel Out' text={agreement?.fuelLevelOut} />
 				<RowItem label='Created By' text={agreement?.createdByName} />

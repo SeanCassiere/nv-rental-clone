@@ -5,7 +5,6 @@ import jwtDecode from "jwt-decode";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { RootState } from "../store";
 import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../interfaces/authentication";
-import { setClientFeatures } from "../slices/appConfigSlice";
 
 const AUTH_URL = process.env.REACT_APP_SERVER_URL || "";
 
@@ -21,7 +20,6 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 	try {
 		LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
 		LOCAL_STORAGE_FUNCTIONS.setRefreshTokenToLocalStorage(data.refreshToken);
-		LOCAL_STORAGE_FUNCTIONS.setClientFeaturesToLocalStorage(data.features);
 	} catch (error) {
 		return thunkApi.rejectWithValue("Could not save the tokens to local storage");
 	}
@@ -29,7 +27,7 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 	try {
 		const decoded: JWTReturnAuthToken = jwtDecode(data.token);
 		const { client_navotar_clientid, client_navotar_userid, exp } = decoded;
-		thunkApi.dispatch(setClientFeatures(data.features));
+
 		return {
 			token: data.token,
 			refreshToken: data.refreshToken,

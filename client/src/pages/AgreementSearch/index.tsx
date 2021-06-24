@@ -1,9 +1,10 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Table, Panel, Message } from "rsuite";
+import Moment from "react-moment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
+import { AppDispatch, selectAppConfigState, selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
 import { fetchAgreementsThunk } from "../../redux/thunks/searchAgreementsThunks";
 import { refreshLastAgreementsSearchDate } from "../../redux/slices/searchAgreementsSlice";
 
@@ -17,6 +18,7 @@ const { Column, HeaderCell, Cell } = Table;
 const AgreementSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
+	const { dates } = useSelector(selectAppConfigState);
 	const {
 		agreements: data,
 		isSearching,
@@ -78,8 +80,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 					<HeaderCell>Check-Out Date</HeaderCell>
 					<Cell>
 						{(rowData: AgreementInList) => {
-							const date = new Date(rowData.CheckoutDate);
-							return <>{date.toLocaleDateString()}</>;
+							return <Moment format={dates.dateShort}>{rowData.CheckoutDate}</Moment>;
 						}}
 					</Cell>
 				</Column>
@@ -88,8 +89,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 					<HeaderCell>Check-In Date</HeaderCell>
 					<Cell>
 						{(rowData: AgreementInList) => {
-							const date = new Date(rowData.CheckinDate);
-							return <>{date.toLocaleDateString()}</>;
+							return <Moment format={dates.dateShort}>{rowData.CheckinDate}</Moment>;
 						}}
 					</Cell>
 				</Column>
@@ -120,8 +120,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 					<HeaderCell>Created Date</HeaderCell>
 					<Cell>
 						{(rowData: AgreementInList) => {
-							const date = new Date(rowData.CreatedDate);
-							return <>{date.toLocaleDateString()}</>;
+							return <Moment format={dates.dateShort}>{rowData.CreatedDate}</Moment>;
 						}}
 					</Cell>
 				</Column>

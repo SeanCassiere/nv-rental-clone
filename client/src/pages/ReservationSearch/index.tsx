@@ -1,10 +1,12 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Table, Panel, Message, Icon } from "rsuite";
+import Moment from "react-moment";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
 	AppDispatch,
+	selectAppConfigState,
 	selectAppKeyValuesState,
 	selectAuthUserState,
 	selectSearchReservationsState,
@@ -22,6 +24,7 @@ const { Column, HeaderCell, Cell } = Table;
 const ReservationSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
+	const { dates } = useSelector(selectAppConfigState);
 	const {
 		reservations: data,
 		isSearching,
@@ -120,8 +123,7 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 					<HeaderCell>Created Date</HeaderCell>
 					<Cell>
 						{(rowData: ReservationsInList) => {
-							const date = new Date(rowData.CreatedDate);
-							return <>{date.toLocaleDateString()}</>;
+							return <Moment format={dates.dateShort}>{rowData.CreatedDate}</Moment>;
 						}}
 					</Cell>
 				</Column>
@@ -132,7 +134,7 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 						{(rowData: ReservationsInList) => {
 							const rowStatId = rowData.StatusId;
 							const rowStatus = reservationStatuses.filter((rdxStat) => rdxStat.id === rowStatId);
-							return <>{rowStatus[0].name}</>;
+							return <>{rowStatus[0]?.name}</>;
 						}}
 					</Cell>
 				</Column>

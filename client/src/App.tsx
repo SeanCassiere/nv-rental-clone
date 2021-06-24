@@ -22,6 +22,7 @@ import StartSplashPage from "./pages/StartSplash";
 import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
 import { fetchAgreementStatusesThunk, fetchReservationStatusesThunk } from "./redux/thunks/appKeyValuesThunks";
+import { fetchClientFeaturesThunk } from "./redux/thunks/appConfigThunks";
 
 const themes = { light: "/styles/rsuite-default.css", dark: "/styles/rsuite-dark.min.css" };
 
@@ -51,6 +52,7 @@ const App: React.FunctionComponent = () => {
 	React.useEffect(() => {
 		if (!isLoggedIn || token === "") return;
 
+		dispatch(fetchClientFeaturesThunk());
 		dispatch(fetchReservationStatusesThunk());
 		dispatch(fetchAgreementStatusesThunk());
 	}, [dispatch, isLoggedIn, token]);

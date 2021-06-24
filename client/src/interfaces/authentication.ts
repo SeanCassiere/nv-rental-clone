@@ -2,7 +2,6 @@ export interface AuthReturn {
 	message: string;
 	token: string;
 	refreshToken: string;
-	features: NavotarClientFeature[];
 }
 
 export interface RefreshReturn {
