@@ -11,6 +11,7 @@ import AgreementChargesSummary from "./AgreementChargesSummary";
 import CustomerInformation from "./CustomerInformation";
 import OtherAgreementSummary from "./OtherAgreementSummary";
 import DepositInformationPanel from "./DepositInformationPanel";
+import TopBarQuickInfo from "./TopBarQuickInfo";
 
 import { fetchAgreementThunk } from "../../redux/thunks/viewAgreementThunks";
 import { AppDispatch, selectViewAgreementState } from "../../redux/store";
@@ -64,6 +65,17 @@ const AgreementViewPage: React.FunctionComponent = () => {
 					<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 				)}
 				<Grid fluid>
+					<Row>
+						<Col md={16}>
+							<TopBarQuickInfo />
+						</Col>
+						<Col md={8}>
+							{/**
+								* @Todo
+								Implement print functionality
+								*/}
+						</Col>
+					</Row>
 					<Row>
 						<Col md={8}>
 							<AgreementInformation />

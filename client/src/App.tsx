@@ -21,6 +21,7 @@ import StartSplashPage from "./pages/StartSplash";
 
 import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
+import { fetchAgreementStatusesThunk, fetchReservationStatusesThunk } from "./redux/thunks/appKeyValuesThunks";
 
 const themes = { light: "/styles/rsuite-default.css", dark: "/styles/rsuite-dark.min.css" };
 
@@ -46,6 +47,13 @@ const App: React.FunctionComponent = () => {
 	React.useEffect(() => {
 		if (loginError) Alert.warning(loginError, 120000);
 	}, [loginError]);
+
+	React.useEffect(() => {
+		if (!isLoggedIn || token === "") return;
+
+		dispatch(fetchReservationStatusesThunk());
+		dispatch(fetchAgreementStatusesThunk());
+	}, [dispatch, isLoggedIn, token]);
 
 	return (
 		<ThemeSwitcherProvider themeMap={themes} defaultTheme={theme}>

@@ -10,13 +10,13 @@ import { setClientFeatures } from "../slices/appConfigSlice";
 const AUTH_URL = process.env.REACT_APP_SERVER_URL || "";
 
 export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, thunkApi) => {
-	const response = await axios.get(`${AUTH_URL}/users/login`);
+	const response = await axios.get<AuthReturn>(`${AUTH_URL}/users/login`);
 
 	if (response.status !== 200) {
 		return thunkApi.rejectWithValue(response.statusText);
 	}
 
-	const data = response.data as AuthReturn;
+	const data = response.data;
 
 	try {
 		LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
@@ -46,7 +46,7 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 	const state = thunkApi.getState() as RootState;
 	const { refreshToken } = state.authUser;
 
-	const response = await axios.get(`${AUTH_URL}/users/navotar/refresh`, {
+	const response = await axios.get<RefreshReturn>(`${AUTH_URL}/users/navotar/refresh`, {
 		headers: { Authorization: `Bearer ${refreshToken}` },
 	});
 
@@ -56,7 +56,7 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 		);
 	}
 
-	const data = response.data as RefreshReturn;
+	const data = response.data;
 
 	try {
 		LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
