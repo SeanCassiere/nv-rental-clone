@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ReservationStatus } from "../../interfaces/statuses";
+import { AgreementStatus, ReservationStatus } from "../../interfaces/statuses";
 
-import { fetchReservationStatusesThunk } from "../thunks/appKeyValuesThunks";
+import { fetchReservationStatusesThunk, fetchAgreementStatusesThunk } from "../thunks/appKeyValuesThunks";
 
 interface AppKeyValuesSliceState {
 	reservationValues: {
 		reservationStatuses: ReservationStatus[];
+		error: string | null;
+	};
+	agreementValues: {
+		agreementStatuses: AgreementStatus[];
 		error: string | null;
 	};
 }
@@ -15,6 +19,10 @@ const initialStateData: AppKeyValuesSliceState = {
 		reservationStatuses: [],
 		error: null,
 	},
+	agreementValues: {
+		agreementStatuses: [],
+		error: null,
+	},
 };
 
 export const appKeyValuesSlice = createSlice({
@@ -22,6 +30,9 @@ export const appKeyValuesSlice = createSlice({
 	initialState: initialStateData,
 	reducers: {
 		setReservationStatuses: (state, action: PayloadAction<ReservationStatus[]>) => {
+			state.reservationValues.reservationStatuses = action.payload;
+		},
+		setAgreementStatuses: (state, action: PayloadAction<ReservationStatus[]>) => {
 			state.reservationValues.reservationStatuses = action.payload;
 		},
 	},
@@ -34,9 +45,17 @@ export const appKeyValuesSlice = createSlice({
 			state.reservationValues.reservationStatuses = action.payload;
 			state.reservationValues.error = null;
 		});
+		builder.addCase(fetchAgreementStatusesThunk.rejected, (state, action) => {
+			state.agreementValues.agreementStatuses = [];
+			state.agreementValues.error = action.error?.message as string;
+		});
+		builder.addCase(fetchAgreementStatusesThunk.fulfilled, (state, action) => {
+			state.agreementValues.agreementStatuses = action.payload;
+			state.agreementValues.error = null;
+		});
 	},
 });
 
-export const { setReservationStatuses } = appKeyValuesSlice.actions;
+export const { setReservationStatuses, setAgreementStatuses } = appKeyValuesSlice.actions;
 
 export default appKeyValuesSlice.reducer;
