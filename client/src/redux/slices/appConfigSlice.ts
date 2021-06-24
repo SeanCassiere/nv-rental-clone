@@ -21,8 +21,8 @@ const initialStateData: AppConfigSliceState = {
 	clientFeatures: [],
 	dates: {
 		dateShort: "MM/dd/yy",
-		dateLong: "MM/dd/yy",
-		dateTimeLong: "MM/dd/yy",
+		dateLong: "MM/dd/yyyy",
+		dateTimeLong: "MM/dd/yyyy HH:mm",
 	},
 };
 
@@ -35,6 +35,15 @@ export const appConfigSlice = createSlice({
 			if (action.payload === "dark") state.theme = "light";
 			LOCAL_STORAGE_FUNCTIONS.setThemeToLocalStorage(state.theme);
 		},
+		setDateShort: (state, action: PayloadAction<string>) => {
+			state.dates.dateShort = action.payload;
+		},
+		setDateLong: (state, action: PayloadAction<string>) => {
+			state.dates.dateLong = action.payload;
+		},
+		setDateTimeLong: (state, action: PayloadAction<string>) => {
+			state.dates.dateTimeLong = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchClientFeaturesThunk.fulfilled, (state, action) => {
@@ -43,6 +52,6 @@ export const appConfigSlice = createSlice({
 	},
 });
 
-export const { switchTheme } = appConfigSlice.actions;
+export const { switchTheme, setDateShort, setDateLong, setDateTimeLong } = appConfigSlice.actions;
 
 export default appConfigSlice.reducer;

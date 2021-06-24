@@ -3,11 +3,14 @@ import appAxiosInstance from "../../api/appAxiosInstance";
 
 import { RootState } from "../store";
 import { NavotarClientFeature } from "../../interfaces/authentication";
+import { setDateShort, setDateLong } from "../slices/appConfigSlice";
 
 export const fetchClientFeaturesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",
 	async (_, thunkApi) => {
 		const { authUser } = thunkApi.getState() as RootState;
+
+		let returnData: NavotarClientFeature[];
 
 		if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
 
@@ -23,9 +26,17 @@ export const fetchClientFeaturesThunk = createAsyncThunk(
 				}
 			);
 
-			return data;
+			returnData = data;
 		} catch (error) {
 			return thunkApi.rejectWithValue("Fetch for client features failed");
 		}
+
+		const shortDate = returnData.filter((feat) => feat.featureId === 38)[0];
+		if (shortDate?.value) thunkApi.dispatch(setDateShort(shortDate?.value));
+
+		const longDate = returnData.filter((feat) => feat.featureId === 39)[0];
+		if (longDate?.value) thunkApi.dispatch(setDateLong(longDate?.value));
+
+		return returnData;
 	}
 );
