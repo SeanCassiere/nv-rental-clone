@@ -2,6 +2,7 @@ import { configureStore, getDefaultMiddleware, Reducer, AnyAction, combineReduce
 import { LOCAL_STORAGE_FUNCTIONS } from "../utils/functions";
 
 import authUserSlice from "./slices/authUserSlice";
+import appKeyValuesSlice from "./slices/appKeyValues";
 import searchAgreementsSlice from "./slices/searchAgreementsSlice";
 import searchCustomersSlice from "./slices/searchCustomersSlice";
 import viewAgreementSlice from "./slices/viewAgreementSlice";
@@ -11,6 +12,7 @@ import searchVehiclesSlice from "./slices/searchVehiclesSlice";
 
 const combinedReducer = combineReducers({
 	appConfig: appConfigSlice,
+	appKeyValues: appKeyValuesSlice,
 	authUser: authUserSlice,
 	searchAgreements: searchAgreementsSlice,
 	viewAgreement: viewAgreementSlice,
@@ -37,6 +39,7 @@ export type RootState = ReturnType<typeof combinedReducer>;
 
 // State Slice Data selectors
 export const selectAppConfigState = (state: RootState) => state.appConfig;
+export const selectAppKeyValuesState = (state: RootState) => state.appKeyValues;
 export const selectAuthUserState = (state: RootState) => state.authUser;
 export const selectSearchAgreementsState = (state: RootState) => state.searchAgreements;
 export const selectViewAgreementState = (state: RootState) => state.viewAgreement;
