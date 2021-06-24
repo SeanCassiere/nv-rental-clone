@@ -32,8 +32,8 @@ export const appKeyValuesSlice = createSlice({
 		setReservationStatuses: (state, action: PayloadAction<ReservationStatus[]>) => {
 			state.reservationValues.reservationStatuses = action.payload;
 		},
-		setAgreementStatuses: (state, action: PayloadAction<ReservationStatus[]>) => {
-			state.reservationValues.reservationStatuses = action.payload;
+		setAgreementStatuses: (state, action: PayloadAction<AgreementStatus[]>) => {
+			state.agreementValues.agreementStatuses = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
