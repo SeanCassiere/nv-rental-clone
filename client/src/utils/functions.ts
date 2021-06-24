@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import { JWTReturnAuthToken, NavotarClientFeature } from "../interfaces/authentication";
+import { JWTReturnAuthToken } from "../interfaces/authentication";
 import { ThemeOptions } from "../redux/slices/appConfigSlice";
 
 export const LOCAL_STORAGE_PREFIX = "NAV_GHI";
@@ -46,16 +46,9 @@ const getTokenFromLocalStorage = (): {
 	}
 };
 
-const getClientFeaturesFromLocalStorage = (): NavotarClientFeature[] => {
-	const fromStorageClientFeatures = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}_CLIENT_FEATURES`) ?? null;
-	if (fromStorageClientFeatures === null) return [];
-	return JSON.parse(fromStorageClientFeatures);
-};
-
 const clearLocalStorageTokens = () => {
 	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_TOKEN`);
 	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_REFRESH_TOKEN`);
-	localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}_CLIENT_FEATURES`);
 };
 
 const setTokenToLocalStorage = (token: string): boolean => {
@@ -76,15 +69,6 @@ const setRefreshTokenToLocalStorage = (refreshToken: string) => {
 	}
 };
 
-const setClientFeaturesToLocalStorage = (features: NavotarClientFeature[]) => {
-	try {
-		localStorage.setItem(`${LOCAL_STORAGE_PREFIX}_CLIENT_FEATURES`, JSON.stringify(features));
-		return true;
-	} catch (error) {
-		return false;
-	}
-};
-
 const setThemeToLocalStorage = (theme: ThemeOptions) => {
 	try {
 		localStorage.setItem(`${LOCAL_STORAGE_PREFIX}_THEME`, theme);
@@ -99,10 +83,8 @@ const LOCAL_STORAGE_FUNCTIONS = {
 	clearLocalStorageTokens,
 	setTokenToLocalStorage,
 	setRefreshTokenToLocalStorage,
-	setClientFeaturesToLocalStorage,
 	getThemeFromLocalStorage,
 	setThemeToLocalStorage,
-	getClientFeaturesFromLocalStorage,
 };
 
 export { LOCAL_STORAGE_FUNCTIONS };

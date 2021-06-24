@@ -33,27 +33,4 @@ const getNavotarAccessToken = async (ClientID: string, ClientSecret: string): Pr
 	return token;
 };
 
-/**
- * @desc Fetch Navotar account features
- * @route POST Navotar V3 BASE URL/Clients/:clientId/ClientFeatures
- * @access PRIVATE
- */
-const getClientFeatures = async (NavotarClientID: string, token: string) => {
-	const headers = {
-		"Content-Type": "application/json",
-		Authorization: `Bearer ${token}`,
-	};
-	try {
-		const { data } = await axios.post(
-			`${process.env.BASE_URL}/Clients/${NavotarClientID}/ClientFeatures`,
-			{},
-			{ headers }
-		);
-		const features = data as NavotarClientFeature[];
-		return features;
-	} catch (error) {
-		throw new Error("Could not fetch your Navotar account features");
-	}
-};
-
-export { getNavotarAccessToken, getClientFeatures };
+export { getNavotarAccessToken };

@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import generateToken from "../../utils/generateToken";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import { getClientFeatures, getNavotarAccessToken } from "./navotarController";
+import { getNavotarAccessToken } from "./navotarController";
 import { JWTReturnAuthToken } from "../../interfaces/interfaces";
 
 dotenv.config();
@@ -33,17 +33,13 @@ const loginUser = asyncHandler(async (_, res) => {
 		throw new Error("Could not decode the access token");
 	}
 
-	const navotar_features = await getClientFeatures("1013", navotar_access);
-
 	try {
 		refresh_token = generateToken("1234567890");
 	} catch (error) {
 		throw new Error("Could not generate the refresh token");
 	}
 
-	res
-		.status(200)
-		.json({ message: "Success", token: navotar_access, refreshToken: refresh_token, features: navotar_features });
+	res.status(200).json({ message: "Success", token: navotar_access, refreshToken: refresh_token });
 });
 
 /**
