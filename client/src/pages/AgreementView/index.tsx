@@ -69,7 +69,12 @@ const AgreementViewPage: React.FunctionComponent = () => {
 						<Col md={16}>
 							<TopBarQuickInfo />
 						</Col>
-						<Col md={8}>hello</Col>
+						<Col md={8}>
+							{/**
+								* @Todo
+								Implement print functionality
+								*/}
+						</Col>
 					</Row>
 					<Row>
 						<Col md={8}>
