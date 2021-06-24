@@ -17,7 +17,9 @@ const TopBarQuickInfo = () => {
 
 		const arrayed = agreementStatuses.filter((stat) => stat.id === agreement?.status);
 
-		setStatusLabel(arrayed[0].name);
+		if (!arrayed) return;
+
+		setStatusLabel(arrayed[0]?.name);
 	}, [agreementStatuses, agreement, isSearching]);
 	return (
 		<Grid style={{ marginBottom: 10 }} fluid>
@@ -79,4 +81,4 @@ const PillContainer = styled.div`
 	}
 `;
 
-export default React.memo(TopBarQuickInfo);
+export default TopBarQuickInfo;
