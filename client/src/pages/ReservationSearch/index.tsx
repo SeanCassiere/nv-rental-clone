@@ -3,7 +3,12 @@ import { Link as RouterLink } from "react-router-dom";
 import { Table, Panel, Message, Icon } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAuthUserState, selectSearchReservationsState } from "../../redux/store";
+import {
+	AppDispatch,
+	selectAppKeyValuesState,
+	selectAuthUserState,
+	selectSearchReservationsState,
+} from "../../redux/store";
 import { fetchReservationsThunk } from "../../redux/thunks/searchReservationsThunks";
 
 import AppPageContainer from "../../components/AppPageContainer";
@@ -24,6 +29,9 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 		isError,
 		error: searchError,
 	} = useSelector(selectSearchReservationsState);
+	const {
+		reservationValues: { reservationStatuses },
+	} = useSelector(selectAppKeyValuesState);
 
 	React.useEffect(() => {
 		const currentTime = Math.floor(Date.now());
@@ -118,9 +126,15 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 					</Cell>
 				</Column>
 
-				<Column width={100}>
+				<Column width={160}>
 					<HeaderCell>Status</HeaderCell>
-					<Cell dataKey='ReservationStatus' />
+					<Cell>
+						{(rowData: ReservationsInList) => {
+							const rowStatId = rowData.StatusId;
+							const rowStatus = reservationStatuses.filter((rdxStat) => rdxStat.id === rowStatId);
+							return <>{rowStatus[0].name}</>;
+						}}
+					</Cell>
 				</Column>
 
 				<Column width={100}>
