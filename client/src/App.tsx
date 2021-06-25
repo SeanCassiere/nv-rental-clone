@@ -7,8 +7,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAppConfigState, selectAuthUserState } from "./redux/store";
 
-import { Alert } from "rsuite";
-
 import DashboardPage from "./pages/Dashboard";
 import AgreementSearchPage from "./pages/AgreementSearch";
 import ReservationSearchPage from "./pages/ReservationSearch";
@@ -32,7 +30,7 @@ const themes = { light: "/styles/rsuite-default.css", dark: "/styles/rsuite-dark
 
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
-	const { isLoggedIn, tokenExpiresAt, error: loginError, token, refreshToken } = useSelector(selectAuthUserState);
+	const { isLoggedIn, tokenExpiresAt, token, refreshToken } = useSelector(selectAuthUserState);
 	const { theme } = useSelector(selectAppConfigState);
 
 	React.useEffect(() => {
@@ -48,10 +46,6 @@ const App: React.FunctionComponent = () => {
 
 		return () => clearInterval(refreshInterval);
 	}, [isLoggedIn, tokenExpiresAt, dispatch, token, refreshToken]);
-
-	React.useEffect(() => {
-		if (loginError) Alert.warning(loginError, 120000);
-	}, [loginError]);
 
 	React.useEffect(() => {
 		if (!isLoggedIn || token === "") return;

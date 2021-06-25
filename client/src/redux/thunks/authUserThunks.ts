@@ -1,7 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { Alert } from "rsuite";
 
+import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { RootState } from "../store";
 import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../interfaces/authentication";
@@ -12,6 +14,7 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 	const response = await axios.get<AuthReturn>(`${AUTH_URL}/users/login`);
 
 	if (response.status !== 200) {
+		Alert.error(response.statusText, ALERT_DURATION);
 		return thunkApi.rejectWithValue(response.statusText);
 	}
 
@@ -21,6 +24,7 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 		LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
 		LOCAL_STORAGE_FUNCTIONS.setRefreshTokenToLocalStorage(data.refreshToken);
 	} catch (error) {
+		Alert.warning("Could not save the tokens to local storage");
 		return thunkApi.rejectWithValue("Could not save the tokens to local storage");
 	}
 
@@ -36,7 +40,8 @@ export const loginUserThunk = createAsyncThunk("authUser/fetchLogin", async (_, 
 			tokenExpiresAt: exp,
 		};
 	} catch (error) {
-		return thunkApi.rejectWithValue("Could not decode the access token");
+		Alert.error("Could not decode and save the access token");
+		return thunkApi.rejectWithValue("Could not decode and save the access token");
 	}
 });
 
@@ -49,6 +54,10 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 	});
 
 	if (response.status !== 200) {
+		Alert.warning(
+			"There was an error refreshing your access token, you will be logged out in less than 30 seconds",
+			12000
+		);
 		return thunkApi.rejectWithValue(
 			"There was an error refreshing your access token, you will be logged out in less than 30 seconds"
 		);
@@ -59,6 +68,7 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 	try {
 		LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
 	} catch (error) {
+		Alert.warning("Could not save the refreshed token to local storage");
 		return thunkApi.rejectWithValue("Could not save the tokens to local storage");
 	}
 
@@ -70,6 +80,7 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 			tokenExpiresAt: exp,
 		};
 	} catch (error) {
+		Alert.error("Could not decode and save the access token");
 		return thunkApi.rejectWithValue("Could not decode the access token");
 	}
 });
