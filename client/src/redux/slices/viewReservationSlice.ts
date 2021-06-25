@@ -1,13 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ReservationViewDataFull } from "../../interfaces/reservations";
 
-import { fetchReservationThunk } from "../thunks/viewReservationThunks";
+import { fetchReservationThunk, fetchReservationPDFThunk } from "../thunks/viewReservationThunks";
 
 interface ViewReservationSliceState {
 	reservation: ReservationViewDataFull | null;
 	isSearching: boolean;
 	isError: boolean;
 	error: string;
+	printPDF: {
+		url: string | null;
+		isPrinting: boolean;
+	};
 }
 
 const initialStateData: ViewReservationSliceState = {
@@ -15,6 +19,10 @@ const initialStateData: ViewReservationSliceState = {
 	isSearching: false,
 	isError: false,
 	error: "",
+	printPDF: {
+		url: null,
+		isPrinting: false,
+	},
 };
 
 export const viewAReservationSlice = createSlice({
@@ -23,9 +31,11 @@ export const viewAReservationSlice = createSlice({
 	reducers: {
 		clearViewReservationState: (state) => {
 			state.reservation = null;
+			state.printPDF = { url: null, isPrinting: false };
 		},
 	},
 	extraReducers: (builder) => {
+		//Fetch Reservation Data
 		builder.addCase(fetchReservationThunk.pending, (state) => {
 			state.isSearching = true;
 			state.reservation = null;
@@ -42,6 +52,18 @@ export const viewAReservationSlice = createSlice({
 				state.error = action.error.message as string;
 			}
 			state.reservation = null;
+		});
+		// Fetch Reservation PDF
+		builder.addCase(fetchReservationPDFThunk.pending, (state) => {
+			state.printPDF.isPrinting = true;
+			state.printPDF.url = null;
+		});
+		builder.addCase(fetchReservationPDFThunk.fulfilled, (state, action) => {
+			state.printPDF.url = action.payload;
+			state.printPDF.isPrinting = false;
+		});
+		builder.addCase(fetchReservationPDFThunk.rejected, (state) => {
+			state.printPDF.isPrinting = false;
 		});
 	},
 });
