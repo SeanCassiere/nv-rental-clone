@@ -1,8 +1,5 @@
 import React from "react";
-import "./App.css";
-
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
-
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAppConfigState, selectAuthUserState } from "./redux/store";
