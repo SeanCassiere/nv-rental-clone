@@ -112,7 +112,7 @@ export interface ReservationsInList {
 	LocationEmailName: null;
 	ReferralCommission: number;
 }
-export interface ReservationView {
+export interface ReservationViewDataFull {
 	reservationview: {
 		reserveId: number;
 		additionalCharge: number;

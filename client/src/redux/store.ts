@@ -9,6 +9,7 @@ import viewAgreementSlice from "./slices/viewAgreementSlice";
 import appConfigSlice from "./slices/appConfigSlice";
 import searchReservationsSlice from "./slices/searchReservationsSlice";
 import searchVehiclesSlice from "./slices/searchVehiclesSlice";
+import viewReservationSlice from "./slices/viewReservationSlice";
 
 const combinedReducer = combineReducers({
 	appConfig: appConfigSlice,
@@ -18,6 +19,7 @@ const combinedReducer = combineReducers({
 	viewAgreement: viewAgreementSlice,
 	searchCustomers: searchCustomersSlice,
 	searchReservations: searchReservationsSlice,
+	viewReservation: viewReservationSlice,
 	searchVehicles: searchVehiclesSlice,
 });
 
@@ -45,6 +47,7 @@ export const selectSearchAgreementsState = (state: RootState) => state.searchAgr
 export const selectViewAgreementState = (state: RootState) => state.viewAgreement;
 export const selectSearchCustomersState = (state: RootState) => state.searchCustomers;
 export const selectSearchReservationsState = (state: RootState) => state.searchReservations;
+export const selectViewReservationState = (state: RootState) => state.viewReservation;
 export const selectSearchVehiclesState = (state: RootState) => state.searchVehicles;
 
 export default store;

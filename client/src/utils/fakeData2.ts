@@ -1,4 +1,4 @@
-import { ReservationView } from "../interfaces/reservations";
+import { ReservationViewDataFull } from "../interfaces/reservations";
 import { VehiclesInList } from "../interfaces/vehicles";
 export const fakeVehicleDataInList: VehiclesInList[] = [
 	{
@@ -373,7 +373,7 @@ export const fakeVehicleDataInList: VehiclesInList[] = [
 	},
 ];
 
-export const fakeViewReservation: ReservationView = {
+export const fakeViewReservation: ReservationViewDataFull = {
 	reservationview: {
 		reserveId: 367965,
 		additionalCharge: 0,
