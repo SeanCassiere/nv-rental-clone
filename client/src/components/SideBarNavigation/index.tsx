@@ -6,6 +6,7 @@ import { Link as RouterLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, selectAppConfigState } from "../../redux/store";
 import { switchTheme } from "../../redux/slices/appConfigSlice";
+import { resetAuthState } from "../../redux/slices/authUserSlice";
 
 const PrimaryComponent: React.FunctionComponent = () => {
 	const history = useHistory();
@@ -22,6 +23,7 @@ const PrimaryComponent: React.FunctionComponent = () => {
 	}, [setShowModal]);
 
 	const triggerLogOut = React.useCallback(() => {
+		dispatch(resetAuthState());
 		dispatch({ type: "authUser/logOutUser" });
 		history.push("/");
 		setShowModal(false);
