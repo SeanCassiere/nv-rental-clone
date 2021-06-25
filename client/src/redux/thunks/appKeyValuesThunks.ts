@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import appAxiosInstance from "../../api/appAxiosInstance";
 
 import { RootState } from "../store";
-import { ReservationStatus, AgreementStatus } from "../../interfaces/statuses";
+import { ReservationStatus, AgreementStatus, VehicleStatus } from "../../interfaces/statuses";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",
@@ -47,3 +47,22 @@ export const fetchAgreementStatusesThunk = createAsyncThunk(
 		}
 	}
 );
+
+export const fetchVehicleStatusesThunk = createAsyncThunk("appKeyValues/fetchVehicleStatuses", async (_, thunkApi) => {
+	const { authUser } = thunkApi.getState() as RootState;
+
+	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+	try {
+		const { data } = await appAxiosInstance.get<VehicleStatus[]>("/Vehicles/Statuses", {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authUser.token}`,
+			},
+		});
+
+		return data;
+	} catch (error) {
+		return thunkApi.rejectWithValue("Fetch for agreement status failed");
+	}
+});
