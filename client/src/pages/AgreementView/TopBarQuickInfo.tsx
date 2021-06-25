@@ -47,7 +47,9 @@ const PillItem = React.memo(({ keyLabel, valueLabel }: { keyLabel: React.ReactNo
 	return (
 		<PillContainer>
 			<span className='label'>{keyLabel}</span>
-			<span className='value'>{isSearching ? "Loading..." : valueLabel}</span>
+			<span className='value'>
+				{isSearching ? "Loading..." : valueLabel === null || valueLabel === "" ? <>&nbsp;</> : valueLabel}
+			</span>
 		</PillContainer>
 	);
 });
