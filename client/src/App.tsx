@@ -21,7 +21,7 @@ import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
 import {
 	fetchAgreementStatusesThunk,
-	fetchReservationStatusesThunk,
+	fetchReservationKeyValuesThunk,
 	fetchVehicleStatusesThunk,
 } from "./redux/thunks/appKeyValuesThunks";
 import { fetchClientFeaturesThunk } from "./redux/thunks/appConfigThunks";
@@ -51,7 +51,7 @@ const App: React.FunctionComponent = () => {
 		if (!isLoggedIn || token === "") return;
 
 		dispatch(fetchClientFeaturesThunk());
-		dispatch(fetchReservationStatusesThunk());
+		dispatch(fetchReservationKeyValuesThunk());
 		dispatch(fetchAgreementStatusesThunk());
 		dispatch(fetchVehicleStatusesThunk());
 	}, [dispatch, isLoggedIn, token]);

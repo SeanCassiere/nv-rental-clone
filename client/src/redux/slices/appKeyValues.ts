@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AgreementStatus, ReservationStatus, VehicleStatus } from "../../interfaces/statuses";
+import { ReservationType } from "../../interfaces/types";
 
 import {
 	fetchReservationStatusesThunk,
+	fetchReservationTypesThunk,
 	fetchAgreementStatusesThunk,
 	fetchVehicleStatusesThunk,
 } from "../thunks/appKeyValuesThunks";
@@ -10,30 +12,26 @@ import {
 interface AppKeyValuesSliceState {
 	reservationValues: {
 		reservationStatuses: ReservationStatus[];
-		error: string | null;
+		reservationTypes: ReservationType[];
 	};
 	agreementValues: {
 		agreementStatuses: AgreementStatus[];
-		error: string | null;
 	};
 	vehicleValues: {
 		vehicleStatuses: VehicleStatus[];
-		error: string | null;
 	};
 }
 
 const initialStateData: AppKeyValuesSliceState = {
 	reservationValues: {
 		reservationStatuses: [],
-		error: null,
+		reservationTypes: [],
 	},
 	agreementValues: {
 		agreementStatuses: [],
-		error: null,
 	},
 	vehicleValues: {
 		vehicleStatuses: [],
-		error: null,
 	},
 };
 
@@ -49,29 +47,32 @@ export const appKeyValuesSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
+		//Reservation Key Values
 		builder.addCase(fetchReservationStatusesThunk.rejected, (state, action) => {
 			state.reservationValues.reservationStatuses = [];
-			state.reservationValues.error = action.error.message as string;
 		});
 		builder.addCase(fetchReservationStatusesThunk.fulfilled, (state, action) => {
 			state.reservationValues.reservationStatuses = action.payload;
-			state.reservationValues.error = null;
 		});
+		builder.addCase(fetchReservationTypesThunk.rejected, (state, action) => {
+			state.reservationValues.reservationStatuses = [];
+		});
+		builder.addCase(fetchReservationTypesThunk.fulfilled, (state, action) => {
+			state.reservationValues.reservationTypes = action.payload;
+		});
+		//Agreement Key Values
 		builder.addCase(fetchAgreementStatusesThunk.rejected, (state, action) => {
 			state.agreementValues.agreementStatuses = [];
-			state.agreementValues.error = action.error?.message as string;
 		});
 		builder.addCase(fetchAgreementStatusesThunk.fulfilled, (state, action) => {
 			state.agreementValues.agreementStatuses = action.payload;
-			state.agreementValues.error = null;
 		});
+		//Vehicle Key Values
 		builder.addCase(fetchVehicleStatusesThunk.rejected, (state, action) => {
 			state.vehicleValues.vehicleStatuses = [];
-			state.vehicleValues.error = action.error?.message as string;
 		});
 		builder.addCase(fetchVehicleStatusesThunk.fulfilled, (state, action) => {
 			state.vehicleValues.vehicleStatuses = action.payload;
-			state.vehicleValues.error = null;
 		});
 	},
 });

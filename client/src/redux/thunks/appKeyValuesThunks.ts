@@ -5,6 +5,7 @@ import { Alert } from "rsuite";
 
 import { RootState } from "../store";
 import { ReservationStatus, AgreementStatus, VehicleStatus } from "../../interfaces/statuses";
+import { ReservationType } from "../../interfaces/types";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",
@@ -26,6 +27,41 @@ export const fetchReservationStatusesThunk = createAsyncThunk(
 			Alert.error("Fetching the reservation statuses failed");
 			return thunkApi.rejectWithValue("Fetching the reservation statuses failed");
 		}
+	}
+);
+
+export const fetchReservationTypesThunk = createAsyncThunk(
+	"appKeyValues/fetchReservationTypes",
+	async (_, thunkApi) => {
+		const { authUser } = thunkApi.getState() as RootState;
+
+		if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+		try {
+			const { data } = await appAxiosInstance.get<ReservationType[]>("/Reservations/Types", {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authUser.token}`,
+				},
+				params: {
+					clientId: authUser.clientId,
+				},
+			});
+
+			return data;
+		} catch (error) {
+			Alert.error("Fetching the reservation types failed");
+			return thunkApi.rejectWithValue("Fetching the reservation types failed");
+		}
+	}
+);
+
+export const fetchReservationKeyValuesThunk = createAsyncThunk(
+	"appKeyValues/fetchReservationKeyValues",
+	async (_, thunkApi) => {
+		await thunkApi.dispatch(fetchReservationStatusesThunk());
+		await thunkApi.dispatch(fetchReservationTypesThunk());
+		return true;
 	}
 );
 
