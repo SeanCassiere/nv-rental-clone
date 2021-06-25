@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Alert } from "rsuite";
 import appAxios from "../../api/appAxiosInstance";
 import { ReservationViewDataFull } from "../../interfaces/reservations";
 import { RootState } from "../store";
@@ -50,7 +51,10 @@ export const fetchReservationPDFThunk = createAsyncThunk(
 			cancelToken: source.token,
 		});
 
-		if (response.status !== 200) return thunkApi.rejectWithValue(response.statusText);
+		if (response.status !== 200) {
+			Alert.error("Could not fetch the Print PDF URL", 8000);
+			return thunkApi.rejectWithValue(response.statusText);
+		}
 
 		return response.data;
 	}
