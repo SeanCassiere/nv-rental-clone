@@ -44,7 +44,7 @@ export const appConfigSlice = createSlice({
 			state.dates.dateLong = action.payload.toUpperCase();
 		},
 		setDateTimeLong: (state, action: PayloadAction<string>) => {
-			state.dates.dateTimeLong = action.payload;
+			state.dates.dateTimeLong = `${action.payload.toUpperCase()} HH:mm a`;
 		},
 	},
 	extraReducers: (builder) => {
