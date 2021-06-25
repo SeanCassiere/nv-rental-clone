@@ -5,17 +5,13 @@ import { Grid, Col, Row, Panel, Message } from "rsuite";
 
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
+import ReservationTopBarQuickInfo from "./ReservationTopBarQuickInfo";
+import ReservationInteractionButtonBar from "./ReservationInteractionButtonBar";
 
-import AgreementInformation from "./AgreementInformation";
-import AgreementChargesSummary from "./AgreementChargesSummary";
-import CustomerInformation from "./CustomerInformation";
-import OtherAgreementSummary from "./OtherAgreementSummary";
-import DepositInformationPanel from "./DepositInformationPanel";
-import AgreementTopBarQuickInfo from "./AgreementTopBarQuickInfo";
-
-import { fetchAgreementThunk } from "../../redux/thunks/viewAgreementThunks";
-import { AppDispatch, selectViewAgreementState } from "../../redux/store";
-import { clearViewAgreementState } from "../../redux/slices/viewAgreementSlice";
+import { fetchReservationThunk } from "../../redux/thunks/viewReservationThunks";
+import { AppDispatch, selectViewReservationState } from "../../redux/store";
+import ReservationQuoteChargesSummary from "./ReservationQuoteChargesSummary";
+import { clearViewReservationState } from "../../redux/slices/viewReservationSlice";
 
 type PageParams = {
 	id: string;
@@ -26,15 +22,15 @@ const AgreementViewPage: React.FunctionComponent = () => {
 	const history = useHistory();
 	const [refreshNow, setRefreshNow] = React.useState(1);
 
-	const { isError, error: searchError } = useSelector(selectViewAgreementState);
+	const { isError, error: searchError } = useSelector(selectViewReservationState);
 	const { id } = useParams<PageParams>();
 
 	React.useEffect(() => {
-		const promise = dispatch(fetchAgreementThunk(id));
+		const promise = dispatch(fetchReservationThunk(id));
 
 		return () => {
 			promise.abort();
-			dispatch(clearViewAgreementState());
+			dispatch(clearViewReservationState());
 		};
 	}, [id, dispatch, refreshNow]);
 
@@ -52,7 +48,7 @@ const AgreementViewPage: React.FunctionComponent = () => {
 				bodyFill
 				header={
 					<ViewPageHeader
-						title='View Agreement'
+						title='View Reservation'
 						goBackFunction={handleGoBack}
 						refreshFunction={handleRefreshList}
 						refresh
@@ -67,26 +63,23 @@ const AgreementViewPage: React.FunctionComponent = () => {
 				<Grid fluid>
 					<Row>
 						<Col md={16}>
-							<AgreementTopBarQuickInfo />
+							<ReservationTopBarQuickInfo />
 						</Col>
 						<Col md={8}>
-							{/**
-								* @Todo
-								Implement print functionality
-								*/}
+							<ReservationInteractionButtonBar />
 						</Col>
 					</Row>
 					<Row>
 						<Col md={8}>
-							<AgreementInformation />
-							<CustomerInformation />
+							<></>
+							<></>
 						</Col>
 						<Col md={8}>
-							<AgreementChargesSummary />
-							<DepositInformationPanel />
+							<></>
+							<></>
 						</Col>
 						<Col md={8}>
-							<OtherAgreementSummary />
+							<ReservationQuoteChargesSummary />
 						</Col>
 					</Row>
 				</Grid>

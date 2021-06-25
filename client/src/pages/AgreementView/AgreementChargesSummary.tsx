@@ -45,47 +45,61 @@ const AgreementChargesSummary: React.FunctionComponent = () => {
 	);
 };
 
-const RowItem: React.FunctionComponent<{
-	label: string | React.ReactNode;
-	leftColText?: number | null | undefined;
-	rightColText?: number | null | undefined;
-	bold?: true;
-	currency: string;
-}> = React.memo(({ label, leftColText, rightColText, bold, currency }) => {
-	const [value, setValue] = React.useState<number>(0);
+const RowItem = React.memo(
+	({
+		label,
+		leftColText,
+		rightColText,
+		bold,
+		currency,
+	}: {
+		label: string | React.ReactNode;
+		leftColText?: number | null | undefined;
+		rightColText?: number | null | undefined;
+		bold?: true;
+		currency: string;
+	}) => {
+		const [value, setValue] = React.useState<number>(0);
 
-	React.useEffect(() => {
-		if (leftColText) {
-			if (leftColText === 0.0) setValue(0);
-			setValue(leftColText);
-		}
+		React.useEffect(() => {
+			if (leftColText) {
+				if (leftColText === 0.0) setValue(0);
+				setValue(leftColText);
+			}
 
-		if (rightColText) {
-			if (rightColText === 0.0) setValue(0);
-			setValue(rightColText);
-		}
-	}, [leftColText, rightColText]);
+			if (rightColText) {
+				if (rightColText === 0.0) setValue(0);
+				setValue(rightColText);
+			}
+		}, [leftColText, rightColText]);
 
-	return (
-		<Row>
-			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={14}>
-				{label}
-			</Col>
-			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
-				{leftColText === 0 ? `${currency}${value.toFixed(2)}` : leftColText ? `${currency}${value.toFixed(2)}` : <></>}
-			</Col>
-			<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
-				{rightColText === 0 ? (
-					`${currency}${value.toFixed(2)}`
-				) : rightColText ? (
-					`${currency}${value.toFixed(2)}`
-				) : (
-					<></>
-				)}
-			</Col>
-		</Row>
-	);
-});
+		return (
+			<Row>
+				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={14}>
+					{label}
+				</Col>
+				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
+					{leftColText === 0 ? (
+						`${currency}${value.toFixed(2)}`
+					) : leftColText ? (
+						`${currency}${value.toFixed(2)}`
+					) : (
+						<></>
+					)}
+				</Col>
+				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
+					{rightColText === 0 ? (
+						`${currency}${value.toFixed(2)}`
+					) : rightColText ? (
+						`${currency}${value.toFixed(2)}`
+					) : (
+						<></>
+					)}
+				</Col>
+			</Row>
+		);
+	}
+);
 
 export default React.memo(AgreementChargesSummary);
 
