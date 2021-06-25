@@ -23,12 +23,13 @@ const PillItem = ({
 const PillContainer = styled.div`
 	display: flex;
 	width: 100%;
+	height: max-content;
 	margin-bottom: 5px;
 
 	.label {
 		min-width: 65px;
 		text-align: center;
-		height: 100%;
+		height: inherit;
 		padding: 5px 10px;
 		display: inline-block;
 		background-color: var(--primary-color);

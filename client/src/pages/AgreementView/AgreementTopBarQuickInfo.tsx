@@ -25,20 +25,20 @@ const TopBarQuickInfo = () => {
 	return (
 		<Grid style={{ marginBottom: 10 }} fluid>
 			<Row>
-				<Col sm={5}>
+				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem keyLabel='No.' valueLabel={agreement?.agreementNumber} isSearching={isSearching} />
 				</Col>
-				<Col sm={6}>
+				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem
 						keyLabel={<Icon icon='user' />}
 						valueLabel={`${agreement?.firstName} ${agreement?.lastName}`}
 						isSearching={isSearching}
 					/>
 				</Col>
-				<Col sm={6}>
+				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem keyLabel={<Icon icon='home' />} valueLabel={agreement?.hPhone} isSearching={isSearching} />
 				</Col>
-				<Col sm={6}>
+				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem keyLabel='Status' valueLabel={statusLabel} isSearching={isSearching} />
 				</Col>
 			</Row>
