@@ -1,9 +1,10 @@
 import React from "react";
 import { Grid, Row, Col, Icon } from "rsuite";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 
 import { selectAppKeyValuesState, selectViewAgreementState } from "../../redux/store";
+
+import PillTopBarItem from "../../components/PillTopBarItem";
 
 const TopBarQuickInfo = () => {
 	const [statusLabel, setStatusLabel] = React.useState("");
@@ -25,62 +26,24 @@ const TopBarQuickInfo = () => {
 		<Grid style={{ marginBottom: 10 }} fluid>
 			<Row>
 				<Col sm={5}>
-					<PillItem keyLabel='No.' valueLabel={agreement?.agreementNumber} />
+					<PillTopBarItem keyLabel='No.' valueLabel={agreement?.agreementNumber} isSearching={isSearching} />
 				</Col>
 				<Col sm={6}>
-					<PillItem keyLabel={<Icon icon='user' />} valueLabel={`${agreement?.firstName} ${agreement?.lastName}`} />
+					<PillTopBarItem
+						keyLabel={<Icon icon='user' />}
+						valueLabel={`${agreement?.firstName} ${agreement?.lastName}`}
+						isSearching={isSearching}
+					/>
 				</Col>
 				<Col sm={6}>
-					<PillItem keyLabel={<Icon icon='home' />} valueLabel={agreement?.hPhone} />
+					<PillTopBarItem keyLabel={<Icon icon='home' />} valueLabel={agreement?.hPhone} isSearching={isSearching} />
 				</Col>
 				<Col sm={6}>
-					<PillItem keyLabel='Status' valueLabel={statusLabel} />
+					<PillTopBarItem keyLabel='Status' valueLabel={statusLabel} isSearching={isSearching} />
 				</Col>
 			</Row>
 		</Grid>
 	);
 };
 
-const PillItem = React.memo(({ keyLabel, valueLabel }: { keyLabel: React.ReactNode; valueLabel: React.ReactNode }) => {
-	const { isSearching } = useSelector(selectViewAgreementState);
-
-	return (
-		<PillContainer>
-			<span className='label'>{keyLabel}</span>
-			<span className='value'>
-				{isSearching ? "Loading..." : valueLabel === null || valueLabel === "" ? <>&nbsp;</> : valueLabel}
-			</span>
-		</PillContainer>
-	);
-});
-
-const PillContainer = styled.div`
-	display: flex;
-	width: 100%;
-	margin-bottom: 5px;
-
-	.label {
-		min-width: 65px;
-		text-align: center;
-		height: 100%;
-		padding: 5px 10px;
-		display: inline-block;
-		background-color: var(--primary-color);
-		color: white;
-		border: 1px solid var(--primary-color);
-		border-top-left-radius: 5px;
-		border-bottom-left-radius: 5px;
-	}
-
-	.value {
-		flex-grow: 1;
-		height: 100%;
-		display: inline-block;
-		padding: 5px 10px;
-		border: 1px solid var(--primary-color);
-		border-top-right-radius: 5px;
-		border-bottom-right-radius: 5px;
-	}
-`;
-
-export default TopBarQuickInfo;
+export default React.memo(TopBarQuickInfo);
