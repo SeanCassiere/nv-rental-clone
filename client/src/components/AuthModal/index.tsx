@@ -1,21 +1,16 @@
 import React from "react";
-import { Modal, Button, Alert, Grid, Row, Col, Icon } from "rsuite";
+import { Modal, Button, Grid, Row, Col, Icon } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAppConfigState, selectAuthUserState } from "../../redux/store";
 
-import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
 import { loginUserThunk } from "../../redux/thunks/authUserThunks";
 import { switchTheme } from "../../redux/slices/appConfigSlice";
 
 const AuthModal: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
-	const { isLoggedIn, isAuthenticating, error: loginError } = useSelector(selectAuthUserState);
+	const { isLoggedIn, isAuthenticating } = useSelector(selectAuthUserState);
 	const { theme } = useSelector(selectAppConfigState);
-
-	React.useEffect(() => {
-		if (loginError) Alert.error(loginError, ALERT_DURATION);
-	}, [loginError]);
 
 	const handleAuth = React.useCallback(async () => {
 		dispatch(loginUserThunk());

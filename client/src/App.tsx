@@ -7,8 +7,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAppConfigState, selectAuthUserState } from "./redux/store";
 
-import { Alert } from "rsuite";
-
 import DashboardPage from "./pages/Dashboard";
 import AgreementSearchPage from "./pages/AgreementSearch";
 import ReservationSearchPage from "./pages/ReservationSearch";
@@ -21,14 +19,18 @@ import StartSplashPage from "./pages/StartSplash";
 
 import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
-import { fetchAgreementStatusesThunk, fetchReservationStatusesThunk } from "./redux/thunks/appKeyValuesThunks";
+import {
+	fetchAgreementStatusesThunk,
+	fetchReservationStatusesThunk,
+	fetchVehicleStatusesThunk,
+} from "./redux/thunks/appKeyValuesThunks";
 import { fetchClientFeaturesThunk } from "./redux/thunks/appConfigThunks";
 
 const themes = { light: "/styles/rsuite-default.css", dark: "/styles/rsuite-dark.min.css" };
 
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
-	const { isLoggedIn, tokenExpiresAt, error: loginError, token, refreshToken } = useSelector(selectAuthUserState);
+	const { isLoggedIn, tokenExpiresAt, token, refreshToken } = useSelector(selectAuthUserState);
 	const { theme } = useSelector(selectAppConfigState);
 
 	React.useEffect(() => {
@@ -46,15 +48,12 @@ const App: React.FunctionComponent = () => {
 	}, [isLoggedIn, tokenExpiresAt, dispatch, token, refreshToken]);
 
 	React.useEffect(() => {
-		if (loginError) Alert.warning(loginError, 120000);
-	}, [loginError]);
-
-	React.useEffect(() => {
 		if (!isLoggedIn || token === "") return;
 
 		dispatch(fetchClientFeaturesThunk());
 		dispatch(fetchReservationStatusesThunk());
 		dispatch(fetchAgreementStatusesThunk());
+		dispatch(fetchVehicleStatusesThunk());
 	}, [dispatch, isLoggedIn, token]);
 
 	return (

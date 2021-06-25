@@ -3,7 +3,7 @@ import appAxiosInstance from "../../api/appAxiosInstance";
 
 import { RootState } from "../store";
 import { NavotarClientFeature } from "../../interfaces/authentication";
-import { setDateShort, setDateLong } from "../slices/appConfigSlice";
+import { setDateShort, setDateLong, setDateTimeLong } from "../slices/appConfigSlice";
 
 export const fetchClientFeaturesThunk = createAsyncThunk("appKeyValues/fetchClientFeatures", async (_, thunkApi) => {
 	const { authUser } = thunkApi.getState() as RootState;
@@ -34,6 +34,9 @@ export const fetchClientFeaturesThunk = createAsyncThunk("appKeyValues/fetchClie
 
 	const longDate = returnData.filter((feat) => feat.featureId === 39)[0];
 	if (longDate?.value) thunkApi.dispatch(setDateLong(longDate?.value));
+
+	const longDateTime = returnData.filter((feat) => feat.featureId === 38)[0];
+	if (longDateTime?.value) thunkApi.dispatch(setDateTimeLong(longDateTime?.value));
 
 	return returnData;
 });

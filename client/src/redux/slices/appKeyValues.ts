@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AgreementStatus, ReservationStatus } from "../../interfaces/statuses";
+import { AgreementStatus, ReservationStatus, VehicleStatus } from "../../interfaces/statuses";
 
-import { fetchReservationStatusesThunk, fetchAgreementStatusesThunk } from "../thunks/appKeyValuesThunks";
+import {
+	fetchReservationStatusesThunk,
+	fetchAgreementStatusesThunk,
+	fetchVehicleStatusesThunk,
+} from "../thunks/appKeyValuesThunks";
 
 interface AppKeyValuesSliceState {
 	reservationValues: {
@@ -10,6 +14,10 @@ interface AppKeyValuesSliceState {
 	};
 	agreementValues: {
 		agreementStatuses: AgreementStatus[];
+		error: string | null;
+	};
+	vehicleValues: {
+		vehicleStatuses: VehicleStatus[];
 		error: string | null;
 	};
 }
@@ -21,6 +29,10 @@ const initialStateData: AppKeyValuesSliceState = {
 	},
 	agreementValues: {
 		agreementStatuses: [],
+		error: null,
+	},
+	vehicleValues: {
+		vehicleStatuses: [],
 		error: null,
 	},
 };
@@ -52,6 +64,14 @@ export const appKeyValuesSlice = createSlice({
 		builder.addCase(fetchAgreementStatusesThunk.fulfilled, (state, action) => {
 			state.agreementValues.agreementStatuses = action.payload;
 			state.agreementValues.error = null;
+		});
+		builder.addCase(fetchVehicleStatusesThunk.rejected, (state, action) => {
+			state.vehicleValues.vehicleStatuses = [];
+			state.vehicleValues.error = action.error?.message as string;
+		});
+		builder.addCase(fetchVehicleStatusesThunk.fulfilled, (state, action) => {
+			state.vehicleValues.vehicleStatuses = action.payload;
+			state.vehicleValues.error = null;
 		});
 	},
 });

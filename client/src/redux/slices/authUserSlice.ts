@@ -47,6 +47,16 @@ export const authUserSlice = createSlice({
 			state.token = action.payload.token;
 			state.tokenExpiresAt = action.payload.tokenExpiresAt;
 		},
+		resetAuthState: (state) => {
+			state.token = "";
+			state.refreshToken = "";
+			state.tokenExpiresAt = null;
+			state.isLoggedIn = false;
+			state.isAuthenticating = false;
+			state.userId = null;
+			state.clientId = null;
+			state.error = null;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(loginUserThunk.pending, (state) => {
@@ -85,6 +95,6 @@ export const authUserSlice = createSlice({
 	},
 });
 
-export const { refreshAccessToken } = authUserSlice.actions;
+export const { refreshAccessToken, resetAuthState } = authUserSlice.actions;
 
 export default authUserSlice.reducer;

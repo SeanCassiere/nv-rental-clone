@@ -3,7 +3,12 @@ import { Link as RouterLink } from "react-router-dom";
 import { Table, Panel, Message } from "rsuite";
 
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAuthUserState, selectSearchVehiclesState } from "../../redux/store";
+import {
+	AppDispatch,
+	selectAppKeyValuesState,
+	selectAuthUserState,
+	selectSearchVehiclesState,
+} from "../../redux/store";
 
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
@@ -16,6 +21,9 @@ const { Column, HeaderCell, Cell } = Table;
 const VehicleSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
+	const {
+		vehicleValues: { vehicleStatuses },
+	} = useSelector(selectAppKeyValuesState);
 	const {
 		vehicles: data,
 		isError,
@@ -88,7 +96,12 @@ const VehicleSearchPage: React.FunctionComponent = () => {
 
 				<Column width={110}>
 					<HeaderCell>Status</HeaderCell>
-					<Cell dataKey='VehicleStatus' />
+					<Cell>
+						{(rowData: VehiclesInList) => {
+							const rowStatus = vehicleStatuses.filter((stat) => stat.id === rowData.StatusId);
+							return <>{rowStatus[0]?.name}</>;
+						}}
+					</Cell>
 				</Column>
 
 				<Column width={200}>

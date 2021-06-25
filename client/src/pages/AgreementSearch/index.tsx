@@ -4,7 +4,13 @@ import { Table, Panel, Message } from "rsuite";
 import Moment from "react-moment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAppConfigState, selectAuthUserState, selectSearchAgreementsState } from "../../redux/store";
+import {
+	AppDispatch,
+	selectAppConfigState,
+	selectAppKeyValuesState,
+	selectAuthUserState,
+	selectSearchAgreementsState,
+} from "../../redux/store";
 import { fetchAgreementsThunk } from "../../redux/thunks/searchAgreementsThunks";
 import { refreshLastAgreementsSearchDate } from "../../redux/slices/searchAgreementsSlice";
 
@@ -18,6 +24,9 @@ const { Column, HeaderCell, Cell } = Table;
 const AgreementSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
+	const {
+		agreementValues: { agreementStatuses },
+	} = useSelector(selectAppKeyValuesState);
 	const { dates } = useSelector(selectAppConfigState);
 	const {
 		agreements: data,
@@ -107,11 +116,12 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 					<HeaderCell>Status</HeaderCell>
 					<Cell>
 						{(rowData: AgreementInList) => {
-							const status = rowData.AgreementStatusName;
-							if (status === "Close") return <span style={{ color: "#D75252" }}>Closed</span>;
-							if (status === "Pending_Payment") return <span style={{ color: "#9119A4" }}>Pending Payments</span>;
-							if (status === "Open") return <span style={{ color: "#069F2E" }}>Open</span>;
-							return <>{rowData.AgreementStatusName}</>;
+							const rowStatus = agreementStatuses.filter((stat) => stat.id === rowData.AgreementStatusId);
+							if (rowStatus[0]?.name === "Close") return <span style={{ color: "#D75252" }}>Closed</span>;
+							if (rowStatus[0]?.name === "PendingPayment")
+								return <span style={{ color: "#9119A4" }}>Pending Payments</span>;
+							if (rowStatus[0]?.name === "Open") return <span style={{ color: "#069F2E" }}>Open</span>;
+							return <>{rowStatus[0]?.name}</>;
 						}}
 					</Cell>
 				</Column>
