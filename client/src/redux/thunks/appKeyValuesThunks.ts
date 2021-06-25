@@ -5,7 +5,7 @@ import { Alert } from "rsuite";
 
 import { RootState } from "../store";
 import { ReservationStatus, AgreementStatus, VehicleStatus } from "../../interfaces/statuses";
-import { ReservationType } from "../../interfaces/types";
+import { AgreementType, ReservationType } from "../../interfaces/types";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",
@@ -85,6 +85,38 @@ export const fetchAgreementStatusesThunk = createAsyncThunk(
 			Alert.error("Fetching the agreement statuses failed");
 			return thunkApi.rejectWithValue("Fetching the agreement statuses failed");
 		}
+	}
+);
+
+export const fetchAgreementTypesThunk = createAsyncThunk("appKeyValues/fetchAgreementTypes", async (_, thunkApi) => {
+	const { authUser } = thunkApi.getState() as RootState;
+
+	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+	try {
+		const { data } = await appAxiosInstance.get<AgreementType[]>("/Agreements/Types", {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authUser.token}`,
+			},
+			params: {
+				clientId: authUser.clientId,
+			},
+		});
+
+		return data;
+	} catch (error) {
+		Alert.error("Fetching the agreement types failed");
+		return thunkApi.rejectWithValue("Fetching the agreement types failed");
+	}
+});
+
+export const fetchAgreementKeyValuesThunk = createAsyncThunk(
+	"appKeyValues/fetchAgreementKeyValues",
+	async (_, thunkApi) => {
+		await thunkApi.dispatch(fetchAgreementStatusesThunk());
+		await thunkApi.dispatch(fetchAgreementTypesThunk());
+		return true;
 	}
 );
 

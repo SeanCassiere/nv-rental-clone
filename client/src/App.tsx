@@ -20,7 +20,7 @@ import StartSplashPage from "./pages/StartSplash";
 import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
 import {
-	fetchAgreementStatusesThunk,
+	fetchAgreementKeyValuesThunk,
 	fetchReservationKeyValuesThunk,
 	fetchVehicleStatusesThunk,
 } from "./redux/thunks/appKeyValuesThunks";
@@ -50,10 +50,13 @@ const App: React.FunctionComponent = () => {
 	React.useEffect(() => {
 		if (!isLoggedIn || token === "") return;
 
-		dispatch(fetchClientFeaturesThunk());
-		dispatch(fetchReservationKeyValuesThunk());
-		dispatch(fetchAgreementStatusesThunk());
-		dispatch(fetchVehicleStatusesThunk());
+		(async () => {
+			await dispatch(fetchClientFeaturesThunk());
+
+			dispatch(fetchReservationKeyValuesThunk());
+			dispatch(fetchAgreementKeyValuesThunk());
+			dispatch(fetchVehicleStatusesThunk());
+		})();
 	}, [dispatch, isLoggedIn, token]);
 
 	return (
