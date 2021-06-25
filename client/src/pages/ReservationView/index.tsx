@@ -6,6 +6,7 @@ import { Grid, Col, Row, Panel, Message } from "rsuite";
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
 import ReservationTopBarQuickInfo from "./ReservationTopBarQuickInfo";
+import ReservationInteractionButtonBar from "./ReservationInteractionButtonBar";
 
 import { fetchReservationThunk } from "../../redux/thunks/viewReservationThunks";
 import { AppDispatch, selectViewReservationState } from "../../redux/store";
@@ -65,10 +66,7 @@ const AgreementViewPage: React.FunctionComponent = () => {
 							<ReservationTopBarQuickInfo />
 						</Col>
 						<Col md={8}>
-							{/**
-								* @Todo
-								Implement print functionality
-								*/}
+							<ReservationInteractionButtonBar />
 						</Col>
 					</Row>
 					<Row>
