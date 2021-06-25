@@ -7,10 +7,10 @@ import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
 import ReservationTopBarQuickInfo from "./ReservationTopBarQuickInfo";
 
-// import { fetchAgreementThunk } from "../../redux/thunks/viewAgreementThunks";
+import { fetchReservationThunk } from "../../redux/thunks/viewReservationThunks";
 import { AppDispatch, selectViewReservationState } from "../../redux/store";
 import ReservationQuoteChargesSummary from "./ReservationQuoteChargesSummary";
-// import { clearViewReservationState } from "../../redux/slices/viewReservationSlice";
+import { clearViewReservationState } from "../../redux/slices/viewReservationSlice";
 
 type PageParams = {
 	id: string;
@@ -25,12 +25,12 @@ const AgreementViewPage: React.FunctionComponent = () => {
 	const { id } = useParams<PageParams>();
 
 	React.useEffect(() => {
-		// const promise = dispatch(fetchAgreementThunk(id));
-		console.log(id);
-		// return () => {
-		// 	promise.abort();
-		// 	dispatch(clearViewReservationState());
-		// };
+		const promise = dispatch(fetchReservationThunk(id));
+
+		return () => {
+			promise.abort();
+			dispatch(clearViewReservationState());
+		};
 	}, [id, dispatch, refreshNow]);
 
 	const handleRefreshList = React.useCallback(() => {

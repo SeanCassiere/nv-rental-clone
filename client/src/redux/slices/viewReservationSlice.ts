@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ReservationViewDataFull } from "../../interfaces/reservations";
 
-import { fakeViewReservation } from "../../utils/fakeData2";
-// import { fetchAgreementThunk } from "../thunks/viewAgreementThunks";
+import { fetchReservationThunk } from "../thunks/viewReservationThunks";
 
 interface ViewReservationSliceState {
 	reservation: ReservationViewDataFull | null;
@@ -12,7 +11,7 @@ interface ViewReservationSliceState {
 }
 
 const initialStateData: ViewReservationSliceState = {
-	reservation: fakeViewReservation,
+	reservation: null,
 	isSearching: false,
 	isError: false,
 	error: "",
@@ -27,23 +26,23 @@ export const viewAReservationSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		// builder.addCase(fetchAgreementThunk.pending, (state) => {
-		// 	state.isSearching = true;
-		// 	state.agreement = null;
-		// 	state.isError = false;
-		// 	state.error = "";
-		// });
-		// builder.addCase(fetchAgreementThunk.fulfilled, (state, action) => {
-		// 	state.agreement = action.payload.agreement;
-		// 	state.isSearching = false;
-		// });
-		// builder.addCase(fetchAgreementThunk.rejected, (state, action) => {
-		// 	if (action.error.message !== "Aborted") {
-		// 		state.isError = true;
-		// 		state.error = action.error.message as string;
-		// 	}
-		// 	state.agreement = null;
-		// });
+		builder.addCase(fetchReservationThunk.pending, (state) => {
+			state.isSearching = true;
+			state.reservation = null;
+			state.isError = false;
+			state.error = "";
+		});
+		builder.addCase(fetchReservationThunk.fulfilled, (state, action) => {
+			state.reservation = action.payload;
+			state.isSearching = false;
+		});
+		builder.addCase(fetchReservationThunk.rejected, (state, action) => {
+			if (action.error.message !== "Aborted") {
+				state.isError = true;
+				state.error = action.error.message as string;
+			}
+			state.reservation = null;
+		});
 	},
 });
 
