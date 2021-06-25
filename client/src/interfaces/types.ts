@@ -23,3 +23,8 @@ export interface AgreementType {
 	isPossibleDelete: boolean;
 	isAddedByCustomer: boolean;
 }
+
+export interface VehicleTypeShort {
+	id: number;
+	value: string;
+}

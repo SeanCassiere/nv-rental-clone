@@ -22,7 +22,7 @@ import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
 import {
 	fetchAgreementKeyValuesThunk,
 	fetchReservationKeyValuesThunk,
-	fetchVehicleStatusesThunk,
+	fetchVehicleKeyValuesThunk,
 } from "./redux/thunks/appKeyValuesThunks";
 import { fetchClientFeaturesThunk } from "./redux/thunks/appConfigThunks";
 
@@ -55,7 +55,7 @@ const App: React.FunctionComponent = () => {
 
 			dispatch(fetchReservationKeyValuesThunk());
 			dispatch(fetchAgreementKeyValuesThunk());
-			dispatch(fetchVehicleStatusesThunk());
+			dispatch(fetchVehicleKeyValuesThunk());
 		})();
 	}, [dispatch, isLoggedIn, token]);
 

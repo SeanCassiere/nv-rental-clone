@@ -5,7 +5,7 @@ import { Alert } from "rsuite";
 
 import { RootState } from "../store";
 import { ReservationStatus, AgreementStatus, VehicleStatus } from "../../interfaces/statuses";
-import { AgreementType, ReservationType } from "../../interfaces/types";
+import { AgreementType, ReservationType, VehicleTypeShort } from "../../interfaces/types";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",
@@ -139,3 +139,38 @@ export const fetchVehicleStatusesThunk = createAsyncThunk("appKeyValues/fetchVeh
 		return thunkApi.rejectWithValue("Fetching the vehicle statuses failed");
 	}
 });
+
+export const fetchVehicleTypesShortThunk = createAsyncThunk(
+	"appKeyValues/fetchVehicleTypesShort",
+	async (_, thunkApi) => {
+		const { authUser } = thunkApi.getState() as RootState;
+
+		if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+		try {
+			const { data } = await appAxiosInstance.get<VehicleTypeShort[]>("/Vehicles/Types", {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authUser.token}`,
+				},
+				params: {
+					clientId: authUser.clientId,
+				},
+			});
+
+			return data;
+		} catch (error) {
+			Alert.error("Fetching the vehicle types failed");
+			return thunkApi.rejectWithValue("Fetching the vehicle types failed");
+		}
+	}
+);
+
+export const fetchVehicleKeyValuesThunk = createAsyncThunk(
+	"appKeyValues/fetchVehicleKeyValues",
+	async (_, thunkApi) => {
+		await thunkApi.dispatch(fetchVehicleStatusesThunk());
+		await thunkApi.dispatch(fetchVehicleTypesShortThunk());
+		return true;
+	}
+);
