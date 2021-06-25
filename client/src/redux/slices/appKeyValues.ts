@@ -1,39 +1,43 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AgreementStatus, ReservationStatus, VehicleStatus } from "../../interfaces/statuses";
+import { ReservationType, AgreementType, VehicleTypeShort } from "../../interfaces/types";
 
 import {
 	fetchReservationStatusesThunk,
+	fetchReservationTypesThunk,
 	fetchAgreementStatusesThunk,
+	fetchAgreementTypesThunk,
 	fetchVehicleStatusesThunk,
+	fetchVehicleTypesShortThunk,
 } from "../thunks/appKeyValuesThunks";
 
 interface AppKeyValuesSliceState {
 	reservationValues: {
 		reservationStatuses: ReservationStatus[];
-		error: string | null;
+		reservationTypes: ReservationType[];
 	};
 	agreementValues: {
 		agreementStatuses: AgreementStatus[];
-		error: string | null;
+		agreementTypes: AgreementType[];
 	};
 	vehicleValues: {
 		vehicleStatuses: VehicleStatus[];
-		error: string | null;
+		vehicleTypes: VehicleTypeShort[];
 	};
 }
 
 const initialStateData: AppKeyValuesSliceState = {
 	reservationValues: {
 		reservationStatuses: [],
-		error: null,
+		reservationTypes: [],
 	},
 	agreementValues: {
 		agreementStatuses: [],
-		error: null,
+		agreementTypes: [],
 	},
 	vehicleValues: {
 		vehicleStatuses: [],
-		error: null,
+		vehicleTypes: [],
 	},
 };
 
@@ -49,29 +53,44 @@ export const appKeyValuesSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(fetchReservationStatusesThunk.rejected, (state, action) => {
+		//Reservation Key Values
+		builder.addCase(fetchReservationStatusesThunk.rejected, (state) => {
 			state.reservationValues.reservationStatuses = [];
-			state.reservationValues.error = action.error.message as string;
 		});
 		builder.addCase(fetchReservationStatusesThunk.fulfilled, (state, action) => {
 			state.reservationValues.reservationStatuses = action.payload;
-			state.reservationValues.error = null;
 		});
-		builder.addCase(fetchAgreementStatusesThunk.rejected, (state, action) => {
+		builder.addCase(fetchReservationTypesThunk.rejected, (state) => {
+			state.reservationValues.reservationStatuses = [];
+		});
+		builder.addCase(fetchReservationTypesThunk.fulfilled, (state, action) => {
+			state.reservationValues.reservationTypes = action.payload;
+		});
+		//Agreement Key Values
+		builder.addCase(fetchAgreementStatusesThunk.rejected, (state) => {
 			state.agreementValues.agreementStatuses = [];
-			state.agreementValues.error = action.error?.message as string;
 		});
 		builder.addCase(fetchAgreementStatusesThunk.fulfilled, (state, action) => {
 			state.agreementValues.agreementStatuses = action.payload;
-			state.agreementValues.error = null;
 		});
-		builder.addCase(fetchVehicleStatusesThunk.rejected, (state, action) => {
+		builder.addCase(fetchAgreementTypesThunk.rejected, (state) => {
+			state.agreementValues.agreementTypes = [];
+		});
+		builder.addCase(fetchAgreementTypesThunk.fulfilled, (state, action) => {
+			state.agreementValues.agreementTypes = action.payload;
+		});
+		//Vehicle Key Values
+		builder.addCase(fetchVehicleStatusesThunk.rejected, (state) => {
 			state.vehicleValues.vehicleStatuses = [];
-			state.vehicleValues.error = action.error?.message as string;
 		});
 		builder.addCase(fetchVehicleStatusesThunk.fulfilled, (state, action) => {
 			state.vehicleValues.vehicleStatuses = action.payload;
-			state.vehicleValues.error = null;
+		});
+		builder.addCase(fetchVehicleTypesShortThunk.rejected, (state) => {
+			state.vehicleValues.vehicleTypes = [];
+		});
+		builder.addCase(fetchVehicleTypesShortThunk.fulfilled, (state, action) => {
+			state.vehicleValues.vehicleTypes = action.payload;
 		});
 	},
 });

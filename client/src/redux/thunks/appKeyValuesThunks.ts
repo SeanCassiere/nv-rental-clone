@@ -5,6 +5,7 @@ import { Alert } from "rsuite";
 
 import { RootState } from "../store";
 import { ReservationStatus, AgreementStatus, VehicleStatus } from "../../interfaces/statuses";
+import { AgreementType, ReservationType, VehicleTypeShort } from "../../interfaces/types";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",
@@ -26,6 +27,41 @@ export const fetchReservationStatusesThunk = createAsyncThunk(
 			Alert.error("Fetching the reservation statuses failed");
 			return thunkApi.rejectWithValue("Fetching the reservation statuses failed");
 		}
+	}
+);
+
+export const fetchReservationTypesThunk = createAsyncThunk(
+	"appKeyValues/fetchReservationTypes",
+	async (_, thunkApi) => {
+		const { authUser } = thunkApi.getState() as RootState;
+
+		if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+		try {
+			const { data } = await appAxiosInstance.get<ReservationType[]>("/Reservations/Types", {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authUser.token}`,
+				},
+				params: {
+					clientId: authUser.clientId,
+				},
+			});
+
+			return data;
+		} catch (error) {
+			Alert.error("Fetching the reservation types failed");
+			return thunkApi.rejectWithValue("Fetching the reservation types failed");
+		}
+	}
+);
+
+export const fetchReservationKeyValuesThunk = createAsyncThunk(
+	"appKeyValues/fetchReservationKeyValues",
+	async (_, thunkApi) => {
+		await thunkApi.dispatch(fetchReservationStatusesThunk());
+		await thunkApi.dispatch(fetchReservationTypesThunk());
+		return true;
 	}
 );
 
@@ -52,6 +88,38 @@ export const fetchAgreementStatusesThunk = createAsyncThunk(
 	}
 );
 
+export const fetchAgreementTypesThunk = createAsyncThunk("appKeyValues/fetchAgreementTypes", async (_, thunkApi) => {
+	const { authUser } = thunkApi.getState() as RootState;
+
+	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+	try {
+		const { data } = await appAxiosInstance.get<AgreementType[]>("/Agreements/Types", {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authUser.token}`,
+			},
+			params: {
+				clientId: authUser.clientId,
+			},
+		});
+
+		return data;
+	} catch (error) {
+		Alert.error("Fetching the agreement types failed");
+		return thunkApi.rejectWithValue("Fetching the agreement types failed");
+	}
+});
+
+export const fetchAgreementKeyValuesThunk = createAsyncThunk(
+	"appKeyValues/fetchAgreementKeyValues",
+	async (_, thunkApi) => {
+		await thunkApi.dispatch(fetchAgreementStatusesThunk());
+		await thunkApi.dispatch(fetchAgreementTypesThunk());
+		return true;
+	}
+);
+
 export const fetchVehicleStatusesThunk = createAsyncThunk("appKeyValues/fetchVehicleStatuses", async (_, thunkApi) => {
 	const { authUser } = thunkApi.getState() as RootState;
 
@@ -71,3 +139,38 @@ export const fetchVehicleStatusesThunk = createAsyncThunk("appKeyValues/fetchVeh
 		return thunkApi.rejectWithValue("Fetching the vehicle statuses failed");
 	}
 });
+
+export const fetchVehicleTypesShortThunk = createAsyncThunk(
+	"appKeyValues/fetchVehicleTypesShort",
+	async (_, thunkApi) => {
+		const { authUser } = thunkApi.getState() as RootState;
+
+		if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+		try {
+			const { data } = await appAxiosInstance.get<VehicleTypeShort[]>("/Vehicles/Types", {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authUser.token}`,
+				},
+				params: {
+					clientId: authUser.clientId,
+				},
+			});
+
+			return data;
+		} catch (error) {
+			Alert.error("Fetching the vehicle types failed");
+			return thunkApi.rejectWithValue("Fetching the vehicle types failed");
+		}
+	}
+);
+
+export const fetchVehicleKeyValuesThunk = createAsyncThunk(
+	"appKeyValues/fetchVehicleKeyValues",
+	async (_, thunkApi) => {
+		await thunkApi.dispatch(fetchVehicleStatusesThunk());
+		await thunkApi.dispatch(fetchVehicleTypesShortThunk());
+		return true;
+	}
+);
