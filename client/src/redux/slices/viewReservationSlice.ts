@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ReservationViewDataFull } from "../../interfaces/reservations";
 
-import { fetchReservationThunk, fetchReservationPDFThunk } from "../thunks/viewReservationThunks";
+import { ReservationViewDataFull } from "../../interfaces/reservations/reservationView";
+import { ReservationSummaryResponseFull } from "../../interfaces/reservations/reservationSummary";
+
+import { fetchReservationPDFThunk, fetchViewReservationByIdThunk } from "../thunks/viewReservationThunks";
 
 interface ViewReservationSliceState {
 	reservation: ReservationViewDataFull | null;
+	reservationSummary: ReservationSummaryResponseFull | null;
 	isSearching: boolean;
 	isError: boolean;
 	error: string;
@@ -16,6 +19,7 @@ interface ViewReservationSliceState {
 
 const initialStateData: ViewReservationSliceState = {
 	reservation: null,
+	reservationSummary: null,
 	isSearching: false,
 	isError: false,
 	error: "",
@@ -31,27 +35,28 @@ export const viewAReservationSlice = createSlice({
 	reducers: {
 		clearViewReservationState: (state) => {
 			state.reservation = null;
+			state.reservationSummary = null;
 			state.printPDF = { url: null, isPrinting: false };
 		},
 	},
 	extraReducers: (builder) => {
-		//Fetch Reservation Data
-		builder.addCase(fetchReservationThunk.pending, (state) => {
-			state.isSearching = true;
+		//Fetch Reservation By Id
+		builder.addCase(fetchViewReservationByIdThunk.pending, (state) => {
 			state.reservation = null;
+			state.reservationSummary = null;
+			state.isSearching = true;
 			state.isError = false;
 			state.error = "";
 		});
-		builder.addCase(fetchReservationThunk.fulfilled, (state, action) => {
-			state.reservation = action.payload;
+		builder.addCase(fetchViewReservationByIdThunk.rejected, (state, action) => {
 			state.isSearching = false;
+			state.isError = true;
+			state.error = action?.error?.message as string;
 		});
-		builder.addCase(fetchReservationThunk.rejected, (state, action) => {
-			if (action.error.message !== "Aborted") {
-				state.isError = true;
-				state.error = action.error.message as string;
-			}
-			state.reservation = null;
+		builder.addCase(fetchViewReservationByIdThunk.fulfilled, (state, action) => {
+			state.reservation = action.payload.reservationView;
+			state.reservationSummary = action.payload.reservationSummary;
+			state.isSearching = false;
 		});
 		// Fetch Reservation PDF
 		builder.addCase(fetchReservationPDFThunk.pending, (state) => {

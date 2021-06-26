@@ -1,6 +1,6 @@
 import { AgreementInList, AgreementSummary, AgreementDataFull } from "../interfaces/agreement";
 import { CustomersInList } from "../interfaces/customers";
-import { ReservationsInList } from "../interfaces/reservations";
+import { ReservationsInList } from "../interfaces/reservations/reservationSearch";
 
 export const fakeReservationsList: ReservationsInList[] = [
 	{

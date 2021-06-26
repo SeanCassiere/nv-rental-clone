@@ -16,7 +16,7 @@ import { fetchReservationsThunk } from "../../redux/thunks/searchReservationsThu
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
 
-import { ReservationsInList } from "../../interfaces/reservations";
+import { ReservationsInList } from "../../interfaces/reservations/reservationSearch";
 import { refreshLastReservationSearchDate } from "../../redux/slices/searchReservationsSlice";
 
 const { Column, HeaderCell, Cell } = Table;
