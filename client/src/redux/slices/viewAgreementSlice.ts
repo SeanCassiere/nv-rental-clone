@@ -1,13 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AgreementDataFull } from "../../interfaces/agreement";
 
-import { fetchAgreementThunk } from "../thunks/viewAgreementThunks";
+import { fetchAgreementThunk, fetchAgreementPDFThunk } from "../thunks/viewAgreementThunks";
 
 interface ViewAgreementSliceState {
 	agreement: AgreementDataFull | null;
 	isSearching: boolean;
 	isError: boolean;
 	error: string;
+	printPDF: {
+		url: string | null;
+		isPrinting: boolean;
+	};
 }
 
 const initialStateData: ViewAgreementSliceState = {
@@ -15,6 +19,10 @@ const initialStateData: ViewAgreementSliceState = {
 	isSearching: false,
 	isError: false,
 	error: "",
+	printPDF: {
+		url: null,
+		isPrinting: false,
+	},
 };
 
 export const viewAgreementsSlice = createSlice({
@@ -23,9 +31,11 @@ export const viewAgreementsSlice = createSlice({
 	reducers: {
 		clearViewAgreementState: (state) => {
 			state.agreement = null;
+			state.printPDF = { url: null, isPrinting: false };
 		},
 	},
 	extraReducers: (builder) => {
+		// Fetch Agreement Thunk
 		builder.addCase(fetchAgreementThunk.pending, (state) => {
 			state.isSearching = true;
 			state.agreement = null;
@@ -42,6 +52,18 @@ export const viewAgreementsSlice = createSlice({
 				state.error = action.error.message as string;
 			}
 			state.agreement = null;
+		});
+		// Fetch Agreement PDF
+		builder.addCase(fetchAgreementPDFThunk.pending, (state) => {
+			state.printPDF.isPrinting = true;
+			state.printPDF.url = null;
+		});
+		builder.addCase(fetchAgreementPDFThunk.fulfilled, (state, action) => {
+			state.printPDF.url = action.payload;
+			state.printPDF.isPrinting = false;
+		});
+		builder.addCase(fetchAgreementPDFThunk.rejected, (state) => {
+			state.printPDF.isPrinting = false;
 		});
 	},
 });
