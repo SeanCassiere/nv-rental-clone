@@ -1,5 +1,5 @@
 import React from "react";
-import { Panel, Grid, Row, Col, Placeholder, Button } from "rsuite";
+import { Panel, Grid, Row, Col, Placeholder, Button, Icon } from "rsuite";
 import { useSelector } from "react-redux";
 import { selectViewReservationState } from "../../redux/store";
 
@@ -9,7 +9,7 @@ import { ReservationMiscViewDataFull } from "../../interfaces/reservations/reser
 const ReservationQuoteChargesSummary = () => {
 	const [showTaxMiscCharges, setShowTaxMiscCharges] = React.useState(false);
 	const [showNonTaxMiscCharges, setShowNonTaxMiscCharges] = React.useState(false);
-	const { reservation, isSearching } = useSelector(selectViewReservationState);
+	const { reservation, reservationSummary, isSearching } = useSelector(selectViewReservationState);
 
 	const handleShowTaxMiscCharges = React.useCallback(() => {
 		setShowTaxMiscCharges((t) => !t);
@@ -29,19 +29,19 @@ const ReservationQuoteChargesSummary = () => {
 	return (
 		<Panel header='Reservation Quote Summary' style={{ marginBottom: 10 }} bordered>
 			<Grid fluid>
-				<RowItem label='Base Rate' colText={reservation?.reservationview.basePrice} currency='$' />
-				<RowItem label='Promotion Discount' colText={reservation?.reservationview.totalDiscount} currency='$' />
-				<RowItem label='Final Base Rate' colText={reservation?.reservationview.basePrice} currency='$' />
+				<RowItem label='Base Rate' colText={reservationSummary?.baseRate} currency='$' />
+				<RowItem label='Promotion Discount' colText={reservationSummary?.promotionDiscount} currency='$' />
+				<RowItem label='Final Base Rate' colText={reservationSummary?.finalBaseRate} currency='$' />
 				<RowItem
 					label={
 						<p>
-							Total Miscellaneous Charges&nbsp;
 							<Button onClick={handleShowTaxMiscCharges} size='xs'>
-								Show More
+								<Icon icon={showTaxMiscCharges ? "angle-up" : "angle-down"} />
 							</Button>
+							&nbsp; Total Miscellaneous Charges
 						</p>
 					}
-					colText={0}
+					colText={reservationSummary?.totalMiscChargesTaxable}
 					currency='$'
 					bold
 				/>
@@ -56,13 +56,13 @@ const ReservationQuoteChargesSummary = () => {
 				<RowItem
 					label={
 						<p>
-							Total Miscellaneous Charges (No Tax)&nbsp;
 							<Button onClick={handleShowNonTaxMiscCharges} size='xs'>
-								Show More
+								<Icon icon={showNonTaxMiscCharges ? "angle-up" : "angle-down"} />
 							</Button>
+							&nbsp; Total Miscellaneous Charges (No Tax)
 						</p>
 					}
-					colText={0}
+					colText={reservationSummary?.totalMiscChargesNonTaxable}
 					currency='$'
 					bold
 				/>
@@ -75,13 +75,13 @@ const ReservationQuoteChargesSummary = () => {
 					</Row>
 				)}
 
-				<RowItem label='Pre-Adjustment' colText={reservation?.reservationview.preAdjustment} currency='$' />
-				<RowItem label='Subtotal' colText={0} currency='$' bold />
-				<RowItem label='Tax Charges' colText={0} currency='$' />
+				<RowItem label='Pre-Adjustment' colText={reservationSummary?.preAdjustment} currency='$' />
+				<RowItem label='Subtotal' colText={reservationSummary?.subTotal} currency='$' bold />
+				<RowItem label='Tax Charges' colText={reservationSummary?.totalTax} currency='$' />
 				<RowItem label='Additional Charges' colText={reservation?.reservationview.additionalCharge} currency='$' />
-				<RowItem label='Total' colText={0} currency='$' bold />
-				<RowItem label='Advanced Paid' colText={reservation?.reservationview.advancedPayment} currency='$' />
-				<RowItem label='Balance Due' colText={0} currency='$' bold />
+				<RowItem label='Total' colText={reservationSummary?.total} currency='$' bold />
+				<RowItem label='Advance Paid' colText={reservationSummary?.advancePayment} currency='$' />
+				<RowItem label='Balance Due' colText={reservationSummary?.balanceDue} currency='$' bold />
 				<RowItem
 					label='Cancellation Charge'
 					colText={reservation?.reservationview.cancellationCharge ?? 0}
@@ -157,7 +157,13 @@ const RowItem = React.memo(
 					{label}
 				</Col>
 				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={8} md={8}>
-					{colText === 0 ? `${currency}${value.toFixed(2)}` : colText ? `${currency}${value.toFixed(2)}` : <></>}
+					{colText === 0 ? (
+						`${currency}${value.toFixed(2)}`
+					) : colText ? (
+						`${currency}${value.toFixed(2)}`
+					) : (
+						<>{currency}0.00</>
+					)}
 				</Col>
 			</Row>
 		);
