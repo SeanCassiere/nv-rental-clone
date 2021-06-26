@@ -1,10 +1,10 @@
 import React from "react";
 import { Panel, Grid, Row, Col, Placeholder } from "rsuite";
 import { useSelector } from "react-redux";
-import { selectViewAgreementState } from "../../../redux/store";
+import { selectViewReservationState } from "../../../redux/store";
 
-const OthersInformationPanel: React.FunctionComponent = () => {
-	const { agreement, isSearching } = useSelector(selectViewAgreementState);
+const OthersInformationPanel = () => {
+	const { reservation, isSearching } = useSelector(selectViewReservationState);
 
 	if (isSearching)
 		return (
@@ -18,11 +18,11 @@ const OthersInformationPanel: React.FunctionComponent = () => {
 			<Grid fluid>
 				<Row>
 					<Col xs={10}>PO</Col>
-					<Col xs={14}>{agreement?.poNo}</Col>
+					<Col xs={14}>{reservation?.reservationview?.poNo}</Col>
 				</Row>
 				<Row>
 					<Col xs={10}>RO</Col>
-					<Col xs={14}>{agreement?.roNo}</Col>
+					<Col xs={14}>{reservation?.reservationview?.roNo}</Col>
 				</Row>
 			</Grid>
 		</Panel>
