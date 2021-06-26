@@ -8,7 +8,7 @@ import ViewPageHeader from "../../components/ViewPageHeader";
 import ReservationTopBarQuickInfo from "./ReservationTopBarQuickInfo";
 import ReservationInteractionButtonBar from "./ReservationInteractionButtonBar";
 
-import { fetchReservationThunk } from "../../redux/thunks/viewReservationThunks";
+import { fetchViewReservationByIdThunk } from "../../redux/thunks/viewReservationThunks";
 import { AppDispatch, selectViewReservationState } from "../../redux/store";
 import ReservationQuoteChargesSummary from "./ReservationQuoteChargesSummary";
 import { clearViewReservationState } from "../../redux/slices/viewReservationSlice";
@@ -17,7 +17,7 @@ type PageParams = {
 	id: string;
 };
 
-const AgreementViewPage: React.FunctionComponent = () => {
+const ReservationViewPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const history = useHistory();
 	const [refreshNow, setRefreshNow] = React.useState(1);
@@ -26,7 +26,7 @@ const AgreementViewPage: React.FunctionComponent = () => {
 	const { id } = useParams<PageParams>();
 
 	React.useEffect(() => {
-		const promise = dispatch(fetchReservationThunk(id));
+		const promise = dispatch(fetchViewReservationByIdThunk(id));
 
 		return () => {
 			promise.abort();
@@ -66,7 +66,7 @@ const AgreementViewPage: React.FunctionComponent = () => {
 							<ReservationTopBarQuickInfo />
 						</Col>
 						<Col md={8}>
-							<ReservationInteractionButtonBar />
+							<ReservationInteractionButtonBar reservationId={id} />
 						</Col>
 					</Row>
 					<Row>
@@ -88,4 +88,4 @@ const AgreementViewPage: React.FunctionComponent = () => {
 	);
 };
 
-export default React.memo(AgreementViewPage);
+export default React.memo(ReservationViewPage);

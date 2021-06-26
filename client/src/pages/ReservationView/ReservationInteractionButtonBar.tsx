@@ -1,22 +1,16 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Row, Col, Button, Icon, Panel } from "rsuite";
 
 import { AppDispatch, selectViewReservationState } from "../../redux/store";
 import { fetchReservationPDFThunk } from "../../redux/thunks/viewReservationThunks";
 
-type PageParams = {
-	id: string;
-};
-
-const ReservationInteractionButtonBar = () => {
+const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: string }) => {
 	const dispatch = useDispatch<AppDispatch>();
 	const {
 		printPDF: { isPrinting, url },
+		isError,
 	} = useSelector(selectViewReservationState);
-
-	const { id } = useParams<PageParams>();
 
 	React.useEffect(() => {
 		if (url === null) return;
@@ -25,15 +19,15 @@ const ReservationInteractionButtonBar = () => {
 	}, [url]);
 
 	const handlePrintRequest = React.useCallback(() => {
-		dispatch(fetchReservationPDFThunk(id));
-	}, [dispatch, id]);
+		dispatch(fetchReservationPDFThunk(reservationId));
+	}, [dispatch, reservationId]);
 
 	return (
 		<Panel bodyFill>
 			<Grid fluid>
 				<Row>
 					<Col>
-						<Button loading={isPrinting} onClick={handlePrintRequest}>
+						<Button loading={isPrinting} onClick={handlePrintRequest} disabled={isError}>
 							<Icon icon='print' size='lg' />
 						</Button>
 					</Col>
