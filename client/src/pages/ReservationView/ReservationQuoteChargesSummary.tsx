@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectViewReservationState } from "../../redux/store";
 
 import styled from "styled-components";
-import { ReservationMiscViewDataFull } from "../../interfaces/reservations";
+import { ReservationMiscViewDataFull } from "../../interfaces/reservations/reservationView";
 
 const ReservationQuoteChargesSummary = () => {
 	const [showTaxMiscCharges, setShowTaxMiscCharges] = React.useState(false);

@@ -2,7 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Alert } from "rsuite";
 import appAxios from "../../api/appAxiosInstance";
-import { ReservationSummaryResponseFull, ReservationViewDataFull } from "../../interfaces/reservations";
+
+import { ReservationViewDataFull } from "../../interfaces/reservations/reservationView";
+import { ReservationSummaryResponseFull } from "../../interfaces/reservations/reservationSummary";
 import { RootState } from "../store";
 
 export const fetchViewReservationByIdThunk = createAsyncThunk(

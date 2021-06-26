@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ReservationSummaryResponseFull, ReservationViewDataFull } from "../../interfaces/reservations";
+
+import { ReservationViewDataFull } from "../../interfaces/reservations/reservationView";
+import { ReservationSummaryResponseFull } from "../../interfaces/reservations/reservationSummary";
 
 import { fetchReservationPDFThunk, fetchViewReservationByIdThunk } from "../thunks/viewReservationThunks";
 

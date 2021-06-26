@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import appAxiosInstance from "../../api/appAxiosInstance";
-import { ReservationsInList } from "../../interfaces/reservations";
+import { ReservationsInList } from "../../interfaces/reservations/reservationSearch";
 import { RootState } from "../store";
 
 export const fetchReservationsThunk = createAsyncThunk(
