@@ -120,8 +120,8 @@ const RateBreakDownSummary = React.memo(() => {
 							<Moment format={dateTimeLong}>{reservation?.reservationview.endDate}</Moment>
 						</Col>
 					</Row>
-					{reservationSummary?.rateSummaryItems.map((item) => (
-						<RateBreakDownItem label={item.type} qty={item.units} cost={item.rate} />
+					{reservationSummary?.rateSummaryItems.map((item, idx) => (
+						<RateBreakDownItem key={idx} label={item.type} qty={item.units} cost={item.rate} />
 					))}
 				</Panel>
 			</Col>

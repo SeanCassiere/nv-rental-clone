@@ -61,7 +61,7 @@ const ReservationViewPage: React.FunctionComponent = () => {
 					<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 				)}
 				<Grid fluid>
-					<Row>
+					<Row style={{ marginBottom: 5 }}>
 						<Col md={16}>
 							<ReservationTopBarQuickInfo />
 						</Col>
