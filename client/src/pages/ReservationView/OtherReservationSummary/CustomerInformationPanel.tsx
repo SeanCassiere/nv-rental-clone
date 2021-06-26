@@ -10,7 +10,7 @@ const CustomerInformationPanel: React.FunctionComponent = () => {
 	if (isSearching)
 		return (
 			<Panel style={{ marginTop: 15 }} bordered>
-				<Placeholder.Grid rows={5} columns={3} rowHeight={40} />
+				<Placeholder.Grid rows={5} columns={3} />
 			</Panel>
 		);
 
