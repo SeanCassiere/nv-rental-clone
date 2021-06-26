@@ -9,6 +9,7 @@ import ReservationTopBarQuickInfo from "./ReservationTopBarQuickInfo";
 import ReservationInteractionButtonBar from "./ReservationInteractionButtonBar";
 import ReservationInformation from "./ReservationInformation";
 import ReservationDepositInformationPanel from "./ReservationDepositInformationPanel";
+import OtherReservationSummary from "./OtherReservationSummary";
 
 import { fetchViewReservationByIdThunk } from "../../redux/thunks/viewReservationThunks";
 import { AppDispatch, selectViewReservationState } from "../../redux/store";
@@ -76,7 +77,7 @@ const ReservationViewPage: React.FunctionComponent = () => {
 							<ReservationInformation />
 						</Col>
 						<Col md={8}>
-							<></>
+							<OtherReservationSummary />
 							<ReservationDepositInformationPanel />
 						</Col>
 						<Col md={8}>
