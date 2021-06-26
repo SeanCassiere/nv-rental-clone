@@ -1,4 +1,4 @@
-import { ReservationViewDataFull } from "../interfaces/reservations";
+import { ReservationViewDataFull } from "../interfaces/reservations/reservationView";
 import { VehiclesInList } from "../interfaces/vehicles";
 export const fakeVehicleDataInList: VehiclesInList[] = [
 	{
