@@ -64,7 +64,7 @@ export interface ReservationViewDataFull {
 		year: number;
 		startDate: string;
 		endDate: string;
-		createdDate: string | null;
+		createdDate: string;
 		notes: string | null;
 		licenseNo: string | null;
 		vehicleNo: string | null;
