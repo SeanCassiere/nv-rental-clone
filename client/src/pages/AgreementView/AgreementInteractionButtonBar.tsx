@@ -2,16 +2,17 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Row, Col, Button, Icon, Panel } from "rsuite";
 
-import { AppDispatch, selectViewReservationState } from "../../redux/store";
-import { fetchReservationPDFThunk } from "../../redux/thunks/viewReservationThunks";
+import { AppDispatch, selectViewAgreementState } from "../../redux/store";
+import { fetchAgreementPDFThunk } from "../../redux/thunks/viewAgreementThunks";
 
-const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: string }) => {
+const AgreementInteractionButtonBar = ({ agreementId }: { agreementId: string }) => {
 	const dispatch = useDispatch<AppDispatch>();
 	const {
+		agreement,
 		printPDF: { isPrinting, url },
 		isError,
 		isSearching,
-	} = useSelector(selectViewReservationState);
+	} = useSelector(selectViewAgreementState);
 
 	React.useEffect(() => {
 		if (url === null) return;
@@ -20,8 +21,10 @@ const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: str
 	}, [url]);
 
 	const handlePrintRequest = React.useCallback(() => {
-		dispatch(fetchReservationPDFThunk(reservationId));
-	}, [dispatch, reservationId]);
+		if (!agreement) return;
+
+		dispatch(fetchAgreementPDFThunk({ id: agreementId, status: agreement?.statusId }));
+	}, [dispatch, agreementId, agreement]);
 
 	return (
 		<Panel bodyFill>
@@ -46,4 +49,4 @@ const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: str
 	);
 };
 
-export default ReservationInteractionButtonBar;
+export default AgreementInteractionButtonBar;

@@ -12,6 +12,7 @@ import CustomerInformation from "./CustomerInformation";
 import OtherAgreementSummary from "./OtherAgreementSummary";
 import DepositInformationPanel from "./DepositInformationPanel";
 import AgreementTopBarQuickInfo from "./AgreementTopBarQuickInfo";
+import AgreementInteractionButtonBar from "./AgreementInteractionButtonBar";
 
 import { fetchAgreementThunk } from "../../redux/thunks/viewAgreementThunks";
 import { AppDispatch, selectViewAgreementState } from "../../redux/store";
@@ -65,15 +66,12 @@ const AgreementViewPage: React.FunctionComponent = () => {
 					<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 				)}
 				<Grid fluid>
-					<Row>
+					<Row style={{ marginBottom: 5 }}>
 						<Col md={16}>
 							<AgreementTopBarQuickInfo />
 						</Col>
 						<Col md={8}>
-							{/**
-								* @Todo
-								Implement print functionality
-								*/}
+							<AgreementInteractionButtonBar agreementId={id} />
 						</Col>
 					</Row>
 					<Row>
