@@ -1,7 +1,8 @@
 import React from "react";
 import { Panel, Grid, Row, Col, Placeholder, Button, Icon } from "rsuite";
 import { useSelector } from "react-redux";
-import { selectViewReservationState } from "../../redux/store";
+import Moment from "react-moment";
+import { selectAppConfigState, selectViewReservationState } from "../../redux/store";
 
 import styled from "styled-components";
 import { ReservationMiscViewDataFull } from "../../interfaces/reservations/reservationView";
@@ -29,6 +30,7 @@ const ReservationQuoteChargesSummary = () => {
 	return (
 		<Panel header='Reservation Quote Summary' style={{ marginBottom: 10 }} bordered>
 			<Grid fluid>
+				<RateBreakDownSummary />
 				<RowItem label='Base Rate' colText={reservationSummary?.baseRate} currency='$' />
 				<RowItem label='Promotion Discount' colText={reservationSummary?.promotionDiscount} currency='$' />
 				<RowItem label='Final Base Rate' colText={reservationSummary?.finalBaseRate} currency='$' />
@@ -91,6 +93,49 @@ const ReservationQuoteChargesSummary = () => {
 		</Panel>
 	);
 };
+
+const RateBreakDownSummary = React.memo(() => {
+	const { reservationSummary, reservation } = useSelector(selectViewReservationState);
+	const {
+		dates: { dateTimeLong },
+	} = useSelector(selectAppConfigState);
+
+	return (
+		<Row style={{ marginBottom: 10 }}>
+			<Col>
+				<Panel style={{ marginBottom: 10 }} bordered>
+					<Row style={{ marginBottom: 10 }}>
+						<Col xs={10} style={{ fontWeight: 700 }}>
+							Start Date
+						</Col>
+						<Col xs={12} style={{ fontWeight: 700 }}>
+							<Moment format={dateTimeLong}>{reservation?.reservationview.startDate}</Moment>
+						</Col>
+					</Row>
+					<Row style={{ marginBottom: 10 }}>
+						<Col xs={10} style={{ fontWeight: 700 }}>
+							End Date
+						</Col>
+						<Col xs={12} style={{ fontWeight: 700 }}>
+							<Moment format={dateTimeLong}>{reservation?.reservationview.endDate}</Moment>
+						</Col>
+					</Row>
+					{reservationSummary?.rateSummaryItems.map((item) => (
+						<RateBreakDownItem label={item.type} qty={item.units} cost={item.rate} />
+					))}
+				</Panel>
+			</Col>
+		</Row>
+	);
+});
+
+const RateBreakDownItem = React.memo(({ label, qty, cost }: { label: React.ReactNode; qty: number; cost: number }) => (
+	<Row style={{ marginBottom: 10 }}>
+		<Col xs={10}>{label}</Col>
+		<Col xs={6}>{qty}&nbsp;x</Col>
+		<Col xs={6}>{cost.toFixed(2)}</Col>
+	</Row>
+));
 
 const MisChargeBreakdownInSummary = React.memo(
 	({
