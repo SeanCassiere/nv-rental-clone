@@ -10,6 +10,7 @@ const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: str
 	const {
 		printPDF: { isPrinting, url },
 		isError,
+		isSearching,
 	} = useSelector(selectViewReservationState);
 
 	React.useEffect(() => {
@@ -27,8 +28,16 @@ const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: str
 			<Grid fluid>
 				<Row>
 					<Col>
-						<Button loading={isPrinting} onClick={handlePrintRequest} disabled={isError}>
+						<Button loading={isPrinting} onClick={handlePrintRequest} disabled={isError || isSearching}>
 							<Icon icon='print' size='lg' />
+						</Button>
+						&nbsp;
+						<Button
+							loading={isPrinting}
+							onClick={() => console.log("email button clicked")}
+							disabled={isError || isSearching}
+						>
+							<Icon icon='envelope' size='lg' />
 						</Button>
 					</Col>
 				</Row>
