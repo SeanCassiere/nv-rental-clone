@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { NavotarClientFeature } from "../../interfaces/authentication";
+import { NavotarClientFeature } from "../../interfaces/clients/clientFeatures";
 
 import { fetchClientFeaturesThunk } from "../thunks/appConfigThunks";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";

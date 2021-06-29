@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import appAxiosInstance from "../../api/appAxiosInstance";
 
 import { RootState } from "../store";
-import { NavotarClientFeature } from "../../interfaces/authentication";
+import { NavotarClientFeature } from "../../interfaces/clients/clientFeatures";
 import { setDateShort, setDateLong, setDateTimeLong } from "../slices/appConfigSlice";
 
 export const fetchClientFeaturesThunk = createAsyncThunk("appKeyValues/fetchClientFeatures", async (_, thunkApi) => {
