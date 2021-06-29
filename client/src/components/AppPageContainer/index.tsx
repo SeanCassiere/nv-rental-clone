@@ -28,7 +28,6 @@ const AppPageContainer: React.FunctionComponent = ({ children }) => {
 
 const StyledContainer = styled.div`
 	padding: 10px 10px 10px 10px;
-	/* background-color: #f9f9f9; */
 	min-height: 100%;
 	overflow: visible;
 	border-left: 1px solid rgba(91, 91, 91, 0.3);
