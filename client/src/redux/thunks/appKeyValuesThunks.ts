@@ -4,7 +4,9 @@ import appAxiosInstance from "../../api/appAxiosInstance";
 import { Alert } from "rsuite";
 
 import { RootState } from "../store";
-import { ReservationStatus, AgreementStatus, VehicleStatus } from "../../interfaces/statuses";
+import { VehicleStatus } from "../../interfaces/status/vehicleStatus";
+import { AgreementStatus } from "../../interfaces/status/agreementStatus";
+import { ReservationStatus } from "../../interfaces/status/reservationStatus";
 import { AgreementType, ReservationType, VehicleTypeShort } from "../../interfaces/types";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(

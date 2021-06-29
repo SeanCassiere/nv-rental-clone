@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AgreementStatus, ReservationStatus, VehicleStatus } from "../../interfaces/statuses";
+import { VehicleStatus } from "../../interfaces/status/vehicleStatus";
+import { AgreementStatus } from "../../interfaces/status/agreementStatus";
+import { ReservationStatus } from "../../interfaces/status/reservationStatus";
 import { ReservationType, AgreementType, VehicleTypeShort } from "../../interfaces/types";
 
 import {
