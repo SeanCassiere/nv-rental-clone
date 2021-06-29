@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import appAxiosInstance from "../../api/appAxiosInstance";
-import { VehiclesInList } from "../../interfaces/vehicles";
+import { VehiclesInList } from "../../interfaces/vehicles/vehicleSearch";
 import { RootState } from "../store";
 
 export const fetchVehiclesThunk = createAsyncThunk(
