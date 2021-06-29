@@ -1,5 +1,21 @@
 import React from "react";
-import { Panel, FlexboxGrid, Form, FormGroup, ControlLabel, SelectPicker, Grid, Row, Col, DatePicker } from "rsuite";
+import {
+	Panel,
+	FlexboxGrid,
+	Form,
+	FormGroup,
+	ControlLabel,
+	SelectPicker,
+	Grid,
+	Row,
+	Col,
+	DatePicker,
+	Button,
+} from "rsuite";
+import { useDispatch } from "react-redux";
+
+import { AppDispatch } from "../../../redux/store";
+import { setCreateResNavPosition } from "../../../redux/slices/createReservationSlice";
 
 const selectOptions = [
 	{
@@ -15,6 +31,10 @@ const selectOptions = [
 ];
 
 const SelectReservationDetails = () => {
+	const dispatch = useDispatch<AppDispatch>();
+
+	const handleNextPage = React.useCallback(() => dispatch(setCreateResNavPosition(1)), [dispatch]);
+
 	return (
 		<FlexboxGrid align='top'>
 			<FlexboxGrid.Item colspan={24}>
@@ -71,6 +91,17 @@ const SelectReservationDetails = () => {
 							</Panel>
 						</Grid>
 					</Form>
+				</Panel>
+			</FlexboxGrid.Item>
+			<FlexboxGrid.Item componentClass={Col} colspan={24} style={{ margin: "10px 0" }}>
+				<Panel style={{ padding: "10px 0px" }} bodyFill>
+					<FlexboxGrid justify='end'>
+						<FlexboxGrid.Item componentClass={Col} xs={24} colspan={10} style={{ textAlign: "right" }}>
+							<Button onClick={handleNextPage} appearance='primary'>
+								Next
+							</Button>
+						</FlexboxGrid.Item>
+					</FlexboxGrid>
 				</Panel>
 			</FlexboxGrid.Item>
 		</FlexboxGrid>

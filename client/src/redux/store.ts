@@ -8,6 +8,7 @@ import searchCustomersSlice from "./slices/searchCustomersSlice";
 import viewAgreementSlice from "./slices/viewAgreementSlice";
 import appConfigSlice from "./slices/appConfigSlice";
 import searchReservationsSlice from "./slices/searchReservationsSlice";
+import createReservationSlice from "./slices/createReservationSlice";
 import searchVehiclesSlice from "./slices/searchVehiclesSlice";
 import viewReservationSlice from "./slices/viewReservationSlice";
 
@@ -20,6 +21,7 @@ const combinedReducer = combineReducers({
 	searchCustomers: searchCustomersSlice,
 	searchReservations: searchReservationsSlice,
 	viewReservation: viewReservationSlice,
+	createReservation: createReservationSlice,
 	searchVehicles: searchVehiclesSlice,
 });
 
@@ -48,6 +50,7 @@ export const selectViewAgreementState = (state: RootState) => state.viewAgreemen
 export const selectSearchCustomersState = (state: RootState) => state.searchCustomers;
 export const selectSearchReservationsState = (state: RootState) => state.searchReservations;
 export const selectViewReservationState = (state: RootState) => state.viewReservation;
+export const selectCreateReservationState = (state: RootState) => state.createReservation;
 export const selectSearchVehiclesState = (state: RootState) => state.searchVehicles;
 
 export default store;

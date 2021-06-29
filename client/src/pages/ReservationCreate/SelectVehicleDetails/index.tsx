@@ -5,17 +5,17 @@ import { FlexboxGrid, Panel, Button, Col } from "rsuite";
 import { setCreateResNavPosition } from "../../../redux/slices/createReservationSlice";
 import { AppDispatch } from "../../../redux/store";
 
-const SelectCustomerDetails = () => {
+const SelectVehicleDetails = () => {
 	const dispatch = useDispatch<AppDispatch>();
 
-	const handleNextPage = React.useCallback(() => dispatch(setCreateResNavPosition(2)), [dispatch]);
+	const handleNextPage = React.useCallback(() => dispatch(setCreateResNavPosition(3)), [dispatch]);
 
-	const handlePrevPage = React.useCallback(() => dispatch(setCreateResNavPosition(0)), [dispatch]);
+	const handlePrevPage = React.useCallback(() => dispatch(setCreateResNavPosition(1)), [dispatch]);
 
 	return (
 		<FlexboxGrid>
 			<FlexboxGrid.Item colspan={24}>
-				<Panel header='Select Customer' bordered></Panel>
+				<Panel header='Select Vehicle' bordered></Panel>
 			</FlexboxGrid.Item>
 			<FlexboxGrid.Item componentClass={Col} colspan={24} style={{ margin: "10px 0" }}>
 				<Panel style={{ padding: "10px 0px" }} bodyFill>
@@ -33,4 +33,4 @@ const SelectCustomerDetails = () => {
 	);
 };
 
-export default React.memo(SelectCustomerDetails);
+export default React.memo(SelectVehicleDetails);
