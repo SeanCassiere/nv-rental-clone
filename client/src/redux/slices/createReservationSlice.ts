@@ -33,7 +33,13 @@ export const CreateReservationSlice = createSlice({
 	initialState: initialCreateReservationStateData,
 	reducers: {
 		clearCreateReservationState: (state) => {
-			state = initialCreateReservationStateData;
+			state.currentNavPosition = 0;
+			state.userForm.checkoutLocationId = null;
+			state.userForm.checkinLocationId = null;
+			state.userForm.reservationTypeId = null;
+			state.userForm.checkoutDate = "";
+			state.userForm.checkinDate = "";
+			state.availableLocations = fakeActiveLocations;
 		},
 		setJumpCreateResNavPosition: (state, action: PayloadAction<NavPositions>) => {
 			if (action.payload === "detail") state.currentNavPosition = 0;

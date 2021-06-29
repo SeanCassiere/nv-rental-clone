@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, selectCreateReservationState } from "../../redux/store";
 import AppPageContainer from "../../components/AppPageContainer";
-import { setJumpCreateResNavPosition } from "../../redux/slices/createReservationSlice";
+import { clearCreateReservationState, setJumpCreateResNavPosition } from "../../redux/slices/createReservationSlice";
 
 import CreateReservationChargesSummary from "./CreateReservationChargesSummary";
 import SelectReservationDetails from "./SelectReservationDetails";
@@ -15,6 +15,12 @@ import SelectMisChargeDetails from "./SelectMisChargeDetails";
 const ReservationCreateScreen = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { currentNavPosition } = useSelector(selectCreateReservationState);
+
+	React.useEffect(() => {
+		return () => {
+			dispatch(clearCreateReservationState());
+		};
+	}, [dispatch]);
 
 	return (
 		<AppPageContainer>

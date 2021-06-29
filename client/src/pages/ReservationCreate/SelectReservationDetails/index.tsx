@@ -71,8 +71,10 @@ const SelectReservationDetails = () => {
 		setResTypes(types);
 	}, [reservationTypes]);
 
+	// Setting initial dates to Redux
 	React.useEffect(() => {
 		if (checkoutDate !== "" || checkinDate !== "") return;
+		console.log("setting date");
 		const today = new Date();
 		const tomorrow = new Date(Date.now() + 3600 * 1000 * 24);
 		dispatch(setCreateResCheckOutDate(today.toISOString()));
@@ -95,7 +97,6 @@ const SelectReservationDetails = () => {
 									<Col xs={12}>
 										<SelectPicker
 											data={resTypes}
-											size='sm'
 											searchable={false}
 											cleanable={false}
 											onSelect={(id) => dispatch(setCreateResTypeId(id))}
@@ -114,10 +115,15 @@ const SelectReservationDetails = () => {
 												format={dateTimeLong}
 												showMeridian
 												defaultValue={new Date()}
-												size='sm'
+												value={new Date(checkoutDate)}
 												block
 												cleanable={false}
-												onChange={(date) => dispatch(setCreateResCheckOutDate(date.toISOString()))}
+												onChange={(date) => {
+													let newCheckIn = new Date(date);
+													newCheckIn.setDate(newCheckIn.getDate() + 1);
+													dispatch(setCreateResCheckOutDate(date.toISOString()));
+													dispatch(setCreateResCheckInDate(newCheckIn.toISOString()));
+												}}
 											/>
 										</FormGroup>
 									</Col>
@@ -126,7 +132,6 @@ const SelectReservationDetails = () => {
 											<ControlLabel>Location</ControlLabel>
 											<SelectPicker
 												data={locations}
-												size='sm'
 												searchable={false}
 												cleanable={false}
 												value={checkoutLocationId}
@@ -145,10 +150,16 @@ const SelectReservationDetails = () => {
 											<DatePicker
 												format={dateTimeLong}
 												showMeridian
-												size='sm'
 												block
-												value={new Date(Date.now() + 3600 * 1000 * 24)}
+												defaultValue={new Date(Date.now() + 3600 * 1000 * 24)}
+												value={new Date(checkinDate)}
 												cleanable={false}
+												disabledDate={(date) => {
+													const cDate = new Date(checkoutDate);
+													if (date) if (date < cDate) return true;
+
+													return false;
+												}}
 												onChange={(date) => dispatch(setCreateResCheckInDate(date.toISOString()))}
 											/>
 										</FormGroup>
@@ -158,10 +169,9 @@ const SelectReservationDetails = () => {
 											<ControlLabel>Location</ControlLabel>
 											<SelectPicker
 												data={locations}
-												size='sm'
 												searchable={false}
 												cleanable={false}
-												defaultValue={checkinLocationId}
+												value={checkinLocationId}
 												onSelect={(e) => dispatch(setCreateResCheckInLocationId(e))}
 												block
 											/>
