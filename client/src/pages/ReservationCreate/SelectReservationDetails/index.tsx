@@ -15,7 +15,7 @@ import {
 import { useDispatch } from "react-redux";
 
 import { AppDispatch } from "../../../redux/store";
-import { setCreateResNavPosition } from "../../../redux/slices/createReservationSlice";
+import { setJumpCreateResNavPosition } from "../../../redux/slices/createReservationSlice";
 
 const selectOptions = [
 	{
@@ -33,7 +33,7 @@ const selectOptions = [
 const SelectReservationDetails = () => {
 	const dispatch = useDispatch<AppDispatch>();
 
-	const handleNextPage = React.useCallback(() => dispatch(setCreateResNavPosition(1)), [dispatch]);
+	const handleNextPage = React.useCallback(() => dispatch(setJumpCreateResNavPosition("customer")), [dispatch]);
 
 	return (
 		<FlexboxGrid align='top'>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, selectCreateReservationState } from "../../redux/store";
 import AppPageContainer from "../../components/AppPageContainer";
-import { setCreateResNavPosition } from "../../redux/slices/createReservationSlice";
+import { setJumpCreateResNavPosition } from "../../redux/slices/createReservationSlice";
 
 import CreateReservationChargesSummary from "./CreateReservationChargesSummary";
 import SelectReservationDetails from "./SelectReservationDetails";
@@ -29,23 +29,23 @@ const ReservationCreateScreen = () => {
 						<FlexboxGrid align='top' justify='center'>
 							<FlexboxGrid.Item componentClass={Col} md={4}>
 								<Steps current={currentNavPosition} style={{ marginTop: 80, marginBottom: 50 }} vertical>
-									<Steps.Item title='Details' onClick={() => dispatch(setCreateResNavPosition(0))} />
+									<Steps.Item title='Details' onClick={() => dispatch(setJumpCreateResNavPosition("detail"))} />
 									<Steps.Item
 										title='Customer'
 										onClick={() => {
-											if (currentNavPosition >= 1) dispatch(setCreateResNavPosition(1));
+											if (currentNavPosition >= 1) dispatch(setJumpCreateResNavPosition("customer"));
 										}}
 									/>
 									<Steps.Item
 										title='Vehicle'
 										onClick={() => {
-											if (currentNavPosition >= 2) dispatch(setCreateResNavPosition(2));
+											if (currentNavPosition >= 2) dispatch(setJumpCreateResNavPosition("vehicle"));
 										}}
 									/>
 									<Steps.Item
 										title='Miscellaneous Charges'
 										onClick={() => {
-											if (currentNavPosition >= 3) dispatch(setCreateResNavPosition(3));
+											if (currentNavPosition >= 3) dispatch(setJumpCreateResNavPosition("misCharge"));
 										}}
 									/>
 								</Steps>

@@ -2,15 +2,14 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { FlexboxGrid, Panel, Button, Col } from "rsuite";
 
-import { setCreateResNavPosition } from "../../../redux/slices/createReservationSlice";
+import { setJumpCreateResNavPosition } from "../../../redux/slices/createReservationSlice";
 import { AppDispatch } from "../../../redux/store";
 
 const SelectCustomerDetails = () => {
 	const dispatch = useDispatch<AppDispatch>();
 
-	const handleNextPage = React.useCallback(() => dispatch(setCreateResNavPosition(2)), [dispatch]);
-
-	const handlePrevPage = React.useCallback(() => dispatch(setCreateResNavPosition(0)), [dispatch]);
+	const handlePrevPage = React.useCallback(() => dispatch(setJumpCreateResNavPosition("detail")), [dispatch]);
+	const handleNextPage = React.useCallback(() => dispatch(setJumpCreateResNavPosition("vehicle")), [dispatch]);
 
 	return (
 		<FlexboxGrid>
