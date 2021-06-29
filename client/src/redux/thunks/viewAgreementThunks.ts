@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Alert } from "rsuite";
 import appAxios from "../../api/appAxiosInstance";
-import { AgreementDataFull } from "../../interfaces/agreement";
+import { AgreementDataFull } from "../../interfaces/agreements/agreementView";
 import { RootState } from "../store";
 
 export const fetchAgreementThunk = createAsyncThunk("viewAgreement/fetchAgreement", async (id: string, thunkApi) => {

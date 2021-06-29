@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AgreementDataFull } from "../../interfaces/agreement";
+import { AgreementDataFull } from "../../interfaces/agreements/agreementView";
 
 import { fetchAgreementThunk, fetchAgreementPDFThunk } from "../thunks/viewAgreementThunks";
 
