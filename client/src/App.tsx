@@ -25,7 +25,7 @@ import {
 } from "./redux/thunks/appKeyValuesThunks";
 import { fetchClientFeaturesThunk } from "./redux/thunks/appConfigThunks";
 
-const themes = { light: "/styles/rsuite-default.css", dark: "/styles/rsuite-dark.min.css" };
+const themes = { light: "/styles/index.css", dark: "/styles/rsuite-dark.min.css" };
 
 const App: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
