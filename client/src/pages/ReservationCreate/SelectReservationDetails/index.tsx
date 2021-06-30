@@ -11,6 +11,7 @@ import {
 	Col,
 	DatePicker,
 	Button,
+	Alert,
 } from "rsuite";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -81,7 +82,13 @@ const SelectReservationDetails = () => {
 		dispatch(setCreateResCheckInDate(tomorrow.toISOString()));
 	}, [checkoutDate, checkinDate, dispatch]);
 
-	const handleNextPage = React.useCallback(() => dispatch(setJumpCreateResNavPosition("customer")), [dispatch]);
+	const handleNextPage = React.useCallback(() => {
+		if (!reservationTypeId || !checkoutLocationId || !checkinLocationId) {
+			Alert.warning("Please enter in all the information");
+			return;
+		}
+		dispatch(setJumpCreateResNavPosition("customer"));
+	}, [dispatch, reservationTypeId, checkoutLocationId, checkinLocationId]);
 
 	return (
 		<FlexboxGrid align='top'>
@@ -132,7 +139,6 @@ const SelectReservationDetails = () => {
 											<ControlLabel>Location</ControlLabel>
 											<SelectPicker
 												data={locations}
-												searchable={false}
 												cleanable={false}
 												value={checkoutLocationId}
 												onSelect={(e) => dispatch(setCreateResCheckOutLocationId(e))}
@@ -169,7 +175,6 @@ const SelectReservationDetails = () => {
 											<ControlLabel>Location</ControlLabel>
 											<SelectPicker
 												data={locations}
-												searchable={false}
 												cleanable={false}
 												value={checkinLocationId}
 												onSelect={(e) => dispatch(setCreateResCheckInLocationId(e))}
@@ -187,7 +192,7 @@ const SelectReservationDetails = () => {
 				<Panel style={{ padding: "10px 0px" }} bodyFill>
 					<FlexboxGrid justify='end'>
 						<FlexboxGrid.Item componentClass={Col} xs={24} colspan={10} style={{ textAlign: "right" }}>
-							<Button onClick={handleNextPage} appearance='primary'>
+							<Button onClick={handleNextPage} appearance='primary' type='submit'>
 								Next
 							</Button>
 						</FlexboxGrid.Item>
