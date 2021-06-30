@@ -12,7 +12,7 @@ import {
 
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
-import { VehiclesInList } from "../../interfaces/vehicles";
+import { VehiclesInList } from "../../interfaces/vehicles/vehicleSearch";
 import { fetchVehiclesThunk } from "../../redux/thunks/searchVehiclesThunks";
 import { refreshLastVehicleSearchDate } from "../../redux/slices/searchVehiclesSlice";
 

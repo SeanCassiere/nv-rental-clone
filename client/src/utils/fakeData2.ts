@@ -1,5 +1,6 @@
+import { AvailableLocation } from "../interfaces/locations/location";
 import { ReservationViewDataFull } from "../interfaces/reservations/reservationView";
-import { VehiclesInList } from "../interfaces/vehicles";
+import { VehiclesInList } from "../interfaces/vehicles/vehicleSearch";
 export const fakeVehicleDataInList: VehiclesInList[] = [
 	{
 		VehicleId: 137328,
@@ -849,3 +850,24 @@ export const fakeViewReservation: ReservationViewDataFull = {
 	agreementInsurance: null,
 	customerImages: [],
 };
+
+export const fakeActiveLocations: AvailableLocation[] = [
+	{
+		locationId: 15545,
+		stateName: "TEXAS",
+		countryName: "USA",
+		locationName: "DrivePro - Houston",
+		address1: "3333 Raleigh St",
+		address2: null,
+		city: "Houston",
+	},
+	{
+		locationId: 15548,
+		stateName: "ALABAMA",
+		countryName: "USA",
+		locationName: "DrivePro - Huntsville",
+		address1: "933 Explorer Blvd NW",
+		address2: null,
+		city: "Huntsville",
+	},
+];

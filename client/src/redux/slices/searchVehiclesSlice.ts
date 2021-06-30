@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { VehiclesInList } from "../../interfaces/vehicles";
+import { VehiclesInList } from "../../interfaces/vehicles/vehicleSearch";
 import { fetchVehiclesThunk } from "../thunks/searchVehiclesThunks";
 
 interface SearchVehiclesSliceState {

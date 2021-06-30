@@ -4,8 +4,12 @@ import appAxiosInstance from "../../api/appAxiosInstance";
 import { Alert } from "rsuite";
 
 import { RootState } from "../store";
-import { ReservationStatus, AgreementStatus, VehicleStatus } from "../../interfaces/statuses";
-import { AgreementType, ReservationType, VehicleTypeShort } from "../../interfaces/types";
+import { VehicleStatus } from "../../interfaces/vehicles/vehicleStatus";
+import { AgreementStatus } from "../../interfaces/agreements/agreementStatus";
+import { ReservationStatus } from "../../interfaces/reservations/reservationStatus";
+import { ReservationType } from "../../interfaces/reservations/reservationType";
+import { AgreementType } from "../../interfaces/agreements/agreementType";
+import { VehicleTypeShort } from "../../interfaces/vehicles/vehicleType";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",

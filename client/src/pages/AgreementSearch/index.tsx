@@ -17,7 +17,7 @@ import { refreshLastAgreementsSearchDate } from "../../redux/slices/searchAgreem
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
 
-import { AgreementInList } from "../../interfaces/agreement";
+import { AgreementInList } from "../../interfaces/agreements/agreementSearch";
 
 const { Column, HeaderCell, Cell } = Table;
 

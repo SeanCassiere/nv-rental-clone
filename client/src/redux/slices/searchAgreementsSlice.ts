@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AgreementInList } from "../../interfaces/agreement";
+import { AgreementInList } from "../../interfaces/agreements/agreementSearch";
 import { fetchAgreementsThunk } from "../thunks/searchAgreementsThunks";
 
 interface SearchAgreementsSliceState {

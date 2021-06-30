@@ -12,6 +12,7 @@ import VehicleSearchPage from "./pages/VehicleSearch";
 import AgreementViewPage from "./pages/AgreementView";
 import ReservationViewPage from "./pages/ReservationView";
 import AdminSettingsPage from "./pages/Admin";
+import ReservationCreateScreen from "./pages/ReservationCreate";
 
 import StartSplashPage from "./pages/StartSplash";
 
@@ -70,6 +71,7 @@ const App: React.FunctionComponent = () => {
 					{/* <Route exact path='/gps' component={AgreementSearchPage} /> */}
 
 					<Route exact path='/reservations' component={ReservationSearchPage} />
+					<Route exact path='/reservations/create' component={ReservationCreateScreen} />
 					<Route exact path='/reservations/:id' component={ReservationViewPage} />
 
 					<Route exact path='/customers' component={CustomerSearchPage} />

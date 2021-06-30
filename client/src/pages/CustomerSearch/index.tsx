@@ -8,7 +8,7 @@ import { AppDispatch, selectAppConfigState, selectAuthUserState, selectSearchCus
 
 import AppPageContainer from "../../components/AppPageContainer";
 import ViewPageHeader from "../../components/ViewPageHeader";
-import { CustomersInList } from "../../interfaces/customers";
+import { CustomersInList } from "../../interfaces/customers/customerSearch";
 import { fetchCustomersThunk } from "../../redux/thunks/searchCustomersThunks";
 import { refreshLastCustomersSearchDate } from "../../redux/slices/searchCustomersSlice";
 

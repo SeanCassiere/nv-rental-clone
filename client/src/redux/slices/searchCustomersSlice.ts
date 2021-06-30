@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CustomersInList } from "../../interfaces/customers";
+import { CustomersInList } from "../../interfaces/customers/customerSearch";
 import { fetchCustomersThunk } from "../thunks/searchCustomersThunks";
 
 interface SearchCustomersSliceState {

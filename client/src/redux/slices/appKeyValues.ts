@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AgreementStatus, ReservationStatus, VehicleStatus } from "../../interfaces/statuses";
-import { ReservationType, AgreementType, VehicleTypeShort } from "../../interfaces/types";
+import { VehicleStatus } from "../../interfaces/vehicles/vehicleStatus";
+import { AgreementStatus } from "../../interfaces/agreements/agreementStatus";
+import { ReservationStatus } from "../../interfaces/reservations/reservationStatus";
+import { ReservationType } from "../../interfaces/reservations/reservationType";
+import { AgreementType } from "../../interfaces/agreements/agreementType";
+import { VehicleTypeShort } from "../../interfaces/vehicles/vehicleType";
 
 import {
 	fetchReservationStatusesThunk,

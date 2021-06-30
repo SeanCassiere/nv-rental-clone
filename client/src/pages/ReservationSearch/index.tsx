@@ -65,6 +65,8 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 				defaultExpanded
 			>
 				Reservations Search page
+				<br />
+				<RouterLink to='/reservations/create'>Create Demo</RouterLink>
 			</Panel>
 			{isError && (
 				<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
