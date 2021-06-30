@@ -11,20 +11,20 @@ const CreateReservationChargesSummary = () => {
 	const {
 		userForm: { checkoutDate, checkinDate, checkoutLocationId, checkinLocationId },
 		currentNavPosition,
-		availableLocations,
+		availableLocations: { locations: fetchedLocations, isSearching: isLocationSearching },
 	} = useSelector(selectCreateReservationState);
 
 	const [checkoutLocationName, setCheckoutLocationName] = React.useState("");
 	const [checkinLocationName, setCheckinLocationName] = React.useState("");
 
 	React.useEffect(() => {
-		if (availableLocations === []) return;
-		const coLocation = availableLocations.filter((i) => i.locationId === checkoutLocationId);
-		const ciLocation = availableLocations.filter((i) => i.locationId === checkinLocationId);
+		if (fetchedLocations === [] || isLocationSearching) return;
+		const coLocation = fetchedLocations.filter((i) => i.locationId === checkoutLocationId);
+		const ciLocation = fetchedLocations.filter((i) => i.locationId === checkinLocationId);
 
 		setCheckoutLocationName(coLocation[0]?.locationName ?? "");
 		setCheckinLocationName(ciLocation[0]?.locationName ?? "");
-	}, [availableLocations, checkoutLocationId, checkinLocationId]);
+	}, [fetchedLocations, isLocationSearching, checkoutLocationId, checkinLocationId]);
 
 	return (
 		<Panel header='Summary' style={{ minHeight: "30em" }} bordered>

@@ -29,11 +29,12 @@ import {
 	setCreateResTypeId,
 	setJumpCreateResNavPosition,
 } from "../../../redux/slices/createReservationSlice";
+import { fetchCreateResLocationsThunk } from "../../../redux/thunks/createReservationThunks";
 
 const SelectReservationDetails = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const {
-		availableLocations,
+		availableLocations: { locations: fetchedLocations, isSearching: isLocationSearching },
 		userForm: { checkoutLocationId, checkinLocationId, reservationTypeId, checkoutDate, checkinDate },
 	} = useSelector(selectCreateReservationState);
 
@@ -50,14 +51,14 @@ const SelectReservationDetails = () => {
 
 	// Formatting the available locations
 	React.useEffect(() => {
-		if (availableLocations === []) return;
+		if (isLocationSearching || fetchedLocations === []) return;
 
-		const data = availableLocations.map((item) => {
+		const data = fetchedLocations.map((item) => {
 			return { value: item.locationId, label: item.locationName };
 		});
 
 		setLocations(data);
-	}, [availableLocations]);
+	}, [fetchedLocations, isLocationSearching]);
 
 	// Formatting the reservation types
 	React.useEffect(() => {
@@ -81,6 +82,13 @@ const SelectReservationDetails = () => {
 		dispatch(setCreateResCheckOutDate(today.toISOString()));
 		dispatch(setCreateResCheckInDate(tomorrow.toISOString()));
 	}, [checkoutDate, checkinDate, dispatch]);
+
+	// Fetching Data
+	React.useEffect(() => {
+		if (fetchedLocations.length !== 0) return;
+
+		dispatch(fetchCreateResLocationsThunk());
+	}, [dispatch, fetchedLocations]);
 
 	const handleNextPage = React.useCallback(() => {
 		if (!reservationTypeId || !checkoutLocationId || !checkinLocationId) {
@@ -140,6 +148,7 @@ const SelectReservationDetails = () => {
 											<SelectPicker
 												data={locations}
 												cleanable={false}
+												disabled={isLocationSearching}
 												value={checkoutLocationId}
 												onSelect={(e) => dispatch(setCreateResCheckOutLocationId(e))}
 												block
@@ -175,6 +184,7 @@ const SelectReservationDetails = () => {
 											<ControlLabel>Location</ControlLabel>
 											<SelectPicker
 												data={locations}
+												disabled={isLocationSearching}
 												cleanable={false}
 												value={checkinLocationId}
 												onSelect={(e) => dispatch(setCreateResCheckInLocationId(e))}

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AvailableLocation } from "../../interfaces/locations/location";
 import { fakeActiveLocations } from "../../utils/fakeData2";
+import { fetchCreateResLocationsThunk } from "../thunks/createReservationThunks";
 
 interface SearchAgreementsSliceState {
 	currentNavPosition: number;
@@ -11,7 +12,7 @@ interface SearchAgreementsSliceState {
 		checkoutDate: string;
 		checkinDate: string;
 	};
-	availableLocations: AvailableLocation[];
+	availableLocations: { locations: AvailableLocation[]; isSearching: boolean };
 }
 
 const initialCreateReservationStateData: SearchAgreementsSliceState = {
@@ -23,7 +24,7 @@ const initialCreateReservationStateData: SearchAgreementsSliceState = {
 		checkoutDate: "",
 		checkinDate: "",
 	},
-	availableLocations: fakeActiveLocations,
+	availableLocations: { locations: [], isSearching: true },
 };
 
 type NavPositions = "detail" | "customer" | "vehicle" | "misCharge";
@@ -39,7 +40,8 @@ export const CreateReservationSlice = createSlice({
 			state.userForm.reservationTypeId = null;
 			state.userForm.checkoutDate = "";
 			state.userForm.checkinDate = "";
-			state.availableLocations = fakeActiveLocations;
+			state.availableLocations.locations = fakeActiveLocations;
+			state.availableLocations.isSearching = false;
 		},
 		setJumpCreateResNavPosition: (state, action: PayloadAction<NavPositions>) => {
 			if (action.payload === "detail") state.currentNavPosition = 0;
@@ -63,7 +65,15 @@ export const CreateReservationSlice = createSlice({
 			state.userForm.reservationTypeId = action.payload;
 		},
 	},
-	extraReducers: (builder) => {},
+	extraReducers: (builder) => {
+		builder.addCase(fetchCreateResLocationsThunk.pending, (state) => {
+			state.availableLocations.isSearching = true;
+		});
+		builder.addCase(fetchCreateResLocationsThunk.fulfilled, (state, action) => {
+			state.availableLocations.locations = action.payload;
+			state.availableLocations.isSearching = false;
+		});
+	},
 });
 
 export const {
