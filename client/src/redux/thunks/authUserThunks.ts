@@ -3,7 +3,6 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { Alert } from "rsuite";
 
-import { ALERT_DURATION } from "../../utils/APP_CONSTANTS";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { RootState } from "../store";
 import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../interfaces/authentication";
@@ -18,12 +17,9 @@ export const loginUserThunk = createAsyncThunk(
 			password,
 		});
 
-		if (response.status !== 200) {
-			Alert.error(response.statusText, ALERT_DURATION);
-			return thunkApi.rejectWithValue(response.statusText);
-		}
+		if (response.status !== 200) return thunkApi.rejectWithValue(response.data.message);
 
-		const data = response.data;
+		const { data } = response;
 
 		try {
 			LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);

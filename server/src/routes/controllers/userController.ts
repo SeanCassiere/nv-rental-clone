@@ -30,13 +30,13 @@ const loginUser = asyncHandler(async (req, res) => {
 
 	//Checking fields from post body
 	try {
-		console.log(req);
 		const { username, password } = req.body;
 		credentials = {
 			username,
 			password,
 		};
 	} catch (error) {
+		res.status(400);
 		throw new Error("Required username and password field not received");
 	}
 
@@ -44,13 +44,15 @@ const loginUser = asyncHandler(async (req, res) => {
 	try {
 		const { data } = await axios.get<JSONServerUser[]>(`${JSON_SERVER_URL}/users?username=${credentials.username}`);
 
-		if (data[0]?.password !== credentials.password) {
-			return res.status(404).json({ message: "Password incorrect" });
+		if (data[0].password !== credentials.password) {
+			res.status(400);
+			throw new Error("Password incorrect");
 		}
 
 		foundUser = data[0];
 	} catch (error) {
-		throw new Error("User not found");
+		res.status(400);
+		throw new Error("Username or Password is incorrect");
 	}
 
 	if (foundUser === null) throw new Error("User not found");
@@ -59,6 +61,7 @@ const loginUser = asyncHandler(async (req, res) => {
 	try {
 		navotar_access = await getNavotarAccessToken(foundUser.api_client_id, foundUser.api_client_secret);
 	} catch (error) {
+		res.status(400);
 		throw new Error("There was an error during login");
 	}
 

@@ -6,7 +6,7 @@
 	"scripts": {
 		"client": "npm start --prefix client",
 		"server:serve": "npm run dev --prefix server",
-		"json:serve": "json-server --watch db.json",
+		"json:serve": "json-server --watch db.json --delay 1200",
 		"build:client": "npm run build --prefix client",
 		"build:server": "npm run build --prefix server",
 		"server": "concurrently \"npm run json:serve\" \"npm run server:serve\"",
