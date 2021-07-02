@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
 	Container,
 	FlexboxGrid,
@@ -13,19 +13,31 @@ import {
 	ButtonToolbar,
 	Button,
 	Col,
+	Alert,
 } from "rsuite";
 
-import { selectAuthUserState } from "../../redux/store";
+import { AppDispatch, selectAuthUserState } from "../../redux/store";
+import { loginUserThunk } from "../../redux/thunks/authUserThunks";
 
 const StartSplashLoginPage: React.FunctionComponent = () => {
-	const [localUserName, setLocalUserName] = React.useState("");
-	const [localPassword, setLocalPassword] = React.useState("");
+	const dispatch = useDispatch<AppDispatch>();
 	const history = useHistory();
 	const { isLoggedIn } = useSelector(selectAuthUserState);
+
+	const [localUserName, setLocalUserName] = React.useState("");
+	const [localPassword, setLocalPassword] = React.useState("");
 
 	React.useEffect(() => {
 		if (isLoggedIn) history.push("/dashboard");
 	}, [isLoggedIn, history]);
+
+	const handleLoginRequest = React.useCallback(() => {
+		if (localUserName === "" || localPassword === "")
+			Alert.warning("Login fields for username or password fields cannot be empty", 5000);
+
+		dispatch(loginUserThunk());
+	}, [localUserName, localPassword, dispatch]);
+
 	return (
 		<Container>
 			<Content>
@@ -48,7 +60,9 @@ const StartSplashLoginPage: React.FunctionComponent = () => {
 								</FormGroup>
 								<FormGroup>
 									<ButtonToolbar>
-										<Button appearance='primary'>Sign in</Button>
+										<Button appearance='primary' onClick={handleLoginRequest}>
+											Sign in
+										</Button>
 										<Button appearance='link' onClick={() => console.log("Trying to reset password")}>
 											Forgot password?
 										</Button>
