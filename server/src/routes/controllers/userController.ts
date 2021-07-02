@@ -1,10 +1,13 @@
+import { Request } from "express";
 import asyncHandler from "express-async-handler";
 import generateToken from "../../utils/generateToken";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import axios from "axios";
+
+import { TokenInterface } from "../../middlewares/authMiddleware";
 import { getNavotarAccessToken } from "./navotarController";
 import { JSONServerUser, JWTReturnAuthToken } from "../../interfaces/interfaces";
-import axios from "axios";
 
 dotenv.config();
 
@@ -85,9 +88,37 @@ const loginUser = asyncHandler(async (req, res) => {
  * @route GET /api/users/navotar/refresh
  * @access PRIVATE
  */
-const refreshNavotarToken = asyncHandler(async (_, res) => {
+const refreshNavotarToken = asyncHandler(async (req: Request, res) => {
+	let foundUser: JSONServerUser | null = null;
+	let userId: string | null = null;
+
+	//Getting userid from the token
 	try {
-		const navotar_access = await getNavotarAccessToken(CLIENT_ID, CLIENT_SECRET);
+		const token = req.headers.authorization?.split(" ")[1];
+		if (!token) throw new Error("Token not found");
+		const decoded = jwt.decode(token) as TokenInterface;
+		userId = decoded.id;
+	} catch (error) {
+		throw new Error("Problem getting the user id from the refresh token");
+	}
+
+	//Fetching user from DB
+	try {
+		const { data } = await axios.get<JSONServerUser[]>(`${JSON_SERVER_URL}/users?id=${userId}`);
+
+		if (data.length === 0) {
+			throw new Error("Cannot find user to generate new access token");
+		}
+
+		foundUser = data[0];
+	} catch (error) {
+		throw new Error("User not found");
+	}
+
+	if (foundUser === null) throw new Error("User not found");
+
+	try {
+		const navotar_access = await getNavotarAccessToken(foundUser.api_client_id, foundUser.api_client_secret);
 		res.status(200).json({ token: navotar_access, message: "Success" });
 	} catch (error) {
 		throw new Error("There was an error when refreshing your token");
