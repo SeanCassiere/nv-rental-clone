@@ -11,8 +11,6 @@ import { JSONServerUser, JWTReturnAuthToken } from "../../interfaces/interfaces"
 
 dotenv.config();
 
-const CLIENT_ID = process.env.CLIENT_ID || "";
-const CLIENT_SECRET = process.env.CLIENT_SECRET || "";
 const JSON_SERVER_URL = process.env.JSON_SERVER_URL || "";
 /**
  * @desc Login and Return Tokens

@@ -52,9 +52,7 @@ You can find a template for this in the `project/server/.env.example` file.
 
 `BASE_URL`
 
-`CLIENT_ID`
-
-`CLIENT_SECRET`
+`JSON_SERVER_URL`
 
 You will also need to configure the `db.json` file in the root of the project.
 
