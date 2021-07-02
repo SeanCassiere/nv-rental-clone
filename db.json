@@ -1,0 +1,13 @@
+{
+	"users": [
+		{
+			"id": "",
+			"username": "",
+			"password": "",
+			"email": "",
+			"nav_client_id": "",
+			"api_client_id": "",
+			"api_client_secret": ""
+		}
+	]
+}

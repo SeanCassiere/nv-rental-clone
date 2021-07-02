@@ -6,6 +6,7 @@
 	"scripts": {
 		"client": "npm start --prefix client",
 		"server": "npm run dev --prefix server",
+		"json:serve": "json-server --watch db.json",
 		"build:client": "npm run build --prefix client",
 		"build:server": "npm run build --prefix server",
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -14,7 +15,9 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"devDependencies": {},
+	"devDependencies": {
+		"json-server": "^0.16.3"
+	},
 	"dependencies": {
 		"concurrently": "^6.2.0",
 		"serve": "^11.3.2"
