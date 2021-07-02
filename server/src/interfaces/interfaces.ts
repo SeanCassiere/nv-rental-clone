@@ -25,3 +25,13 @@ export interface NavotarClientFeature {
 	flag: string | null;
 	value: string | null;
 }
+
+export interface JSONServerUser {
+	id: string;
+	username: string;
+	password: string;
+	email: string;
+	nav_client_id: string;
+	api_client_id: string;
+	api_client_secret: string;
+}
