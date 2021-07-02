@@ -1,11 +1,9 @@
-
 # Navotar Redesign with RSuiteJS
 
 My personal design preference of the Navotar platform using React and the RSuiteJS library for the styles and components.
 
-
-
 ## API Reference
+
 Get the full API Documentation at https://api.appnavotar.com/docs
 
 #### Obtaining the Auth Token
@@ -14,14 +12,16 @@ Get the full API Documentation at https://api.appnavotar.com/docs
   POST https://auth.appnavotar.com/connect/token
 
   Content-Type: application/x-www-form-urlencoded
-  
+
   Request Body:
     grant_type = client_credentials
     client_id = [YOUR CLIENT ID]
     client_secret = [YOUR CLIENT SECRET]
     scope = Api
 ```
-  The above authentication is already handled by the TypeScript-NodeJS server.
+
+The above authentication is already handled by the TypeScript-NodeJS server.
+
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env files in both the `project/client` and `project/server` directories.
@@ -52,9 +52,26 @@ You can find a template for this in the `project/server/.env.example` file.
 
 `BASE_URL`
 
-`CLIENT_ID`
+`JSON_SERVER_URL`
 
-`CLIENT_SECRET`
+You will also need to configure the `db.json` file in the root of the project.
+
+```json
+{
+	"users": [
+		{
+			"id": "",
+			"username": "",
+			"password": "",
+			"email": "",
+			"nav_client_id": "",
+			"api_client_id": "",
+			"api_client_secret": ""
+		}
+	]
+}
+```
+
 ## Run Locally
 
 Clone the project
@@ -69,27 +86,30 @@ Go to the project directory
   cd my-project
 ```
 
-  Install base development dependancies
+Install base development dependancies
 
-```bash 
+```bash
   npm install
 
 ```
-  Install TypeScript-NodeJS server dependancies
+
+Install TypeScript-NodeJS server dependancies
 
 ```bash
   cd server
   npm install
   cd ../
 ```
-  Install React client dependancies
+
+Install React client dependancies
 
 ```bash
   cd client
   npm install
   cd ../
 ```
-  Run the project
+
+Run the project
 
 ```bash
   npm run dev

@@ -13,7 +13,7 @@ const AuthModal: React.FunctionComponent = () => {
 	const { theme } = useSelector(selectAppConfigState);
 
 	const handleAuth = React.useCallback(async () => {
-		dispatch(loginUserThunk());
+		dispatch(loginUserThunk({ username: "", password: "" }));
 	}, [dispatch]);
 
 	return (

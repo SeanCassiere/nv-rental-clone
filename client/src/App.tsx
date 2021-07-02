@@ -14,7 +14,7 @@ import ReservationViewPage from "./pages/ReservationView";
 import AdminSettingsPage from "./pages/Admin";
 import ReservationCreateScreen from "./pages/ReservationCreate";
 
-import StartSplashPage from "./pages/StartSplash";
+import StartSplashLoginPage from "./pages/StartSplashLogin";
 
 import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
@@ -62,7 +62,7 @@ const App: React.FunctionComponent = () => {
 		<ThemeSwitcherProvider themeMap={themes} defaultTheme={theme}>
 			<Router>
 				<Switch>
-					<Route exact path='/' component={StartSplashPage} />
+					<Route exact path='/' component={StartSplashLoginPage} />
 					<Route exact path='/dashboard' component={DashboardPage} />
 
 					<Route exact path='/vehicles' component={VehicleSearchPage} />

@@ -5,16 +5,19 @@
 	"main": "server/build/index.js",
 	"scripts": {
 		"client": "npm start --prefix client",
-		"server": "npm run dev --prefix server",
+		"server:serve": "npm run dev --prefix server",
+		"json:serve": "json-server --watch db.json --delay 1200",
 		"build:client": "npm run build --prefix client",
 		"build:server": "npm run build --prefix server",
-		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"server": "concurrently \"npm run json:serve\" \"npm run server:serve\"",
 		"serve:client": "serve -s client/build"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"devDependencies": {},
+	"devDependencies": {
+		"json-server": "^0.16.3"
+	},
 	"dependencies": {
 		"concurrently": "^6.2.0",
 		"serve": "^11.3.2"
