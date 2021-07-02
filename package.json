@@ -5,11 +5,11 @@
 	"main": "server/build/index.js",
 	"scripts": {
 		"client": "npm start --prefix client",
-		"server": "npm run dev --prefix server",
+		"server:serve": "npm run dev --prefix server",
 		"json:serve": "json-server --watch db.json",
 		"build:client": "npm run build --prefix client",
 		"build:server": "npm run build --prefix server",
-		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"server": "concurrently \"npm run json:serve\" \"npm run server:serve\"",
 		"serve:client": "serve -s client/build"
 	},
 	"keywords": [],

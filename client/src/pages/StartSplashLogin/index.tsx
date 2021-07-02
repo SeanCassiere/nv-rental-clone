@@ -35,7 +35,7 @@ const StartSplashLoginPage: React.FunctionComponent = () => {
 		if (localUserName === "" || localPassword === "")
 			Alert.warning("Login fields for username or password fields cannot be empty", 5000);
 
-		dispatch(loginUserThunk());
+		dispatch(loginUserThunk({ username: localUserName, password: localPassword }));
 	}, [localUserName, localPassword, dispatch]);
 
 	return (
