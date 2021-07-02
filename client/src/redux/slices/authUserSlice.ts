@@ -57,6 +57,9 @@ export const authUserSlice = createSlice({
 			state.clientId = null;
 			state.error = null;
 		},
+		setAuthUserError: (state, action: PayloadAction<string>) => {
+			state.error = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(loginUserThunk.pending, (state) => {
@@ -76,8 +79,7 @@ export const authUserSlice = createSlice({
 			state.isLoggedIn = true;
 			state.isAuthenticating = false;
 		});
-		builder.addCase(loginUserThunk.rejected, (state, action) => {
-			state.error = action.error.message as string;
+		builder.addCase(loginUserThunk.rejected, (state) => {
 			state.isAuthenticating = false;
 		});
 		builder.addCase(refreshAuthTokenThunk.fulfilled, (state, action) => {
@@ -85,12 +87,12 @@ export const authUserSlice = createSlice({
 			state.tokenExpiresAt = action.payload.tokenExpiresAt;
 		});
 		builder.addCase(refreshAuthTokenThunk.rejected, (state, action) => {
-			state.error = action.error.message as string;
+			state.error = action as string;
 			state.isAuthenticating = false;
 		});
 	},
 });
 
-export const { refreshAccessToken, resetAuthState } = authUserSlice.actions;
+export const { refreshAccessToken, resetAuthState, setAuthUserError } = authUserSlice.actions;
 
 export default authUserSlice.reducer;

@@ -1,48 +1,51 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import jwtDecode from "jwt-decode";
 import { Alert } from "rsuite";
 
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { RootState } from "../store";
 import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../interfaces/authentication";
+import { setAuthUserError } from "../slices/authUserSlice";
 
 const AUTH_URL = process.env.REACT_APP_SERVER_URL || "";
 
 export const loginUserThunk = createAsyncThunk(
 	"authUser/fetchLogin",
 	async ({ username, password }: { username: string; password: string }, thunkApi) => {
-		const response = await axios.post<AuthReturn>(`${AUTH_URL}/users/login`, {
-			username,
-			password,
-		});
-
-		if (response.status !== 200) return thunkApi.rejectWithValue(response.data.message);
-
-		const { data } = response;
-
 		try {
-			LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
-			LOCAL_STORAGE_FUNCTIONS.setRefreshTokenToLocalStorage(data.refreshToken);
-		} catch (error) {
-			Alert.warning("Could not save the tokens to local storage");
-			return thunkApi.rejectWithValue("Could not save the tokens to local storage");
-		}
+			const { data } = await axios.post<AuthReturn>(`${AUTH_URL}/users/login`, {
+				username,
+				password,
+			});
 
-		try {
-			const decoded: JWTReturnAuthToken = jwtDecode(data.token);
-			const { client_navotar_clientid, client_navotar_userid, exp } = decoded;
+			try {
+				LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
+				LOCAL_STORAGE_FUNCTIONS.setRefreshTokenToLocalStorage(data.refreshToken);
+			} catch (error) {
+				Alert.warning("Could not save the tokens to local storage");
+				return thunkApi.rejectWithValue("Could not save the tokens to local storage");
+			}
 
-			return {
-				token: data.token,
-				refreshToken: data.refreshToken,
-				clientId: client_navotar_clientid,
-				userId: client_navotar_userid,
-				tokenExpiresAt: exp,
-			};
+			try {
+				const decoded: JWTReturnAuthToken = jwtDecode(data.token);
+				const { client_navotar_clientid, client_navotar_userid, exp } = decoded;
+
+				return {
+					token: data.token,
+					refreshToken: data.refreshToken,
+					clientId: client_navotar_clientid,
+					userId: client_navotar_userid,
+					tokenExpiresAt: exp,
+				};
+			} catch (error) {
+				Alert.error("Could not decode and save the access token");
+				return thunkApi.rejectWithValue("Could not decode and save the access token");
+			}
 		} catch (error) {
-			Alert.error("Could not decode and save the access token");
-			return thunkApi.rejectWithValue("Could not decode and save the access token");
+			const err = error as AxiosError;
+			thunkApi.dispatch(setAuthUserError(err?.response?.data?.message));
+			return thunkApi.rejectWithValue(err?.response?.data?.message);
 		}
 	}
 );
