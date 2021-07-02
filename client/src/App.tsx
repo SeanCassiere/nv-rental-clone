@@ -14,7 +14,7 @@ import ReservationViewPage from "./pages/ReservationView";
 import AdminSettingsPage from "./pages/Admin";
 import ReservationCreateScreen from "./pages/ReservationCreate";
 
-import StartSplashLoginPage from "./pages/StartSplash";
+import StartSplashLoginPage from "./pages/StartSplashLogin";
 
 import NotFoundPage from "./pages/NotFound";
 import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
