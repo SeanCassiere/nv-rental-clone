@@ -135,6 +135,9 @@ export const fetchVehicleStatusesThunk = createAsyncThunk("appKeyValues/fetchVeh
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authUser.token}`,
 			},
+			params: {
+				clientId: authUser.clientId,
+			},
 		});
 
 		return data;
