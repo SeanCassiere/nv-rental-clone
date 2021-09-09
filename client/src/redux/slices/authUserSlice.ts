@@ -86,7 +86,7 @@ export const authUserSlice = createSlice({
 			state.token = action.payload.token;
 			state.tokenExpiresAt = action.payload.tokenExpiresAt;
 		});
-		builder.addCase(refreshAuthTokenThunk.rejected, (state, action) => {
+		builder.addCase(refreshAuthTokenThunk.rejected, (state, action: any) => {
 			state.error = action as string;
 			state.isAuthenticating = false;
 		});

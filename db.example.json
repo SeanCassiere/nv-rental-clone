@@ -1,0 +1,13 @@
+{
+	"users": [
+		{
+			"id": "UUID of the USER",
+			"username": "demo",
+			"password": "123",
+			"email": "USER EMAIL",
+			"nav_client_id": "NAVOTAR CLIENT ID",
+			"api_client_id": "API CLIENT ID",
+			"api_client_secret": "API CLIENT SECRET"
+		}
+	]
+}
