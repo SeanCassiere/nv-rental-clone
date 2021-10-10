@@ -2,28 +2,28 @@ import React from "react";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, selectAppConfigState, selectAuthUserState } from "./redux/store";
+import { AppDispatch, selectAppConfigState, selectAuthUserState } from "./shared/redux/store";
 
-import DashboardPage from "./pages/Dashboard";
-import AgreementSearchPage from "./pages/AgreementSearch";
-import ReservationSearchPage from "./pages/ReservationSearch";
-import CustomerSearchPage from "./pages/CustomerSearch";
-import VehicleSearchPage from "./pages/VehicleSearch";
-import AgreementViewPage from "./pages/AgreementView";
-import ReservationViewPage from "./pages/ReservationView";
-import AdminSettingsPage from "./pages/Admin";
-import ReservationCreateScreen from "./pages/ReservationCreate";
+import DashboardPage from "./modules/Dashboard";
+import AgreementSearchPage from "./modules/AgreementSearch";
+import ReservationSearchPage from "./modules/ReservationSearch";
+import CustomerSearchPage from "./modules/CustomerSearch";
+import VehicleSearchPage from "./modules/VehicleSearch";
+import AgreementViewPage from "./modules/AgreementView";
+import ReservationViewPage from "./modules/ReservationView";
+import AdminSettingsPage from "./modules/Admin";
+import ReservationCreateScreen from "./modules/ReservationCreate";
 
-import StartSplashLoginPage from "./pages/StartSplashLogin";
+import StartSplashLoginPage from "./modules/StartSplashLogin";
 
-import NotFoundPage from "./pages/NotFound";
-import { fetchAuthUserPermissions, refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
+import NotFoundPage from "./modules/NotFound";
+import { fetchAuthUserPermissions, refreshAuthTokenThunk } from "./shared/redux/thunks/authUserThunks";
 import {
 	fetchAgreementKeyValuesThunk,
 	fetchReservationKeyValuesThunk,
 	fetchVehicleKeyValuesThunk,
-} from "./redux/thunks/appKeyValuesThunks";
-import { fetchClientFeaturesThunk } from "./redux/thunks/appConfigThunks";
+} from "./shared/redux/thunks/appKeyValuesThunks";
+import { fetchClientFeaturesThunk } from "./shared/redux/thunks/appConfigThunks";
 
 const themes = { light: "/styles/index.css", dark: "/styles/rsuite-dark.min.css" };
 
