@@ -63,6 +63,9 @@ export const allProcessesSlice = createSlice({
 			state[action.payload.key].success = true;
 			state[action.payload.key].isProcessing = false;
 			state[action.payload.key].lastRun = action.payload.date;
+			state[action.payload.key].isError = false;
+			state[action.payload.key].errorMsg = null;
+			state[action.payload.key].errorData = false;
 		},
 		setLastRanDate: (state, action: PayloadAction<{ key: keyof AllProcesses; date: string }>) => {
 			state[action.payload.key].lastRun = action.payload.date;

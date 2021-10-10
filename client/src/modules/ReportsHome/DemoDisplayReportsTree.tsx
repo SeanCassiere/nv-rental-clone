@@ -16,7 +16,7 @@ const DemoDisplayReportsTree = ({ folders, reports }: I_DemoDisplayReportsTree) 
 					<p>{folder.folderName}</p>
 					<ul>
 						{reports.map((rep) => {
-							if (rep.folderId !== folder.reportFolderId) return <></>;
+							if (rep.folderId !== folder.reportFolderId) return null;
 
 							return (
 								<li key={`report-${rep.reportId}`}>
@@ -31,4 +31,4 @@ const DemoDisplayReportsTree = ({ folders, reports }: I_DemoDisplayReportsTree) 
 	);
 };
 
-export default DemoDisplayReportsTree;
+export default React.memo(DemoDisplayReportsTree);

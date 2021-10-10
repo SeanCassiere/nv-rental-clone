@@ -16,7 +16,7 @@ export const fetchVehiclesThunk = createAsyncThunk(
 		thunkApi.dispatch(setProcessLoading("searchVehicles"));
 
 		const source = axios.CancelToken.source();
-		thunkApi.signal.addEventListener("abort", () => source.cancel());
+		thunkApi.signal.addEventListener("abort", () => source.cancel("cancelled"));
 
 		const state = thunkApi.getState() as RootState;
 		const authUser = state.authUser;
@@ -41,6 +41,9 @@ export const fetchVehiclesThunk = createAsyncThunk(
 		} catch (error) {
 			if (error) {
 				const axiosErr = error as AxiosError;
+
+				if (axiosErr.message === "cancelled") return false;
+
 				return thunkApi.dispatch(
 					setProcessError({
 						key: "searchVehicles",
