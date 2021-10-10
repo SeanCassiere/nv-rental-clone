@@ -29,7 +29,15 @@ const StartSplashLoginPage: React.FunctionComponent = () => {
 	const [localPassword, setLocalPassword] = React.useState("");
 
 	React.useEffect(() => {
-		if (isLoggedIn) history.push("/dashboard");
+		if (isLoggedIn) {
+			const {
+				location: { state },
+			} = history;
+			const routeState = state as any;
+
+			if (routeState && routeState.next) return history.push(routeState.next);
+			return history.push("/dashboard");
+		}
 	}, [isLoggedIn, history]);
 
 	const handleLoginRequest = React.useCallback(() => {

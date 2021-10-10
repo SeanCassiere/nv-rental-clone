@@ -13,7 +13,11 @@ import {
 	fetchAgreementTypesThunk,
 	fetchVehicleStatusesThunk,
 	fetchVehicleTypesShortThunk,
+	fetchAvailableReportFolders,
+	fetchAvailableReports,
 } from "../thunks/appKeyValuesThunks";
+import { IR_ReportFolder } from "../../interfaces/reports/folder";
+import { IR_AvailableReport } from "../../interfaces/reports/availableReport";
 
 interface AppKeyValuesSliceState {
 	reservationValues: {
@@ -27,6 +31,10 @@ interface AppKeyValuesSliceState {
 	vehicleValues: {
 		vehicleStatuses: VehicleStatus[];
 		vehicleTypes: VehicleTypeShort[];
+	};
+	reportValues: {
+		reportFolders: IR_ReportFolder[];
+		reportsAvailable: IR_AvailableReport[];
 	};
 }
 
@@ -42,6 +50,10 @@ const initialStateData: AppKeyValuesSliceState = {
 	vehicleValues: {
 		vehicleStatuses: [],
 		vehicleTypes: [],
+	},
+	reportValues: {
+		reportFolders: [],
+		reportsAvailable: [],
 	},
 };
 
@@ -95,6 +107,20 @@ export const appKeyValuesSlice = createSlice({
 		});
 		builder.addCase(fetchVehicleTypesShortThunk.fulfilled, (state, action) => {
 			state.vehicleValues.vehicleTypes = action.payload;
+		});
+		// Reports -> Folders
+		builder.addCase(fetchAvailableReportFolders.rejected, (state) => {
+			state.reportValues.reportFolders = [];
+		});
+		builder.addCase(fetchAvailableReportFolders.fulfilled, (state, action) => {
+			state.reportValues.reportFolders = action.payload;
+		});
+		// Reports -> Reports
+		builder.addCase(fetchAvailableReports.rejected, (state) => {
+			state.reportValues.reportsAvailable = [];
+		});
+		builder.addCase(fetchAvailableReports.fulfilled, (state, action) => {
+			state.reportValues.reportsAvailable = action.payload;
 		});
 	},
 });

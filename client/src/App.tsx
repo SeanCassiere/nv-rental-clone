@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAppConfigState, selectAuthUserState } from "./shared/redux/store";
 
+import { AuthRoute } from "./shared/components/AuthRoute";
+
 import DashboardPage from "./modules/Dashboard";
 import AgreementSearchPage from "./modules/AgreementSearch";
 import ReservationSearchPage from "./modules/ReservationSearch";
@@ -13,6 +15,7 @@ import AgreementViewPage from "./modules/AgreementView";
 import ReservationViewPage from "./modules/ReservationView";
 import AdminSettingsPage from "./modules/Admin";
 import ReservationCreateScreen from "./modules/ReservationCreate";
+import ReportsHomePage from "./modules/ReportsHome";
 
 import StartSplashLoginPage from "./modules/StartSplashLogin";
 
@@ -20,6 +23,8 @@ import NotFoundPage from "./modules/NotFound";
 import { fetchAuthUserPermissions, refreshAuthTokenThunk } from "./shared/redux/thunks/authUserThunks";
 import {
 	fetchAgreementKeyValuesThunk,
+	fetchAvailableReportFolders,
+	fetchAvailableReports,
 	fetchReservationKeyValuesThunk,
 	fetchVehicleKeyValuesThunk,
 } from "./shared/redux/thunks/appKeyValuesThunks";
@@ -56,6 +61,8 @@ const App: React.FunctionComponent = () => {
 			dispatch(fetchReservationKeyValuesThunk());
 			dispatch(fetchAgreementKeyValuesThunk());
 			dispatch(fetchVehicleKeyValuesThunk());
+			dispatch(fetchAvailableReportFolders());
+			dispatch(fetchAvailableReports());
 		})();
 	}, [dispatch, isLoggedIn, token]);
 
@@ -64,29 +71,31 @@ const App: React.FunctionComponent = () => {
 			<Router>
 				<Switch>
 					<Route exact path='/' component={StartSplashLoginPage} />
-					<Route exact path='/dashboard' component={DashboardPage} />
+					<Route exact path='/login' component={StartSplashLoginPage} />
+					<AuthRoute exact path='/dashboard' component={DashboardPage} />
 
-					<Route exact path='/vehicles' component={VehicleSearchPage} />
+					<AuthRoute exact path='/vehicles' component={VehicleSearchPage} />
 					{/* <Route exact path='/vehicles/:id' component={DashboardPage} /> */}
 
 					{/* <Route exact path='/gps' component={AgreementSearchPage} /> */}
 
-					<Route exact path='/reservations' component={ReservationSearchPage} />
-					<Route exact path='/reservations/create' component={ReservationCreateScreen} />
-					<Route exact path='/reservations/:id' component={ReservationViewPage} />
+					<AuthRoute exact path='/reservations' component={ReservationSearchPage} />
+					<AuthRoute exact path='/reservations/create' component={ReservationCreateScreen} />
+					<AuthRoute exact path='/reservations/:id' component={ReservationViewPage} />
 
-					<Route exact path='/customers' component={CustomerSearchPage} />
+					<AuthRoute exact path='/customers' component={CustomerSearchPage} />
 					{/* <Route exact path='/customers/:id/edit' component={DashboardPage} /> */}
 
-					<Route exact path='/agreements' component={AgreementSearchPage} />
-					<Route exact path='/agreements/:id' component={AgreementViewPage} />
+					<AuthRoute exact path='/agreements' component={AgreementSearchPage} />
+					<AuthRoute exact path='/agreements/:id' component={AgreementViewPage} />
 					{/* <Route exact path='/agreements/:id/edit' component={DashboardPage} /> */}
 					{/* <Route exact path='/agreements/:id/checkin' component={DashboardPage} /> */}
 
 					{/* <Route exact path='/claims' component={AgreementSearchPage} /> */}
-					{/* <Route exact path='/reports' component={AgreementSearchPage} /> */}
-					<Route exact path='/admin' component={AdminSettingsPage} />
-					<Route component={NotFoundPage} />
+					<AuthRoute exact path='/reports/:id' component={ReportsHomePage} />
+					<AuthRoute exact path='/reports' component={ReportsHomePage} />
+					<AuthRoute exact path='/admin' component={AdminSettingsPage} />
+					<AuthRoute component={NotFoundPage} />
 				</Switch>
 			</Router>
 		</ThemeSwitcherProvider>

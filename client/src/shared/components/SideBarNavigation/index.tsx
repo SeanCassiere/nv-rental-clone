@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, selectAppConfigState } from "../../redux/store";
 import { switchTheme } from "../../redux/slices/appConfigSlice";
 import { resetAuthState } from "../../redux/slices/authUserSlice";
+import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 
 const PrimaryComponent: React.FunctionComponent = () => {
 	const history = useHistory();
@@ -23,8 +24,8 @@ const PrimaryComponent: React.FunctionComponent = () => {
 	}, [setShowModal]);
 
 	const triggerLogOut = React.useCallback(() => {
+		LOCAL_STORAGE_FUNCTIONS.clearLocalStorageTokens();
 		dispatch(resetAuthState());
-		dispatch({ type: "authUser/logOutUser" });
 		history.push("/");
 		setShowModal(false);
 	}, [dispatch, history]);
@@ -164,9 +165,9 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 							{/* <Nav.Item eventKey='claims' icon={<Icon icon='plus-square' />} componentClass={RouterLink} to='/claims'>
 								Claims
 							</Nav.Item> */}
-							{/* <Nav.Item eventKey='reports' icon={<Icon icon='line-chart' />} componentClass={RouterLink} to='/reports'>
+							<Nav.Item eventKey='reports' icon={<Icon icon='line-chart' />} componentClass={RouterLink} to='/reports'>
 								Reports
-							</Nav.Item> */}
+							</Nav.Item>
 							<Nav.Item eventKey='admin' icon={<Icon icon='gear-circle' />} componentClass={RouterLink} to='/admin'>
 								Admin
 							</Nav.Item>

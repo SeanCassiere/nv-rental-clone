@@ -10,6 +10,8 @@ import { ReservationStatus } from "../../interfaces/reservations/reservationStat
 import { ReservationType } from "../../interfaces/reservations/reservationType";
 import { AgreementType } from "../../interfaces/agreements/agreementType";
 import { VehicleTypeShort } from "../../interfaces/vehicles/vehicleType";
+import { IR_AvailableReport } from "../../interfaces/reports/availableReport";
+import { IR_ReportFolder } from "../../interfaces/reports/folder";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
 	"appKeyValues/fetchReservationStatuses",
@@ -181,3 +183,54 @@ export const fetchVehicleKeyValuesThunk = createAsyncThunk(
 		return true;
 	}
 );
+
+export const fetchAvailableReportFolders = createAsyncThunk(
+	"appKeyValues/fetchAvailableReportFolders",
+	async (_, thunkApi) => {
+		const { authUser } = thunkApi.getState() as RootState;
+
+		if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+		try {
+			const { data } = await appAxiosInstance.get<IR_ReportFolder[]>("/Reports/Folders", {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authUser.token}`,
+				},
+				params: {
+					clientId: authUser.clientId,
+					userId: authUser.userId,
+				},
+			});
+
+			return data;
+		} catch (error) {
+			Alert.error("Fetching the report folders failed");
+			return thunkApi.rejectWithValue("Fetching the report folders failed");
+		}
+	}
+);
+
+export const fetchAvailableReports = createAsyncThunk("appKeyValues/fetchAvailableReports", async (_, thunkApi) => {
+	const { authUser } = thunkApi.getState() as RootState;
+
+	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+
+	try {
+		const { data } = await appAxiosInstance.get<IR_AvailableReport[]>("/Reports", {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authUser.token}`,
+			},
+			params: {
+				clientId: authUser.clientId,
+				userId: authUser.userId,
+			},
+		});
+
+		return data;
+	} catch (error) {
+		Alert.error("Fetching the reports failed");
+		return thunkApi.rejectWithValue("Fetching the reports failed");
+	}
+});
