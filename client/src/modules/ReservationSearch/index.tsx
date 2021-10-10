@@ -11,13 +11,13 @@ import {
 	selectAuthUserState,
 	selectSearchReservationsState,
 } from "../../shared/redux/store";
-import { fetchReservationsThunk } from "../../shared/redux/thunks/searchReservationsThunks";
+import { fetchReservationsThunk } from "../../shared/redux/thunks/allProcessesThunks/searchReservations";
 
 import AppPageContainer from "../../shared/components/AppPageContainer";
 import ViewPageHeader from "../../shared/components/ViewPageHeader";
 
 import { ReservationsInList } from "../../shared/interfaces/reservations/reservationSearch";
-import { refreshLastReservationSearchDate } from "../../shared/redux/slices/searchReservationsSlice";
+import { setLastRanDate } from "../../shared/redux/slices/allProcessesSlice";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -25,20 +25,14 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { token, clientId, userId } = useSelector(selectAuthUserState);
 	const { dates } = useSelector(selectAppConfigState);
-	const {
-		reservations: data,
-		isSearching,
-		lastRanSearch,
-		isError,
-		error: searchError,
-	} = useSelector(selectSearchReservationsState);
+	const { data, isProcessing, lastRun, isError, errorMsg: searchError } = useSelector(selectSearchReservationsState);
 	const {
 		reservationValues: { reservationStatuses },
 	} = useSelector(selectAppKeyValuesState);
 
 	React.useEffect(() => {
 		const currentTime = Math.floor(Date.now());
-		const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 30000) : Math.floor(Date.now());
+		const lastSearch = lastRun ? Math.floor(Date.parse(lastRun) + 30000) : Math.floor(Date.now());
 
 		// Skip searching if already search in the last 30 secs
 		if (lastSearch > currentTime) return;
@@ -48,12 +42,12 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 		const promise = dispatch(fetchReservationsThunk({ limit: 15 }));
 
 		return () => promise.abort();
-	}, [dispatch, lastRanSearch, token, clientId, userId]);
+	}, [dispatch, lastRun, token, clientId, userId]);
 
 	const handleRefreshList = React.useCallback(() => {
 		const currentTime = new Date();
 		currentTime.setDate(currentTime.getDate() - 120);
-		dispatch(refreshLastReservationSearchDate(currentTime.toUTCString()));
+		dispatch(setLastRanDate({ date: currentTime.toUTCString(), key: "searchReservations" }));
 	}, [dispatch]);
 
 	return (
@@ -71,7 +65,7 @@ const ReservationSearchPage: React.FunctionComponent = () => {
 			{isError && (
 				<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 			)}
-			<Table height={500} bordered data={data} loading={isSearching} shouldUpdateScroll={false}>
+			<Table height={500} bordered data={data} loading={isProcessing} shouldUpdateScroll={false}>
 				<Column width={110}>
 					<HeaderCell>Reservation No.</HeaderCell>
 					<Cell dataKey='ReservationNumber' />

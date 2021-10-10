@@ -13,8 +13,8 @@ import {
 import AppPageContainer from "../../shared/components/AppPageContainer";
 import ViewPageHeader from "../../shared/components/ViewPageHeader";
 import { VehiclesInList } from "../../shared/interfaces/vehicles/vehicleSearch";
-import { fetchVehiclesThunk } from "../../shared/redux/thunks/searchVehiclesThunks";
-import { refreshLastVehicleSearchDate } from "../../shared/redux/slices/searchVehiclesSlice";
+import { fetchVehiclesThunk } from "../../shared/redux/thunks/allProcessesThunks/searchVehicles";
+import { setLastRanDate } from "../../shared/redux/slices/allProcessesSlice";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -24,17 +24,11 @@ const VehicleSearchPage: React.FunctionComponent = () => {
 	const {
 		vehicleValues: { vehicleStatuses },
 	} = useSelector(selectAppKeyValuesState);
-	const {
-		vehicles: data,
-		isError,
-		error: searchError,
-		isSearching,
-		lastRanSearch,
-	} = useSelector(selectSearchVehiclesState);
+	const { data, isError, errorMsg: searchError, isProcessing, lastRun } = useSelector(selectSearchVehiclesState);
 
 	React.useEffect(() => {
 		const currentTime = Math.floor(Date.now());
-		const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 30000) : Math.floor(Date.now());
+		const lastSearch = lastRun ? Math.floor(Date.parse(lastRun) + 30000) : Math.floor(Date.now());
 		// Skip searching if already search in the last 30 secs
 
 		if (lastSearch > currentTime) return;
@@ -42,12 +36,12 @@ const VehicleSearchPage: React.FunctionComponent = () => {
 
 		const promise = dispatch(fetchVehiclesThunk({ limit: 15 }));
 		return () => promise.abort();
-	}, [dispatch, lastRanSearch, token, clientId, userId]);
+	}, [dispatch, lastRun, token, clientId, userId]);
 
 	const handleRefreshList = React.useCallback(() => {
 		const currentTime = new Date();
 		currentTime.setDate(currentTime.getDate() - 120);
-		dispatch(refreshLastVehicleSearchDate(currentTime.toUTCString()));
+		dispatch(setLastRanDate({ date: currentTime.toUTCString(), key: "searchVehicles" }));
 	}, [dispatch]);
 
 	return (
@@ -63,7 +57,7 @@ const VehicleSearchPage: React.FunctionComponent = () => {
 			{isError && (
 				<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 			)}
-			<Table height={500} bordered data={data} loading={isSearching} shouldUpdateScroll={false}>
+			<Table height={500} bordered data={data} loading={isProcessing} shouldUpdateScroll={false}>
 				<Column width={120}>
 					<HeaderCell>Vehicle No.</HeaderCell>
 					<Cell dataKey='VehicleNo' />

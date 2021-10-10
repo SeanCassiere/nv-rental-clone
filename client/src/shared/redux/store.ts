@@ -1,27 +1,21 @@
 import { configureStore, getDefaultMiddleware, Reducer, AnyAction, combineReducers } from "@reduxjs/toolkit";
 
 import authUserSlice from "./slices/authUserSlice";
-import appKeyValuesSlice from "./slices/appKeyValues";
-import searchAgreementsSlice from "./slices/searchAgreementsSlice";
-import searchCustomersSlice from "./slices/searchCustomersSlice";
+import lookupListsSlice from "./slices/lookupListsSlice";
 import viewAgreementSlice from "./slices/viewAgreementSlice";
 import appConfigSlice from "./slices/appConfigSlice";
-import searchReservationsSlice from "./slices/searchReservationsSlice";
 import createReservationSlice from "./slices/createReservationSlice";
-import searchVehiclesSlice from "./slices/searchVehiclesSlice";
 import viewReservationSlice from "./slices/viewReservationSlice";
+import allProcessesSlice from "./slices/allProcessesSlice";
 
 const combinedReducer = combineReducers({
 	[appConfigSlice.name]: appConfigSlice.reducer,
-	[appKeyValuesSlice.name]: appKeyValuesSlice.reducer,
+	[lookupListsSlice.name]: lookupListsSlice.reducer,
 	[authUserSlice.name]: authUserSlice.reducer,
-	[searchAgreementsSlice.name]: searchAgreementsSlice.reducer,
+	[allProcessesSlice.name]: allProcessesSlice.reducer,
 	[viewAgreementSlice.name]: viewAgreementSlice.reducer,
-	[searchCustomersSlice.name]: searchCustomersSlice.reducer,
-	[searchReservationsSlice.name]: searchReservationsSlice.reducer,
 	[viewReservationSlice.name]: viewReservationSlice.reducer,
 	[createReservationSlice.name]: createReservationSlice.reducer,
-	[searchVehiclesSlice.name]: searchVehiclesSlice.reducer,
 });
 
 const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
@@ -40,15 +34,16 @@ export type RootState = ReturnType<typeof combinedReducer>;
 // State Slice Data selectors
 export const selectAppConfigState = (state: RootState) => state.appConfig;
 export const selectAuthUserState = (state: RootState) => state.authUser;
-export const selectSearchAgreementsState = (state: RootState) => state.searchAgreements;
 export const selectViewAgreementState = (state: RootState) => state.viewAgreement;
-export const selectSearchCustomersState = (state: RootState) => state.searchCustomers;
-export const selectSearchReservationsState = (state: RootState) => state.searchReservations;
 export const selectViewReservationState = (state: RootState) => state.viewReservation;
 export const selectCreateReservationState = (state: RootState) => state.createReservation;
-export const selectSearchVehiclesState = (state: RootState) => state.searchVehicles;
 
-export const selectAppKeyValuesState = (state: RootState) => state.appKeyValues;
-export const selectReportsState = (state: RootState) => state.appKeyValues.reportValues;
+export const selectAppKeyValuesState = (state: RootState) => state.lookupList;
+export const selectReportsState = (state: RootState) => state.lookupList.reportValues;
+
+export const selectSearchAgreementsState = (state: RootState) => state.allProcesses.searchAgreements;
+export const selectSearchCustomersState = (state: RootState) => state.allProcesses.searchCustomers;
+export const selectSearchVehiclesState = (state: RootState) => state.allProcesses.searchVehicles;
+export const selectSearchReservationsState = (state: RootState) => state.allProcesses.searchReservations;
 
 export default store;

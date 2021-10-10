@@ -15,7 +15,7 @@ import {
 	fetchVehicleTypesShortThunk,
 	fetchAvailableReportFolders,
 	fetchAvailableReports,
-} from "../thunks/appKeyValuesThunks";
+} from "../thunks/lookupListsThunks";
 import { IR_ReportFolder } from "../../interfaces/reports/folder";
 import { IR_AvailableReport } from "../../interfaces/reports/availableReport";
 
@@ -57,8 +57,8 @@ const initialStateData: AppKeyValuesSliceState = {
 	},
 };
 
-export const appKeyValuesSlice = createSlice({
-	name: "appKeyValues",
+export const lookupListsSlice = createSlice({
+	name: "lookupList",
 	initialState: initialStateData,
 	reducers: {
 		setReservationStatuses: (state, action: PayloadAction<ReservationStatus[]>) => {
@@ -125,6 +125,6 @@ export const appKeyValuesSlice = createSlice({
 	},
 });
 
-export const { setReservationStatuses, setAgreementStatuses } = appKeyValuesSlice.actions;
+export const { setReservationStatuses, setAgreementStatuses } = lookupListsSlice.actions;
 
-export default appKeyValuesSlice;
+export default lookupListsSlice;

@@ -14,7 +14,7 @@ import { IR_AvailableReport } from "../../interfaces/reports/availableReport";
 import { IR_ReportFolder } from "../../interfaces/reports/folder";
 
 export const fetchReservationStatusesThunk = createAsyncThunk(
-	"appKeyValues/fetchReservationStatuses",
+	"lookupList/fetchReservationStatuses",
 	async (_, thunkApi) => {
 		const { authUser } = thunkApi.getState() as RootState;
 
@@ -36,34 +36,31 @@ export const fetchReservationStatusesThunk = createAsyncThunk(
 	}
 );
 
-export const fetchReservationTypesThunk = createAsyncThunk(
-	"appKeyValues/fetchReservationTypes",
-	async (_, thunkApi) => {
-		const { authUser } = thunkApi.getState() as RootState;
+export const fetchReservationTypesThunk = createAsyncThunk("lookupList/fetchReservationTypes", async (_, thunkApi) => {
+	const { authUser } = thunkApi.getState() as RootState;
 
-		if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
+	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
 
-		try {
-			const { data } = await appAxiosInstance.get<ReservationType[]>("/Reservations/Types", {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authUser.token}`,
-				},
-				params: {
-					clientId: authUser.clientId,
-				},
-			});
+	try {
+		const { data } = await appAxiosInstance.get<ReservationType[]>("/Reservations/Types", {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authUser.token}`,
+			},
+			params: {
+				clientId: authUser.clientId,
+			},
+		});
 
-			return data;
-		} catch (error) {
-			Alert.error("Fetching the reservation types failed");
-			return thunkApi.rejectWithValue("Fetching the reservation types failed");
-		}
+		return data;
+	} catch (error) {
+		Alert.error("Fetching the reservation types failed");
+		return thunkApi.rejectWithValue("Fetching the reservation types failed");
 	}
-);
+});
 
 export const fetchReservationKeyValuesThunk = createAsyncThunk(
-	"appKeyValues/fetchReservationKeyValues",
+	"lookupList/fetchReservationKeyValues",
 	async (_, thunkApi) => {
 		await thunkApi.dispatch(fetchReservationStatusesThunk());
 		await thunkApi.dispatch(fetchReservationTypesThunk());
@@ -72,7 +69,7 @@ export const fetchReservationKeyValuesThunk = createAsyncThunk(
 );
 
 export const fetchAgreementStatusesThunk = createAsyncThunk(
-	"appKeyValues/fetchAgreementStatuses",
+	"lookupList/fetchAgreementStatuses",
 	async (_, thunkApi) => {
 		const { authUser } = thunkApi.getState() as RootState;
 
@@ -94,7 +91,7 @@ export const fetchAgreementStatusesThunk = createAsyncThunk(
 	}
 );
 
-export const fetchAgreementTypesThunk = createAsyncThunk("appKeyValues/fetchAgreementTypes", async (_, thunkApi) => {
+export const fetchAgreementTypesThunk = createAsyncThunk("lookupList/fetchAgreementTypes", async (_, thunkApi) => {
 	const { authUser } = thunkApi.getState() as RootState;
 
 	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
@@ -118,7 +115,7 @@ export const fetchAgreementTypesThunk = createAsyncThunk("appKeyValues/fetchAgre
 });
 
 export const fetchAgreementKeyValuesThunk = createAsyncThunk(
-	"appKeyValues/fetchAgreementKeyValues",
+	"lookupList/fetchAgreementKeyValues",
 	async (_, thunkApi) => {
 		await thunkApi.dispatch(fetchAgreementStatusesThunk());
 		await thunkApi.dispatch(fetchAgreementTypesThunk());
@@ -126,7 +123,7 @@ export const fetchAgreementKeyValuesThunk = createAsyncThunk(
 	}
 );
 
-export const fetchVehicleStatusesThunk = createAsyncThunk("appKeyValues/fetchVehicleStatuses", async (_, thunkApi) => {
+export const fetchVehicleStatusesThunk = createAsyncThunk("lookupList/fetchVehicleStatuses", async (_, thunkApi) => {
 	const { authUser } = thunkApi.getState() as RootState;
 
 	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");
@@ -150,7 +147,7 @@ export const fetchVehicleStatusesThunk = createAsyncThunk("appKeyValues/fetchVeh
 });
 
 export const fetchVehicleTypesShortThunk = createAsyncThunk(
-	"appKeyValues/fetchVehicleTypesShort",
+	"lookupList/fetchVehicleTypesShort",
 	async (_, thunkApi) => {
 		const { authUser } = thunkApi.getState() as RootState;
 
@@ -175,17 +172,14 @@ export const fetchVehicleTypesShortThunk = createAsyncThunk(
 	}
 );
 
-export const fetchVehicleKeyValuesThunk = createAsyncThunk(
-	"appKeyValues/fetchVehicleKeyValues",
-	async (_, thunkApi) => {
-		await thunkApi.dispatch(fetchVehicleStatusesThunk());
-		await thunkApi.dispatch(fetchVehicleTypesShortThunk());
-		return true;
-	}
-);
+export const fetchVehicleKeyValuesThunk = createAsyncThunk("lookupList/fetchVehicleKeyValues", async (_, thunkApi) => {
+	await thunkApi.dispatch(fetchVehicleStatusesThunk());
+	await thunkApi.dispatch(fetchVehicleTypesShortThunk());
+	return true;
+});
 
 export const fetchAvailableReportFolders = createAsyncThunk(
-	"appKeyValues/fetchAvailableReportFolders",
+	"lookupList/fetchAvailableReportFolders",
 	async (_, thunkApi) => {
 		const { authUser } = thunkApi.getState() as RootState;
 
@@ -211,7 +205,7 @@ export const fetchAvailableReportFolders = createAsyncThunk(
 	}
 );
 
-export const fetchAvailableReports = createAsyncThunk("appKeyValues/fetchAvailableReports", async (_, thunkApi) => {
+export const fetchAvailableReports = createAsyncThunk("lookupList/fetchAvailableReports", async (_, thunkApi) => {
 	const { authUser } = thunkApi.getState() as RootState;
 
 	if (!authUser.isLoggedIn) return thunkApi.rejectWithValue("User is not logged in");

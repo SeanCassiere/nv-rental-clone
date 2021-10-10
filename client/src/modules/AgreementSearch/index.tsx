@@ -11,8 +11,8 @@ import {
 	selectAuthUserState,
 	selectSearchAgreementsState,
 } from "../../shared/redux/store";
-import { fetchAgreementsThunk } from "../../shared/redux/thunks/searchAgreementsThunks";
-import { refreshLastAgreementsSearchDate } from "../../shared/redux/slices/searchAgreementsSlice";
+import { fetchAgreementsThunk } from "../../shared/redux/thunks/allProcessesThunks/searchAgreeements";
+import { setLastRanDate } from "../../shared/redux/slices/allProcessesSlice";
 
 import AppPageContainer from "../../shared/components/AppPageContainer";
 import ViewPageHeader from "../../shared/components/ViewPageHeader";
@@ -28,17 +28,11 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 		agreementValues: { agreementStatuses },
 	} = useSelector(selectAppKeyValuesState);
 	const { dates } = useSelector(selectAppConfigState);
-	const {
-		agreements: data,
-		isSearching,
-		lastRanSearch,
-		isError,
-		error: searchError,
-	} = useSelector(selectSearchAgreementsState);
+	const { data, isProcessing, lastRun, isError, errorMsg: searchError } = useSelector(selectSearchAgreementsState);
 
 	React.useEffect(() => {
 		const currentTime = Math.floor(Date.now());
-		const lastSearch = lastRanSearch ? Math.floor(Date.parse(lastRanSearch) + 30000) : Math.floor(Date.now());
+		const lastSearch = lastRun ? Math.floor(Date.parse(lastRun) + 30000) : Math.floor(Date.now());
 
 		// Skip searching if already search in the last 30 secs
 		if (lastSearch > currentTime) return;
@@ -48,12 +42,12 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 		const promise = dispatch(fetchAgreementsThunk({ limit: 15 }));
 
 		return () => promise.abort();
-	}, [dispatch, lastRanSearch, token, clientId, userId]);
+	}, [dispatch, lastRun, token, clientId, userId]);
 
 	const handleRefreshList = React.useCallback(() => {
 		const currentTime = new Date();
 		currentTime.setDate(currentTime.getDate() - 120);
-		dispatch(refreshLastAgreementsSearchDate(currentTime.toUTCString()));
+		dispatch(setLastRanDate({ date: currentTime.toUTCString(), key: "searchAgreements" }));
 	}, [dispatch]);
 
 	return (
@@ -69,7 +63,7 @@ const AgreementSearchPage: React.FunctionComponent = () => {
 			{isError && (
 				<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
 			)}
-			<Table height={500} bordered data={data} loading={isSearching} shouldUpdateScroll={false}>
+			<Table height={500} bordered data={data} loading={isProcessing} shouldUpdateScroll={false}>
 				<Column width={110}>
 					<HeaderCell>Agreement No.</HeaderCell>
 					<Cell dataKey='AgreementNumber' />

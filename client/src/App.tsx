@@ -27,7 +27,7 @@ import {
 	fetchAvailableReports,
 	fetchReservationKeyValuesThunk,
 	fetchVehicleKeyValuesThunk,
-} from "./shared/redux/thunks/appKeyValuesThunks";
+} from "./shared/redux/thunks/lookupListsThunks";
 import { fetchClientFeaturesThunk } from "./shared/redux/thunks/appConfigThunks";
 
 const themes = { light: "/styles/index.css", dark: "/styles/rsuite-dark.min.css" };
