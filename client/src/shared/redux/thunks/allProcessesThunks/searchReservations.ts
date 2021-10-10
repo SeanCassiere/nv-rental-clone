@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import appAxiosInstance from "../../../api/appAxiosInstance";
-import { VehiclesInList } from "../../../interfaces/vehicles/vehicleSearch";
+import { ReservationsInList } from "../../../interfaces/reservations/reservationSearch";
 import {
 	setProcessError,
 	setProcessLoading,
 	setProcessSuccess,
-	setSearchVehiclesData,
+	setSearchReservationsData,
 } from "../../slices/allProcessesSlice";
 import { RootState } from "../../store";
 
@@ -37,7 +37,7 @@ export const fetchReservationsThunk = createAsyncThunk(
 			});
 
 			const currentDateTime = new Date();
-			thunkApi.dispatch(setSearchVehiclesData(response.data as VehiclesInList[]));
+			thunkApi.dispatch(setSearchReservationsData(response.data as ReservationsInList[]));
 			return thunkApi.dispatch(setProcessSuccess({ key: "searchReservations", date: currentDateTime.toUTCString() }));
 		} catch (error) {
 			if (error) {

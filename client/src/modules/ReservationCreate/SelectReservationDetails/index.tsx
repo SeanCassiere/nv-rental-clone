@@ -76,7 +76,7 @@ const SelectReservationDetails = () => {
 	// Setting initial dates to Redux
 	React.useEffect(() => {
 		if (checkoutDate !== "" || checkinDate !== "") return;
-		console.log("setting date");
+
 		const today = new Date();
 		const tomorrow = new Date(Date.now() + 3600 * 1000 * 24);
 		dispatch(setCreateResCheckOutDate(today.toISOString()));

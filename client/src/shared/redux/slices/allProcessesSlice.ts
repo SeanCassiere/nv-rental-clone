@@ -97,6 +97,7 @@ export const {
 	setSearchAgreementsData,
 	setSearchCustomersData,
 	setSearchVehiclesData,
+	setSearchReservationsData,
 } = allProcessesSlice.actions;
 
 export default allProcessesSlice;
