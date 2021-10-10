@@ -10,6 +10,7 @@ interface AuthUserSliceState {
 	isAuthenticating: boolean;
 	userId: string | null;
 	clientId: string | null;
+	permissions: string[];
 	error: string | null;
 }
 
@@ -22,12 +23,14 @@ initialStateData = {
 	isAuthenticating: false,
 	userId: null,
 	clientId: null,
+	permissions: [],
 	error: null,
 };
 
 const callLocal = LOCAL_STORAGE_FUNCTIONS.getTokenFromLocalStorage();
 if (callLocal) {
 	initialStateData = {
+		...initialStateData,
 		token: callLocal.token,
 		refreshToken: callLocal.refreshToken,
 		tokenExpiresAt: callLocal.tokenExpiresAt,
@@ -59,6 +62,9 @@ export const authUserSlice = createSlice({
 		},
 		setAuthUserError: (state, action: PayloadAction<string>) => {
 			state.error = action.payload;
+		},
+		setAuthUserPermissions: (state, action: PayloadAction<Array<string>>) => {
+			state.permissions = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
@@ -93,6 +99,6 @@ export const authUserSlice = createSlice({
 	},
 });
 
-export const { refreshAccessToken, resetAuthState, setAuthUserError } = authUserSlice.actions;
+export const { refreshAccessToken, resetAuthState, setAuthUserError, setAuthUserPermissions } = authUserSlice.actions;
 
 export default authUserSlice.reducer;

@@ -6,7 +6,8 @@ import { Alert } from "rsuite";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { RootState } from "../store";
 import { AuthReturn, RefreshReturn, JWTReturnAuthToken } from "../../interfaces/authentication";
-import { setAuthUserError } from "../slices/authUserSlice";
+import { setAuthUserError, setAuthUserPermissions } from "../slices/authUserSlice";
+import appAxiosInstance from "../../api/appAxiosInstance";
 
 const AUTH_URL = process.env.REACT_APP_SERVER_URL || "";
 
@@ -87,5 +88,25 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 	} catch (error) {
 		Alert.error("Could not decode and save the access token");
 		return thunkApi.rejectWithValue("Could not decode the access token");
+	}
+});
+
+export const fetchAuthUserPermissions = createAsyncThunk("authUser/fetchPermissions", async (_, thunkApi) => {
+	const { authUser } = thunkApi.getState() as RootState;
+	try {
+		const { data } = await appAxiosInstance.get<Array<string>>(`/Users/${authUser.userId}/Permissions`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authUser.token}`,
+			},
+			params: { clientId: authUser.clientId },
+		});
+
+		thunkApi.dispatch(setAuthUserPermissions(data));
+		return true;
+	} catch (error) {
+		const err = error as AxiosError;
+		thunkApi.dispatch(setAuthUserError(err?.response?.data?.message));
+		return thunkApi.rejectWithValue(err?.response?.data?.message);
 	}
 });

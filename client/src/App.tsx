@@ -17,7 +17,7 @@ import ReservationCreateScreen from "./pages/ReservationCreate";
 import StartSplashLoginPage from "./pages/StartSplashLogin";
 
 import NotFoundPage from "./pages/NotFound";
-import { refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
+import { fetchAuthUserPermissions, refreshAuthTokenThunk } from "./redux/thunks/authUserThunks";
 import {
 	fetchAgreementKeyValuesThunk,
 	fetchReservationKeyValuesThunk,
@@ -52,6 +52,7 @@ const App: React.FunctionComponent = () => {
 		(async () => {
 			await dispatch(fetchClientFeaturesThunk());
 
+			dispatch(fetchAuthUserPermissions());
 			dispatch(fetchReservationKeyValuesThunk());
 			dispatch(fetchAgreementKeyValuesThunk());
 			dispatch(fetchVehicleKeyValuesThunk());
