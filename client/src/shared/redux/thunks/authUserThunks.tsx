@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import jwtDecode from "jwt-decode";
-import { Alert } from "rsuite";
+import { toaster, Message } from "rsuite";
 
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 import { RootState } from "../store";
@@ -24,7 +24,7 @@ export const loginUserThunk = createAsyncThunk(
 				LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
 				LOCAL_STORAGE_FUNCTIONS.setRefreshTokenToLocalStorage(data.refreshToken);
 			} catch (error) {
-				Alert.warning("Could not save the tokens to local storage");
+				toaster.push(<Message type='error'>Could not save the tokens to local storage</Message>);
 				return thunkApi.rejectWithValue("Could not save the tokens to local storage");
 			}
 
@@ -40,7 +40,7 @@ export const loginUserThunk = createAsyncThunk(
 					tokenExpiresAt: exp,
 				};
 			} catch (error) {
-				Alert.error("Could not decode and save the access token");
+				toaster.push(<Message type='error'>Could not decode and save the access token</Message>);
 				return thunkApi.rejectWithValue("Could not decode and save the access token");
 			}
 		} catch (error) {
@@ -60,9 +60,10 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 	});
 
 	if (response.status !== 200) {
-		Alert.warning(
-			"There was an error refreshing your access token, you will be logged out in less than 30 seconds",
-			12000
+		toaster.push(
+			<Message type='error'>
+				There was an error refreshing your access token, you will be logged out in less than 30 seconds
+			</Message>
 		);
 		return thunkApi.rejectWithValue(
 			"There was an error refreshing your access token, you will be logged out in less than 30 seconds"
@@ -74,7 +75,7 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 	try {
 		LOCAL_STORAGE_FUNCTIONS.setTokenToLocalStorage(data.token);
 	} catch (error) {
-		Alert.warning("Could not save the refreshed token to local storage");
+		toaster.push(<Message type='error'>Could not save the refreshed token to local storage</Message>);
 		return thunkApi.rejectWithValue("Could not save the tokens to local storage");
 	}
 
@@ -86,7 +87,7 @@ export const refreshAuthTokenThunk = createAsyncThunk("authUser/fetchNewAccessTo
 			tokenExpiresAt: exp,
 		};
 	} catch (error) {
-		Alert.error("Could not decode and save the access token");
+		toaster.push(<Message type='error'>Could not decode and save the access token</Message>);
 		return thunkApi.rejectWithValue("Could not decode the access token");
 	}
 });

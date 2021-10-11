@@ -1,24 +1,14 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-	Container,
-	FlexboxGrid,
-	Content,
-	Panel,
-	Form,
-	FormGroup,
-	ControlLabel,
-	FormControl,
-	ButtonToolbar,
-	Button,
-	Col,
-	Alert,
-	Message,
-} from "rsuite";
+import { Container, FlexboxGrid, Content, Panel, Form, ButtonToolbar, Button, Col, toaster, Message } from "rsuite";
 
 import { AppDispatch, selectAuthUserState } from "../../shared/redux/store";
 import { loginUserThunk } from "../../shared/redux/thunks/authUserThunks";
+
+const FormGroup = Form.Group;
+const ControlLabel = Form.ControlLabel;
+const FormControl = Form.Control;
 
 const StartSplashLoginPage: React.FunctionComponent = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -42,7 +32,9 @@ const StartSplashLoginPage: React.FunctionComponent = () => {
 
 	const handleLoginRequest = React.useCallback(() => {
 		if (localUserName === "" || localPassword === "")
-			return Alert.warning("Login fields for username or password fields cannot be empty", 5000);
+			return toaster.push(
+				<Message type='warning'>Login fields for username or password fields cannot be empty</Message>
+			);
 
 		dispatch(loginUserThunk({ username: localUserName, password: localPassword }));
 	}, [localUserName, localPassword, dispatch]);
@@ -51,9 +43,13 @@ const StartSplashLoginPage: React.FunctionComponent = () => {
 		<Container>
 			<Content>
 				<FlexboxGrid justify='center' align='middle' style={{ minHeight: 700, marginBottom: 50 }}>
-					<FlexboxGrid.Item componentClass={Col} xs={20} sm={8} md={8} colspan={8}>
+					<FlexboxGrid.Item as={Col} xs={20} sm={8} md={8} colspan={8}>
 						<Panel header={<h3>Login</h3>} bordered>
-							{error && <Message type='error' title='Login error' description={error} style={{ marginBottom: 20 }} />}
+							{error && (
+								<Message type='error' title='Login error' style={{ marginBottom: 20 }}>
+									error
+								</Message>
+							)}
 
 							<Form fluid>
 								<FormGroup>
@@ -67,9 +63,8 @@ const StartSplashLoginPage: React.FunctionComponent = () => {
 								</FormGroup>
 								<FormGroup>
 									<ControlLabel>Password</ControlLabel>
-									<FormControl
+									<Form.Control
 										name='password'
-										type='password'
 										value={localPassword}
 										disabled={isAuthenticating}
 										onChange={(e) => setLocalPassword(e)}

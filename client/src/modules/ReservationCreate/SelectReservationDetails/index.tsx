@@ -1,18 +1,5 @@
 import React from "react";
-import {
-	Panel,
-	FlexboxGrid,
-	Form,
-	FormGroup,
-	ControlLabel,
-	SelectPicker,
-	Grid,
-	Row,
-	Col,
-	DatePicker,
-	Button,
-	Alert,
-} from "rsuite";
+import { Panel, FlexboxGrid, Form, SelectPicker, Grid, Row, Col, DatePicker, Button, toaster, Message } from "rsuite";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -30,6 +17,9 @@ import {
 	setJumpCreateResNavPosition,
 } from "../../../shared/redux/slices/createReservationSlice";
 import { fetchCreateResLocationsThunk } from "../../../shared/redux/thunks/createReservationThunks";
+
+const FormGroup = Form.Group;
+const ControlLabel = Form.ControlLabel;
 
 const SelectReservationDetails = () => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -92,7 +82,11 @@ const SelectReservationDetails = () => {
 
 	const handleNextPage = React.useCallback(() => {
 		if (!reservationTypeId || !checkoutLocationId || !checkinLocationId) {
-			Alert.warning("Please enter in all the information");
+			toaster.push(
+				<Message type='warning' closable>
+					Please enter in all the information
+				</Message>
+			);
 			return;
 		}
 		dispatch(setJumpCreateResNavPosition("customer"));
@@ -115,7 +109,7 @@ const SelectReservationDetails = () => {
 											searchable={false}
 											cleanable={false}
 											onSelect={(id) => dispatch(setCreateResTypeId(id))}
-											value={reservationTypeId}
+											value={reservationTypeId as number}
 											block
 										/>
 									</Col>
@@ -130,7 +124,7 @@ const SelectReservationDetails = () => {
 												format={dateTimeLong}
 												showMeridian
 												defaultValue={new Date()}
-												value={new Date(checkoutDate)}
+												value={new Date(checkoutDate.trim() !== "" ? checkoutDate : Date.now())}
 												block
 												cleanable={false}
 												onChange={(date) => {
@@ -149,8 +143,10 @@ const SelectReservationDetails = () => {
 												data={locations}
 												cleanable={false}
 												disabled={isLocationSearching}
-												value={checkoutLocationId}
-												onSelect={(e) => dispatch(setCreateResCheckOutLocationId(e))}
+												value={checkoutLocationId as number}
+												onSelect={(e) => {
+													dispatch(setCreateResCheckOutLocationId(e));
+												}}
 												block
 											/>
 										</FormGroup>
@@ -166,8 +162,8 @@ const SelectReservationDetails = () => {
 												format={dateTimeLong}
 												showMeridian
 												block
+												value={new Date(checkinDate.trim() !== "" ? checkinDate : Date.now())}
 												defaultValue={new Date(Date.now() + 3600 * 1000 * 24)}
-												value={new Date(checkinDate)}
 												cleanable={false}
 												disabledDate={(date) => {
 													const cDate = new Date(checkoutDate);
@@ -186,7 +182,7 @@ const SelectReservationDetails = () => {
 												data={locations}
 												disabled={isLocationSearching}
 												cleanable={false}
-												value={checkinLocationId}
+												value={checkinLocationId as number}
 												onSelect={(e) => dispatch(setCreateResCheckInLocationId(e))}
 												block
 											/>
@@ -198,10 +194,10 @@ const SelectReservationDetails = () => {
 					</Form>
 				</Panel>
 			</FlexboxGrid.Item>
-			<FlexboxGrid.Item componentClass={Col} colspan={24} style={{ margin: "10px 0" }}>
+			<FlexboxGrid.Item as={Col} colspan={24} style={{ margin: "10px 0" }}>
 				<Panel style={{ padding: "10px 0px" }} bodyFill>
 					<FlexboxGrid justify='end'>
-						<FlexboxGrid.Item componentClass={Col} xs={24} colspan={10} style={{ textAlign: "right" }}>
+						<FlexboxGrid.Item as={Col} xs={24} colspan={10} style={{ textAlign: "right" }}>
 							<Button onClick={handleNextPage} appearance='primary' type='submit'>
 								Next
 							</Button>

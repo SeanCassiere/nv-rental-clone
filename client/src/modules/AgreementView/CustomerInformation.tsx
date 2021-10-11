@@ -42,10 +42,10 @@ const RowItem: React.FunctionComponent<{
 }> = ({ label, text }) => {
 	return (
 		<Row>
-			<Col componentClass={ColItem} md={12} style={{ fontWeight: "bold" }}>
+			<Col as={ColItem} md={12} style={{ fontWeight: "bold" }}>
 				{label}
 			</Col>
-			<Col componentClass={ColItem} md={12}>
+			<Col as={ColItem} md={12}>
 				{text}
 			</Col>
 		</Row>

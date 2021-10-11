@@ -21,9 +21,9 @@ const initialStateData: AppConfigSliceState = {
 	theme: LOCAL_STORAGE_FUNCTIONS.getThemeFromLocalStorage(),
 	clientFeatures: [],
 	dates: {
-		dateShort: "MM/DD/YYYY",
-		dateLong: "MM/DD/YYYY",
-		dateTimeLong: "MM/DD/YYYY HH:mm a",
+		dateShort: "MM/dd/yyyy",
+		dateLong: "MM/dd/yyyy",
+		dateTimeLong: "MM/dd/yyyy HH:mm a",
 	},
 	error: null,
 };
@@ -38,13 +38,13 @@ export const appConfigSlice = createSlice({
 			LOCAL_STORAGE_FUNCTIONS.setThemeToLocalStorage(state.theme);
 		},
 		setDateShort: (state, action: PayloadAction<string>) => {
-			state.dates.dateShort = action.payload.toUpperCase();
+			state.dates.dateShort = action.payload;
 		},
 		setDateLong: (state, action: PayloadAction<string>) => {
-			state.dates.dateLong = action.payload.toUpperCase();
+			state.dates.dateLong = action.payload;
 		},
 		setDateTimeLong: (state, action: PayloadAction<string>) => {
-			state.dates.dateTimeLong = `${action.payload.toUpperCase()} HH:mm a`;
+			state.dates.dateTimeLong = `${action.payload} HH:mm a`;
 		},
 	},
 	extraReducers: (builder) => {

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import appAxiosInstance from "../../api/appAxiosInstance";
 
-import { Alert } from "rsuite";
+import { toaster, Message } from "rsuite";
 
 import { RootState } from "../store";
 import { VehicleStatus } from "../../interfaces/vehicles/vehicleStatus";
@@ -30,7 +30,7 @@ export const fetchReservationStatusesThunk = createAsyncThunk(
 
 			return data;
 		} catch (error) {
-			Alert.error("Fetching the reservation statuses failed");
+			toaster.push(<Message type='warning'>Fetching the reservation statuses failed</Message>);
 			return thunkApi.rejectWithValue("Fetching the reservation statuses failed");
 		}
 	}
@@ -54,7 +54,7 @@ export const fetchReservationTypesThunk = createAsyncThunk("lookupList/fetchRese
 
 		return data;
 	} catch (error) {
-		Alert.error("Fetching the reservation types failed");
+		toaster.push(<Message type='warning'>Fetching the reservation types failed</Message>);
 		return thunkApi.rejectWithValue("Fetching the reservation types failed");
 	}
 });
@@ -85,7 +85,7 @@ export const fetchAgreementStatusesThunk = createAsyncThunk(
 
 			return data;
 		} catch (error) {
-			Alert.error("Fetching the agreement statuses failed");
+			toaster.push(<Message type='warning'>Fetching the agreement statuses failed</Message>);
 			return thunkApi.rejectWithValue("Fetching the agreement statuses failed");
 		}
 	}
@@ -109,7 +109,7 @@ export const fetchAgreementTypesThunk = createAsyncThunk("lookupList/fetchAgreem
 
 		return data;
 	} catch (error) {
-		Alert.error("Fetching the agreement types failed");
+		toaster.push(<Message type='warning'>Fetching the agreement types failed</Message>);
 		return thunkApi.rejectWithValue("Fetching the agreement types failed");
 	}
 });
@@ -141,7 +141,7 @@ export const fetchVehicleStatusesThunk = createAsyncThunk("lookupList/fetchVehic
 
 		return data;
 	} catch (error) {
-		Alert.error("Fetching the vehicle statuses failed");
+		toaster.push(<Message type='warning'>Fetching the vehicle statuses failed</Message>);
 		return thunkApi.rejectWithValue("Fetching the vehicle statuses failed");
 	}
 });
@@ -166,7 +166,7 @@ export const fetchVehicleTypesShortThunk = createAsyncThunk(
 
 			return data;
 		} catch (error) {
-			Alert.error("Fetching the vehicle types failed");
+			toaster.push(<Message type='warning'>Fetching the vehicle types failed</Message>);
 			return thunkApi.rejectWithValue("Fetching the vehicle types failed");
 		}
 	}
@@ -199,7 +199,7 @@ export const fetchAvailableReportFolders = createAsyncThunk(
 
 			return data;
 		} catch (error) {
-			Alert.error("Fetching the report folders failed");
+			toaster.push(<Message type='warning'>Fetching the report folders failed</Message>);
 			return thunkApi.rejectWithValue("Fetching the report folders failed");
 		}
 	}
@@ -224,7 +224,7 @@ export const fetchAvailableReports = createAsyncThunk("lookupList/fetchAvailable
 
 		return data;
 	} catch (error) {
-		Alert.error("Fetching the reports failed");
+		toaster.push(<Message type='warning'>Fetching the reports failed</Message>);
 		return thunkApi.rejectWithValue("Fetching the reports failed");
 	}
 });

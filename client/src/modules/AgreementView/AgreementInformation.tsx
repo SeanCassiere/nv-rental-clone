@@ -60,10 +60,10 @@ const RowItem: React.FunctionComponent<{
 }> = React.memo(({ label, text }) => {
 	return (
 		<Row>
-			<Col componentClass={ColItem} md={12}>
+			<Col as={ColItem} md={12}>
 				<b>{label}</b>
 			</Col>
-			<Col componentClass={ColItem} md={12}>
+			<Col as={ColItem} md={12}>
 				{text ? text : <></>}
 			</Col>
 		</Row>

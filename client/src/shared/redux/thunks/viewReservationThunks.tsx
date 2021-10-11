@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Alert } from "rsuite";
+import { toaster, Message } from "rsuite";
 import appAxios from "../../api/appAxiosInstance";
 
 import { ReservationViewDataFull } from "../../interfaces/reservations/reservationView";
@@ -74,7 +74,7 @@ export const fetchReservationPDFThunk = createAsyncThunk(
 		});
 
 		if (response.status !== 200) {
-			Alert.error("Could not fetch the Print PDF URL", 8000);
+			toaster.push(<Message type='error'>Could not fetch the Print PDF URL</Message>);
 			return thunkApi.rejectWithValue(response.statusText);
 		}
 

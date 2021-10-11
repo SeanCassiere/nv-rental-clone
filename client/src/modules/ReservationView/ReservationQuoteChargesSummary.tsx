@@ -1,5 +1,8 @@
 import React from "react";
-import { Panel, Grid, Row, Col, Placeholder, Button, Icon } from "rsuite";
+import { Panel, Grid, Row, Col, Placeholder, Button } from "rsuite";
+import ArrowUpIcon from "@rsuite/icons/ArrowUp";
+import ArrowDownIcon from "@rsuite/icons/ArrowDown";
+
 import { useSelector } from "react-redux";
 import Moment from "react-moment";
 import { selectAppConfigState, selectViewReservationState } from "../../shared/redux/store";
@@ -38,7 +41,7 @@ const ReservationQuoteChargesSummary = () => {
 					label={
 						<p>
 							<Button onClick={handleShowTaxMiscCharges} size='xs'>
-								<Icon icon={showTaxMiscCharges ? "angle-up" : "angle-down"} />
+								{showTaxMiscCharges ? <ArrowUpIcon /> : <ArrowDownIcon />}
 							</Button>
 							&nbsp; Total Miscellaneous Charges
 						</p>
@@ -59,7 +62,7 @@ const ReservationQuoteChargesSummary = () => {
 					label={
 						<p>
 							<Button onClick={handleShowNonTaxMiscCharges} size='xs'>
-								<Icon icon={showNonTaxMiscCharges ? "angle-up" : "angle-down"} />
+								{showNonTaxMiscCharges ? <ArrowUpIcon /> : <ArrowDownIcon />}
 							</Button>
 							&nbsp; Total Miscellaneous Charges (No Tax)
 						</p>
@@ -164,7 +167,7 @@ const MisChargeBreakdownInSummary = React.memo(
 							{currency}&nbsp;
 							{item.value.toFixed(2)}&nbsp; x&nbsp;{item.unit}
 						</Col>
-						<Col sx={8} sm={5} style={{ textAlign: "right" }}>
+						<Col xs={8} sm={5} style={{ textAlign: "right" }}>
 							{currency}
 							{item.totalValue.toFixed(2)}
 						</Col>
@@ -198,10 +201,10 @@ const RowItem = React.memo(
 
 		return (
 			<Row>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={16} md={16}>
+				<Col as={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={16} md={16}>
 					{label}
 				</Col>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={8} md={8}>
+				<Col as={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={8} md={8}>
 					{colText === 0 ? (
 						`${currency}${value.toFixed(2)}`
 					) : colText ? (

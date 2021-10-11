@@ -18,30 +18,30 @@ const ReservationDepositInformationPanel = () => {
 		<Panel header='Deposit Information' style={{ marginBottom: 10 }} bordered>
 			<Grid fluid>
 				<Row>
-					<Col componentClass={ColItem} xs={16} md={6}>
+					<Col as={ColItem} xs={16} md={6}>
 						<b>Total Deposit</b>
 					</Col>
-					<Col componentClass={ColItemTextRight} xs={8} md={6}>
+					<Col as={ColItemTextRight} xs={8} md={6}>
 						${reservation?.depositTotals.depositAmount.toFixed(2)}
 					</Col>
-					<Col componentClass={ColItem} xs={16} md={6}>
+					<Col as={ColItem} xs={16} md={6}>
 						<b>Total Authorized</b>
 					</Col>
-					<Col componentClass={ColItemTextRight} xs={8} md={6}>
+					<Col as={ColItemTextRight} xs={8} md={6}>
 						${reservation?.depositTotals.onHoldAmount.toFixed(2)}
 					</Col>
 				</Row>
 				<Row>
-					<Col componentClass={ColItem} xs={16} md={6}>
+					<Col as={ColItem} xs={16} md={6}>
 						<b>Total Refund</b>
 					</Col>
-					<Col componentClass={ColItemTextRight} xs={8} md={6}>
+					<Col as={ColItemTextRight} xs={8} md={6}>
 						${reservation?.depositTotals.refundAmount.toFixed(2)}
 					</Col>
-					<Col componentClass={ColItem} xs={16} md={6}>
+					<Col as={ColItem} xs={16} md={6}>
 						<b>Total Released</b>
 					</Col>
-					<Col componentClass={ColItemTextRight} xs={8} md={6}>
+					<Col as={ColItemTextRight} xs={8} md={6}>
 						${reservation?.depositTotals.releaseAmount.toFixed(2)}
 					</Col>
 				</Row>

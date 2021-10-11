@@ -1,5 +1,7 @@
 import React from "react";
-import { Button, Icon } from "rsuite";
+import { Button } from "rsuite";
+import ArrowLeftLineIcon from "@rsuite/icons/ArrowLeftLine";
+import CloudReflashIcon from "@rsuite/icons/CloudReflash";
 
 const ViewPageHeader: React.FunctionComponent<{
 	goBackFunction?: () => void;
@@ -14,7 +16,7 @@ const ViewPageHeader: React.FunctionComponent<{
 			{back && goBackFunction && (
 				<>
 					<Button onClick={goBackFunction}>
-						<Icon icon='chevron-left' />
+						<ArrowLeftLineIcon />
 					</Button>
 					&nbsp;
 				</>
@@ -24,7 +26,7 @@ const ViewPageHeader: React.FunctionComponent<{
 				<>
 					&nbsp;
 					<Button onClick={refreshFunction}>
-						<Icon icon='refresh' />
+						<CloudReflashIcon />
 					</Button>
 				</>
 			)}

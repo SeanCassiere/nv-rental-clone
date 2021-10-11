@@ -75,10 +75,10 @@ const RowItem = React.memo(
 
 		return (
 			<Row>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={14}>
+				<Col as={ColItem} style={{ fontWeight: bold ? 900 : 500 }} xs={12} md={14}>
 					{label}
 				</Col>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
+				<Col as={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
 					{leftColText === 0 ? (
 						`${currency}${value.toFixed(2)}`
 					) : leftColText ? (
@@ -87,7 +87,7 @@ const RowItem = React.memo(
 						<></>
 					)}
 				</Col>
-				<Col componentClass={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
+				<Col as={ColItem} style={{ fontWeight: bold ? 900 : 500, textAlign: "right" }} xs={6} md={5}>
 					{rightColText === 0 ? (
 						`${currency}${value.toFixed(2)}`
 					) : rightColText ? (

@@ -36,7 +36,7 @@ const ReservationCreateScreen = () => {
 				<Row>
 					<Col>
 						<FlexboxGrid align='top' justify='center'>
-							<FlexboxGrid.Item componentClass={Col} md={4}>
+							<FlexboxGrid.Item as={Col} md={4}>
 								<Steps current={currentNavPosition} style={{ marginTop: 80, marginBottom: 50 }} vertical>
 									<Steps.Item title='Details' onClick={() => dispatch(setJumpCreateResNavPosition("detail"))} />
 									<Steps.Item
@@ -60,7 +60,7 @@ const ReservationCreateScreen = () => {
 								</Steps>
 							</FlexboxGrid.Item>
 							<FlexboxGrid.Item
-								componentClass={Col}
+								as={Col}
 								xs={24}
 								sm={24}
 								md={10}
@@ -71,7 +71,7 @@ const ReservationCreateScreen = () => {
 								{currentNavPosition === 2 && <SelectVehicleDetails />}
 								{currentNavPosition === 3 && <SelectMisChargeDetails />}
 							</FlexboxGrid.Item>
-							<FlexboxGrid.Item componentClass={Col} xs={24} sm={24} md={9}>
+							<FlexboxGrid.Item as={Col} xs={24} sm={24} md={9}>
 								<CreateReservationChargesSummary />
 							</FlexboxGrid.Item>
 						</FlexboxGrid>

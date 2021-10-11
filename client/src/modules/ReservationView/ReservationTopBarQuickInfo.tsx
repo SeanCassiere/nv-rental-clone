@@ -1,5 +1,7 @@
 import React from "react";
-import { Grid, Row, Col, Icon } from "rsuite";
+import { Grid, Row, Col } from "rsuite";
+import UserInfoIcon from "@rsuite/icons/UserInfo";
+import DashboardIcon from "@rsuite/icons/Dashboard";
 import { useSelector } from "react-redux";
 
 import { selectAppKeyValuesState, selectViewReservationState } from "../../shared/redux/store";
@@ -34,14 +36,14 @@ const ReservationTopBarQuickInfo = () => {
 				</Col>
 				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem
-						keyLabel={<Icon icon='user' />}
+						keyLabel={<UserInfoIcon />}
 						valueLabel={`${reservation?.reservationview.firstName} ${reservation?.reservationview.lastName}`}
 						isSearching={isSearching}
 					/>
 				</Col>
 				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem
-						keyLabel={<Icon icon='home' />}
+						keyLabel={<DashboardIcon />}
 						valueLabel={reservation?.reservationview.hPhone}
 						isSearching={isSearching}
 					/>

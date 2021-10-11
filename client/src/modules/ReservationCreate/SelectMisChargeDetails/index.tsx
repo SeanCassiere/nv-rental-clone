@@ -16,10 +16,10 @@ const SelectMiscChargeDetails = () => {
 			<FlexboxGrid.Item colspan={24}>
 				<Panel header='Select Miscellaneous Charges' bordered></Panel>
 			</FlexboxGrid.Item>
-			<FlexboxGrid.Item componentClass={Col} colspan={24} style={{ margin: "10px 0" }}>
+			<FlexboxGrid.Item as={Col} colspan={24} style={{ margin: "10px 0" }}>
 				<Panel style={{ padding: "10px 0px" }} bodyFill>
 					<FlexboxGrid justify='end'>
-						<FlexboxGrid.Item componentClass={Col} xs={24} colspan={10} style={{ textAlign: "right" }}>
+						<FlexboxGrid.Item as={Col} xs={24} colspan={10} style={{ textAlign: "right" }}>
 							<Button onClick={handlePrevPage}>Previous</Button>&nbsp;
 							<Button onClick={handleNextPage} appearance='primary'>
 								Finish

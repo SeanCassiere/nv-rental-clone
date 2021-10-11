@@ -9,18 +9,13 @@ const NotFoundPage: React.FunctionComponent = () => {
 	return (
 		<AppPageContainer>
 			<CenterFlex>
-				<Message
-					showIcon
-					type='error'
-					title='Resource not found'
-					description={
-						<p>
-							The page you are looking for cannot be found
-							<br />
-							<RouterLink to='/dashboard'>Go back to the Dashboard</RouterLink>
-						</p>
-					}
-				/>
+				<Message showIcon type='error' title='Resource not found'>
+					<p>
+						The page you are looking for cannot be found
+						<br />
+						<RouterLink to='/dashboard'>Go back to the Dashboard</RouterLink>
+					</p>
+				</Message>
 			</CenterFlex>
 		</AppPageContainer>
 	);

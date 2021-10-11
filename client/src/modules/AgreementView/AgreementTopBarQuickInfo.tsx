@@ -1,6 +1,9 @@
 import React from "react";
-import { Grid, Row, Col, Icon } from "rsuite";
+import { Grid, Row, Col } from "rsuite";
 import { useSelector } from "react-redux";
+
+import MemberIcon from "@rsuite/icons/Member";
+import DashboardIcon from "@rsuite/icons/Dashboard";
 
 import { selectAppKeyValuesState, selectViewAgreementState } from "../../shared/redux/store";
 
@@ -30,13 +33,13 @@ const TopBarQuickInfo = () => {
 				</Col>
 				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem
-						keyLabel={<Icon icon='user' />}
+						keyLabel={<MemberIcon />}
 						valueLabel={`${agreement?.firstName} ${agreement?.lastName}`}
 						isSearching={isSearching}
 					/>
 				</Col>
 				<Col sm={12} md={12} lg={6}>
-					<PillTopBarItem keyLabel={<Icon icon='home' />} valueLabel={agreement?.hPhone} isSearching={isSearching} />
+					<PillTopBarItem keyLabel={<DashboardIcon />} valueLabel={agreement?.hPhone} isSearching={isSearching} />
 				</Col>
 				<Col sm={12} md={12} lg={6}>
 					<PillTopBarItem keyLabel='Status' valueLabel={statusLabel} isSearching={isSearching} />

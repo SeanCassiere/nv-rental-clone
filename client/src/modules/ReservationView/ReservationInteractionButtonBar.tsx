@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Row, Col, Button, Icon, Panel } from "rsuite";
+import { Grid, Row, Col, Button, Panel } from "rsuite";
+import EmailFillIcon from "@rsuite/icons/EmailFill";
+import SendIcon from "@rsuite/icons/Send";
 
 import { AppDispatch, selectViewReservationState } from "../../shared/redux/store";
 import { fetchReservationPDFThunk } from "../../shared/redux/thunks/viewReservationThunks";
@@ -29,7 +31,7 @@ const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: str
 				<Row>
 					<Col>
 						<Button loading={isPrinting} onClick={handlePrintRequest} disabled={isError || isSearching}>
-							<Icon icon='print' size='lg' />
+							<SendIcon />
 						</Button>
 						&nbsp;
 						<Button
@@ -37,7 +39,7 @@ const ReservationInteractionButtonBar = ({ reservationId }: { reservationId: str
 							onClick={() => console.log("email button clicked")}
 							disabled={isError || isSearching}
 						>
-							<Icon icon='envelope' size='lg' />
+							<EmailFillIcon />
 						</Button>
 					</Col>
 				</Row>

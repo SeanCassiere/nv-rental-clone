@@ -37,7 +37,7 @@ const CreateReservationChargesSummary = () => {
 						</Col>
 						<Col xs={10}>{checkoutLocationName}</Col>
 					</Row>
-					<Row styles={styles.row}>
+					<Row style={styles.row}>
 						<Col xs={5}>Check-In</Col>
 						<Col xs={9}>
 							<Moment format={dateTimeLong}>{checkinDate}</Moment>

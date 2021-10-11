@@ -1,6 +1,10 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Panel, Grid, Row, Col, Icon, Placeholder } from "rsuite";
+import { Panel, Grid, Row, Col, Placeholder } from "rsuite";
+
+import ReadyRoundIcon from "@rsuite/icons/ReadyRound";
+import MinusRoundIcon from "@rsuite/icons/MinusRound";
+
 import { useSelector } from "react-redux";
 import { selectViewAgreementState } from "../../../shared/redux/store";
 
@@ -39,7 +43,7 @@ const PerDriverItem: React.FunctionComponent<{
 			<Grid fluid>
 				<Row>
 					<Col xsHidden md={4}>
-						<Icon icon={isMain ? "dot-circle-o" : "circle-o"} />
+						{isMain ? <ReadyRoundIcon /> : <MinusRoundIcon />}
 					</Col>
 					<Col xs={20}>
 						<Row>

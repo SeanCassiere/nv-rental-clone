@@ -1,5 +1,7 @@
 import React from "react";
-import { Modal, Button, Grid, Row, Col, Icon } from "rsuite";
+import { Modal, Button, Grid, Row, Col } from "rsuite";
+import OthersIcon from "@rsuite/icons/Others";
+import MoreIcon from "@rsuite/icons/More";
 
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, selectAppConfigState, selectAuthUserState } from "../../redux/store";
@@ -17,7 +19,7 @@ const AuthModal: React.FunctionComponent = () => {
 	}, [dispatch]);
 
 	return (
-		<Modal show={!isLoggedIn} size='xs'>
+		<Modal open={!isLoggedIn} size='xs'>
 			<Modal.Header closeButton={false}>
 				<Grid fluid>
 					<Row>
@@ -26,7 +28,7 @@ const AuthModal: React.FunctionComponent = () => {
 						</Col>
 						<Col xs={2}>
 							<Button onClick={() => dispatch(switchTheme(theme))}>
-								<Icon icon={theme === "light" ? "moon-o" : "sun-o"} />
+								{theme === "light" ? <OthersIcon /> : <MoreIcon />}
 							</Button>
 						</Col>
 					</Row>

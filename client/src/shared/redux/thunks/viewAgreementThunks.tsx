@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Alert } from "rsuite";
+import { toaster, Message } from "rsuite";
 import appAxios from "../../api/appAxiosInstance";
 import { AgreementDataFull } from "../../interfaces/agreements/agreementView";
 import { RootState } from "../store";
@@ -52,7 +52,7 @@ export const fetchAgreementPDFThunk = createAsyncThunk(
 
 			return response.data;
 		} catch (error) {
-			Alert.error("Could not fetch the Print PDF URL", 8000);
+			toaster.push(<Message type='error'>Could not fetch the Print PDF URL</Message>);
 			return thunkApi.rejectWithValue("Could not fetch the Print PDF URL");
 		}
 	}

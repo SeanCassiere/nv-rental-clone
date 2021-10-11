@@ -63,7 +63,9 @@ const AgreementViewPage: React.FunctionComponent = () => {
 				style={{ height: "100%" }}
 			>
 				{isError && (
-					<Message type='error' title='An error occurred' description={searchError} style={{ marginBottom: 10 }} />
+					<Message type='error' title='An error occurred' style={{ marginBottom: 10 }}>
+						{searchError}
+					</Message>
 				)}
 				<Grid fluid>
 					<Row style={{ marginBottom: 5 }}>

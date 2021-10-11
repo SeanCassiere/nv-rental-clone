@@ -66,10 +66,10 @@ export default React.memo(ReservationInformation);
 const RowItem = React.memo(({ label, text }: { label: string | React.ReactNode; text: React.ReactNode }) => {
 	return (
 		<Row>
-			<Col componentClass={ColItem} md={12}>
+			<Col as={ColItem} md={12}>
 				<b>{label}</b>
 			</Col>
-			<Col componentClass={ColItem} md={12}>
+			<Col as={ColItem} md={12}>
 				{text ? text : <></>}
 			</Col>
 		</Row>

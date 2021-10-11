@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import appAxiosInstance from "../../../api/appAxiosInstance";
+import { XPagination } from "../../../interfaces/pagination/pagination";
 import { VehiclesInList } from "../../../interfaces/vehicles/vehicleSearch";
 import {
 	setProcessError,
@@ -12,7 +13,7 @@ import { RootState } from "../../store";
 
 export const fetchVehiclesThunk = createAsyncThunk(
 	"allProcesses/fetchVehicles",
-	async ({ limit }: { limit: number }, thunkApi) => {
+	async ({ limit, page }: { limit: number; page: number }, thunkApi) => {
 		thunkApi.dispatch(setProcessLoading("searchVehicles"));
 
 		const source = axios.CancelToken.source();
@@ -29,14 +30,16 @@ export const fetchVehiclesThunk = createAsyncThunk(
 				},
 				params: {
 					ClientId: authUser.clientId,
-					Page: 1,
+					Page: page,
 					PageSize: limit,
 				},
 				cancelToken: source.token,
 			});
 
+			const pagination: XPagination = JSON.parse(response.headers["x-pagination"]);
+
 			const currentDateTime = new Date();
-			thunkApi.dispatch(setSearchVehiclesData(response.data as VehiclesInList[]));
+			thunkApi.dispatch(setSearchVehiclesData({ vehicles: response.data as VehiclesInList[], pagination }));
 			return thunkApi.dispatch(setProcessSuccess({ key: "searchVehicles", date: currentDateTime.toUTCString() }));
 		} catch (error) {
 			if (error) {

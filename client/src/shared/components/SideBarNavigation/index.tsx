@@ -1,5 +1,19 @@
 import React from "react";
-import { Sidenav, Nav, Icon, Navbar, Sidebar, Modal, Button, Dropdown } from "rsuite";
+import { Sidenav, Nav, Navbar, Sidebar, Modal, Button, Dropdown } from "rsuite";
+
+import AdvancedAnalyticsIcon from "@rsuite/icons/AdvancedAnalytics";
+import DashboardIcon from "@rsuite/icons/Dashboard";
+import SettingIcon from "@rsuite/icons/Setting";
+import OthersIcon from "@rsuite/icons/Others";
+import MoreIcon from "@rsuite/icons/More";
+import UnvisibleIcon from "@rsuite/icons/Unvisible";
+import ArrowLeftLineIcon from "@rsuite/icons/ArrowLeftLine";
+import ArrowRightLineIcon from "@rsuite/icons/ArrowRightLine";
+import BarLineChartIcon from "@rsuite/icons/BarLineChart";
+import TableIcon from "@rsuite/icons/Table";
+import PeoplesIcon from "@rsuite/icons/Peoples";
+import PeoplesCostomizeIcon from "@rsuite/icons/PeoplesCostomize";
+import StorageIcon from "@rsuite/icons/Storage";
 
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
@@ -32,7 +46,7 @@ const PrimaryComponent: React.FunctionComponent = () => {
 
 	return (
 		<>
-			<Modal size='xs' show={showModal} onHide={triggerClose}>
+			<Modal size='xs' open={showModal} onClose={triggerClose}>
 				<Modal.Header>
 					<Modal.Title>
 						<b>Logout Warning</b>
@@ -114,61 +128,40 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 	return (
 		<div className='full-sidebar'>
 			<Sidebar className='sidebar-app-container' width={expanded ? 250 : 56} collapsible>
-				<Sidenav
-					expanded={expanded}
-					activeKey={activeKey}
-					onSelect={handleSelect}
-					appearance='default'
-					className='height-100-per'
-				>
+				<Sidenav expanded={expanded} appearance='default' className='height-100-per'>
 					<Sidenav.Header>
 						<div className='sidebar-brand-container'>
-							<Icon icon='logo-analytics' size='lg' style={{ verticalAlign: 0 }} />
-							<span style={{ marginLeft: 12 }}> BRAND</span>
+							<AdvancedAnalyticsIcon style={{ verticalAlign: 0 }} />
+							{expanded && <span style={{ marginLeft: 12 }}> BRAND</span>}
 						</div>
 					</Sidenav.Header>
 					<Sidenav.Body>
-						<Nav>
-							<Nav.Item
-								eventKey='dashboard'
-								icon={<Icon icon='dashboard' />}
-								componentClass={RouterLink}
-								to='/dashboard'
-							>
+						<Nav onSelect={handleSelect} activeKey={activeKey}>
+							<Nav.Item eventKey='dashboard' icon={<DashboardIcon />} as={RouterLink} to='/dashboard'>
 								Dashboard
 							</Nav.Item>
-							<Nav.Item eventKey='vehicles' icon={<Icon icon='car' />} componentClass={RouterLink} to='/vehicles'>
+							<Nav.Item eventKey='vehicles' icon={<StorageIcon />} as={RouterLink} to='/vehicles'>
 								Vehicles
 							</Nav.Item>
-							{/* <Nav.Item eventKey='gps' icon={<Icon icon='explore' />} componentClass={RouterLink} to='/gps'>
+							{/* <Nav.Item eventKey='gps' icon={<Icon icon='explore' />} as={RouterLink} to='/gps'>
 								GPS
 							</Nav.Item> */}
-							<Nav.Item
-								eventKey='reservations'
-								icon={<Icon icon='order-form' />}
-								componentClass={RouterLink}
-								to='/reservations'
-							>
+							<Nav.Item eventKey='reservations' icon={<PeoplesCostomizeIcon />} as={RouterLink} to='/reservations'>
 								Reservations
 							</Nav.Item>
-							<Nav.Item eventKey='customers' icon={<Icon icon='group' />} componentClass={RouterLink} to='/customers'>
+							<Nav.Item eventKey='customers' icon={<PeoplesIcon />} as={RouterLink} to='/customers'>
 								Customers
 							</Nav.Item>
-							<Nav.Item
-								eventKey='agreements'
-								icon={<Icon icon='signing' />}
-								componentClass={RouterLink}
-								to='/agreements'
-							>
+							<Nav.Item eventKey='agreements' icon={<TableIcon />} as={RouterLink} to='/agreements'>
 								Agreements
 							</Nav.Item>
-							{/* <Nav.Item eventKey='claims' icon={<Icon icon='plus-square' />} componentClass={RouterLink} to='/claims'>
+							{/* <Nav.Item eventKey='claims' icon={<Icon icon='plus-square' />} as={RouterLink} to='/claims'>
 								Claims
 							</Nav.Item> */}
-							<Nav.Item eventKey='reports' icon={<Icon icon='line-chart' />} componentClass={RouterLink} to='/reports'>
+							<Nav.Item eventKey='reports' icon={<BarLineChartIcon />} as={RouterLink} to='/reports'>
 								Reports
 							</Nav.Item>
-							<Nav.Item eventKey='admin' icon={<Icon icon='gear-circle' />} componentClass={RouterLink} to='/admin'>
+							<Nav.Item eventKey='admin' icon={<SettingIcon />} as={RouterLink} to='/admin'>
 								Admin
 							</Nav.Item>
 						</Nav>
@@ -176,43 +169,35 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 				</Sidenav>
 
 				<Navbar appearance='default' className='nav-toggle'>
-					<Navbar.Body>
-						<Nav>
-							<Dropdown
-								placement='topStart'
-								trigger='click'
-								renderTitle={() => {
-									return <Icon style={{ ...iconStyles, textAlign: "center" }} icon='cog' />;
-								}}
-							>
-								<Dropdown.Item onClick={() => dispatch(switchTheme(theme))}>
-									<Icon icon={theme === "light" ? "moon-o" : "sun-o"} />
-									&nbsp;
-									{theme === "light" ? <>Dark</> : <>Light</>}&nbsp;Mode
-								</Dropdown.Item>
-								<Dropdown.Item onClick={showLogoutModal}>
-									<Icon icon='sign-out' />
-									&nbsp;Sign out
-								</Dropdown.Item>
-							</Dropdown>
-						</Nav>
+					<Nav>
+						<Dropdown placement='topStart' trigger='click'>
+							<Dropdown.Item onClick={() => dispatch(switchTheme(theme))}>
+								{theme === "light" ? <OthersIcon /> : <MoreIcon />}
+								&nbsp;
+								{theme === "light" ? <>Dark</> : <>Light</>}&nbsp;Mode
+							</Dropdown.Item>
+							<Dropdown.Item onClick={showLogoutModal}>
+								<UnvisibleIcon />
+								&nbsp;Sign out
+							</Dropdown.Item>
+						</Dropdown>
+					</Nav>
 
-						<Nav pullRight id='nav-switch'>
-							<Nav.Item onClick={handleToggle} style={{ width: 56, textAlign: "center" }}>
-								<Icon icon={expanded ? "angle-left" : "angle-right"} />
-							</Nav.Item>
-						</Nav>
-					</Navbar.Body>
+					<Nav pullRight id='nav-switch'>
+						<Nav.Item onClick={handleToggle} style={{ width: 56, textAlign: "center" }}>
+							{expanded ? <ArrowLeftLineIcon /> : <ArrowRightLineIcon />}
+						</Nav.Item>
+					</Nav>
 				</Navbar>
 			</Sidebar>
 		</div>
 	);
 };
 
-const iconStyles = {
-	width: 56,
-	height: 56,
-	lineHeight: "56px",
-};
+// const iconStyles = {
+// 	width: 56,
+// 	height: 56,
+// 	lineHeight: "56px",
+// };
 
 export default PrimaryComponent;

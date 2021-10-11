@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import appAxiosInstance from "../../../api/appAxiosInstance";
 import { AgreementInList } from "../../../interfaces/agreements/agreementSearch";
+import { XPagination } from "../../../interfaces/pagination/pagination";
 import {
 	setProcessError,
 	setProcessLoading,
@@ -12,7 +13,7 @@ import { RootState } from "../../store";
 
 export const fetchAgreementsThunk = createAsyncThunk(
 	"allProcesses/fetchAgreements",
-	async ({ limit }: { limit: number }, thunkApi) => {
+	async ({ limit, page }: { limit: number; page: number }, thunkApi) => {
 		thunkApi.dispatch(setProcessLoading("searchAgreements"));
 
 		const source = axios.CancelToken.source();
@@ -30,14 +31,16 @@ export const fetchAgreementsThunk = createAsyncThunk(
 				params: {
 					ClientId: authUser.clientId,
 					UserId: authUser.userId,
-					Page: 1,
+					Page: page,
 					PageSize: limit,
 				},
 				cancelToken: source.token,
 			});
 
+			const pagination: XPagination = JSON.parse(response.headers["x-pagination"]);
+
 			const currentDateTime = new Date();
-			thunkApi.dispatch(setSearchAgreementsData(response.data as AgreementInList[]));
+			thunkApi.dispatch(setSearchAgreementsData({ agreements: response.data as AgreementInList[], pagination }));
 			return thunkApi.dispatch(setProcessSuccess({ key: "searchAgreements", date: currentDateTime.toUTCString() }));
 		} catch (error) {
 			if (error) {

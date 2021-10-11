@@ -4,6 +4,7 @@ import { CustomersInList } from "../../interfaces/customers/customerSearch";
 import { AgreementInList } from "../../interfaces/agreements/agreementSearch";
 import { VehiclesInList } from "../../interfaces/vehicles/vehicleSearch";
 import { ReservationsInList } from "../../interfaces/reservations/reservationSearch";
+import { XPagination } from "../../interfaces/pagination/pagination";
 
 interface ProcessInterface<T> {
 	isProcessing: boolean;
@@ -28,20 +29,41 @@ function populateEmptyProcess<T>(initial: T) {
 	return data;
 }
 
+const initialPagination: XPagination = {
+	totalCount: 25,
+	pageSize: 25,
+	currentPage: 1,
+	totalPages: 1,
+	previousPageLink: null,
+	nextPageLink: null,
+};
+
 interface AllProcesses {
-	searchCustomers: ProcessInterface<CustomersInList[]>;
-	searchVehicles: ProcessInterface<VehiclesInList[]>;
-	searchAgreements: ProcessInterface<AgreementInList[]>;
-	searchReservations: ProcessInterface<ReservationsInList[]>;
+	searchCustomers: ProcessInterface<{ customers: CustomersInList[]; pagination: XPagination }>;
+	searchVehicles: ProcessInterface<{ vehicles: VehiclesInList[]; pagination: XPagination }>;
+	searchAgreements: ProcessInterface<{ agreements: AgreementInList[]; pagination: XPagination }>;
+	searchReservations: ProcessInterface<{ reservations: ReservationsInList[]; pagination: XPagination }>;
 }
 
 let allProcessesInitialState: AllProcesses;
 
 allProcessesInitialState = {
-	searchCustomers: populateEmptyProcess<CustomersInList[]>([]),
-	searchVehicles: populateEmptyProcess<VehiclesInList[]>([]),
-	searchAgreements: populateEmptyProcess<AgreementInList[]>([]),
-	searchReservations: populateEmptyProcess<ReservationsInList[]>([]),
+	searchCustomers: populateEmptyProcess<{ customers: CustomersInList[]; pagination: XPagination }>({
+		customers: [],
+		pagination: initialPagination,
+	}),
+	searchVehicles: populateEmptyProcess<{ vehicles: VehiclesInList[]; pagination: XPagination }>({
+		vehicles: [],
+		pagination: initialPagination,
+	}),
+	searchAgreements: populateEmptyProcess<{ agreements: AgreementInList[]; pagination: XPagination }>({
+		agreements: [],
+		pagination: initialPagination,
+	}),
+	searchReservations: populateEmptyProcess<{ reservations: ReservationsInList[]; pagination: XPagination }>({
+		reservations: [],
+		pagination: initialPagination,
+	}),
 };
 
 export const allProcessesSlice = createSlice({
@@ -76,17 +98,30 @@ export const allProcessesSlice = createSlice({
 			state[action.payload.key].errorMsg = action.payload.msg;
 			state[action.payload.key].errorData = action.payload.data;
 		},
-		setSearchAgreementsData: (state, action: PayloadAction<AgreementInList[]>) => {
-			state.searchAgreements.data = action.payload;
+		setSearchAgreementsData: (
+			state,
+			action: PayloadAction<{ agreements: AgreementInList[]; pagination: XPagination }>
+		) => {
+			state.searchAgreements.data.agreements = action.payload.agreements;
+			state.searchAgreements.data.pagination = action.payload.pagination;
 		},
-		setSearchCustomersData: (state, action: PayloadAction<CustomersInList[]>) => {
-			state.searchCustomers.data = action.payload;
+		setSearchCustomersData: (
+			state,
+			action: PayloadAction<{ customers: CustomersInList[]; pagination: XPagination }>
+		) => {
+			state.searchCustomers.data.customers = action.payload.customers;
+			state.searchCustomers.data.pagination = action.payload.pagination;
 		},
-		setSearchVehiclesData: (state, action: PayloadAction<VehiclesInList[]>) => {
-			state.searchVehicles.data = action.payload;
+		setSearchVehiclesData: (state, action: PayloadAction<{ vehicles: VehiclesInList[]; pagination: XPagination }>) => {
+			state.searchVehicles.data.vehicles = action.payload.vehicles;
+			state.searchVehicles.data.pagination = action.payload.pagination;
 		},
-		setSearchReservationsData: (state, action: PayloadAction<ReservationsInList[]>) => {
-			state.searchReservations.data = action.payload;
+		setSearchReservationsData: (
+			state,
+			action: PayloadAction<{ reservations: ReservationsInList[]; pagination: XPagination }>
+		) => {
+			state.searchReservations.data.reservations = action.payload.reservations;
+			state.searchReservations.data.pagination = action.payload.pagination;
 		},
 	},
 });

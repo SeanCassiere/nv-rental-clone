@@ -30,6 +30,7 @@
 		"Cancellationchrgs",
 		"Checkin",
 		"clientid",
+		"Costomize",
 		"createddate",
 		"date",
 		"expairy",
@@ -46,11 +47,13 @@
 		"passport",
 		"Perday",
 		"reduxjs",
+		"Reflash",
 		"reservationview",
 		"reservtion",
 		"rsuite",
 		"Sidenav",
 		"totaltax",
+		"Unvisible",
 		"userid"
 	]
 }

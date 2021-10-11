@@ -32,10 +32,10 @@ export default React.memo(BillingInformationPanel);
 const RowItem = React.memo(({ label, text }: { label: string | React.ReactNode; text: string | React.ReactNode }) => {
 	return (
 		<Row>
-			<Col componentClass={ColItem} md={12} style={{ fontWeight: "bold" }}>
+			<Col as={ColItem} md={12} style={{ fontWeight: "bold" }}>
 				{label}
 			</Col>
-			<Col componentClass={ColItem} md={12}>
+			<Col as={ColItem} md={12}>
 				{text}
 			</Col>
 		</Row>
