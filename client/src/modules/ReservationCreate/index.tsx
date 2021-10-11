@@ -27,14 +27,14 @@ const ReservationCreateScreen = () => {
 
 	return (
 		<AppPageContainer>
-			<Grid fluid>
+			<Grid>
 				<Row style={{ marginBottom: 20 }}>
-					<Col>
+					<Col sm={24}>
 						<Panel header='Create Reservation' bordered></Panel>
 					</Col>
 				</Row>
 				<Row>
-					<Col>
+					<Col sm={24}>
 						<FlexboxGrid align='top' justify='center'>
 							<FlexboxGrid.Item as={Col} md={4}>
 								<Steps current={currentNavPosition} style={{ marginTop: 80, marginBottom: 50 }} vertical>
