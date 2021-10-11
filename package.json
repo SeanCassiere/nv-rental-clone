@@ -19,7 +19,9 @@
 		"json-server": "^0.16.3"
 	},
 	"dependencies": {
+		"@types/react-beautiful-dnd": "^13.1.2",
 		"concurrently": "^6.2.0",
+		"react-beautiful-dnd": "^13.1.0",
 		"serve": "^11.3.2"
 	}
 }
