@@ -1,11 +1,28 @@
 import React from "react";
-
-import DNDGrid from "./DNDGrid";
-import AppPageContainer from "../../shared/components/AppPageContainer";
 import { Panel } from "rsuite";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, selectAuthUserState } from "../../shared/redux/store";
+
+import { fetchWidgetsList } from "../../shared/redux/thunks/allProcessesThunks/fetchWidgetsList";
+
+import BeautifulDNDGrid from "./BeautifulDNDGrid";
+import AppPageContainer from "../../shared/components/AppPageContainer";
 import ViewPageHeader from "../../shared/components/ViewPageHeader";
 
 const DashboardPage: React.FunctionComponent = () => {
+	const dispatch = useDispatch<AppDispatch>();
+	const { clientId, userId } = useSelector(selectAuthUserState);
+
+	const makeApiCall = React.useCallback(() => dispatch(fetchWidgetsList()), [dispatch]);
+
+	React.useEffect(() => {
+		if (!clientId || !userId) return;
+
+		const promise = makeApiCall();
+
+		return () => promise.abort();
+	}, [dispatch, clientId, userId, makeApiCall]);
+
 	return (
 		<AppPageContainer>
 			<div style={{ padding: 5 }}>
@@ -14,7 +31,7 @@ const DashboardPage: React.FunctionComponent = () => {
 					<br />
 				</Panel>
 			</div>
-			<DNDGrid />
+			<BeautifulDNDGrid />
 		</AppPageContainer>
 	);
 };

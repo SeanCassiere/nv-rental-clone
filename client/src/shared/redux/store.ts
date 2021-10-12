@@ -7,12 +7,14 @@ import appConfigSlice from "./slices/appConfigSlice";
 import createReservationSlice from "./slices/createReservationSlice";
 import viewReservationSlice from "./slices/viewReservationSlice";
 import allProcessesSlice from "./slices/allProcessesSlice";
+import dashboardSlice from "./slices/dashboardSlice";
 
 const combinedReducer = combineReducers({
 	[appConfigSlice.name]: appConfigSlice.reducer,
 	[lookupListsSlice.name]: lookupListsSlice.reducer,
 	[authUserSlice.name]: authUserSlice.reducer,
 	[allProcessesSlice.name]: allProcessesSlice.reducer,
+	[dashboardSlice.name]: dashboardSlice.reducer,
 	[viewAgreementSlice.name]: viewAgreementSlice.reducer,
 	[viewReservationSlice.name]: viewReservationSlice.reducer,
 	[createReservationSlice.name]: createReservationSlice.reducer,
@@ -45,5 +47,8 @@ export const selectSearchAgreementsState = (state: RootState) => state.allProces
 export const selectSearchCustomersState = (state: RootState) => state.allProcesses.searchCustomers;
 export const selectSearchVehiclesState = (state: RootState) => state.allProcesses.searchVehicles;
 export const selectSearchReservationsState = (state: RootState) => state.allProcesses.searchReservations;
+export const selectFetchWidgetsList = (state: RootState) => state.allProcesses.fetchWidgetsList;
+
+export const selectDashboard = (state: RootState) => state.dashboard;
 
 export default store;
