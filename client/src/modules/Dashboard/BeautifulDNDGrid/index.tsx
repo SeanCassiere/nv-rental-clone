@@ -13,15 +13,7 @@ import {
 	updateWidgetAThunk,
 	updateWidgetBThunk,
 } from "../../../shared/redux/thunks/allProcessesThunks/fetchWidgetsList";
-
-// a little function to help us with reordering the result
-const reorder = (list: IWidget[], startIndex: number, endIndex: number) => {
-	const result = Array.from(list);
-	const [removed] = result.splice(startIndex, 1);
-	result.splice(endIndex, 0, removed);
-
-	return result;
-};
+import { sortAscendingList } from "../../../shared/utils/sortsWidgetsOrder";
 
 function chooseWidget(widget: IWidget) {
 	switch (widget.widgetID) {
@@ -97,24 +89,18 @@ const BeautifulDNDGrid = () => {
 			Object.getOwnPropertyNames(items[result.source.index]).length ===
 			Object.getOwnPropertyNames(items[result.destination.index]).length
 		) {
-			items = [...items, { ...items[result.source.index], widgetUserPosition: result.destination.index + 1 }];
-			items = [...items, { ...items[result.destination.index], widgetUserPosition: result.destination.index + 1 }];
+			const newWidgetAData = { ...items[result.source.index], widgetUserPosition: result.destination.index + 1 };
+			items = items.filter((item) => item.widgetID !== newWidgetAData.widgetID);
+			items = [...items, newWidgetAData];
 
-			// console.log(`widget a ${items[result.source.index].widgetName}`, items[result.source.index]);
-			// console.log(`widget b ${items[result.destination.index].widgetName}`, items[result.destination.index]);
+			const newWidgetBData = { ...items[result.destination.index], widgetUserPosition: result.source.index + 1 };
+			items = items.filter((item) => item.widgetID !== newWidgetBData.widgetID);
+			items = [...items, newWidgetBData];
 
-			const updatedWidgets = reorder(widgets, result.source.index, result.destination.index);
+			dispatch(updateWidgetAThunk(newWidgetAData));
+			dispatch(updateWidgetBThunk(newWidgetBData));
 
-			dispatch(updateWidgetAThunk(updatedWidgets[result.source.index]));
-			dispatch(updateWidgetBThunk(updatedWidgets[result.destination.index]));
-
-			// console.log(`widget a ${updatedWidgets[result.source.index].widgetName}`, updatedWidgets[result.source.index]);
-			// console.log(
-			// 	`widget b ${updatedWidgets[result.destination.index].widgetName}`,
-			// 	updatedWidgets[result.destination.index]
-			// );
-
-			dispatch(setDashboardWidgets(updatedWidgets));
+			dispatch(setDashboardWidgets(sortAscendingList(items)));
 		}
 	}
 

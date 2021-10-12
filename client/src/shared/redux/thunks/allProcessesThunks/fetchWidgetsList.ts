@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import appAxiosInstance from "../../../api/appAxiosInstance";
 import { IWidget } from "../../../interfaces/dashboard/widgets";
+import { sortAscendingList } from "../../../utils/sortsWidgetsOrder";
 import { setProcessError, setProcessLoading, setProcessSuccess } from "../../slices/allProcessesSlice";
 import { setDashboardWidgets } from "../../slices/dashboardSlice";
 import { RootState } from "../../store";
@@ -100,7 +101,3 @@ export const updateWidgetBThunk = createAsyncThunk(
 		}
 	}
 );
-
-function sortAscendingList(items: IWidget[]) {
-	return items.sort((a, b) => a.widgetUserPosition - b.widgetUserPosition);
-}
