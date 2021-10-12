@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch, selectDashboard, selectFetchSalesStatusStatistics } from "../../../shared/redux/store";
 import { fetchSalesStatuses } from "../../../shared/redux/thunks/allProcessesThunks/fetchSalesStatusStatistics";
+import { WIDGET_MEDIUM_HEIGHT } from "../BeautifulDNDGrid";
 
 export default function LineChartWidget() {
 	const dispatch = useDispatch<AppDispatch>();
@@ -19,11 +20,11 @@ export default function LineChartWidget() {
 	}, [dispatch]);
 
 	if (isProcessing) {
-		return <div style={{ minHeight: 300 }}></div>;
+		return <div style={{ minHeight: WIDGET_MEDIUM_HEIGHT }}></div>;
 	}
 
 	return (
-		<ResponsiveContainer width='100%' height={300}>
+		<ResponsiveContainer width='100%' height={WIDGET_MEDIUM_HEIGHT}>
 			<AreaChart
 				data={salesStatusData}
 				margin={{
