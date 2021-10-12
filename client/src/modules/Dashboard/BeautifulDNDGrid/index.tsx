@@ -1,9 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Row, Col, Panel, IconButton } from "rsuite";
+import { Grid, Row, Col, Panel } from "rsuite";
 import { DragDropContext, Draggable, Droppable, DropResult, ResponderProvided } from "react-beautiful-dnd";
-
-import TrashIcon from "@rsuite/icons/Trash";
 
 import LineChartWidget from "../LineChartWidget";
 
@@ -13,8 +11,7 @@ import { setDashboardWidgets } from "../../../shared/redux/slices/dashboardSlice
 import { sortAscendingList } from "../../../shared/utils/sortsWidgetsOrder";
 import { updateDashboardWidget } from "../../../shared/api/updateDashboardWidget";
 
-type HandleChangeViewFunc = (widget: IWidget, isDelete: boolean) => void;
-
+export const WIDGET_TRUE_MIN_HEIGHT = 50;
 export const WIDGET_SMALL_HEIGHT = 89;
 export const WIDGET_MEDIUM_HEIGHT = 300;
 export const WIDGET_LARGE_HEIGHT = 250;
@@ -56,56 +53,35 @@ function chooseWidget(widget: IWidget) {
 	}
 }
 
-function WidgetBlock({
-	widget,
-	index,
-	editingState,
-	handleDelete,
-}: {
-	widget: IWidget;
-	index: number;
-	editingState: boolean;
-	handleDelete: HandleChangeViewFunc;
-}) {
+function WidgetBlock({ widget, index, editingState }: { widget: IWidget; index: number; editingState: boolean }) {
+	const spanNumber = widget.isDeleted ? 6 : widget.widgetScale === "6" ? 12 : 24;
 	return (
 		<Draggable draggableId={widget.widgetID} index={index} isDragDisabled={!editingState}>
 			{(provided) => (
 				<Col
 					xs={24}
-					md={parseInt(widget.widgetScale) * 2 ?? 12}
+					md={spanNumber}
+					// md={parseInt(widget.widgetScale) * 2 ?? 12}
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 				>
 					<Panel
 						bordered
-						style={{ minHeight: 100, marginBottom: 10, backgroundColor: "#fff" }}
+						style={{ minHeight: 80, marginBottom: widget.isDeleted ? 0 : 10, backgroundColor: "#fff" }}
 						header={
-							<Row style={{ marginBottom: 20 }}>
-								<Col xs={19} style={{ minHeight: 30 }}>
+							<Row style={{ marginBottom: widget.isDeleted ? 0 : 20 }}>
+								<Col xs={24} style={{ minHeight: 30 }}>
 									<h5>{widget.widgetName}</h5>
-								</Col>
-								<Col xs={5}>
-									<div style={{ width: "100%", textAlign: "right" }}>
-										{editingState && (
-											<>
-												<IconButton
-													appearance='ghost'
-													size='sm'
-													color='red'
-													icon={<TrashIcon />}
-													onClick={() => handleDelete(widget, true)}
-												/>
-											</>
-										)}
-									</div>
 								</Col>
 							</Row>
 						}
 					>
-						<Row>
-							<Col xs={24}>{chooseWidget(widget)}</Col>
-						</Row>
+						{!widget.isDeleted && (
+							<Row>
+								<Col xs={24}>{chooseWidget(widget)}</Col>
+							</Row>
+						)}
 					</Panel>
 				</Col>
 			)}
@@ -113,33 +89,15 @@ function WidgetBlock({
 	);
 }
 
-const WidgetList = React.memo(
-	({
-		widgets,
-		editingState,
-		handleDelete,
-	}: {
-		widgets: IWidget[];
-		editingState: boolean;
-		handleDelete: HandleChangeViewFunc;
-	}) => {
-		return (
-			<>
-				{widgets
-					.filter((w) => !w.isDeleted)
-					.map((widget, index: number) => (
-						<WidgetBlock
-							widget={widget}
-							index={index}
-							key={widget.widgetID}
-							editingState={editingState}
-							handleDelete={handleDelete}
-						/>
-					))}
-			</>
-		);
-	}
-);
+const WidgetList = React.memo(({ widgets, editingState }: { widgets: IWidget[]; editingState: boolean }) => {
+	return (
+		<>
+			{widgets.map((widget, index: number) => (
+				<WidgetBlock widget={widget} index={index} key={widget.widgetID} editingState={editingState} />
+			))}
+		</>
+	);
+});
 
 const BeautifulDNDGrid = ({ editingState }: { editingState: boolean }) => {
 	const dispatch = useDispatch();
@@ -148,6 +106,22 @@ const BeautifulDNDGrid = ({ editingState }: { editingState: boolean }) => {
 
 	function onDragEnd(result: DropResult, _: ResponderProvided) {
 		if (!result.destination) return;
+
+		if (result.source.droppableId === "inactive-widgets" && result.destination.droppableId === "inactive-widgets") {
+			return;
+		}
+
+		if (result.destination.droppableId === "inactive-widgets" && result.source.droppableId === "active-widgets") {
+			const deleteWidget = widgets.filter((i) => i.widgetID === result.draggableId)[0];
+			handleChangeView(deleteWidget, true);
+			return;
+		}
+
+		if (result.source.droppableId === "inactive-widgets" && result.destination.droppableId === "active-widgets") {
+			const activateWidget = widgets.filter((i) => i.widgetID === result.draggableId)[0];
+			handleChangeView(activateWidget, false);
+			return;
+		}
 
 		let items = Array.from(widgets);
 
@@ -181,34 +155,78 @@ const BeautifulDNDGrid = ({ editingState }: { editingState: boolean }) => {
 		dispatch(setDashboardWidgets(sortAscendingList(items)));
 	}
 
+	const activeWidgets = widgets.filter((w) => w.isDeleted === false);
+	const inActiveWidgets = widgets.filter((w) => w.isDeleted === true);
+
 	return (
 		<>
-			{editingState && (
-				<Panel header='Unused widgets' bordered style={{ margin: "0 5px 10px 5px" }}>
-					{widgets.filter((w) => w.isDeleted).length === 0 ? (
-						<div>You have used all the available widgets.</div>
-					) : (
-						widgets
-							.filter((w) => w.isDeleted)
-							.map((w) => (
-								<div key={w.widgetID}>
-									<button onClick={() => handleChangeView(w, false)}>{w.widgetName}</button>
-								</div>
-							))
-					)}
-				</Panel>
-			)}
 			<DragDropContext onDragEnd={onDragEnd}>
-				<Droppable droppableId='widgets'>
-					{(provided) => (
-						<Grid ref={provided.innerRef} {...provided.droppableProps} style={{ width: "100%" }}>
-							<Row>
-								<WidgetList widgets={widgets} editingState={editingState} handleDelete={handleChangeView} />
-								{provided.placeholder}
-							</Row>
-						</Grid>
-					)}
-				</Droppable>
+				<Grid fluid>
+					<Row style={{ marginBottom: 10 }}>
+						<Col xs={24}>
+							<Droppable droppableId='inactive-widgets'>
+								{(provided) => (
+									<Grid ref={provided.innerRef} {...provided.droppableProps} style={{ width: "100%" }}>
+										{editingState && (
+											<Row
+												style={{
+													minHeight: 120,
+													backgroundColor: "#fff",
+													border: "5px dashed rgba(255, 105, 105, 0.5)",
+													padding: "20px 20px 20px 20px",
+													borderRadius: 5,
+													position: "relative",
+												}}
+											>
+												{inActiveWidgets.length === 0 ? (
+													<div
+														style={{
+															position: "absolute",
+															inset: 0,
+															width: "100%",
+															display: "flex",
+															justifyContent: "center",
+															alignItems: "center",
+															height: "100%",
+														}}
+													>
+														<span style={{ display: "block" }}>Using all the available widgets</span>
+													</div>
+												) : (
+													<WidgetList widgets={inActiveWidgets} editingState={editingState} />
+												)}
+
+												{provided.placeholder}
+											</Row>
+										)}
+									</Grid>
+								)}
+							</Droppable>
+						</Col>
+					</Row>
+
+					<Row>
+						<Col xs={24}>
+							<Droppable droppableId='active-widgets'>
+								{(provided) => (
+									<Grid ref={provided.innerRef} {...provided.droppableProps} style={{ width: "100%" }}>
+										<Row
+											style={{
+												border: editingState ? "5px dashed rgba(48, 208, 182, 0.5)" : "none",
+												backgroundColor: "#fff",
+												padding: editingState ? "10px 5px 10px 5px" : 0,
+												borderRadius: 5,
+											}}
+										>
+											<WidgetList widgets={activeWidgets} editingState={editingState} />
+											{provided.placeholder}
+										</Row>
+									</Grid>
+								)}
+							</Droppable>
+						</Col>
+					</Row>
+				</Grid>
 			</DragDropContext>
 		</>
 	);
