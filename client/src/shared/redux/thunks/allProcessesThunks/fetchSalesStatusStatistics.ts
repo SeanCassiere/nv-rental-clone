@@ -1,14 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import appAxiosInstance from "../../../api/appAxiosInstance";
-import { IWidget } from "../../../interfaces/dashboard/widgets";
-import { sortAscendingList } from "../../../utils/sortsWidgetsOrder";
+import { ISalesStatus } from "../../../interfaces/dashboard/salesStatus";
 import { setProcessError, setProcessLoading, setProcessSuccess } from "../../slices/allProcessesSlice";
-import { setDashboardWidgets } from "../../slices/dashboardSlice";
+import { setSalesStatusData } from "../../slices/dashboardSlice";
 import { RootState } from "../../store";
 
-export const fetchWidgetsList = createAsyncThunk("allProcesses/fetchWidgetsList", async (_, thunkApi) => {
-	thunkApi.dispatch(setProcessLoading("fetchWidgetsList"));
+export const fetchSalesStatuses = createAsyncThunk("allProcesses/fetchSalesStatuses", async (_, thunkApi) => {
+	thunkApi.dispatch(setProcessLoading("fetchSalesStatusStatistics"));
 
 	const source = axios.CancelToken.source();
 	thunkApi.signal.addEventListener("abort", () => source.cancel("cancelled"));
@@ -16,24 +15,26 @@ export const fetchWidgetsList = createAsyncThunk("allProcesses/fetchWidgetsList"
 	const state = thunkApi.getState() as RootState;
 	const authUser = state.authUser;
 
+	const currentDateTime = new Date();
+
 	try {
-		const response = await appAxiosInstance.get(`/Dashboard`, {
+		const response = await appAxiosInstance.get(`/Statistics/Sales`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authUser.token}`,
 			},
 			params: {
-				clientId: authUser.clientId,
-				userId: authUser.userId,
+				ClientId: authUser.clientId,
+				UserId: authUser.userId,
+				ClientDate: currentDateTime.toISOString(),
 			},
 			cancelToken: source.token,
 		});
 
-		const currentDateTime = new Date();
-		const rawData = response.data as IWidget[];
-		const sorted = sortAscendingList(rawData);
-		thunkApi.dispatch(setDashboardWidgets(sorted));
-		return thunkApi.dispatch(setProcessSuccess({ key: "fetchWidgetsList", date: currentDateTime.toUTCString() }));
+		thunkApi.dispatch(setSalesStatusData(response.data as ISalesStatus[]));
+		return thunkApi.dispatch(
+			setProcessSuccess({ key: "fetchSalesStatusStatistics", date: currentDateTime.toUTCString() })
+		);
 	} catch (error) {
 		if (error) {
 			const axiosErr = error as AxiosError;
@@ -42,9 +43,9 @@ export const fetchWidgetsList = createAsyncThunk("allProcesses/fetchWidgetsList"
 
 			return thunkApi.dispatch(
 				setProcessError({
-					key: "fetchWidgetsList",
+					key: "fetchSalesStatusStatistics",
 					data: axiosErr.response?.data,
-					msg: "Widgets fetch failed",
+					msg: "Sales Status Statistics fetch failed",
 				})
 			);
 		}

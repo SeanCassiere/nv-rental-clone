@@ -5,7 +5,6 @@ import { AgreementInList } from "../../interfaces/agreements/agreementSearch";
 import { VehiclesInList } from "../../interfaces/vehicles/vehicleSearch";
 import { ReservationsInList } from "../../interfaces/reservations/reservationSearch";
 import { XPagination } from "../../interfaces/pagination/pagination";
-import { IWidget } from "../../interfaces/dashboard/widgets";
 
 interface ProcessInterface<T> {
 	isProcessing: boolean;
@@ -44,7 +43,8 @@ interface AllProcesses {
 	searchVehicles: ProcessInterface<{ vehicles: VehiclesInList[]; pagination: XPagination }>;
 	searchAgreements: ProcessInterface<{ agreements: AgreementInList[]; pagination: XPagination }>;
 	searchReservations: ProcessInterface<{ reservations: ReservationsInList[]; pagination: XPagination }>;
-	fetchWidgetsList: ProcessInterface<IWidget[]>;
+	fetchWidgetsList: ProcessInterface<null>;
+	fetchSalesStatusStatistics: ProcessInterface<null>;
 }
 
 let allProcessesInitialState: AllProcesses;
@@ -66,7 +66,8 @@ allProcessesInitialState = {
 		reservations: [],
 		pagination: initialPagination,
 	}),
-	fetchWidgetsList: populateEmptyProcess<IWidget[]>([]),
+	fetchWidgetsList: populateEmptyProcess<null>(null),
+	fetchSalesStatusStatistics: populateEmptyProcess<null>(null),
 };
 
 export const allProcessesSlice = createSlice({
@@ -126,9 +127,6 @@ export const allProcessesSlice = createSlice({
 			state.searchReservations.data.reservations = action.payload.reservations;
 			state.searchReservations.data.pagination = action.payload.pagination;
 		},
-		setFetchWidgetsListData: (state, action: PayloadAction<IWidget[]>) => {
-			state.fetchWidgetsList.data = action.payload;
-		},
 	},
 });
 
@@ -142,7 +140,6 @@ export const {
 	setSearchCustomersData,
 	setSearchVehiclesData,
 	setSearchReservationsData,
-	setFetchWidgetsListData,
 } = allProcessesSlice.actions;
 
 export default allProcessesSlice;

@@ -48,6 +48,7 @@ export const selectSearchCustomersState = (state: RootState) => state.allProcess
 export const selectSearchVehiclesState = (state: RootState) => state.allProcesses.searchVehicles;
 export const selectSearchReservationsState = (state: RootState) => state.allProcesses.searchReservations;
 export const selectFetchWidgetsList = (state: RootState) => state.allProcesses.fetchWidgetsList;
+export const selectFetchSalesStatusStatistics = (state: RootState) => state.allProcesses.fetchSalesStatusStatistics;
 
 export const selectDashboard = (state: RootState) => state.dashboard;
 

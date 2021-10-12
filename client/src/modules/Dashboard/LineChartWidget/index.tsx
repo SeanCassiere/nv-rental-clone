@@ -1,26 +1,31 @@
-// import "./styles.css";
+import React, { useEffect } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useDispatch, useSelector } from "react-redux";
 
-const data = [
-	{ total: 84994.53, monthName: "Nov", previousTotal: 5760.0 },
-	{ total: 8004.62, monthName: "Dec", previousTotal: 8000.0 },
-	{ total: 4810.89, monthName: "Jan", previousTotal: 15900.0 },
-	{ total: 53512.7, monthName: "Feb", previousTotal: 18550.0 },
-	{ total: 9847.4, monthName: "Mar", previousTotal: 29150.0 },
-	{ total: 38406.9, monthName: "Apr", previousTotal: 39845.4 },
-	{ total: 25689.65, monthName: "May", previousTotal: 18597.7 },
-	{ total: 87141.23, monthName: "Jun", previousTotal: 47960.76 },
-	{ total: 15456.26, monthName: "Jul", previousTotal: 88234.46 },
-	{ total: 52464.44, monthName: "Aug", previousTotal: 50779.4 },
-	{ total: 50550.82, monthName: "Sep", previousTotal: 63670.71 },
-	{ total: 43747.68, monthName: "Oct", previousTotal: 17764.11 },
-];
+import { AppDispatch, selectDashboard, selectFetchSalesStatusStatistics } from "../../../shared/redux/store";
+import { fetchSalesStatuses } from "../../../shared/redux/thunks/allProcessesThunks/fetchSalesStatusStatistics";
 
 export default function LineChartWidget() {
+	const dispatch = useDispatch<AppDispatch>();
+	const { salesStatusData } = useSelector(selectDashboard);
+	const { isProcessing } = useSelector(selectFetchSalesStatusStatistics);
+
+	useEffect(() => {
+		const promise = dispatch(fetchSalesStatuses());
+
+		return () => {
+			promise.abort();
+		};
+	}, [dispatch]);
+
+	if (isProcessing) {
+		return <div style={{ minHeight: 300 }}></div>;
+	}
+
 	return (
 		<ResponsiveContainer width='100%' height={300}>
 			<AreaChart
-				data={data}
+				data={salesStatusData}
 				margin={{
 					top: 5,
 					right: 30,
@@ -42,16 +47,14 @@ export default function LineChartWidget() {
 				<XAxis dataKey='monthName' />
 				<YAxis />
 				<Tooltip />
-				{/* <Legend /> */}
+
 				<Area
 					type='monotone'
 					dataKey='previousTotal'
 					name='Previous Total'
 					dot={false}
 					stroke='#1E649E'
-					// fill='rgb(38, 100, 158)'
 					fill='url(#colorUv2)'
-					// fillOpacity={0.3}
 					fillOpacity={1}
 					strokeWidth={1.5}
 				/>
@@ -61,9 +64,7 @@ export default function LineChartWidget() {
 					name='Total'
 					dot={false}
 					stroke='#30D0B6'
-					// fill='rgb(48, 208, 182)'
 					fill='url(#colorUv)'
-					// fillOpacity={0.3}
 					fillOpacity={1}
 					strokeWidth={1.5}
 				/>

@@ -7,13 +7,10 @@ import LineChartWidget from "../LineChartWidget";
 import DragableIcon from "@rsuite/icons/Dragable";
 import { IWidget } from "../../../shared/interfaces/dashboard/widgets";
 import { useDispatch, useSelector } from "react-redux";
-import { selectDashboard } from "../../../shared/redux/store";
+import { selectAuthUserState, selectDashboard } from "../../../shared/redux/store";
 import { setDashboardWidgets } from "../../../shared/redux/slices/dashboardSlice";
-import {
-	updateWidgetAThunk,
-	updateWidgetBThunk,
-} from "../../../shared/redux/thunks/allProcessesThunks/fetchWidgetsList";
 import { sortAscendingList } from "../../../shared/utils/sortsWidgetsOrder";
+import { updateDashboardWidget } from "../../../shared/api/updateDashboardWidget";
 
 function chooseWidget(widget: IWidget) {
 	switch (widget.widgetID) {
@@ -77,7 +74,7 @@ const WidgetList = React.memo(({ widgets }: { widgets: IWidget[] }) => {
 
 const BeautifulDNDGrid = () => {
 	const dispatch = useDispatch();
-
+	const { token } = useSelector(selectAuthUserState);
 	const { widgets } = useSelector(selectDashboard);
 
 	function onDragEnd(result: DropResult, _: ResponderProvided) {
@@ -97,8 +94,8 @@ const BeautifulDNDGrid = () => {
 			items = items.filter((item) => item.widgetID !== newWidgetBData.widgetID);
 			items = [...items, newWidgetBData];
 
-			dispatch(updateWidgetAThunk(newWidgetAData));
-			dispatch(updateWidgetBThunk(newWidgetBData));
+			updateDashboardWidget(newWidgetAData, token);
+			updateDashboardWidget(newWidgetBData, token);
 
 			dispatch(setDashboardWidgets(sortAscendingList(items)));
 		}
