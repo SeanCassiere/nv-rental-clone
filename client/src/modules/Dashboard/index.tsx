@@ -51,7 +51,7 @@ const DashboardPage: React.FunctionComponent = () => {
 										)}
 
 										<IconButton
-											appearance='ghost'
+											appearance={isEditingLayout ? "primary" : "ghost"}
 											color={isEditingLayout ? "green" : "cyan"}
 											icon={isEditingLayout ? <CheckIcon /> : <MoveDownIcon />}
 											onClick={() => setIsEditingLayout((e) => !e)}

@@ -1,25 +1,40 @@
 import React from "react";
-import { Sidenav, Nav, Navbar, Sidebar, Modal, Button, Dropdown } from "rsuite";
+import {
+	Sidenav,
+	Nav,
+	Navbar,
+	Sidebar,
+	Modal,
+	Button,
+	// Dropdown
+} from "rsuite";
 
 import AdvancedAnalyticsIcon from "@rsuite/icons/AdvancedAnalytics";
 import DashboardIcon from "@rsuite/icons/Dashboard";
 import SettingIcon from "@rsuite/icons/Setting";
-import OthersIcon from "@rsuite/icons/Others";
-import MoreIcon from "@rsuite/icons/More";
-import UnvisibleIcon from "@rsuite/icons/Unvisible";
-import ArrowLeftLineIcon from "@rsuite/icons/ArrowLeftLine";
-import ArrowRightLineIcon from "@rsuite/icons/ArrowRightLine";
+// import OthersIcon from "@rsuite/icons/Others";
+// import MoreIcon from "@rsuite/icons/More";
+// import UnvisibleIcon from "@rsuite/icons/Unvisible";
+// import ArrowLeftLineIcon from "@rsuite/icons/ArrowLeftLine";
+// import ArrowRightLineIcon from "@rsuite/icons/ArrowRightLine";
 import BarLineChartIcon from "@rsuite/icons/BarLineChart";
 import TableIcon from "@rsuite/icons/Table";
 import PeoplesIcon from "@rsuite/icons/Peoples";
 import PeoplesCostomizeIcon from "@rsuite/icons/PeoplesCostomize";
 import StorageIcon from "@rsuite/icons/Storage";
+import IdMappingIcon from "@rsuite/icons/IdMapping";
 
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, selectAppConfigState } from "../../redux/store";
-import { switchTheme } from "../../redux/slices/appConfigSlice";
+import {
+	useDispatch,
+	// useSelector
+} from "react-redux";
+import {
+	AppDispatch,
+	// selectAppConfigState
+} from "../../redux/store";
+// import { switchTheme } from "../../redux/slices/appConfigSlice";
 import { resetAuthState } from "../../redux/slices/authUserSlice";
 import { LOCAL_STORAGE_FUNCTIONS } from "../../utils/functions";
 
@@ -82,8 +97,8 @@ const pagesKeyList = [
 ];
 
 const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }> = ({ showLogoutModal }) => {
-	const dispatch = useDispatch<AppDispatch>();
-	const { theme } = useSelector(selectAppConfigState);
+	// const dispatch = useDispatch<AppDispatch>();
+	// const { theme } = useSelector(selectAppConfigState);
 	const [expanded, setExpanded] = React.useState(false);
 	const [activeKey, setActiveKey] = React.useState("dashboard");
 
@@ -114,9 +129,9 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 		};
 	}, []);
 
-	const handleToggle = React.useCallback(() => {
-		setExpanded((state) => !state);
-	}, [setExpanded]);
+	// const handleToggle = React.useCallback(() => {
+	// 	setExpanded((state) => !state);
+	// }, [setExpanded]);
 
 	const handleSelect = React.useCallback(
 		(eventKey: string) => {
@@ -169,7 +184,7 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 				</Sidenav>
 
 				<Navbar appearance='default' className='nav-toggle'>
-					<Nav>
+					{/* <Nav>
 						<Dropdown placement='topStart' trigger='click'>
 							<Dropdown.Item onClick={() => dispatch(switchTheme(theme))}>
 								{theme === "light" ? <OthersIcon /> : <MoreIcon />}
@@ -181,11 +196,12 @@ const SideBarNavigation: React.FunctionComponent<{ showLogoutModal: () => void }
 								&nbsp;Sign out
 							</Dropdown.Item>
 						</Dropdown>
-					</Nav>
+					</Nav> */}
 
 					<Nav pullRight id='nav-switch'>
-						<Nav.Item onClick={handleToggle} style={{ width: 56, textAlign: "center" }}>
-							{expanded ? <ArrowLeftLineIcon /> : <ArrowRightLineIcon />}
+						<Nav.Item onClick={showLogoutModal} style={{ width: 56, textAlign: "center" }}>
+							<IdMappingIcon />
+							{/* {expanded ? <ArrowLeftLineIcon /> : <ArrowRightLineIcon />} */}
 						</Nav.Item>
 					</Nav>
 				</Navbar>

@@ -45,6 +45,7 @@ interface AllProcesses {
 	searchReservations: ProcessInterface<{ reservations: ReservationsInList[]; pagination: XPagination }>;
 	fetchWidgetsList: ProcessInterface<null>;
 	fetchSalesStatusStatistics: ProcessInterface<null>;
+	updateDashboardWidget: ProcessInterface<null>;
 }
 
 let allProcessesInitialState: AllProcesses;
@@ -68,6 +69,7 @@ allProcessesInitialState = {
 	}),
 	fetchWidgetsList: populateEmptyProcess<null>(null),
 	fetchSalesStatusStatistics: populateEmptyProcess<null>(null),
+	updateDashboardWidget: populateEmptyProcess<null>(null),
 };
 
 export const allProcessesSlice = createSlice({

@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import appAxiosInstance from "../../../api/appAxiosInstance";
 import { IWidget } from "../../../interfaces/dashboard/widgets";
-import { sortAscendingList } from "../../../utils/sortsWidgetsOrder";
+import { sortWidgetsInAscendingList } from "../../../utils/widgetsFunctions";
 import { setProcessError, setProcessLoading, setProcessSuccess } from "../../slices/allProcessesSlice";
 import { setDashboardWidgets } from "../../slices/dashboardSlice";
 import { RootState } from "../../store";
@@ -31,7 +31,7 @@ export const fetchWidgetsList = createAsyncThunk("allProcesses/fetchWidgetsList"
 
 		const currentDateTime = new Date();
 		const rawData = response.data as IWidget[];
-		const sorted = sortAscendingList(rawData);
+		const sorted = sortWidgetsInAscendingList(rawData);
 		thunkApi.dispatch(setDashboardWidgets(sorted));
 		return thunkApi.dispatch(setProcessSuccess({ key: "fetchWidgetsList", date: currentDateTime.toUTCString() }));
 	} catch (error) {

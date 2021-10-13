@@ -1,15 +1,17 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Row, Col, Panel } from "rsuite";
+import { Grid, Row, Col, Panel, IconButton } from "rsuite";
 import { DragDropContext, Draggable, Droppable, DropResult, ResponderProvided } from "react-beautiful-dnd";
+
+import HistoryIcon from "@rsuite/icons/History";
 
 import LineChartWidget from "../LineChartWidget";
 
 import { IWidget } from "../../../shared/interfaces/dashboard/widgets";
-import { selectAuthUserState, selectDashboard } from "../../../shared/redux/store";
+import { selectDashboard } from "../../../shared/redux/store";
 import { setDashboardWidgets } from "../../../shared/redux/slices/dashboardSlice";
-import { sortAscendingList } from "../../../shared/utils/sortsWidgetsOrder";
-import { updateDashboardWidget } from "../../../shared/api/updateDashboardWidget";
+import { sortWidgetDeleteEnterReorder, sortWidgetsInAscendingList } from "../../../shared/utils/widgetsFunctions";
+import { updateDashboardWidgetThunk } from "../../../shared/redux/thunks/allProcessesThunks/updateDashboardWidget";
 
 export const WIDGET_TRUE_MIN_HEIGHT = 50;
 export const WIDGET_SMALL_HEIGHT = 89;
@@ -54,7 +56,7 @@ function chooseWidget(widget: IWidget) {
 }
 
 function WidgetBlock({ widget, index, editingState }: { widget: IWidget; index: number; editingState: boolean }) {
-	const spanNumber = widget.isDeleted ? 6 : widget.widgetScale === "6" ? 12 : 24;
+	const spanNumber = widget.isDeleted ? 5 : widget.widgetScale === "6" ? 12 : 24;
 	return (
 		<Draggable draggableId={widget.widgetID} index={index} isDragDisabled={!editingState}>
 			{(provided) => (
@@ -101,7 +103,6 @@ const WidgetList = React.memo(({ widgets, editingState }: { widgets: IWidget[]; 
 
 const BeautifulDNDGrid = ({ editingState }: { editingState: boolean }) => {
 	const dispatch = useDispatch();
-	const { token } = useSelector(selectAuthUserState);
 	const { widgets } = useSelector(selectDashboard);
 
 	function onDragEnd(result: DropResult, _: ResponderProvided) {
@@ -137,10 +138,8 @@ const BeautifulDNDGrid = ({ editingState }: { editingState: boolean }) => {
 			items = items.filter((item) => item.widgetID !== newWidgetBData.widgetID);
 			items = [...items, newWidgetBData];
 
-			updateDashboardWidget(newWidgetAData, token);
-			updateDashboardWidget(newWidgetBData, token);
-
-			dispatch(setDashboardWidgets(sortAscendingList(items)));
+			dispatch(updateDashboardWidgetThunk([newWidgetAData, newWidgetBData]));
+			dispatch(setDashboardWidgets(sortWidgetsInAscendingList(items)));
 		}
 	}
 
@@ -151,8 +150,20 @@ const BeautifulDNDGrid = ({ editingState }: { editingState: boolean }) => {
 		items = items.filter((item) => item.widgetID !== modifiedWidget.widgetID);
 		items = [...items, modifiedWidget];
 
-		updateDashboardWidget(modifiedWidget, token);
-		dispatch(setDashboardWidgets(sortAscendingList(items)));
+		const reordered = sortWidgetDeleteEnterReorder(items);
+		dispatch(updateDashboardWidgetThunk(reordered));
+		dispatch(setDashboardWidgets(reordered));
+	}
+
+	function handleResetAllWidgets() {
+		const items = Array.from(widgets);
+
+		const updatedWidgetList = items.map((widget) => {
+			return { ...widget, isDeleted: false, widgetUserPosition: widget.widgetPosition };
+		});
+
+		dispatch(updateDashboardWidgetThunk(updatedWidgetList));
+		dispatch(setDashboardWidgets(sortWidgetsInAscendingList(updatedWidgetList)));
 	}
 
 	const activeWidgets = widgets.filter((w) => w.isDeleted === false);
@@ -168,36 +179,47 @@ const BeautifulDNDGrid = ({ editingState }: { editingState: boolean }) => {
 								{(provided) => (
 									<Grid ref={provided.innerRef} {...provided.droppableProps} style={{ width: "100%" }}>
 										{editingState && (
-											<Row
+											<div
 												style={{
 													minHeight: 120,
 													backgroundColor: "#fff",
 													border: "5px dashed rgba(255, 105, 105, 0.5)",
 													padding: "20px 20px 20px 20px",
 													borderRadius: 5,
-													position: "relative",
 												}}
 											>
-												{inActiveWidgets.length === 0 ? (
-													<div
-														style={{
-															position: "absolute",
-															inset: 0,
-															width: "100%",
-															display: "flex",
-															justifyContent: "center",
-															alignItems: "center",
-															height: "100%",
-														}}
-													>
-														<span style={{ display: "block" }}>Using all the available widgets</span>
-													</div>
-												) : (
-													<WidgetList widgets={inActiveWidgets} editingState={editingState} />
-												)}
+												<Row style={{ marginBottom: 10 }}>
+													<Col xs={24}>
+														<IconButton
+															color='yellow'
+															appearance='primary'
+															onClick={handleResetAllWidgets}
+															icon={<HistoryIcon />}
+														/>
+													</Col>
+												</Row>
+												<Row style={{ position: "relative" }}>
+													{inActiveWidgets.length === 0 ? (
+														<div
+															style={{
+																position: "absolute",
+																inset: 0,
+																width: "100%",
+																display: "flex",
+																justifyContent: "center",
+																alignItems: "center",
+																height: "100%",
+															}}
+														>
+															<span style={{ display: "block" }}>Using all the available widgets</span>
+														</div>
+													) : (
+														<WidgetList widgets={inActiveWidgets} editingState={editingState} />
+													)}
 
-												{provided.placeholder}
-											</Row>
+													{provided.placeholder}
+												</Row>
+											</div>
 										)}
 									</Grid>
 								)}
