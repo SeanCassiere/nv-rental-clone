@@ -1,12 +1,12 @@
 {
-	"name": "rsuite-navigation-app",
+	"name": "nv-v3-redesign",
 	"version": "1.0.0",
 	"description": "",
 	"main": "server/build/index.js",
 	"scripts": {
 		"client": "npm start --prefix client",
 		"server:serve": "npm run dev --prefix server",
-		"json:serve": "json-server --watch db.json --delay 1200",
+		"json:serve": "json-server --watch db.json --delay 500",
 		"build:client": "npm run build --prefix client",
 		"build:server": "npm run build --prefix server",
 		"server": "concurrently \"npm run json:serve\" \"npm run server:serve\"",
@@ -19,9 +19,7 @@
 		"json-server": "^0.16.3"
 	},
 	"dependencies": {
-		"@types/react-beautiful-dnd": "^13.1.2",
 		"concurrently": "^6.2.0",
-		"react-beautiful-dnd": "^13.1.0",
 		"serve": "^11.3.2"
 	}
 }
