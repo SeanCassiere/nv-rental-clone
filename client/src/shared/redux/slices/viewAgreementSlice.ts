@@ -42,7 +42,7 @@ export const viewAgreementsSlice = createSlice({
 			state.isError = false;
 			state.error = "";
 		});
-		builder.addCase(fetchAgreementThunk.fulfilled, (state, action) => {
+		builder.addCase(fetchAgreementThunk.fulfilled, (state, action: any) => {
 			state.agreement = action.payload.agreement;
 			state.isSearching = false;
 		});
@@ -59,7 +59,7 @@ export const viewAgreementsSlice = createSlice({
 			state.printPDF.url = null;
 		});
 		builder.addCase(fetchAgreementPDFThunk.fulfilled, (state, action) => {
-			state.printPDF.url = action.payload;
+			state.printPDF.url = action.payload as string;
 			state.printPDF.isPrinting = false;
 		});
 		builder.addCase(fetchAgreementPDFThunk.rejected, (state) => {

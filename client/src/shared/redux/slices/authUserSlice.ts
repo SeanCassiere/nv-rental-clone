@@ -77,7 +77,7 @@ export const authUserSlice = createSlice({
 			state.tokenExpiresAt = null;
 			state.error = null;
 		});
-		builder.addCase(loginUserThunk.fulfilled, (state, action) => {
+		builder.addCase(loginUserThunk.fulfilled, (state, action: any) => {
 			state.token = action.payload.token;
 			state.refreshToken = action.payload.refreshToken;
 			state.clientId = action.payload.clientId;
@@ -88,7 +88,7 @@ export const authUserSlice = createSlice({
 		builder.addCase(loginUserThunk.rejected, (state) => {
 			state.isAuthenticating = false;
 		});
-		builder.addCase(refreshAuthTokenThunk.fulfilled, (state, action) => {
+		builder.addCase(refreshAuthTokenThunk.fulfilled, (state, action: any) => {
 			state.token = action.payload.token;
 			state.tokenExpiresAt = action.payload.tokenExpiresAt;
 		});

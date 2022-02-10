@@ -53,7 +53,7 @@ export const viewReservationSlice = createSlice({
 			state.isError = true;
 			state.error = action?.error?.message as string;
 		});
-		builder.addCase(fetchViewReservationByIdThunk.fulfilled, (state, action) => {
+		builder.addCase(fetchViewReservationByIdThunk.fulfilled, (state, action: any) => {
 			state.reservation = action.payload.reservationView;
 			state.reservationSummary = action.payload.reservationSummary;
 			state.isSearching = false;
@@ -64,7 +64,7 @@ export const viewReservationSlice = createSlice({
 			state.printPDF.url = null;
 		});
 		builder.addCase(fetchReservationPDFThunk.fulfilled, (state, action) => {
-			state.printPDF.url = action.payload;
+			state.printPDF.url = action.payload as string;
 			state.printPDF.isPrinting = false;
 		});
 		builder.addCase(fetchReservationPDFThunk.rejected, (state) => {

@@ -26,6 +26,7 @@ const getNavotarAccessToken = async (ClientID: string, ClientSecret: string): Pr
 		const { access_token } = data as AuthReturn;
 		token = access_token;
 	} catch (err) {
+		console.log("\n", err, "\n\n");
 		const axiosErr = err as AxiosError;
 		throw new Error(axiosErr.response?.data?.error);
 	}

@@ -51,7 +51,7 @@ export const appConfigSlice = createSlice({
 		builder.addCase(fetchClientFeaturesThunk.rejected, (state, action) => {
 			state.error = action.error?.message as string;
 		});
-		builder.addCase(fetchClientFeaturesThunk.fulfilled, (state, action) => {
+		builder.addCase(fetchClientFeaturesThunk.fulfilled, (state, action: PayloadAction<any>) => {
 			state.clientFeatures = action.payload;
 		});
 	},
