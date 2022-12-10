@@ -9,6 +9,7 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.19.1",
     "@tanstack/react-router": "^0.0.1-beta.38",
     "oidc-client-ts": "^2.2.0",
     "react": "18.2.0",
