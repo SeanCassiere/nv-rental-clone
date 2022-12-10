@@ -1,25 +1,36 @@
 {
-	"name": "nv-v3-redesign",
-	"version": "1.0.0",
-	"description": "",
-	"main": "server/build/index.js",
-	"scripts": {
-		"client": "npm start --prefix client",
-		"server:serve": "npm run dev --prefix server",
-		"json:serve": "json-server --watch db.json --delay 500",
-		"build:client": "npm run build --prefix client",
-		"build:server": "npm run build --prefix server",
-		"server": "concurrently \"npm run json:serve\" \"npm run server:serve\"",
-		"serve:client": "serve -s client/build"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"devDependencies": {
-		"json-server": "^0.16.3"
-	},
-	"dependencies": {
-		"concurrently": "^6.2.0",
-		"serve": "^11.3.2"
-	}
+  "name": "nv-v3-redesign",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "13.0.2",
+    "next-auth": "^4.18.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "zod": "^3.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "autoprefixer": "^10.4.7",
+    "eslint": "^8.26.0",
+    "eslint-config-next": "13.0.2",
+    "postcss": "^8.4.14",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.13",
+    "tailwindcss": "^3.2.0",
+    "typescript": "^4.8.4"
+  },
+  "ct3aMetadata": {
+    "initVersion": "6.11.3"
+  }
 }

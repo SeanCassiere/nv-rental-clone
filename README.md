@@ -1,116 +1,28 @@
-# Navotar Redesign with RSuiteJS
+# Create T3 App
 
-My personal design preference of the Navotar platform using React and the RSuiteJS library for the styles and components.
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-## API Reference
+## What's next? How do I make an app with this?
 
-Get the full API Documentation at https://api.appnavotar.com/docs
+We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
-#### Obtaining the Auth Token
+If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
-```http
-  POST https://auth.appnavotar.com/connect/token
+- [Next.js](https://nextjs.org)
+- [NextAuth.js](https://next-auth.js.org)
+- [Prisma](https://prisma.io)
+- [Tailwind CSS](https://tailwindcss.com)
+- [tRPC](https://trpc.io)
 
-  Content-Type: application/x-www-form-urlencoded
+## Learn More
 
-  Request Body:
-    grant_type = client_credentials
-    client_id = [YOUR CLIENT ID]
-    client_secret = [YOUR CLIENT SECRET]
-    scope = Api
-```
+To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-The above authentication is already handled by the TypeScript-NodeJS server.
+- [Documentation](https://create.t3.gg/)
+- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-## Environment Variables
+You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-To run this project, you will need to add the following environment variables to your .env files in both the `project/client` and `project/server` directories.
+## How do I deploy this?
 
-#### Client Environment Variables
-
-In the `project/client` directory, you will need to set up the following environment variables.
-
-You can find a template for this in the `project/client/.env.example` file.
-
-`REACT_APP_SERVER_URL`
-
-`REACT_APP_BASE_URL`
-
-#### Server Environment Variables
-
-In the `project/server` directory, you will need to set up the following environment variables.
-
-You can find a template for this in the `project/server/.env.example` file.
-
-`PORT`
-
-`NODE_ENV`
-
-`JWT_SECRET`
-
-`AUTH_URL`
-
-`BASE_URL`
-
-`JSON_SERVER_URL`
-
-You will also need to configure the `db.json` file in the root of the project.
-
-```json
-{
-	"users": [
-		{
-			"id": "",
-			"username": "",
-			"password": "",
-			"email": "",
-			"nav_client_id": "",
-			"api_client_id": "",
-			"api_client_secret": ""
-		}
-	]
-}
-```
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/SeanCassiere/nv-v3-redesign.git my-project
-```
-
-Go to the project directory
-
-```bash
-  cd my-project
-```
-
-Install base development dependancies
-
-```bash
-  npm install
-
-```
-
-Install TypeScript-NodeJS server dependancies
-
-```bash
-  cd server
-  npm install
-  cd ../
-```
-
-Install React client dependancies
-
-```bash
-  cd client
-  npm install
-  cd ../
-```
-
-Run the project
-
-```bash
-  npm run dev
-```
+Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
