@@ -1,9 +1,8 @@
+import { RouterProvider } from "@tanstack/react-router";
+import { router } from "./routes/Router";
+
 const App = () => {
-  return (
-    <div className="App">
-      <h1 className="text-red-400">Hello World</h1>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
