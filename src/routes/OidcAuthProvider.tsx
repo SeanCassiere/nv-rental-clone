@@ -1,4 +1,7 @@
-import { AuthProvider } from "react-oidc-context";
+import {
+  AuthProvider,
+  type AuthProviderNoUserManagerProps,
+} from "react-oidc-context";
 
 const AUTHORITY =
   import.meta.env.VITE_APP_AUTH_AUTHORITY || "https://testauth.appnavotar.com/";
@@ -9,7 +12,7 @@ const POST_LOGOUT_REDIRECT_URI =
 const SILENT_REDIRECT_URI =
   import.meta.env.VITE_APP_AUTH_SILENT_REDIRECT_URI ?? "";
 
-const config = {
+const config: AuthProviderNoUserManagerProps = {
   authority: AUTHORITY,
   client_id: CLIENT_ID,
   redirect_uri: REDIRECT_URI,
@@ -19,6 +22,8 @@ const config = {
   response_mode: "query" as const,
   scope: "openid profile Api",
   automaticSilentRenew: true,
+  loadUserInfo: true,
+  monitorSession: true,
 };
 
 export const OidcAuthProvider = ({
