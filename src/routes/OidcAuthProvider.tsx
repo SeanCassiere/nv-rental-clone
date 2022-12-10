@@ -30,7 +30,7 @@ export const OidcAuthProvider = ({
     <AuthProvider
       {...config}
       onSigninCallback={() => {
-        window.location.href = "/";
+        window.location.replace("/");
       }}
     >
       {children}

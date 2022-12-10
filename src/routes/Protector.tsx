@@ -24,6 +24,7 @@ function Protector({ children }: { children: React.ReactNode }) {
     <>{children}</>
   ) : (
     <div>
+      <p>{auth.signinRedirect() as any}</p>
       <p>Not logged in</p>
       <p>
         <button onClick={() => void auth.signinRedirect()}>Log in</button>

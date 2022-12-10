@@ -5,21 +5,6 @@ import Protector from "../routes/Protector";
 function Index() {
   const auth = useAuth();
 
-  switch (auth.activeNavigator) {
-    case "signinSilent":
-      return <div>Signing you in...</div>;
-    case "signoutRedirect":
-      return <div>Signing you out...</div>;
-  }
-
-  if (auth.isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (auth.error) {
-    auth.clearStaleState();
-  }
-
   const isAuthed = auth.isAuthenticated;
 
   return (
@@ -38,7 +23,13 @@ function Index() {
             </pre>
 
             <p>
-              <button onClick={() => void auth.removeUser()}>Log out</button>
+              <button
+                onClick={() => {
+                  auth.signoutRedirect();
+                }}
+              >
+                Log out
+              </button>
             </p>
           </div>
         ) : (
