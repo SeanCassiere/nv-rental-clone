@@ -18,6 +18,7 @@ export function useGetAgreementsList(params: {
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
+        currentDate: new Date(),
       }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),

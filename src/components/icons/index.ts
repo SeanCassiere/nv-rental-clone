@@ -2,11 +2,8 @@ export type IconProps = {
   className?: string;
 };
 
-export * from "./RectangleGroup";
-export * from "./HomeIcon";
-export * from "./DocumentText";
-export * from "./MagnifyingGlass";
-export * from "./BellIcon";
-export * from "./HamburgerMenu";
-export * from "./SettingsCog";
-export * from "./XMark";
+export * from "./Payment";
+export * from "./Arrow";
+export * from "./Vehicle";
+export * from "./General";
+export * from "./AppShell";

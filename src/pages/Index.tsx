@@ -1,7 +1,10 @@
 import { useAuth } from "react-oidc-context";
+
 import AppShell from "../components/app-shell";
-import { useGetUserProfile } from "../hooks/network/useGetUserProfile";
 import Protector from "../routes/Protector";
+import { useGetUserProfile } from "../hooks/network/useGetUserProfile";
+import { useGetDashboardStats } from "../hooks/network/useGetDashboardStats";
+import StatisticsWidget from "../components/Dashboard/statistics-widget";
 
 function Index() {
   const auth = useAuth();
@@ -9,6 +12,10 @@ function Index() {
   const isAuthed = auth.isAuthenticated;
 
   const userQuery = useGetUserProfile();
+  const statistics = useGetDashboardStats({
+    locationId: 0,
+    clientDate: new Date(),
+  });
 
   return (
     <Protector>
@@ -17,7 +24,8 @@ function Index() {
           <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
             <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
           </div>
-          <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+          <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
+            <StatisticsWidget statistics={statistics.data} />
             <div>
               {isAuthed ? (
                 <div>

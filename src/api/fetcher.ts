@@ -28,13 +28,15 @@ export interface ResponseParsed<T> {
 
 export function makeUrl(
   endpoint: string,
-  params: Record<string, string | number | null>
+  params: Record<string, string | number | null | undefined>
 ) {
   const queryParams = new URLSearchParams();
 
   for (const key of Object.entries(params)) {
     const [keyName, value] = key;
-    queryParams.append(keyName, `${value}`);
+    if (typeof value !== "undefined") {
+      queryParams.append(keyName, `${value}`);
+    }
   }
 
   const queryUrl = new URL(`${apiBaseUrl}${endpoint}`);
