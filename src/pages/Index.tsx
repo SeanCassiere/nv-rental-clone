@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
+import { useGetUserProfile } from "../hooks/network/useGetUserProfile";
 import Protector from "../routes/Protector";
 
 function Index() {
@@ -7,12 +8,21 @@ function Index() {
 
   const isAuthed = auth.isAuthenticated;
 
+  const userQuery = useGetUserProfile();
+
   return (
     <Protector>
       <h1 className="text-red-400">Home</h1>
       <p>
-        <Link to="/agreements">Agreements Page</Link>
+        <Link to="/agreements" search={() => ({ page: 1, size: 10 })}>
+          Agreements Page
+        </Link>
       </p>
+      <div className="mt-5 mb-5 border border-red-400">
+        <pre className="min-h-[50px] overflow-hidden text-xs">
+          {JSON.stringify(userQuery.data, null, 2)}
+        </pre>
+      </div>
       <div className="mt-10">
         {isAuthed ? (
           <div>

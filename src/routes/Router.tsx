@@ -28,13 +28,13 @@ const agreementsRoute = rootRoute.createRoute({
   path: "/agreements",
   component: AgreementsPage,
   validateSearch: z.object({
-    page: z.number().default(1),
-    size: z.number().default(20),
+    page: z.number().min(1).default(1),
+    size: z.number().min(1).default(10),
   }).parse,
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
-      size: search.size || 20,
+      size: search.size || 10,
     }),
   ],
 });
