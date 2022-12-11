@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
+import AppShell from "../components/app-shell";
 import { useGetUserProfile } from "../hooks/network/useGetUserProfile";
 import Protector from "../routes/Protector";
 
@@ -12,45 +12,49 @@ function Index() {
 
   return (
     <Protector>
-      <h1 className="text-red-400">Home</h1>
-      <p>
-        <Link to="/agreements" search={() => ({ page: 1, size: 10 })}>
-          Agreements Page
-        </Link>
-      </p>
-      <div className="mt-5 mb-5 border border-red-400">
-        <pre className="min-h-[50px] overflow-hidden text-xs">
-          {JSON.stringify(userQuery.data, null, 2)}
-        </pre>
-      </div>
-      <div className="mt-10">
-        {isAuthed ? (
-          <div>
-            <p>You are logged in</p>
-            <p>Hello {auth.user?.profile.sub}</p>
-            <pre className="overflow-hidden text-xs">
-              {JSON.stringify(auth.user, null, 2)}
-            </pre>
+      <AppShell>
+        <div className="py-6">
+          <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+            <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+          </div>
+          <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+            <div>
+              {isAuthed ? (
+                <div>
+                  <p>You are logged in</p>
+                  <p>Hello {auth.user?.profile.sub}</p>
+                  <p>
+                    <button
+                      onClick={() => {
+                        auth.signoutRedirect();
+                      }}
+                    >
+                      Log out
+                    </button>
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p>Not logged in</p>
+                  <p>
+                    <button onClick={() => void auth.signinRedirect()}>
+                      Log in
+                    </button>
+                  </p>
+                </div>
+              )}
+            </div>
 
-            <p>
-              <button
-                onClick={() => {
-                  auth.signoutRedirect();
-                }}
-              >
-                Log out
-              </button>
-            </p>
+            <div className="py-4">
+              <div className="my-5 border-4 border-dashed border-gray-200">
+                <pre className="min-h-[50px] overflow-x-scroll text-sm">
+                  {JSON.stringify(userQuery.data, null, 2)}
+                </pre>
+              </div>
+            </div>
           </div>
-        ) : (
-          <div>
-            <p>Not logged in</p>
-            <p>
-              <button onClick={() => void auth.signinRedirect()}>Log in</button>
-            </p>
-          </div>
-        )}
-      </div>
+        </div>
+      </AppShell>
     </Protector>
   );
 }
