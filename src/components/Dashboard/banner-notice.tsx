@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
 import type { DashboardNoticeType } from "../../types/Dashboard";
@@ -42,11 +43,20 @@ const BannerNotice = ({ notice }: { notice: DashboardNoticeType }) => {
               {notice.actionText}
             </a>
           </div>
-          <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
+          <div
+            className={classNames(
+              notice.ignoreDismiss
+                ? "sm:hidden"
+                : "order-2 flex-shrink-0 sm:order-3 sm:ml-3"
+            )}
+          >
             <button
               type="button"
-              className="-mr-1 flex rounded-md p-2 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
-              onClick={onDismiss}
+              className={classNames(
+                "-mr-1 flex rounded-md p-2 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2",
+                notice.ignoreDismiss ? "opacity-0" : ""
+              )}
+              onClick={notice.ignoreDismiss ? undefined : onDismiss}
             >
               <span className="sr-only">Dismiss</span>
               <XMarkOutline className="h-6 w-6 text-white" aria-hidden="true" />
