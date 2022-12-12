@@ -7,10 +7,15 @@ import type { AgreementListItemType } from "../../types/Agreement";
 export function useGetAgreementsList(params: {
   page: number;
   pageSize: number;
+  filters: any;
 }) {
   const auth = useAuth();
   const query = useQuery<ResponseParsed<AgreementListItemType[]>>({
-    queryKey: ["agreements", JSON.stringify(params)],
+    queryKey: [
+      "agreements",
+      JSON.stringify({ page: params.page, pageSize: params.pageSize }),
+      JSON.stringify(params.filters),
+    ],
     queryFn: () =>
       fetchAgreementsList({
         page: params.page,
@@ -19,6 +24,7 @@ export function useGetAgreementsList(params: {
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
         currentDate: new Date(),
+        filters: params.filters,
       }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),
