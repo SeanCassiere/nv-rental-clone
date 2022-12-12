@@ -1,11 +1,43 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import { Fragment, useState } from "react";
-import AppShell from "../components/app-shell";
-import { useGetAgreementsList } from "../hooks/network/useGetAgreementsList";
-import { useGetModuleColumns } from "../hooks/network/useGetModuleColumns";
-import Protector from "../routes/Protector";
+import { z } from "zod";
 
-const Agreements = () => {
+import { rootRoute } from "../../routes/Router";
+import AppShell from "../../components/app-shell";
+import Protector from "../../routes/Protector";
+import { useGetAgreementsList } from "../../hooks/network/useGetAgreementsList";
+import { useGetModuleColumns } from "../../hooks/network/useGetModuleColumns";
+
+export const agreementFiltersModel = z
+  .object({
+    AgreementStatusName: z.string().optional(),
+    Statuses: z.number().optional(),
+    IsSearchOverdues: z.boolean().optional(),
+    EndDate: z
+      .preprocess((arg) => {
+        if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+      }, z.date())
+      .optional(),
+  })
+  .optional();
+
+export const agreementsSearchRoute = rootRoute.createRoute({
+  path: "/agreements",
+  component: AgreementsSearchPage,
+  validateSearch: z.object({
+    page: z.number().min(1).default(1),
+    size: z.number().min(1).default(10),
+    filters: agreementFiltersModel,
+  }).parse,
+  preSearchFilters: [
+    (search) => ({
+      page: search.page || 1,
+      size: search.size || 10,
+    }),
+  ],
+});
+
+function AgreementsSearchPage() {
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
   const searchFilters = {
     AgreementStatusName: filters?.AgreementStatusName || undefined,
@@ -149,6 +181,6 @@ const Agreements = () => {
       </AppShell>
     </Protector>
   );
-};
+}
 
-export default Agreements;
+export default AgreementsSearchPage;
