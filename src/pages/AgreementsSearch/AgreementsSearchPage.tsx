@@ -1,41 +1,15 @@
 import { Link, useSearch } from "@tanstack/react-router";
-import { Fragment, useState } from "react";
-import { z } from "zod";
+import { createColumnHelper } from "@tanstack/react-table";
+import { Fragment, useMemo, useState } from "react";
 
-import { rootRoute } from "../../routes/Router";
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import { useGetAgreementsList } from "../../hooks/network/useGetAgreementsList";
 import { useGetModuleColumns } from "../../hooks/network/useGetModuleColumns";
+import type { AgreementListItemType } from "../../types/Agreement";
+import ModuleTable from "../../components/PrimaryModule/ModuleTable";
 
-export const agreementFiltersModel = z
-  .object({
-    AgreementStatusName: z.string().optional(),
-    Statuses: z.number().optional(),
-    IsSearchOverdues: z.boolean().optional(),
-    EndDate: z
-      .preprocess((arg) => {
-        if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
-      }, z.date())
-      .optional(),
-  })
-  .optional();
-
-export const agreementsSearchRoute = rootRoute.createRoute({
-  path: "/agreements",
-  component: AgreementsSearchPage,
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: agreementFiltersModel,
-  }).parse,
-  preSearchFilters: [
-    (search) => ({
-      page: search.page || 1,
-      size: search.size || 10,
-    }),
-  ],
-});
+const columnHelper = createColumnHelper<AgreementListItemType>();
 
 function AgreementsSearchPage() {
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
@@ -49,7 +23,7 @@ function AgreementsSearchPage() {
     EndDate: filters?.EndDate || undefined,
   };
 
-  const agreements = useGetAgreementsList({
+  const agreementsData = useGetAgreementsList({
     page: pageNumber,
     pageSize: size,
     filters: searchFilters,
@@ -57,7 +31,20 @@ function AgreementsSearchPage() {
 
   const [stateFilters, setStateFilters] = useState(searchFilters);
 
-  const columns = useGetModuleColumns({ module: "agreements" });
+  const columnsData = useGetModuleColumns({ module: "agreements" });
+
+  const columns = useMemo(() => {
+    const data = columnsData.data
+      .filter((col) => col.isSelected)
+      .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
+    const cols = data.map((column) => {
+      return columnHelper.accessor(column.columnHeader as any, {
+        header: () => column.columnHeaderDescription,
+        cell: (item) => item.getValue(),
+      });
+    });
+    return cols;
+  }, [columnsData.data]);
 
   return (
     <Protector>
@@ -129,52 +116,50 @@ function AgreementsSearchPage() {
                 Commit
               </Link>
             </div>
-            <div className="py-4">
-              <div>
-                <Link
-                  to="/agreements"
-                  search={(search) => ({
-                    ...search,
-                    page: pageNumber <= 1 ? 1 : pageNumber - 1,
-                    size,
-                  })}
-                >
-                  Page -1
-                </Link>
-                <Link
-                  to="/agreements"
-                  search={(search) => ({
-                    ...search,
-                    page: pageNumber + 1,
-                    size,
-                  })}
-                >
-                  Page +1
-                </Link>
-              </div>
 
-              <div className="mt-5 overflow-x-scroll py-4 text-sm">
-                <div>Columns</div>
-                {columns.data
-                  .filter((col) => col.isSelected)
-                  .sort((col1, col2) => col1.orderIndex - col2.orderIndex)
-                  .map((col, i) => (
-                    <span key={col.columnHeader + i} className="mr-1">
-                      {col.columnHeader}
-                    </span>
-                  ))}
-              </div>
-              <div className="mt-10">
-                {agreements.data.data.map((agreement) => (
-                  <div
-                    key={agreement.AgreementId}
-                    className="my-4 flex gap-2 border-2 border-dashed border-gray-400 py-3"
-                  >
-                    <span>{agreement.AgreementNumber}</span>
-                    <span>{agreement.AgreementStatusName}</span>
-                  </div>
-                ))}
-              </div>
+            <div>
+              <ModuleTable
+                data={agreementsData.data.data}
+                columns={columns}
+                noRows={
+                  agreementsData.isLoading === false &&
+                  agreementsData.data.data.length === 0
+                }
+              />
+            </div>
+            <div>
+              <p>
+                <Link
+                  to="/agreements"
+                  search={(search) => ({
+                    ...search,
+                    page: pageNumber === 1 ? 1 : pageNumber - 1,
+                    size,
+                  })}
+                >
+                  less
+                </Link>
+                &nbsp;|&nbsp;
+                <Link
+                  to="/agreements"
+                  search={(search) => ({
+                    ...search,
+                    page:
+                      pageNumber === agreementsData.data.totalPages
+                        ? pageNumber
+                        : pageNumber + 1,
+                    size,
+                  })}
+                >
+                  plus
+                </Link>
+              </p>
+              <p>
+                {JSON.stringify({
+                  totalPages: agreementsData.data.totalPages,
+                  totalRecords: agreementsData.data.totalRecords,
+                })}
+              </p>
             </div>
           </div>
         </div>

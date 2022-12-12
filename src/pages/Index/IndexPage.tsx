@@ -1,4 +1,3 @@
-import { rootRoute } from "../../routes/Router";
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import StatisticsWidget from "../../components/Dashboard/statistics-widget";
@@ -6,11 +5,6 @@ import BannerNotice from "../../components/Dashboard/banner-notice";
 import { useGetUserProfile } from "../../hooks/network/useGetUserProfile";
 import { useGetDashboardStats } from "../../hooks/network/useGetDashboardStats";
 import { useGetDashboardNoticeList } from "../../hooks/network/useGetDashboardNoticeList";
-
-export const indexRoute = rootRoute.createRoute({
-  path: "/",
-  component: IndexPage,
-});
 
 function IndexPage() {
   const userQuery = useGetUserProfile();

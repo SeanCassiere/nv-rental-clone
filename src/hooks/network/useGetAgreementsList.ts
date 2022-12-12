@@ -25,6 +25,13 @@ export function useGetAgreementsList(params: {
         accessToken: auth.user?.access_token || "",
         currentDate: new Date(),
         filters: params.filters,
+      }).then((dataObj) => {
+        const updated = dataObj.data.map((agreement: any) => ({
+          ...agreement,
+          FullName: agreement?.FirstName + " " + agreement?.LastName, // done for columns accessors
+        }));
+
+        return { ...dataObj, data: updated };
       }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),

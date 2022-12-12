@@ -1,26 +1,10 @@
 import {
-  Outlet,
   createReactRouter,
-  createRouteConfig,
   parseSearchWith,
   stringifySearchWith,
 } from "@tanstack/react-router";
 
-import { OidcAuthProvider } from "./OidcAuthProvider";
-import { indexRoute } from "../pages/Index/IndexPage";
-import { agreementsSearchRoute } from "../pages/AgreementsSearch/AgreementsSearchPage";
-
-export const rootRoute = createRouteConfig({
-  component: () => {
-    return (
-      <OidcAuthProvider>
-        <Outlet />
-      </OidcAuthProvider>
-    );
-  },
-});
-
-const routeConfig = rootRoute.addChildren([indexRoute, agreementsSearchRoute]);
+import { routeConfig } from "./routing";
 
 export const router = createReactRouter({
   routeConfig,
