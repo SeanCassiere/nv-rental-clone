@@ -2,8 +2,9 @@ import { createRouteConfig, Outlet } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { OidcAuthProvider } from "./OidcAuthProvider";
-import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage";
 import IndexPage from "../pages/Index/IndexPage";
+import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage";
+import AgreementViewPage from "../pages/AgreementView/AgreementViewPage";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -20,6 +21,10 @@ const indexRoute = rootRoute.createRoute({
   component: IndexPage,
 });
 
+const agreementsRoute = rootRoute.createRoute({
+  path: "agreements",
+});
+
 export const agreementFiltersModel = z
   .object({
     AgreementStatusName: z.string().optional(),
@@ -33,8 +38,8 @@ export const agreementFiltersModel = z
   })
   .optional();
 
-const agreementsSearchRoute = rootRoute.createRoute({
-  path: "/agreements",
+const agreementsIndexRoute = agreementsRoute.createRoute({
+  path: "/",
   component: AgreementsSearchPage,
   validateSearch: z.object({
     page: z.number().min(1).default(1),
@@ -49,7 +54,12 @@ const agreementsSearchRoute = rootRoute.createRoute({
   ],
 });
 
+const viewAgreementRoute = agreementsRoute.createRoute({
+  path: "$agreementId",
+  component: AgreementViewPage,
+});
+
 export const routeConfig = rootRoute.addChildren([
   indexRoute,
-  agreementsSearchRoute,
+  agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
 ]);

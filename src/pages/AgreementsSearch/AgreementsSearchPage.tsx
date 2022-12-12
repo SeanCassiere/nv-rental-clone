@@ -40,7 +40,22 @@ function AgreementsSearchPage() {
     const cols = data.map((column) => {
       return columnHelper.accessor(column.columnHeader as any, {
         header: () => column.columnHeaderDescription,
-        cell: (item) => item.getValue(),
+        cell: (item) => {
+          if (column.columnHeader === "AgreementNumber") {
+            const agreementId = item.table.getRow(item.row.id).original
+              .AgreementId;
+            return (
+              <Link
+                to="/agreements/$agreementId"
+                params={{ agreementId: String(agreementId) }}
+                className="font-medium text-teal-500"
+              >
+                {item.getValue()}
+              </Link>
+            );
+          }
+          return item.getValue();
+        },
       });
     });
     return cols;

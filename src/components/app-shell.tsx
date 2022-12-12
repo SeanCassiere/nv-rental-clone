@@ -35,14 +35,16 @@ const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       name: "Dashboard",
       href: "/",
       icon: RectangleGroupSolid,
-      current: path.pathname === "/",
+      current: path.routeId === "/",
       props: {},
     },
     {
       name: "Agreements",
       href: "/agreements",
       icon: DocumentTextSolid,
-      current: path.pathname.includes("/agreements"),
+      current:
+        path.routeId.includes("/agreements") ||
+        path.routeId.includes("/agreements/$agreementId"),
       props: {
         search: () => ({ page: 1, size: 10 }),
       },
