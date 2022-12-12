@@ -1,5 +1,6 @@
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 import React, { Fragment, useState } from "react";
+import { useAuth } from "react-oidc-context";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import { Link, useNearestMatch } from "@tanstack/react-router";
 import classNames from "classnames";
@@ -13,14 +14,19 @@ import {
   XMarkOutline,
 } from "./icons";
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+export function removeAllLocalStorageKeysForUser(
+  clientId: string,
+  userId: string
+) {
+  const localStorageKeyPrefix = `${clientId}:${userId}:`;
+  Object.keys(window.localStorage)
+    .filter((key) => key.startsWith(localStorageKeyPrefix))
+    .forEach((key) => window.localStorage.removeItem(key));
+}
 
 const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const auth = useAuth();
 
   const path = useNearestMatch();
 
@@ -39,6 +45,29 @@ const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       current: path.pathname.includes("/agreements"),
       props: {
         search: (search: any) => ({ ...search, page: 1, size: 10 }),
+      },
+    },
+  ];
+
+  const userNavigation = [
+    { name: "Your profile", type: "Link", props: {} },
+    { name: "Settings", type: "Link", props: {} },
+    {
+      name: "Sign out",
+      type: "Button",
+      props: {
+        onClick: () => {
+          if (
+            auth.user?.profile.navotar_clientid &&
+            auth.user?.profile.navotar_userid
+          ) {
+            removeAllLocalStorageKeysForUser(
+              auth.user?.profile.navotar_clientid,
+              auth.user?.profile.navotar_userid
+            );
+          }
+          auth.signoutRedirect();
+        },
       },
     },
   ];
@@ -261,17 +290,32 @@ const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <a
-                              href={item.href}
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              {item.name}
-                            </a>
-                          )}
+                          {({ active }) => {
+                            if (item.type === "Link") {
+                              return (
+                                <Link<any>
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                  {...item.props}
+                                >
+                                  {item.name}
+                                </Link>
+                              );
+                            }
+                            return (
+                              <button
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block w-full px-4 py-2 text-left text-sm text-gray-700"
+                                )}
+                                {...item.props}
+                              >
+                                {item.name}
+                              </button>
+                            );
+                          }}
                         </Menu.Item>
                       ))}
                     </Menu.Items>

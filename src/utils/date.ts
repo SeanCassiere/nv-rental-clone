@@ -1,4 +1,4 @@
-export function dateToQueryYearMonthDay(date: Date) {
+export function localDateToQueryYearMonthDay(date: Date) {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();

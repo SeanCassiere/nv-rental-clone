@@ -9,3 +9,14 @@ export type DashboardStatsType = {
   paymentDelay: number;
   pendingPayment: number;
 };
+
+export type DashboardNoticeType = {
+  id: string;
+  titleText: string;
+  titleTextShort: string;
+  actionText: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  link: string | null;
+  ignoreDismiss: boolean;
+};
