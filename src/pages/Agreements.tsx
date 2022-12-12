@@ -1,11 +1,13 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import AppShell from "../components/app-shell";
 import { useGetAgreementsList } from "../hooks/network/useGetAgreementsList";
+import { useGetModuleColumns } from "../hooks/network/useGetModuleColumns";
 import Protector from "../routes/Protector";
 
 const Agreements = () => {
   const { page: pageNumber = 1, size = 10 } = useSearch();
   const agreements = useGetAgreementsList({ page: pageNumber, pageSize: size });
+  const columns = useGetModuleColumns({ module: "agreements" });
 
   const noData = { ...agreements.data, data: undefined };
   return (
@@ -40,6 +42,17 @@ const Agreements = () => {
                 </Link>
               </div>
 
+              <div className="mt-5 overflow-x-scroll py-4 text-sm">
+                <div>Columns</div>
+                {columns.data
+                  .filter((col) => col.isSelected)
+                  .sort((col1, col2) => col1.orderIndex - col2.orderIndex)
+                  .map((col, i) => (
+                    <span key={col.columnHeader + i} className="mr-1">
+                      {col.columnHeader}
+                    </span>
+                  ))}
+              </div>
               <div className="mt-5 overflow-x-scroll py-4 text-sm">
                 {JSON.stringify(noData)}
               </div>
