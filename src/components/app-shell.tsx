@@ -44,7 +44,7 @@ const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       icon: DocumentTextSolid,
       current: path.pathname.includes("/agreements"),
       props: {
-        search: (search: any) => ({ ...search, page: 1, size: 10 }),
+        search: () => ({ page: 1, size: 10 }),
       },
     },
   ];
