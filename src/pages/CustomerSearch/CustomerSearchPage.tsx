@@ -1,13 +1,14 @@
-import { Fragment, useState } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
+import { createColumnHelper } from "@tanstack/react-table";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import ModuleTable from "../../components/PrimaryModule/ModuleTable";
+import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
-import { createColumnHelper } from "@tanstack/react-table";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
+import { customerFiltersModel } from "../../utils/schemas/customer";
 import type { CustomerListItemType } from "../../types/Customer";
 
 const columnHelper = createColumnHelper<CustomerListItemType>();
@@ -23,8 +24,6 @@ function CustomerSearchPage() {
     pageSize: size,
     filters: searchFilters,
   });
-
-  const [stateFilters, setStateFilters] = useState(searchFilters);
 
   const columnsData = useGetModuleColumns({ module: "customers" });
 
@@ -71,67 +70,28 @@ function CustomerSearchPage() {
             <h1 className="text-2xl font-semibold text-gray-900">Customers</h1>
           </div>
           <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-            <div className="my-2 grid grid-cols-8 gap-2 overflow-x-scroll py-4 text-sm">
-              {[...Object.entries(stateFilters)].map(([key, value]) => (
-                <Fragment key={key}>
-                  <div>{key}</div>
-                  <div>
-                    <input
-                      name={(stateFilters as unknown as any)[key]}
-                      value={`${value}`}
-                      onChange={(evt) => {
-                        setStateFilters((prev) => ({
-                          ...prev,
-                          [key]: evt.target.value,
-                        }));
-                      }}
-                    />
-                  </div>
-                </Fragment>
-              ))}
-
-              <Link
-                className="col-span-2 rounded bg-blue-500 py-2 px-4 text-center font-bold text-white hover:bg-blue-700"
-                to="/customers"
-                search={(s) => {
-                  const fill = stateFilters
-                    ? Object.entries(stateFilters).reduce(
-                        (acc, [key, value]) => {
-                          let storeValue: any = value;
-                          if (
-                            String(value).trim() === "undefined" ||
-                            String(value).trim() === "" ||
-                            typeof value === "undefined"
-                          )
-                            return acc;
-
-                          if (String(value) === "true") {
-                            storeValue = true;
-                          }
-                          if (String(value) === "false") {
-                            storeValue = false;
-                          }
-                          if (
-                            typeof value === "string" &&
-                            /^\d+$/.test(String(value))
-                          ) {
-                            storeValue = parseInt(value);
-                          }
-
-                          return {
-                            ...acc,
-                            [key]: storeValue,
-                          };
-                        },
-                        {}
-                      )
-                    : {};
-
-                  return { ...s, page: 1, size: 10, filters: fill };
-                }}
-              >
-                Commit
-              </Link>
+            <div className="my-2 py-4">
+              <ModuleSearchFilters
+                key={`module-filters-${JSON.stringify(searchFilters).length}`}
+                validationSchema={customerFiltersModel}
+                initialValues={searchFilters}
+                searchFiltersBlueprint={[
+                  {
+                    name: "Active",
+                    type: "single-dropdown",
+                    required: false,
+                    accessor: "active",
+                    label: "Active",
+                    options: [
+                      { value: "true", label: "true" },
+                      { value: "false", label: "false" },
+                    ],
+                  },
+                ]}
+                persistSearchFilters={{ page: 1, size: 10 }}
+                toLocation="/customers"
+                queryFilterKey="filters"
+              />
             </div>
 
             <div>

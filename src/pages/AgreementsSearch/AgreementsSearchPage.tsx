@@ -1,13 +1,14 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Fragment, useState } from "react";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import ModuleTable from "../../components/PrimaryModule/ModuleTable";
+import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
+import { agreementFiltersModel } from "../../utils/schemas/agreement";
 import type { AgreementListItemType } from "../../types/Agreement";
 
 const columnHelper = createColumnHelper<AgreementListItemType>();
@@ -20,7 +21,8 @@ function AgreementsSearchPage() {
     IsSearchOverdues:
       typeof filters?.IsSearchOverdues !== "undefined"
         ? filters?.IsSearchOverdues
-        : undefined,
+        : false,
+    StartDate: filters?.StartDate || undefined,
     EndDate: filters?.EndDate || undefined,
   };
 
@@ -29,8 +31,6 @@ function AgreementsSearchPage() {
     pageSize: size,
     filters: searchFilters,
   });
-
-  const [stateFilters, setStateFilters] = useState(searchFilters);
 
   const columnsData = useGetModuleColumns({ module: "agreements" });
 
@@ -78,67 +78,56 @@ function AgreementsSearchPage() {
             <h1 className="text-2xl font-semibold text-gray-900">Agreements</h1>
           </div>
           <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-            <div className="my-2 grid grid-cols-8 gap-2 overflow-x-scroll py-4 text-sm">
-              {[...Object.entries(stateFilters)].map(([key, value]) => (
-                <Fragment key={key}>
-                  <div>{key}</div>
-                  <div>
-                    <input
-                      name={(stateFilters as unknown as any)[key]}
-                      value={`${value}`}
-                      onChange={(evt) => {
-                        setStateFilters((prev) => ({
-                          ...prev,
-                          [key]: evt.target.value,
-                        }));
-                      }}
-                    />
-                  </div>
-                </Fragment>
-              ))}
-
-              <Link
-                className="col-span-2 rounded bg-blue-500 py-2 px-4 text-center font-bold text-white hover:bg-blue-700"
-                to="/agreements"
-                search={(s) => {
-                  const fill = stateFilters
-                    ? Object.entries(stateFilters).reduce(
-                        (acc, [key, value]) => {
-                          let storeValue = value;
-                          if (
-                            String(value).trim() === "undefined" ||
-                            String(value).trim() === "" ||
-                            typeof value === "undefined"
-                          )
-                            return acc;
-
-                          if (String(value) === "true") {
-                            storeValue = true;
-                          }
-                          if (String(value) === "false") {
-                            storeValue = false;
-                          }
-                          if (
-                            typeof value === "string" &&
-                            /^\d+$/.test(String(value))
-                          ) {
-                            storeValue = parseInt(value);
-                          }
-
-                          return {
-                            ...acc,
-                            [key]: storeValue,
-                          };
-                        },
-                        {}
-                      )
-                    : {};
-
-                  return { ...s, page: 1, size: 10, filters: fill };
-                }}
-              >
-                Commit
-              </Link>
+            <div className="my-2 py-4">
+              <ModuleSearchFilters
+                key={`module-filters-${JSON.stringify(searchFilters).length}`}
+                validationSchema={agreementFiltersModel}
+                initialValues={searchFilters}
+                searchFiltersBlueprint={[
+                  {
+                    name: "AgreementStatusName",
+                    type: "text",
+                    required: false,
+                    accessor: "AgreementStatusName",
+                    label: "Status Name",
+                  },
+                  {
+                    name: "Statuses",
+                    type: "number",
+                    required: false,
+                    accessor: "Statuses",
+                    label: "Status",
+                  },
+                  {
+                    name: "IsSearchOverdues",
+                    type: "single-dropdown",
+                    required: false,
+                    accessor: "IsSearchOverdues",
+                    label: "Search Overdues?",
+                    options: [
+                      { value: "true", label: "true" },
+                      { value: "false", label: "false" },
+                    ],
+                  },
+                  {
+                    name: "StartDate",
+                    type: "date",
+                    required: false,
+                    accessor: "StartDate",
+                    label: "Start date",
+                  },
+                  {
+                    name: "EndDate",
+                    type: "date",
+                    required: false,
+                    accessor: "EndDate",
+                    label: "End date",
+                  },
+                ]}
+                persistSearchFilters={{ page: 1, size: 10 }}
+                toLocation="/agreements"
+                queryFilterKey="filters"
+              />
             </div>
 
             <div>

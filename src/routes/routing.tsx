@@ -6,6 +6,8 @@ import IndexPage from "../pages/Index/IndexPage";
 import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage";
 import AgreementViewPage from "../pages/AgreementView/AgreementViewPage";
 import CustomerSearchPage from "../pages/CustomerSearch/CustomerSearchPage";
+import { agreementFiltersModel } from "../utils/schemas/agreement";
+import { customerFiltersModel } from "../utils/schemas/customer";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -23,17 +25,6 @@ const indexRoute = rootRoute.createRoute({
 });
 
 const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
-
-export const agreementFiltersModel = z.object({
-  AgreementStatusName: z.string().optional(),
-  Statuses: z.number().optional(),
-  IsSearchOverdues: z.boolean().optional(),
-  EndDate: z
-    .preprocess((arg) => {
-      if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
-    }, z.date())
-    .optional(),
-});
 
 const agreementsIndexRoute = agreementsRoute.createRoute({
   path: "/",
@@ -57,10 +48,6 @@ const viewAgreementRoute = agreementsRoute.createRoute({
 });
 
 const customersRoute = rootRoute.createRoute({ path: "customers" });
-
-export const customerFiltersModel = z.object({
-  active: z.boolean().default(true).optional(),
-});
 
 const customersIndexRoute = customersRoute.createRoute({
   path: "/",
