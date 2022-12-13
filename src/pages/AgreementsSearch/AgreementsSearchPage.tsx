@@ -48,7 +48,7 @@ function AgreementsSearchPage() {
               <Link
                 to="/agreements/$agreementId"
                 params={{ agreementId: String(agreementId) }}
-                className="font-medium text-teal-500"
+                className="font-medium text-teal-700"
               >
                 {item.getValue()}
               </Link>

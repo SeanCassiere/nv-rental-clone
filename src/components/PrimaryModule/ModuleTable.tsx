@@ -25,7 +25,7 @@ const ModuleTable = <T extends any>(
   return (
     <div className="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-sm">
       <table className="min-w-full table-auto divide-y divide-gray-300">
-        <thead className="bg-teal-500">
+        <thead className="bg-gray-200">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header, headerIdx) => (
@@ -33,7 +33,7 @@ const ModuleTable = <T extends any>(
                   key={header.id}
                   scope="col"
                   className={classNames(
-                    "select-none py-3.5 text-left text-base font-medium text-white",
+                    "select-none py-3.5 text-left text-base font-medium text-teal-900",
                     headerIdx === 0 ? "px-4 sm:pl-6" : "px-4"
                   )}
                 >
