@@ -83,7 +83,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
   const [values, setValues] = useState(props.initialValues);
   return (
     <form
-      className="grid grid-cols-1 gap-2 md:grid-cols-4"
+      className="grid grid-cols-1 gap-2 md:grid-cols-4 lg:grid-cols-6"
       onReset={(evt) => {
         evt.preventDefault();
         router.navigate<any>({
@@ -100,7 +100,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
         const result = props.validationSchema.safeParse(values);
 
         if (!result.success) {
-          console.log("failed", result.error);
+          console.error("failed submitting module filters\n\n", result.error);
           return;
         }
 
@@ -117,6 +117,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
     >
       {props.searchFiltersBlueprint.map((blueprint, idx) => (
         <RenderInput
+          key={`input-${blueprint.name}-${idx}`}
           blueprint={blueprint}
           value={values[blueprint.accessor]}
           onChange={(evt: any) => {
@@ -136,7 +137,6 @@ function ModuleSearchFilters<T extends KeyValueObject>(
 
             setValues((prev) => ({ ...prev, [blueprint.accessor]: insert }));
           }}
-          key={`${blueprint.name}-${idx}`}
         />
       ))}
       <button type="submit" className="bg-teal-500 px-4 py-1 text-white">
@@ -186,8 +186,10 @@ const RenderInput = <T extends KeyValueObject>({
           value={typeof value === "undefined" ? "" : value}
           onChange={onChange}
         >
-          {blueprint.options.map((option: any) => (
-            <option value={option.value}>{option.label}</option>
+          {blueprint.options.map((option: any, idx) => (
+            <option key={`${blueprint.name}-${idx}`} value={option.value}>
+              {option.label}
+            </option>
           ))}
         </select>
       </div>
