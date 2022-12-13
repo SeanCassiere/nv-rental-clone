@@ -1,13 +1,14 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
+import ModuleTable from "../../components/PrimaryModule/ModuleTable";
 import { useGetAgreementsList } from "../../hooks/network/useGetAgreementsList";
 import { useGetModuleColumns } from "../../hooks/network/useGetModuleColumns";
+import { useSaveModuleColumns } from "../../hooks/network/useSaveModuleColumns";
 import type { AgreementListItemType } from "../../types/Agreement";
-import ModuleTable from "../../components/PrimaryModule/ModuleTable";
 
 const columnHelper = createColumnHelper<AgreementListItemType>();
 
@@ -33,35 +34,41 @@ function AgreementsSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "agreements" });
 
-  const columns = useMemo(() => {
-    const data = columnsData.data
-      .filter((col) => col.isSelected)
-      .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
+  const visibleOrderedColumns = columnsData.data
+    .filter((col) => col.isSelected)
+    .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
 
-    const cols = data.map((column) =>
-      columnHelper.accessor(column.columnHeader as any, {
-        header: () => column.columnHeaderDescription,
-        cell: (item) => {
-          if (column.columnHeader === "AgreementNumber") {
-            const agreementId = item.table.getRow(item.row.id).original
-              .AgreementId;
-            return (
-              <Link
-                to="/agreements/$agreementId"
-                params={{ agreementId: String(agreementId) }}
-                className="font-medium text-teal-700"
-              >
-                {item.getValue()}
-              </Link>
-            );
-          }
-          return item.getValue();
-        },
-      })
-    );
+  const columnDefs = visibleOrderedColumns.map((column) =>
+    columnHelper.accessor(column.columnHeader as any, {
+      header: () => column.columnHeaderDescription,
+      cell: (item) => {
+        if (column.columnHeader === "AgreementNumber") {
+          const agreementId = item.table.getRow(item.row.id).original
+            .AgreementId;
+          return (
+            <Link
+              to="/agreements/$agreementId"
+              params={{ agreementId: String(agreementId) }}
+              className="font-medium text-teal-700"
+            >
+              {item.getValue()}
+            </Link>
+          );
+        }
 
-    return cols;
-  }, [columnsData.data]);
+        return item.getValue();
+      },
+    })
+  );
+
+  const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
+
+  const saveColumnsOrder = (newColumnOrder: string[]) => {
+    saveColumnsMutation.mutate({
+      allColumns: columnsData.data,
+      accessorKeys: newColumnOrder,
+    });
+  };
 
   return (
     <Protector>
@@ -136,12 +143,15 @@ function AgreementsSearchPage() {
 
             <div>
               <ModuleTable<AgreementListItemType>
+                key={`table-cols-${columnDefs.length}`}
                 data={agreementsData.data.data}
-                columns={columns}
+                columns={columnDefs}
                 noRows={
                   agreementsData.isLoading === false &&
                   agreementsData.data.data.length === 0
                 }
+                onColumnOrdering={saveColumnsOrder}
+                lockedColumns={["AgreementNumber"]}
               />
             </div>
             <div>

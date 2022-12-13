@@ -28,10 +28,12 @@ const DraggableColumnHeader = ({
   header,
   table,
   headerIdx,
+  isLocked,
 }: {
   header: Header<any, unknown>;
   headerIdx: number;
   table: Table<any>;
+  isLocked: boolean;
 }) => {
   const { getState, setColumnOrder } = table;
   const { columnOrder } = getState();
@@ -47,9 +49,13 @@ const DraggableColumnHeader = ({
       );
       setColumnOrder(newColumnOrder);
     },
+    canDrop() {
+      return !isLocked;
+    },
   });
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
+    canDrag: !isLocked,
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -68,8 +74,14 @@ const DraggableColumnHeader = ({
       )}
       style={{ opacity: isDragging ? 0.85 : 1 }}
     >
-      <div ref={previewRef} className="h-full w-full text-left">
-        <button ref={dragRef} className={classNames("py-3 text-left")}>
+      <div ref={previewRef} className={classNames("h-full w-full text-left")}>
+        <button
+          ref={dragRef}
+          className={classNames(
+            "py-3 text-left",
+            isLocked ? "cursor-no-drop" : ""
+          )}
+        >
           {header.isPlaceholder
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}
@@ -82,11 +94,14 @@ const DraggableColumnHeader = ({
 interface ModuleTableProps<T> {
   data: T[];
   columns: any[];
-  onRowReorderEnd?: () => void;
   noRows: boolean;
+  onColumnOrdering?: (accessorKeys: string[]) => void;
+  lockedColumns?: (keyof T)[];
 }
 
 const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
+  const lockedColumns = (props.lockedColumns || []) as string[];
+
   const [columns] = useState([...props.columns]);
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
     columns.map((col) => col.accessorKey)
@@ -96,10 +111,13 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     data: props.data,
     columns: props.columns,
     state: { columnOrder },
-    onColumnOrderChange: setColumnOrder,
+    onColumnOrderChange: (order) => {
+      setColumnOrder(order);
+      if (props.onColumnOrdering) {
+        props.onColumnOrdering(order as any);
+      }
+    },
     getCoreRowModel: getCoreRowModel(),
-    debugHeaders: true,
-    debugColumns: true,
   });
 
   return (
@@ -114,6 +132,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                   header={header}
                   headerIdx={headerIdx}
                   table={table}
+                  isLocked={lockedColumns.includes(header.id)}
                 />
               ))}
             </tr>

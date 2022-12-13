@@ -2,10 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchModuleColumns } from "../../api/columns";
 import type { ColumnListItemType } from "../../types/Column";
+import type { AppPrimaryModuleType } from "../../types/General";
 
-type ModuleType = "reservations" | "agreements" | "customers" | "vehicles";
-
-export function useGetModuleColumns({ module }: { module: ModuleType }) {
+export function useGetModuleColumns({
+  module,
+}: {
+  module: AppPrimaryModuleType;
+}) {
   const auth = useAuth();
   const query = useQuery<ColumnListItemType[]>({
     queryKey: [module, "columns"],
@@ -15,7 +18,14 @@ export function useGetModuleColumns({ module }: { module: ModuleType }) {
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
         module,
-      }).then((data) => mutateColumnAccessors(module, data)),
+      })
+        .then((data) => mutateColumnAccessors(module, data))
+        .then((cols) =>
+          cols.sort(
+            (col1, col2) =>
+              col1.columnHeaderSettingID - col2.columnHeaderSettingID // sort by columnHeaderSettingID
+          )
+        ),
     enabled: auth.isAuthenticated,
     initialData: makeInitialColumnAccessors(module),
   });
@@ -23,7 +33,7 @@ export function useGetModuleColumns({ module }: { module: ModuleType }) {
 }
 
 export function mutateColumnAccessors(
-  type: ModuleType,
+  type: AppPrimaryModuleType,
   data: ColumnListItemType[]
 ) {
   switch (type) {
@@ -50,7 +60,7 @@ export function mutateColumnAccessors(
   }
 }
 
-export function makeInitialColumnAccessors(module: ModuleType) {
+export function makeInitialColumnAccessors(module: AppPrimaryModuleType) {
   switch (module) {
     case "reservations":
       return [];
