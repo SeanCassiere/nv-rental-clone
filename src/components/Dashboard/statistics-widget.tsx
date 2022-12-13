@@ -90,6 +90,16 @@ const StatisticsWidget = ({
           title="Pending payment"
           icon={BankNotesOutline}
           value={statistics.pendingPayment.toString()}
+          linkProps={
+            {
+              to: "/agreements",
+              search: () => ({
+                page: 1,
+                size: 10,
+                filters: { Statuses: 5 },
+              }),
+            } as any
+          }
         />
       </li>
       <li>
