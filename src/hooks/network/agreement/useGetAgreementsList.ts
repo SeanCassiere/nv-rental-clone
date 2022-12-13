@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchAgreementsList } from "../../api/agreements";
-import { makeInitialApiData, type ResponseParsed } from "../../api/fetcher";
-import type { AgreementListItemType } from "../../types/Agreement";
+import { fetchAgreementsList } from "../../../api/agreements";
+import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
+import type { AgreementListItemType } from "../../../types/Agreement";
 
 export function useGetAgreementsList(params: {
   page: number;

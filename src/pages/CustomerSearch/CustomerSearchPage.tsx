@@ -1,30 +1,24 @@
-import { Link, useSearch } from "@tanstack/react-router";
-import { createColumnHelper } from "@tanstack/react-table";
 import { Fragment, useState } from "react";
+import { Link, useSearch } from "@tanstack/react-router";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import ModuleTable from "../../components/PrimaryModule/ModuleTable";
-import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
+import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
+import { createColumnHelper } from "@tanstack/react-table";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import type { AgreementListItemType } from "../../types/Agreement";
+import type { CustomerListItemType } from "../../types/Customer";
 
-const columnHelper = createColumnHelper<AgreementListItemType>();
+const columnHelper = createColumnHelper<CustomerListItemType>();
 
-function AgreementsSearchPage() {
+function CustomerSearchPage() {
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
   const searchFilters = {
-    AgreementStatusName: filters?.AgreementStatusName || undefined,
-    Statuses: filters?.Statuses || undefined,
-    IsSearchOverdues:
-      typeof filters?.IsSearchOverdues !== "undefined"
-        ? filters?.IsSearchOverdues
-        : undefined,
-    EndDate: filters?.EndDate || undefined,
+    active: typeof filters?.active !== "undefined" ? filters?.active : true,
   };
 
-  const agreementsData = useGetAgreementsList({
+  const customersData = useGetCustomersList({
     page: pageNumber,
     pageSize: size,
     filters: searchFilters,
@@ -32,23 +26,22 @@ function AgreementsSearchPage() {
 
   const [stateFilters, setStateFilters] = useState(searchFilters);
 
-  const columnsData = useGetModuleColumns({ module: "agreements" });
+  const columnsData = useGetModuleColumns({ module: "customers" });
 
   const visibleOrderedColumns = columnsData.data
     .filter((col) => col.isSelected)
     .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
 
   const columnDefs = visibleOrderedColumns.map((column) =>
-    columnHelper.accessor(column.columnHeader as any, {
+    columnHelper.accessor(column.searchText as any, {
       header: () => column.columnHeaderDescription,
       cell: (item) => {
-        if (column.columnHeader === "AgreementNumber") {
-          const agreementId = item.table.getRow(item.row.id).original
-            .AgreementId;
+        if (column.columnHeader === "FirstName" && column.isSelected === true) {
+          const customerId = item.table.getRow(item.row.id).original.CustomerId;
           return (
             <Link
               to="/agreements/$agreementId"
-              params={{ agreementId: String(agreementId) }}
+              params={{ agreementId: String(customerId) }}
               className="font-medium text-teal-700"
             >
               {item.getValue()}
@@ -61,7 +54,7 @@ function AgreementsSearchPage() {
     })
   );
 
-  const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
+  const saveColumnsMutation = useSaveModuleColumns({ module: "customers" });
 
   const saveColumnsOrder = (newColumnOrder: string[]) => {
     saveColumnsMutation.mutate({
@@ -75,7 +68,7 @@ function AgreementsSearchPage() {
       <AppShell>
         <div className="py-6">
           <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-            <h1 className="text-2xl font-semibold text-gray-900">Agreements</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Customers</h1>
           </div>
           <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
             <div className="my-2 grid grid-cols-8 gap-2 overflow-x-scroll py-4 text-sm">
@@ -99,12 +92,12 @@ function AgreementsSearchPage() {
 
               <Link
                 className="col-span-2 rounded bg-blue-500 py-2 px-4 text-center font-bold text-white hover:bg-blue-700"
-                to="/agreements"
+                to="/customers"
                 search={(s) => {
                   const fill = stateFilters
                     ? Object.entries(stateFilters).reduce(
                         (acc, [key, value]) => {
-                          let storeValue = value;
+                          let storeValue: any = value;
                           if (
                             String(value).trim() === "undefined" ||
                             String(value).trim() === "" ||
@@ -142,22 +135,22 @@ function AgreementsSearchPage() {
             </div>
 
             <div>
-              <ModuleTable<AgreementListItemType>
+              <ModuleTable
                 key={`table-cols-${columnDefs.length}`}
-                data={agreementsData.data.data}
+                data={customersData.data.data}
                 columns={columnDefs}
                 noRows={
-                  agreementsData.isLoading === false &&
-                  agreementsData.data.data.length === 0
+                  customersData.isLoading === false &&
+                  customersData.data.data.length === 0
                 }
                 onColumnOrdering={saveColumnsOrder}
-                lockedColumns={["AgreementNumber"]}
+                lockedColumns={["CustomerNumber"]}
               />
             </div>
             <div>
               <p>
                 <Link
-                  to="/agreements"
+                  to="/customers"
                   search={(search) => ({
                     ...search,
                     page: pageNumber === 1 ? 1 : pageNumber - 1,
@@ -168,11 +161,11 @@ function AgreementsSearchPage() {
                 </Link>
                 &nbsp;|&nbsp;
                 <Link
-                  to="/agreements"
+                  to="/customers"
                   search={(search) => ({
                     ...search,
                     page:
-                      pageNumber === agreementsData.data.totalPages
+                      pageNumber === customersData.data.totalPages
                         ? pageNumber
                         : pageNumber + 1,
                     size,
@@ -183,8 +176,8 @@ function AgreementsSearchPage() {
               </p>
               <p>
                 {JSON.stringify({
-                  totalPages: agreementsData.data.totalPages,
-                  totalRecords: agreementsData.data.totalRecords,
+                  totalPages: customersData.data.totalPages,
+                  totalRecords: customersData.data.totalRecords,
                 })}
               </p>
             </div>
@@ -195,4 +188,4 @@ function AgreementsSearchPage() {
   );
 }
 
-export default AgreementsSearchPage;
+export default CustomerSearchPage;

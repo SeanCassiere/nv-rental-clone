@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchDashboardStats } from "../../api/dashboard";
-import type { DashboardStatsType } from "../../types/Dashboard";
+import { fetchDashboardStats } from "../../../api/dashboard";
+import type { DashboardStatsType } from "../../../types/Dashboard";
 
 export function useGetDashboardStats({
   locationId,

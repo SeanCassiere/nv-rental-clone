@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveModuleColumns } from "../../api/columns";
+import { saveModuleColumns } from "../../../api/columns";
 import { useAuth } from "react-oidc-context";
-import type { ColumnListItemType } from "../../types/Column";
-import type { AppPrimaryModuleType } from "../../types/General";
+import type { ColumnListItemType } from "../../../types/Column";
+import type { AppPrimaryModuleType } from "../../../types/General";
 
 export function useSaveModuleColumns({
   module,

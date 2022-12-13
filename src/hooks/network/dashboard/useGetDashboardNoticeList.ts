@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchDashboardNoticeList } from "../../api/dashboard";
-import type { DashboardNoticeType } from "../../types/Dashboard";
+import { fetchDashboardNoticeList } from "../../../api/dashboard";
+import type { DashboardNoticeType } from "../../../types/Dashboard";
 
 export function useGetDashboardNoticeList() {
   const auth = useAuth();

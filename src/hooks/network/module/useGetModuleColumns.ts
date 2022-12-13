@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchModuleColumns } from "../../api/columns";
-import type { ColumnListItemType } from "../../types/Column";
-import type { AppPrimaryModuleType } from "../../types/General";
+import { fetchModuleColumns } from "../../../api/columns";
+import type { ColumnListItemType } from "../../../types/Column";
+import type { AppPrimaryModuleType } from "../../../types/General";
 
 export function useGetModuleColumns({
   module,
@@ -52,7 +52,17 @@ export function mutateColumnAccessors(
         return column;
       });
     case "customers":
-      return data;
+      return data.map((column) => {
+        if (column.columnHeader === "DateOfbirth") {
+          column.columnHeader = "DateOfbirth";
+          column.searchText = "DateOfbirth";
+        }
+        if (column.columnHeader === "CreatedByName") {
+          column.columnHeader = "CreatedByName";
+          column.searchText = "CreatedByName";
+        }
+        return column;
+      });
     case "vehicles":
       return data;
     default:
