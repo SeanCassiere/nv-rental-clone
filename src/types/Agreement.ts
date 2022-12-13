@@ -1,4 +1,5 @@
 export type AgreementListItemType = {
+  id: string; // this is added in useGetAgreementsList.ts
   FullName: string | null; // this is added in useGetAgreementsList.ts
   AgreementId: number;
   CreditCardNo: string | null;

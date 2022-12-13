@@ -37,8 +37,9 @@ function AgreementsSearchPage() {
     const data = columnsData.data
       .filter((col) => col.isSelected)
       .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
-    const cols = data.map((column) => {
-      return columnHelper.accessor(column.columnHeader as any, {
+
+    const cols = data.map((column) =>
+      columnHelper.accessor(column.columnHeader as any, {
         header: () => column.columnHeaderDescription,
         cell: (item) => {
           if (column.columnHeader === "AgreementNumber") {
@@ -56,8 +57,9 @@ function AgreementsSearchPage() {
           }
           return item.getValue();
         },
-      });
-    });
+      })
+    );
+
     return cols;
   }, [columnsData.data]);
 
@@ -69,7 +71,7 @@ function AgreementsSearchPage() {
             <h1 className="text-2xl font-semibold text-gray-900">Agreements</h1>
           </div>
           <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-            <div className="my-2 grid max-w-[400px] grid-cols-2 gap-2 overflow-x-scroll py-4 text-sm">
+            <div className="my-2 grid grid-cols-8 gap-2 overflow-x-scroll py-4 text-sm">
               {[...Object.entries(stateFilters)].map(([key, value]) => (
                 <Fragment key={key}>
                   <div>{key}</div>
@@ -133,7 +135,7 @@ function AgreementsSearchPage() {
             </div>
 
             <div>
-              <ModuleTable
+              <ModuleTable<AgreementListItemType>
                 data={agreementsData.data.data}
                 columns={columns}
                 noRows={

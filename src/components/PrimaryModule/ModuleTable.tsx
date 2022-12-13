@@ -1,10 +1,83 @@
-import { type PropsWithChildren } from "react";
+import { useState } from "react";
 import {
   getCoreRowModel,
   useReactTable,
   flexRender,
+  type Header,
+  type Table,
+  type ColumnOrderState,
+  type Column,
 } from "@tanstack/react-table";
 import classNames from "classnames";
+import { useDrag, useDrop } from "react-dnd";
+
+const reorderColumn = (
+  draggedColumnId: string,
+  targetColumnId: string,
+  columnOrder: string[]
+): ColumnOrderState => {
+  columnOrder.splice(
+    columnOrder.indexOf(targetColumnId),
+    0,
+    columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0] as string
+  );
+  return [...columnOrder];
+};
+
+const DraggableColumnHeader = ({
+  header,
+  table,
+  headerIdx,
+}: {
+  header: Header<any, unknown>;
+  headerIdx: number;
+  table: Table<any>;
+}) => {
+  const { getState, setColumnOrder } = table;
+  const { columnOrder } = getState();
+  const { column } = header;
+
+  const [, dropRef] = useDrop({
+    accept: "column",
+    drop: (draggedColumn: Column<any>) => {
+      const newColumnOrder = reorderColumn(
+        draggedColumn.id,
+        column.id,
+        columnOrder
+      );
+      setColumnOrder(newColumnOrder);
+    },
+  });
+
+  const [{ isDragging }, dragRef, previewRef] = useDrag({
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    item: () => column,
+    type: "column",
+  });
+
+  return (
+    <th
+      ref={dropRef}
+      colSpan={header.colSpan}
+      scope="col"
+      className={classNames(
+        "text-base font-medium text-teal-900",
+        headerIdx === 0 ? "px-4 sm:pl-6" : "px-4"
+      )}
+      style={{ opacity: isDragging ? 0.85 : 1 }}
+    >
+      <div ref={previewRef} className="h-full w-full text-left">
+        <button ref={dragRef} className={classNames("py-3 text-left")}>
+          {header.isPlaceholder
+            ? null
+            : flexRender(header.column.columnDef.header, header.getContext())}
+        </button>
+      </div>
+    </th>
+  );
+};
 
 interface ModuleTableProps<T> {
   data: T[];
@@ -13,13 +86,20 @@ interface ModuleTableProps<T> {
   noRows: boolean;
 }
 
-const ModuleTable = <T extends any>(
-  props: PropsWithChildren<ModuleTableProps<T>>
-) => {
+const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
+  const [columns] = useState([...props.columns]);
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
+    columns.map((col) => col.accessorKey)
+  );
+
   const table = useReactTable({
     data: props.data,
     columns: props.columns,
+    state: { columnOrder },
+    onColumnOrderChange: setColumnOrder,
     getCoreRowModel: getCoreRowModel(),
+    debugHeaders: true,
+    debugColumns: true,
   });
 
   return (
@@ -29,21 +109,12 @@ const ModuleTable = <T extends any>(
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header, headerIdx) => (
-                <th
+                <DraggableColumnHeader
                   key={header.id}
-                  scope="col"
-                  className={classNames(
-                    "select-none py-3.5 text-left text-base font-medium text-teal-900",
-                    headerIdx === 0 ? "px-4 sm:pl-6" : "px-4"
-                  )}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
+                  header={header}
+                  headerIdx={headerIdx}
+                  table={table}
+                />
               ))}
             </tr>
           ))}

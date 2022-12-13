@@ -28,6 +28,7 @@ export function useGetAgreementsList(params: {
       }).then((dataObj) => {
         const updated = dataObj.data.map((agreement: any) => ({
           ...agreement,
+          id: `${agreement?.AgreementId}`,
           FullName: agreement?.FirstName + " " + agreement?.LastName, // done for columns accessors
         }));
 
