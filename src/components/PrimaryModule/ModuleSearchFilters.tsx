@@ -145,7 +145,9 @@ function ModuleSearchFilters<T extends KeyValueObject>(
       <button type="reset" className="bg-gray-500 px-4 py-1 text-white">
         Clear
       </button>
-      <div className="overflow-scroll text-xs">{JSON.stringify(values)}</div>
+      <div className="col-span-1 overflow-scroll text-xs sm:col-span-2 md:col-span-5">
+        {JSON.stringify(values)}
+      </div>
     </form>
   );
 }
