@@ -7,8 +7,11 @@ import LoggedOutPage from "../pages/LoggedOut/LoggedOutPage";
 import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage";
 import AgreementViewPage from "../pages/AgreementView/AgreementViewPage";
 import CustomerSearchPage from "../pages/CustomerSearch/CustomerSearchPage";
+import ReservationsSearchPage from "../pages/ReservationsSearch/ReservationsSearchPage";
+
 import { agreementFiltersModel } from "../utils/schemas/agreement";
 import { customerFiltersModel } from "../utils/schemas/customer";
+import { reservationFiltersModel } from "../utils/schemas/reservation";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -71,9 +74,28 @@ const customersIndexRoute = customersRoute.createRoute({
   ],
 });
 
+const reservationsRoute = rootRoute.createRoute({ path: "reservations" });
+
+const reservationsIndexRoute = reservationsRoute.createRoute({
+  path: "/",
+  component: ReservationsSearchPage,
+  validateSearch: z.object({
+    page: z.number().min(1).default(1),
+    size: z.number().min(1).default(10),
+    filters: reservationFiltersModel.optional(),
+  }).parse,
+  preSearchFilters: [
+    (search) => ({
+      page: search.page || 1,
+      size: search.size || 10,
+    }),
+  ],
+});
+
 export const routeConfig = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
   agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
+  reservationsRoute.addChildren([reservationsIndexRoute]),
   customersRoute.addChildren([customersIndexRoute]),
 ]);

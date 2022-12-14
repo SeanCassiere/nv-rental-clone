@@ -38,7 +38,17 @@ export function mutateColumnAccessors(
 ) {
   switch (type) {
     case "reservations":
-      return data;
+      return data.map((column) => {
+        if (column.columnHeader === "CheckoutDate") {
+          column.columnHeader = "StartDate";
+          column.searchText = "StartDate";
+        }
+        if (column.columnHeader === "CheckinDate") {
+          column.columnHeader = "EndDate";
+          column.searchText = "EndDate";
+        }
+        return column;
+      });
     case "agreements":
       return data.map((column) => {
         if (column.columnHeader === "CustomerName") {

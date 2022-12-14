@@ -13,6 +13,7 @@ import {
   HamburgerMenuOutline,
   XMarkOutline,
   UsersSolid,
+  BookFilled,
 } from "./icons";
 
 export function removeAllLocalStorageKeysForUser(
@@ -48,6 +49,17 @@ const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         path.routeId.includes("/customers/$customerId"),
       props: {
         search: () => ({ page: 1, size: 10, filters: { active: true } }),
+      },
+    },
+    {
+      name: "Reservations",
+      href: "/reservations",
+      icon: BookFilled,
+      current:
+        path.routeId.includes("/reservations") ||
+        path.routeId.includes("/reservations/$reservationId"),
+      props: {
+        search: () => ({ page: 1, size: 10 }),
       },
     },
     {
