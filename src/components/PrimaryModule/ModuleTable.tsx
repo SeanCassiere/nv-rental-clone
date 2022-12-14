@@ -4,89 +4,77 @@ import {
   useReactTable,
   flexRender,
   type Header,
-  type Table,
   type ColumnOrderState,
-  type Column,
 } from "@tanstack/react-table";
 import classNames from "classnames";
-import { useDrag, useDrop } from "react-dnd";
+import {
+  DndContext,
+  useSensors,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  closestCorners,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+import {
+  arrayMove,
+  SortableContext,
+  horizontalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
-const reorderColumn = (
-  draggedColumnId: string,
-  targetColumnId: string,
-  columnOrder: string[]
-): ColumnOrderState => {
-  columnOrder.splice(
-    columnOrder.indexOf(targetColumnId),
-    0,
-    columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0] as string
-  );
-  return [...columnOrder];
-};
-
-const DraggableColumnHeader = ({
-  header,
-  table,
-  headerIdx,
-  isLocked,
-}: {
+interface DraggableColumnHeaderProps {
   header: Header<any, unknown>;
-  headerIdx: number;
-  table: Table<any>;
   isLocked: boolean;
-}) => {
-  const { getState, setColumnOrder } = table;
-  const { columnOrder } = getState();
-  const { column } = header;
+}
+const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
+  const { header, isLocked } = props;
+  const isDisabled = header.index === 0 || isLocked;
 
-  const [, dropRef] = useDrop({
-    accept: "column",
-    drop: (draggedColumn: Column<any>) => {
-      const newColumnOrder = reorderColumn(
-        draggedColumn.id,
-        column.id,
-        columnOrder
-      );
-      setColumnOrder(newColumnOrder);
-    },
-    canDrop() {
-      return !isLocked;
-    },
-  });
-
-  const [{ isDragging }, dragRef, previewRef] = useDrag({
-    canDrag: !isLocked,
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    item: () => column,
-    type: "column",
+  const {
+    attributes,
+    listeners,
+    setDraggableNodeRef,
+    setDroppableNodeRef,
+    transform,
+    isDragging,
+    transition,
+    over,
+  } = useSortable({
+    id: header.id,
+    disabled: isDisabled,
   });
 
   return (
     <th
-      ref={dropRef}
+      ref={isDisabled ? undefined : setDroppableNodeRef}
       colSpan={header.colSpan}
       scope="col"
       className={classNames(
         "text-base font-medium text-teal-900",
-        headerIdx === 0 ? "px-4 sm:pl-6" : "px-4"
+        header.index === 0 ? "px-4 sm:pl-6" : "px-4"
       )}
-      style={{ opacity: isDragging ? 0.85 : 1 }}
     >
-      <div ref={previewRef} className={classNames("h-full w-full text-left")}>
-        <button
-          ref={dragRef}
-          className={classNames(
-            "py-3 text-left",
-            isLocked ? "cursor-no-drop" : ""
-          )}
-        >
-          {header.isPlaceholder
-            ? null
-            : flexRender(header.column.columnDef.header, header.getContext())}
-        </button>
-      </div>
+      <button
+        ref={setDraggableNodeRef}
+        className={classNames(
+          "h-full w-full py-3 text-left",
+          (isDragging && isDisabled) || (isDragging && over?.disabled)
+            ? "cursor-no-drop"
+            : "",
+          isDisabled ? "cursor-pointer" : "cursor-grab",
+          isDragging ? "bg-gray-300" : "bg-gray-200"
+        )}
+        style={{ transform: CSS.Translate.toString(transform), transition }}
+        {...listeners}
+        {...attributes}
+      >
+        {header.isPlaceholder
+          ? null
+          : flexRender(header.column.columnDef.header, header.getContext())}
+      </button>
     </th>
   );
 };
@@ -120,53 +108,84 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {})
+  );
+
+  const handleDndDragEnd = (evt: DragEndEvent) => {
+    if (!evt.over || evt.over.disabled || evt.active.id === evt.over.id) return;
+
+    const draggingId = evt.active.id;
+    const overId = evt.over.id;
+    const newOrder = arrayMove(
+      columnOrder,
+      columnOrder.indexOf(draggingId as string),
+      columnOrder.indexOf(overId as string)
+    );
+    table.setColumnOrder(newOrder);
+  };
+
   return (
     <div className="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-sm">
-      <table className="min-w-full table-auto divide-y divide-gray-300">
-        <thead className="bg-gray-200">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header, headerIdx) => (
-                <DraggableColumnHeader
-                  key={header.id}
-                  header={header}
-                  headerIdx={headerIdx}
-                  table={table}
-                  isLocked={lockedColumns.includes(header.id)}
-                />
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
-          {props.noRows === false &&
-            table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell, cellIdx) => (
-                  <td
-                    key={cell.id}
-                    className={classNames(
-                      "whitespace-nowrap py-4 text-base font-normal text-gray-700",
-                      cellIdx === 0 ? "px-4 sm:pl-6" : "px-4"
-                    )}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragEnd={handleDndDragEnd}
+        modifiers={[restrictToHorizontalAxis]}
+      >
+        <table className="min-w-full table-auto divide-y divide-gray-300">
+          <thead className="bg-gray-200">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                <SortableContext
+                  items={columnOrder}
+                  strategy={horizontalListSortingStrategy}
+                >
+                  {headerGroup.headers.map((header) => (
+                    <DraggableColumnHeader
+                      key={header.id}
+                      header={header}
+                      isLocked={lockedColumns.includes(header.id)}
+                    />
+                  ))}
+                </SortableContext>
               </tr>
             ))}
-          {props.noRows && (
-            <tr>
-              <td
-                colSpan={table.getAllColumns().length}
-                className="whitespace-nowrap px-4 py-4 text-center text-base text-gray-700"
-              >
-                No data
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white">
+            {props.noRows === false &&
+              table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell, cellIdx) => (
+                    <td
+                      key={cell.id}
+                      className={classNames(
+                        "whitespace-nowrap py-4 text-base font-normal text-gray-700",
+                        cellIdx === 0 ? "px-4 sm:pl-6" : "px-4"
+                      )}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            {props.noRows && (
+              <tr>
+                <td
+                  colSpan={table.getAllColumns().length}
+                  className="whitespace-nowrap px-4 py-4 text-center text-base text-gray-700"
+                >
+                  No data
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </DndContext>
     </div>
   );
 };
