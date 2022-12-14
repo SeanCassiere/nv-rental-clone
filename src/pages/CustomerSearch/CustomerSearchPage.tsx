@@ -16,7 +16,8 @@ const columnHelper = createColumnHelper<CustomerListItemType>();
 function CustomerSearchPage() {
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
   const searchFilters = {
-    active: typeof filters?.active !== "undefined" ? filters?.active : true,
+    Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
+    SortDirection: filters?.SortDirection || "ASC",
   };
 
   const customersData = useGetCustomersList({
@@ -80,11 +81,22 @@ function CustomerSearchPage() {
                     name: "Active",
                     type: "single-dropdown",
                     required: false,
-                    accessor: "active",
+                    accessor: "Active",
                     label: "Active",
                     options: [
                       { value: "true", label: "true" },
                       { value: "false", label: "false" },
+                    ],
+                  },
+                  {
+                    name: "SortDirection",
+                    type: "single-dropdown",
+                    required: false,
+                    accessor: "SortDirection",
+                    label: "Sort Direction",
+                    options: [
+                      { value: "ASC", label: "ASC" },
+                      { value: "DESC", label: "DESC" },
                     ],
                   },
                 ]}
