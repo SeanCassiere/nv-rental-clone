@@ -16,7 +16,10 @@ const columnHelper = createColumnHelper<ReservationListItemType>();
 function ReservationsSearchPage() {
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
   const searchFilters = {
-    SortDirection: filters?.SortDirection || "DESC",
+    Statuses: filters?.Statuses || undefined,
+    CreatedDateFrom: filters?.CreatedDateFrom || undefined,
+    CreatedDateTo: filters?.CreatedDateTo || undefined,
+    SortDirection: filters?.SortDirection || "ASC",
   };
 
   const reservationsData = useGetReservationsList({
@@ -78,6 +81,27 @@ function ReservationsSearchPage() {
                 validationSchema={reservationFiltersModel}
                 initialValues={searchFilters}
                 searchFiltersBlueprint={[
+                  {
+                    name: "Statuses",
+                    type: "number",
+                    required: false,
+                    accessor: "Statuses",
+                    label: "Status",
+                  },
+                  {
+                    name: "CreatedDateFrom",
+                    type: "date",
+                    required: false,
+                    accessor: "CreatedDateFrom",
+                    label: "Start date",
+                  },
+                  {
+                    name: "CreatedDateTo",
+                    type: "date",
+                    required: false,
+                    accessor: "CreatedDateTo",
+                    label: "End date",
+                  },
                   {
                     name: "SortDirection",
                     type: "single-dropdown",

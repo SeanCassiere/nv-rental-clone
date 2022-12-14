@@ -24,6 +24,7 @@ export function useGetReservationsList(params: {
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
         filters: params.filters,
+        clientDate: new Date(),
       }).then((dataObj) => {
         const updated = dataObj.data.map((reservation: any) => ({
           ...reservation,

@@ -28,6 +28,20 @@ const StatisticsWidget = ({
           title="Reservation"
           icon={CreditCardOutline}
           value={statistics.todaysReservationCount.toString()}
+          linkProps={
+            {
+              to: "/reservations",
+              search: () => ({
+                page: 1,
+                size: 10,
+                filters: {
+                  Statuses: 2,
+                  CreatedDateFrom: localDateToQueryYearMonthDay(new Date()),
+                  CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
+                },
+              }),
+            } as any
+          }
         />
       </li>
       <li>
