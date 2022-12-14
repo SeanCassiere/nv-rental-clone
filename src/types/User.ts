@@ -1,0 +1,24 @@
+export type UserProfileType = {
+  clientId: number;
+  userID: number;
+  userName: string;
+  firstName: string | null;
+  lastName: string | null;
+  fullName: null;
+  email: string | null;
+  userRoleID: number;
+  language: string | null;
+  roleName: "Admin";
+  locationName: string | null;
+  lastLogin: string | null;
+  isReservationEmail: boolean;
+  isActive: boolean;
+  phone: string | null;
+  scanAccessKey: string | null;
+  languageName: string | null;
+  lockOut: boolean;
+  locationList: null;
+  userIdV3: string;
+  overrideDateFormat: string | null;
+  overrideTimeFormat: string | null;
+};
