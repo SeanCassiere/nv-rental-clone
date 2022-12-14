@@ -24,6 +24,8 @@ function AgreementsSearchPage() {
         : false,
     StartDate: filters?.StartDate || undefined,
     EndDate: filters?.EndDate || undefined,
+    SortBy: filters?.SortBy || "CreatedDate",
+    SortDirection: filters?.SortDirection || "DESC",
   };
 
   const agreementsData = useGetAgreementsList({
@@ -122,6 +124,25 @@ function AgreementsSearchPage() {
                     required: false,
                     accessor: "EndDate",
                     label: "End date",
+                  },
+                  {
+                    name: "SortBy",
+                    type: "single-dropdown",
+                    required: false,
+                    accessor: "SortBy",
+                    label: "Sort by",
+                    options: [{ value: "CreatedDate", label: "Created date" }],
+                  },
+                  {
+                    name: "SortDirection",
+                    type: "single-dropdown",
+                    required: false,
+                    accessor: "SortDirection",
+                    label: "Sort Direction",
+                    options: [
+                      { value: "ASC", label: "ASC" },
+                      { value: "DESC", label: "DESC" },
+                    ],
                   },
                 ]}
                 persistSearchFilters={{ page: 1, size: 10 }}

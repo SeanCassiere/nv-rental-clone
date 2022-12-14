@@ -13,6 +13,8 @@ export const agreementFiltersModel = z
     IsSearchOverdues: z.coerce.boolean().optional(),
     StartDate: z.coerce.date().optional(),
     EndDate: z.coerce.date().optional(),
+    SortBy: z.string().optional(),
+    SortDirection: z.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
     if (StartDate && EndDate && StartDate > EndDate) {
