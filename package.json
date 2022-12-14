@@ -9,6 +9,10 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.0.6",
+    "@dnd-kit/modifiers": "^6.0.1",
+    "@dnd-kit/sortable": "^7.0.1",
+    "@dnd-kit/utilities": "^3.2.1",
     "@headlessui/react": "^1.7.5",
     "@tanstack/react-query": "^4.20.4",
     "@tanstack/react-query-devtools": "^4.20.4",
@@ -17,8 +21,6 @@
     "classnames": "^2.3.2",
     "oidc-client-ts": "^2.2.0",
     "react": "18.2.0",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "18.2.0",
     "react-oidc-context": "^2.2.0",
     "zod": "^3.20.2"
