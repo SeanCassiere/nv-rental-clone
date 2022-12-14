@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { OidcAuthProvider } from "./OidcAuthProvider";
 import IndexPage from "../pages/Index/IndexPage";
+import LoggedOutPage from "../pages/LoggedOut/LoggedOutPage";
 import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage";
 import AgreementViewPage from "../pages/AgreementView/AgreementViewPage";
 import CustomerSearchPage from "../pages/CustomerSearch/CustomerSearchPage";
@@ -22,6 +23,11 @@ export const rootRoute = createRouteConfig({
 const indexRoute = rootRoute.createRoute({
   path: "/",
   component: IndexPage,
+});
+
+const loggedOutRoute = rootRoute.createRoute({
+  path: "/logged-out",
+  component: LoggedOutPage,
 });
 
 const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
@@ -67,6 +73,7 @@ const customersIndexRoute = customersRoute.createRoute({
 
 export const routeConfig = rootRoute.addChildren([
   indexRoute,
+  loggedOutRoute,
   agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
   customersRoute.addChildren([customersIndexRoute]),
 ]);
