@@ -20,3 +20,16 @@ export type DashboardNoticeType = {
   link: string | null;
   ignoreDismiss: boolean;
 };
+
+export type DashboardWidgetListItemType = {
+  widgetID: string;
+  widgetName: string;
+  widgetScale: string; // eg: "6"
+  widgetPosition: number;
+  widgetMappingID: number;
+  clientID: number;
+  userID: number;
+  widgetUserPosition: number;
+  isEditable: boolean;
+  isDeleted: boolean;
+};

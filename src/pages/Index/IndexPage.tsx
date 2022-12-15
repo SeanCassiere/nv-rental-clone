@@ -2,17 +2,29 @@ import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import StatisticsWidget from "../../components/Dashboard/statistics-widget";
 import BannerNotice from "../../components/Dashboard/banner-notice";
-import { useGetUserProfile } from "../../hooks/network/user/useGetUserProfile";
+import DashboardDndWidgetGrid from "../../components/Dashboard/dnd-widget-grid";
+
+import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
+import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
+import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
 
 function IndexPage() {
-  const userQuery = useGetUserProfile();
   const statistics = useGetDashboardStats({
     locationId: 0,
     clientDate: new Date(),
   });
+
+  const widgetList = useGetDashboardWidgetList();
+
   const noticeList = useGetDashboardNoticeList();
+
+  const saveDashboardWidgetsMutation = useSaveDashboardWidgetList();
+
+  const handleWidgetSortingEnd = (widgets: DashboardWidgetItemParsed[]) => {
+    saveDashboardWidgetsMutation.mutate({ widgets });
+  };
 
   return (
     <Protector>
@@ -31,12 +43,13 @@ function IndexPage() {
           <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
             <StatisticsWidget statistics={statistics.data} />
 
-            <div className="py-4">
-              <div className="border-4 border-dashed border-gray-200 bg-white">
-                <pre className="min-h-[50px] overflow-x-scroll text-sm">
-                  {JSON.stringify(userQuery.data, null, 2)}
-                </pre>
-              </div>
+            <div className="mt-4">
+              <DashboardDndWidgetGrid
+                key={`${JSON.stringify(widgetList.data)}`}
+                widgets={widgetList.data}
+                selectedLocationIds={[0]}
+                onWidgetSortingEnd={handleWidgetSortingEnd}
+              />
             </div>
           </div>
         </div>
