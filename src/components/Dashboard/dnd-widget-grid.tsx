@@ -7,7 +7,7 @@ import {
   useSensor,
   MouseSensor,
   TouchSensor,
-  closestCenter,
+  closestCorners,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -19,6 +19,13 @@ import { CSS } from "@dnd-kit/utilities";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 
+function sortByUserPositionFn(
+  widgetA: DashboardWidgetItemParsed,
+  widgetB: DashboardWidgetItemParsed
+) {
+  return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
+}
+
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
   selectedLocationIds: number[];
@@ -27,8 +34,12 @@ interface DashboardDndWidgetGridProps {
 const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   const { widgets: widgetList, onWidgetSortingEnd } = props;
 
-  const [widgets, setWidgets] = useState([...widgetList]);
-  const widgetIdsList = widgets.map((widget) => widget.widgetID);
+  const [widgets, setWidgets] = useState([
+    ...widgetList.sort(sortByUserPositionFn),
+  ]);
+  const widgetIdsList = widgets
+    .filter((widget) => widget.isDeleted === false)
+    .map((widget) => widget.widgetID);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
@@ -46,10 +57,10 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
       widgetIdsList.indexOf(draggingId as string),
       widgetIdsList.indexOf(overId as string)
     );
-    const reorderedWidgetsList = reorderBasedOnWidgetIdPositions(
-      widgets,
-      newWidgetIdOrder
-    );
+    const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
+      widgets: widgetList,
+      orderedWidgetIds: newWidgetIdOrder,
+    });
     setWidgets(reorderedWidgetsList);
     onWidgetSortingEnd(reorderedWidgetsList);
   };
@@ -57,13 +68,18 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={closestCorners}
       onDragEnd={handleDragEnd}
     >
       <div className="grid min-h-[500px] w-full grid-cols-1 gap-4 md:grid-cols-12">
-        <SortableContext items={widgetIdsList} strategy={rectSortingStrategy}>
+        <SortableContext
+          key={widgetIdsList.toString()}
+          items={widgetIdsList}
+          strategy={rectSortingStrategy}
+        >
           {widgets
             .filter((widget) => widget.isDeleted === false)
+            .sort(sortByUserPositionFn)
             .map((widget) => (
               <WidgetSizingContainer
                 widget={widget}
@@ -76,25 +92,40 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   );
 };
 
-function reorderBasedOnWidgetIdPositions(
-  widgets: DashboardWidgetItemParsed[],
-  orderedWidgetIds: string[]
-): DashboardWidgetItemParsed[] {
-  const copiedWidgets = [...widgets];
+function reorderBasedOnWidgetIdPositions({
+  widgets,
+  orderedWidgetIds,
+}: {
+  widgets: DashboardWidgetItemParsed[];
+  orderedWidgetIds: string[];
+}): DashboardWidgetItemParsed[] {
+  const copiedWidgetsWithoutDeleted = [
+    ...widgets.filter((w) => w.isDeleted === false).sort(sortByUserPositionFn),
+  ];
   const returnableWidgets: DashboardWidgetItemParsed[] = [];
-  if (copiedWidgets.length !== orderedWidgetIds.length) {
-    return copiedWidgets;
+
+  if (copiedWidgetsWithoutDeleted.length !== orderedWidgetIds.length) {
+    return copiedWidgetsWithoutDeleted;
   }
 
   orderedWidgetIds.forEach((widgetId, index) => {
-    const widget = copiedWidgets.find((widget) => widget.widgetID === widgetId);
+    const widget = copiedWidgetsWithoutDeleted.find(
+      (widget) => widget.widgetID === widgetId
+    );
     if (widget) {
       widget.widgetUserPosition = index + 1;
       returnableWidgets.push(widget);
     }
   });
 
-  return returnableWidgets;
+  widgets
+    .filter((w) => w.isDeleted)
+    .forEach((widget, index) => {
+      widget.widgetUserPosition = returnableWidgets.length + index + 1;
+      returnableWidgets.push(widget);
+    });
+
+  return returnableWidgets.sort(sortByUserPositionFn);
 }
 
 function WidgetSizingContainer({

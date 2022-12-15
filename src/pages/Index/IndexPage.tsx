@@ -4,10 +4,10 @@ import StatisticsWidget from "../../components/Dashboard/statistics-widget";
 import BannerNotice from "../../components/Dashboard/banner-notice";
 import DashboardDndWidgetGrid from "../../components/Dashboard/dnd-widget-grid";
 
+import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
-import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
 
 function IndexPage() {

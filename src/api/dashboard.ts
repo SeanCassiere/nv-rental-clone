@@ -94,8 +94,8 @@ export const saveDashboardWidgetItem = async (
   const body = {
     ...opts.widget,
     widgetScale: String(opts.widget.widgetScale),
-    clientID: opts.clientId,
-    userID: opts.userId,
+    clientID: Number(opts.clientId),
+    userID: Number(opts.userId),
   };
 
   return await callV3Api(makeUrl("/v3/dashboard", {}), {

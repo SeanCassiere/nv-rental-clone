@@ -20,33 +20,7 @@ export function useSaveDashboardWidgetList() {
           accessToken: auth.user?.access_token || "",
         })
       );
-      Promise.all(savePromises);
-    },
-    onMutate: async (variables) => {
-      // Cancel any outgoing refetches
-      // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries(["dashboard", "widgets"]);
-
-      // Snapshot the previous value
-      const previousWidgets = queryClient.getQueryData([
-        "dashboard",
-        "widgets",
-      ]);
-
-      // Optimistically update to the new value
-      queryClient.setQueryData(["dashboard", "widgets"], ((old: any[]) => [
-        ...(old ? old : []),
-        ...variables.widgets,
-      ]) as any);
-
-      // Return a context object with the snapshotted value
-      return { previousWidgets };
-    },
-    onError: (_, __, context) => {
-      queryClient.setQueryData(
-        ["dashboard", "widgets"],
-        context?.previousWidgets || []
-      );
+      await Promise.all(savePromises);
     },
     onSettled: () => {
       queryClient.invalidateQueries(["dashboard", "widgets"]);
