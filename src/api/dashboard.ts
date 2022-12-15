@@ -1,6 +1,9 @@
 import type { DashboardNoticeType } from "../types/Dashboard";
 import { localDateToQueryYearMonthDay } from "../utils/date";
-import { dashboardWidgetItemListSchema } from "../utils/schemas/dashboard";
+import {
+  dashboardWidgetItemListSchema,
+  type DashboardWidgetItemParsed,
+} from "../utils/schemas/dashboard";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchDashboardStats = async (
@@ -83,4 +86,23 @@ export const fetchDashboardWidgetList = async (opts: CommonAuthParams) => {
       },
     }
   ).then((res) => dashboardWidgetItemListSchema.parse(res.data));
+};
+
+export const saveDashboardWidgetItem = async (
+  opts: { widget: DashboardWidgetItemParsed } & CommonAuthParams
+) => {
+  const body = {
+    ...opts.widget,
+    widgetScale: String(opts.widget.widgetScale),
+    clientID: opts.clientId,
+    userID: opts.userId,
+  };
+
+  return await callV3Api(makeUrl("/v3/dashboard", {}), {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      Authorization: `Bearer ${opts.accessToken}`,
+    },
+  });
 };

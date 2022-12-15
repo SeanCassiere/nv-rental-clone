@@ -8,6 +8,7 @@ import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashbo
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
 
 function IndexPage() {
   const statistics = useGetDashboardStats({
@@ -19,9 +20,10 @@ function IndexPage() {
 
   const noticeList = useGetDashboardNoticeList();
 
+  const saveDashboardWidgetsMutation = useSaveDashboardWidgetList();
+
   const handleWidgetSortingEnd = (widgets: DashboardWidgetItemParsed[]) => {
-    // TODO: Save the new widget order to the server
-    console.log("TODO: Save the new widget order to the server\n", widgets);
+    saveDashboardWidgetsMutation.mutate({ widgets });
   };
 
   return (
