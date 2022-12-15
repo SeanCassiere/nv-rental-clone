@@ -1,5 +1,6 @@
 import type { DashboardNoticeType } from "../types/Dashboard";
 import { localDateToQueryYearMonthDay } from "../utils/date";
+import { dashboardWidgetItemListSchema } from "../utils/schemas/dashboard";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchDashboardStats = async (
@@ -68,4 +69,18 @@ export const fetchDashboardNoticeList = async () => {
     }
   );
   return mapped.filter((notice) => notice !== null) as any[];
+};
+
+export const fetchDashboardWidgetList = async (opts: CommonAuthParams) => {
+  return await callV3Api(
+    makeUrl(`/v3/dashboard`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => dashboardWidgetItemListSchema.parse(res.data));
 };

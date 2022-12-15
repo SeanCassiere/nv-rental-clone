@@ -5,6 +5,7 @@ import BannerNotice from "../../components/Dashboard/banner-notice";
 import { useGetUserProfile } from "../../hooks/network/user/useGetUserProfile";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
+import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 
 function IndexPage() {
   const userQuery = useGetUserProfile();
@@ -12,6 +13,9 @@ function IndexPage() {
     locationId: 0,
     clientDate: new Date(),
   });
+
+  const widgetList = useGetDashboardWidgetList();
+
   const noticeList = useGetDashboardNoticeList();
 
   return (
@@ -32,6 +36,11 @@ function IndexPage() {
             <StatisticsWidget statistics={statistics.data} />
 
             <div className="py-4">
+              <div className="mb-2 border-4 border-dashed border-gray-200 bg-white">
+                <pre className="min-h-[50px] overflow-x-scroll text-sm">
+                  {JSON.stringify(widgetList.data, null, 2)}
+                </pre>
+              </div>
               <div className="border-4 border-dashed border-gray-200 bg-white">
                 <pre className="min-h-[50px] overflow-x-scroll text-sm">
                   {JSON.stringify(userQuery.data, null, 2)}
