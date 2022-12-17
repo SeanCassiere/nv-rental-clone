@@ -3,13 +3,16 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
-import ModuleTable from "../../components/PrimaryModule/ModuleTable";
+import ModuleTable, {
+  type ColumnVisibilityGraph,
+} from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { reservationFiltersModel } from "../../utils/schemas/reservation";
 import type { ReservationListItemType } from "../../types/Reservation";
+import { sortColumnOrder } from "../../utils/ordering";
 
 const columnHelper = createColumnHelper<ReservationListItemType>();
 
@@ -30,12 +33,9 @@ function ReservationsSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "reservations" });
 
-  const visibleOrderedColumns = columnsData.data
-    .filter((col) => col.isSelected)
-    .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
-
-  const columnDefs = visibleOrderedColumns.map((column) =>
+  const columnDefs = columnsData.data.sort(sortColumnOrder).map((column) =>
     columnHelper.accessor(column.columnHeader as any, {
+      id: column.columnHeader,
       header: () => column.columnHeaderDescription,
       cell: (item) => {
         if (column.columnHeader === "ReservationNumber") {
@@ -50,7 +50,6 @@ function ReservationsSearchPage() {
             </Link>
           );
         }
-
         return item.getValue();
       },
     })
@@ -63,6 +62,14 @@ function ReservationsSearchPage() {
       allColumns: columnsData.data,
       accessorKeys: newColumnOrder,
     });
+  };
+
+  const saveColumnVisibility = (graph: ColumnVisibilityGraph) => {
+    const newColumnsData = columnsData.data.map((col) => {
+      col.isSelected = graph[col.columnHeader] || false;
+      return col;
+    });
+    saveColumnsMutation.mutate({ allColumns: newColumnsData });
   };
 
   return (
@@ -120,8 +127,8 @@ function ReservationsSearchPage() {
               />
             </div>
 
-            <div>
-              <ModuleTable<ReservationListItemType>
+            <div className="shadow">
+              <ModuleTable
                 key={`table-cols-${columnDefs.length}`}
                 data={reservationsData.data.data}
                 columns={columnDefs}
@@ -129,8 +136,11 @@ function ReservationsSearchPage() {
                   reservationsData.isLoading === false &&
                   reservationsData.data.data.length === 0
                 }
-                onColumnOrdering={saveColumnsOrder}
+                onColumnOrderChange={saveColumnsOrder}
                 lockedColumns={["ReservationNumber"]}
+                rawColumnsData={columnsData.data}
+                showColumnPicker
+                onColumnVisibilityChange={saveColumnVisibility}
               />
             </div>
             <div>

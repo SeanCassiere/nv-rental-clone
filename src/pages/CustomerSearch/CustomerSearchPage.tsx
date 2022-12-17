@@ -3,7 +3,9 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
-import ModuleTable from "../../components/PrimaryModule/ModuleTable";
+import ModuleTable, {
+  type ColumnVisibilityGraph,
+} from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -28,31 +30,34 @@ function CustomerSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "customers" });
 
-  const visibleOrderedColumns = columnsData.data
-    .filter((col) => col.isSelected)
-    .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
+  const columnDefs = columnsData.data
+    .sort((col1, col2) => col1.orderIndex - col2.orderIndex)
+    .map((column) =>
+      columnHelper.accessor(column.searchText as any, {
+        id: column.columnHeader,
+        header: () => column.columnHeaderDescription,
+        cell: (item) => {
+          if (
+            column.columnHeader === "FirstName" &&
+            column.isSelected === true
+          ) {
+            const customerId = item.table.getRow(item.row.id).original
+              .CustomerId;
+            return (
+              <Link
+                to="/agreements/$agreementId"
+                params={{ agreementId: String(customerId) }}
+                className="font-medium text-teal-700"
+              >
+                {item.getValue()}
+              </Link>
+            );
+          }
 
-  const columnDefs = visibleOrderedColumns.map((column) =>
-    columnHelper.accessor(column.searchText as any, {
-      header: () => column.columnHeaderDescription,
-      cell: (item) => {
-        if (column.columnHeader === "FirstName" && column.isSelected === true) {
-          const customerId = item.table.getRow(item.row.id).original.CustomerId;
-          return (
-            <Link
-              to="/agreements/$agreementId"
-              params={{ agreementId: String(customerId) }}
-              className="font-medium text-teal-700"
-            >
-              {item.getValue()}
-            </Link>
-          );
-        }
-
-        return item.getValue();
-      },
-    })
-  );
+          return item.getValue();
+        },
+      })
+    );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "customers" });
 
@@ -61,6 +66,14 @@ function CustomerSearchPage() {
       allColumns: columnsData.data,
       accessorKeys: newColumnOrder,
     });
+  };
+
+  const saveColumnVisibility = (graph: ColumnVisibilityGraph) => {
+    const newColumnsData = columnsData.data.map((col) => {
+      col.isSelected = graph[col.columnHeader] || false;
+      return col;
+    });
+    saveColumnsMutation.mutate({ allColumns: newColumnsData });
   };
 
   return (
@@ -106,7 +119,7 @@ function CustomerSearchPage() {
               />
             </div>
 
-            <div>
+            <div className="shadow">
               <ModuleTable
                 key={`table-cols-${columnDefs.length}`}
                 data={customersData.data.data}
@@ -115,8 +128,11 @@ function CustomerSearchPage() {
                   customersData.isLoading === false &&
                   customersData.data.data.length === 0
                 }
-                onColumnOrdering={saveColumnsOrder}
+                onColumnOrderChange={saveColumnsOrder}
                 lockedColumns={["CustomerNumber"]}
+                rawColumnsData={columnsData.data}
+                showColumnPicker
+                onColumnVisibilityChange={saveColumnVisibility}
               />
             </div>
             <div>

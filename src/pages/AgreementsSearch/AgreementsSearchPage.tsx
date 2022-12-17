@@ -3,7 +3,9 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
-import ModuleTable from "../../components/PrimaryModule/ModuleTable";
+import ModuleTable, {
+  type ColumnVisibilityGraph,
+} from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -36,32 +38,31 @@ function AgreementsSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "agreements" });
 
-  const visibleOrderedColumns = columnsData.data
-    .filter((col) => col.isSelected)
-    .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
+  const columnDefs = columnsData.data
+    .sort((col1, col2) => col1.orderIndex - col2.orderIndex)
+    .map((column) =>
+      columnHelper.accessor(column.columnHeader as any, {
+        id: column.columnHeader,
+        header: () => column.columnHeaderDescription,
+        cell: (item) => {
+          if (column.columnHeader === "AgreementNumber") {
+            const agreementId = item.table.getRow(item.row.id).original
+              .AgreementId;
+            return (
+              <Link
+                to="/agreements/$agreementId"
+                params={{ agreementId: String(agreementId) }}
+                className="font-medium text-teal-700"
+              >
+                {item.getValue()}
+              </Link>
+            );
+          }
 
-  const columnDefs = visibleOrderedColumns.map((column) =>
-    columnHelper.accessor(column.columnHeader as any, {
-      header: () => column.columnHeaderDescription,
-      cell: (item) => {
-        if (column.columnHeader === "AgreementNumber") {
-          const agreementId = item.table.getRow(item.row.id).original
-            .AgreementId;
-          return (
-            <Link
-              to="/agreements/$agreementId"
-              params={{ agreementId: String(agreementId) }}
-              className="font-medium text-teal-700"
-            >
-              {item.getValue()}
-            </Link>
-          );
-        }
-
-        return item.getValue();
-      },
-    })
-  );
+          return item.getValue();
+        },
+      })
+    );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
 
@@ -70,6 +71,14 @@ function AgreementsSearchPage() {
       allColumns: columnsData.data,
       accessorKeys: newColumnOrder,
     });
+  };
+
+  const saveColumnVisibility = (graph: ColumnVisibilityGraph) => {
+    const newColumnsData = columnsData.data.map((col) => {
+      col.isSelected = graph[col.columnHeader] || false;
+      return col;
+    });
+    saveColumnsMutation.mutate({ allColumns: newColumnsData });
   };
 
   return (
@@ -151,8 +160,8 @@ function AgreementsSearchPage() {
               />
             </div>
 
-            <div>
-              <ModuleTable<AgreementListItemType>
+            <div className="shadow">
+              <ModuleTable
                 key={`table-cols-${columnDefs.length}`}
                 data={agreementsData.data.data}
                 columns={columnDefs}
@@ -160,8 +169,11 @@ function AgreementsSearchPage() {
                   agreementsData.isLoading === false &&
                   agreementsData.data.data.length === 0
                 }
-                onColumnOrdering={saveColumnsOrder}
+                onColumnOrderChange={saveColumnsOrder}
                 lockedColumns={["AgreementNumber"]}
+                rawColumnsData={columnsData.data}
+                showColumnPicker
+                onColumnVisibilityChange={saveColumnVisibility}
               />
             </div>
             <div>
