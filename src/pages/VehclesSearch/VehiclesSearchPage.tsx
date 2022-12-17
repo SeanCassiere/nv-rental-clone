@@ -3,7 +3,9 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
-import ModuleTable from "../../components/PrimaryModule/ModuleTable";
+import ModuleTable, {
+  type ColumnVisibilityGraph,
+} from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -28,31 +30,30 @@ function VehiclesSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "vehicles" });
 
-  const visibleOrderedColumns = columnsData.data
-    .filter((col) => col.isSelected)
-    .sort((col1, col2) => col1.orderIndex - col2.orderIndex);
+  const columnDefs = columnsData.data
+    .sort((col1, col2) => col1.orderIndex - col2.orderIndex)
+    .map((column) =>
+      columnHelper.accessor(column.columnHeader as any, {
+        id: column.columnHeader,
+        header: () => column.columnHeaderDescription,
+        cell: (item) => {
+          if (column.columnHeader === "VehicleNo") {
+            const vehicleId = item.table.getRow(item.row.id).original.id;
+            return (
+              <Link
+                to="/agreements/$agreementId"
+                params={{ agreementId: String(vehicleId) }}
+                className="font-medium text-teal-700"
+              >
+                {item.getValue()}
+              </Link>
+            );
+          }
 
-  const columnDefs = visibleOrderedColumns.map((column) =>
-    columnHelper.accessor(column.columnHeader as any, {
-      header: () => column.columnHeaderDescription,
-      cell: (item) => {
-        if (column.columnHeader === "VehicleNo") {
-          const vehicleId = item.table.getRow(item.row.id).original.id;
-          return (
-            <Link
-              to="/agreements/$agreementId"
-              params={{ agreementId: String(vehicleId) }}
-              className="font-medium text-teal-700"
-            >
-              {item.getValue()}
-            </Link>
-          );
-        }
-
-        return item.getValue();
-      },
-    })
-  );
+          return item.getValue();
+        },
+      })
+    );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "vehicles" });
 
@@ -61,6 +62,14 @@ function VehiclesSearchPage() {
       allColumns: columnsData.data,
       accessorKeys: newColumnOrder,
     });
+  };
+
+  const saveColumnVisibility = (graph: ColumnVisibilityGraph) => {
+    const newColumnsData = columnsData.data.map((col) => {
+      col.isSelected = graph[col.columnHeader] || false;
+      return col;
+    });
+    saveColumnsMutation.mutate({ allColumns: newColumnsData });
   };
 
   return (
@@ -106,8 +115,8 @@ function VehiclesSearchPage() {
               />
             </div>
 
-            <div>
-              <ModuleTable<VehicleListItemType>
+            <div className="shadow">
+              <ModuleTable
                 key={`table-cols-${columnDefs.length}`}
                 data={vehiclesData.data.data}
                 columns={columnDefs}
@@ -115,8 +124,11 @@ function VehiclesSearchPage() {
                   vehiclesData.isLoading === false &&
                   vehiclesData.data.data.length === 0
                 }
-                onColumnOrdering={saveColumnsOrder}
+                onColumnOrderChange={saveColumnsOrder}
                 lockedColumns={["VehicleNo"]}
+                rawColumnsData={columnsData.data}
+                showColumnPicker
+                onColumnVisibilityChange={saveColumnVisibility}
               />
             </div>
             <div>

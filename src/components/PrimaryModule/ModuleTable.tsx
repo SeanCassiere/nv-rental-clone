@@ -24,6 +24,11 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Menu } from "@headlessui/react";
+
+import { EyeSlashOutline } from "../icons";
+import type { ColumnListItemType } from "../../types/Column";
+import { sortColumnOrder } from "../../utils/ordering";
 
 interface DraggableColumnHeaderProps {
   header: Header<any, unknown>;
@@ -32,6 +37,7 @@ interface DraggableColumnHeaderProps {
 const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
   const { header, isLocked } = props;
   const isDisabled = header.index === 0 || isLocked;
+  // const isDisabled = false;
 
   const {
     attributes,
@@ -79,31 +85,55 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
   );
 };
 
+export type ColumnVisibilityGraph = { [columnHeader: string]: boolean };
+
 interface ModuleTableProps<T> {
   data: T[];
   columns: any[];
+  rawColumnsData: ColumnListItemType[];
   noRows: boolean;
-  onColumnOrdering?: (accessorKeys: string[]) => void;
+  onColumnOrderChange?: (accessorKeys: string[]) => void;
   lockedColumns?: (keyof T)[];
+  showColumnPicker?: boolean;
+  onColumnVisibilityChange?: (visibilityGraph: ColumnVisibilityGraph) => void;
 }
 
 const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   const lockedColumns = (props.lockedColumns || []) as string[];
 
+  const showExtraActions = props.showColumnPicker;
+
+  const [hasVisibilityChanges, setHasVisibilityChanges] = useState(false);
+
   const [columns] = useState([...props.columns]);
+
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
     columns.map((col) => col.accessorKey)
+  );
+  const [columnVisibility, setColumnVisibility] = useState(
+    props.rawColumnsData
+      .sort(sortColumnOrder)
+      .reduce(
+        (acc, col) => ({ ...acc, [col.columnHeader]: col.isSelected }),
+        {}
+      )
   );
 
   const table = useReactTable({
     data: props.data,
     columns: props.columns,
-    state: { columnOrder },
+    state: {
+      columnOrder,
+      columnVisibility,
+    },
     onColumnOrderChange: (order) => {
       setColumnOrder(order);
-      if (props.onColumnOrdering) {
-        props.onColumnOrdering(order as any);
+      if (props.onColumnOrderChange) {
+        props.onColumnOrderChange(order as any);
       }
+    },
+    onColumnVisibilityChange: (changesFunc) => {
+      setColumnVisibility(changesFunc);
     },
     getCoreRowModel: getCoreRowModel(),
   });
@@ -126,67 +156,132 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     table.setColumnOrder(newOrder);
   };
 
+  const getColumnDescription = (headerName: string) => {
+    const find = props.rawColumnsData.find(
+      (col) => col.columnHeader === headerName
+    );
+    const description = find ? find.columnHeaderDescription : "Not found";
+    return description;
+  };
+
   return (
-    <div className="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-sm">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragEnd={handleDndDragEnd}
-        modifiers={[restrictToHorizontalAxis]}
-      >
-        <table className="min-w-full table-auto divide-y divide-gray-300">
-          <thead className="bg-gray-200">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                <SortableContext
-                  items={columnOrder}
-                  strategy={horizontalListSortingStrategy}
+    <>
+      {showExtraActions && (
+        <div className="flex w-[100%] items-center justify-end bg-gray-200 px-4 pt-4 pb-2">
+          {props.showColumnPicker && (
+            <div className="relative">
+              <Menu>
+                <Menu.Button className="rounded-full bg-gray-300 p-2 text-xs text-teal-600">
+                  <EyeSlashOutline className="h-5 w-5" />
+                </Menu.Button>
+                <Menu.Items
+                  onBlur={() => {
+                    if (!hasVisibilityChanges) return;
+                    setHasVisibilityChanges(false);
+                    if (props.onColumnVisibilityChange) {
+                      props.onColumnVisibilityChange(columnVisibility);
+                    }
+                  }}
+                  className="absolute top-12 right-0 max-h-96 w-72 overflow-y-auto bg-white py-2 shadow md:max-h-80 md:w-64"
                 >
-                  {headerGroup.headers.map((header) => (
-                    <DraggableColumnHeader
-                      key={header.id}
-                      header={header}
-                      isLocked={lockedColumns.includes(header.id)}
-                    />
-                  ))}
-                </SortableContext>
-              </tr>
-            ))}
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {props.noRows === false &&
-              table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell, cellIdx) => (
-                    <td
-                      key={cell.id}
-                      className={classNames(
-                        "whitespace-nowrap py-4 text-base font-normal text-gray-700",
-                        cellIdx === 0 ? "px-4 sm:pl-6" : "px-4"
-                      )}
+                  {table.getAllLeafColumns().map((column) => (
+                    <Menu.Item
+                      key={`select-column-${column.id}`}
+                      disabled={lockedColumns.includes(column.id)}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+                      {() => (
+                        <>
+                          <div className="flex items-center gap-2 py-2 px-4 hover:bg-gray-50">
+                            <input
+                              type="checkbox"
+                              checked={column.getIsVisible()}
+                              onChange={(evt) => {
+                                setHasVisibilityChanges(true);
+                                column.getToggleVisibilityHandler()(evt);
+                              }}
+                              id={`html-for-${column.id}`}
+                              name={`html-for-${column.id}`}
+                              className="rounded-full text-teal-500 disabled:text-gray-400"
+                              disabled={lockedColumns.includes(column.id)}
+                            />
+                            <label
+                              className="w-full select-none text-gray-600"
+                              htmlFor={`html-for-${column.id}`}
+                            >
+                              {getColumnDescription(column.id)}
+                            </label>
+                          </div>
+                        </>
                       )}
-                    </td>
+                    </Menu.Item>
                   ))}
+                </Menu.Items>
+              </Menu>
+            </div>
+          )}
+        </div>
+      )}
+      <div className="overflow-x-auto md:rounded-sm">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragEnd={handleDndDragEnd}
+          modifiers={[restrictToHorizontalAxis]}
+        >
+          <table className="min-w-full table-auto divide-y divide-gray-300">
+            <thead className="bg-gray-200">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  <SortableContext
+                    items={columnOrder}
+                    strategy={horizontalListSortingStrategy}
+                  >
+                    {headerGroup.headers.map((header) => (
+                      <DraggableColumnHeader
+                        key={header.id}
+                        header={header}
+                        isLocked={lockedColumns.includes(header.id)}
+                      />
+                    ))}
+                  </SortableContext>
                 </tr>
               ))}
-            {props.noRows && (
-              <tr>
-                <td
-                  colSpan={table.getAllColumns().length}
-                  className="whitespace-nowrap px-4 py-4 text-center text-base text-gray-700"
-                >
-                  No data
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </DndContext>
-    </div>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {props.noRows === false &&
+                table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell, cellIdx) => (
+                      <td
+                        key={cell.id}
+                        className={classNames(
+                          "whitespace-nowrap py-4 text-base font-normal text-gray-700",
+                          cellIdx === 0 ? "px-4 sm:pl-6" : "px-4"
+                        )}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              {props.noRows && (
+                <tr>
+                  <td
+                    colSpan={table.getAllColumns().length}
+                    className="whitespace-nowrap px-4 py-4 text-center text-base text-gray-700"
+                  >
+                    No data
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </DndContext>
+      </div>
+    </>
   );
 };
 
