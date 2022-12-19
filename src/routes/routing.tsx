@@ -8,7 +8,8 @@ import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage
 import AgreementViewPage from "../pages/AgreementView/AgreementViewPage";
 import CustomerSearchPage from "../pages/CustomerSearch/CustomerSearchPage";
 import ReservationsSearchPage from "../pages/ReservationsSearch/ReservationsSearchPage";
-import VehiclesSearchPage from "../pages/VehclesSearch/VehiclesSearchPage";
+import VehiclesSearchPage from "../pages/VehiclesSearch/VehiclesSearchPage";
+import ReservationViewPage from "../pages/ReservationView/ReservationViewPage";
 
 import { agreementFiltersModel } from "../utils/schemas/agreement";
 import { customerFiltersModel } from "../utils/schemas/customer";
@@ -92,6 +93,10 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
     }),
   ],
 });
+const viewReservationRoute = reservationsRoute.createRoute({
+  path: "$reservationId",
+  component: ReservationViewPage,
+});
 
 // Vehicle Routes
 const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
@@ -115,7 +120,7 @@ export const routeConfig = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
   agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
-  reservationsRoute.addChildren([reservationsIndexRoute]),
+  reservationsRoute.addChildren([reservationsIndexRoute, viewReservationRoute]),
   customersRoute.addChildren([customersIndexRoute]),
   vehiclesRoute.addChildren([vehiclesIndexRoute]),
 ]);
