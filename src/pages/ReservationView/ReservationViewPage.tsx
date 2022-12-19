@@ -6,12 +6,18 @@ import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 
 function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const reservationId = params.reservationId || "";
+
+  const rentalRatesSummary = useGetModuleRentalRatesSummary({
+    module: "reservations",
+    referenceId: reservationId,
+  });
 
   return (
     <Protector>
@@ -55,8 +61,15 @@ function ReservationViewPage() {
               <div className="bg-white">Reservation block 1</div>
               <div className="bg-white">Reservation block 2</div>
             </div>
+            {/*  */}
             <div className="flex flex-col gap-4 md:col-span-5">
-              <div className="bg-white">Reservation summary</div>
+              <div className="overflow-x-scroll bg-white text-xs">
+                <pre>
+                  <code>
+                    {JSON.stringify(rentalRatesSummary.data, null, 2)}
+                  </code>
+                </pre>
+              </div>
             </div>
           </div>
         </div>

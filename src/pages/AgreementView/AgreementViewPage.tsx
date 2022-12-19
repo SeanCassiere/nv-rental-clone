@@ -6,12 +6,18 @@ import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 
 function AgreementViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const agreementId = params.agreementId || "";
+
+  const rentalRatesSummary = useGetModuleRentalRatesSummary({
+    module: "agreements",
+    referenceId: agreementId,
+  });
 
   return (
     <Protector>
@@ -53,8 +59,15 @@ function AgreementViewPage() {
               <div className="bg-white">Agreement block 1</div>
               <div className="bg-white">Agreement block 2</div>
             </div>
+            {/*  */}
             <div className="flex flex-col gap-4 md:col-span-5">
-              <div className="bg-white">Agreement summary</div>
+              <div className="overflow-x-scroll bg-white text-xs">
+                <pre>
+                  <code>
+                    {JSON.stringify(rentalRatesSummary.data, null, 2)}
+                  </code>
+                </pre>
+              </div>
             </div>
           </div>
         </div>
