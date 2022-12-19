@@ -28,7 +28,7 @@ import { Menu } from "@headlessui/react";
 
 import { EyeSlashOutline } from "../icons";
 import type { ColumnListItemType } from "../../types/Column";
-import { sortColumnOrder } from "../../utils/ordering";
+import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
 interface DraggableColumnHeaderProps {
   header: Header<any, unknown>;
@@ -112,7 +112,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   );
   const [columnVisibility, setColumnVisibility] = useState(
     props.rawColumnsData
-      .sort(sortColumnOrder)
+      .sort(sortColOrderByOrderIndex)
       .reduce(
         (acc, col) => ({ ...acc, [col.columnHeader]: col.isSelected }),
         {}
@@ -136,6 +136,9 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       setColumnVisibility(changesFunc);
     },
     getCoreRowModel: getCoreRowModel(),
+    // debugTable: true,
+    debugHeaders: true,
+    // debugColumns: true,
   });
 
   const sensors = useSensors(
