@@ -44,8 +44,8 @@ function ReservationsSearchPage() {
             const reservationId = item.table.getRow(item.row.id).original.id;
             return (
               <Link
-                to="/agreements/$agreementId"
-                params={{ agreementId: String(reservationId) }}
+                to="/reservations/$reservationId"
+                params={{ reservationId: String(reservationId) }}
                 className="font-medium text-teal-700"
               >
                 {item.getValue()}
