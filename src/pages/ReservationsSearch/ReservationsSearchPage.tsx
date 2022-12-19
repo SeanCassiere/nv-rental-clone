@@ -10,7 +10,7 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { reservationFiltersModel } from "../../utils/schemas/reservation";
+import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import type { ReservationListItemType } from "../../types/Reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
@@ -87,7 +87,7 @@ function ReservationsSearchPage() {
             <div className="my-2 py-4">
               <ModuleSearchFilters
                 key={`module-filters-${JSON.stringify(searchFilters).length}`}
-                validationSchema={reservationFiltersModel}
+                validationSchema={ReservationFiltersSchema}
                 initialValues={searchFilters}
                 searchFiltersBlueprint={[
                   {

@@ -6,7 +6,7 @@ import { z } from "zod";
 //   }, z.date())
 //   .optional(),
 
-export const agreementFiltersModel = z
+export const AgreementFiltersSchema = z
   .object({
     AgreementStatusName: z.string().optional(),
     Statuses: z.coerce.number().optional(),

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const dashboardWidgetItemSchema = z.object({
+const DashboardWidgetItemSchema = z.object({
   widgetID: z.string(),
   widgetName: z.string(),
   widgetScale: z.coerce.number(),
@@ -12,7 +12,7 @@ const dashboardWidgetItemSchema = z.object({
   // clientID: z.number(),
   // userID: z.number(),
 });
-export const dashboardWidgetItemListSchema = z.array(dashboardWidgetItemSchema);
+export const DashboardWidgetItemListSchema = z.array(DashboardWidgetItemSchema);
 export type DashboardWidgetItemParsed = z.infer<
-  typeof dashboardWidgetItemSchema
+  typeof DashboardWidgetItemSchema
 >;
