@@ -1,6 +1,6 @@
 import type { ColumnListItemType } from "../types/Column";
 
-export function sortColumnOrder(
+export function sortColOrderByOrderIndex(
   col1: ColumnListItemType,
   col2: ColumnListItemType
 ) {

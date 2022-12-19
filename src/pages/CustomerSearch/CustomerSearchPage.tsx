@@ -12,6 +12,7 @@ import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColu
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { customerFiltersModel } from "../../utils/schemas/customer";
 import type { CustomerListItemType } from "../../types/Customer";
+import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
 const columnHelper = createColumnHelper<CustomerListItemType>();
 
@@ -31,9 +32,9 @@ function CustomerSearchPage() {
   const columnsData = useGetModuleColumns({ module: "customers" });
 
   const columnDefs = columnsData.data
-    .sort((col1, col2) => col1.orderIndex - col2.orderIndex)
+    .sort(sortColOrderByOrderIndex)
     .map((column) =>
-      columnHelper.accessor(column.searchText as any, {
+      columnHelper.accessor(column.columnHeader as any, {
         id: column.columnHeader,
         header: () => column.columnHeaderDescription,
         cell: (item) => {
@@ -61,14 +62,14 @@ function CustomerSearchPage() {
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "customers" });
 
-  const saveColumnsOrder = (newColumnOrder: string[]) => {
+  const handleSaveColumnsOrder = (newColumnOrder: string[]) => {
     saveColumnsMutation.mutate({
       allColumns: columnsData.data,
       accessorKeys: newColumnOrder,
     });
   };
 
-  const saveColumnVisibility = (graph: ColumnVisibilityGraph) => {
+  const handleSaveColumnVisibility = (graph: ColumnVisibilityGraph) => {
     const newColumnsData = columnsData.data.map((col) => {
       col.isSelected = graph[col.columnHeader] || false;
       return col;
@@ -128,11 +129,11 @@ function CustomerSearchPage() {
                   customersData.isLoading === false &&
                   customersData.data.data.length === 0
                 }
-                onColumnOrderChange={saveColumnsOrder}
+                onColumnOrderChange={handleSaveColumnsOrder}
                 lockedColumns={["CustomerNumber"]}
                 rawColumnsData={columnsData.data}
                 showColumnPicker
-                onColumnVisibilityChange={saveColumnVisibility}
+                onColumnVisibilityChange={handleSaveColumnVisibility}
               />
             </div>
             <div>

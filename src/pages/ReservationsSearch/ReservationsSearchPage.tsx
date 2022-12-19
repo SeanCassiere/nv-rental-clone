@@ -12,7 +12,7 @@ import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColu
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { reservationFiltersModel } from "../../utils/schemas/reservation";
 import type { ReservationListItemType } from "../../types/Reservation";
-import { sortColumnOrder } from "../../utils/ordering";
+import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
 const columnHelper = createColumnHelper<ReservationListItemType>();
 
@@ -33,38 +33,40 @@ function ReservationsSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "reservations" });
 
-  const columnDefs = columnsData.data.sort(sortColumnOrder).map((column) =>
-    columnHelper.accessor(column.columnHeader as any, {
-      id: column.columnHeader,
-      header: () => column.columnHeaderDescription,
-      cell: (item) => {
-        if (column.columnHeader === "ReservationNumber") {
-          const reservationId = item.table.getRow(item.row.id).original.id;
-          return (
-            <Link
-              to="/agreements/$agreementId"
-              params={{ agreementId: String(reservationId) }}
-              className="font-medium text-teal-700"
-            >
-              {item.getValue()}
-            </Link>
-          );
-        }
-        return item.getValue();
-      },
-    })
-  );
+  const columnDefs = columnsData.data
+    .sort(sortColOrderByOrderIndex)
+    .map((column) =>
+      columnHelper.accessor(column.columnHeader as any, {
+        id: column.columnHeader,
+        header: () => column.columnHeaderDescription,
+        cell: (item) => {
+          if (column.columnHeader === "ReservationNumber") {
+            const reservationId = item.table.getRow(item.row.id).original.id;
+            return (
+              <Link
+                to="/agreements/$agreementId"
+                params={{ agreementId: String(reservationId) }}
+                className="font-medium text-teal-700"
+              >
+                {item.getValue()}
+              </Link>
+            );
+          }
+          return item.getValue();
+        },
+      })
+    );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "reservations" });
 
-  const saveColumnsOrder = (newColumnOrder: string[]) => {
+  const handleSaveColumnsOrder = (newColumnOrder: string[]) => {
     saveColumnsMutation.mutate({
       allColumns: columnsData.data,
       accessorKeys: newColumnOrder,
     });
   };
 
-  const saveColumnVisibility = (graph: ColumnVisibilityGraph) => {
+  const handleSaveColumnVisibility = (graph: ColumnVisibilityGraph) => {
     const newColumnsData = columnsData.data.map((col) => {
       col.isSelected = graph[col.columnHeader] || false;
       return col;
@@ -136,11 +138,11 @@ function ReservationsSearchPage() {
                   reservationsData.isLoading === false &&
                   reservationsData.data.data.length === 0
                 }
-                onColumnOrderChange={saveColumnsOrder}
+                onColumnOrderChange={handleSaveColumnsOrder}
                 lockedColumns={["ReservationNumber"]}
                 rawColumnsData={columnsData.data}
                 showColumnPicker
-                onColumnVisibilityChange={saveColumnVisibility}
+                onColumnVisibilityChange={handleSaveColumnVisibility}
               />
             </div>
             <div>

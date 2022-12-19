@@ -12,6 +12,7 @@ import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColu
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { vehicleFiltersModel } from "../../utils/schemas/vehicle";
 import type { VehicleListItemType } from "../../types/Vehicle";
+import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
 const columnHelper = createColumnHelper<VehicleListItemType>();
 
@@ -31,7 +32,7 @@ function VehiclesSearchPage() {
   const columnsData = useGetModuleColumns({ module: "vehicles" });
 
   const columnDefs = columnsData.data
-    .sort((col1, col2) => col1.orderIndex - col2.orderIndex)
+    .sort(sortColOrderByOrderIndex)
     .map((column) =>
       columnHelper.accessor(column.columnHeader as any, {
         id: column.columnHeader,
@@ -57,14 +58,14 @@ function VehiclesSearchPage() {
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "vehicles" });
 
-  const saveColumnsOrder = (newColumnOrder: string[]) => {
+  const handleSaveColumnsOrder = (newColumnOrder: string[]) => {
     saveColumnsMutation.mutate({
       allColumns: columnsData.data,
       accessorKeys: newColumnOrder,
     });
   };
 
-  const saveColumnVisibility = (graph: ColumnVisibilityGraph) => {
+  const handleSaveColumnVisibility = (graph: ColumnVisibilityGraph) => {
     const newColumnsData = columnsData.data.map((col) => {
       col.isSelected = graph[col.columnHeader] || false;
       return col;
@@ -124,11 +125,11 @@ function VehiclesSearchPage() {
                   vehiclesData.isLoading === false &&
                   vehiclesData.data.data.length === 0
                 }
-                onColumnOrderChange={saveColumnsOrder}
+                onColumnOrderChange={handleSaveColumnsOrder}
                 lockedColumns={["VehicleNo"]}
                 rawColumnsData={columnsData.data}
                 showColumnPicker
-                onColumnVisibilityChange={saveColumnVisibility}
+                onColumnVisibilityChange={handleSaveColumnVisibility}
               />
             </div>
             <div>
