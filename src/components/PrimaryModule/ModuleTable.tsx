@@ -136,9 +136,6 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       setColumnVisibility(changesFunc);
     },
     getCoreRowModel: getCoreRowModel(),
-    // debugTable: true,
-    debugHeaders: true,
-    // debugColumns: true,
   });
 
   const sensors = useSensors(
