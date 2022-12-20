@@ -3,6 +3,8 @@ import {
   type AuthProviderNoUserManagerProps,
 } from "react-oidc-context";
 
+import { LS_OIDC_REDIRECT_URI_KEY } from "../utils/constants";
+
 const AUTHORITY =
   import.meta.env.VITE_APP_AUTH_AUTHORITY || "https://testauth.appnavotar.com/";
 const CLIENT_ID = import.meta.env.VITE_APP_AUTH_CLIENT_ID ?? "xxx-xxx-xxx-xxx";
@@ -35,7 +37,14 @@ export const OidcAuthProvider = ({
     <AuthProvider
       {...config}
       onSigninCallback={() => {
-        window.location.replace("/");
+        const redirectUri = window.localStorage.getItem(
+          LS_OIDC_REDIRECT_URI_KEY
+        );
+        if (redirectUri && redirectUri !== "") {
+          window.location.replace(redirectUri);
+        } else {
+          window.location.replace("/");
+        }
       }}
     >
       {children}
