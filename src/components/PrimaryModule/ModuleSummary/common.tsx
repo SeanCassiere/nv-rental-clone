@@ -62,7 +62,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
           data.biggerText ? "text-lg" : "text-base"
         )}
       >
-        {Number(data.amount).toString()}
+        {data.amount}
       </span>
     </div>
   );

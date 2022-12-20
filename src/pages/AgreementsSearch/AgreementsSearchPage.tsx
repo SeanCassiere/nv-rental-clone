@@ -1,5 +1,6 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
@@ -16,7 +17,11 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
 const columnHelper = createColumnHelper<AgreementListItemType>();
 
+const DateTimeColumns = ["CreatedDate", "CheckoutDate", "CheckinDate"];
+
 function AgreementsSearchPage() {
+  const { t } = useTranslation();
+
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
   const searchFilters = {
     AgreementStatusName: filters?.AgreementStatusName || undefined,
@@ -58,6 +63,10 @@ function AgreementsSearchPage() {
                 {item.getValue()}
               </Link>
             );
+          }
+
+          if (DateTimeColumns.includes(column.columnHeader)) {
+            return t("intlDateTime", { value: new Date(item.getValue()) });
           }
 
           return item.getValue();
