@@ -28,7 +28,7 @@ function ReservationViewPage() {
               <div className="flex flex-row items-center gap-4 md:gap-8">
                 <button
                   onClick={() => {
-                    router.history.back();
+                    router.history.go(-1);
                   }}
                   className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-200 font-semibold shadow"
                 >
