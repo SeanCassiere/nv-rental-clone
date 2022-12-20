@@ -10,7 +10,7 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { customerFiltersModel } from "../../utils/schemas/customer";
+import { CustomerFiltersSchema } from "../../utils/schemas/customer";
 import type { CustomerListItemType } from "../../types/Customer";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
@@ -88,7 +88,7 @@ function CustomerSearchPage() {
             <div className="my-2 py-4">
               <ModuleSearchFilters
                 key={`module-filters-${JSON.stringify(searchFilters).length}`}
-                validationSchema={customerFiltersModel}
+                validationSchema={CustomerFiltersSchema}
                 initialValues={searchFilters}
                 searchFiltersBlueprint={[
                   {

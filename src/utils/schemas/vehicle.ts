@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const vehicleFiltersModel = z.object({
+export const VehicleFiltersSchema = z.object({
   Active: z.coerce.boolean().default(true).optional(),
   // SortBy: z.string().optional(),
   SortDirection: z.string().optional(),

@@ -1,4 +1,4 @@
-import { useParams, useRouter } from "@tanstack/react-router";
+import { useRouter, useParams } from "@tanstack/react-router";
 
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
@@ -9,15 +9,15 @@ import {
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 import RentalRatesSummary from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
 
-function AgreementViewPage() {
+function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const agreementId = params.agreementId || "";
+  const reservationId = params.reservationId || "";
 
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "agreements",
-    referenceId: agreementId,
+    module: "reservations",
+    referenceId: reservationId,
   });
 
   return (
@@ -38,7 +38,7 @@ function AgreementViewPage() {
                 </button>
                 <h1 className="truncate text-2xl font-semibold text-gray-900">
                   No.&nbsp;
-                  <span className="text-gray-600">{agreementId}</span>
+                  <span className="text-gray-600">{reservationId}</span>
                 </h1>
               </div>
               {/*  */}
@@ -52,18 +52,20 @@ function AgreementViewPage() {
                 </button>
               </div>
             </div>
-            <div className="mt-6 bg-white p-4">Agreement information modes</div>
+            <div className="mt-6 bg-white p-4">
+              Reservation information modes
+            </div>
           </div>
 
           <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
             <div className="flex flex-col gap-4 md:col-span-7">
-              <div className="bg-white">Agreement block 1</div>
-              <div className="bg-white">Agreement block 2</div>
+              <div className="bg-white">Reservation block 1</div>
+              <div className="bg-white">Reservation block 2</div>
             </div>
             {/*  */}
             <div className="flex flex-col gap-4 md:col-span-5">
               <RentalRatesSummary
-                module="agreements"
+                module="reservations"
                 summaryData={rentalRatesSummary.data}
               />
             </div>
@@ -74,4 +76,4 @@ function AgreementViewPage() {
   );
 }
 
-export default AgreementViewPage;
+export default ReservationViewPage;

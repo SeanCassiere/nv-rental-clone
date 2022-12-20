@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const reservationFiltersModel = z
+export const ReservationFiltersSchema = z
   .object({
     Statuses: z.coerce.number().optional(),
     CreatedDateFrom: z.coerce.date().optional(),

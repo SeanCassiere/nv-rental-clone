@@ -8,12 +8,13 @@ import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage
 import AgreementViewPage from "../pages/AgreementView/AgreementViewPage";
 import CustomerSearchPage from "../pages/CustomerSearch/CustomerSearchPage";
 import ReservationsSearchPage from "../pages/ReservationsSearch/ReservationsSearchPage";
-import VehiclesSearchPage from "../pages/VehclesSearch/VehiclesSearchPage";
+import VehiclesSearchPage from "../pages/VehiclesSearch/VehiclesSearchPage";
+import ReservationViewPage from "../pages/ReservationView/ReservationViewPage";
 
-import { agreementFiltersModel } from "../utils/schemas/agreement";
-import { customerFiltersModel } from "../utils/schemas/customer";
-import { reservationFiltersModel } from "../utils/schemas/reservation";
-import { vehicleFiltersModel } from "../utils/schemas/vehicle";
+import { AgreementFiltersSchema } from "../utils/schemas/agreement";
+import { CustomerFiltersSchema } from "../utils/schemas/customer";
+import { ReservationFiltersSchema } from "../utils/schemas/reservation";
+import { VehicleFiltersSchema } from "../utils/schemas/vehicle";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -43,7 +44,7 @@ const agreementsIndexRoute = agreementsRoute.createRoute({
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
-    filters: agreementFiltersModel.optional(),
+    filters: AgreementFiltersSchema.optional(),
   }).parse,
   preSearchFilters: [
     (search) => ({
@@ -65,7 +66,7 @@ const customersIndexRoute = customersRoute.createRoute({
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
-    filters: customerFiltersModel.optional(),
+    filters: CustomerFiltersSchema.optional(),
   }).parse,
   preSearchFilters: [
     (search) => ({
@@ -83,7 +84,7 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
-    filters: reservationFiltersModel.optional(),
+    filters: ReservationFiltersSchema.optional(),
   }).parse,
   preSearchFilters: [
     (search) => ({
@@ -91,6 +92,10 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
       size: search.size || 10,
     }),
   ],
+});
+const viewReservationRoute = reservationsRoute.createRoute({
+  path: "$reservationId",
+  component: ReservationViewPage,
 });
 
 // Vehicle Routes
@@ -101,7 +106,7 @@ const vehiclesIndexRoute = vehiclesRoute.createRoute({
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
-    filters: vehicleFiltersModel.optional(),
+    filters: VehicleFiltersSchema.optional(),
   }).parse,
   preSearchFilters: [
     (search) => ({
@@ -115,7 +120,7 @@ export const routeConfig = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
   agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
-  reservationsRoute.addChildren([reservationsIndexRoute]),
+  reservationsRoute.addChildren([reservationsIndexRoute, viewReservationRoute]),
   customersRoute.addChildren([customersIndexRoute]),
   vehiclesRoute.addChildren([vehiclesIndexRoute]),
 ]);

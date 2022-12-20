@@ -7,3 +7,4 @@ export * from "./Arrow";
 export * from "./Vehicle";
 export * from "./General";
 export * from "./AppShell";
+export * from "./Chevron";

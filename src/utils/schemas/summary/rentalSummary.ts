@@ -1,0 +1,161 @@
+import { z } from "zod";
+
+const RentalSummaryMiscChargeSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  calculationType: z.enum(["Perday", "Fixed", "Percentage", "Range"]),
+  isQuantity: z.boolean(),
+  isOptional: z.boolean(),
+  isTaxable: z.boolean(),
+  value: z.number(),
+  total: z.number(),
+  locationMiscChargeId: z.number(),
+  startDate: z.string().nullable(),
+  endDate: z.string().nullable(),
+  quantity: z.number(),
+  units: z.number(),
+  optionId: z.number().nullable(),
+  optionName: z.string().nullable(),
+  miscChargeType: z.string().nullable(),
+  locationTaxIds: z.string(),
+  miscChargeCode: z.string().nullable(),
+  subTotal: z.number(),
+  totaltax: z.number(),
+  isSelected: z.boolean(),
+  isBillToInsurance: z.boolean(),
+});
+export type TRentalSummaryMiscChargeSchema = z.infer<
+  typeof RentalSummaryMiscChargeSchema
+>;
+
+const RentalRateSummaryItemSchema = z.object({
+  type: z.enum(["Hourly", "Daily", "Weekly", "Monthly"]),
+  rate: z.number(),
+  units: z.number().nullable(),
+  startDate: z.string().nullable(),
+  endDate: z.string().nullable(),
+  kMorMileageAllowed: z.number().nullable(),
+});
+export type TRentalRateSummaryItemSchema = z.infer<
+  typeof RentalRateSummaryItemSchema
+>;
+
+const RentalSummaryTaxItemSchema = z.object({
+  taxId: z.number(),
+  locationTaxId: z.number(),
+  name: z.string().nullable(),
+  description: z.string().nullable(),
+  value: z.number(),
+  isOption: z.boolean(),
+  isDeleted: z.boolean(),
+  isDefaultSelectedForReservation: z.boolean(),
+  misChargeId: z.number().nullable(),
+  locationName: z.string().nullable(),
+  totalRows: z.number(),
+  locationId: z.number(),
+  activeDate: z.string().nullable(),
+  expiryDate: z.string().nullable(),
+  clientId: z.number(),
+  userId: z.number(),
+  locationTaxes: z.any(),
+  isSelected: z.boolean(),
+});
+export type TRentalSummaryTaxItemSchema = z.infer<
+  typeof RentalSummaryTaxItemSchema
+>;
+
+const RentalSummaryPromotionItemSchema = z.object({
+  promotionId: z.number(),
+  promotionCode: z.string(),
+  startDate: z.string().nullable(),
+  endDate: z.string().nullable(),
+  vehicleTypeId: z.number(),
+  locationId: z.number(),
+  discountTypeNo: z.number(),
+  discountType: z.number(),
+  discountValue: z.number(),
+  minimumDay: z.number(),
+  isAutoApply: z.boolean(),
+  milesAllowedDiscountType: z.number(),
+  milesAllowedDiscountValue: z.number(),
+  minimumTotal: z.number(),
+  discountTotal: z.number(),
+  orderNo: z.number().nullable(),
+  applicableTo: z.enum(["Subtotal", "BaseRate"]),
+  oneTimeUse: z.boolean(),
+  active: z.boolean(),
+  isAutoApplyOnline: z.boolean(),
+  vehicleType: z.any(),
+});
+export type TRentalSummaryPromotionItemSchema = z.infer<
+  typeof RentalSummaryPromotionItemSchema
+>;
+
+export const RentalRatesSummarySchema = z.object({
+  baseRate: z.number(),
+  finalBaseRate: z.number(),
+  subTotal: z.number(),
+  totalTax: z.number(),
+  dropOffCharges: z.number(),
+  promotionDiscount: z.number(),
+  preAdjustment: z.number(),
+  promotionDiscountOnSubTotal: z.number(),
+  preSubTotal: z.number(),
+  total: z.number(),
+  agreementCharges: z.number(),
+  fineCharges: z.number(),
+  additionalCharge: z.number(),
+  postAdjustment: z.number().nullable(),
+  advancePayment: z.number(),
+  writeOffAmount: z.number().nullable(),
+  amountPaid: z.number(),
+  insuranceBaseCharge: z.number(),
+  insuranceTotalTax: z.number(),
+  insuranceTotal: z.number(),
+  insurancePaidAmount: z.number(),
+  insuranceBalanceAmount: z.number(),
+  insuranceTotalMiscChargesNonTaxable: z.number(),
+  customerBaseCharge: z.number(),
+  customerTotalTax: z.number(),
+  customerTotal: z.number(),
+  customerPaidAmount: z.number(),
+  customerBalanceAmount: z.number(),
+  customerTotalMiscChargesNonTaxable: z.number(),
+  balanceDue: z.number(),
+  reimbursementAmount: z.number(),
+  cancellationCharge: z.number().nullable(),
+  estimateTotalwithDeposit: z.number(),
+  securityDeposit: z.number(),
+  totalDays: z.number(),
+  securityDepositPercentage: z.number(),
+  unTaxableAdditional: z.number(),
+  maxTotalDays: z.number(),
+  freeMiles: z.number(),
+  initialCharge: z.number(),
+  initialChargeHours: z.number(),
+  extraMilesCharge: z.number(),
+  extraDayCharge: z.number(),
+  extraFuelCharge: z.number(),
+  extraKMUsed: z.number().nullable(),
+  avgPerHourRate: z.number(),
+  avgPerDayRate: z.number(),
+  totalKmUsed: z.number().nullable(),
+  miscCharges: z.array(RentalSummaryMiscChargeSchema),
+  totalMiscChargesTaxable: z.number(),
+  totalMiscChargesNonTaxable: z.number(),
+  rateSummaryItems: z.array(RentalRateSummaryItemSchema),
+  taxes: z.array(RentalSummaryTaxItemSchema),
+  promotions: z.array(RentalSummaryPromotionItemSchema),
+  inventoryCharges: z.array(z.any()),
+  totalInventoryChargesTaxable: z.number(),
+  totalInventoryChargesNonTaxable: z.number(),
+  taxListString: z.string().nullable(),
+  isHourlySlottedRate: z.boolean(),
+  isExtraMileageChargeTaxable: z.boolean(),
+  isExtraDayChargeTaxable: z.boolean(),
+  isFuelChargeTaxable: z.boolean(),
+});
+export type TRentalRatesSummarySchema = z.infer<
+  typeof RentalRatesSummarySchema
+>;

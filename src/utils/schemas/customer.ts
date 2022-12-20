@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const customerFiltersModel = z.object({
+export const CustomerFiltersSchema = z.object({
   Active: z.coerce.boolean().default(true).optional(),
   SortDirection: z.string().optional(),
 });

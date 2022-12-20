@@ -10,7 +10,7 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { agreementFiltersModel } from "../../utils/schemas/agreement";
+import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
 import type { AgreementListItemType } from "../../types/Agreement";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
@@ -93,7 +93,7 @@ function AgreementsSearchPage() {
             <div className="my-2 py-4">
               <ModuleSearchFilters
                 key={`module-filters-${JSON.stringify(searchFilters).length}`}
-                validationSchema={agreementFiltersModel}
+                validationSchema={AgreementFiltersSchema}
                 initialValues={searchFilters}
                 searchFiltersBlueprint={[
                   {

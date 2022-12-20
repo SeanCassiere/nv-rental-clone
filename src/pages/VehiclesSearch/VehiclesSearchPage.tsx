@@ -10,7 +10,7 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { vehicleFiltersModel } from "../../utils/schemas/vehicle";
+import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
 import type { VehicleListItemType } from "../../types/Vehicle";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
@@ -84,7 +84,7 @@ function VehiclesSearchPage() {
             <div className="my-2 py-4">
               <ModuleSearchFilters
                 key={`module-filters-${JSON.stringify(searchFilters).length}`}
-                validationSchema={vehicleFiltersModel}
+                validationSchema={VehicleFiltersSchema}
                 initialValues={searchFilters}
                 searchFiltersBlueprint={[
                   {
