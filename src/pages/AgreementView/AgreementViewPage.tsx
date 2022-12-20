@@ -8,6 +8,7 @@ import {
 } from "../../components/icons";
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 import RentalRatesSummary from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
+import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 
 function AgreementViewPage() {
   const router = useRouter();
@@ -19,6 +20,8 @@ function AgreementViewPage() {
     module: "agreements",
     referenceId: agreementId,
   });
+
+  const clientProfile = useGetClientProfile();
 
   return (
     <Protector>
@@ -65,6 +68,7 @@ function AgreementViewPage() {
               <RentalRatesSummary
                 module="agreements"
                 summaryData={rentalRatesSummary.data}
+                currency={clientProfile.data?.currency || undefined}
               />
             </div>
           </div>
