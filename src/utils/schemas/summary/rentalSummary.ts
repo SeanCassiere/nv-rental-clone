@@ -4,7 +4,7 @@ const RentalSummaryMiscChargeSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string(),
-  calculationType: z.enum(["Perday"]),
+  calculationType: z.enum(["Perday", "Fixed", "Percentage", "Range"]),
   isQuantity: z.boolean(),
   isOptional: z.boolean(),
   isTaxable: z.boolean(),
@@ -30,7 +30,7 @@ export type TRentalSummaryMiscChargeSchema = z.infer<
 >;
 
 const RentalRateSummaryItemSchema = z.object({
-  type: z.enum(["Daily", "Weekly", "Monthly"]),
+  type: z.enum(["Hourly", "Daily", "Weekly", "Monthly"]),
   rate: z.number(),
   units: z.number().nullable(),
   startDate: z.string().nullable(),
