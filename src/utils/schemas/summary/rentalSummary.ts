@@ -54,8 +54,8 @@ const RentalSummaryTaxItemSchema = z.object({
   locationName: z.string().nullable(),
   totalRows: z.number(),
   locationId: z.number(),
-  activeDate: z.string().datetime().nullable(),
-  expiryDate: z.string().datetime().nullable(),
+  activeDate: z.string().nullable(),
+  expiryDate: z.string().nullable(),
   clientId: z.number(),
   userId: z.number(),
   locationTaxes: z.any(),
@@ -63,6 +63,33 @@ const RentalSummaryTaxItemSchema = z.object({
 });
 export type TRentalSummaryTaxItemSchema = z.infer<
   typeof RentalSummaryTaxItemSchema
+>;
+
+const RentalSummaryPromotionItemSchema = z.object({
+  promotionId: z.number(),
+  promotionCode: z.string(),
+  startDate: z.string().nullable(),
+  endDate: z.string().nullable(),
+  vehicleTypeId: z.number(),
+  locationId: z.number(),
+  discountTypeNo: z.number(),
+  discountType: z.number(),
+  discountValue: z.number(),
+  minimumDay: z.number(),
+  isAutoApply: z.boolean(),
+  milesAllowedDiscountType: z.number(),
+  milesAllowedDiscountValue: z.number(),
+  minimumTotal: z.number(),
+  discountTotal: z.number(),
+  orderNo: z.number().nullable(),
+  applicableTo: z.enum(["Subtotal", "BaseRate"]),
+  oneTimeUse: z.boolean(),
+  active: z.boolean(),
+  isAutoApplyOnline: z.boolean(),
+  vehicleType: z.any(),
+});
+export type TRentalSummaryPromotionItemSchema = z.infer<
+  typeof RentalSummaryPromotionItemSchema
 >;
 
 export const RentalRatesSummarySchema = z.object({
@@ -119,7 +146,7 @@ export const RentalRatesSummarySchema = z.object({
   totalMiscChargesNonTaxable: z.number(),
   rateSummaryItems: z.array(RentalRateSummaryItemSchema),
   taxes: z.array(RentalSummaryTaxItemSchema),
-  promotions: z.array(z.any()),
+  promotions: z.array(RentalSummaryPromotionItemSchema),
   inventoryCharges: z.array(z.any()),
   totalInventoryChargesTaxable: z.number(),
   totalInventoryChargesNonTaxable: z.number(),

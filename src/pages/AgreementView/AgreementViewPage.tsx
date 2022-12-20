@@ -7,6 +7,7 @@ import {
   HamburgerMenuOutline,
 } from "../../components/icons";
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
+import RentalRatesSummary from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
 
 function AgreementViewPage() {
   const router = useRouter();
@@ -30,7 +31,7 @@ function AgreementViewPage() {
                   onClick={() => {
                     router.history.go(-1);
                   }}
-                  className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-200 font-semibold shadow"
+                  className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-100 font-semibold shadow"
                 >
                   <ChevronLeftOutline className="h-7 w-7" />
                   <span className="sr-only">Go back</span>
@@ -44,7 +45,7 @@ function AgreementViewPage() {
               <div className="flex flex-row items-center justify-end gap-4 md:gap-8">
                 <button
                   type="button"
-                  className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-200 font-semibold shadow"
+                  className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-100 font-semibold shadow"
                 >
                   <HamburgerMenuOutline className="h-7 w-7" />
                   <span className="sr-only">Options</span>
@@ -61,13 +62,10 @@ function AgreementViewPage() {
             </div>
             {/*  */}
             <div className="flex flex-col gap-4 md:col-span-5">
-              <div className="overflow-x-scroll bg-white text-xs">
-                <pre>
-                  <code>
-                    {JSON.stringify(rentalRatesSummary.data, null, 2)}
-                  </code>
-                </pre>
-              </div>
+              <RentalRatesSummary
+                module="agreements"
+                summaryData={rentalRatesSummary.data}
+              />
             </div>
           </div>
         </div>
