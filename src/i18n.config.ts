@@ -2,6 +2,7 @@ import i18n from "i18next";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import dayjs from "dayjs";
 
 const common = "common";
 
@@ -37,6 +38,27 @@ i18n
     },
     interpolation: {
       escapeValue: false,
+      format: (value, format, lng, options) => {
+        if (format === "datetime") {
+          return dayjs(value, { locale: lng }).format("DD/MM/YYYY hh:mm A");
+        }
+
+        if (format === "date") {
+          return dayjs(value, { locale: lng }).format("DD/MM/YYYY");
+        }
+        if (format === "currency") {
+          const { currency, value: numberValue = 0 } = options as any;
+
+          if (currency !== "") {
+            return new Intl.NumberFormat(lng, {
+              style: "currency",
+              currency,
+            }).format(numberValue);
+          }
+        }
+
+        return value;
+      },
     },
     debug: false,
   });
