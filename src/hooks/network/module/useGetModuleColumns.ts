@@ -38,7 +38,12 @@ export function mutateColumnAccessors(
 ) {
   switch (type) {
     case "reservations":
-      return data.map((column) => {
+      const reservationColumnData = settingStartingColumn(
+        data,
+        "ReservationNumber"
+      );
+
+      return reservationColumnData.map((column) => {
         if (column.columnHeader === "CheckoutDate") {
           column.columnHeader = "StartDate";
           column.searchText = "StartDate";
@@ -78,7 +83,11 @@ export function mutateColumnAccessors(
         return column;
       });
     case "agreements":
-      return data.map((column) => {
+      const agreementColumnData = settingStartingColumn(
+        data,
+        "AgreementNumber"
+      );
+      return agreementColumnData.map((column) => {
         if (column.columnHeader === "CustomerName") {
           column.columnHeader = "FullName";
           column.searchText = "FullName";
@@ -90,7 +99,8 @@ export function mutateColumnAccessors(
         return column;
       });
     case "customers":
-      return data.map((column) => {
+      const customerColumnData = settingStartingColumn(data, "FirstName");
+      return customerColumnData.map((column) => {
         if (column.columnHeader === "DateOfbirth") {
           column.columnHeader = "DateOfbirth";
           column.searchText = "DateOfbirth";
@@ -118,7 +128,8 @@ export function mutateColumnAccessors(
         return column;
       });
     case "vehicles":
-      return data;
+      const vehicleColumnData = settingStartingColumn(data, "VehicleNo");
+      return vehicleColumnData;
     default:
       return data;
   }
@@ -371,4 +382,37 @@ export function makeInitialColumnAccessors(module: AppPrimaryModuleType) {
     default:
       return [];
   }
+}
+
+function settingStartingColumn(
+  columns: ColumnListItemType[],
+  startingColumnHeader: string
+) {
+  let columnData = columns;
+  const numberActive = columns.filter((col) => col.isSelected).length;
+
+  const findReservationNumber = columnData
+    .map((d) => d.columnHeader)
+    .indexOf(startingColumnHeader);
+
+  if (numberActive === 0) {
+    // if 0 columns are active
+    if (columnData[findReservationNumber]) {
+      (columnData[findReservationNumber] as any).isSelected = true;
+    }
+  }
+
+  // setting the starting column
+  if (
+    columnData[findReservationNumber] &&
+    (columnData[findReservationNumber]?.orderIndex !== 0 ||
+      columnData[findReservationNumber]?.orderIndex !== 1)
+  ) {
+    columnData = columnData.map((col, idx) => ({
+      ...col,
+      orderIndex: col.columnHeader !== startingColumnHeader ? idx + 2 : 1,
+    }));
+  }
+
+  return columnData;
 }

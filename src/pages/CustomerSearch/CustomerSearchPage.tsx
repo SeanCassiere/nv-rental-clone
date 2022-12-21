@@ -139,7 +139,7 @@ function CustomerSearchPage() {
                   customersData.data.data.length === 0
                 }
                 onColumnOrderChange={handleSaveColumnsOrder}
-                lockedColumns={["CustomerNumber"]}
+                lockedColumns={["FirstName"]}
                 rawColumnsData={columnsData.data}
                 showColumnPicker
                 onColumnVisibilityChange={handleSaveColumnVisibility}
