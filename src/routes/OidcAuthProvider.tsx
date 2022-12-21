@@ -26,6 +26,14 @@ const config: AuthProviderNoUserManagerProps = {
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
+  onSigninCallback: async () => {
+    const redirectUri = window.localStorage.getItem(LS_OIDC_REDIRECT_URI_KEY);
+    if (redirectUri && redirectUri !== "") {
+      window.location.replace(redirectUri);
+    } else {
+      window.location.replace("/");
+    }
+  },
 };
 
 export const OidcAuthProvider = ({
@@ -33,21 +41,5 @@ export const OidcAuthProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  return (
-    <AuthProvider
-      {...config}
-      onSigninCallback={() => {
-        const redirectUri = window.localStorage.getItem(
-          LS_OIDC_REDIRECT_URI_KEY
-        );
-        if (redirectUri && redirectUri !== "") {
-          window.location.replace(redirectUri);
-        } else {
-          window.location.replace("/");
-        }
-      }}
-    >
-      {children}
-    </AuthProvider>
-  );
+  return <AuthProvider {...config}>{children}</AuthProvider>;
 };
