@@ -2,8 +2,9 @@
 import React, { Fragment, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Dialog, Menu, Transition } from "@headlessui/react";
-import { Link, useNearestMatch } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import classNames from "classnames";
+
 import {
   RectangleGroupSolid,
   DocumentTextSolid,
@@ -34,7 +35,18 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const auth = useAuth();
 
-  const path = useNearestMatch();
+  const router = useRouter();
+
+  const matches = (routes: string[], mode: "=" | "~" = "~") => {
+    const matching = router.state.currentMatches.map((mat) => mat.routeId);
+    if (mode === "=") {
+      // exact match
+      // return matching.some((mat) => mat === routes);
+      return routes.some((route) => matching.includes(route));
+    }
+    // return matching.some((mat) => mat.includes(routes));
+    return matching.some((mat) => routes.includes(mat));
+  };
 
   const userProfile = useGetUserProfile();
 
@@ -43,16 +55,14 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       name: "Dashboard",
       href: "/",
       icon: RectangleGroupSolid,
-      current: path.routeId === "/",
+      current: matches(["/"], "="),
       props: {},
     },
     {
       name: "Customers",
       href: "/customers",
       icon: UsersSolid,
-      current:
-        path.routeId.includes("/customers") ||
-        path.routeId.includes("/customers/$customerId"),
+      current: matches(["/customers", "/customers/$customerId"]),
       props: {
         search: () => ({ page: 1, size: 10, filters: { active: true } }),
       },
@@ -61,9 +71,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       name: "Vehicles",
       href: "/vehicles",
       icon: TruckFilled,
-      current:
-        path.routeId.includes("/vehicles") ||
-        path.routeId.includes("/vehicles/$vehicleId"),
+      current: matches(["/vehicles", "/vehicles/$vehicleId"]),
       props: {
         search: () => ({ page: 1, size: 10, filters: { active: true } }),
       },
@@ -72,9 +80,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       name: "Reservations",
       href: "/reservations",
       icon: BookFilled,
-      current:
-        path.routeId.includes("/reservations") ||
-        path.routeId.includes("/reservations/$reservationId"),
+      current: matches(["/reservations", "/reservations/$reservationId"]),
       props: {
         search: () => ({ page: 1, size: 10 }),
       },
@@ -83,9 +89,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       name: "Agreements",
       href: "/agreements",
       icon: DocumentTextSolid,
-      current:
-        path.routeId.includes("/agreements") ||
-        path.routeId.includes("/agreements/$agreementId"),
+      current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {
         search: () => ({ page: 1, size: 10 }),
       },
