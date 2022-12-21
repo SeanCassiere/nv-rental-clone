@@ -22,6 +22,7 @@ export function useGetDashboardNoticeList() {
           if (!dismissedNoticeIds.includes(notice.id)) {
             return notice;
           }
+          return false;
         });
 
         return notices;
