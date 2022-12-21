@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -90,6 +91,10 @@ function AgreementsSearchPage() {
     });
     saveColumnsMutation.mutate({ allColumns: newColumnsData });
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Protector>

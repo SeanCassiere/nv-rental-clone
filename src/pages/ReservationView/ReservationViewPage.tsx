@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter, useParams } from "@tanstack/react-router";
 
 import AppShell from "../../components/app-shell";
@@ -22,6 +23,10 @@ function ReservationViewPage() {
   });
 
   const clientProfile = useGetClientProfile();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Protector>
