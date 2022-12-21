@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 
-import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import StatisticsWidget from "../../components/Dashboard/statistics-widget";
 import BannerNotice from "../../components/Dashboard/banner-notice";
@@ -34,32 +33,30 @@ function IndexPage() {
 
   return (
     <Protector>
-      <AppShell>
-        {noticeList.data.length > 0 && (
-          <div className="grid gap-1">
-            {noticeList.data.map((notice) => (
-              <BannerNotice notice={notice} key={notice.id} />
-            ))}
-          </div>
-        )}
-        <div className="py-6">
-          <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-            <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-          </div>
-          <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
-            <StatisticsWidget statistics={statistics.data} />
+      {noticeList.data.length > 0 && (
+        <div className="grid gap-1">
+          {noticeList.data.map((notice) => (
+            <BannerNotice notice={notice} key={notice.id} />
+          ))}
+        </div>
+      )}
+      <div className="py-6">
+        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+        </div>
+        <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
+          <StatisticsWidget statistics={statistics.data} />
 
-            <div className="mt-4">
-              <DashboardDndWidgetGrid
-                key={`${JSON.stringify(widgetList.data)}`}
-                widgets={widgetList.data}
-                selectedLocationIds={[0]}
-                onWidgetSortingEnd={handleWidgetSortingEnd}
-              />
-            </div>
+          <div className="mt-4">
+            <DashboardDndWidgetGrid
+              key={`${JSON.stringify(widgetList.data)}`}
+              widgets={widgetList.data}
+              selectedLocationIds={[0]}
+              onWidgetSortingEnd={handleWidgetSortingEnd}
+            />
           </div>
         </div>
-      </AppShell>
+      </div>
     </Protector>
   );
 }

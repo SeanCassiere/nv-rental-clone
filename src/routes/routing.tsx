@@ -1,15 +1,8 @@
-import { createRouteConfig, Outlet } from "@tanstack/react-router";
+import { createRouteConfig, Outlet, lazy } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { OidcAuthProvider } from "./OidcAuthProvider";
-import IndexPage from "../pages/Index/IndexPage";
-import LoggedOutPage from "../pages/LoggedOut/LoggedOutPage";
-import AgreementsSearchPage from "../pages/AgreementsSearch/AgreementsSearchPage";
-import AgreementViewPage from "../pages/AgreementView/AgreementViewPage";
-import CustomerSearchPage from "../pages/CustomerSearch/CustomerSearchPage";
-import ReservationsSearchPage from "../pages/ReservationsSearch/ReservationsSearchPage";
-import VehiclesSearchPage from "../pages/VehiclesSearch/VehiclesSearchPage";
-import ReservationViewPage from "../pages/ReservationView/ReservationViewPage";
+import AppShellLayout from "../components/AppShellLayout";
 
 import { AgreementFiltersSchema } from "../utils/schemas/agreement";
 import { CustomerFiltersSchema } from "../utils/schemas/customer";
@@ -20,7 +13,9 @@ export const rootRoute = createRouteConfig({
   component: () => {
     return (
       <OidcAuthProvider>
-        <Outlet />
+        <AppShellLayout>
+          <Outlet />
+        </AppShellLayout>
       </OidcAuthProvider>
     );
   },
@@ -28,19 +23,21 @@ export const rootRoute = createRouteConfig({
 
 const indexRoute = rootRoute.createRoute({
   path: "/",
-  component: IndexPage,
+  component: lazy(() => import("../pages/Index/IndexPage")),
 });
 
 const loggedOutRoute = rootRoute.createRoute({
   path: "/logged-out",
-  component: LoggedOutPage,
+  component: lazy(() => import("../pages/LoggedOut/LoggedOutPage")),
 });
 
 // Agreement Routes
 const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
 const agreementsIndexRoute = agreementsRoute.createRoute({
   path: "/",
-  component: AgreementsSearchPage,
+  component: lazy(
+    () => import("../pages/AgreementsSearch/AgreementsSearchPage")
+  ),
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
@@ -55,14 +52,14 @@ const agreementsIndexRoute = agreementsRoute.createRoute({
 });
 const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
-  component: AgreementViewPage,
+  component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
 });
 
 // Customer Routes
 const customersRoute = rootRoute.createRoute({ path: "customers" });
 const customersIndexRoute = customersRoute.createRoute({
   path: "/",
-  component: CustomerSearchPage,
+  component: lazy(() => import("../pages/CustomerSearch/CustomerSearchPage")),
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
@@ -80,7 +77,9 @@ const customersIndexRoute = customersRoute.createRoute({
 const reservationsRoute = rootRoute.createRoute({ path: "reservations" });
 const reservationsIndexRoute = reservationsRoute.createRoute({
   path: "/",
-  component: ReservationsSearchPage,
+  component: lazy(
+    () => import("../pages/ReservationsSearch/ReservationsSearchPage")
+  ),
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
@@ -95,14 +94,14 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
 });
 const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
-  component: ReservationViewPage,
+  component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
 });
 
 // Vehicle Routes
 const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
 const vehiclesIndexRoute = vehiclesRoute.createRoute({
   path: "/",
-  component: VehiclesSearchPage,
+  component: lazy(() => import("../pages/VehiclesSearch/VehiclesSearchPage")),
   validateSearch: z.object({
     page: z.number().min(1).default(1),
     size: z.number().min(1).default(10),
