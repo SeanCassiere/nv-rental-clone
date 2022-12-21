@@ -116,7 +116,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   ];
 
   if (!auth.isAuthenticated) {
-    return <>children</>;
+    return <>{children}</>;
   }
 
   return (
@@ -342,15 +342,17 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                         {({ active }) => {
                           if (item.type === "Link") {
                             return (
-                              <Link<any>
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                                {...item.props}
-                              >
-                                {item.name}
-                              </Link>
+                              <span>
+                                <Link<any>
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                  {...item.props}
+                                >
+                                  {item.name}
+                                </Link>
+                              </span>
                             );
                           }
                           return (
