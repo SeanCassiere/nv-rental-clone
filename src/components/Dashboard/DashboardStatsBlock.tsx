@@ -16,7 +16,7 @@ import {
 } from "@tanstack/react-router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
 
-const StatisticsWidget = ({
+const DashboardStatsBlock = ({
   statistics,
 }: {
   statistics: DashboardStatsType;
@@ -162,4 +162,4 @@ const StatBlock = ({
   );
 };
 
-export default StatisticsWidget;
+export default DashboardStatsBlock;

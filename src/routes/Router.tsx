@@ -12,6 +12,11 @@ export const router = createReactRouter({
   stringifySearch: stringifySearchWith((value) =>
     encodeToBinary(JSON.stringify(value))
   ),
+  defaultPendingComponent: () => (
+    <div className="flex items-center justify-center text-3xl">
+      Code-split loading...
+    </div>
+  ),
 });
 
 export function decodeFromBinary(str: string): string {
