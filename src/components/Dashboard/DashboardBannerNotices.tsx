@@ -4,7 +4,11 @@ import { useAuth } from "react-oidc-context";
 import type { DashboardNoticeType } from "../../types/Dashboard";
 import { MegaPhoneOutline, XMarkOutline } from "../icons";
 
-const BannerNotice = ({ notice }: { notice: DashboardNoticeType }) => {
+const DashboardBannerNotices = ({
+  notice,
+}: {
+  notice: DashboardNoticeType;
+}) => {
   const auth = useAuth();
   const [show, setShow] = useState(true);
 
@@ -68,4 +72,4 @@ const BannerNotice = ({ notice }: { notice: DashboardNoticeType }) => {
   );
 };
 
-export default BannerNotice;
+export default DashboardBannerNotices;

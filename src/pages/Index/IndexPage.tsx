@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
 import Protector from "../../routes/Protector";
-import StatisticsWidget from "../../components/Dashboard/statistics-widget";
-import BannerNotice from "../../components/Dashboard/banner-notice";
-import DashboardDndWidgetGrid from "../../components/Dashboard/dnd-widget-grid";
+import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
+import DashboardBannerNotices from "../../components/Dashboard/DashboardBannerNotices";
+import DashboardDndWidgetGrid from "../../components/Dashboard/DashboardDndWidgetGrid";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
@@ -36,7 +36,7 @@ function IndexPage() {
       {noticeList.data.length > 0 && (
         <div className="grid gap-1">
           {noticeList.data.map((notice) => (
-            <BannerNotice notice={notice} key={notice.id} />
+            <DashboardBannerNotices notice={notice} key={notice.id} />
           ))}
         </div>
       )}
@@ -45,7 +45,7 @@ function IndexPage() {
           <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
         </div>
         <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
-          <StatisticsWidget statistics={statistics.data} />
+          <DashboardStatsBlock statistics={statistics.data} />
 
           <div className="mt-4">
             <DashboardDndWidgetGrid
