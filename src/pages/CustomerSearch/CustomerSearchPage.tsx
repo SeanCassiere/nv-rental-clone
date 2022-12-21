@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -86,6 +87,10 @@ function CustomerSearchPage() {
     saveColumnsMutation.mutate({ allColumns: newColumnsData });
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Protector>
       <AppShell>
@@ -139,7 +144,7 @@ function CustomerSearchPage() {
                   customersData.data.data.length === 0
                 }
                 onColumnOrderChange={handleSaveColumnsOrder}
-                lockedColumns={["CustomerNumber"]}
+                lockedColumns={["FirstName"]}
                 rawColumnsData={columnsData.data}
                 showColumnPicker
                 onColumnVisibilityChange={handleSaveColumnVisibility}

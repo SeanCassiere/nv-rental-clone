@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -72,6 +73,10 @@ function VehiclesSearchPage() {
     });
     saveColumnsMutation.mutate({ allColumns: newColumnsData });
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Protector>

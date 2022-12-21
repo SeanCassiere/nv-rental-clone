@@ -1,6 +1,11 @@
+import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 
 const LoggedOutPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="py-6">
       <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">

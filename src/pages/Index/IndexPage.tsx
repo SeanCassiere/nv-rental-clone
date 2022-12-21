@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import AppShell from "../../components/app-shell";
 import Protector from "../../routes/Protector";
 import StatisticsWidget from "../../components/Dashboard/statistics-widget";
@@ -25,6 +27,10 @@ function IndexPage() {
   const handleWidgetSortingEnd = (widgets: DashboardWidgetItemParsed[]) => {
     saveDashboardWidgetsMutation.mutate({ widgets });
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Protector>

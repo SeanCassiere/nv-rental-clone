@@ -32,93 +32,91 @@ export function useGetModuleColumns({
   return query;
 }
 
+type ColumMap = { [columnHeader in string]: string };
+
+const reservationColumnHeaderMap: ColumMap = {
+  CheckoutDate: "StartDate",
+  CheckinDate: "EndDate",
+  Note: "Note",
+  Company: "Company",
+  ReservationNumber: "ReservationNumber",
+  Phone: "Phone",
+  StartLocationName: "StartLocationName",
+  EndLocationName: "EndLocationName",
+  CreatedDate: "CreatedDate",
+};
+
+const agreementColumnHeaderMap: ColumMap = {
+  CustomerName: "FullName",
+  Phone: "HPhone",
+};
+
+const customerColumnHeaderMap: ColumMap = {
+  DateOfbirth: "DateOfbirth",
+  CreatedByName: "CreatedByName",
+  Phone: "hPhone",
+  Address: "Address1",
+  Zip: "ZipCode",
+  InsuranceCompanyName: "InsuranceCompanyName",
+};
+
 export function mutateColumnAccessors(
   type: AppPrimaryModuleType,
   data: ColumnListItemType[]
 ) {
   switch (type) {
     case "reservations":
-      return data.map((column) => {
-        if (column.columnHeader === "CheckoutDate") {
-          column.columnHeader = "StartDate";
-          column.searchText = "StartDate";
+      const reservationColumnData = settingStartingColumn(
+        data,
+        "ReservationNumber"
+      );
+
+      return reservationColumnData.map((column) => {
+        if (column.columnHeader in reservationColumnHeaderMap) {
+          column.columnHeader = reservationColumnHeaderMap[
+            column.columnHeader
+          ] as string;
+          column.searchText = reservationColumnHeaderMap[
+            column.columnHeader
+          ] as string;
         }
-        if (column.columnHeader === "CheckinDate") {
-          column.columnHeader = "EndDate";
-          column.searchText = "EndDate";
-        }
-        if (column.columnHeader === "Note") {
-          column.columnHeader = "Note";
-          column.searchText = "Note";
-        }
-        if (column.columnHeader === "Company") {
-          column.columnHeader = "Company";
-          column.searchText = "Company";
-        }
-        if (column.columnHeader === "ReservationNumber") {
-          column.columnHeader = "ReservationNumber";
-          column.searchText = "ReservationNumber";
-        }
-        if (column.columnHeader === "Phone") {
-          column.columnHeader = "Phone";
-          column.searchText = "Phone";
-        }
-        if (column.columnHeader === "StartLocationName") {
-          column.columnHeader = "StartLocationName";
-          column.searchText = "StartLocationName";
-        }
-        if (column.columnHeader === "EndLocationName") {
-          column.columnHeader = "EndLocationName";
-          column.searchText = "EndLocationName";
-        }
-        if (column.columnHeader === "CreatedDate") {
-          column.columnHeader = "CreatedDate";
-          column.searchText = "CreatedDate";
-        }
+
         return column;
       });
     case "agreements":
-      return data.map((column) => {
-        if (column.columnHeader === "CustomerName") {
-          column.columnHeader = "FullName";
-          column.searchText = "FullName";
+      const agreementColumnData = settingStartingColumn(
+        data,
+        "AgreementNumber"
+      );
+      return agreementColumnData.map((column) => {
+        if (column.columnHeader in agreementColumnHeaderMap) {
+          column.columnHeader = agreementColumnHeaderMap[
+            column.columnHeader
+          ] as string;
+          column.searchText = agreementColumnHeaderMap[
+            column.columnHeader
+          ] as string;
         }
-        if (column.columnHeader === "Phone") {
-          column.columnHeader = "HPhone";
-          column.searchText = "HPhone";
-        }
+
         return column;
       });
     case "customers":
-      return data.map((column) => {
-        if (column.columnHeader === "DateOfbirth") {
-          column.columnHeader = "DateOfbirth";
-          column.searchText = "DateOfbirth";
+      const customerColumnData = settingStartingColumn(data, "FirstName");
+      return customerColumnData.map((column) => {
+        if (column.columnHeader in customerColumnHeaderMap) {
+          column.columnHeader = customerColumnHeaderMap[
+            column.columnHeader
+          ] as string;
+          column.searchText = customerColumnHeaderMap[
+            column.columnHeader
+          ] as string;
         }
-        if (column.columnHeader === "CreatedByName") {
-          column.columnHeader = "CreatedByName";
-          column.searchText = "CreatedByName";
-        }
-        if (column.columnHeader === "Phone") {
-          column.columnHeader = "hPhone";
-          column.searchText = "hPhone";
-        }
-        if (column.columnHeader === "Address") {
-          column.columnHeader = "Address1";
-          column.searchText = "Address1";
-        }
-        if (column.columnHeader === "Zip") {
-          column.columnHeader = "ZipCode";
-          column.searchText = "ZipCode";
-        }
-        if (column.columnHeader === "InsuranceCompanyName") {
-          column.columnHeader = "InsuranceCompanyName";
-          column.searchText = "InsuranceCompanyName";
-        }
+
         return column;
       });
     case "vehicles":
-      return data;
+      const vehicleColumnData = settingStartingColumn(data, "VehicleNo");
+      return vehicleColumnData;
     default:
       return data;
   }
@@ -371,4 +369,37 @@ export function makeInitialColumnAccessors(module: AppPrimaryModuleType) {
     default:
       return [];
   }
+}
+
+function settingStartingColumn(
+  columns: ColumnListItemType[],
+  startingColumnHeader: string
+) {
+  let columnData = columns;
+  const numberActive = columns.filter((col) => col.isSelected).length;
+
+  const findReservationNumber = columnData
+    .map((d) => d.columnHeader)
+    .indexOf(startingColumnHeader);
+
+  if (numberActive === 0) {
+    // if 0 columns are active
+    if (columnData[findReservationNumber]) {
+      (columnData[findReservationNumber] as any).isSelected = true;
+    }
+  }
+
+  // setting the starting column
+  if (
+    columnData[findReservationNumber] &&
+    (columnData[findReservationNumber]?.orderIndex !== 0 ||
+      columnData[findReservationNumber]?.orderIndex !== 1)
+  ) {
+    columnData = columnData.map((col, idx) => ({
+      ...col,
+      orderIndex: col.columnHeader !== startingColumnHeader ? idx + 2 : 1,
+    }));
+  }
+
+  return columnData;
 }
