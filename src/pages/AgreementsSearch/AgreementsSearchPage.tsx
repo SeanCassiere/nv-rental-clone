@@ -34,6 +34,7 @@ function AgreementsSearchPage() {
     EndDate: filters?.EndDate || undefined,
     SortBy: filters?.SortBy || "CreatedDate",
     SortDirection: filters?.SortDirection || "DESC",
+    CustomerId: filters?.CustomerId || undefined,
   };
 
   const agreementsData = useGetAgreementsList({
@@ -146,6 +147,13 @@ function AgreementsSearchPage() {
                   required: false,
                   accessor: "EndDate",
                   label: "End date",
+                },
+                {
+                  name: "CustomerId",
+                  type: "number",
+                  required: false,
+                  accessor: "CustomerId",
+                  label: "CustomerId",
                 },
                 {
                   name: "SortBy",

@@ -25,34 +25,94 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.totalRevenue),
     },
     {
-      label: "Opened reservations",
+      label: "Open reservations",
       amount: summaryData?.openedReservation || 0,
       primaryTextHighlight: Boolean(summaryData?.openedReservation),
+      linkProps: {
+        to: "/reservations",
+        search: () => ({
+          filters: {
+            Statuses: 2,
+            CustomerId: `${summaryData.customerId}`,
+          },
+        }),
+      },
     },
     {
       label: "Confirmed reservations",
       amount: summaryData?.confirmedReservation || 0,
       primaryTextHighlight: Boolean(summaryData?.confirmedReservation),
+      type: Boolean(summaryData?.confirmedReservation) ? "link" : "text",
+      linkProps: {
+        to: "/reservations",
+        search: () => ({
+          filters: {
+            Statuses: 3,
+            CustomerId: `${summaryData.customerId}`,
+          },
+        }),
+      },
     },
     {
       label: "No-show reservations",
       amount: summaryData?.noShowReservation || 0,
       primaryTextHighlight: Boolean(summaryData?.noShowReservation),
+      type: Boolean(summaryData?.noShowReservation) ? "link" : "text",
+      linkProps: {
+        to: "/reservations",
+        search: () => ({
+          filters: {
+            Statuses: 4,
+            CustomerId: `${summaryData.customerId}`,
+          },
+        }),
+      },
     },
     {
       label: "Cancelled reservations",
       amount: summaryData?.cancelledReservation || 0,
       primaryTextHighlight: Boolean(summaryData?.cancelledReservation),
+      linkProps: {
+        to: "/reservations",
+        search: () => ({
+          filters: {
+            Statuses: 5,
+            CustomerId: `${summaryData.customerId}`,
+          },
+        }),
+      },
     },
     {
       label: "Opened agreements",
       amount: summaryData?.openedAgreements || 0,
       primaryTextHighlight: Boolean(summaryData?.openedAgreements),
+      type: Boolean(summaryData?.openedAgreements) ? "link" : "text",
+      linkProps: {
+        to: "/agreements",
+        search: () => ({
+          filters: {
+            Statuses: 2,
+            CustomerId: `${summaryData.customerId}`,
+            IsSearchOverdues: false,
+          },
+        }),
+      },
     },
     {
       label: "Closed agreements",
       amount: summaryData?.closedAgreements || 0,
       primaryTextHighlight: Boolean(summaryData?.closedAgreements),
+      type: Boolean(summaryData?.closedAgreements) ? "link" : "text",
+      linkProps: {
+        to: "/agreements",
+        search: () => ({
+          filters: {
+            Statuses: 3,
+            CustomerId: `${summaryData.customerId}`,
+            IsSearchOverdues: false,
+          },
+        }),
+      },
     },
     {
       label: "Total traffic tickets",
@@ -63,11 +123,33 @@ export const CustomerSummary = ({
       label: "Pending payments",
       amount: summaryData?.pendingPayments || 0,
       primaryTextHighlight: Boolean(summaryData?.pendingPayments),
+      type: Boolean(summaryData?.pendingPayments) ? "link" : "text",
+      linkProps: {
+        to: "/agreements",
+        search: () => ({
+          filters: {
+            Statuses: 5,
+            CustomerId: `${summaryData.customerId}`,
+            IsSearchOverdues: false,
+          },
+        }),
+      },
     },
     {
       label: "Pending deposits",
       amount: summaryData?.pendingDeposit || 0,
       primaryTextHighlight: Boolean(summaryData?.pendingDeposit),
+      type: Boolean(summaryData?.pendingDeposit) ? "link" : "text",
+      linkProps: {
+        to: "/agreements",
+        search: () => ({
+          filters: {
+            Statuses: 7,
+            CustomerId: `${summaryData.customerId}`,
+            IsSearchOverdues: false,
+          },
+        }),
+      },
     },
   ];
 

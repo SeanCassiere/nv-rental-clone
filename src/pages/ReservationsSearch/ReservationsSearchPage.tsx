@@ -28,6 +28,7 @@ function ReservationsSearchPage() {
     CreatedDateFrom: filters?.CreatedDateFrom || undefined,
     CreatedDateTo: filters?.CreatedDateTo || undefined,
     SortDirection: filters?.SortDirection || "ASC",
+    CustomerId: filters?.CustomerId || undefined,
   };
 
   const reservationsData = useGetReservationsList({
@@ -121,6 +122,13 @@ function ReservationsSearchPage() {
                   required: false,
                   accessor: "CreatedDateTo",
                   label: "End date",
+                },
+                {
+                  name: "CustomerId",
+                  type: "number",
+                  required: false,
+                  accessor: "CustomerId",
+                  label: "CustomerId",
                 },
                 {
                   name: "SortDirection",

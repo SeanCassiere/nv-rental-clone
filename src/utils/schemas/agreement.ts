@@ -15,6 +15,7 @@ export const AgreementFiltersSchema = z
     EndDate: z.coerce.date().optional(),
     SortBy: z.string().optional(),
     SortDirection: z.string().optional(),
+    CustomerId: z.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
     if (StartDate && EndDate && StartDate > EndDate) {
