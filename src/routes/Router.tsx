@@ -13,8 +13,8 @@ export const router = createReactRouter({
     encodeToBinary(JSON.stringify(value))
   ),
   defaultPendingComponent: () => (
-    <div className="flex items-center justify-center text-3xl">
-      Code-split loading...
+    <div className="flex h-[calc(100vh-4rem)] w-full items-center justify-center text-3xl">
+      <div>Code-split loading...</div>
     </div>
   ),
 });

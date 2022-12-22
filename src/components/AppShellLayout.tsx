@@ -380,7 +380,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
           </div>
         </div>
 
-        <main className="flex-1">
+        <main className="h-full flex-1">
           {children}
           {/* <div className="py-6">
               <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
