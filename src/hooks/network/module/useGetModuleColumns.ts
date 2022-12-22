@@ -378,6 +378,11 @@ function settingStartingColumn(
   let columnData = columns;
   const numberActive = columns.filter((col) => col.isSelected).length;
 
+  if (numberActive !== 0) {
+    // because the user already has columns selected
+    return columnData;
+  }
+
   const findReservationNumber = columnData
     .map((d) => d.columnHeader)
     .indexOf(startingColumnHeader);
