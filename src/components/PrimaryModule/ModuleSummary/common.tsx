@@ -1,4 +1,9 @@
 import classNames from "classnames";
+import {
+  type MakeLinkOptions,
+  type RegisteredAllRouteInfo,
+  Link,
+} from "@tanstack/react-router";
 import { type ReactNode } from "react";
 export const SummaryHeader = ({
   title,
@@ -20,6 +25,8 @@ export const SummaryHeader = ({
 export type TSummaryLineItemProps = {
   id: string;
   label: string;
+  type?: "text" | "link";
+  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo, "/", ".">;
   amount: string | number | null;
   shown?: boolean;
   redHighlight?: boolean;
@@ -28,7 +35,33 @@ export type TSummaryLineItemProps = {
   biggerText?: boolean;
 };
 
+export const makeSummaryDataStyles = (
+  data: Pick<
+    TSummaryLineItemProps,
+    | "primaryTextHighlight"
+    | "redHighlight"
+    | "primaryBlockHighlight"
+    | "biggerText"
+  >
+) => {
+  return classNames(
+    "text-base font-semibold",
+    !data.primaryTextHighlight &&
+      !data.redHighlight &&
+      !data.primaryBlockHighlight
+      ? "text-gray-700"
+      : "",
+    data.redHighlight ? "text-red-400" : "",
+    data.primaryTextHighlight && !data.primaryBlockHighlight
+      ? "text-teal-400"
+      : "",
+    data.biggerText ? "text-lg" : "text-base"
+  );
+};
+
 export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
+  const { type: lineItemType = "text" } = data;
+
   return (
     <div
       className={classNames(
@@ -47,23 +80,14 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
       >
         {data.label}
       </span>
-      <span
-        className={classNames(
-          "text-base font-semibold",
-          !data.primaryTextHighlight &&
-            !data.redHighlight &&
-            !data.primaryBlockHighlight
-            ? "text-gray-700"
-            : "",
-          data.redHighlight ? "text-red-400" : "",
-          data.primaryTextHighlight && !data.primaryBlockHighlight
-            ? "text-teal-400"
-            : "",
-          data.biggerText ? "text-lg" : "text-base"
-        )}
-      >
-        {data.amount}
-      </span>
+      {lineItemType === "text" && (
+        <span className={makeSummaryDataStyles(data)}>{data.amount}</span>
+      )}
+      {lineItemType === "link" && (
+        <Link {...data.linkProps} className={makeSummaryDataStyles(data)}>
+          {data.amount}
+        </Link>
+      )}
     </div>
   );
 };

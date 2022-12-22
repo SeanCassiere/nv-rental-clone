@@ -7,7 +7,7 @@ import {
   HamburgerMenuOutline,
 } from "../../components/icons";
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import RentalRatesSummary from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
+import { RentalRatesSummary } from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 
 function AgreementViewPage() {
