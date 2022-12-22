@@ -6,12 +6,19 @@ import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
+import { CustomerSummary } from "../../components/PrimaryModule/ModuleSummary/CustomerSummary";
+import { useGetCustomerSummary } from "../../hooks/network/customer/useGetCustomerSummary";
+import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 
 function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const customerId = params.customerId || "";
+
+  const customerSummary = useGetCustomerSummary({ customerId });
+
+  const clientProfile = useGetClientProfile();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -58,7 +65,10 @@ function CustomerViewPage() {
           </div>
           {/*  */}
           <div className="flex flex-col gap-4 md:col-span-5">
-            summary module here
+            <CustomerSummary
+              summaryData={customerSummary.data}
+              currency={clientProfile.data?.currency || undefined}
+            />
           </div>
         </div>
       </div>

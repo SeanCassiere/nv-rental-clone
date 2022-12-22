@@ -1,5 +1,6 @@
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import { RentalRatesSummarySchema } from "../utils/schemas/summary";
+import { CustomerSummarySchema } from "../utils/schemas/summary/customerSummary";
 
 export const fetchRentalRateSummaryAmounts = async (
   opts: {
@@ -27,4 +28,20 @@ export const fetchRentalRateSummaryAmounts = async (
       },
     }
   ).then((res) => RentalRatesSummarySchema.parse(res.data));
+};
+
+export const fetchCustomerSummaryAmounts = async (
+  opts: { customerId: string | number } & CommonAuthParams
+) => {
+  return await callV3Api(
+    makeUrl(`/v3/customers/${opts.customerId}/summary`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => CustomerSummarySchema.parse(res.data));
 };
