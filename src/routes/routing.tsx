@@ -72,6 +72,10 @@ const customersIndexRoute = customersRoute.createRoute({
     }),
   ],
 });
+const viewCustomerRoute = customersRoute.createRoute({
+  path: "$customerId",
+  component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
+});
 
 // Reservation Routes
 const reservationsRoute = rootRoute.createRoute({ path: "reservations" });
@@ -120,6 +124,6 @@ export const routeConfig = rootRoute.addChildren([
   loggedOutRoute,
   agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
   reservationsRoute.addChildren([reservationsIndexRoute, viewReservationRoute]),
-  customersRoute.addChildren([customersIndexRoute]),
+  customersRoute.addChildren([customersIndexRoute, viewCustomerRoute]),
   vehiclesRoute.addChildren([vehiclesIndexRoute]),
 ]);
