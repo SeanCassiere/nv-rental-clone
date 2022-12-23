@@ -1,6 +1,7 @@
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import { RentalRatesSummarySchema } from "../utils/schemas/summary";
 import { CustomerSummarySchema } from "../utils/schemas/summary/customerSummary";
+import { VehicleSummarySchema } from "../utils/schemas/summary/vehicleSummary";
 
 export const fetchRentalRateSummaryAmounts = async (
   opts: {
@@ -44,4 +45,20 @@ export const fetchCustomerSummaryAmounts = async (
       },
     }
   ).then((res) => CustomerSummarySchema.parse(res.data));
+};
+
+export const fetchVehicleSummaryAmounts = async (
+  opts: { vehicleId: string | number } & CommonAuthParams
+) => {
+  return await callV3Api(
+    makeUrl(`/v3/vehicles/${opts.vehicleId}/summary`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => VehicleSummarySchema.parse(res.data));
 };

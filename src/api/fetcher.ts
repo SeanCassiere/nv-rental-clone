@@ -34,12 +34,6 @@ export function makeUrl(
 
   for (const key of Object.entries(params)) {
     const [keyName, value] = key;
-    // if (
-    //   typeof value !== "undefined" ||
-    //   (typeof value === "string" && value !== "")
-    // ) {
-    //   queryParams.append(keyName, `${value}`);
-    // }
 
     if (typeof value !== "undefined") {
       //
