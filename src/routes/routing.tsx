@@ -118,6 +118,10 @@ const vehiclesIndexRoute = vehiclesRoute.createRoute({
     }),
   ],
 });
+const viewVehicleRoute = vehiclesRoute.createRoute({
+  path: "$vehicleId",
+  component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
+});
 
 export const routeConfig = rootRoute.addChildren([
   indexRoute,
@@ -125,5 +129,5 @@ export const routeConfig = rootRoute.addChildren([
   agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
   reservationsRoute.addChildren([reservationsIndexRoute, viewReservationRoute]),
   customersRoute.addChildren([customersIndexRoute, viewCustomerRoute]),
-  vehiclesRoute.addChildren([vehiclesIndexRoute]),
+  vehiclesRoute.addChildren([vehiclesIndexRoute, viewVehicleRoute]),
 ]);
