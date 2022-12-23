@@ -7,12 +7,16 @@ import {
   HamburgerMenuOutline,
 } from "../../components/icons";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
+import { VehicleSummary } from "../../components/PrimaryModule/ModuleSummary/VehicleSummary";
+import { useGetVehicleSummary } from "../../hooks/network/vehicle/useGetVehicleSummary";
 
 function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const vehicleId = params.vehicleId || "";
+
+  const vehicleSummary = useGetVehicleSummary({ vehicleId });
 
   const clientProfile = useGetClientProfile();
 
@@ -61,7 +65,11 @@ function VehicleViewPage() {
           </div>
           {/*  */}
           <div className="flex flex-col gap-4 md:col-span-5">
-            Vehicle Summary
+            <VehicleSummary
+              summaryData={vehicleSummary.data}
+              currency={clientProfile.data?.currency || undefined}
+              vehicleId={vehicleId}
+            />
           </div>
         </div>
       </div>

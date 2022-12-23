@@ -2,6 +2,7 @@ import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import { RentalRatesSummarySchema } from "../utils/schemas/summary";
 import { CustomerSummarySchema } from "../utils/schemas/summary/customerSummary";
 import { VehicleSummarySchema } from "../utils/schemas/summary/vehicleSummary";
+import { localDateTimeToQueryYearMonthDay } from "../utils/date";
 
 export const fetchRentalRateSummaryAmounts = async (
   opts: {
@@ -48,12 +49,13 @@ export const fetchCustomerSummaryAmounts = async (
 };
 
 export const fetchVehicleSummaryAmounts = async (
-  opts: { vehicleId: string | number } & CommonAuthParams
+  opts: { vehicleId: string | number; clientDate: Date } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/vehicles/${opts.vehicleId}/summary`, {
       clientId: opts.clientId,
       userId: opts.userId,
+      clientTime: localDateTimeToQueryYearMonthDay(opts.clientDate, true),
     }),
     {
       headers: {
