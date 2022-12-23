@@ -9,12 +9,14 @@ import { z } from "zod";
 export const AgreementFiltersSchema = z
   .object({
     AgreementStatusName: z.string().optional(),
-    Statuses: z.coerce.number().optional(),
+    Statuses: z.array(z.coerce.number()).optional(),
     IsSearchOverdues: z.coerce.boolean().optional(),
     StartDate: z.coerce.date().optional(),
     EndDate: z.coerce.date().optional(),
     SortBy: z.string().optional(),
     SortDirection: z.string().optional(),
+    CustomerId: z.string().optional(),
+    VehicleId: z.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
     if (StartDate && EndDate && StartDate > EndDate) {

@@ -51,8 +51,8 @@ function CustomerSearchPage() {
               .CustomerId;
             return (
               <Link
-                to="/agreements/$agreementId"
-                params={{ agreementId: String(customerId) }}
+                to="/customers/$customerId"
+                params={{ customerId: String(customerId) }}
                 className="font-medium text-teal-700"
               >
                 {item.getValue()}

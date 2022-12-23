@@ -4,9 +4,10 @@ import { type ZodSchema } from "zod";
 
 type KeyValueObject = { [key: string]: any };
 
-function makeJsonSafe<T extends KeyValueObject>(data: T) {
+function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {
   const parse = Object.entries(data).reduce((acc, [key, value]) => {
     let storeValue = value;
+
     if (
       String(value).trim() === "undefined" ||
       String(value).trim() === "" ||
@@ -14,14 +15,19 @@ function makeJsonSafe<T extends KeyValueObject>(data: T) {
     )
       return acc;
 
-    if (String(value) === "true") {
-      storeValue = true;
-    }
-    if (String(value) === "false") {
-      storeValue = false;
-    }
-    if (typeof value === "string" && /^\d+$/.test(String(value))) {
-      storeValue = parseInt(value);
+    if (Array.isArray(originalData[key]) && typeof value === "string") {
+      storeValue = value.split(",").map((i) => i.trim());
+    } else {
+      if (String(value) === "true") {
+        storeValue = true;
+      }
+      if (String(value) === "false") {
+        storeValue = false;
+      }
+
+      if (typeof value === "string" && /^\d+$/.test(String(value))) {
+        storeValue = parseInt(value);
+      }
     }
 
     return {
@@ -30,6 +36,22 @@ function makeJsonSafe<T extends KeyValueObject>(data: T) {
     };
   }, {});
   return parse;
+}
+
+function makeBackToArray(data: any, originalData: any) {
+  const parsed = [...Object.entries(data)].reduce((prev, [key, value]) => {
+    let useableValue = value;
+    if (Array.isArray(originalData[key]) && typeof value === "string") {
+      useableValue = value.split(",").map((i) => i.trim());
+    }
+
+    return {
+      ...prev,
+      [key]: useableValue,
+    };
+  }, {});
+
+  return parsed;
 }
 
 interface BaseBluePrint<T> {
@@ -97,14 +119,18 @@ function ModuleSearchFilters<T extends KeyValueObject>(
       onSubmit={(evt) => {
         evt.preventDefault();
 
-        const result = props.validationSchema.safeParse(values);
+        const insert = makeBackToArray(values, props.initialValues);
+
+        const result = props.validationSchema.safeParse(insert);
 
         if (!result.success) {
           console.error("failed submitting module filters\n\n", result.error);
           return;
         }
 
-        const jsonSafe = makeJsonSafe(values);
+        const secondInsert = makeBackToArray(result.data, props.initialValues);
+
+        const jsonSafe = makeJsonSafe(secondInsert, props.initialValues);
 
         router.navigate<any>({
           to: props.toLocation as any,
@@ -171,7 +197,13 @@ const RenderInput = <T extends KeyValueObject>({
           id={id}
           type="text"
           name={blueprint.name}
-          value={typeof value === "undefined" ? "" : value}
+          value={
+            typeof value === "undefined"
+              ? ""
+              : Array.isArray(value)
+              ? value.join(",")
+              : value
+          }
           onChange={onChange}
         />
       </div>

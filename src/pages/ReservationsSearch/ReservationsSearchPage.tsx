@@ -24,10 +24,12 @@ function ReservationsSearchPage() {
 
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
   const searchFilters = {
-    Statuses: filters?.Statuses || undefined,
+    Statuses: filters?.Statuses || [],
     CreatedDateFrom: filters?.CreatedDateFrom || undefined,
     CreatedDateTo: filters?.CreatedDateTo || undefined,
     SortDirection: filters?.SortDirection || "ASC",
+    CustomerId: filters?.CustomerId || undefined,
+    VehicleId: filters?.VehicleId || undefined,
   };
 
   const reservationsData = useGetReservationsList({
@@ -121,6 +123,20 @@ function ReservationsSearchPage() {
                   required: false,
                   accessor: "CreatedDateTo",
                   label: "End date",
+                },
+                {
+                  name: "CustomerId",
+                  type: "number",
+                  required: false,
+                  accessor: "CustomerId",
+                  label: "CustomerId",
+                },
+                {
+                  name: "VehicleId",
+                  type: "number",
+                  required: false,
+                  accessor: "VehicleId",
+                  label: "VehicleId",
                 },
                 {
                   name: "SortDirection",

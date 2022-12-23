@@ -1,25 +1,22 @@
 import { useEffect } from "react";
-import { useRouter, useParams } from "@tanstack/react-router";
+import { useParams, useRouter } from "@tanstack/react-router";
 
 import Protector from "../../routes/Protector";
 import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import { RentalRatesSummary } from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
+import { CustomerSummary } from "../../components/PrimaryModule/ModuleSummary/CustomerSummary";
+import { useGetCustomerSummary } from "../../hooks/network/customer/useGetCustomerSummary";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 
-function ReservationViewPage() {
+function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const reservationId = params.reservationId || "";
+  const customerId = params.customerId || "";
 
-  const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "reservations",
-    referenceId: reservationId,
-  });
+  const customerSummary = useGetCustomerSummary({ customerId });
 
   const clientProfile = useGetClientProfile();
 
@@ -44,7 +41,7 @@ function ReservationViewPage() {
               </button>
               <h1 className="truncate text-2xl font-semibold text-gray-900">
                 No.&nbsp;
-                <span className="text-gray-600">{reservationId}</span>
+                <span className="text-gray-600">{customerId}</span>
               </h1>
             </div>
             {/*  */}
@@ -58,19 +55,18 @@ function ReservationViewPage() {
               </button>
             </div>
           </div>
-          <div className="mt-6 bg-white p-4">Reservation information modes</div>
+          <div className="mt-6 bg-white p-4">Customer information modes</div>
         </div>
 
         <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
           <div className="flex flex-col gap-4 md:col-span-7">
-            <div className="bg-white">Reservation block 1</div>
-            <div className="bg-white">Reservation block 2</div>
+            <div className="bg-white">Customer block 1</div>
+            <div className="bg-white">Customer block 2</div>
           </div>
           {/*  */}
           <div className="flex flex-col gap-4 md:col-span-5">
-            <RentalRatesSummary
-              module="reservations"
-              summaryData={rentalRatesSummary.data}
+            <CustomerSummary
+              summaryData={customerSummary.data}
               currency={clientProfile.data?.currency || undefined}
             />
           </div>
@@ -80,4 +76,4 @@ function ReservationViewPage() {
   );
 }
 
-export default ReservationViewPage;
+export default CustomerViewPage;

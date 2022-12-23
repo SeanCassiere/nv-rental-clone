@@ -28,17 +28,25 @@ export interface ResponseParsed<T> {
 
 export function makeUrl(
   endpoint: string,
-  params: Record<string, string | number | null | undefined>
+  params: Record<string, string | number | null | any[] | undefined>
 ) {
   const queryParams = new URLSearchParams();
 
   for (const key of Object.entries(params)) {
     const [keyName, value] = key;
-    if (
-      typeof value !== "undefined" ||
-      (typeof value === "string" && value !== "")
-    ) {
-      queryParams.append(keyName, `${value}`);
+
+    if (typeof value !== "undefined") {
+      //
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          queryParams.append(keyName, `${item}`);
+        });
+      } else {
+        //
+        if (value !== "") {
+          queryParams.append(keyName, `${value}`);
+        }
+      }
     }
   }
 

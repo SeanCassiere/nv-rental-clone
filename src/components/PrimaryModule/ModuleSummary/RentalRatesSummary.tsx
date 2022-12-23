@@ -7,7 +7,7 @@ import {
 } from "./common";
 import { useTranslation } from "react-i18next";
 
-const RentalRatesSummary = ({
+export const RentalRatesSummary = ({
   module,
   summaryData,
   currency = "",
@@ -18,7 +18,7 @@ const RentalRatesSummary = ({
 }) => {
   const { t } = useTranslation();
 
-  const defaultLineItemsList: TSummaryLineItemProps[] = [
+  const defaultLineItemsList: Omit<TSummaryLineItemProps, "id">[] = [
     {
       label: "Base rate",
       amount: t("intlCurrency", { value: summaryData?.baseRate, currency }),
@@ -186,7 +186,12 @@ const RentalRatesSummary = ({
       }),
       primaryTextHighlight: Boolean(summaryData.securityDeposit),
     },
-  ].map((item, idx) => ({ ...item, id: `${module}-summary-${idx}` }));
+  ];
+
+  const lineItems = defaultLineItemsList.map((item, idx) => ({
+    ...item,
+    id: `${module}-summary-${idx}`,
+  }));
 
   return (
     <div className="grid divide-y divide-gray-200 rounded bg-white py-1 shadow-sm">
@@ -194,7 +199,7 @@ const RentalRatesSummary = ({
         title="Summary of charges"
         icon={<CurrencyDollarSolid className="h-5 w-5 text-gray-700" />}
       />
-      {defaultLineItemsList
+      {lineItems
         .filter((item) => item.shown === true || item.shown === undefined)
         .map((item) => (
           <SummaryLineItem key={item.id} data={item} />
@@ -202,5 +207,3 @@ const RentalRatesSummary = ({
     </div>
   );
 };
-
-export default RentalRatesSummary;

@@ -25,7 +25,7 @@ function AgreementsSearchPage() {
   const { page: pageNumber = 1, size = 10, filters } = useSearch();
   const searchFilters = {
     AgreementStatusName: filters?.AgreementStatusName || undefined,
-    Statuses: filters?.Statuses || undefined,
+    Statuses: filters?.Statuses || [],
     IsSearchOverdues:
       typeof filters?.IsSearchOverdues !== "undefined"
         ? filters?.IsSearchOverdues
@@ -34,6 +34,8 @@ function AgreementsSearchPage() {
     EndDate: filters?.EndDate || undefined,
     SortBy: filters?.SortBy || "CreatedDate",
     SortDirection: filters?.SortDirection || "DESC",
+    CustomerId: filters?.CustomerId || undefined,
+    VehicleId: filters?.VehicleId || undefined,
   };
 
   const agreementsData = useGetAgreementsList({
@@ -146,6 +148,20 @@ function AgreementsSearchPage() {
                   required: false,
                   accessor: "EndDate",
                   label: "End date",
+                },
+                {
+                  name: "CustomerId",
+                  type: "number",
+                  required: false,
+                  accessor: "CustomerId",
+                  label: "CustomerId",
+                },
+                {
+                  name: "VehicleId",
+                  type: "number",
+                  required: false,
+                  accessor: "VehicleId",
+                  label: "VehicleId",
                 },
                 {
                   name: "SortBy",

@@ -42,8 +42,8 @@ function VehiclesSearchPage() {
             const vehicleId = item.table.getRow(item.row.id).original.id;
             return (
               <Link
-                to="/agreements/$agreementId"
-                params={{ agreementId: String(vehicleId) }}
+                to="/vehicles/$vehicleId"
+                params={{ vehicleId: String(vehicleId) }}
                 className="font-medium text-teal-700"
               >
                 {item.getValue()}
