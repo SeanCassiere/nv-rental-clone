@@ -21,6 +21,8 @@ function VehiclesSearchPage() {
   const searchFilters = {
     Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
     SortDirection: filters?.SortDirection || "DESC",
+    VehicleNo: filters?.VehicleNo || undefined,
+    VehicleId: filters?.VehicleId || undefined,
   };
 
   const vehiclesData = useGetVehiclesList({
@@ -90,6 +92,20 @@ function VehiclesSearchPage() {
               validationSchema={VehicleFiltersSchema}
               initialValues={searchFilters}
               searchFiltersBlueprint={[
+                {
+                  name: "VehicleNo",
+                  type: "text",
+                  required: false,
+                  accessor: "VehicleNo",
+                  label: "VehicleNo",
+                },
+                {
+                  name: "VehicleId",
+                  type: "number",
+                  required: false,
+                  accessor: "VehicleId",
+                  label: "VehicleId",
+                },
                 {
                   name: "Active",
                   type: "single-dropdown",
