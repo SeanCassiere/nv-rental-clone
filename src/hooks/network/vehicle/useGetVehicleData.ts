@@ -16,6 +16,7 @@ export function useGetVehicleData(params: {
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
+        clientTime: new Date(),
       }),
     enabled: auth.isAuthenticated,
     onError: (err) => {
