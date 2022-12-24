@@ -84,7 +84,7 @@ function VehicleViewPage() {
             <VehicleSummary
               summaryData={vehicleSummary.data}
               currency={clientProfile.data?.currency || undefined}
-              vehicleId={vehicleId}
+              vehicleNo={vehicleData.data?.vehicle.vehicleNo || undefined}
             />
           </div>
         </div>

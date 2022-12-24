@@ -87,10 +87,28 @@ export const VehicleDataSchema = z.object({
     lastUpdatedByName: z.string().nullable(),
     licenseStateName: z.string().nullable(),
   }),
-  image: z.string().nullable(),
+  image: z
+    .object({
+      imageName: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+      imageView: z.string().nullable(),
+      isActive: z.boolean(),
+      vehicleId: z.number().nullable(),
+      vehicleImageID: z.number().nullable(),
+    })
+    .nullable(),
   optionList: z.array(z.any()),
   vehicleSummary: z.any(),
   userIds: z.array(z.coerce.number()),
-  imageList: z.array(z.any()),
+  imageList: z.array(
+    z.object({
+      vehicleImageID: z.number().nullable(),
+      vehicleId: z.number().nullable(),
+      imageName: z.string().nullable(),
+      imageView: z.string().nullable(),
+      imageUrl: z.string().nullable(),
+      isActive: z.boolean(),
+    })
+  ),
   addedInventoryItemList: z.array(z.any()),
 });

@@ -30,6 +30,7 @@ function ReservationsSearchPage() {
     SortDirection: filters?.SortDirection || "ASC",
     CustomerId: filters?.CustomerId || undefined,
     VehicleId: filters?.VehicleId || undefined,
+    VehicleNo: filters?.VehicleNo || undefined,
   };
 
   const reservationsData = useGetReservationsList({
@@ -130,6 +131,13 @@ function ReservationsSearchPage() {
                   required: false,
                   accessor: "CustomerId",
                   label: "CustomerId",
+                },
+                {
+                  name: "VehicleNo",
+                  type: "text",
+                  required: false,
+                  accessor: "VehicleNo",
+                  label: "VehicleNo",
                 },
                 {
                   name: "VehicleId",

@@ -9,16 +9,15 @@ import {
 } from "./common";
 
 export const VehicleSummary = ({
-  vehicleId,
   summaryData,
   currency = "",
+  vehicleNo,
 }: {
-  vehicleId: string | number;
   summaryData: TVehicleSummarySchema;
   currency?: string;
+  vehicleNo?: string;
 }) => {
   const { t } = useTranslation();
-  console.log("summary", summaryData);
 
   const lineItems: Omit<TSummaryLineItemProps, "id">[] = [
     {
@@ -76,7 +75,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/reservations",
         search: () => ({
-          filters: { VehicleId: `${vehicleId}` },
+          filters: { VehicleNo: vehicleNo ?? "" },
         }),
       },
     },
@@ -110,7 +109,7 @@ export const VehicleSummary = ({
         to: "/reservations",
         search: () => ({
           filters: {
-            VehicleId: `${vehicleId}`,
+            VehicleNo: vehicleNo ?? "",
             Statuses: [2, 7],
           },
         }),
@@ -124,7 +123,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/agreements",
         search: () => ({
-          filters: { VehicleId: `${vehicleId}` },
+          filters: { VehicleNo: vehicleNo ?? "" },
         }),
       },
     },
@@ -180,7 +179,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/agreements",
         search: () => ({
-          filters: { VehicleId: `${vehicleId}`, Statuses: [5] },
+          filters: { VehicleNo: vehicleNo ?? "", Statuses: [5] },
         }),
       },
     },

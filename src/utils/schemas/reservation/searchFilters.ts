@@ -8,6 +8,7 @@ export const ReservationFiltersSchema = z
     SortDirection: z.string().optional(),
     CustomerId: z.string().optional(),
     VehicleId: z.string().optional(),
+    VehicleNo: z.string().optional(),
   })
   .superRefine(({ CreatedDateFrom, CreatedDateTo }, ctx) => {
     if (CreatedDateFrom && CreatedDateTo && CreatedDateFrom > CreatedDateTo) {

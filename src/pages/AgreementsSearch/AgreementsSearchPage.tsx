@@ -36,6 +36,7 @@ function AgreementsSearchPage() {
     SortDirection: filters?.SortDirection || "DESC",
     CustomerId: filters?.CustomerId || undefined,
     VehicleId: filters?.VehicleId || undefined,
+    VehicleNo: filters?.VehicleNo || undefined,
   };
 
   const agreementsData = useGetAgreementsList({
@@ -155,6 +156,13 @@ function AgreementsSearchPage() {
                   required: false,
                   accessor: "CustomerId",
                   label: "CustomerId",
+                },
+                {
+                  name: "VehicleNo",
+                  type: "text",
+                  required: false,
+                  accessor: "VehicleNo",
+                  label: "VehicleNo",
                 },
                 {
                   name: "VehicleId",
