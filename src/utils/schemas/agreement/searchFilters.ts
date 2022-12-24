@@ -1,11 +1,5 @@
 import { z } from "zod";
 
-// EndDate: z
-//   .preprocess((arg) => {
-//     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
-//   }, z.date())
-//   .optional(),
-
 export const AgreementFiltersSchema = z
   .object({
     AgreementStatusName: z.string().optional(),
