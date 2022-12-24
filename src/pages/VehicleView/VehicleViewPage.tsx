@@ -1,34 +1,55 @@
-import { useEffect } from "react";
-import { useRouter, useParams } from "@tanstack/react-router";
+import { lazy, useEffect } from "react";
+import { useRouter, useParams, useSearch } from "@tanstack/react-router";
 
 import Protector from "../../routes/Protector";
 import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { VehicleSummary } from "../../components/PrimaryModule/ModuleSummary/VehicleSummary";
-import { useGetVehicleSummary } from "../../hooks/network/vehicle/useGetVehicleSummary";
 import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
+import {
+  type ModuleTabConfigItem,
+  ModuleTabs,
+} from "../../components/PrimaryModule/ModuleTabs";
+import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+
+const SummaryTab = lazy(
+  () => import("../../components/Vehicle/VehicleSummaryTab")
+);
 
 function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
+  const search = useSearch();
 
   const vehicleId = params.vehicleId || "";
+  const tabName = search?.tab || "";
 
   const onFindError = () => {
     router.history.go(-1);
   };
 
-  const vehicleData = useGetVehicleData({
+  const onTabClick = (newTabName: string) => {
+    router.navigate({
+      to: "/vehicles/$vehicleId",
+      params: { vehicleId },
+      search: { tab: newTabName },
+      replace: true,
+    });
+  };
+
+  const tabsConfig: ModuleTabConfigItem[] = [
+    {
+      id: "summary",
+      label: "Summary",
+      component: <SummaryTab vehicleId={vehicleId} />,
+    },
+  ];
+
+  useGetVehicleData({
     vehicleId,
     onError: onFindError,
   });
-
-  const vehicleSummary = useGetVehicleSummary({ vehicleId });
-
-  const clientProfile = useGetClientProfile();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -68,25 +89,13 @@ function VehicleViewPage() {
           <div className="mt-6 bg-white p-4">Vehicle information modes</div>
         </div>
 
-        <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
-          <div className="flex flex-col gap-4 md:col-span-7">
-            <div className="overflow-x-scroll bg-white">
-              <h2>Vehicle data</h2>
-              <code className="text-xs">
-                <pre>{JSON.stringify(vehicleData.data, null, 2)}</pre>
-              </code>
-            </div>
-            <div className="bg-white">Vehicle block 1</div>
-            <div className="bg-white">Vehicle block 2</div>
-          </div>
-          {/*  */}
-          <div className="flex flex-col gap-4 md:col-span-5">
-            <VehicleSummary
-              summaryData={vehicleSummary.data}
-              currency={clientProfile.data?.currency || undefined}
-              vehicleNo={vehicleData.data?.vehicle.vehicleNo || undefined}
-            />
-          </div>
+        <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
+          <ModuleTabs
+            key={`changing-tab-${tabName}`}
+            tabConfig={tabsConfig}
+            startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
+            onTabClick={onTabClick}
+          />
         </div>
       </div>
     </Protector>

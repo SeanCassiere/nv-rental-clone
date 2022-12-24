@@ -53,6 +53,7 @@ const agreementsIndexRoute = agreementsRoute.createRoute({
 const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
   component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Customer Routes
@@ -75,6 +76,7 @@ const customersIndexRoute = customersRoute.createRoute({
 const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
   component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Reservation Routes
@@ -99,6 +101,7 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
 const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
   component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Vehicle Routes
@@ -121,6 +124,7 @@ const vehiclesIndexRoute = vehiclesRoute.createRoute({
 const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
   component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 export const routeConfig = rootRoute.addChildren([
