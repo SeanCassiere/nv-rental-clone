@@ -98,7 +98,7 @@ export const VehicleDataSchema = z.object({
     })
     .nullable(),
   optionList: z.array(z.any()),
-  vehicleSummary: z.any(),
+  // vehicleSummary: z.any(),
   userIds: z.array(z.coerce.number()),
   imageList: z.array(
     z.object({
