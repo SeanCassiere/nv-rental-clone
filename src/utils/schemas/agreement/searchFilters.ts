@@ -1,11 +1,5 @@
 import { z } from "zod";
 
-// EndDate: z
-//   .preprocess((arg) => {
-//     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
-//   }, z.date())
-//   .optional(),
-
 export const AgreementFiltersSchema = z
   .object({
     AgreementStatusName: z.string().optional(),
@@ -17,6 +11,7 @@ export const AgreementFiltersSchema = z
     SortDirection: z.string().optional(),
     CustomerId: z.string().optional(),
     VehicleId: z.string().optional(),
+    VehicleNo: z.coerce.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
     if (StartDate && EndDate && StartDate > EndDate) {

@@ -1,3 +1,4 @@
+import { CustomerDataSchema } from "../utils/schemas/customer";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchCustomersList = async (
@@ -21,4 +22,20 @@ export const fetchCustomersList = async (
       },
     }
   );
+};
+
+export const fetchCustomerData = async (
+  opts: { customerId: string | number } & CommonAuthParams
+) => {
+  return await callV3Api(
+    makeUrl(`/v3/customers/${opts.customerId}`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => CustomerDataSchema.parse(res.data));
 };

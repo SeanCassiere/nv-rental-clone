@@ -9,12 +9,22 @@ import {
 import { CustomerSummary } from "../../components/PrimaryModule/ModuleSummary/CustomerSummary";
 import { useGetCustomerSummary } from "../../hooks/network/customer/useGetCustomerSummary";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
+import { useGetCustomerData } from "../../hooks/network/customer/useGetCustomerData";
 
 function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const customerId = params.customerId || "";
+
+  const onFindError = () => {
+    router.history.go(-1);
+  };
+
+  const customerData = useGetCustomerData({
+    customerId,
+    onError: onFindError,
+  });
 
   const customerSummary = useGetCustomerSummary({ customerId });
 
@@ -60,6 +70,12 @@ function CustomerViewPage() {
 
         <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
           <div className="flex flex-col gap-4 md:col-span-7">
+            <div className="overflow-x-scroll bg-white">
+              <h2>Customer data</h2>
+              <code className="text-xs">
+                <pre>{JSON.stringify(customerData.data, null, 2)}</pre>
+              </code>
+            </div>
             <div className="bg-white">Customer block 1</div>
             <div className="bg-white">Customer block 2</div>
           </div>

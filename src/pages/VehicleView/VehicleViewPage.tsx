@@ -9,12 +9,22 @@ import {
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { VehicleSummary } from "../../components/PrimaryModule/ModuleSummary/VehicleSummary";
 import { useGetVehicleSummary } from "../../hooks/network/vehicle/useGetVehicleSummary";
+import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
 
 function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const vehicleId = params.vehicleId || "";
+
+  const onFindError = () => {
+    router.history.go(-1);
+  };
+
+  const vehicleData = useGetVehicleData({
+    vehicleId,
+    onError: onFindError,
+  });
 
   const vehicleSummary = useGetVehicleSummary({ vehicleId });
 
@@ -60,6 +70,12 @@ function VehicleViewPage() {
 
         <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
           <div className="flex flex-col gap-4 md:col-span-7">
+            <div className="overflow-x-scroll bg-white">
+              <h2>Vehicle data</h2>
+              <code className="text-xs">
+                <pre>{JSON.stringify(vehicleData.data, null, 2)}</pre>
+              </code>
+            </div>
             <div className="bg-white">Vehicle block 1</div>
             <div className="bg-white">Vehicle block 2</div>
           </div>
@@ -68,7 +84,7 @@ function VehicleViewPage() {
             <VehicleSummary
               summaryData={vehicleSummary.data}
               currency={clientProfile.data?.currency || undefined}
-              vehicleId={vehicleId}
+              vehicleNo={vehicleData.data?.vehicle.vehicleNo || undefined}
             />
           </div>
         </div>

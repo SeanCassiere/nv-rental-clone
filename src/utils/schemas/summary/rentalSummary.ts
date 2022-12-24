@@ -73,7 +73,7 @@ const RentalSummaryPromotionItemSchema = z.object({
   vehicleTypeId: z.number(),
   locationId: z.number(),
   discountTypeNo: z.number(),
-  discountType: z.number(),
+  discountType: z.string().nullable(),
   discountValue: z.number(),
   minimumDay: z.number(),
   isAutoApply: z.boolean(),
