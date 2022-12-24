@@ -1,37 +1,71 @@
-import { useEffect } from "react";
-import { useParams, useRouter } from "@tanstack/react-router";
+import { useEffect, lazy } from "react";
+import { useParams, useRouter, useSearch } from "@tanstack/react-router";
 
 import Protector from "../../routes/Protector";
 import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import { RentalRatesSummary } from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
+import {
+  ModuleTabs,
+  type ModuleTabConfigItem,
+} from "../../components/PrimaryModule/ModuleTabs";
+import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+
+const SummaryTab = lazy(
+  () => import("../../components/Agreement/AgreementSummaryTab")
+);
+const PaymentsTab = lazy(
+  () => import("../../components/PrimaryModule/ModulePayments/Tab")
+);
+const InvoicesTab = lazy(
+  () => import("../../components/PrimaryModule/ModuleInvoices/Tab")
+);
 
 function AgreementViewPage() {
   const router = useRouter();
   const params = useParams();
+  const search = useSearch();
 
   const agreementId = params.agreementId || "";
+  const tabName = search?.tab || "";
+
+  const tabsConfig: ModuleTabConfigItem[] = [
+    {
+      id: "summary",
+      label: "Summary",
+      component: <SummaryTab agreementId={agreementId} />,
+    },
+    {
+      id: "payments",
+      label: "Payments",
+      component: <PaymentsTab />,
+    },
+    {
+      id: "invoices",
+      label: "Invoices",
+      component: <InvoicesTab />,
+    },
+  ];
+
+  const onTabClick = (newTabName: string) => {
+    router.navigate({
+      to: "/agreements/$agreementId",
+      params: { agreementId },
+      search: { tab: newTabName },
+      replace: true,
+    });
+  };
 
   const onFindError = () => {
     router.history.go(-1);
   };
 
-  const agreementData = useGetAgreementData({
+  useGetAgreementData({
     agreementId,
     onError: onFindError,
   });
-
-  const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "agreements",
-    referenceId: agreementId,
-  });
-
-  const clientProfile = useGetClientProfile();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -71,25 +105,13 @@ function AgreementViewPage() {
           <div className="mt-6 bg-white p-4">Agreement information modes</div>
         </div>
 
-        <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
-          <div className="flex flex-col gap-4 md:col-span-7">
-            <div className="overflow-x-scroll bg-white">
-              <h2>Agreement data</h2>
-              <code className="text-xs">
-                <pre>{JSON.stringify(agreementData.data, null, 2)}</pre>
-              </code>
-            </div>
-            <div className="bg-white">Agreement block 1</div>
-            <div className="bg-white">Agreement block 2</div>
-          </div>
-          {/*  */}
-          <div className="flex flex-col gap-4 md:col-span-5">
-            <RentalRatesSummary
-              module="agreements"
-              summaryData={rentalRatesSummary.data}
-              currency={clientProfile.data?.currency || undefined}
-            />
-          </div>
+        <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
+          <ModuleTabs
+            key={`changing-tab-${tabName}`}
+            tabConfig={tabsConfig}
+            startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
+            onTabClick={onTabClick}
+          />
         </div>
       </div>
     </Protector>
