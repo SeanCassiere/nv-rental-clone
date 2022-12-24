@@ -1,4 +1,5 @@
 import { localDateToQueryYearMonthDay } from "../utils/date";
+import { ReservationDataSchema } from "../utils/schemas/reservation";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchReservationsList = async (
@@ -24,4 +25,22 @@ export const fetchReservationsList = async (
       },
     }
   );
+};
+
+export const fetchReservationData = async (
+  opts: {
+    reservationId: string | number;
+  } & CommonAuthParams
+) => {
+  return await callV3Api(
+    makeUrl(`/v3/reservations/${opts.reservationId}`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => ReservationDataSchema.parse(res.data));
 };

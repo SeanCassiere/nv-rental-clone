@@ -9,12 +9,22 @@ import {
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 import { RentalRatesSummary } from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
+import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
 
 function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const reservationId = params.reservationId || "";
+
+  const onFindError = () => {
+    router.history.go(-1);
+  };
+
+  const reservationData = useGetReservationData({
+    reservationId,
+    onError: onFindError,
+  });
 
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
     module: "reservations",
@@ -63,6 +73,12 @@ function ReservationViewPage() {
 
         <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
           <div className="flex flex-col gap-4 md:col-span-7">
+            <div className="overflow-x-scroll bg-white">
+              <h2>Reservation data</h2>
+              <code className="text-xs">
+                <pre>{JSON.stringify(reservationData.data, null, 2)}</pre>
+              </code>
+            </div>
             <div className="bg-white">Reservation block 1</div>
             <div className="bg-white">Reservation block 2</div>
           </div>
