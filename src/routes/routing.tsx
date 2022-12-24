@@ -53,6 +53,7 @@ const agreementsIndexRoute = agreementsRoute.createRoute({
 const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
   component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Customer Routes
@@ -99,6 +100,7 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
 const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
   component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Vehicle Routes
