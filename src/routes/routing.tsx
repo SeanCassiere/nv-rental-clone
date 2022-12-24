@@ -76,6 +76,7 @@ const customersIndexRoute = customersRoute.createRoute({
 const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
   component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Reservation Routes
@@ -123,6 +124,7 @@ const vehiclesIndexRoute = vehiclesRoute.createRoute({
 const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
   component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
+  validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 export const routeConfig = rootRoute.addChildren([
