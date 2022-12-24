@@ -1,37 +1,71 @@
-import { useEffect } from "react";
-import { useRouter, useParams } from "@tanstack/react-router";
+import { lazy, useEffect } from "react";
+import { useRouter, useParams, useSearch } from "@tanstack/react-router";
 
 import Protector from "../../routes/Protector";
 import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import { RentalRatesSummary } from "../../components/PrimaryModule/ModuleSummary/RentalRatesSummary";
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
+import {
+  type ModuleTabConfigItem,
+  ModuleTabs,
+} from "../../components/PrimaryModule/ModuleTabs";
+import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+
+const SummaryTab = lazy(
+  () => import("../../components/Reservation/ReservationSummaryTab")
+);
+const PaymentsTab = lazy(
+  () => import("../../components/PrimaryModule/ModulePayments/Tab")
+);
+const InvoicesTab = lazy(
+  () => import("../../components/PrimaryModule/ModuleInvoices/Tab")
+);
 
 function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
+  const search = useSearch();
 
   const reservationId = params.reservationId || "";
+  const tabName = search?.tab || "";
+
+  const tabsConfig: ModuleTabConfigItem[] = [
+    {
+      id: "summary",
+      label: "Summary",
+      component: <SummaryTab reservationId={reservationId} />,
+    },
+    {
+      id: "payments",
+      label: "Payments",
+      component: <PaymentsTab />,
+    },
+    {
+      id: "invoices",
+      label: "Invoices",
+      component: <InvoicesTab />,
+    },
+  ];
 
   const onFindError = () => {
     router.history.go(-1);
   };
 
-  const reservationData = useGetReservationData({
+  const onTabClick = (newTabName: string) => {
+    router.navigate({
+      to: "/reservations/$reservationId",
+      params: { reservationId },
+      search: { tab: newTabName },
+      replace: true,
+    });
+  };
+
+  useGetReservationData({
     reservationId,
     onError: onFindError,
   });
-
-  const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "reservations",
-    referenceId: reservationId,
-  });
-
-  const clientProfile = useGetClientProfile();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -71,25 +105,13 @@ function ReservationViewPage() {
           <div className="mt-6 bg-white p-4">Reservation information modes</div>
         </div>
 
-        <div className="mx-auto mt-6 grid max-w-full grid-cols-1 gap-4 px-4 sm:px-6 md:grid-cols-12 md:px-8">
-          <div className="flex flex-col gap-4 md:col-span-7">
-            <div className="overflow-x-scroll bg-white">
-              <h2>Reservation data</h2>
-              <code className="text-xs">
-                <pre>{JSON.stringify(reservationData.data, null, 2)}</pre>
-              </code>
-            </div>
-            <div className="bg-white">Reservation block 1</div>
-            <div className="bg-white">Reservation block 2</div>
-          </div>
-          {/*  */}
-          <div className="flex flex-col gap-4 md:col-span-5">
-            <RentalRatesSummary
-              module="reservations"
-              summaryData={rentalRatesSummary.data}
-              currency={clientProfile.data?.currency || undefined}
-            />
-          </div>
+        <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
+          <ModuleTabs
+            key={`changing-tab-${tabName}`}
+            tabConfig={tabsConfig}
+            startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
+            onTabClick={onTabClick}
+          />
         </div>
       </div>
     </Protector>
