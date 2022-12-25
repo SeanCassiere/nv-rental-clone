@@ -5,4 +5,5 @@ export const VehicleFiltersSchema = z.object({
   SortDirection: z.string().optional(),
   VehicleNo: z.coerce.string().optional(),
   VehicleId: z.string().optional(),
+  VehicleStatus: z.string().optional(),
 });

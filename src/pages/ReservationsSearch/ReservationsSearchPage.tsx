@@ -14,6 +14,7 @@ import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleCo
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import type { ReservationListItemType } from "../../types/Reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
+import { useGetReservationStatusList } from "../../hooks/network/reservation/useGetReservationStatusList";
 
 const columnHelper = createColumnHelper<ReservationListItemType>();
 
@@ -38,6 +39,8 @@ function ReservationsSearchPage() {
     pageSize: size,
     filters: searchFilters,
   });
+
+  const reservationStatusList = useGetReservationStatusList();
 
   const columnsData = useGetModuleColumns({ module: "reservations" });
 
@@ -106,10 +109,17 @@ function ReservationsSearchPage() {
               searchFiltersBlueprint={[
                 {
                   name: "Statuses",
-                  type: "number",
+                  type: "multiple-dropdown",
                   required: false,
                   accessor: "Statuses",
                   label: "Status",
+                  options: [
+                    { value: "undefined", label: "Select" },
+                    ...reservationStatusList.data.map((item) => ({
+                      value: `${item.id}`,
+                      label: item.name,
+                    })),
+                  ],
                 },
                 {
                   name: "CreatedDateFrom",
@@ -127,7 +137,7 @@ function ReservationsSearchPage() {
                 },
                 {
                   name: "CustomerId",
-                  type: "number",
+                  type: "hidden",
                   required: false,
                   accessor: "CustomerId",
                   label: "CustomerId",
@@ -141,7 +151,7 @@ function ReservationsSearchPage() {
                 },
                 {
                   name: "VehicleId",
-                  type: "number",
+                  type: "hidden",
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",

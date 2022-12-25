@@ -33,7 +33,7 @@ export const ModuleTabs = (props: {
   return (
     <div className="w-full">
       <Tab.Group selectedIndex={index} onChange={handleChangeIndex}>
-        <Tab.List className="my-2 flex gap-1 overflow-x-scroll py-2 md:px-3">
+        <Tab.List className="my-2 flex gap-1 overflow-x-auto py-2 md:px-3">
           {props.tabConfig.map((item, idx) => (
             <Tab key={`tab-header-${item.id}`} as={Fragment}>
               {({ selected }) => (

@@ -63,7 +63,7 @@ interface BaseBluePrint<T> {
 
 interface TextSearchBlueprint<T extends KeyValueObject>
   extends BaseBluePrint<T> {
-  type: "text";
+  type: "text" | "hidden";
 }
 
 interface DateSearchBlueprint<T extends KeyValueObject>
@@ -82,10 +82,17 @@ interface SingleDropdownSearchBlueprint<T extends KeyValueObject>
   options: { value: string; label: string }[];
 }
 
+interface MultipleDropdownSearchBlueprint<T extends KeyValueObject>
+  extends BaseBluePrint<T> {
+  type: "multiple-dropdown";
+  options: { value: string; label: string }[];
+}
+
 type SearchBlueprint<T extends KeyValueObject> =
   | TextSearchBlueprint<T>
   | NumberSearchBlueprint<T>
   | SingleDropdownSearchBlueprint<T>
+  | MultipleDropdownSearchBlueprint<T>
   | DateSearchBlueprint<T>;
 
 interface ModuleSearchFiltersProps<T extends KeyValueObject> {
@@ -105,7 +112,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
   const [values, setValues] = useState(props.initialValues);
   return (
     <form
-      className="grid grid-cols-1 gap-2 md:grid-cols-4 lg:grid-cols-6"
+      className="grid grid-cols-1 gap-2 md:grid-cols-4 lg:grid-cols-5"
       onReset={(evt) => {
         evt.preventDefault();
         router.navigate<any>({
@@ -147,18 +154,35 @@ function ModuleSearchFilters<T extends KeyValueObject>(
           blueprint={blueprint}
           value={values[blueprint.accessor]}
           onChange={(evt: any) => {
-            let insert = evt.target.value;
-            if (
-              typeof insert === "string" &&
-              (insert.length === 0 || insert === "undefined")
-            ) {
-              insert = undefined;
-            }
-            if (String(insert) === "true") {
-              insert = true;
-            }
-            if (String(insert) === "false") {
-              insert = false;
+            let insert: any = evt.target.value;
+
+            // done for select multiple
+            // uses a string array
+            if (evt.target.multiple === true) {
+              const options = [...evt.target.selectedOptions].map(
+                (el) => el.value
+              );
+              // console.log(options);
+              if (options.includes("undefined")) {
+                insert = [];
+              } else {
+                insert = options;
+              }
+            } else {
+              //
+              if (
+                typeof insert === "string" &&
+                (insert.length === 0 || insert === "undefined")
+              ) {
+                insert = undefined;
+              }
+              if (String(insert) === "true") {
+                insert = true;
+              }
+              if (String(insert) === "false") {
+                insert = false;
+              }
+              //
             }
 
             setValues((prev) => ({ ...prev, [blueprint.accessor]: insert }));
@@ -171,7 +195,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
       <button type="reset" className="bg-gray-500 px-4 py-1 text-white">
         Clear
       </button>
-      <div className="col-span-1 overflow-scroll text-xs sm:col-span-2 md:col-span-5">
+      <div className="col-span-1 overflow-y-auto text-xs sm:col-span-2 md:col-span-5">
         {JSON.stringify(values)}
       </div>
     </form>
@@ -221,13 +245,38 @@ const RenderInput = <T extends KeyValueObject>({
           onChange={onChange}
         >
           {blueprint.options.map((option: any, idx) => (
-            <option key={`${blueprint.name}-${idx}`} value={option.value}>
+            <option key={`${blueprint.name}-${idx}`} value={`${option.value}`}>
               {option.label}
             </option>
           ))}
         </select>
       </div>
     );
+  }
+
+  if (blueprint.type === "multiple-dropdown") {
+    return (
+      <div className="grid">
+        <label htmlFor={id}>{blueprint.label}</label>
+        <select
+          id={id}
+          name={blueprint.name}
+          defaultValue={Array.isArray(value) ? [...value] : []}
+          onChange={onChange}
+          multiple
+        >
+          {blueprint.options.map((option, idx) => (
+            <option key={`${blueprint.name}-${idx}`} value={`${option.value}`}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
+  if (blueprint.type === "hidden") {
+    return <input id={id} type="hidden" name={blueprint.name} value={value} />;
   }
 
   if (blueprint.type === "date") {
