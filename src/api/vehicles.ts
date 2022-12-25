@@ -1,4 +1,5 @@
 import { localDateTimeToQueryYearMonthDay } from "../utils/date";
+import { AgreementStatusListSchema } from "../utils/schemas/agreement";
 import { VehicleDataSchema } from "../utils/schemas/vehicle/vehicleData";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
@@ -44,4 +45,18 @@ export const fetchVehicleData = async (
       },
     }
   ).then((res) => VehicleDataSchema.parse(res.data));
+};
+
+export const fetchVehicleStatusesList = async (opts: CommonAuthParams) => {
+  return await callV3Api(
+    makeUrl(`/v3/vehicles/statuses`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => AgreementStatusListSchema.parse(res.data));
 };
