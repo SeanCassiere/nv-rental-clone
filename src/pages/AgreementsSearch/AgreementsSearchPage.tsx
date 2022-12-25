@@ -14,6 +14,7 @@ import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleCo
 import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
 import type { AgreementListItemType } from "../../types/Agreement";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
+import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
 
 const columnHelper = createColumnHelper<AgreementListItemType>();
 
@@ -44,6 +45,8 @@ function AgreementsSearchPage() {
     pageSize: size,
     filters: searchFilters,
   });
+
+  const agreementStatusList = useGetAgreementStatusList();
 
   const columnsData = useGetModuleColumns({ module: "agreements" });
 
@@ -112,18 +115,18 @@ function AgreementsSearchPage() {
               initialValues={searchFilters}
               searchFiltersBlueprint={[
                 {
-                  name: "AgreementStatusName",
-                  type: "text",
-                  required: false,
-                  accessor: "AgreementStatusName",
-                  label: "Status Name",
-                },
-                {
                   name: "Statuses",
-                  type: "number",
+                  type: "multiple-dropdown",
                   required: false,
                   accessor: "Statuses",
                   label: "Status",
+                  options: [
+                    { value: "undefined", label: "Select" },
+                    ...agreementStatusList.data.map((item) => ({
+                      value: `${item.id}`,
+                      label: item.name,
+                    })),
+                  ],
                 },
                 {
                   name: "IsSearchOverdues",
