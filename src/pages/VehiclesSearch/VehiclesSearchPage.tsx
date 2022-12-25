@@ -119,7 +119,7 @@ function VehiclesSearchPage() {
                 },
                 {
                   name: "VehicleId",
-                  type: "number",
+                  type: "hidden",
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",

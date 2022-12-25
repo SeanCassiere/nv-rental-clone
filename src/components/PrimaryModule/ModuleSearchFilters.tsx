@@ -63,7 +63,7 @@ interface BaseBluePrint<T> {
 
 interface TextSearchBlueprint<T extends KeyValueObject>
   extends BaseBluePrint<T> {
-  type: "text";
+  type: "text" | "hidden";
 }
 
 interface DateSearchBlueprint<T extends KeyValueObject>
@@ -273,6 +273,10 @@ const RenderInput = <T extends KeyValueObject>({
         </select>
       </div>
     );
+  }
+
+  if (blueprint.type === "hidden") {
+    return <input id={id} type="hidden" name={blueprint.name} value={value} />;
   }
 
   if (blueprint.type === "date") {

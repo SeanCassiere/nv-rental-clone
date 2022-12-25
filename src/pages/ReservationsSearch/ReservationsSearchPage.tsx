@@ -137,7 +137,7 @@ function ReservationsSearchPage() {
                 },
                 {
                   name: "CustomerId",
-                  type: "number",
+                  type: "hidden",
                   required: false,
                   accessor: "CustomerId",
                   label: "CustomerId",
@@ -151,7 +151,7 @@ function ReservationsSearchPage() {
                 },
                 {
                   name: "VehicleId",
-                  type: "number",
+                  type: "hidden",
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",

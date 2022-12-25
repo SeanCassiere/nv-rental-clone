@@ -155,7 +155,7 @@ function AgreementsSearchPage() {
                 },
                 {
                   name: "CustomerId",
-                  type: "number",
+                  type: "hidden",
                   required: false,
                   accessor: "CustomerId",
                   label: "CustomerId",
@@ -169,7 +169,7 @@ function AgreementsSearchPage() {
                 },
                 {
                   name: "VehicleId",
-                  type: "number",
+                  type: "hidden",
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",
