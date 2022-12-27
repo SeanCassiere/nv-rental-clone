@@ -26,6 +26,11 @@ const indexRoute = rootRoute.createRoute({
   component: lazy(() => import("../pages/Index/IndexPage")),
 });
 
+const stylingRoute = rootRoute.createRoute({
+  path: "/styles",
+  component: lazy(() => import("../pages/StylingArea/StylingAreaPage")),
+});
+
 const loggedOutRoute = rootRoute.createRoute({
   path: "/logged-out",
   component: lazy(() => import("../pages/LoggedOut/LoggedOutPage")),
@@ -130,6 +135,7 @@ const viewVehicleRoute = vehiclesRoute.createRoute({
 export const routeConfig = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
+  stylingRoute,
   agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
   reservationsRoute.addChildren([reservationsIndexRoute, viewReservationRoute]),
   customersRoute.addChildren([customersIndexRoute, viewCustomerRoute]),
