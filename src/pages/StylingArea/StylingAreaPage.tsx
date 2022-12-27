@@ -1,9 +1,8 @@
-import React, { Fragment } from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import classNames from "classnames";
+import React from "react";
 import {
-  SelectInput,
   TextInput,
+  SelectInput,
+  MultiSelectInput,
   type TSelectInputOption,
 } from "../../components/Form";
 
@@ -20,12 +19,12 @@ const people = [
   { id: 10, name: "Troy McClaine" },
 ] as const;
 
-type Person = typeof people[number];
-
 const StylingAreaPage: React.FC = () => {
-  const [selectedPeople, setSelectedPeople] = React.useState<Person["name"][]>([
-    people[0].name,
-    people[1].name,
+  const [selectedPeople, setSelectedPeople] = React.useState<
+    TSelectInputOption[]
+  >([
+    { label: people[0].name, value: `${people[0].id}` },
+    { label: people[1].name, value: `${people[1].id}` },
   ]);
 
   const [selectedPerson, setSelectedPerson] =
@@ -37,74 +36,18 @@ const StylingAreaPage: React.FC = () => {
     <div className="h-full divide-y-2 divide-teal-400 bg-gray-200 px-2">
       <section className="py-10 md:mx-28">
         <h2 className="text-2xl">Multi-Select</h2>
-        <div className="relative w-[220px]">
-          <Listbox
-            value={selectedPeople}
-            onChange={(items) => {
-              console.log("items", items);
+        <div className="relative w-[420px]">
+          <MultiSelectInput
+            values={selectedPeople}
+            options={people.map((item) => ({
+              label: item.name,
+              value: `${item.id}`,
+            }))}
+            onSelect={(items) => {
               setSelectedPeople(items);
             }}
-            name="persons"
-            multiple
-          >
-            {({ open }) => (
-              <>
-                <Listbox.Button
-                  key={`persons-${selectedPeople.length}`}
-                  as={TextInput}
-                  className="relative w-full truncate rounded-sm border border-gray-300"
-                  defaultValue={
-                    selectedPeople.length > 0
-                      ? selectedPeople.join(", ")
-                      : "Select"
-                  }
-                  readOnly
-                  label="Persons"
-                />
-
-                <Transition
-                  show={open}
-                  enter="transition duration-100 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                  className="absolute left-0 top-full z-10 min-w-full"
-                >
-                  <Listbox.Options
-                    static
-                    className="max-h-[190px] overflow-y-auto shadow-sm"
-                  >
-                    {people
-                      .map((p) => p.name)
-                      .map((person) => (
-                        <Listbox.Option
-                          key={person}
-                          value={person}
-                          as={Fragment}
-                        >
-                          {({ active, selected }) => (
-                            <li
-                              className={classNames(
-                                active
-                                  ? "bg-blue-500 text-white hover:bg-blue-500"
-                                  : "bg-white text-black",
-                                selected ? "bg-blue-600" : "",
-                                "px-2 py-1 text-sm"
-                              )}
-                            >
-                              {person}
-                              {selected && " <"}
-                            </li>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                  </Listbox.Options>
-                </Transition>
-              </>
-            )}
-          </Listbox>
+            label="People"
+          />
         </div>
         <div>
           <p>

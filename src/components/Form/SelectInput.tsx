@@ -1,4 +1,4 @@
-import { useId, Fragment } from "react";
+import { useId, Fragment, forwardRef } from "react";
 import { Transition, Listbox } from "@headlessui/react";
 import classNames from "classnames";
 import { TextInput } from ".";
@@ -18,7 +18,7 @@ interface SelectProps {
   required?: boolean;
 }
 
-export const SelectInput = (props: SelectProps) => {
+export const SelectInput = forwardRef((props: SelectProps, ref) => {
   const id = useId();
   const { value, includeBlank, options, onSelect, label, required, name } =
     props;
@@ -34,9 +34,10 @@ export const SelectInput = (props: SelectProps) => {
         {({ open }) => (
           <>
             <Listbox.Button
-              key={`${id}-${JSON.stringify(value).length}`}
+              key={`${name ?? id}-${JSON.stringify(value ?? []).length}`}
               as={TextInput}
               defaultValue={value ? value.label : "Select"}
+              ref={ref}
               readOnly
               label={label}
               required={required}
@@ -58,7 +59,7 @@ export const SelectInput = (props: SelectProps) => {
               >
                 {selectOptions.map((option) => (
                   <Listbox.Option
-                    key={option.label}
+                    key={`${id}-${option.label}`}
                     value={option}
                     as={Fragment}
                   >
@@ -84,4 +85,4 @@ export const SelectInput = (props: SelectProps) => {
       </Listbox>
     </div>
   );
-};
+});
