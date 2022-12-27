@@ -1,7 +1,11 @@
 import React, { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import classNames from "classnames";
-import { TextInput } from "../../components/Form";
+import {
+  SelectInput,
+  TextInput,
+  type TSelectInputOption,
+} from "../../components/Form";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },
@@ -24,9 +28,8 @@ const StylingAreaPage: React.FC = () => {
     people[1].name,
   ]);
 
-  const [selectedPerson, setSelectedPerson] = React.useState<string | null>(
-    null
-  );
+  const [selectedPerson, setSelectedPerson] =
+    React.useState<TSelectInputOption | null>(null);
 
   const [textValue, setTextValue] = React.useState("");
 
@@ -46,10 +49,9 @@ const StylingAreaPage: React.FC = () => {
           >
             {({ open }) => (
               <>
-                <Listbox.Label>Persons:</Listbox.Label>
                 <Listbox.Button
                   key={`persons-${selectedPeople.length}`}
-                  as="input"
+                  as={TextInput}
                   className="relative w-full truncate rounded-sm border border-gray-300"
                   defaultValue={
                     selectedPeople.length > 0
@@ -57,6 +59,7 @@ const StylingAreaPage: React.FC = () => {
                       : "Select"
                   }
                   readOnly
+                  label="Persons"
                 />
 
                 <Transition
@@ -114,68 +117,20 @@ const StylingAreaPage: React.FC = () => {
       </section>
       <section className="py-10 md:mx-28">
         <h2 className="text-2xl">Single-Select</h2>
-        <div className="relative w-[220px]">
-          <Listbox
+        <div className="relative w-[420px]">
+          <SelectInput
+            label="Person"
             value={selectedPerson}
-            onChange={(item) => {
-              console.log("item", item);
-              setSelectedPerson((prev) => (prev === item ? null : item));
+            options={people.map((person) => ({
+              value: `${person.id}`,
+              label: person.name,
+            }))}
+            onSelect={(item) => {
+              if (typeof item === "undefined") return;
+              setSelectedPerson(item);
             }}
-            name="person"
-          >
-            {({ open }) => (
-              <>
-                <Listbox.Label>Person:</Listbox.Label>
-                <Listbox.Button
-                  key={`person-${(selectedPerson || "").length}`}
-                  as="input"
-                  className="relative w-full truncate rounded-sm border border-gray-300"
-                  defaultValue={selectedPerson ? selectedPerson : "Select"}
-                  readOnly
-                />
-
-                <Transition
-                  show={open}
-                  enter="transition duration-100 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                  className="absolute left-0 top-full z-10 min-w-full"
-                >
-                  <Listbox.Options
-                    static
-                    className="max-h-[190px] overflow-y-auto shadow-sm"
-                  >
-                    {(people as unknown as any[])
-                      .map((p) => p.name)
-                      .map((person) => (
-                        <Listbox.Option
-                          key={person}
-                          value={person}
-                          as={Fragment}
-                        >
-                          {({ active, selected }) => (
-                            <li
-                              className={classNames(
-                                active
-                                  ? "bg-blue-500 text-white hover:bg-blue-500"
-                                  : "bg-white text-black",
-                                selected ? "bg-blue-600" : "",
-                                "px-2 py-1 text-sm"
-                              )}
-                            >
-                              {person}
-                            </li>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                  </Listbox.Options>
-                </Transition>
-              </>
-            )}
-          </Listbox>
+            includeBlank
+          />
         </div>
         <div>
           <p>
