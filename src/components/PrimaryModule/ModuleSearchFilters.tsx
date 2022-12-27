@@ -1,7 +1,12 @@
 import { useId, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { type ZodSchema } from "zod";
-
+import {
+  TextInput,
+  MultiSelectInput,
+  SelectInput,
+  type TSelectInputOption,
+} from "../Form";
 type KeyValueObject = { [key: string]: any };
 
 function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {
@@ -158,11 +163,11 @@ function ModuleSearchFilters<T extends KeyValueObject>(
 
             // done for select multiple
             // uses a string array
-            if (evt.target.multiple === true) {
+            if (evt.target?.multiple === true) {
               const options = [...evt.target.selectedOptions].map(
                 (el) => el.value
               );
-              // console.log(options);
+
               if (options.includes("undefined")) {
                 insert = [];
               } else {
@@ -187,12 +192,15 @@ function ModuleSearchFilters<T extends KeyValueObject>(
 
             setValues((prev) => ({ ...prev, [blueprint.accessor]: insert }));
           }}
+          directSetter={(input: any) => {
+            setValues((prev) => ({ ...prev, [blueprint.accessor]: input }));
+          }}
         />
       ))}
-      <button type="submit" className="bg-teal-500 px-4 py-1 text-white">
+      <button type="submit" className="bg-teal-500 px-4 py-2.5 text-white">
         Submit
       </button>
-      <button type="reset" className="bg-gray-500 px-4 py-1 text-white">
+      <button type="reset" className="bg-gray-500 px-4 py-2.5 text-white">
         Clear
       </button>
       <div className="col-span-1 overflow-y-auto text-xs sm:col-span-2 md:col-span-5">
@@ -206,92 +214,102 @@ const RenderInput = <T extends KeyValueObject>({
   blueprint,
   value,
   onChange,
+  directSetter,
 }: {
   blueprint: SearchBlueprint<T>;
   value: any;
   onChange: any;
+  directSetter: (input: any) => void;
 }) => {
   const id = useId();
 
   if (blueprint.type === "text" || blueprint.type === "number") {
     return (
-      <div className="grid">
-        <label htmlFor={id}>{blueprint.label}</label>
-        <input
-          id={id}
-          type="text"
-          name={blueprint.name}
-          value={
-            typeof value === "undefined"
-              ? ""
-              : Array.isArray(value)
-              ? value.join(",")
-              : value
-          }
-          onChange={onChange}
-        />
-      </div>
+      <TextInput
+        label={blueprint.label}
+        onChange={onChange}
+        type={blueprint.type}
+        value={
+          typeof value === "undefined"
+            ? ""
+            : Array.isArray(value)
+            ? value.join(",")
+            : value
+        }
+      />
     );
   }
 
   if (blueprint.type === "single-dropdown") {
+    const getValue = () => {
+      if (typeof value !== "undefined") {
+        const item = `${value}`;
+        const find = blueprint.options.find((el) => el.value === item);
+        return find;
+      }
+
+      return undefined;
+    };
     return (
-      <div className="grid">
-        <label htmlFor={id}>{blueprint.label}</label>
-        <select
-          id={id}
-          name={blueprint.name}
-          value={typeof value === "undefined" ? "" : value}
-          onChange={onChange}
-        >
-          {blueprint.options.map((option: any, idx) => (
-            <option key={`${blueprint.name}-${idx}`} value={`${option.value}`}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SelectInput
+        label={blueprint.label}
+        options={blueprint.options}
+        value={typeof value === "undefined" ? undefined : getValue()}
+        onSelect={(item) => {
+          onChange({ target: { value: item ? item.value : undefined } });
+        }}
+      />
     );
   }
 
   if (blueprint.type === "multiple-dropdown") {
+    const getValues = () => {
+      if (Array.isArray(value)) {
+        const sendItems: TSelectInputOption[] = [];
+        value.forEach((item) => {
+          const found = blueprint.options.find(
+            (option) => option.value === `${item}`
+          );
+          if (found) {
+            sendItems.push(found);
+          }
+        });
+        return sendItems;
+      }
+      return [];
+    };
+
     return (
-      <div className="grid">
-        <label htmlFor={id}>{blueprint.label}</label>
-        <select
-          id={id}
-          name={blueprint.name}
-          defaultValue={Array.isArray(value) ? [...value] : []}
-          onChange={onChange}
-          multiple
-        >
-          {blueprint.options.map((option, idx) => (
-            <option key={`${blueprint.name}-${idx}`} value={`${option.value}`}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <MultiSelectInput
+        label={blueprint.label}
+        values={getValues()}
+        onSelect={(selectValues) => {
+          if (selectValues.map((item) => item.value).includes("undefined")) {
+            directSetter([]);
+            return;
+          }
+
+          directSetter(selectValues.map((item) => item.value));
+        }}
+        options={blueprint.options}
+      />
+    );
+  }
+
+  if (blueprint.type === "date") {
+    return (
+      <TextInput
+        type="date"
+        label={blueprint.label}
+        name={blueprint.name}
+        value={typeof value === "undefined" ? "" : value}
+        onChange={onChange}
+      />
     );
   }
 
   if (blueprint.type === "hidden") {
     return <input id={id} type="hidden" name={blueprint.name} value={value} />;
-  }
-
-  if (blueprint.type === "date") {
-    return (
-      <div className="grid">
-        <label htmlFor={id}>{blueprint.label}</label>
-        <input
-          id={id}
-          type="date"
-          name={blueprint.name}
-          value={typeof value === "undefined" ? "" : value}
-          onChange={onChange}
-        />
-      </div>
-    );
   }
 
   return <span>none</span>;
