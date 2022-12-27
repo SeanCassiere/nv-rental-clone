@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import classNames from "classnames";
+import { TextInput } from "../../components/Form";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },
@@ -27,9 +28,11 @@ const StylingAreaPage: React.FC = () => {
     null
   );
 
+  const [textValue, setTextValue] = React.useState("");
+
   return (
-    <div className="h-full bg-gray-200">
-      <section className="md:mx-28">
+    <div className="h-full divide-y-2 divide-teal-400 bg-gray-200 px-2">
+      <section className="py-10 md:mx-28">
         <h2 className="text-2xl">Multi-Select</h2>
         <div className="relative w-[220px]">
           <Listbox
@@ -109,8 +112,7 @@ const StylingAreaPage: React.FC = () => {
           </p>
         </div>
       </section>
-      <hr className="my-5" />
-      <section className="md:mx-28">
+      <section className="py-10 md:mx-28">
         <h2 className="text-2xl">Single-Select</h2>
         <div className="relative w-[220px]">
           <Listbox
@@ -174,6 +176,25 @@ const StylingAreaPage: React.FC = () => {
               </>
             )}
           </Listbox>
+        </div>
+        <div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+            iure nam facilis tempora ducimus temporibus, numquam culpa
+            voluptatibus, quia nostrum, minus at! Soluta quos ducimus ipsa nemo
+            eaque dolores itaque?
+          </p>
+        </div>
+      </section>
+      <section className="py-10 md:mx-28">
+        <h2 className="text-2xl">TextInput</h2>
+        <div className="relative my-2 w-full">
+          <TextInput
+            label="Name"
+            value={textValue}
+            onChange={(evt) => setTextValue(evt.target.value)}
+            required
+          />
         </div>
         <div>
           <p>
