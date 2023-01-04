@@ -82,7 +82,7 @@ export const handleSuccess = async (response: Response) => {
       totalRecords = parse?.totalCount ? parse?.totalCount : totalRecords;
       totalPages = parse?.totalPages ? parse?.totalPages : totalPages;
     } catch (error) {
-      console.log("failed parsing pagination from headers");
+      console.warn("Failed parsing x-pagination header\n", paginationString);
     }
   }
 
