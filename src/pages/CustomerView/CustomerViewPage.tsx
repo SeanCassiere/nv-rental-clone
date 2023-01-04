@@ -1,6 +1,7 @@
 import { lazy, useEffect } from "react";
 import { useParams, useRouter, useSearch } from "@tanstack/react-router";
 
+import { viewCustomerRoute } from "../../routes";
 import Protector from "../../routes/Protector";
 import {
   ChevronLeftOutline,
@@ -20,10 +21,9 @@ const SummaryTab = lazy(
 function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
-  const search = useSearch();
+  const { tab: tabName = "" } = useSearch({ from: viewCustomerRoute.id });
 
   const customerId = params.customerId || "";
-  const tabName = search?.tab || "";
 
   const tabsConfig: ModuleTabConfigItem[] = [
     {

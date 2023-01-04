@@ -2,7 +2,7 @@
 import React, { Fragment, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Dialog, Menu, Transition } from "@headlessui/react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useRouterStore } from "@tanstack/react-router";
 import classNames from "classnames";
 
 import {
@@ -35,10 +35,10 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const auth = useAuth();
 
-  const router = useRouter();
+  const routerStore = useRouterStore();
 
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
-    const matching = router.state.currentMatches.map((mat) => mat.routeId);
+    const matching = routerStore.currentMatches.map((mat) => mat.routeId);
     if (mode === "=") {
       // exact match
       // return matching.some((mat) => mat === routes);
@@ -188,9 +188,9 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                 <nav className="space-y-1 px-2">
                   {/* render in mobile sidebar */}
                   {navigation.map((item) => (
-                    <Link<any>
+                    <Link
                       key={item.name}
-                      to={item.href}
+                      to={item.href as any}
                       className={classNames(
                         item.current
                           ? "bg-gray-100 text-teal-400"
@@ -240,7 +240,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
               {navigation.map((item) => (
                 <Link<any>
                   key={item.name}
-                  to={item.href}
+                  to={item.href as any}
                   className={classNames(
                     item.current
                       ? "bg-gray-100  text-teal-400"

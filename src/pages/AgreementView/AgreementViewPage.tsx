@@ -1,6 +1,12 @@
 import { useEffect, lazy } from "react";
-import { useParams, useRouter, useSearch } from "@tanstack/react-router";
+import {
+  // useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
 
+import { viewAgreementRoute } from "../../routes";
 import Protector from "../../routes/Protector";
 import {
   ChevronLeftOutline,
@@ -25,11 +31,16 @@ const InvoicesTab = lazy(
 
 function AgreementViewPage() {
   const router = useRouter();
+
+  const { tab: tabName = "" } = useSearch({
+    from: viewAgreementRoute.id,
+  });
+
+  // const navigate = useNavigate({ from: viewAgreementRoute.id });
+
   const params = useParams();
-  const search = useSearch();
 
   const agreementId = params.agreementId || "";
-  const tabName = search?.tab || "";
 
   const tabsConfig: ModuleTabConfigItem[] = [
     {
@@ -50,10 +61,14 @@ function AgreementViewPage() {
   ];
 
   const onTabClick = (newTabName: string) => {
+    // navigate({
+    //   search: (other) => ({ ...other, tab: newTabName }),
+    //   replace: true,
+    // });
     router.navigate({
-      to: "/agreements/$agreementId",
-      params: { agreementId },
-      search: { tab: newTabName },
+      to: viewAgreementRoute.id,
+      params: () => ({ agreementId: agreementId }),
+      search: (other) => ({ ...other, tab: newTabName }),
       replace: true,
     });
   };

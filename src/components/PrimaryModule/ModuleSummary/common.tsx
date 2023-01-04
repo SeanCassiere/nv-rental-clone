@@ -26,7 +26,7 @@ export type TSummaryLineItemProps = {
   id: string;
   label: string;
   type?: "text" | "link";
-  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo, "/", ".">;
+  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo["routePaths"], ".">;
   amount: string | number | null;
   shown?: boolean;
   redHighlight?: boolean;
@@ -84,7 +84,10 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
         <span className={makeSummaryDataStyles(data)}>{data.amount}</span>
       )}
       {lineItemType === "link" && (
-        <Link {...data.linkProps} className={makeSummaryDataStyles(data)}>
+        <Link
+          {...(data?.linkProps as any)}
+          className={makeSummaryDataStyles(data)}
+        >
           {data.amount}
         </Link>
       )}

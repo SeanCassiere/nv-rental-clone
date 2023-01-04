@@ -12,6 +12,7 @@ import {
   ModuleTabs,
 } from "../../components/PrimaryModule/ModuleTabs";
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { viewReservationRoute } from "../../routes";
 
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")
@@ -26,10 +27,9 @@ const InvoicesTab = lazy(
 function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
-  const search = useSearch();
+  const { tab: tabName = "" } = useSearch({ from: viewReservationRoute.id });
 
   const reservationId = params.reservationId || "";
-  const tabName = search?.tab || "";
 
   const tabsConfig: ModuleTabConfigItem[] = [
     {

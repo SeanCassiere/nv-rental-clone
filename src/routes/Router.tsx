@@ -4,7 +4,7 @@ import {
   stringifySearchWith,
 } from "@tanstack/react-router";
 
-import { routeConfig } from "./routing";
+import { routeConfig } from ".";
 
 export const router = createReactRouter({
   routeConfig,

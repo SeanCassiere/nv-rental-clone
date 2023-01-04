@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import { vehiclesSearchRoute } from "../../routes";
 import Protector from "../../routes/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
@@ -18,7 +19,12 @@ import { useGetVehicleStatusList } from "../../hooks/network/vehicle/useGetVehic
 const columnHelper = createColumnHelper<VehicleListItemType>();
 
 function VehiclesSearchPage() {
-  const { page: pageNumber = 1, size = 10, filters } = useSearch();
+  const {
+    page: pageNumber = 1,
+    size = 10,
+    filters,
+  } = useSearch({ from: vehiclesSearchRoute.id });
+
   const searchFilters = {
     Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
     SortDirection: filters?.SortDirection || "DESC",

@@ -21,24 +21,24 @@ export const rootRoute = createRouteConfig({
   },
 });
 
-const indexRoute = rootRoute.createRoute({
+export const indexRoute = rootRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/Index/IndexPage")),
 });
 
-const stylingRoute = rootRoute.createRoute({
+export const stylingRoute = rootRoute.createRoute({
   path: "/styles",
   component: lazy(() => import("../pages/StylingArea/StylingAreaPage")),
 });
 
-const loggedOutRoute = rootRoute.createRoute({
+export const loggedOutRoute = rootRoute.createRoute({
   path: "/logged-out",
   component: lazy(() => import("../pages/LoggedOut/LoggedOutPage")),
 });
 
 // Agreement Routes
-const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
-const agreementsIndexRoute = agreementsRoute.createRoute({
+export const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
+export const agreementSearchRoute = agreementsRoute.createRoute({
   path: "/",
   component: lazy(
     () => import("../pages/AgreementsSearch/AgreementsSearchPage")
@@ -55,15 +55,15 @@ const agreementsIndexRoute = agreementsRoute.createRoute({
     }),
   ],
 });
-const viewAgreementRoute = agreementsRoute.createRoute({
+export const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
   component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
   validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Customer Routes
-const customersRoute = rootRoute.createRoute({ path: "customers" });
-const customersIndexRoute = customersRoute.createRoute({
+export const customersRoute = rootRoute.createRoute({ path: "customers" });
+export const customerSearchRoute = customersRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/CustomerSearch/CustomerSearchPage")),
   validateSearch: z.object({
@@ -78,15 +78,17 @@ const customersIndexRoute = customersRoute.createRoute({
     }),
   ],
 });
-const viewCustomerRoute = customersRoute.createRoute({
+export const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
   component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
   validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Reservation Routes
-const reservationsRoute = rootRoute.createRoute({ path: "reservations" });
-const reservationsIndexRoute = reservationsRoute.createRoute({
+export const reservationsRoute = rootRoute.createRoute({
+  path: "reservations",
+});
+export const reservationsSearchRoute = reservationsRoute.createRoute({
   path: "/",
   component: lazy(
     () => import("../pages/ReservationsSearch/ReservationsSearchPage")
@@ -103,15 +105,15 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
     }),
   ],
 });
-const viewReservationRoute = reservationsRoute.createRoute({
+export const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
   component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
   validateSearch: z.object({ tab: z.string().optional() }),
 });
 
 // Vehicle Routes
-const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
-const vehiclesIndexRoute = vehiclesRoute.createRoute({
+export const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
+export const vehiclesSearchRoute = vehiclesRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/VehiclesSearch/VehiclesSearchPage")),
   validateSearch: z.object({
@@ -126,7 +128,7 @@ const vehiclesIndexRoute = vehiclesRoute.createRoute({
     }),
   ],
 });
-const viewVehicleRoute = vehiclesRoute.createRoute({
+export const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
   component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
   validateSearch: z.object({ tab: z.string().optional() }),
@@ -136,8 +138,11 @@ export const routeConfig = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
   stylingRoute,
-  agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
-  reservationsRoute.addChildren([reservationsIndexRoute, viewReservationRoute]),
-  customersRoute.addChildren([customersIndexRoute, viewCustomerRoute]),
-  vehiclesRoute.addChildren([vehiclesIndexRoute, viewVehicleRoute]),
+  agreementsRoute.addChildren([agreementSearchRoute, viewAgreementRoute]),
+  reservationsRoute.addChildren([
+    reservationsSearchRoute,
+    viewReservationRoute,
+  ]),
+  customersRoute.addChildren([customerSearchRoute, viewCustomerRoute]),
+  vehiclesRoute.addChildren([vehiclesSearchRoute, viewVehicleRoute]),
 ]);

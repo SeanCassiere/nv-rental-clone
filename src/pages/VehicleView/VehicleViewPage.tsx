@@ -12,6 +12,7 @@ import {
   ModuleTabs,
 } from "../../components/PrimaryModule/ModuleTabs";
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { viewVehicleRoute } from "../../routes";
 
 const SummaryTab = lazy(
   () => import("../../components/Vehicle/VehicleSummaryTab")
@@ -20,10 +21,10 @@ const SummaryTab = lazy(
 function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
-  const search = useSearch();
+
+  const { tab: tabName = "" } = useSearch({ from: viewVehicleRoute.id });
 
   const vehicleId = params.vehicleId || "";
-  const tabName = search?.tab || "";
 
   const onFindError = () => {
     router.history.go(-1);
