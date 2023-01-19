@@ -38,11 +38,20 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const routerStore = useRouterStore();
 
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
-    const matching = routerStore.currentMatches.map((mat) => mat.routeId);
+    // const matching = routerStore.currentMatches.map(
+    //   (mat) => mat.route.fullPath
+    // );
+
+    const matching = [
+      ...routerStore.currentMatches.map((mat) => mat.route.fullPath),
+    ];
+    matching.shift();
+
     if (mode === "=") {
       // exact match
       // return matching.some((mat) => mat === routes);
-      return routes.some((route) => matching.includes(route));
+
+      return routes.some((route) => matching.includes(route as any));
     }
     // return matching.some((mat) => mat.includes(routes));
     return matching.some((mat) => routes.includes(mat));
