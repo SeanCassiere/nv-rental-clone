@@ -1,5 +1,10 @@
 import { lazy, useEffect } from "react";
-import { useRouter, useParams, useSearch } from "@tanstack/react-router";
+import {
+  useNavigate,
+  useRouter,
+  useParams,
+  useSearch,
+} from "@tanstack/react-router";
 
 import Protector from "../../routes/Protector";
 import {
@@ -24,6 +29,8 @@ function VehicleViewPage() {
 
   const { tab: tabName = "" } = useSearch({ from: viewVehicleRoute.id });
 
+  const navigate = useNavigate({ from: viewVehicleRoute.id });
+
   const vehicleId = params.vehicleId || "";
 
   const onFindError = () => {
@@ -31,10 +38,9 @@ function VehicleViewPage() {
   };
 
   const onTabClick = (newTabName: string) => {
-    router.navigate({
-      to: "/vehicles/$vehicleId",
-      params: { vehicleId },
-      search: { tab: newTabName },
+    navigate({
+      to: viewVehicleRoute.id,
+      search: (others) => ({ ...others, tab: newTabName }),
       replace: true,
     });
   };

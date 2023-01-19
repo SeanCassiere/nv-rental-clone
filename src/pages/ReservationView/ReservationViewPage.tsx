@@ -1,5 +1,10 @@
 import { lazy, useEffect } from "react";
-import { useRouter, useParams, useSearch } from "@tanstack/react-router";
+import {
+  useNavigate,
+  useRouter,
+  useParams,
+  useSearch,
+} from "@tanstack/react-router";
 
 import Protector from "../../routes/Protector";
 import {
@@ -27,7 +32,10 @@ const InvoicesTab = lazy(
 function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
+
   const { tab: tabName = "" } = useSearch({ from: viewReservationRoute.id });
+
+  const navigate = useNavigate({ from: viewReservationRoute.id });
 
   const reservationId = params.reservationId || "";
 
@@ -54,10 +62,9 @@ function ReservationViewPage() {
   };
 
   const onTabClick = (newTabName: string) => {
-    router.navigate({
-      to: "/reservations/$reservationId",
-      params: { reservationId },
-      search: { tab: newTabName },
+    navigate({
+      to: viewReservationRoute.id,
+      search: (others) => ({ ...others, tab: newTabName }),
       replace: true,
     });
   };

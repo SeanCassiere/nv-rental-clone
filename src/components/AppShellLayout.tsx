@@ -36,16 +36,14 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const auth = useAuth();
 
   const routerStore = useRouterStore();
-  console.log("currentLocation", routerStore.currentLocation);
 
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
-    // const matching = routerStore.currentMatches.map(
-    //   (mat) => mat.route.fullPath
-    // );
-
     const matching = [
       ...routerStore.currentMatches.map((mat) => mat.route.fullPath),
     ];
+
+    // because this comes out like ['/','/customers','/customers/$customerId'] or ['/','/']
+    // we take out the first element in the array
     matching.shift();
 
     if (mode === "=") {
@@ -73,36 +71,28 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       href: "/customers",
       icon: UsersSolid,
       current: matches(["/customers", "/customers/$customerId"]),
-      props: {
-        search: () => ({ page: 1, size: 10, filters: { active: true } }),
-      },
+      props: {},
     },
     {
       name: "Vehicles",
       href: "/vehicles",
       icon: TruckFilled,
       current: matches(["/vehicles", "/vehicles/$vehicleId"]),
-      props: {
-        search: () => ({ page: 1, size: 10, filters: { active: true } }),
-      },
+      props: {},
     },
     {
       name: "Reservations",
       href: "/reservations",
       icon: BookFilled,
       current: matches(["/reservations", "/reservations/$reservationId"]),
-      props: {
-        search: () => ({ page: 1, size: 10 }),
-      },
+      props: {},
     },
     {
       name: "Agreements",
       href: "/agreements",
       icon: DocumentTextSolid,
       current: matches(["/agreements", "/agreements/$agreementId"]),
-      props: {
-        // search: () => ({ page: 1, size: 10 }),
-      },
+      props: {},
     },
   ];
 

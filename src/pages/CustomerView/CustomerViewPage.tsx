@@ -1,5 +1,10 @@
 import { lazy, useEffect } from "react";
-import { useParams, useRouter, useSearch } from "@tanstack/react-router";
+import {
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
 
 import { viewCustomerRoute } from "../../routes";
 import Protector from "../../routes/Protector";
@@ -21,7 +26,10 @@ const SummaryTab = lazy(
 function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
+
   const { tab: tabName = "" } = useSearch({ from: viewCustomerRoute.id });
+
+  const navigate = useNavigate({ from: viewCustomerRoute.id });
 
   const customerId = params.customerId || "";
 
@@ -38,10 +46,9 @@ function CustomerViewPage() {
   };
 
   const onTabClick = (newTabName: string) => {
-    router.navigate({
-      to: "/customers/$customerId",
-      params: { customerId },
-      search: { tab: newTabName },
+    navigate({
+      to: viewCustomerRoute.id,
+      search: (others) => ({ ...others, tab: newTabName }),
       replace: true,
     });
   };

@@ -1,6 +1,6 @@
 import { useEffect, lazy } from "react";
 import {
-  // useNavigate,
+  useNavigate,
   useParams,
   useRouter,
   useSearch,
@@ -36,14 +36,13 @@ function AgreementViewPage() {
     from: viewAgreementRoute.id,
   });
 
-  // const navigate = useNavigate({ from: viewAgreementRoute.id });
+  const navigate = useNavigate({ from: viewAgreementRoute.id });
 
   const params = useParams({
     from: viewAgreementRoute.id,
   });
 
-  console.log("agreementId Raw", params.agreementId);
-  const agreementId = params.agreementId?.split("?")[0] || "";
+  const agreementId = params.agreementId || "";
 
   const tabsConfig: ModuleTabConfigItem[] = [
     {
@@ -64,15 +63,9 @@ function AgreementViewPage() {
   ];
 
   const onTabClick = (newTabName: string) => {
-    // navigate({
-    //   to: viewAgreementRoute.id,
-    //   search: () => ({ tab: newTabName }),
-    //   replace: true,
-    // });
-    router.navigate({
+    navigate({
       to: viewAgreementRoute.id,
-      params: () => ({ agreementId: agreementId }),
-      search: () => ({ tab: newTabName }),
+      search: (others) => ({ ...others, tab: newTabName }),
       replace: true,
     });
   };

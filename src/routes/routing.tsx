@@ -37,14 +37,7 @@ export const indexRoute = rootRoute.createRoute({
 });
 
 // Agreement Routes
-export const agreementsRoute = rootRoute.createRoute({
-  path: "agreements",
-  component: () => (
-    <>
-      <Outlet />
-    </>
-  ),
-});
+export const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
 export const agreementSearchRoute = agreementsRoute.createRoute({
   path: "/",
   component: lazy(
@@ -104,6 +97,10 @@ export const customerSearchRoute = customersRoute.createRoute({
 export const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
   component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
+  parseParams: (params) => ({
+    customerId: z.string().parse(params.customerId),
+  }),
+  stringifyParams: (params) => ({ customerId: `${params.customerId}` }),
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
 });
@@ -135,6 +132,10 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
 export const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
   component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
+  parseParams: (params) => ({
+    reservationId: z.string().parse(params.reservationId),
+  }),
+  stringifyParams: (params) => ({ reservationId: `${params.reservationId}` }),
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
 });
@@ -162,6 +163,10 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
 export const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
   component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
+  parseParams: (params) => ({
+    vehicleId: z.string().parse(params.vehicleId),
+  }),
+  stringifyParams: (params) => ({ vehicleId: `${params.vehicleId}` }),
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
 });
