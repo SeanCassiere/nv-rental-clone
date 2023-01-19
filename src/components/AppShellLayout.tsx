@@ -2,7 +2,7 @@
 import React, { Fragment, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Dialog, Menu, Transition } from "@headlessui/react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useRouterStore } from "@tanstack/react-router";
 import classNames from "classnames";
 
 import {
@@ -35,14 +35,22 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const auth = useAuth();
 
-  const router = useRouter();
+  const routerStore = useRouterStore();
 
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
-    const matching = router.state.currentMatches.map((mat) => mat.routeId);
+    const matching = [
+      ...routerStore.currentMatches.map((mat) => mat.route.fullPath),
+    ];
+
+    // because this comes out like ['/','/customers','/customers/$customerId'] or ['/','/']
+    // we take out the first element in the array
+    matching.shift();
+
     if (mode === "=") {
       // exact match
       // return matching.some((mat) => mat === routes);
-      return routes.some((route) => matching.includes(route));
+
+      return routes.some((route) => matching.includes(route as any));
     }
     // return matching.some((mat) => mat.includes(routes));
     return matching.some((mat) => routes.includes(mat));
@@ -63,36 +71,28 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       href: "/customers",
       icon: UsersSolid,
       current: matches(["/customers", "/customers/$customerId"]),
-      props: {
-        search: () => ({ page: 1, size: 10, filters: { active: true } }),
-      },
+      props: {},
     },
     {
       name: "Vehicles",
       href: "/vehicles",
       icon: TruckFilled,
       current: matches(["/vehicles", "/vehicles/$vehicleId"]),
-      props: {
-        search: () => ({ page: 1, size: 10, filters: { active: true } }),
-      },
+      props: {},
     },
     {
       name: "Reservations",
       href: "/reservations",
       icon: BookFilled,
       current: matches(["/reservations", "/reservations/$reservationId"]),
-      props: {
-        search: () => ({ page: 1, size: 10 }),
-      },
+      props: {},
     },
     {
       name: "Agreements",
       href: "/agreements",
       icon: DocumentTextSolid,
       current: matches(["/agreements", "/agreements/$agreementId"]),
-      props: {
-        search: () => ({ page: 1, size: 10 }),
-      },
+      props: {},
     },
   ];
 
@@ -188,9 +188,9 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                 <nav className="space-y-1 px-2">
                   {/* render in mobile sidebar */}
                   {navigation.map((item) => (
-                    <Link<any>
+                    <Link
                       key={item.name}
-                      to={item.href}
+                      to={item.href as any}
                       className={classNames(
                         item.current
                           ? "bg-gray-100 text-teal-400"
@@ -240,7 +240,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
               {navigation.map((item) => (
                 <Link<any>
                   key={item.name}
-                  to={item.href}
+                  to={item.href as any}
                   className={classNames(
                     item.current
                       ? "bg-gray-100  text-teal-400"

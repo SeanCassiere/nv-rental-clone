@@ -21,33 +21,37 @@ export const rootRoute = createRouteConfig({
   },
 });
 
-const indexRoute = rootRoute.createRoute({
+export const stylingRoute = rootRoute.createRoute({
+  path: "styles",
+  component: lazy(() => import("../pages/StylingArea/StylingAreaPage")),
+});
+
+export const loggedOutRoute = rootRoute.createRoute({
+  path: "logged-out",
+  component: lazy(() => import("../pages/LoggedOut/LoggedOutPage")),
+});
+
+export const indexRoute = rootRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/Index/IndexPage")),
 });
 
-const stylingRoute = rootRoute.createRoute({
-  path: "/styles",
-  component: lazy(() => import("../pages/StylingArea/StylingAreaPage")),
-});
-
-const loggedOutRoute = rootRoute.createRoute({
-  path: "/logged-out",
-  component: lazy(() => import("../pages/LoggedOut/LoggedOutPage")),
-});
-
 // Agreement Routes
-const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
-const agreementsIndexRoute = agreementsRoute.createRoute({
+export const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
+export const agreementSearchRoute = agreementsRoute.createRoute({
   path: "/",
   component: lazy(
     () => import("../pages/AgreementsSearch/AgreementsSearchPage")
   ),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: AgreementFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) => {
+    return z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: AgreementFiltersSchema.optional(),
+      })
+      .parse(search);
+  },
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -55,22 +59,34 @@ const agreementsIndexRoute = agreementsRoute.createRoute({
     }),
   ],
 });
-const viewAgreementRoute = agreementsRoute.createRoute({
+export const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
   component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  parseParams: (params) => ({
+    agreementId: z.string().parse(params.agreementId),
+  }),
+  stringifyParams: (params) => ({ agreementId: `${params.agreementId}` }),
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
 });
 
 // Customer Routes
-const customersRoute = rootRoute.createRoute({ path: "customers" });
-const customersIndexRoute = customersRoute.createRoute({
+export const customersRoute = rootRoute.createRoute({ path: "customers" });
+export const customerSearchRoute = customersRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/CustomerSearch/CustomerSearchPage")),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: CustomerFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) =>
+    z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: CustomerFiltersSchema.optional(),
+      })
+      .parse(search),
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -78,24 +94,34 @@ const customersIndexRoute = customersRoute.createRoute({
     }),
   ],
 });
-const viewCustomerRoute = customersRoute.createRoute({
+export const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
   component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  parseParams: (params) => ({
+    customerId: z.string().parse(params.customerId),
+  }),
+  stringifyParams: (params) => ({ customerId: `${params.customerId}` }),
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 // Reservation Routes
-const reservationsRoute = rootRoute.createRoute({ path: "reservations" });
-const reservationsIndexRoute = reservationsRoute.createRoute({
+export const reservationsRoute = rootRoute.createRoute({
+  path: "reservations",
+});
+export const reservationsSearchRoute = reservationsRoute.createRoute({
   path: "/",
   component: lazy(
     () => import("../pages/ReservationsSearch/ReservationsSearchPage")
   ),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: ReservationFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) =>
+    z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: ReservationFiltersSchema.optional(),
+      })
+      .parse(search),
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -103,22 +129,30 @@ const reservationsIndexRoute = reservationsRoute.createRoute({
     }),
   ],
 });
-const viewReservationRoute = reservationsRoute.createRoute({
+export const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
   component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  parseParams: (params) => ({
+    reservationId: z.string().parse(params.reservationId),
+  }),
+  stringifyParams: (params) => ({ reservationId: `${params.reservationId}` }),
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 // Vehicle Routes
-const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
-const vehiclesIndexRoute = vehiclesRoute.createRoute({
+export const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
+export const vehiclesSearchRoute = vehiclesRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/VehiclesSearch/VehiclesSearchPage")),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: VehicleFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) =>
+    z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: VehicleFiltersSchema.optional(),
+      })
+      .parse(search),
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -126,18 +160,26 @@ const vehiclesIndexRoute = vehiclesRoute.createRoute({
     }),
   ],
 });
-const viewVehicleRoute = vehiclesRoute.createRoute({
+export const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
   component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  parseParams: (params) => ({
+    vehicleId: z.string().parse(params.vehicleId),
+  }),
+  stringifyParams: (params) => ({ vehicleId: `${params.vehicleId}` }),
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 export const routeConfig = rootRoute.addChildren([
   indexRoute,
+  agreementsRoute.addChildren([agreementSearchRoute, viewAgreementRoute]),
+  reservationsRoute.addChildren([
+    reservationsSearchRoute,
+    viewReservationRoute,
+  ]),
+  customersRoute.addChildren([customerSearchRoute, viewCustomerRoute]),
+  vehiclesRoute.addChildren([vehiclesSearchRoute, viewVehicleRoute]),
   loggedOutRoute,
   stylingRoute,
-  agreementsRoute.addChildren([agreementsIndexRoute, viewAgreementRoute]),
-  reservationsRoute.addChildren([reservationsIndexRoute, viewReservationRoute]),
-  customersRoute.addChildren([customersIndexRoute, viewCustomerRoute]),
-  vehiclesRoute.addChildren([vehiclesIndexRoute, viewVehicleRoute]),
 ]);

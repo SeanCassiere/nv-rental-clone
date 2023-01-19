@@ -136,7 +136,7 @@ const StatBlock = ({
   title: string;
   value: string;
   icon: ({ className }: IconProps) => JSX.Element;
-  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo, "/", string>;
+  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo["routePaths"], ".">;
 }) => {
   return (
     <Link {...(linkProps as any)}>

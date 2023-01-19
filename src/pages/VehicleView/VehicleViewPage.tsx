@@ -1,5 +1,10 @@
 import { lazy, useEffect } from "react";
-import { useRouter, useParams, useSearch } from "@tanstack/react-router";
+import {
+  useNavigate,
+  useRouter,
+  useParams,
+  useSearch,
+} from "@tanstack/react-router";
 
 import Protector from "../../routes/Protector";
 import {
@@ -12,6 +17,7 @@ import {
   ModuleTabs,
 } from "../../components/PrimaryModule/ModuleTabs";
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { viewVehicleRoute } from "../../routes";
 
 const SummaryTab = lazy(
   () => import("../../components/Vehicle/VehicleSummaryTab")
@@ -20,20 +26,21 @@ const SummaryTab = lazy(
 function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
-  const search = useSearch();
+
+  const { tab: tabName = "" } = useSearch({ from: viewVehicleRoute.id });
+
+  const navigate = useNavigate({ from: viewVehicleRoute.id });
 
   const vehicleId = params.vehicleId || "";
-  const tabName = search?.tab || "";
 
   const onFindError = () => {
     router.history.go(-1);
   };
 
   const onTabClick = (newTabName: string) => {
-    router.navigate({
-      to: "/vehicles/$vehicleId",
-      params: { vehicleId },
-      search: { tab: newTabName },
+    navigate({
+      to: viewVehicleRoute.id,
+      search: (others) => ({ ...others, tab: newTabName }),
       replace: true,
     });
   };

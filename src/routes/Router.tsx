@@ -1,12 +1,12 @@
 import {
-  createReactRouter,
+  ReactRouter,
   parseSearchWith,
   stringifySearchWith,
 } from "@tanstack/react-router";
 
-import { routeConfig } from "./routing";
+import { routeConfig } from ".";
 
-export const router = createReactRouter({
+export const router = new ReactRouter({
   routeConfig,
   parseSearch: parseSearchWith((value) => JSON.parse(decodeFromBinary(value))),
   stringifySearch: stringifySearchWith((value) =>
