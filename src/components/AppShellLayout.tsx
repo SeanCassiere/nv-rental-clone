@@ -36,6 +36,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const auth = useAuth();
 
   const routerStore = useRouterStore();
+  console.log("currentLocation", routerStore.currentLocation);
 
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
     // const matching = routerStore.currentMatches.map(
@@ -100,7 +101,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       icon: DocumentTextSolid,
       current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {
-        search: () => ({ page: 1, size: 10 }),
+        // search: () => ({ page: 1, size: 10 }),
       },
     },
   ];

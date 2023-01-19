@@ -38,9 +38,12 @@ function AgreementViewPage() {
 
   // const navigate = useNavigate({ from: viewAgreementRoute.id });
 
-  const params = useParams();
+  const params = useParams({
+    from: viewAgreementRoute.id,
+  });
 
-  const agreementId = params.agreementId || "";
+  console.log("agreementId Raw", params.agreementId);
+  const agreementId = params.agreementId?.split("?")[0] || "";
 
   const tabsConfig: ModuleTabConfigItem[] = [
     {
@@ -62,13 +65,14 @@ function AgreementViewPage() {
 
   const onTabClick = (newTabName: string) => {
     // navigate({
-    //   search: (other) => ({ ...other, tab: newTabName }),
+    //   to: viewAgreementRoute.id,
+    //   search: () => ({ tab: newTabName }),
     //   replace: true,
     // });
     router.navigate({
       to: viewAgreementRoute.id,
       params: () => ({ agreementId: agreementId }),
-      search: (other) => ({ ...other, tab: newTabName }),
+      search: () => ({ tab: newTabName }),
       replace: true,
     });
   };

@@ -21,33 +21,44 @@ export const rootRoute = createRouteConfig({
   },
 });
 
+export const stylingRoute = rootRoute.createRoute({
+  path: "styles",
+  component: lazy(() => import("../pages/StylingArea/StylingAreaPage")),
+});
+
+export const loggedOutRoute = rootRoute.createRoute({
+  path: "logged-out",
+  component: lazy(() => import("../pages/LoggedOut/LoggedOutPage")),
+});
+
 export const indexRoute = rootRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/Index/IndexPage")),
 });
 
-export const stylingRoute = rootRoute.createRoute({
-  path: "/styles",
-  component: lazy(() => import("../pages/StylingArea/StylingAreaPage")),
-});
-
-export const loggedOutRoute = rootRoute.createRoute({
-  path: "/logged-out",
-  component: lazy(() => import("../pages/LoggedOut/LoggedOutPage")),
-});
-
 // Agreement Routes
-export const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
+export const agreementsRoute = rootRoute.createRoute({
+  path: "agreements",
+  component: () => (
+    <>
+      <Outlet />
+    </>
+  ),
+});
 export const agreementSearchRoute = agreementsRoute.createRoute({
   path: "/",
   component: lazy(
     () => import("../pages/AgreementsSearch/AgreementsSearchPage")
   ),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: AgreementFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) => {
+    return z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: AgreementFiltersSchema.optional(),
+      })
+      .parse(search);
+  },
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -58,7 +69,16 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
 export const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
   component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  parseParams: (params) => ({
+    agreementId: z.string().parse(params.agreementId),
+  }),
+  stringifyParams: (params) => ({ agreementId: `${params.agreementId}` }),
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
 });
 
 // Customer Routes
@@ -66,11 +86,14 @@ export const customersRoute = rootRoute.createRoute({ path: "customers" });
 export const customerSearchRoute = customersRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/CustomerSearch/CustomerSearchPage")),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: CustomerFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) =>
+    z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: CustomerFiltersSchema.optional(),
+      })
+      .parse(search),
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -81,7 +104,8 @@ export const customerSearchRoute = customersRoute.createRoute({
 export const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
   component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 // Reservation Routes
@@ -93,11 +117,14 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
   component: lazy(
     () => import("../pages/ReservationsSearch/ReservationsSearchPage")
   ),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: ReservationFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) =>
+    z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: ReservationFiltersSchema.optional(),
+      })
+      .parse(search),
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -108,7 +135,8 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
 export const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
   component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 // Vehicle Routes
@@ -116,11 +144,14 @@ export const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
 export const vehiclesSearchRoute = vehiclesRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/VehiclesSearch/VehiclesSearchPage")),
-  validateSearch: z.object({
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).default(10),
-    filters: VehicleFiltersSchema.optional(),
-  }).parse,
+  validateSearch: (search) =>
+    z
+      .object({
+        page: z.number().min(1).default(1),
+        size: z.number().min(1).default(10),
+        filters: VehicleFiltersSchema.optional(),
+      })
+      .parse(search),
   preSearchFilters: [
     (search) => ({
       page: search.page || 1,
@@ -131,13 +162,12 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
 export const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
   component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
-  validateSearch: z.object({ tab: z.string().optional() }),
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 export const routeConfig = rootRoute.addChildren([
   indexRoute,
-  loggedOutRoute,
-  stylingRoute,
   agreementsRoute.addChildren([agreementSearchRoute, viewAgreementRoute]),
   reservationsRoute.addChildren([
     reservationsSearchRoute,
@@ -145,4 +175,6 @@ export const routeConfig = rootRoute.addChildren([
   ]),
   customersRoute.addChildren([customerSearchRoute, viewCustomerRoute]),
   vehiclesRoute.addChildren([vehiclesSearchRoute, viewVehicleRoute]),
+  loggedOutRoute,
+  stylingRoute,
 ]);
