@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchCustomersList } from "../../../api/customer";
-import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
-import {
-  CustomerListItemListSchema,
-  type TCustomerListItemParsed,
-} from "../../../utils/schemas/customer";
+import { makeInitialApiData } from "../../../api/fetcher";
+import { CustomerListItemListSchema } from "../../../utils/schemas/customer";
+import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
 
 export function useGetCustomersList(params: {
   page: number;
@@ -13,7 +11,7 @@ export function useGetCustomersList(params: {
   filters: any;
 }) {
   const auth = useAuth();
-  const query = useQuery<ResponseParsed<TCustomerListItemParsed[]>>({
+  const query = useQuery({
     queryKey: [
       "customers",
       { page: params.page, pageSize: params.pageSize },
@@ -28,13 +26,15 @@ export function useGetCustomersList(params: {
         accessToken: auth.user?.access_token || "",
         filters: params.filters,
       })
-        .then((dataObj) => {
-          const parsed = CustomerListItemListSchema.parse(dataObj.data);
-
-          return { ...dataObj, data: parsed };
+        .then((res) => {
+          if (res.ok) return res;
+          return { ...res, data: [] };
         })
+        .then((res) =>
+          validateApiResWithZodSchema(CustomerListItemListSchema, res)
+        )
         .catch((e) => {
-          console.log(e);
+          console.error(e);
           throw e;
         }),
     enabled: auth.isAuthenticated,

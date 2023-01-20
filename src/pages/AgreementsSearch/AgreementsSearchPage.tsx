@@ -54,6 +54,7 @@ function AgreementsSearchPage() {
     filters: searchFilters,
   });
 
+  console.log("status", agreementsData.data.status, agreementsData.data.ok);
   const agreementStatusList = useGetAgreementStatusList();
 
   const columnsData = useGetModuleColumns({ module: "agreements" });

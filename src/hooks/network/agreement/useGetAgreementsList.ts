@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchAgreementsList } from "../../../api/agreements";
-import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
-import {
-  AgreementListItemListSchema,
-  type TAgreementListItemParsed,
-} from "../../../utils/schemas/agreement";
+import { makeInitialApiData } from "../../../api/fetcher";
+import { AgreementListItemListSchema } from "../../../utils/schemas/agreement";
+import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
 
 export function useGetAgreementsList(params: {
   page: number;
@@ -13,7 +11,7 @@ export function useGetAgreementsList(params: {
   filters: Record<string, any>;
 }) {
   const auth = useAuth();
-  const query = useQuery<ResponseParsed<TAgreementListItemParsed[]>>({
+  const query = useQuery({
     queryKey: [
       "agreements",
       { page: params.page, pageSize: params.pageSize },
@@ -28,13 +26,20 @@ export function useGetAgreementsList(params: {
         accessToken: auth.user?.access_token || "",
         currentDate: new Date(),
         filters: params.filters,
-      }).then((dataObj) => {
-        const parsed = AgreementListItemListSchema.parse(dataObj.data);
-
-        return { ...dataObj, data: parsed };
-      }),
+      })
+        .then((res) => {
+          if (res.ok) return res;
+          return { ...res, data: [] };
+        })
+        .then((res) =>
+          validateApiResWithZodSchema(AgreementListItemListSchema, res)
+        )
+        .catch((e) => {
+          console.error(e);
+          throw e;
+        }),
     enabled: auth.isAuthenticated,
-    initialData: makeInitialApiData([] as any[]),
+    initialData: makeInitialApiData([]),
     keepPreviousData: true,
   });
   return query;
