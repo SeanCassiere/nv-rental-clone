@@ -4,6 +4,7 @@ import { fetchReservationsList } from "../../../api/reservation";
 import { makeInitialApiData } from "../../../api/fetcher";
 import { ReservationListItemListSchema } from "../../../utils/schemas/reservation";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
+import { reservationQKeys } from "../../../utils/query-key";
 
 export function useGetReservationsList(params: {
   page: number;
@@ -12,11 +13,10 @@ export function useGetReservationsList(params: {
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: [
-      "reservations",
-      { page: params.page, pageSize: params.pageSize },
-      params.filters,
-    ],
+    queryKey: reservationQKeys.search({
+      pagination: { page: params.page, pageSize: params.pageSize },
+      filters: params.filters,
+    }),
     queryFn: () =>
       fetchReservationsList({
         page: params.page,

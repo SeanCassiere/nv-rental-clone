@@ -4,6 +4,7 @@ import { fetchCustomersList } from "../../../api/customer";
 import { makeInitialApiData } from "../../../api/fetcher";
 import { CustomerListItemListSchema } from "../../../utils/schemas/customer";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
+import { customerQKeys } from "../../../utils/query-key";
 
 export function useGetCustomersList(params: {
   page: number;
@@ -12,11 +13,10 @@ export function useGetCustomersList(params: {
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: [
-      "customers",
-      { page: params.page, pageSize: params.pageSize },
-      params.filters,
-    ],
+    queryKey: customerQKeys.search({
+      pagination: { page: params.page, pageSize: params.pageSize },
+      filters: params.filters,
+    }),
     queryFn: () =>
       fetchCustomersList({
         page: params.page,

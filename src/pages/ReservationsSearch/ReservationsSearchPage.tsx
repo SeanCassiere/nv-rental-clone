@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -24,21 +24,9 @@ const DateTimeColumns = ["CreatedDate", "StartDate", "EndDate"];
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  const {
-    page: pageNumber = 1,
-    size = 10,
-    filters,
-  } = useSearch({ from: reservationsSearchRoute.id });
-
-  const searchFilters = {
-    Statuses: filters?.Statuses || [],
-    CreatedDateFrom: filters?.CreatedDateFrom || undefined,
-    CreatedDateTo: filters?.CreatedDateTo || undefined,
-    SortDirection: filters?.SortDirection || "ASC",
-    CustomerId: filters?.CustomerId || undefined,
-    VehicleId: filters?.VehicleId || undefined,
-    VehicleNo: filters?.VehicleNo || undefined,
-  };
+  const { searchFilters, pageNumber, size } = useLoaderData({
+    from: reservationsSearchRoute.id,
+  });
 
   const reservationsData = useGetReservationsList({
     page: pageNumber,
@@ -205,6 +193,7 @@ function ReservationsSearchPage() {
                   page: pageNumber === 1 ? 1 : pageNumber - 1,
                   size,
                 })}
+                preload="intent"
               >
                 less
               </Link>
@@ -219,6 +208,7 @@ function ReservationsSearchPage() {
                       : pageNumber + 1,
                   size,
                 })}
+                preload="intent"
               >
                 plus
               </Link>
