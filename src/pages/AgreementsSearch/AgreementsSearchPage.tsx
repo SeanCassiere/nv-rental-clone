@@ -13,11 +13,11 @@ import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreem
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
-import type { AgreementListItemType } from "../../types/Agreement";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
+import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 
-const columnHelper = createColumnHelper<AgreementListItemType>();
+const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
 const DateTimeColumns = ["CreatedDate", "CheckoutDate", "CheckinDate"];
 

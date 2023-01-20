@@ -1,0 +1,67 @@
+import { z } from "zod";
+
+const AgreementListItemSchema = z
+  .object({
+    AgreementId: z.number(),
+    AgreementStatusId: z.number(),
+    AgreementNumber: z.string(),
+    AgreementStatusName: z.string(),
+    ReserveId: z.number().nullable(),
+    VehicleId: z.number(),
+    MakeId: z.number(),
+    VehicleNo: z.string(),
+    VehicleMakeName: z.string().nullable(),
+    ModelId: z.number(),
+    ModelName: z.string().nullable(),
+    Year: z.number().or(z.string()),
+    Trim: z.string().nullable(),
+    LicenseNo: z.string(),
+    CheckoutDate: z.string(),
+    CheckinDate: z.string(),
+    ReturnDate: z.string().nullable(),
+    CreatedDate: z.string().nullable(),
+    CreatedByName: z.string().nullable(),
+    CustomerId: z.number(),
+    FirstName: z.string().nullable(),
+    LastName: z.string().nullable(),
+    CreditCardNo: z.string().nullable(),
+    PONo: z.string().nullable(),
+    RONo: z.string().nullable(),
+    HPhone: z.string().nullable(),
+    CPhone: z.string().nullable(),
+    BPhone: z.string().nullable(),
+    TotalAmount: z.number(),
+    Note: z.string().nullable(),
+    Color: z.string().nullable(),
+    CheckoutLocationId: z.number(),
+    CheckinLocationId: z.number(),
+    CheckoutLocationName: z.string().nullable(),
+    CheckinLocationName: z.string().nullable(),
+    VehicleTypeId: z.number(),
+    VehicleType: z.string().nullable(),
+    AgreementType: z.string().nullable(),
+    CustomerType: z.string().nullable(),
+    OdometerOut: z.number().default(0),
+    OdometerIn: z.number().default(0),
+    CustomerEmail: z.string().nullable(),
+    InsurenceCompanyName: z.string().nullable(),
+    ClaimNumber: z.string().nullable(),
+    Address: z.string().nullable(),
+    InsuranceExpiryDate: z.string().nullable(),
+    Destination: z.string().nullable(),
+    PolicyNumber: z.string().nullable(),
+    RefferalName: z.string().nullable(),
+    AdditionalDriverNames: z.string().nullable(),
+    DaysRemaining: z.number().default(0),
+    CompanyName: z.string().nullable(),
+  })
+  .transform((item) => {
+    return {
+      ...item,
+      id: item.AgreementId,
+      FullName: `${item.FirstName} ${item.LastName}`,
+    };
+  });
+
+export type TAgreementListItemParsed = z.infer<typeof AgreementListItemSchema>;
+export const AgreementListItemListSchema = z.array(AgreementListItemSchema);

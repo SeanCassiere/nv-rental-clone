@@ -2,19 +2,22 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchAgreementsList } from "../../../api/agreements";
 import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
-import type { AgreementListItemType } from "../../../types/Agreement";
+import {
+  AgreementListItemListSchema,
+  type TAgreementListItemParsed,
+} from "../../../utils/schemas/agreement";
 
 export function useGetAgreementsList(params: {
   page: number;
   pageSize: number;
-  filters: any;
+  filters: Record<string, any>;
 }) {
   const auth = useAuth();
-  const query = useQuery<ResponseParsed<AgreementListItemType[]>>({
+  const query = useQuery<ResponseParsed<TAgreementListItemParsed[]>>({
     queryKey: [
       "agreements",
-      JSON.stringify({ page: params.page, pageSize: params.pageSize }),
-      JSON.stringify(params.filters),
+      { page: params.page, pageSize: params.pageSize },
+      params.filters,
     ],
     queryFn: () =>
       fetchAgreementsList({
@@ -26,16 +29,13 @@ export function useGetAgreementsList(params: {
         currentDate: new Date(),
         filters: params.filters,
       }).then((dataObj) => {
-        const updated = dataObj.data.map((agreement: any) => ({
-          ...agreement,
-          id: `${agreement?.AgreementId}`,
-          FullName: agreement?.FirstName + " " + agreement?.LastName, // done for columns accessors
-        }));
+        const parsed = AgreementListItemListSchema.parse(dataObj.data);
 
-        return { ...dataObj, data: updated };
+        return { ...dataObj, data: parsed };
       }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),
+    keepPreviousData: true,
   });
   return query;
 }
