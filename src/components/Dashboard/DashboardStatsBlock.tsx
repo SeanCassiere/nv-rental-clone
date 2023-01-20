@@ -40,6 +40,7 @@ const DashboardStatsBlock = ({
                   CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
                 },
               }),
+              preload: "intent",
             } as any
           }
         />
@@ -61,6 +62,7 @@ const DashboardStatsBlock = ({
                   IsSearchOverdues: false,
                 },
               }),
+              preload: "intent",
             } as any
           }
         />
@@ -78,6 +80,7 @@ const DashboardStatsBlock = ({
                 size: 10,
                 filters: { Statuses: [2] },
               }),
+              preload: "intent",
             } as any
           }
         />
@@ -95,6 +98,7 @@ const DashboardStatsBlock = ({
                 size: 10,
                 filters: { Statuses: [2], IsSearchOverdues: true },
               }),
+              preload: "intent",
             } as any
           }
         />
@@ -112,6 +116,7 @@ const DashboardStatsBlock = ({
                 size: 10,
                 filters: { Statuses: [5] },
               }),
+              preload: "intent",
             } as any
           }
         />

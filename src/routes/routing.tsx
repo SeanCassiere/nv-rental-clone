@@ -3,11 +3,16 @@ import { z } from "zod";
 
 import { OidcAuthProvider } from "./OidcAuthProvider";
 import AppShellLayout from "../components/AppShellLayout";
+import { getAuthToken } from "../utils/authLocal";
+import { queryClient } from "../App";
 
 import { AgreementFiltersSchema } from "../utils/schemas/agreement";
 import { CustomerFiltersSchema } from "../utils/schemas/customer";
 import { ReservationFiltersSchema } from "../utils/schemas/reservation";
 import { VehicleFiltersSchema } from "../utils/schemas/vehicle";
+
+import { fetchDashboardWidgetList } from "../api/dashboard";
+import { fetchModuleColumnsModded } from "../hooks/network/module/useGetModuleColumns";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -33,6 +38,22 @@ export const loggedOutRoute = rootRoute.createRoute({
 
 export const indexRoute = rootRoute.createRoute({
   path: "/",
+  loader: async () => {
+    const auth = getAuthToken();
+    if (auth) {
+      queryClient.getQueryData(["dashboard", "widgets"]) ??
+        (await queryClient.prefetchQuery({
+          queryKey: ["dashboard", "widgets"],
+          queryFn: () =>
+            fetchDashboardWidgetList({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+            }),
+        }));
+    }
+    return {};
+  },
   component: lazy(() => import("../pages/Index/IndexPage")),
 });
 
@@ -40,6 +61,23 @@ export const indexRoute = rootRoute.createRoute({
 export const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
 export const agreementSearchRoute = agreementsRoute.createRoute({
   path: "/",
+  loader: async () => {
+    const auth = getAuthToken();
+    if (auth) {
+      queryClient.getQueryData(["agreements", "columns"]) ??
+        (await queryClient.prefetchQuery({
+          queryKey: ["agreements", "columns"],
+          queryFn: () =>
+            fetchModuleColumnsModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "agreements",
+            }),
+        }));
+    }
+    return {};
+  },
   component: lazy(
     () => import("../pages/AgreementsSearch/AgreementsSearchPage")
   ),
@@ -78,6 +116,23 @@ export const viewAgreementRoute = agreementsRoute.createRoute({
 export const customersRoute = rootRoute.createRoute({ path: "customers" });
 export const customerSearchRoute = customersRoute.createRoute({
   path: "/",
+  loader: async () => {
+    const auth = getAuthToken();
+    if (auth) {
+      queryClient.getQueryData(["customers", "columns"]) ??
+        (await queryClient.prefetchQuery({
+          queryKey: ["customers", "columns"],
+          queryFn: () =>
+            fetchModuleColumnsModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "customers",
+            }),
+        }));
+    }
+    return {};
+  },
   component: lazy(() => import("../pages/CustomerSearch/CustomerSearchPage")),
   validateSearch: (search) =>
     z
@@ -111,6 +166,23 @@ export const reservationsRoute = rootRoute.createRoute({
 });
 export const reservationsSearchRoute = reservationsRoute.createRoute({
   path: "/",
+  loader: async () => {
+    const auth = getAuthToken();
+    if (auth) {
+      queryClient.getQueryData(["reservations", "columns"]) ??
+        (await queryClient.prefetchQuery({
+          queryKey: ["reservations", "columns"],
+          queryFn: () =>
+            fetchModuleColumnsModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "reservations",
+            }),
+        }));
+    }
+    return {};
+  },
   component: lazy(
     () => import("../pages/ReservationsSearch/ReservationsSearchPage")
   ),
@@ -144,6 +216,23 @@ export const viewReservationRoute = reservationsRoute.createRoute({
 export const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
 export const vehiclesSearchRoute = vehiclesRoute.createRoute({
   path: "/",
+  loader: async () => {
+    const auth = getAuthToken();
+    if (auth) {
+      queryClient.getQueryData(["vehicles", "columns"]) ??
+        (await queryClient.prefetchQuery({
+          queryKey: ["vehicles", "columns"],
+          queryFn: () =>
+            fetchModuleColumnsModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "vehicles",
+            }),
+        }));
+    }
+    return {};
+  },
   component: lazy(() => import("../pages/VehiclesSearch/VehiclesSearchPage")),
   validateSearch: (search) =>
     z

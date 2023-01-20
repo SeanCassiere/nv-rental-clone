@@ -197,6 +197,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                           : "text-gray-600 hover:bg-gray-50 hover:text-teal-500",
                         "group flex items-center rounded-md px-2 py-2 text-base font-medium"
                       )}
+                      preload="intent"
                       {...item.props}
                     >
                       <item.icon
@@ -247,6 +248,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                       : "text-gray-600 hover:bg-gray-50 hover:text-teal-500",
                     "group flex items-center px-2 py-4 text-sm font-medium"
                   )}
+                  preload="intent"
                   {...item.props}
                 >
                   <item.icon

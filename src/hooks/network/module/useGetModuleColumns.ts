@@ -16,24 +16,38 @@ export function useGetModuleColumns({
   const query = useQuery({
     queryKey: [module, "columns"],
     queryFn: () =>
-      fetchModuleColumns({
+      fetchModuleColumnsModded({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
         module,
-      })
-        .then((data) => ColumnListItemListSchema.parse(data))
-        .then((data) => mutateColumnAccessors(module, data))
-        .then((cols) =>
-          cols.sort(
-            (col1, col2) =>
-              col1.columnHeaderSettingID - col2.columnHeaderSettingID // sort by columnHeaderSettingID
-          )
-        ),
+      }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialColumnAccessors(module),
   });
   return query;
+}
+
+export async function fetchModuleColumnsModded(
+  params: Parameters<typeof fetchModuleColumns>[0]
+) {
+  return await fetchModuleColumns({
+    clientId: params.clientId || "",
+    userId: params.userId || "",
+    accessToken: params.accessToken || "",
+    module: params.module,
+  })
+    .then((data) => ColumnListItemListSchema.parse(data))
+    .then((data) => mutateColumnAccessors(params.module, data))
+    .then((cols) =>
+      cols.sort(
+        (col1, col2) => col1.columnHeaderSettingID - col2.columnHeaderSettingID // sort by columnHeaderSettingID
+      )
+    )
+    .catch((e) => {
+      console.log(e);
+      throw e;
+    });
 }
 
 type ColumMap = { [columnHeader in string]: string };
