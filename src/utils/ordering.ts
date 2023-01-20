@@ -1,8 +1,8 @@
-import type { ColumnListItemType } from "../types/Column";
+import { type TColumnListItemParsed } from "./schemas/column";
 
 export function sortColOrderByOrderIndex(
-  col1: ColumnListItemType,
-  col2: ColumnListItemType
+  col1: TColumnListItemParsed,
+  col2: TColumnListItemParsed
 ) {
   return col1.orderIndex - col2.orderIndex;
 }

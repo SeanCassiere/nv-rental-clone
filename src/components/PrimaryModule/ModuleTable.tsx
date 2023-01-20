@@ -27,7 +27,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Menu } from "@headlessui/react";
 
 import { EyeSlashOutline } from "../icons";
-import type { ColumnListItemType } from "../../types/Column";
+import { type TColumnListItemParsed } from "../../utils/schemas/column";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 
 interface DraggableColumnHeaderProps {
@@ -90,7 +90,7 @@ export type ColumnVisibilityGraph = { [columnHeader: string]: boolean };
 interface ModuleTableProps<T> {
   data: T[];
   columns: any[];
-  rawColumnsData: ColumnListItemType[];
+  rawColumnsData: TColumnListItemParsed[];
   noRows: boolean;
   onColumnOrderChange?: (accessorKeys: string[]) => void;
   lockedColumns?: (keyof T)[];
