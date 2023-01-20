@@ -1,4 +1,3 @@
-import type { ColumnResponseType } from "../types/Column";
 import type { AppPrimaryModuleType } from "../types/General";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
@@ -39,7 +38,7 @@ export const fetchModuleColumns = async (
 ) => {
   const { module } = getModuleApiName(opts.module);
 
-  const response = await callV3Api(
+  return await callV3Api(
     makeUrl(`/v3/clients/columnHeaderInformation`, {
       clientId: opts.clientId,
       userId: opts.userId,
@@ -51,13 +50,6 @@ export const fetchModuleColumns = async (
       },
     }
   ).then((res) => res.data);
-
-  const columns = response.map((column: ColumnResponseType) => ({
-    ...column,
-    isSelected: column.isSelected === "true",
-  }));
-
-  return columns;
 };
 
 export const saveModuleColumns = async (

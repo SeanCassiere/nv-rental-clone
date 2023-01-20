@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchModuleColumns } from "../../../api/columns";
-import type { ColumnListItemType } from "../../../types/Column";
 import type { AppPrimaryModuleType } from "../../../types/General";
+import {
+  ColumnListItemListSchema,
+  type TColumnListItemParsed,
+} from "../../../utils/schemas/column";
 
 export function useGetModuleColumns({
   module,
@@ -10,7 +13,7 @@ export function useGetModuleColumns({
   module: AppPrimaryModuleType;
 }) {
   const auth = useAuth();
-  const query = useQuery<ColumnListItemType[]>({
+  const query = useQuery({
     queryKey: [module, "columns"],
     queryFn: () =>
       fetchModuleColumns({
@@ -19,6 +22,7 @@ export function useGetModuleColumns({
         accessToken: auth.user?.access_token || "",
         module,
       })
+        .then((data) => ColumnListItemListSchema.parse(data))
         .then((data) => mutateColumnAccessors(module, data))
         .then((cols) =>
           cols.sort(
@@ -62,7 +66,7 @@ const customerColumnHeaderMap: ColumMap = {
 
 export function mutateColumnAccessors(
   type: AppPrimaryModuleType,
-  data: ColumnListItemType[]
+  data: TColumnListItemParsed[]
 ) {
   switch (type) {
     case "reservations":
@@ -372,7 +376,7 @@ export function makeInitialColumnAccessors(module: AppPrimaryModuleType) {
 }
 
 function settingStartingColumn(
-  columns: ColumnListItemType[],
+  columns: TColumnListItemParsed[],
   startingColumnHeader: string
 ) {
   let columnData = columns;

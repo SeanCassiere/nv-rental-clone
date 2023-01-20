@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchDashboardStats } from "../../../api/dashboard";
-import type { DashboardStatsType } from "../../../types/Dashboard";
 
 export function useGetDashboardStats({
   locationId,
@@ -11,7 +10,7 @@ export function useGetDashboardStats({
   clientDate: Date;
 }) {
   const auth = useAuth();
-  const query = useQuery<DashboardStatsType>({
+  const query = useQuery({
     queryKey: ["dashboard", "stats"],
     queryFn: () =>
       fetchDashboardStats({

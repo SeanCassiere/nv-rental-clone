@@ -12,11 +12,11 @@ import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesLi
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
-import type { VehicleListItemType } from "../../types/Vehicle";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetVehicleStatusList } from "../../hooks/network/vehicle/useGetVehicleStatusList";
+import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 
-const columnHelper = createColumnHelper<VehicleListItemType>();
+const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
   const {

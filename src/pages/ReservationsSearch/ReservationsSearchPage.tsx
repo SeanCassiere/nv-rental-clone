@@ -13,11 +13,11 @@ import { useGetReservationsList } from "../../hooks/network/reservation/useGetRe
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
-import type { ReservationListItemType } from "../../types/Reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetReservationStatusList } from "../../hooks/network/reservation/useGetReservationStatusList";
+import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
 
-const columnHelper = createColumnHelper<ReservationListItemType>();
+const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
 const DateTimeColumns = ["CreatedDate", "StartDate", "EndDate"];
 

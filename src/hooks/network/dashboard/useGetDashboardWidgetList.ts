@@ -15,28 +15,7 @@ export function useGetDashboardWidgetList() {
         accessToken: auth.user?.access_token || "",
       }),
     enabled: auth.isAuthenticated,
-    initialData: [
-      {
-        widgetID: "QuickLookup",
-        widgetName: "Quick Lookup",
-        widgetScale: 6,
-        widgetPosition: 1,
-        widgetMappingID: 0,
-        widgetUserPosition: 1,
-        isEditable: true,
-        isDeleted: false,
-      },
-      {
-        widgetID: "QuickCheckin",
-        widgetName: "Quick Check Agreement",
-        widgetScale: 6,
-        widgetPosition: 2,
-        widgetMappingID: 0,
-        widgetUserPosition: 2,
-        isEditable: true,
-        isDeleted: false,
-      },
-    ] as DashboardWidgetItemParsed[],
+    initialData: [],
   });
   return query;
 }

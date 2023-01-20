@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import type { VehicleListItemType } from "../../../types/Vehicle";
 import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
 import { fetchVehiclesList } from "../../../api/vehicles";
+import {
+  VehicleListItemListSchema,
+  type TVehicleListItemParsed,
+} from "../../../utils/schemas/vehicle";
 
 export function useGetVehiclesList(params: {
   page: number;
@@ -10,11 +13,11 @@ export function useGetVehiclesList(params: {
   filters: any;
 }) {
   const auth = useAuth();
-  const query = useQuery<ResponseParsed<VehicleListItemType[]>>({
+  const query = useQuery<ResponseParsed<TVehicleListItemParsed[]>>({
     queryKey: [
       "vehicles",
-      JSON.stringify({ page: params.page, pageSize: params.pageSize }),
-      JSON.stringify(params.filters),
+      { page: params.page, pageSize: params.pageSize },
+      params.filters,
     ],
     queryFn: () =>
       fetchVehiclesList({
@@ -24,14 +27,16 @@ export function useGetVehiclesList(params: {
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
         filters: params.filters,
-      }).then((dataObj) => {
-        const updated = dataObj.data.map((vehicle: any) => ({
-          ...vehicle,
-          id: `${vehicle?.VehicleId}`,
-        }));
+      })
+        .then((dataObj) => {
+          const parsed = VehicleListItemListSchema.parse(dataObj.data);
 
-        return { ...dataObj, data: updated };
-      }),
+          return { ...dataObj, data: parsed };
+        })
+        .catch((e) => {
+          console.log(e);
+          throw e;
+        }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),
   });

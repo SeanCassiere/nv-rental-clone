@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchReservationsList } from "../../../api/reservation";
 import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
-import type { ReservationListItemType } from "../../../types/Reservation";
+import {
+  ReservationListItemListSchema,
+  type TReservationListItemParsed,
+} from "../../../utils/schemas/reservation";
 
 export function useGetReservationsList(params: {
   page: number;
@@ -10,11 +13,11 @@ export function useGetReservationsList(params: {
   filters: any;
 }) {
   const auth = useAuth();
-  const query = useQuery<ResponseParsed<ReservationListItemType[]>>({
+  const query = useQuery<ResponseParsed<TReservationListItemParsed[]>>({
     queryKey: [
       "reservations",
-      JSON.stringify({ page: params.page, pageSize: params.pageSize }),
-      JSON.stringify(params.filters),
+      { page: params.page, pageSize: params.pageSize },
+      params.filters,
     ],
     queryFn: () =>
       fetchReservationsList({
@@ -26,13 +29,9 @@ export function useGetReservationsList(params: {
         filters: params.filters,
         clientDate: new Date(),
       }).then((dataObj) => {
-        const updated = dataObj.data.map((reservation: any) => ({
-          ...reservation,
-          id: `${reservation?.ReserveId}`,
-          FullName: reservation?.FirstName + " " + reservation?.LastName, // done for columns accessors
-        }));
+        const parsed = ReservationListItemListSchema.parse(dataObj.data);
 
-        return { ...dataObj, data: updated };
+        return { ...dataObj, data: parsed };
       }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),
