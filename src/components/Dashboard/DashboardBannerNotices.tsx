@@ -1,14 +1,10 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import type { DashboardNoticeType } from "../../types/Dashboard";
+import type { TDashboardNotice } from "../../utils/schemas/dashboard";
 import { MegaPhoneOutline, XMarkOutline } from "../icons";
 
-const DashboardBannerNotices = ({
-  notice,
-}: {
-  notice: DashboardNoticeType;
-}) => {
+const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
   const auth = useAuth();
   const [show, setShow] = useState(true);
 

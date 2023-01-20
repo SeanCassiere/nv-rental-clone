@@ -1,7 +1,8 @@
-import type { DashboardNoticeType } from "../types/Dashboard";
+import type { TDashboardNotice } from "../utils/schemas/dashboard";
 import { localDateToQueryYearMonthDay } from "../utils/date";
 import {
   DashboardWidgetItemListSchema,
+  DashboardStatsSchema,
   type DashboardWidgetItemParsed,
 } from "../utils/schemas/dashboard";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
@@ -21,7 +22,7 @@ export const fetchDashboardStats = async (
         Authorization: `Bearer ${opts.accessToken}`,
       },
     }
-  ).then((res) => res.data);
+  ).then((res) => DashboardStatsSchema.parse(res.data));
 };
 
 export const fetchDashboardNoticeList = async () => {
@@ -30,8 +31,8 @@ export const fetchDashboardNoticeList = async () => {
     .then((res) => res.json())
     .catch(() => []);
 
-  const mapped: (DashboardNoticeType | null)[] = data.map(
-    (notice: DashboardNoticeType) => {
+  const mapped: (TDashboardNotice | null)[] = data.map(
+    (notice: TDashboardNotice) => {
       const startDate = notice.startDate ? new Date(notice.startDate) : null;
       const endDate = notice.endDate ? new Date(notice.endDate) : null;
 

@@ -8,18 +8,18 @@ import {
   BankNotesOutline,
   BellIconOutline,
 } from "../icons";
-import type { DashboardStatsType } from "../../types/Dashboard";
 import {
   Link,
   type MakeLinkOptions,
   type RegisteredAllRouteInfo,
 } from "@tanstack/react-router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
+import type { TDashboardStats } from "../../utils/schemas/dashboard";
 
 const DashboardStatsBlock = ({
   statistics,
 }: {
-  statistics: DashboardStatsType;
+  statistics: TDashboardStats;
 }) => {
   return (
     <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
@@ -27,7 +27,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Reservation"
           icon={CreditCardOutline}
-          value={statistics.todaysReservationCount.toString()}
+          value={Number(statistics.todaysReservationCount).toString()}
           linkProps={
             {
               to: "/reservations",
@@ -48,7 +48,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Return"
           icon={ArrowDownRightOutline}
-          value={statistics.todaysArrivalsCount.toString()}
+          value={Number(statistics.todaysArrivalsCount).toString()}
           linkProps={
             {
               to: "/agreements",
@@ -69,7 +69,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="On rent"
           icon={TruckOutline}
-          value={statistics.openAgreement.toString()}
+          value={Number(statistics.openAgreement).toString()}
           linkProps={
             {
               to: "/agreements",
@@ -86,7 +86,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Overdue"
           icon={CreditCardOutline}
-          value={statistics.overDues.toString()}
+          value={Number(statistics.overDues).toString()}
           linkProps={
             {
               to: "/agreements",
@@ -103,7 +103,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Pending payment"
           icon={BankNotesOutline}
-          value={statistics.pendingPayment.toString()}
+          value={Number(statistics.pendingPayment).toString()}
           linkProps={
             {
               to: "/agreements",
@@ -120,7 +120,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Service alert"
           icon={BellIconOutline}
-          value={statistics.serviceAlerts.toString()}
+          value={Number(statistics.serviceAlerts).toString()}
         />
       </li>
     </ul>
