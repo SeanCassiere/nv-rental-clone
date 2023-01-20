@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchCustomersList } from "../../../api/customer";
 import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
-import type { CustomerListItemType } from "../../../types/Customer";
+import {
+  CustomerListItemListSchema,
+  type TCustomerListItemParsed,
+} from "../../../utils/schemas/customer";
 
 export function useGetCustomersList(params: {
   page: number;
@@ -10,11 +13,11 @@ export function useGetCustomersList(params: {
   filters: any;
 }) {
   const auth = useAuth();
-  const query = useQuery<ResponseParsed<CustomerListItemType[]>>({
+  const query = useQuery<ResponseParsed<TCustomerListItemParsed[]>>({
     queryKey: [
       "customers",
-      JSON.stringify({ page: params.page, pageSize: params.pageSize }),
-      JSON.stringify(params.filters),
+      { page: params.page, pageSize: params.pageSize },
+      params.filters,
     ],
     queryFn: () =>
       fetchCustomersList({
@@ -24,14 +27,16 @@ export function useGetCustomersList(params: {
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
         filters: params.filters,
-      }).then((dataObj) => {
-        const updated = dataObj.data.map((customer: any) => ({
-          ...customer,
-          id: `${customer?.AgreementId}`,
-        }));
+      })
+        .then((dataObj) => {
+          const parsed = CustomerListItemListSchema.parse(dataObj.data);
 
-        return { ...dataObj, data: updated };
-      }),
+          return { ...dataObj, data: parsed };
+        })
+        .catch((e) => {
+          console.log(e);
+          throw e;
+        }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),
   });

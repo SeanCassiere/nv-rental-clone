@@ -13,10 +13,10 @@ import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomer
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { CustomerFiltersSchema } from "../../utils/schemas/customer";
-import type { CustomerListItemType } from "../../types/Customer";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
+import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 
-const columnHelper = createColumnHelper<CustomerListItemType>();
+const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
 const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 
