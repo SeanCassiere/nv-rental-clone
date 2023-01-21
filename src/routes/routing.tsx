@@ -22,6 +22,11 @@ import { fetchAgreementsListModded } from "../hooks/network/agreement/useGetAgre
 import { fetchReservationsListModded } from "../hooks/network/reservation/useGetReservationsList";
 import { fetchCustomersListModded } from "../hooks/network/customer/useGetCustomersList";
 import { fetchVehiclesListModded } from "../hooks/network/vehicle/useGetVehiclesList";
+import {
+  fetchCustomerSummaryAmounts,
+  fetchRentalRateSummaryAmounts,
+  fetchVehicleSummaryAmounts,
+} from "../api/summary";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -159,17 +164,45 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
 });
 export const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
-  component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
-  parseParams: (params) => ({
-    agreementId: z.string().parse(params.agreementId),
-  }),
-  stringifyParams: (params) => ({ agreementId: `${params.agreementId}` }),
   validateSearch: (search) =>
     z
       .object({
         tab: z.string().optional(),
       })
       .parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
+  loader: async ({ params: { agreementId } }) => {
+    const auth = getAuthToken();
+
+    if (auth) {
+      const promises = [];
+      // get summary
+      const summaryKey = agreementQKeys.summary(agreementId);
+      if (!queryClient.getQueryData(summaryKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: summaryKey,
+            queryFn: () =>
+              fetchRentalRateSummaryAmounts({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "agreements",
+                referenceId: agreementId,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
+    }
+    return {};
+  },
+  component: lazy(() => import("../pages/AgreementView/AgreementViewPage")),
+  parseParams: (params) => ({
+    agreementId: z.string().parse(params.agreementId),
+  }),
+  stringifyParams: (params) => ({ agreementId: `${params.agreementId}` }),
 });
 
 // Customer Routes
@@ -253,12 +286,39 @@ export const customerSearchRoute = customersRoute.createRoute({
 export const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
   component: lazy(() => import("../pages/CustomerView/CustomerViewPage")),
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
+  loader: async ({ params: { customerId } }) => {
+    const auth = getAuthToken();
+
+    if (auth) {
+      const promises = [];
+      // get summary
+      const summaryKey = customerQKeys.summary(customerId);
+      if (!queryClient.getQueryData(summaryKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: summaryKey,
+            queryFn: () =>
+              fetchCustomerSummaryAmounts({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                customerId,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
+    }
+    return {};
+  },
   parseParams: (params) => ({
     customerId: z.string().parse(params.customerId),
   }),
   stringifyParams: (params) => ({ customerId: `${params.customerId}` }),
-  validateSearch: (search) =>
-    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 // Reservation Routes
@@ -350,13 +410,41 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
 });
 export const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
+  loader: async ({ params: { reservationId } }) => {
+    const auth = getAuthToken();
+
+    if (auth) {
+      const promises = [];
+      // get summary
+      const summaryKey = reservationQKeys.summary(reservationId);
+      if (!queryClient.getQueryData(summaryKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: summaryKey,
+            queryFn: () =>
+              fetchRentalRateSummaryAmounts({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "reservations",
+                referenceId: reservationId,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
+    }
+    return {};
+  },
   component: lazy(() => import("../pages/ReservationView/ReservationViewPage")),
   parseParams: (params) => ({
     reservationId: z.string().parse(params.reservationId),
   }),
   stringifyParams: (params) => ({ reservationId: `${params.reservationId}` }),
-  validateSearch: (search) =>
-    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 // Vehicle Routes
@@ -442,13 +530,41 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
 });
 export const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
+  loader: async ({ params: { vehicleId } }) => {
+    const auth = getAuthToken();
+
+    if (auth) {
+      const promises = [];
+      // get summary
+      const summaryKey = vehicleQKeys.summary(vehicleId);
+      if (!queryClient.getQueryData(summaryKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: summaryKey,
+            queryFn: () =>
+              fetchVehicleSummaryAmounts({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                vehicleId,
+                clientDate: new Date(),
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
+    }
+    return {};
+  },
   component: lazy(() => import("../pages/VehicleView/VehicleViewPage")),
   parseParams: (params) => ({
     vehicleId: z.string().parse(params.vehicleId),
   }),
   stringifyParams: (params) => ({ vehicleId: `${params.vehicleId}` }),
-  validateSearch: (search) =>
-    z.object({ tab: z.string().optional() }).parse(search),
 });
 
 export const routeConfig = rootRoute.addChildren([

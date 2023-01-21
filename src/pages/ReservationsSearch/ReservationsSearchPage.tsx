@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { Link, useLoaderData } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -45,6 +45,7 @@ function ReservationsSearchPage() {
         id: column.columnHeader,
         header: () => column.columnHeaderDescription,
         cell: (item) => {
+          const value = item.getValue();
           if (column.columnHeader === "ReservationNumber") {
             const reservationId = item.table.getRow(item.row.id).original.id;
             return (
@@ -52,37 +53,44 @@ function ReservationsSearchPage() {
                 to="/reservations/$reservationId"
                 params={{ reservationId: String(reservationId) }}
                 className="font-medium text-teal-700"
+                // preload="intent" // doesn't preload, cannot figure out why
               >
-                {item.getValue()}
+                {value}
               </Link>
             );
           }
 
           if (DateTimeColumns.includes(column.columnHeader)) {
-            return t("intlDateTime", { value: new Date(item.getValue()) });
+            return t("intlDateTime", { value: new Date(value) });
           }
 
-          return item.getValue();
+          return value;
         },
       })
     );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "reservations" });
 
-  const handleSaveColumnsOrder = (newColumnOrder: string[]) => {
-    saveColumnsMutation.mutate({
-      allColumns: columnsData.data,
-      accessorKeys: newColumnOrder,
-    });
-  };
+  const handleSaveColumnsOrder = useCallback(
+    (newColumnOrder: string[]) => {
+      saveColumnsMutation.mutate({
+        allColumns: columnsData.data,
+        accessorKeys: newColumnOrder,
+      });
+    },
+    [columnsData.data, saveColumnsMutation]
+  );
 
-  const handleSaveColumnVisibility = (graph: ColumnVisibilityGraph) => {
-    const newColumnsData = columnsData.data.map((col) => {
-      col.isSelected = graph[col.columnHeader] || false;
-      return col;
-    });
-    saveColumnsMutation.mutate({ allColumns: newColumnsData });
-  };
+  const handleSaveColumnVisibility = useCallback(
+    (graph: ColumnVisibilityGraph) => {
+      const newColumnsData = columnsData.data.map((col) => {
+        col.isSelected = graph[col.columnHeader] || false;
+        return col;
+      });
+      saveColumnsMutation.mutate({ allColumns: newColumnsData });
+    },
+    [columnsData.data, saveColumnsMutation]
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
