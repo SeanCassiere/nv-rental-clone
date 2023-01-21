@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -24,29 +24,9 @@ const DateTimeColumns = ["CreatedDate", "CheckoutDate", "CheckinDate"];
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  const {
-    page: pageNumber = 1,
-    size = 10,
-    filters,
-  } = useSearch({
+  const { searchFilters, pageNumber, size } = useLoaderData({
     from: agreementSearchRoute.id,
   });
-
-  const searchFilters = {
-    AgreementStatusName: filters?.AgreementStatusName || undefined,
-    Statuses: filters?.Statuses || [],
-    IsSearchOverdues:
-      typeof filters?.IsSearchOverdues !== "undefined"
-        ? filters?.IsSearchOverdues
-        : false,
-    StartDate: filters?.StartDate || undefined,
-    EndDate: filters?.EndDate || undefined,
-    SortBy: filters?.SortBy || "CreatedDate",
-    SortDirection: filters?.SortDirection || "DESC",
-    CustomerId: filters?.CustomerId || undefined,
-    VehicleId: filters?.VehicleId || undefined,
-    VehicleNo: filters?.VehicleNo || undefined,
-  };
 
   const agreementsData = useGetAgreementsList({
     page: pageNumber,
@@ -233,6 +213,7 @@ function AgreementsSearchPage() {
                   page: pageNumber === 1 ? 1 : pageNumber - 1,
                   size,
                 })}
+                preload="intent"
               >
                 less
               </Link>
@@ -247,6 +228,7 @@ function AgreementsSearchPage() {
                       : pageNumber + 1,
                   size,
                 })}
+                preload="intent"
               >
                 plus
               </Link>

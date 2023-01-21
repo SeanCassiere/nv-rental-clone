@@ -10,9 +10,19 @@ import { AgreementFiltersSchema } from "../utils/schemas/agreement";
 import { CustomerFiltersSchema } from "../utils/schemas/customer";
 import { ReservationFiltersSchema } from "../utils/schemas/reservation";
 import { VehicleFiltersSchema } from "../utils/schemas/vehicle";
+import {
+  agreementQKeys,
+  reservationQKeys,
+  customerQKeys,
+  vehicleQKeys,
+} from "../utils/query-key";
 
 import { fetchDashboardWidgetList } from "../api/dashboard";
 import { fetchModuleColumnsModded } from "../hooks/network/module/useGetModuleColumns";
+import { fetchAgreementsListModded } from "../hooks/network/agreement/useGetAgreementsList";
+import { fetchReservationsListModded } from "../hooks/network/reservation/useGetReservationsList";
+import { fetchCustomersListModded } from "../hooks/network/customer/useGetCustomersList";
+import { fetchVehiclesListModded } from "../hooks/network/vehicle/useGetVehiclesList";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -61,23 +71,6 @@ export const indexRoute = rootRoute.createRoute({
 export const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
 export const agreementSearchRoute = agreementsRoute.createRoute({
   path: "/",
-  loader: async () => {
-    const auth = getAuthToken();
-    if (auth) {
-      queryClient.getQueryData(["agreements", "columns"]) ??
-        (await queryClient.prefetchQuery({
-          queryKey: ["agreements", "columns"],
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "agreements",
-            }),
-        }));
-    }
-    return {};
-  },
   component: lazy(
     () => import("../pages/AgreementsSearch/AgreementsSearchPage")
   ),
@@ -92,10 +85,80 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
   },
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
   ],
+  loader: async ({ search: { page, size, filters } }) => {
+    const auth = getAuthToken();
+
+    const searchFilters = {
+      AgreementStatusName: filters?.AgreementStatusName || undefined,
+      Statuses: filters?.Statuses || [],
+      IsSearchOverdues:
+        typeof filters?.IsSearchOverdues !== "undefined"
+          ? filters?.IsSearchOverdues
+          : false,
+      StartDate: filters?.StartDate || undefined,
+      EndDate: filters?.EndDate || undefined,
+      SortBy: filters?.SortBy || "CreatedDate",
+      SortDirection: filters?.SortDirection || "DESC",
+      CustomerId: filters?.CustomerId || undefined,
+      VehicleId: filters?.VehicleId || undefined,
+      VehicleNo: filters?.VehicleNo || undefined,
+    };
+
+    const pageNumber = page || 1;
+    const pageSize = size || 10;
+
+    if (auth) {
+      const promises = [];
+
+      // get columns
+      const columnsKey = agreementQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "agreements",
+              }),
+          })
+        );
+      }
+
+      // get list
+      const searchKey = agreementQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchAgreementsListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                currentDate: new Date(),
+                filters: searchFilters,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
+    }
+    return { searchFilters, pageNumber, size: pageSize };
+  },
 });
 export const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
@@ -116,23 +179,6 @@ export const viewAgreementRoute = agreementsRoute.createRoute({
 export const customersRoute = rootRoute.createRoute({ path: "customers" });
 export const customerSearchRoute = customersRoute.createRoute({
   path: "/",
-  loader: async () => {
-    const auth = getAuthToken();
-    if (auth) {
-      queryClient.getQueryData(["customers", "columns"]) ??
-        (await queryClient.prefetchQuery({
-          queryKey: ["customers", "columns"],
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "customers",
-            }),
-        }));
-    }
-    return {};
-  },
   component: lazy(() => import("../pages/CustomerSearch/CustomerSearchPage")),
   validateSearch: (search) =>
     z
@@ -144,10 +190,68 @@ export const customerSearchRoute = customersRoute.createRoute({
       .parse(search),
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
   ],
+  loader: async ({ search: { page, size, filters } }) => {
+    const auth = getAuthToken();
+
+    const searchFilters = {
+      Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
+      SortDirection: filters?.SortDirection || "ASC",
+    };
+
+    const pageNumber = page || 1;
+    const pageSize = size || 10;
+
+    if (auth) {
+      const promises = [];
+
+      // get columns
+      const columnsKey = customerQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "customers",
+              }),
+          })
+        );
+      }
+
+      // get search
+      const searchKey = customerQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchCustomersListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                filters: searchFilters,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
+    }
+    return { searchFilters, pageNumber, size: pageSize };
+  },
 });
 export const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
@@ -166,23 +270,6 @@ export const reservationsRoute = rootRoute.createRoute({
 });
 export const reservationsSearchRoute = reservationsRoute.createRoute({
   path: "/",
-  loader: async () => {
-    const auth = getAuthToken();
-    if (auth) {
-      queryClient.getQueryData(["reservations", "columns"]) ??
-        (await queryClient.prefetchQuery({
-          queryKey: ["reservations", "columns"],
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "reservations",
-            }),
-        }));
-    }
-    return {};
-  },
   component: lazy(
     () => import("../pages/ReservationsSearch/ReservationsSearchPage")
   ),
@@ -196,10 +283,73 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
       .parse(search),
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
   ],
+  loader: async ({ search: { page, size, filters } }) => {
+    const auth = getAuthToken();
+
+    const searchFilters = {
+      Statuses: filters?.Statuses || [],
+      CreatedDateFrom: filters?.CreatedDateFrom || undefined,
+      CreatedDateTo: filters?.CreatedDateTo || undefined,
+      SortDirection: filters?.SortDirection || "ASC",
+      CustomerId: filters?.CustomerId || undefined,
+      VehicleId: filters?.VehicleId || undefined,
+      VehicleNo: filters?.VehicleNo || undefined,
+    };
+
+    const pageNumber = page || 1;
+    const pageSize = size || 10;
+
+    if (auth) {
+      const promises = [];
+
+      // get columns
+      const columnsKey = reservationQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "reservations",
+              }),
+          })
+        );
+      }
+
+      // get search
+      const searchKey = reservationQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchReservationsListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                filters: searchFilters,
+                clientDate: new Date(),
+              }),
+          })
+        );
+      }
+      await Promise.all(promises);
+    }
+    return { searchFilters, pageNumber, size: pageSize };
+  },
 });
 export const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
@@ -216,23 +366,6 @@ export const viewReservationRoute = reservationsRoute.createRoute({
 export const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
 export const vehiclesSearchRoute = vehiclesRoute.createRoute({
   path: "/",
-  loader: async () => {
-    const auth = getAuthToken();
-    if (auth) {
-      queryClient.getQueryData(["vehicles", "columns"]) ??
-        (await queryClient.prefetchQuery({
-          queryKey: ["vehicles", "columns"],
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "vehicles",
-            }),
-        }));
-    }
-    return {};
-  },
   component: lazy(() => import("../pages/VehiclesSearch/VehiclesSearchPage")),
   validateSearch: (search) =>
     z
@@ -244,10 +377,71 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
       .parse(search),
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
   ],
+  loader: async ({ search: { page, size, filters } }) => {
+    const auth = getAuthToken();
+
+    const searchFilters = {
+      Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
+      SortDirection: filters?.SortDirection || "DESC",
+      VehicleNo: filters?.VehicleNo || undefined,
+      VehicleId: filters?.VehicleId || undefined,
+      VehicleStatus: filters?.VehicleStatus || undefined,
+    };
+
+    const pageNumber = page || 1;
+    const pageSize = size || 10;
+
+    if (auth) {
+      const promises = [];
+
+      // get columns
+      const columnsKey = vehicleQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "vehicles",
+              }),
+          })
+        );
+      }
+
+      // get search
+      const searchKey = vehicleQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchVehiclesListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                filters: searchFilters,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
+    }
+    return { searchFilters, pageNumber, size: pageSize };
+  },
 });
 export const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",

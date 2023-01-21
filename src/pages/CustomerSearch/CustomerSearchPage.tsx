@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -23,18 +23,9 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  const {
-    page: pageNumber = 1,
-    size = 10,
-    filters,
-  } = useSearch({
+  const { searchFilters, pageNumber, size } = useLoaderData({
     from: customerSearchRoute.id,
   });
-
-  const searchFilters = {
-    Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
-    SortDirection: filters?.SortDirection || "ASC",
-  };
 
   const customersData = useGetCustomersList({
     page: pageNumber,
@@ -165,6 +156,7 @@ function CustomerSearchPage() {
                   page: pageNumber === 1 ? 1 : pageNumber - 1,
                   size,
                 })}
+                preload="intent"
               >
                 less
               </Link>
@@ -179,6 +171,7 @@ function CustomerSearchPage() {
                       : pageNumber + 1,
                   size,
                 })}
+                preload="intent"
               >
                 plus
               </Link>

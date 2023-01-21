@@ -15,15 +15,9 @@ export function makeInitialApiData<T>(initialData: T) {
     pageSize: 0,
     totalPages: 0,
     totalRecords: 0,
+    status: 200,
+    ok: true,
   };
-}
-
-export interface ResponseParsed<T> {
-  data: T;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-  totalRecords: number;
 }
 
 export function makeUrl(
@@ -86,23 +80,33 @@ export const handleSuccess = async (response: Response) => {
     }
   }
 
-  if (response.ok) {
-    const dto: ResponseParsed<any> = {
-      data: await response.json(),
-      page,
-      pageSize,
-      totalPages,
-      totalRecords,
-    };
-    return dto as any;
-  } else {
-    await response.json().then((data) => {
-      const message =
-        data?.message ||
-        "handleSuccess: something went wrong with the api call";
-      throw message;
-    });
-  }
+  // if (response.ok) {
+  //   const dto: any = {
+  //     status: response.status,
+  //     page,
+  //     pageSize,
+  //     totalPages,
+  //     totalRecords,
+  //     data: await response.json(),
+  //   };
+  //   return dto as any;
+  // } else {
+  //   await response.json().then((data) => {
+  //     const message =
+  //       data?.message ||
+  //       "handleSuccess: something went wrong with the api call";
+  //     throw message;
+  //   });
+  // }
+  return {
+    ok: response.ok,
+    status: response.status,
+    page,
+    pageSize,
+    totalPages,
+    totalRecords,
+    data: await response.json(),
+  };
 };
 
 export const handleError = (error: Error) => {

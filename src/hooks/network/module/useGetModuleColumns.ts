@@ -3,9 +3,28 @@ import { useAuth } from "react-oidc-context";
 import { fetchModuleColumns } from "../../../api/columns";
 import type { AppPrimaryModuleType } from "../../../types/General";
 import {
+  agreementQKeys,
+  reservationQKeys,
+  customerQKeys,
+  vehicleQKeys,
+} from "../../../utils/query-key";
+import {
   ColumnListItemListSchema,
   type TColumnListItemParsed,
 } from "../../../utils/schemas/column";
+
+const selectorKey = (module: AppPrimaryModuleType) => {
+  switch (module) {
+    case "reservations":
+      return reservationQKeys;
+    case "agreements":
+      return agreementQKeys;
+    case "customers":
+      return customerQKeys;
+    case "vehicles":
+      return vehicleQKeys;
+  }
+};
 
 export function useGetModuleColumns({
   module,
@@ -14,7 +33,7 @@ export function useGetModuleColumns({
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: [module, "columns"],
+    queryKey: selectorKey(module).columns(),
     queryFn: () =>
       fetchModuleColumnsModded({
         clientId: auth.user?.profile.navotar_clientid || "",

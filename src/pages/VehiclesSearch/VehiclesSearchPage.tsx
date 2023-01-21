@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { vehiclesSearchRoute } from "../../routes";
@@ -19,20 +19,9 @@ import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  const {
-    page: pageNumber = 1,
-    size = 10,
-    filters,
-  } = useSearch({ from: vehiclesSearchRoute.id });
-
-  const searchFilters = {
-    Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
-    SortDirection: filters?.SortDirection || "DESC",
-    VehicleNo: filters?.VehicleNo || undefined,
-    VehicleId: filters?.VehicleId || undefined,
-    VehicleStatus: filters?.VehicleStatus || undefined,
-  };
-
+  const { searchFilters, pageNumber, size } = useLoaderData({
+    from: vehiclesSearchRoute.id,
+  });
   const vehiclesData = useGetVehiclesList({
     page: pageNumber,
     pageSize: size,
@@ -184,6 +173,7 @@ function VehiclesSearchPage() {
                   page: pageNumber === 1 ? 1 : pageNumber - 1,
                   size,
                 })}
+                preload="intent"
               >
                 less
               </Link>
@@ -198,6 +188,7 @@ function VehiclesSearchPage() {
                       : pageNumber + 1,
                   size,
                 })}
+                preload="intent"
               >
                 plus
               </Link>

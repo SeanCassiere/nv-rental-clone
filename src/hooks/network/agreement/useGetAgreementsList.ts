@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchAgreementsList } from "../../../api/agreements";
-import { makeInitialApiData, type ResponseParsed } from "../../../api/fetcher";
-import {
-  AgreementListItemListSchema,
-  type TAgreementListItemParsed,
-} from "../../../utils/schemas/agreement";
+import { makeInitialApiData } from "../../../api/fetcher";
+import { AgreementListItemListSchema } from "../../../utils/schemas/agreement";
+import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
+import { agreementQKeys } from "../../../utils/query-key";
 
 export function useGetAgreementsList(params: {
   page: number;
@@ -13,14 +12,13 @@ export function useGetAgreementsList(params: {
   filters: Record<string, any>;
 }) {
   const auth = useAuth();
-  const query = useQuery<ResponseParsed<TAgreementListItemParsed[]>>({
-    queryKey: [
-      "agreements",
-      { page: params.page, pageSize: params.pageSize },
-      params.filters,
-    ],
+  const query = useQuery({
+    queryKey: agreementQKeys.search({
+      pagination: { page: params.page, pageSize: params.pageSize },
+      filters: params.filters,
+    }),
     queryFn: () =>
-      fetchAgreementsList({
+      fetchAgreementsListModded({
         page: params.page,
         pageSize: params.pageSize,
         clientId: auth.user?.profile.navotar_clientid || "",
@@ -28,14 +26,34 @@ export function useGetAgreementsList(params: {
         accessToken: auth.user?.access_token || "",
         currentDate: new Date(),
         filters: params.filters,
-      }).then((dataObj) => {
-        const parsed = AgreementListItemListSchema.parse(dataObj.data);
-
-        return { ...dataObj, data: parsed };
       }),
     enabled: auth.isAuthenticated,
-    initialData: makeInitialApiData([] as any[]),
-    keepPreviousData: true,
+    initialData: makeInitialApiData([]),
   });
   return query;
+}
+
+export async function fetchAgreementsListModded(
+  params: Parameters<typeof fetchAgreementsList>[0]
+) {
+  return await fetchAgreementsList({
+    clientId: params.clientId || "",
+    userId: params.userId || "",
+    accessToken: params.accessToken || "",
+    page: params.page,
+    pageSize: params.pageSize,
+    currentDate: params.currentDate,
+    filters: params.filters,
+  })
+    .then((res) => {
+      if (res.ok) return res;
+      return { ...res, data: [] };
+    })
+    .then((res) =>
+      validateApiResWithZodSchema(AgreementListItemListSchema, res)
+    )
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }
