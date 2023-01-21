@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy } from "react";
 import {
   useNavigate,
   useRouter,
@@ -16,6 +16,8 @@ import {
   type ModuleTabConfigItem,
   ModuleTabs,
 } from "../../components/PrimaryModule/ModuleTabs";
+import ScrollToTop from "../../components/ScrollToTop";
+
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { viewReservationRoute } from "../../routes";
 
@@ -74,12 +76,9 @@ function ReservationViewPage() {
     onError: onFindError,
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <Protector>
+      <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center md:gap-8">

@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import { Link, useLoaderData } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,8 @@ import ModuleTable, {
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
+import ScrollToTop from "../../components/ScrollToTop";
+
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
@@ -93,12 +95,9 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <Protector>
+      <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <h1 className="text-2xl font-semibold text-gray-900">Agreements</h1>
