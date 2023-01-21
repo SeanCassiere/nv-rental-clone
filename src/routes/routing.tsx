@@ -16,8 +16,13 @@ import {
   customerQKeys,
   vehicleQKeys,
 } from "../utils/query-key";
+
 import { fetchDashboardWidgetList } from "../api/dashboard";
 import { fetchModuleColumnsModded } from "../hooks/network/module/useGetModuleColumns";
+import { fetchAgreementsListModded } from "../hooks/network/agreement/useGetAgreementsList";
+import { fetchReservationsListModded } from "../hooks/network/reservation/useGetReservationsList";
+import { fetchCustomersListModded } from "../hooks/network/customer/useGetCustomersList";
+import { fetchVehiclesListModded } from "../hooks/network/vehicle/useGetVehiclesList";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -102,22 +107,54 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
       VehicleId: filters?.VehicleId || undefined,
       VehicleNo: filters?.VehicleNo || undefined,
     };
+
     const pageNumber = page || 1;
     const pageSize = size || 10;
 
     if (auth) {
+      const promises = [];
+
       // get columns
-      queryClient.getQueryData([agreementQKeys.columns()]) ??
-        (await queryClient.prefetchQuery({
-          queryKey: agreementQKeys.columns(),
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "agreements",
-            }),
-        }));
+      const columnsKey = agreementQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "agreements",
+              }),
+          })
+        );
+      }
+
+      // get list
+      const searchKey = agreementQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchAgreementsListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                currentDate: new Date(),
+                filters: searchFilters,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
     }
     return { searchFilters, pageNumber, size: pageSize };
   },
@@ -168,18 +205,48 @@ export const customerSearchRoute = customersRoute.createRoute({
     const pageSize = size || 10;
 
     if (auth) {
+      const promises = [];
+
       // get columns
-      queryClient.getQueryData(customerQKeys.columns()) ??
-        (await queryClient.prefetchQuery({
-          queryKey: customerQKeys.columns(),
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "customers",
-            }),
-        }));
+      const columnsKey = customerQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "customers",
+              }),
+          })
+        );
+      }
+
+      // get search
+      const searchKey = customerQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchCustomersListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                filters: searchFilters,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
     }
     return { searchFilters, pageNumber, size: pageSize };
   },
@@ -235,18 +302,48 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
     const pageSize = size || 10;
 
     if (auth) {
+      const promises = [];
+
       // get columns
-      queryClient.getQueryData(reservationQKeys.columns()) ??
-        (await queryClient.prefetchQuery({
-          queryKey: reservationQKeys.columns(),
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "reservations",
-            }),
-        }));
+      const columnsKey = reservationQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "reservations",
+              }),
+          })
+        );
+      }
+
+      // get search
+      const searchKey = reservationQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchReservationsListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                filters: searchFilters,
+                clientDate: new Date(),
+              }),
+          })
+        );
+      }
+      await Promise.all(promises);
     }
     return { searchFilters, pageNumber, size: pageSize };
   },
@@ -296,18 +393,48 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
     const pageSize = size || 10;
 
     if (auth) {
+      const promises = [];
+
       // get columns
-      queryClient.getQueryData(vehicleQKeys.columns()) ??
-        (await queryClient.prefetchQuery({
-          queryKey: vehicleQKeys.columns(),
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "vehicles",
-            }),
-        }));
+      const columnsKey = vehicleQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: columnsKey,
+            queryFn: () =>
+              fetchModuleColumnsModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                module: "vehicles",
+              }),
+          })
+        );
+      }
+
+      // get search
+      const searchKey = vehicleQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
+        filters: searchFilters,
+      });
+      if (!queryClient.getQueryData(searchKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: searchKey,
+            queryFn: () =>
+              fetchVehiclesListModded({
+                page: pageNumber,
+                pageSize: pageSize,
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                filters: searchFilters,
+              }),
+          })
+        );
+      }
+
+      await Promise.all(promises);
     }
     return { searchFilters, pageNumber, size: pageSize };
   },

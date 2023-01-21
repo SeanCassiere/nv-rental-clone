@@ -18,7 +18,7 @@ export function useGetReservationsList(params: {
       filters: params.filters,
     }),
     queryFn: () =>
-      fetchReservationsList({
+      fetchReservationsListModded({
         page: params.page,
         pageSize: params.pageSize,
         clientId: auth.user?.profile.navotar_clientid || "",
@@ -26,20 +26,34 @@ export function useGetReservationsList(params: {
         accessToken: auth.user?.access_token || "",
         filters: params.filters,
         clientDate: new Date(),
-      })
-        .then((res) => {
-          if (res.ok) return res;
-          return { ...res, data: [] };
-        })
-        .then((res) =>
-          validateApiResWithZodSchema(ReservationListItemListSchema, res)
-        )
-        .catch((e) => {
-          console.error(e);
-          throw e;
-        }),
+      }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),
   });
   return query;
+}
+
+export async function fetchReservationsListModded(
+  params: Parameters<typeof fetchReservationsList>[0]
+) {
+  return await fetchReservationsList({
+    clientId: params.clientId || "",
+    userId: params.userId || "",
+    accessToken: params.accessToken || "",
+    page: params.page,
+    pageSize: params.pageSize,
+    clientDate: params.clientDate,
+    filters: params.filters,
+  })
+    .then((res) => {
+      if (res.ok) return res;
+      return { ...res, data: [] };
+    })
+    .then((res) =>
+      validateApiResWithZodSchema(ReservationListItemListSchema, res)
+    )
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }

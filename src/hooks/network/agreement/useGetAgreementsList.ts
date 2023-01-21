@@ -18,7 +18,7 @@ export function useGetAgreementsList(params: {
       filters: params.filters,
     }),
     queryFn: () =>
-      fetchAgreementsList({
+      fetchAgreementsListModded({
         page: params.page,
         pageSize: params.pageSize,
         clientId: auth.user?.profile.navotar_clientid || "",
@@ -26,21 +26,34 @@ export function useGetAgreementsList(params: {
         accessToken: auth.user?.access_token || "",
         currentDate: new Date(),
         filters: params.filters,
-      })
-        .then((res) => {
-          if (res.ok) return res;
-          return { ...res, data: [] };
-        })
-        .then((res) =>
-          validateApiResWithZodSchema(AgreementListItemListSchema, res)
-        )
-        .catch((e) => {
-          console.error(e);
-          throw e;
-        }),
+      }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([]),
-    keepPreviousData: true,
   });
   return query;
+}
+
+export async function fetchAgreementsListModded(
+  params: Parameters<typeof fetchAgreementsList>[0]
+) {
+  return await fetchAgreementsList({
+    clientId: params.clientId || "",
+    userId: params.userId || "",
+    accessToken: params.accessToken || "",
+    page: params.page,
+    pageSize: params.pageSize,
+    currentDate: params.currentDate,
+    filters: params.filters,
+  })
+    .then((res) => {
+      if (res.ok) return res;
+      return { ...res, data: [] };
+    })
+    .then((res) =>
+      validateApiResWithZodSchema(AgreementListItemListSchema, res)
+    )
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }

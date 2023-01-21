@@ -18,27 +18,38 @@ export function useGetCustomersList(params: {
       filters: params.filters,
     }),
     queryFn: () =>
-      fetchCustomersList({
+      fetchCustomersListModded({
         page: params.page,
         pageSize: params.pageSize,
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
         filters: params.filters,
-      })
-        .then((res) => {
-          if (res.ok) return res;
-          return { ...res, data: [] };
-        })
-        .then((res) =>
-          validateApiResWithZodSchema(CustomerListItemListSchema, res)
-        )
-        .catch((e) => {
-          console.error(e);
-          throw e;
-        }),
+      }),
     enabled: auth.isAuthenticated,
     initialData: makeInitialApiData([] as any[]),
   });
   return query;
+}
+
+export async function fetchCustomersListModded(
+  params: Parameters<typeof fetchCustomersList>[0]
+) {
+  return await fetchCustomersList({
+    clientId: params.clientId || "",
+    userId: params.userId || "",
+    accessToken: params.accessToken || "",
+    page: params.page,
+    pageSize: params.pageSize,
+    filters: params.filters,
+  })
+    .then((res) => {
+      if (res.ok) return res;
+      return { ...res, data: [] };
+    })
+    .then((res) => validateApiResWithZodSchema(CustomerListItemListSchema, res))
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }
