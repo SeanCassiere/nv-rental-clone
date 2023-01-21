@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchDashboardStats } from "../../../api/dashboard";
+import { dashboardQKeys } from "../../../utils/query-key";
 
 export function useGetDashboardStats({
   locationId,
@@ -11,7 +12,7 @@ export function useGetDashboardStats({
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: ["dashboard", "stats"],
+    queryKey: dashboardQKeys.stats(),
     queryFn: () =>
       fetchDashboardStats({
         clientId: auth.user?.profile.navotar_clientid || "",

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchReservationData } from "../../../api/reservation";
+import { reservationQKeys } from "../../../utils/query-key";
 import { type ReservationDataParsed } from "../../../utils/schemas/reservation";
 
 export function useGetReservationData(params: {
@@ -9,7 +10,7 @@ export function useGetReservationData(params: {
 }) {
   const auth = useAuth();
   const query = useQuery<ReservationDataParsed>({
-    queryKey: ["reservationView", params.reservationId, "data"],
+    queryKey: reservationQKeys.id(params.reservationId),
     queryFn: async () =>
       fetchReservationData({
         reservationId: params.reservationId,

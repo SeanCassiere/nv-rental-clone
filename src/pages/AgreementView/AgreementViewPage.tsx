@@ -1,4 +1,4 @@
-import { useEffect, lazy } from "react";
+import { lazy } from "react";
 import {
   useNavigate,
   useParams,
@@ -12,6 +12,8 @@ import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
+import ScrollToTop from "../../components/ScrollToTop";
+
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 import {
   ModuleTabs,
@@ -79,12 +81,9 @@ function AgreementViewPage() {
     onError: onFindError,
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <Protector>
+      <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center md:gap-8">

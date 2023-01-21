@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchAgreementStatusesList } from "../../../api/agreements";
+import { agreementQKeys } from "../../../utils/query-key";
 import { type AgreementStatusListParsed } from "../../../utils/schemas/agreement";
 
 export function useGetAgreementStatusList() {
   const auth = useAuth();
   const query = useQuery<AgreementStatusListParsed>({
-    queryKey: ["agreements", "statuses"],
+    queryKey: agreementQKeys.statuses(),
     queryFn: async () =>
       await fetchAgreementStatusesList({
         clientId: auth.user?.profile.navotar_clientid || "",

@@ -1,9 +1,8 @@
-import { useEffect } from "react";
-
 import Protector from "../../routes/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
 import DashboardBannerNotices from "../../components/Dashboard/DashboardBannerNotices";
 import DashboardDndWidgetGrid from "../../components/Dashboard/DashboardDndWidgetGrid";
+import ScrollToTop from "../../components/ScrollToTop";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
@@ -27,12 +26,9 @@ function IndexPage() {
     saveDashboardWidgetsMutation.mutate({ widgets });
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <Protector>
+      <ScrollToTop />
       {noticeList.data.length > 0 && (
         <div className="grid gap-1">
           {noticeList.data.map((notice) => (

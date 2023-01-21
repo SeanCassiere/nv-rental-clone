@@ -1,24 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchRentalRateSummaryAmounts } from "../../../api/summary";
-import {
-  RentalRatesSummarySchema,
-  type TRentalRatesSummarySchema,
-} from "../../../utils/schemas/summary";
+import { agreementQKeys, reservationQKeys } from "../../../utils/query-key";
+import { RentalRatesSummarySchema } from "../../../utils/schemas/summary";
+
+type TModule = "reservations" | "agreements";
+
+const keySelector = (module: TModule) => {
+  switch (module) {
+    case "reservations":
+      return reservationQKeys;
+    case "agreements":
+      return agreementQKeys;
+  }
+};
 
 export function useGetModuleRentalRatesSummary(params: {
-  module: "reservations" | "agreements";
+  module: TModule;
   referenceId: string;
 }) {
   const auth = useAuth();
-  const query = useQuery<TRentalRatesSummarySchema>({
-    queryKey: [
-      params.module === "agreements" ? "agreementView" : "reservationView",
-      params.referenceId,
-      "summary",
-    ],
-    queryFn: async () =>
-      await fetchRentalRateSummaryAmounts({
+  const query = useQuery({
+    queryKey: keySelector(params.module).summary(params.referenceId),
+    queryFn: () =>
+      fetchRentalRateSummaryAmounts({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",

@@ -77,6 +77,7 @@ export const VehicleSummary = ({
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "" },
         }),
+        preload: "intent",
       },
     },
 
@@ -98,6 +99,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/reservations/$reservationId",
         params: { reservationId: `${summaryData.currentReservation}` },
+        preload: "intent",
       },
     },
     {
@@ -113,6 +115,7 @@ export const VehicleSummary = ({
             Statuses: [2, 7],
           },
         }),
+        preload: "intent",
       },
     },
     {
@@ -125,6 +128,7 @@ export const VehicleSummary = ({
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "" },
         }),
+        preload: "intent",
       },
     },
     {
@@ -145,6 +149,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/agreements/$agreementId",
         params: { agreementId: `${summaryData.currentAgreement}` },
+        preload: "intent",
       },
     },
     {
@@ -181,6 +186,7 @@ export const VehicleSummary = ({
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "", Statuses: [5] },
         }),
+        preload: "intent",
       },
     },
     {

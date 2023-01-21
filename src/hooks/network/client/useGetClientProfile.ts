@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import type { TClientProfileSchema } from "../../../utils/schemas/client";
 import { fetchClientProfile } from "../../../api/clients";
+import { clientQKeys } from "../../../utils/query-key";
 
 export function useGetClientProfile() {
   const auth = useAuth();
 
   const query = useQuery<TClientProfileSchema>({
-    queryKey: ["client", "profile"],
+    queryKey: clientQKeys.profile(),
     queryFn: async () => {
       return await fetchClientProfile({
         clientId: auth.user?.profile.navotar_clientid || "",
@@ -16,7 +17,7 @@ export function useGetClientProfile() {
       });
     },
     enabled: auth.isAuthenticated,
-    staleTime: 1000 * 60 * 15, // 15 minutes before the data is considered to be stale
+    staleTime: 1000 * 60 * 1, // 1 minute before the data is considered to be stale
   });
   return query;
 }
