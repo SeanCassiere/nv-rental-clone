@@ -85,6 +85,7 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
   },
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
@@ -189,6 +190,7 @@ export const customerSearchRoute = customersRoute.createRoute({
       .parse(search),
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
@@ -281,6 +283,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
       .parse(search),
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
@@ -374,6 +377,7 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
       .parse(search),
   preSearchFilters: [
     (search) => ({
+      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),
