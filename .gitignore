@@ -41,3 +41,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# temp
+/.temp/
+/.temps/
+/temp/
+/temps/
