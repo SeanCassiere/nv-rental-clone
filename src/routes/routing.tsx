@@ -14,6 +14,7 @@ import {
   reservationQKeys,
   customerQKeys,
   vehicleQKeys,
+  dashboardQKeys,
 } from "../utils/query-key";
 
 import { fetchDashboardWidgetList } from "../api/dashboard";
@@ -53,9 +54,10 @@ export const indexRoute = rootRoute.createRoute({
   loader: async () => {
     const auth = getAuthToken();
     if (auth) {
-      queryClient.getQueryData(["dashboard", "widgets"]) ??
+      const widgetsKey = dashboardQKeys.widgets();
+      queryClient.getQueryData(widgetsKey) ??
         (await queryClient.prefetchQuery({
-          queryKey: ["dashboard", "widgets"],
+          queryKey: widgetsKey,
           queryFn: () =>
             fetchDashboardWidgetList({
               clientId: auth.profile.navotar_clientid,
