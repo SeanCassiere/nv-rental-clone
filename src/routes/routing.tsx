@@ -1,7 +1,6 @@
 import { createRouteConfig, Outlet, lazy } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { OidcAuthProvider } from "./OidcAuthProvider";
 import AppShellLayout from "../components/AppShellLayout";
 import { getAuthToken } from "../utils/authLocal";
 import { queryClient } from "../App";
@@ -27,11 +26,9 @@ import { fetchVehiclesListModded } from "../hooks/network/vehicle/useGetVehicles
 export const rootRoute = createRouteConfig({
   component: () => {
     return (
-      <OidcAuthProvider>
-        <AppShellLayout>
-          <Outlet />
-        </AppShellLayout>
-      </OidcAuthProvider>
+      <AppShellLayout>
+        <Outlet />
+      </AppShellLayout>
     );
   },
 });

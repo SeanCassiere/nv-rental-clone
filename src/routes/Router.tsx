@@ -19,6 +19,12 @@ export const router = new ReactRouter({
   ),
 });
 
+declare module "@tanstack/react-router" {
+  interface RegisterRouter {
+    router: typeof router;
+  }
+}
+
 export function decodeFromBinary(str: string): string {
   return decodeURIComponent(
     Array.prototype.map
