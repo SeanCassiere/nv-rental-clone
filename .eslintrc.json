@@ -3,7 +3,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "extends": ["plugin:@typescript-eslint/recommended", "react-app", "prettier"],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "warn",
