@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchAgreementData } from "../../../api/agreements";
+import { agreementQKeys } from "../../../utils/query-key";
 import { type AgreementDataParsed } from "../../../utils/schemas/agreement";
 
 export function useGetAgreementData(params: {
@@ -9,7 +10,7 @@ export function useGetAgreementData(params: {
 }) {
   const auth = useAuth();
   const query = useQuery<AgreementDataParsed>({
-    queryKey: ["agreementView", params.agreementId, "data"],
+    queryKey: agreementQKeys.id(params.agreementId),
     queryFn: async () =>
       fetchAgreementData({
         agreementId: params.agreementId,

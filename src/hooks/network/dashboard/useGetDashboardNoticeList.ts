@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchDashboardNoticeList } from "../../../api/dashboard";
+import { dashboardQKeys } from "../../../utils/query-key";
 import { DashboardNoticeListParsed } from "../../../utils/schemas/dashboard";
 
 export function useGetDashboardNoticeList() {
   const auth = useAuth();
 
   const query = useQuery({
-    queryKey: ["dashboard", "notices"],
+    queryKey: dashboardQKeys.notices(),
     queryFn: () =>
       fetchDashboardNoticeList()
         .then((data) => DashboardNoticeListParsed.parse(data))

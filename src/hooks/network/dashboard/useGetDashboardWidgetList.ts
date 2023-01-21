@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchDashboardWidgetList } from "../../../api/dashboard";
+import { dashboardQKeys } from "../../../utils/query-key";
 import type { DashboardWidgetItemParsed } from "../../../utils/schemas/dashboard";
 
 export function useGetDashboardWidgetList() {
   const auth = useAuth();
 
   const query = useQuery<DashboardWidgetItemParsed[]>({
-    queryKey: ["dashboard", "widgets"],
+    queryKey: dashboardQKeys.widgets(),
     queryFn: () =>
       fetchDashboardWidgetList({
         clientId: auth.user?.profile.navotar_clientid || "",

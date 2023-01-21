@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchCustomerData } from "../../../api/customer";
+import { customerQKeys } from "../../../utils/query-key";
 import { type CustomerDataParsed } from "../../../utils/schemas/customer";
 
 export function useGetCustomerData(params: {
@@ -9,7 +10,7 @@ export function useGetCustomerData(params: {
 }) {
   const auth = useAuth();
   const query = useQuery<CustomerDataParsed>({
-    queryKey: ["customerView", params.customerId, "data"],
+    queryKey: customerQKeys.id(params.customerId),
     queryFn: async () =>
       fetchCustomerData({
         customerId: params.customerId,
