@@ -155,7 +155,9 @@ function ModuleSearchFilters<T extends KeyValueObject>(
     >
       {props.searchFiltersBlueprint.map((blueprint, idx) => (
         <RenderInput
-          key={`input-${blueprint.name}-${idx}`}
+          key={`input-${blueprint.name}-${idx}-${
+            props.initialValues[blueprint.accessor]
+          }`}
           blueprint={blueprint}
           value={values[blueprint.accessor]}
           onChange={(evt: any) => {
@@ -227,6 +229,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <TextInput
         label={blueprint.label}
+        key={`input-${blueprint.name}-${typeof value}`}
         onChange={onChange}
         type={blueprint.type}
         value={
@@ -253,6 +256,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <SelectInput
         label={blueprint.label}
+        key={`input-${blueprint.name}-${typeof value}`}
         options={blueprint.options}
         value={typeof value === "undefined" ? undefined : getValue()}
         onSelect={(item) => {
@@ -282,6 +286,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <MultiSelectInput
         label={blueprint.label}
+        key={`input-${blueprint.name}-${typeof value}`}
         values={getValues()}
         onSelect={(selectValues) => {
           if (selectValues.map((item) => item.value).includes("undefined")) {
@@ -300,6 +305,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <TextInput
         type="date"
+        key={`input-${blueprint.name}-${typeof value}`}
         label={blueprint.label}
         name={blueprint.name}
         value={typeof value === "undefined" ? "" : value}

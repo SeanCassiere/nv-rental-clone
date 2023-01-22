@@ -1,8 +1,13 @@
-export function localDateToQueryYearMonthDay(date: Date) {
+export function localDateToQueryYearMonthDay(date: Date, op: "-" | "/" = "-") {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  return `${year}-${month}-${day}`;
+
+  const parsed = `${year}${op}${month > 9 ? month : `0${month}`}${op}${
+    day > 9 ? day : `0${day}`
+  }`;
+
+  return parsed;
 }
 
 export function localDateTimeToQueryYearMonthDay(
@@ -15,7 +20,8 @@ export function localDateTimeToQueryYearMonthDay(
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
-  return (
+
+  const parsed =
     year +
     "-" +
     month +
@@ -26,8 +32,9 @@ export function localDateTimeToQueryYearMonthDay(
     ":" +
     (minutes > 9 ? `${minutes}` : `0${minutes}`) +
     ":" +
-    (seconds > 9 ? `${seconds}` : `0${seconds}`)
-  );
+    (seconds > 9 ? `${seconds}` : `0${seconds}`);
+
+  return parsed;
   // return `${year}-${month}-${day}${includeT ? "T" : " "}${
   //   hours.toString().length > 10 ? hours : `0${hours}`
   // }:${minutes.toString().length > 10 ? minutes : `0${minutes}`}:${
