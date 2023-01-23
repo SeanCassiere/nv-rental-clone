@@ -33,6 +33,7 @@ import {
   fetchRentalRateSummaryAmounts,
   fetchVehicleSummaryAmounts,
 } from "../api/summary";
+import { makeInitialApiData } from "../api/fetcher";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -56,7 +57,7 @@ export const loggedOutRoute = rootRoute.createRoute({
 
 export const indexRoute = rootRoute.createRoute({
   path: "/",
-  loader: async () => {
+  onLoad: async () => {
     const auth = getAuthToken();
     if (auth) {
       const widgetsKey = dashboardQKeys.widgets();
@@ -69,6 +70,7 @@ export const indexRoute = rootRoute.createRoute({
               userId: auth.profile.navotar_userid,
               accessToken: auth.access_token,
             }),
+          initialData: [],
         }));
     }
     return {};
@@ -91,7 +93,7 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
       size: search?.size || 10,
     }),
   ],
-  loader: async ({ search }) => {
+  onLoad: async ({ search }) => {
     const auth = getAuthToken();
 
     const {
@@ -116,6 +118,7 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
                 accessToken: auth.access_token,
                 module: "agreements",
               }),
+            initialData: [],
           })
         );
       }
@@ -139,6 +142,7 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
                 currentDate: new Date(),
                 filters: searchFilters,
               }),
+            initialData: makeInitialApiData([]),
           })
         );
       }
@@ -157,7 +161,7 @@ export const viewAgreementRoute = agreementsRoute.createRoute({
       })
       .parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
-  loader: async ({ params: { agreementId } }) => {
+  onLoad: async ({ params: { agreementId } }) => {
     const auth = getAuthToken();
 
     if (auth) {
@@ -204,7 +208,7 @@ export const customerSearchRoute = customersRoute.createRoute({
       size: search.size || 10,
     }),
   ],
-  loader: async ({ search }) => {
+  onLoad: async ({ search }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } =
@@ -226,6 +230,7 @@ export const customerSearchRoute = customersRoute.createRoute({
                 accessToken: auth.access_token,
                 module: "customers",
               }),
+            initialData: [],
           })
         );
       }
@@ -248,6 +253,8 @@ export const customerSearchRoute = customersRoute.createRoute({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
+
+            initialData: makeInitialApiData([]),
           })
         );
       }
@@ -263,7 +270,7 @@ export const viewCustomerRoute = customersRoute.createRoute({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
-  loader: async ({ params: { customerId } }) => {
+  onLoad: async ({ params: { customerId } }) => {
     const auth = getAuthToken();
 
     if (auth) {
@@ -312,7 +319,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
       size: search.size || 10,
     }),
   ],
-  loader: async ({ search }) => {
+  onLoad: async ({ search }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } =
@@ -334,6 +341,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
                 accessToken: auth.access_token,
                 module: "reservations",
               }),
+            initialData: [],
           })
         );
       }
@@ -357,6 +365,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
                 filters: searchFilters,
                 clientDate: new Date(),
               }),
+            initialData: makeInitialApiData([]),
           })
         );
       }
@@ -370,7 +379,7 @@ export const viewReservationRoute = reservationsRoute.createRoute({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
-  loader: async ({ params: { reservationId } }) => {
+  onLoad: async ({ params: { reservationId } }) => {
     const auth = getAuthToken();
 
     if (auth) {
@@ -417,7 +426,7 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
       size: search.size || 10,
     }),
   ],
-  loader: async ({ search }) => {
+  onLoad: async ({ search }) => {
     const auth = getAuthToken();
     const { pageNumber, size, searchFilters } =
       normalizeVehicleListSearchParams(search);
@@ -438,6 +447,7 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
                 accessToken: auth.access_token,
                 module: "vehicles",
               }),
+            initialData: [],
           })
         );
       }
@@ -460,6 +470,7 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
+            initialData: makeInitialApiData([]),
           })
         );
       }
@@ -474,7 +485,7 @@ export const viewVehicleRoute = vehiclesRoute.createRoute({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
-  loader: async ({ params: { vehicleId } }) => {
+  onLoad: async ({ params: { vehicleId } }) => {
     const auth = getAuthToken();
 
     if (auth) {
