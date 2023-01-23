@@ -5,36 +5,36 @@ import {
 } from "@tanstack/react-router";
 import JSURL from "jsurl2";
 
-import { rootRoute } from "./routing/__root";
+import { rootRoute } from "./routes/__root";
 
 // /
-import { indexRoute } from "./routing";
+import { indexRoute } from "./routes";
 
 // /logged-out
-import { loggedOutRoute } from "./routing/logged-out";
+import { loggedOutRoute } from "./routes/logged-out";
 
 // /styles
-import { stylingRoute } from "./routing/styles";
+import { stylingRoute } from "./routes/styles";
 
 // /agreements
-import { agreementsRoute } from "./routing/agreements";
-import { searchAgreementsRoute } from "./routing/agreements/searchAgreements";
-import { viewAgreementRoute } from "./routing/agreements/viewAgreement";
+import { agreementsRoute } from "./routes/agreements";
+import { searchAgreementsRoute } from "./routes/agreements/searchAgreements";
+import { viewAgreementRoute } from "./routes/agreements/viewAgreement";
 
 // /customers
-import { customersRoute } from "./routing/customers";
-import { searchCustomersRoute } from "./routing/customers/searchCustomers";
-import { viewCustomerRoute } from "./routing/customers/viewCustomer";
+import { customersRoute } from "./routes/customers";
+import { searchCustomersRoute } from "./routes/customers/searchCustomers";
+import { viewCustomerRoute } from "./routes/customers/viewCustomer";
 
 // /reservations
-import { reservationsRoute } from "./routing/reservations";
-import { searchReservationsRoute } from "./routing/reservations/searchReservations";
-import { viewReservationRoute } from "./routing/reservations/viewReservation";
+import { reservationsRoute } from "./routes/reservations";
+import { searchReservationsRoute } from "./routes/reservations/searchReservations";
+import { viewReservationRoute } from "./routes/reservations/viewReservation";
 
 // /vehicles
-import { vehiclesRoute } from "./routing/vehicles";
-import { searchVehiclesRoute } from "./routing/vehicles/searchVehicles";
-import { viewVehicleRoute } from "./routing/vehicles/viewVehicle";
+import { vehiclesRoute } from "./routes/vehicles";
+import { searchVehiclesRoute } from "./routes/vehicles/searchVehicles";
+import { viewVehicleRoute } from "./routes/vehicles/viewVehicle";
 
 const routeConfig = rootRoute.addChildren([
   indexRoute,
@@ -48,12 +48,6 @@ const routeConfig = rootRoute.addChildren([
   customersRoute.addChildren([searchCustomersRoute, viewCustomerRoute]),
   vehiclesRoute.addChildren([searchVehiclesRoute, viewVehicleRoute]),
 ]);
-
-declare module "@tanstack/react-router" {
-  interface RegisterRouter {
-    router: typeof router;
-  }
-}
 
 export const router = new ReactRouter({
   routeConfig,
@@ -69,6 +63,12 @@ export const router = new ReactRouter({
     </div>
   ),
 });
+
+declare module "@tanstack/react-router" {
+  interface RegisterRouter {
+    router: typeof router;
+  }
+}
 
 // export function decodeFromBinary(str: string): string {
 //   return decodeURIComponent(

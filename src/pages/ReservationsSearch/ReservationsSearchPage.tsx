@@ -3,8 +3,8 @@ import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { searchReservationsRoute } from "../../routes/routing/reservations/searchReservations";
-import Protector from "../../routes/Protector";
+import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
+import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";

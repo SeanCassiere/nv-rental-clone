@@ -2,11 +2,11 @@ import { lazy } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { agreementsRoute } from ".";
-import { queryClient as qc } from "../../../App";
-import { fetchRentalRateSummaryAmounts } from "../../../api/summary";
+import { queryClient as qc } from "../../App";
+import { fetchRentalRateSummaryAmounts } from "../../api/summary";
 
-import { getAuthToken } from "../../../utils/authLocal";
-import { agreementQKeys } from "../../../utils/query-key";
+import { getAuthToken } from "../../utils/authLocal";
+import { agreementQKeys } from "../../utils/query-key";
 
 export const viewAgreementRoute = agreementsRoute.createRoute({
   path: "$agreementId",
@@ -44,9 +44,7 @@ export const viewAgreementRoute = agreementsRoute.createRoute({
     }
     return {};
   },
-  component: lazy(
-    () => import("../../../pages/AgreementView/AgreementViewPage")
-  ),
+  component: lazy(() => import("../../pages/AgreementView/AgreementViewPage")),
   parseParams: (params) => ({
     agreementId: z.string().parse(params.agreementId),
   }),

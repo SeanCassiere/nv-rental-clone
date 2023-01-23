@@ -2,8 +2,8 @@ import { useCallback, useMemo } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { searchVehiclesRoute } from "../../routes/routing/vehicles/searchVehicles";
-import Protector from "../../routes/Protector";
+import { searchVehiclesRoute } from "../../routes/vehicles/searchVehicles";
+import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";

@@ -1,20 +1,20 @@
 import { lazy } from "@tanstack/react-router";
 
 import { agreementsRoute } from ".";
-import { queryClient as qc } from "../../../App";
-import { makeInitialApiData } from "../../../api/fetcher";
-import { fetchModuleColumnsModded } from "../../../hooks/network/module/useGetModuleColumns";
-import { fetchAgreementsListModded } from "../../../hooks/network/agreement/useGetAgreementsList";
+import { queryClient as qc } from "../../App";
+import { makeInitialApiData } from "../../api/fetcher";
+import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
+import { fetchAgreementsListModded } from "../../hooks/network/agreement/useGetAgreementsList";
 
-import { getAuthToken } from "../../../utils/authLocal";
-import { agreementQKeys } from "../../../utils/query-key";
-import { AgreementSearchQuerySchema } from "../../../utils/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "../../../utils/normalize-search-params";
+import { getAuthToken } from "../../utils/authLocal";
+import { agreementQKeys } from "../../utils/query-key";
+import { AgreementSearchQuerySchema } from "../../utils/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 
 export const searchAgreementsRoute = agreementsRoute.createRoute({
   path: "/",
   component: lazy(
-    () => import("../../../pages/AgreementsSearch/AgreementsSearchPage")
+    () => import("../../pages/AgreementsSearch/AgreementsSearchPage")
   ),
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
