@@ -2,10 +2,10 @@ import { lazy } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { vehiclesRoute } from ".";
-import { fetchVehicleSummaryAmounts } from "../../../api/summary";
-import { queryClient as qc } from "../../../App";
-import { getAuthToken } from "../../../utils/authLocal";
-import { vehicleQKeys } from "../../../utils/query-key";
+import { fetchVehicleSummaryAmounts } from "../../api/summary";
+import { queryClient as qc } from "../../App";
+import { getAuthToken } from "../../utils/authLocal";
+import { vehicleQKeys } from "../../utils/query-key";
 
 export const viewVehicleRoute = vehiclesRoute.createRoute({
   path: "$vehicleId",
@@ -39,7 +39,7 @@ export const viewVehicleRoute = vehiclesRoute.createRoute({
     }
     return {};
   },
-  component: lazy(() => import("../../../pages/VehicleView/VehicleViewPage")),
+  component: lazy(() => import("../../pages/VehicleView/VehicleViewPage")),
   parseParams: (params) => ({
     vehicleId: z.string().parse(params.vehicleId),
   }),

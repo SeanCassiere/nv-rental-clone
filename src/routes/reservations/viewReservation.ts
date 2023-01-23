@@ -2,11 +2,11 @@ import { lazy } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { reservationsRoute } from ".";
-import { queryClient as qc } from "../../../App";
-import { fetchRentalRateSummaryAmounts } from "../../../api/summary";
+import { queryClient as qc } from "../../App";
+import { fetchRentalRateSummaryAmounts } from "../../api/summary";
 
-import { getAuthToken } from "../../../utils/authLocal";
-import { reservationQKeys } from "../../../utils/query-key";
+import { getAuthToken } from "../../utils/authLocal";
+import { reservationQKeys } from "../../utils/query-key";
 
 export const viewReservationRoute = reservationsRoute.createRoute({
   path: "$reservationId",
@@ -41,7 +41,7 @@ export const viewReservationRoute = reservationsRoute.createRoute({
     return {};
   },
   component: lazy(
-    () => import("../../../pages/ReservationView/ReservationViewPage")
+    () => import("../../pages/ReservationView/ReservationViewPage")
   ),
   parseParams: (params) => ({
     reservationId: z.string().parse(params.reservationId),

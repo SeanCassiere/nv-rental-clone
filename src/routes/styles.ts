@@ -4,5 +4,5 @@ import { rootRoute } from "./__root";
 
 export const stylingRoute = rootRoute.createRoute({
   path: "styles",
-  component: lazy(() => import("../../pages/StylingArea/StylingAreaPage")),
+  component: lazy(() => import("../pages/StylingArea/StylingAreaPage")),
 });

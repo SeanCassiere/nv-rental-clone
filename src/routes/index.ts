@@ -1,11 +1,11 @@
 import { lazy } from "@tanstack/react-router";
 
 import { rootRoute } from "./__root";
-import { queryClient as qc } from "../../App";
-import { fetchDashboardWidgetList } from "../../api/dashboard";
-import { fetchDashboardNoticeListModded } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
-import { getAuthToken } from "../../utils/authLocal";
-import { dashboardQKeys } from "../../utils/query-key";
+import { queryClient as qc } from "../App";
+import { fetchDashboardWidgetList } from "../api/dashboard";
+import { fetchDashboardNoticeListModded } from "../hooks/network/dashboard/useGetDashboardNoticeList";
+import { getAuthToken } from "../utils/authLocal";
+import { dashboardQKeys } from "../utils/query-key";
 
 export const indexRoute = rootRoute.createRoute({
   path: "/",
@@ -52,5 +52,5 @@ export const indexRoute = rootRoute.createRoute({
     }
     return {};
   },
-  component: lazy(() => import("../../pages/Index/IndexPage")),
+  component: lazy(() => import("../pages/Index/IndexPage")),
 });

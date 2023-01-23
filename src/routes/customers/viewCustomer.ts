@@ -2,15 +2,15 @@ import { lazy } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { customersRoute } from ".";
-import { queryClient as qc } from "../../../App";
-import { fetchCustomerSummaryAmounts } from "../../../api/summary";
+import { queryClient as qc } from "../../App";
+import { fetchCustomerSummaryAmounts } from "../../api/summary";
 
-import { getAuthToken } from "../../../utils/authLocal";
-import { customerQKeys } from "../../../utils/query-key";
+import { getAuthToken } from "../../utils/authLocal";
+import { customerQKeys } from "../../utils/query-key";
 
 export const viewCustomerRoute = customersRoute.createRoute({
   path: "$customerId",
-  component: lazy(() => import("../../../pages/CustomerView/CustomerViewPage")),
+  component: lazy(() => import("../../pages/CustomerView/CustomerViewPage")),
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],

@@ -1,20 +1,20 @@
 import { lazy } from "@tanstack/react-router";
 
 import { vehiclesRoute } from ".";
-import { queryClient } from "../../../App";
-import { makeInitialApiData } from "../../../api/fetcher";
-import { fetchModuleColumnsModded } from "../../../hooks/network/module/useGetModuleColumns";
-import { fetchVehiclesListModded } from "../../../hooks/network/vehicle/useGetVehiclesList";
+import { queryClient } from "../../App";
+import { makeInitialApiData } from "../../api/fetcher";
+import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
+import { fetchVehiclesListModded } from "../../hooks/network/vehicle/useGetVehiclesList";
 
-import { getAuthToken } from "../../../utils/authLocal";
-import { normalizeVehicleListSearchParams } from "../../../utils/normalize-search-params";
-import { vehicleQKeys } from "../../../utils/query-key";
-import { VehicleSearchQuerySchema } from "../../../utils/schemas/vehicle";
+import { getAuthToken } from "../../utils/authLocal";
+import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
+import { vehicleQKeys } from "../../utils/query-key";
+import { VehicleSearchQuerySchema } from "../../utils/schemas/vehicle";
 
 export const searchVehiclesRoute = vehiclesRoute.createRoute({
   path: "/",
   component: lazy(
-    () => import("../../../pages/VehiclesSearch/VehiclesSearchPage")
+    () => import("../../pages/VehiclesSearch/VehiclesSearchPage")
   ),
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [

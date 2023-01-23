@@ -1,20 +1,20 @@
 import { lazy } from "@tanstack/react-router";
 
 import { reservationsRoute } from ".";
-import { queryClient } from "../../../App";
-import { makeInitialApiData } from "../../../api/fetcher";
-import { fetchModuleColumnsModded } from "../../../hooks/network/module/useGetModuleColumns";
-import { fetchReservationsListModded } from "../../../hooks/network/reservation/useGetReservationsList";
+import { queryClient } from "../../App";
+import { makeInitialApiData } from "../../api/fetcher";
+import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
+import { fetchReservationsListModded } from "../../hooks/network/reservation/useGetReservationsList";
 
-import { getAuthToken } from "../../../utils/authLocal";
-import { normalizeReservationListSearchParams } from "../../../utils/normalize-search-params";
-import { reservationQKeys } from "../../../utils/query-key";
-import { ReservationSearchQuerySchema } from "../../../utils/schemas/reservation";
+import { getAuthToken } from "../../utils/authLocal";
+import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
+import { reservationQKeys } from "../../utils/query-key";
+import { ReservationSearchQuerySchema } from "../../utils/schemas/reservation";
 
 export const searchReservationsRoute = reservationsRoute.createRoute({
   path: "/",
   component: lazy(
-    () => import("../../../pages/ReservationsSearch/ReservationsSearchPage")
+    () => import("../../pages/ReservationsSearch/ReservationsSearchPage")
   ),
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [

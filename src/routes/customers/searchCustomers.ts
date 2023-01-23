@@ -1,20 +1,20 @@
 import { lazy } from "@tanstack/react-router";
 
 import { customersRoute } from ".";
-import { makeInitialApiData } from "../../../api/fetcher";
-import { queryClient as qc } from "../../../App";
-import { fetchCustomersListModded } from "../../../hooks/network/customer/useGetCustomersList";
-import { fetchModuleColumnsModded } from "../../../hooks/network/module/useGetModuleColumns";
+import { makeInitialApiData } from "../../api/fetcher";
+import { queryClient as qc } from "../../App";
+import { fetchCustomersListModded } from "../../hooks/network/customer/useGetCustomersList";
+import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
 
-import { getAuthToken } from "../../../utils/authLocal";
-import { normalizeCustomerListSearchParams } from "../../../utils/normalize-search-params";
-import { customerQKeys } from "../../../utils/query-key";
-import { CustomerSearchQuerySchema } from "../../../utils/schemas/customer";
+import { getAuthToken } from "../../utils/authLocal";
+import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
+import { customerQKeys } from "../../utils/query-key";
+import { CustomerSearchQuerySchema } from "../../utils/schemas/customer";
 
 export const searchCustomersRoute = customersRoute.createRoute({
   path: "/",
   component: lazy(
-    () => import("../../../pages/CustomerSearch/CustomerSearchPage")
+    () => import("../../pages/CustomerSearch/CustomerSearchPage")
   ),
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [

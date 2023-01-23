@@ -1,4 +1,4 @@
-import Protector from "../../routes/Protector";
+import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
 import DashboardBannerNotices from "../../components/Dashboard/DashboardBannerNotices";
 import DashboardDndWidgetGrid from "../../components/Dashboard/DashboardDndWidgetGrid";
