@@ -21,3 +21,10 @@ export const AgreementFiltersSchema = z
       });
     }
   });
+
+export const AgreementSearchQuerySchema = z.object({
+  page: z.number().min(1).default(1),
+  size: z.number().min(1).default(10),
+  filters: AgreementFiltersSchema.optional(),
+});
+export type TAgreementSearchQuery = z.infer<typeof AgreementSearchQuerySchema>;

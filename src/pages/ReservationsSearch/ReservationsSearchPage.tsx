@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -18,6 +18,7 @@ import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetReservationStatusList } from "../../hooks/network/reservation/useGetReservationStatusList";
 import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
+import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -26,9 +27,9 @@ const DateTimeColumns = ["CreatedDate", "StartDate", "EndDate"];
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  const { searchFilters, pageNumber, size } = useLoaderData({
-    from: reservationsSearchRoute.id,
-  });
+  const search = useSearch({ from: reservationsSearchRoute.id });
+  const { pageNumber, size, searchFilters } =
+    normalizeReservationListSearchParams(search);
 
   const reservationsData = useGetReservationsList({
     page: pageNumber,
@@ -55,7 +56,7 @@ function ReservationsSearchPage() {
                 to="/reservations/$reservationId"
                 params={{ reservationId: String(reservationId) }}
                 className="font-medium text-teal-700"
-                // preload="intent" // doesn't preload, cannot figure out why
+                preload={false} // doesn't preload with intent, cannot figure out why
               >
                 {value}
               </Link>
@@ -178,15 +179,15 @@ function ReservationsSearchPage() {
           <div className="shadow">
             <ModuleTable
               key={`table-cols-${columnDefs.length}`}
-              data={reservationsData.data.data}
+              data={reservationsData.data?.data || []}
               columns={columnDefs}
               noRows={
                 reservationsData.isLoading === false &&
-                reservationsData.data.data.length === 0
+                reservationsData.data?.data.length === 0
               }
               onColumnOrderChange={handleSaveColumnsOrder}
               lockedColumns={["ReservationNumber"]}
-              rawColumnsData={columnsData.data}
+              rawColumnsData={columnsData?.data || []}
               showColumnPicker
               onColumnVisibilityChange={handleSaveColumnVisibility}
             />
@@ -210,7 +211,7 @@ function ReservationsSearchPage() {
                 search={(search) => ({
                   ...search,
                   page:
-                    pageNumber === reservationsData.data.totalPages
+                    pageNumber === reservationsData.data?.totalPages
                       ? pageNumber
                       : pageNumber + 1,
                   size,
@@ -222,8 +223,8 @@ function ReservationsSearchPage() {
             </p>
             <p>
               {JSON.stringify({
-                totalPages: reservationsData.data.totalPages,
-                totalRecords: reservationsData.data.totalRecords,
+                totalPages: reservationsData.data?.totalPages,
+                totalRecords: reservationsData.data?.totalRecords,
               })}
             </p>
           </div>

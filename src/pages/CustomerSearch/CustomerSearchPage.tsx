@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -17,6 +17,7 @@ import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleCo
 import { CustomerFiltersSchema } from "../../utils/schemas/customer";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
+import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -25,9 +26,9 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  const { searchFilters, pageNumber, size } = useLoaderData({
-    from: customerSearchRoute.id,
-  });
+  const search = useSearch({ from: customerSearchRoute.id });
+  const { searchFilters, pageNumber, size } =
+    normalizeCustomerListSearchParams(search);
 
   const customersData = useGetCustomersList({
     page: pageNumber,
@@ -56,7 +57,7 @@ function CustomerSearchPage() {
                 to="/customers/$customerId"
                 params={{ customerId: String(customerId) }}
                 className="font-medium text-teal-700"
-                // preload="intent" // doesn't preload, cannot figure out why
+                preload={false} // doesn't preload with intent, cannot figure out why
               >
                 {value}
               </Link>
@@ -141,15 +142,15 @@ function CustomerSearchPage() {
           <div className="shadow">
             <ModuleTable
               key={`table-cols-${columnDefs.length}`}
-              data={customersData.data.data}
+              data={customersData.data?.data || []}
               columns={columnDefs}
               noRows={
                 customersData.isLoading === false &&
-                customersData.data.data.length === 0
+                customersData.data?.data.length === 0
               }
               onColumnOrderChange={handleSaveColumnsOrder}
               lockedColumns={["FirstName"]}
-              rawColumnsData={columnsData.data}
+              rawColumnsData={columnsData?.data || []}
               showColumnPicker
               onColumnVisibilityChange={handleSaveColumnVisibility}
             />
@@ -173,7 +174,7 @@ function CustomerSearchPage() {
                 search={(search) => ({
                   ...search,
                   page:
-                    pageNumber === customersData.data.totalPages
+                    pageNumber === customersData.data?.totalPages
                       ? pageNumber
                       : pageNumber + 1,
                   size,
@@ -185,8 +186,8 @@ function CustomerSearchPage() {
             </p>
             <p>
               {JSON.stringify({
-                totalPages: customersData.data.totalPages,
-                totalRecords: customersData.data.totalRecords,
+                totalPages: customersData.data?.totalPages,
+                totalRecords: customersData.data?.totalRecords,
               })}
             </p>
           </div>

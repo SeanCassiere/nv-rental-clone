@@ -18,3 +18,12 @@ export const ReservationFiltersSchema = z
       });
     }
   });
+
+export const ReservationSearchQuerySchema = z.object({
+  page: z.number().min(1).default(1),
+  size: z.number().min(1).default(10),
+  filters: ReservationFiltersSchema.optional(),
+});
+export type TReservationSearchQuery = z.infer<
+  typeof ReservationSearchQuerySchema
+>;

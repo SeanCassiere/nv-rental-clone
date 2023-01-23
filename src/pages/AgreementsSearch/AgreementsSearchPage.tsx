@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -18,6 +18,7 @@ import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
 import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -26,9 +27,9 @@ const DateTimeColumns = ["CreatedDate", "CheckoutDate", "CheckinDate"];
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  const { searchFilters, pageNumber, size } = useLoaderData({
-    from: agreementSearchRoute.id,
-  });
+  const search = useSearch({ from: agreementSearchRoute.id });
+  const { searchFilters, pageNumber, size } =
+    normalizeAgreementListSearchParams(search);
 
   const agreementsData = useGetAgreementsList({
     page: pageNumber,
@@ -56,7 +57,7 @@ function AgreementsSearchPage() {
                 to="/agreements/$agreementId"
                 params={{ agreementId: String(agreementId) }}
                 className="font-medium text-teal-700"
-                // preload="intent" // doesn't preload, cannot figure out why
+                preload={false} // doesn't preload with intent, cannot figure out why
               >
                 {value}
               </Link>
@@ -201,15 +202,15 @@ function AgreementsSearchPage() {
               // key={`table-data-length-${
               //   JSON.stringify(columnsData.data).length
               // }`}
-              data={agreementsData.data.data}
+              data={agreementsData.data?.data || []}
               columns={columnDefs}
               noRows={
                 agreementsData.isLoading === false &&
-                agreementsData.data.data.length === 0
+                agreementsData.data?.data.length === 0
               }
               onColumnOrderChange={handleSaveColumnsOrder}
               lockedColumns={["AgreementNumber"]}
-              rawColumnsData={columnsData.data}
+              rawColumnsData={columnsData?.data || []}
               showColumnPicker
               onColumnVisibilityChange={handleSaveColumnVisibility}
             />
@@ -233,7 +234,7 @@ function AgreementsSearchPage() {
                 search={(search) => ({
                   ...search,
                   page:
-                    pageNumber === agreementsData.data.totalPages
+                    pageNumber === agreementsData.data?.totalPages
                       ? pageNumber
                       : pageNumber + 1,
                   size,
@@ -245,8 +246,8 @@ function AgreementsSearchPage() {
             </p>
             <p>
               {JSON.stringify({
-                totalPages: agreementsData.data.totalPages,
-                totalRecords: agreementsData.data.totalRecords,
+                totalPages: agreementsData.data?.totalPages,
+                totalRecords: agreementsData.data?.totalRecords,
               })}
             </p>
           </div>

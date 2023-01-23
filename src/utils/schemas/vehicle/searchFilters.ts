@@ -7,3 +7,10 @@ export const VehicleFiltersSchema = z.object({
   VehicleId: z.string().optional(),
   VehicleStatus: z.string().optional(),
 });
+
+export const VehicleSearchQuerySchema = z.object({
+  page: z.number().min(1).default(1),
+  size: z.number().min(1).default(10),
+  filters: VehicleFiltersSchema.optional(),
+});
+export type TVehicleSearchQuery = z.infer<typeof VehicleSearchQuerySchema>;
