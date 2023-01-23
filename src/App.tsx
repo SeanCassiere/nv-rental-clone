@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useAuth, type AuthContext } from "react-oidc-context";
 
 import { OidcAuthProvider } from "./routes/OidcAuthProvider";
-import { router } from "./routes/Router";
+import { router } from "./routes/router";
 import "./i18n.config";
 
 // Create a client for react-query

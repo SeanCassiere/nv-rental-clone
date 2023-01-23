@@ -4,7 +4,55 @@ import {
   stringifySearchWith,
 } from "@tanstack/react-router";
 
-import { routeConfig } from ".";
+import { rootRoute } from "./routing/__root";
+
+// /
+import { indexRoute } from "./routing";
+
+// /logged-out
+import { loggedOutRoute } from "./routing/logged-out";
+
+// /styles
+import { stylingRoute } from "./routing/styles";
+
+// /agreements
+import { agreementsRoute } from "./routing/agreements";
+import { searchAgreementsRoute } from "./routing/agreements/searchAgreements";
+import { viewAgreementRoute } from "./routing/agreements/viewAgreement";
+
+// /customers
+import { customersRoute } from "./routing/customers";
+import { searchCustomersRoute } from "./routing/customers/searchCustomers";
+import { viewCustomerRoute } from "./routing/customers/viewCustomer";
+
+// /reservations
+import { reservationsRoute } from "./routing/reservations";
+import { searchReservationsRoute } from "./routing/reservations/searchReservations";
+import { viewReservationRoute } from "./routing/reservations/viewReservation";
+
+// /vehicles
+import { vehiclesRoute } from "./routing/vehicles";
+import { searchVehiclesRoute } from "./routing/vehicles/searchVehicles";
+import { viewVehicleRoute } from "./routing/vehicles/viewVehicle";
+
+const routeConfig = rootRoute.addChildren([
+  indexRoute,
+  loggedOutRoute,
+  stylingRoute,
+  agreementsRoute.addChildren([searchAgreementsRoute, viewAgreementRoute]),
+  reservationsRoute.addChildren([
+    searchReservationsRoute,
+    viewReservationRoute,
+  ]),
+  customersRoute.addChildren([searchCustomersRoute, viewCustomerRoute]),
+  vehiclesRoute.addChildren([searchVehiclesRoute, viewVehicleRoute]),
+]);
+
+declare module "@tanstack/react-router" {
+  interface RegisterRouter {
+    router: typeof router;
+  }
+}
 
 export const router = new ReactRouter({
   routeConfig,
@@ -18,12 +66,6 @@ export const router = new ReactRouter({
     </div>
   ),
 });
-
-declare module "@tanstack/react-router" {
-  interface RegisterRouter {
-    router: typeof router;
-  }
-}
 
 export function decodeFromBinary(str: string): string {
   return decodeURIComponent(

@@ -19,7 +19,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import { viewReservationRoute } from "../../routes";
+import { viewReservationRoute } from "../../routes/routing/reservations/viewReservation";
 
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")

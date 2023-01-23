@@ -3,7 +3,7 @@ import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { reservationsSearchRoute } from "../../routes";
+import { searchReservationsRoute } from "../../routes/routing/reservations/searchReservations";
 import Protector from "../../routes/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
@@ -27,7 +27,7 @@ const DateTimeColumns = ["CreatedDate", "StartDate", "EndDate"];
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  const search = useSearch({ from: reservationsSearchRoute.id });
+  const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
     normalizeReservationListSearchParams(search);
 
