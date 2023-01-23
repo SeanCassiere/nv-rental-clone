@@ -27,7 +27,11 @@ const App = () => {
 const SubApp = () => {
   return (
     <>
-      <RouterProvider router={router} context={{ auth: useAuth() }} />
+      <RouterProvider
+        router={router}
+        context={{ auth: useAuth() }}
+        defaultPreload="intent"
+      />
     </>
   );
 };

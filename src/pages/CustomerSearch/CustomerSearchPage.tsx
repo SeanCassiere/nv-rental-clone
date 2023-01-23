@@ -57,7 +57,7 @@ function CustomerSearchPage() {
                 to="/customers/$customerId"
                 params={{ customerId: String(customerId) }}
                 className="font-medium text-teal-700"
-                // preload="intent" // doesn't preload, cannot figure out why
+                preload={false} // doesn't preload with intent, cannot figure out why
               >
                 {value}
               </Link>
