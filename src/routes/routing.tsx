@@ -5,10 +5,10 @@ import AppShellLayout from "../components/AppShellLayout";
 import { getAuthToken } from "../utils/authLocal";
 import { queryClient } from "../App";
 
-import { AgreementFiltersSchema } from "../utils/schemas/agreement";
-import { CustomerFiltersSchema } from "../utils/schemas/customer";
-import { ReservationFiltersSchema } from "../utils/schemas/reservation";
-import { VehicleFiltersSchema } from "../utils/schemas/vehicle";
+import { AgreementSearchQuerySchema } from "../utils/schemas/agreement";
+import { CustomerSearchQuerySchema } from "../utils/schemas/customer";
+import { ReservationSearchQuerySchema } from "../utils/schemas/reservation";
+import { VehicleSearchQuerySchema } from "../utils/schemas/vehicle";
 import {
   agreementQKeys,
   reservationQKeys,
@@ -16,7 +16,12 @@ import {
   vehicleQKeys,
   dashboardQKeys,
 } from "../utils/query-key";
-
+import {
+  normalizeAgreementListSearchParams,
+  normalizeCustomerListSearchParams,
+  normalizeReservationListSearchParams,
+  normalizeVehicleListSearchParams,
+} from "../utils/normalize-search-params";
 import { fetchDashboardWidgetList } from "../api/dashboard";
 import { fetchModuleColumnsModded } from "../hooks/network/module/useGetModuleColumns";
 import { fetchAgreementsListModded } from "../hooks/network/agreement/useGetAgreementsList";
@@ -78,43 +83,22 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
   component: lazy(
     () => import("../pages/AgreementsSearch/AgreementsSearchPage")
   ),
-  validateSearch: (search) => {
-    return z
-      .object({
-        page: z.number().min(1).default(1),
-        size: z.number().min(1).default(10),
-        filters: AgreementFiltersSchema.optional(),
-      })
-      .parse(search);
-  },
+  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
       ...search,
-      page: search.page || 1,
-      size: search.size || 10,
+      page: search?.page || 1,
+      size: search?.size || 10,
     }),
   ],
-  loader: async ({ search: { page, size, filters } }) => {
+  loader: async ({ search }) => {
     const auth = getAuthToken();
 
-    const searchFilters = {
-      AgreementStatusName: filters?.AgreementStatusName || undefined,
-      Statuses: filters?.Statuses || [],
-      IsSearchOverdues:
-        typeof filters?.IsSearchOverdues !== "undefined"
-          ? filters?.IsSearchOverdues
-          : false,
-      StartDate: filters?.StartDate || undefined,
-      EndDate: filters?.EndDate || undefined,
-      SortBy: filters?.SortBy || "CreatedDate",
-      SortDirection: filters?.SortDirection || "DESC",
-      CustomerId: filters?.CustomerId || undefined,
-      VehicleId: filters?.VehicleId || undefined,
-      VehicleNo: filters?.VehicleNo || undefined,
-    };
-
-    const pageNumber = page || 1;
-    const pageSize = size || 10;
+    const {
+      searchFilters,
+      pageNumber,
+      size: pageSize,
+    } = normalizeAgreementListSearchParams(search);
 
     if (auth) {
       const promises = [];
@@ -161,7 +145,7 @@ export const agreementSearchRoute = agreementsRoute.createRoute({
 
       await Promise.all(promises);
     }
-    return { searchFilters, pageNumber, size: pageSize };
+    return {};
   },
 });
 export const viewAgreementRoute = agreementsRoute.createRoute({
@@ -212,14 +196,7 @@ export const customersRoute = rootRoute.createRoute({ path: "customers" });
 export const customerSearchRoute = customersRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/CustomerSearch/CustomerSearchPage")),
-  validateSearch: (search) =>
-    z
-      .object({
-        page: z.number().min(1).default(1),
-        size: z.number().min(1).default(10),
-        filters: CustomerFiltersSchema.optional(),
-      })
-      .parse(search),
+  validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
       ...search,
@@ -227,16 +204,11 @@ export const customerSearchRoute = customersRoute.createRoute({
       size: search.size || 10,
     }),
   ],
-  loader: async ({ search: { page, size, filters } }) => {
+  loader: async ({ search }) => {
     const auth = getAuthToken();
 
-    const searchFilters = {
-      Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
-      SortDirection: filters?.SortDirection || "ASC",
-    };
-
-    const pageNumber = page || 1;
-    const pageSize = size || 10;
+    const { pageNumber, size, searchFilters } =
+      normalizeCustomerListSearchParams(search);
 
     if (auth) {
       const promises = [];
@@ -260,7 +232,7 @@ export const customerSearchRoute = customersRoute.createRoute({
 
       // get search
       const searchKey = customerQKeys.search({
-        pagination: { page: pageNumber, pageSize: pageSize },
+        pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
       if (!queryClient.getQueryData(searchKey)) {
@@ -270,7 +242,7 @@ export const customerSearchRoute = customersRoute.createRoute({
             queryFn: () =>
               fetchCustomersListModded({
                 page: pageNumber,
-                pageSize: pageSize,
+                pageSize: size,
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
@@ -282,7 +254,7 @@ export const customerSearchRoute = customersRoute.createRoute({
 
       await Promise.all(promises);
     }
-    return { searchFilters, pageNumber, size: pageSize };
+    return {};
   },
 });
 export const viewCustomerRoute = customersRoute.createRoute({
@@ -332,14 +304,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
   component: lazy(
     () => import("../pages/ReservationsSearch/ReservationsSearchPage")
   ),
-  validateSearch: (search) =>
-    z
-      .object({
-        page: z.number().min(1).default(1),
-        size: z.number().min(1).default(10),
-        filters: ReservationFiltersSchema.optional(),
-      })
-      .parse(search),
+  validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
       ...search,
@@ -347,21 +312,11 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
       size: search.size || 10,
     }),
   ],
-  loader: async ({ search: { page, size, filters } }) => {
+  loader: async ({ search }) => {
     const auth = getAuthToken();
 
-    const searchFilters = {
-      Statuses: filters?.Statuses || [],
-      CreatedDateFrom: filters?.CreatedDateFrom || undefined,
-      CreatedDateTo: filters?.CreatedDateTo || undefined,
-      SortDirection: filters?.SortDirection || "ASC",
-      CustomerId: filters?.CustomerId || undefined,
-      VehicleId: filters?.VehicleId || undefined,
-      VehicleNo: filters?.VehicleNo || undefined,
-    };
-
-    const pageNumber = page || 1;
-    const pageSize = size || 10;
+    const { pageNumber, size, searchFilters } =
+      normalizeReservationListSearchParams(search);
 
     if (auth) {
       const promises = [];
@@ -385,7 +340,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
 
       // get search
       const searchKey = reservationQKeys.search({
-        pagination: { page: pageNumber, pageSize: pageSize },
+        pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
       if (!queryClient.getQueryData(searchKey)) {
@@ -395,7 +350,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
             queryFn: () =>
               fetchReservationsListModded({
                 page: pageNumber,
-                pageSize: pageSize,
+                pageSize: size,
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
@@ -407,7 +362,7 @@ export const reservationsSearchRoute = reservationsRoute.createRoute({
       }
       await Promise.all(promises);
     }
-    return { searchFilters, pageNumber, size: pageSize };
+    return {};
   },
 });
 export const viewReservationRoute = reservationsRoute.createRoute({
@@ -454,14 +409,7 @@ export const vehiclesRoute = rootRoute.createRoute({ path: "vehicles" });
 export const vehiclesSearchRoute = vehiclesRoute.createRoute({
   path: "/",
   component: lazy(() => import("../pages/VehiclesSearch/VehiclesSearchPage")),
-  validateSearch: (search) =>
-    z
-      .object({
-        page: z.number().min(1).default(1),
-        size: z.number().min(1).default(10),
-        filters: VehicleFiltersSchema.optional(),
-      })
-      .parse(search),
+  validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
       ...search,
@@ -469,19 +417,10 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
       size: search.size || 10,
     }),
   ],
-  loader: async ({ search: { page, size, filters } }) => {
+  loader: async ({ search }) => {
     const auth = getAuthToken();
-
-    const searchFilters = {
-      Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
-      SortDirection: filters?.SortDirection || "DESC",
-      VehicleNo: filters?.VehicleNo || undefined,
-      VehicleId: filters?.VehicleId || undefined,
-      VehicleStatus: filters?.VehicleStatus || undefined,
-    };
-
-    const pageNumber = page || 1;
-    const pageSize = size || 10;
+    const { pageNumber, size, searchFilters } =
+      normalizeVehicleListSearchParams(search);
 
     if (auth) {
       const promises = [];
@@ -505,7 +444,7 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
 
       // get search
       const searchKey = vehicleQKeys.search({
-        pagination: { page: pageNumber, pageSize: pageSize },
+        pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
       if (!queryClient.getQueryData(searchKey)) {
@@ -515,7 +454,7 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
             queryFn: () =>
               fetchVehiclesListModded({
                 page: pageNumber,
-                pageSize: pageSize,
+                pageSize: size,
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
@@ -527,7 +466,7 @@ export const vehiclesSearchRoute = vehiclesRoute.createRoute({
 
       await Promise.all(promises);
     }
-    return { searchFilters, pageNumber, size: pageSize };
+    return {};
   },
 });
 export const viewVehicleRoute = vehiclesRoute.createRoute({

@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { vehiclesSearchRoute } from "../../routes";
@@ -17,13 +17,15 @@ import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetVehicleStatusList } from "../../hooks/network/vehicle/useGetVehicleStatusList";
 import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
+import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  const { searchFilters, pageNumber, size } = useLoaderData({
-    from: vehiclesSearchRoute.id,
-  });
+  const search = useSearch({ from: vehiclesSearchRoute.id });
+  const { pageNumber, size, searchFilters } =
+    normalizeVehicleListSearchParams(search);
+
   const vehiclesData = useGetVehiclesList({
     page: pageNumber,
     pageSize: size,
@@ -158,15 +160,15 @@ function VehiclesSearchPage() {
           <div className="shadow">
             <ModuleTable
               key={`table-cols-${columnDefs.length}`}
-              data={vehiclesData.data.data}
+              data={vehiclesData.data?.data || []}
               columns={columnDefs}
               noRows={
                 vehiclesData.isLoading === false &&
-                vehiclesData.data.data.length === 0
+                vehiclesData.data?.data.length === 0
               }
               onColumnOrderChange={handleSaveColumnsOrder}
               lockedColumns={["VehicleNo"]}
-              rawColumnsData={columnsData.data}
+              rawColumnsData={columnsData?.data || []}
               showColumnPicker
               onColumnVisibilityChange={handleSaveColumnVisibility}
             />
@@ -190,7 +192,7 @@ function VehiclesSearchPage() {
                 search={(search) => ({
                   ...search,
                   page:
-                    pageNumber === vehiclesData.data.totalPages
+                    pageNumber === vehiclesData.data?.totalPages
                       ? pageNumber
                       : pageNumber + 1,
                   size,
@@ -202,8 +204,8 @@ function VehiclesSearchPage() {
             </p>
             <p>
               {JSON.stringify({
-                totalPages: vehiclesData.data.totalPages,
-                totalRecords: vehiclesData.data.totalRecords,
+                totalPages: vehiclesData.data?.totalPages,
+                totalRecords: vehiclesData.data?.totalRecords,
               })}
             </p>
           </div>
