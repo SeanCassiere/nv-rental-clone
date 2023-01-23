@@ -3,6 +3,7 @@ import {
   parseSearchWith,
   stringifySearchWith,
 } from "@tanstack/react-router";
+import JSURL from "jsurl2";
 
 import { rootRoute } from "./routing/__root";
 
@@ -56,10 +57,12 @@ declare module "@tanstack/react-router" {
 
 export const router = new ReactRouter({
   routeConfig,
-  parseSearch: parseSearchWith((value) => JSON.parse(decodeFromBinary(value))),
-  stringifySearch: stringifySearchWith((value) =>
-    encodeToBinary(JSON.stringify(value))
-  ),
+  parseSearch: parseSearchWith((value) => JSURL.parse(value)),
+  stringifySearch: stringifySearchWith((value) => JSURL.stringify(value)),
+  // parseSearch: parseSearchWith((value) => JSON.parse(decodeFromBinary(value))),
+  // stringifySearch: stringifySearchWith((value) =>
+  //   encodeToBinary(JSON.stringify(value))
+  // ),
   defaultPendingComponent: () => (
     <div className="flex h-[calc(100vh-4rem)] w-full items-center justify-center text-3xl">
       <div>Code-split loading...</div>
@@ -67,20 +70,20 @@ export const router = new ReactRouter({
   ),
 });
 
-export function decodeFromBinary(str: string): string {
-  return decodeURIComponent(
-    Array.prototype.map
-      .call(atob(str), function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
-}
+// export function decodeFromBinary(str: string): string {
+//   return decodeURIComponent(
+//     Array.prototype.map
+//       .call(atob(str), function (c) {
+//         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+//       })
+//       .join("")
+//   );
+// }
 
-export function encodeToBinary(str: string): string {
-  return btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-      return String.fromCharCode(parseInt(p1, 16));
-    })
-  );
-}
+// export function encodeToBinary(str: string): string {
+//   return btoa(
+//     encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+//       return String.fromCharCode(parseInt(p1, 16));
+//     })
+//   );
+// }
