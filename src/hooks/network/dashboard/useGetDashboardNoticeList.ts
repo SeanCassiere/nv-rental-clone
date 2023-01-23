@@ -10,32 +10,45 @@ export function useGetDashboardNoticeList() {
   const query = useQuery({
     queryKey: dashboardQKeys.notices(),
     queryFn: () =>
-      fetchDashboardNoticeList()
-        .then((data) => DashboardNoticeListParsed.parse(data))
-        .then((res) => {
-          const local = window.localStorage.getItem(
-            `${auth.user?.profile.navotar_clientid}:${auth.user?.profile.navotar_userid}:dismissed-notices`
-          );
-          const dismissedNoticeIds: string[] = local ? JSON.parse(local) : [];
-
-          const notices = res.filter((notice) => {
-            if (notice.ignoreDismiss) {
-              return notice;
-            }
-            if (!dismissedNoticeIds.includes(notice.id)) {
-              return notice;
-            }
-            return false;
-          });
-
-          return notices;
-        })
-        .catch((e) => {
-          console.log(e);
-          throw e;
-        }),
+      fetchDashboardNoticeListModded({
+        clientId: auth.user?.profile.navotar_clientid || "",
+        userId: auth.user?.profile.navotar_userid || "",
+      }),
     enabled: auth.isAuthenticated,
     initialData: [],
   });
   return query;
+}
+
+export async function fetchDashboardNoticeListModded({
+  userId: navotar_userid,
+  clientId: navotar_clientid,
+}: {
+  userId: string;
+  clientId: string;
+}) {
+  return await fetchDashboardNoticeList()
+    .then((data) => DashboardNoticeListParsed.parse(data))
+    .then((res) => {
+      const local = window.localStorage.getItem(
+        `${navotar_clientid}:${navotar_userid}:dismissed-notices`
+      );
+      const dismissedNoticeIds: string[] = local ? JSON.parse(local) : [];
+
+      const notices = res.filter((notice) => {
+        if (notice.ignoreDismiss) {
+          return notice;
+        }
+        if (!dismissedNoticeIds.includes(notice.id)) {
+          return notice;
+        }
+        return false;
+      });
+
+      return notices;
+    })
+    .catch((e) => {
+      console.log(e);
+      throw e;
+    });
 }

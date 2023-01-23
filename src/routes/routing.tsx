@@ -34,6 +34,7 @@ import {
   fetchVehicleSummaryAmounts,
 } from "../api/summary";
 import { makeInitialApiData } from "../api/fetcher";
+import { fetchDashboardNoticeListModded } from "../hooks/network/dashboard/useGetDashboardNoticeList";
 
 export const rootRoute = createRouteConfig({
   component: () => {
@@ -60,18 +61,43 @@ export const indexRoute = rootRoute.createRoute({
   onLoad: async () => {
     const auth = getAuthToken();
     if (auth) {
+      const promises = [];
+
+      // get notices
+      const noticesKey = dashboardQKeys.notices();
+      if (!queryClient.getQueryData(noticesKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: noticesKey,
+            queryFn: () =>
+              fetchDashboardNoticeListModded({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+              }),
+            initialData: [],
+          })
+        );
+      }
+
+      // get widgets
       const widgetsKey = dashboardQKeys.widgets();
-      queryClient.getQueryData(widgetsKey) ??
-        (await queryClient.prefetchQuery({
-          queryKey: widgetsKey,
-          queryFn: () =>
-            fetchDashboardWidgetList({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-            }),
-          initialData: [],
-        }));
+
+      if (!queryClient.getQueryData(widgetsKey)) {
+        promises.push(
+          queryClient.prefetchQuery({
+            queryKey: widgetsKey,
+            queryFn: () =>
+              fetchDashboardWidgetList({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+              }),
+            initialData: [],
+          })
+        );
+      }
+
+      await Promise.all(promises);
     }
     return {};
   },
