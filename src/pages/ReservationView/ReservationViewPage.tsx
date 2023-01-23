@@ -6,7 +6,8 @@ import {
   useSearch,
 } from "@tanstack/react-router";
 
-import Protector from "../../routes/Protector";
+import Protector from "../../components/Protector";
+import { viewReservationRoute } from "../../routes/reservations/viewReservation";
 import {
   ChevronLeftOutline,
   HamburgerMenuOutline,
@@ -19,7 +20,6 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import { viewReservationRoute } from "../../routes";
 
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")

@@ -2,8 +2,8 @@ import { useCallback, useMemo } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { vehiclesSearchRoute } from "../../routes";
-import Protector from "../../routes/Protector";
+import { searchVehiclesRoute } from "../../routes/vehicles/searchVehicles";
+import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
@@ -22,7 +22,7 @@ import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-p
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  const search = useSearch({ from: vehiclesSearchRoute.id });
+  const search = useSearch({ from: searchVehiclesRoute.id });
   const { pageNumber, size, searchFilters } =
     normalizeVehicleListSearchParams(search);
 

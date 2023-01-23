@@ -3,8 +3,8 @@ import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { customerSearchRoute } from "../../routes";
-import Protector from "../../routes/Protector";
+import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
+import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
@@ -26,7 +26,7 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  const search = useSearch({ from: customerSearchRoute.id });
+  const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeCustomerListSearchParams(search);
 

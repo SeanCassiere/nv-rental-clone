@@ -6,8 +6,8 @@ import {
   useSearch,
 } from "@tanstack/react-router";
 
-import { viewCustomerRoute } from "../../routes";
-import Protector from "../../routes/Protector";
+import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
+import Protector from "../../components/Protector";
 import {
   ChevronLeftOutline,
   HamburgerMenuOutline,

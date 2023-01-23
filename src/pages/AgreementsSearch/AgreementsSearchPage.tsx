@@ -3,8 +3,8 @@ import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { agreementSearchRoute } from "../../routes";
-import Protector from "../../routes/Protector";
+import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
@@ -27,7 +27,7 @@ const DateTimeColumns = ["CreatedDate", "CheckoutDate", "CheckinDate"];
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  const search = useSearch({ from: agreementSearchRoute.id });
+  const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeAgreementListSearchParams(search);
 
