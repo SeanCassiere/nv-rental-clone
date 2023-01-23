@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -38,40 +38,42 @@ function CustomerSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "customers" });
 
-  const columnDefs = columnsData.data
-    .sort(sortColOrderByOrderIndex)
-    .map((column) =>
-      columnHelper.accessor(column.columnHeader as any, {
-        id: column.columnHeader,
-        header: () => column.columnHeaderDescription,
-        cell: (item) => {
-          const value = item.getValue();
-          if (
-            column.columnHeader === "FirstName" &&
-            column.isSelected === true
-          ) {
-            const customerId = item.table.getRow(item.row.id).original
-              .CustomerId;
-            return (
-              <Link
-                to="/customers/$customerId"
-                params={{ customerId: String(customerId) }}
-                className="font-medium text-teal-700"
-                preload={false} // doesn't preload with intent, cannot figure out why
-              >
-                {value}
-              </Link>
-            );
-          }
+  const columnDefs = useMemo(
+    () =>
+      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
+        columnHelper.accessor(column.columnHeader as any, {
+          id: column.columnHeader,
+          header: () => column.columnHeaderDescription,
+          cell: (item) => {
+            const value = item.getValue();
+            if (
+              column.columnHeader === "FirstName" &&
+              column.isSelected === true
+            ) {
+              const customerId = item.table.getRow(item.row.id).original
+                .CustomerId;
+              return (
+                <Link
+                  to="/customers/$customerId"
+                  params={{ customerId: String(customerId) }}
+                  className="font-medium text-teal-700"
+                  preload="intent"
+                >
+                  {value}
+                </Link>
+              );
+            }
 
-          if (DateColumns.includes(column.columnHeader)) {
-            return t("intlDate", { value: new Date(value) });
-          }
+            if (DateColumns.includes(column.columnHeader)) {
+              return t("intlDate", { value: new Date(value) });
+            }
 
-          return value;
-        },
-      })
-    );
+            return value;
+          },
+        })
+      ),
+    [columnsData.data, t]
+  );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "customers" });
 

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -36,32 +36,34 @@ function VehiclesSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "vehicles" });
 
-  const columnDefs = columnsData.data
-    .sort(sortColOrderByOrderIndex)
-    .map((column) =>
-      columnHelper.accessor(column.columnHeader as any, {
-        id: column.columnHeader,
-        header: () => column.columnHeaderDescription,
-        cell: (item) => {
-          const value = item.getValue();
-          if (column.columnHeader === "VehicleNo") {
-            const vehicleId = item.table.getRow(item.row.id).original.id;
-            return (
-              <Link
-                to="/vehicles/$vehicleId"
-                params={{ vehicleId: String(vehicleId) }}
-                className="font-medium text-teal-700"
-                preload={false} // doesn't preload with intent, cannot figure out why
-              >
-                {value}
-              </Link>
-            );
-          }
+  const columnDefs = useMemo(
+    () =>
+      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
+        columnHelper.accessor(column.columnHeader as any, {
+          id: column.columnHeader,
+          header: () => column.columnHeaderDescription,
+          cell: (item) => {
+            const value = item.getValue();
+            if (column.columnHeader === "VehicleNo") {
+              const vehicleId = item.table.getRow(item.row.id).original.id;
+              return (
+                <Link
+                  to="/vehicles/$vehicleId"
+                  params={{ vehicleId: String(vehicleId) }}
+                  className="font-medium text-teal-700"
+                  preload="intent"
+                >
+                  {value}
+                </Link>
+              );
+            }
 
-          return value;
-        },
-      })
-    );
+            return value;
+          },
+        })
+      ),
+    [columnsData.data]
+  );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "vehicles" });
 
