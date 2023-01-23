@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -41,37 +41,39 @@ function AgreementsSearchPage() {
 
   const columnsData = useGetModuleColumns({ module: "agreements" });
 
-  const columnDefs = columnsData.data
-    .sort(sortColOrderByOrderIndex)
-    .map((column) =>
-      columnHelper.accessor(column.columnHeader as any, {
-        id: column.columnHeader,
-        header: () => column.columnHeaderDescription,
-        cell: (item) => {
-          const value = item.getValue();
-          if (column.columnHeader === "AgreementNumber") {
-            const agreementId = item.table.getRow(item.row.id).original
-              .AgreementId;
-            return (
-              <Link
-                to="/agreements/$agreementId"
-                params={{ agreementId: String(agreementId) }}
-                className="font-medium text-teal-700"
-                preload={false} // doesn't preload with intent, cannot figure out why
-              >
-                {value}
-              </Link>
-            );
-          }
+  const columnDefs = useMemo(
+    () =>
+      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
+        columnHelper.accessor(column.columnHeader as any, {
+          id: column.columnHeader,
+          header: () => column.columnHeaderDescription,
+          cell: (item) => {
+            const value = item.getValue();
+            if (column.columnHeader === "AgreementNumber") {
+              const agreementId = item.table.getRow(item.row.id).original
+                .AgreementId;
+              return (
+                <Link
+                  to="/agreements/$agreementId"
+                  params={{ agreementId: String(agreementId) }}
+                  className="font-medium text-teal-700"
+                  preload="intent"
+                >
+                  {value}
+                </Link>
+              );
+            }
 
-          if (DateTimeColumns.includes(column.columnHeader)) {
-            return t("intlDateTime", { value: new Date(value) });
-          }
+            if (DateTimeColumns.includes(column.columnHeader)) {
+              return t("intlDateTime", { value: new Date(value) });
+            }
 
-          return value;
-        },
-      })
-    );
+            return value;
+          },
+        })
+      ),
+    [columnsData.data, t]
+  );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
 
