@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TextInput } from "../../components/Form";
 import JSURL from "jsurl2";
+import { Button } from "../../components/Form/Button";
 
 const JsURLDecoder = () => {
   const [encodeValue, setEncodeValue] = useState("");
@@ -10,7 +11,7 @@ const JsURLDecoder = () => {
   const [decoded, setDecoded] = useState<any>({});
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <TextInput
         label="Encode JSON"
         value={encodeValue}
@@ -18,7 +19,8 @@ const JsURLDecoder = () => {
           setEncodeValue(evt.target.value);
           try {
             const parsed = JSON.parse(evt.target.value);
-            setEncoded(JSURL.stringify(parsed));
+            const url = JSURL.stringify(parsed);
+            setEncoded(url);
           } catch (error) {
             setEncoded("could not encode");
           }
@@ -26,7 +28,19 @@ const JsURLDecoder = () => {
       />
       <div>
         <p className="text-sm">Encoded</p>
-        <p>{encoded}</p>
+        <div className="flex flex-col md:flex-row">
+          <p className="w-full break-all bg-indigo-100 p-4">{encoded}</p>
+          <p className="w-min">
+            <Button
+              type="button"
+              onClick={() => {
+                window.navigator.clipboard.writeText(encoded);
+              }}
+            >
+              Copy
+            </Button>
+          </p>
+        </div>
       </div>
       <TextInput
         label="Decode JSURL to JSON"
@@ -43,7 +57,21 @@ const JsURLDecoder = () => {
       />
       <div>
         <p className="text-sm">Decoded</p>
-        <p>{JSON.stringify(decoded)}</p>
+        <div className="flex flex-col md:flex-row">
+          <p className="w-full break-all bg-indigo-100 p-4">
+            {JSON.stringify(decoded)}
+          </p>
+          <p className="w-min">
+            <Button
+              type="button"
+              onClick={() => {
+                window.navigator.clipboard.writeText(JSON.stringify(decoded));
+              }}
+            >
+              Copy
+            </Button>
+          </p>
+        </div>
       </div>
     </div>
   );
