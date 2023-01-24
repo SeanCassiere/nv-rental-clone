@@ -73,7 +73,6 @@ const StylingAreaPage: React.FC = () => {
               if (typeof item === "undefined") return;
               setSelectedPerson(item);
             }}
-            includeBlank
           />
         </div>
         <div>

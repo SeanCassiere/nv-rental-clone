@@ -35,7 +35,7 @@ const DashboardStatsBlock = ({
                 page: 1,
                 size: 10,
                 filters: {
-                  Statuses: [2],
+                  Statuses: ["2"],
                   CreatedDateFrom: localDateToQueryYearMonthDay(new Date()),
                   CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
                 },
@@ -58,7 +58,7 @@ const DashboardStatsBlock = ({
                 size: 10,
                 filters: {
                   EndDate: localDateToQueryYearMonthDay(new Date()),
-                  Statuses: [2],
+                  Statuses: ["2"],
                   IsSearchOverdues: false,
                 },
               }),
@@ -78,7 +78,7 @@ const DashboardStatsBlock = ({
               search: () => ({
                 page: 1,
                 size: 10,
-                filters: { Statuses: [2] },
+                filters: { Statuses: ["2"] },
               }),
               preload: "intent",
             } as any
@@ -96,7 +96,7 @@ const DashboardStatsBlock = ({
               search: () => ({
                 page: 1,
                 size: 10,
-                filters: { Statuses: [2], IsSearchOverdues: true },
+                filters: { Statuses: ["2"], IsSearchOverdues: true },
               }),
               preload: "intent",
             } as any
@@ -114,7 +114,7 @@ const DashboardStatsBlock = ({
               search: () => ({
                 page: 1,
                 size: 10,
-                filters: { Statuses: [5] },
+                filters: { Statuses: ["5"] },
               }),
               preload: "intent",
             } as any

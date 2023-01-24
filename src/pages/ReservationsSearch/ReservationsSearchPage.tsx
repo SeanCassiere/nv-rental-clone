@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -29,6 +29,8 @@ const DateTimeColumns = ["CreatedDate", "StartDate", "EndDate"];
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
+
+  const router = useRouter();
 
   const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -116,15 +118,37 @@ function ReservationsSearchPage() {
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
               validationSchema={ReservationFiltersSchema}
               initialValues={searchFilters}
+              onSubmit={async (formValues) => {
+                router.navigate({
+                  to: "/reservations",
+                  search: (current) => ({
+                    ...current,
+                    page: 1,
+                    size: 10,
+                    filters: { ...formValues },
+                  }),
+                });
+              }}
+              onReset={async () => {
+                router.navigate({
+                  to: "/reservations",
+                  search: () => ({ page: 1, size: 10, filters: undefined }),
+                });
+              }}
               searchFiltersBlueprint={[
                 {
-                  name: "Statuses",
+                  queryKey: "Statuses",
                   type: "multiple-dropdown",
                   required: false,
                   accessor: "Statuses",
                   label: "Status",
                   options: [
-                    { value: "undefined", label: "All" },
+                    {
+                      value: undefined,
+                      label: "All",
+                      isPlaceholder: true,
+                      isSelectAll: true,
+                    },
                     ...reservationStatusList.data.map((item) => ({
                       value: `${item.id}`,
                       label: item.name,
@@ -132,13 +156,13 @@ function ReservationsSearchPage() {
                   ],
                 },
                 {
-                  name: "ReservationTypes",
+                  queryKey: "ReservationTypes",
                   type: "single-dropdown",
                   required: false,
                   accessor: "ReservationTypes",
                   label: "Type",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...reservationTypesList.data.map((item) => ({
                       value: `${item.typeName}`,
                       label: item.typeName,
@@ -146,27 +170,27 @@ function ReservationsSearchPage() {
                   ],
                 },
                 {
-                  name: "CreatedDateFrom",
+                  queryKey: "CreatedDateFrom",
                   type: "date",
                   required: false,
                   accessor: "CreatedDateFrom",
                   label: "Start date",
                 },
                 {
-                  name: "CreatedDateTo",
+                  queryKey: "CreatedDateTo",
                   type: "date",
                   required: false,
                   accessor: "CreatedDateTo",
                   label: "End date",
                 },
                 {
-                  name: "PickupLocationId",
+                  queryKey: "PickupLocationId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "CheckoutLocationId",
                   label: "Checkout location",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...locationsList.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
@@ -174,13 +198,13 @@ function ReservationsSearchPage() {
                   ],
                 },
                 {
-                  name: "ReturnLocationId",
+                  queryKey: "ReturnLocationId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "CheckinLocationId",
                   label: "Checkin location",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...locationsList.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
@@ -188,13 +212,13 @@ function ReservationsSearchPage() {
                   ],
                 },
                 {
-                  name: "VehicleTypeId",
+                  queryKey: "VehicleTypeId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "VehicleTypeId",
                   label: "Vehicle type",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...vehicleTypesList.data.map((item) => ({
                       value: `${item.VehicleTypeId}`,
                       label: item.VehicleTypeName,
@@ -202,28 +226,28 @@ function ReservationsSearchPage() {
                   ],
                 },
                 {
-                  name: "CustomerId",
+                  queryKey: "CustomerId",
                   type: "hidden",
                   required: false,
                   accessor: "CustomerId",
                   label: "CustomerId",
                 },
                 {
-                  name: "VehicleNo",
+                  queryKey: "VehicleNo",
                   type: "text",
                   required: false,
                   accessor: "VehicleNo",
                   label: "Vehicle no.",
                 },
                 {
-                  name: "VehicleId",
+                  queryKey: "VehicleId",
                   type: "hidden",
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",
                 },
                 {
-                  name: "SortDirection",
+                  queryKey: "SortDirection",
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",

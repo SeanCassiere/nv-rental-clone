@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -29,6 +29,8 @@ const DateTimeColumns = ["CreatedDate", "CheckoutDate", "CheckinDate"];
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
+
+  const router = useRouter();
 
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -117,29 +119,53 @@ function AgreementsSearchPage() {
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
               validationSchema={AgreementFiltersSchema}
               initialValues={searchFilters}
+              onSubmit={async (formValues) => {
+                router.navigate({
+                  to: "/agreements",
+                  search: (current) => ({
+                    ...current,
+                    page: 1,
+                    size: 10,
+                    filters: { ...formValues },
+                  }),
+                });
+              }}
+              onReset={async () => {
+                router.navigate({
+                  to: "/agreements",
+                  search: () => ({ page: 1, size: 10, filters: undefined }),
+                });
+              }}
               searchFiltersBlueprint={[
                 {
-                  name: "Statuses",
+                  queryKey: "Statuses",
                   type: "multiple-dropdown",
                   required: false,
                   accessor: "Statuses",
                   label: "Status",
                   options: [
-                    { value: "undefined", label: "All" },
+                    {
+                      value: undefined,
+                      label: "All",
+                      isPlaceholder: true,
+                      isSelectAll: true,
+                    },
                     ...agreementStatusList.data.map((item) => ({
                       value: `${item.id}`,
                       label: item.name,
+                      isPlaceholder: false,
+                      isSelectAll: false,
                     })),
                   ],
                 },
                 {
-                  name: "AgreementTypes",
+                  queryKey: "AgreementTypes",
                   type: "single-dropdown",
                   required: false,
                   accessor: "AgreementTypes",
                   label: "Type",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...agreementTypesList.data.map((item) => ({
                       value: `${item.typeName}`,
                       label: item.typeName,
@@ -147,34 +173,34 @@ function AgreementsSearchPage() {
                   ],
                 },
                 {
-                  name: "StartDate",
+                  queryKey: "StartDate",
                   type: "date",
                   required: false,
                   accessor: "StartDate",
                   label: "Start date",
                 },
                 {
-                  name: "EndDate",
+                  queryKey: "EndDate",
                   type: "date",
                   required: false,
                   accessor: "EndDate",
                   label: "End date",
                 },
                 {
-                  name: "CustomerId",
+                  queryKey: "CustomerId",
                   type: "hidden",
                   required: false,
                   accessor: "CustomerId",
                   label: "CustomerId",
                 },
                 {
-                  name: "PickupLocationId",
+                  queryKey: "PickupLocationId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "PickupLocationId",
                   label: "Checkout location",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...locationsList.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
@@ -182,13 +208,13 @@ function AgreementsSearchPage() {
                   ],
                 },
                 {
-                  name: "ReturnLocationId",
+                  queryKey: "ReturnLocationId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "ReturnLocationId",
                   label: "Checkin location",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...locationsList.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
@@ -196,13 +222,13 @@ function AgreementsSearchPage() {
                   ],
                 },
                 {
-                  name: "VehicleTypeId",
+                  queryKey: "VehicleTypeId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "VehicleTypeId",
                   label: "Vehicle type",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...vehicleTypesList.data.map((item) => ({
                       value: `${item.VehicleTypeId}`,
                       label: item.VehicleTypeName,
@@ -210,47 +236,53 @@ function AgreementsSearchPage() {
                   ],
                 },
                 {
-                  name: "VehicleNo",
+                  queryKey: "VehicleNo",
                   type: "text",
                   required: false,
                   accessor: "VehicleNo",
                   label: "Vehicle no.",
                 },
                 {
-                  name: "VehicleId",
+                  queryKey: "VehicleId",
                   type: "hidden",
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",
                 },
                 {
-                  name: "IsSearchOverdues",
+                  queryKey: "IsSearchOverdues",
                   type: "single-dropdown",
                   required: false,
                   accessor: "IsSearchOverdues",
                   label: "Search overdues?",
                   options: [
-                    { value: "true", label: "true" },
+                    { value: "true", label: "true", isPlaceholder: true },
                     { value: "false", label: "false" },
                   ],
                 },
                 {
-                  name: "SortBy",
+                  queryKey: "SortBy",
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortBy",
                   label: "Sort by",
-                  options: [{ value: "CreatedDate", label: "Created date" }],
+                  options: [
+                    {
+                      value: "CreatedDate",
+                      label: "Created date",
+                      isPlaceholder: true,
+                    },
+                  ],
                 },
                 {
-                  name: "SortDirection",
+                  queryKey: "SortDirection",
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
                   label: "Sort direction",
                   options: [
                     { value: "ASC", label: "ASC" },
-                    { value: "DESC", label: "DESC" },
+                    { value: "DESC", label: "DESC", isPlaceholder: true },
                   ],
                 },
               ]}

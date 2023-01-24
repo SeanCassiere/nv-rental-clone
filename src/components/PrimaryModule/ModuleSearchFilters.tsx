@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
-import { useRouter } from "@tanstack/react-router";
 import { type ZodSchema } from "zod";
+
 import {
   TextInput,
   MultiSelectInput,
@@ -18,21 +18,20 @@ function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {
       String(value).trim() === "undefined" ||
       String(value).trim() === "" ||
       typeof value === "undefined"
-    )
+    ) {
       return acc;
+    }
 
     if (Array.isArray(originalData[key]) && typeof value === "string") {
       storeValue = value.split(",").map((i) => i.trim());
+    } else if (Array.isArray(originalData[key]) && Array.isArray(value)) {
+      storeValue = value.filter((i) => i !== undefined);
     } else {
       if (String(value) === "true") {
         storeValue = true;
       }
       if (String(value) === "false") {
         storeValue = false;
-      }
-
-      if (typeof value === "string" && /^\d+$/.test(String(value))) {
-        storeValue = parseInt(value);
       }
     }
 
@@ -44,18 +43,23 @@ function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {
   return parse;
 }
 
-function makeBackToArray(data: any, originalData: any) {
+function makeBackToArray<T extends KeyValueObject>(
+  data: any,
+  originalData: any
+) {
   const parsed = [...Object.entries(data)].reduce((prev, [key, value]) => {
     let useableValue = value;
     if (Array.isArray(originalData[key]) && typeof value === "string") {
       useableValue = value.split(",").map((i) => i.trim());
+    } else if (Array.isArray(originalData[key]) && Array.isArray(value)) {
+      useableValue = value.filter((i) => i !== undefined);
     }
 
     return {
       ...prev,
       [key]: useableValue,
     };
-  }, {});
+  }, {} as T);
 
   return parsed;
 }
@@ -64,34 +68,38 @@ interface BaseBluePrint<T> {
   label: string;
   required: boolean;
   accessor: keyof T;
-  name: string;
+  queryKey: string;
 }
 
-interface TextSearchBlueprint<T extends KeyValueObject>
-  extends BaseBluePrint<T> {
+interface TextSearchBlueprint<T> extends BaseBluePrint<T> {
   type: "text" | "hidden";
 }
 
-interface DateSearchBlueprint<T extends KeyValueObject>
-  extends BaseBluePrint<T> {
+interface DateSearchBlueprint<T> extends BaseBluePrint<T> {
   type: "date";
 }
 
-interface NumberSearchBlueprint<T extends KeyValueObject>
-  extends BaseBluePrint<T> {
+interface NumberSearchBlueprint<T> extends BaseBluePrint<T> {
   type: "number";
 }
 
-interface SingleDropdownSearchBlueprint<T extends KeyValueObject>
-  extends BaseBluePrint<T> {
+interface SingleDropdownSearchBlueprint<T> extends BaseBluePrint<T> {
   type: "single-dropdown";
-  options: { value: string; label: string }[];
+  options: {
+    value: string | undefined;
+    label: string;
+    isPlaceholder?: boolean;
+  }[];
 }
 
-interface MultipleDropdownSearchBlueprint<T extends KeyValueObject>
-  extends BaseBluePrint<T> {
+interface MultipleDropdownSearchBlueprint<T> extends BaseBluePrint<T> {
   type: "multiple-dropdown";
-  options: { value: string; label: string }[];
+  options: {
+    value: string | undefined;
+    label: string;
+    isPlaceholder?: boolean;
+    isSelectAll?: boolean;
+  }[];
 }
 
 type SearchBlueprint<T extends KeyValueObject> =
@@ -108,26 +116,23 @@ interface ModuleSearchFiltersProps<T extends KeyValueObject> {
   persistSearchFilters: { [key: string]: any };
   toLocation: string;
   queryFilterKey: string;
+  onSubmit?: (values: T) => Promise<void>;
+  onReset?: () => Promise<void>;
 }
 
 function ModuleSearchFilters<T extends KeyValueObject>(
   props: ModuleSearchFiltersProps<T>
 ) {
-  const router = useRouter();
-
   const [values, setValues] = useState(props.initialValues);
   return (
     <form
       className="grid grid-cols-1 items-end gap-2 md:grid-cols-4 lg:grid-cols-6"
       onReset={(evt) => {
         evt.preventDefault();
-        router.navigate<any>({
-          to: props.toLocation as any,
-          search: {
-            ...props.persistSearchFilters,
-            [props.queryFilterKey]: undefined,
-          },
-        });
+
+        if (props.onReset) {
+          props.onReset();
+        }
       }}
       onSubmit={(evt) => {
         evt.preventDefault();
@@ -144,19 +149,15 @@ function ModuleSearchFilters<T extends KeyValueObject>(
         const secondInsert = makeBackToArray(result.data, props.initialValues);
 
         const jsonSafe = makeJsonSafe(secondInsert, props.initialValues);
-
-        router.navigate<any>({
-          to: props.toLocation as any,
-          search: {
-            ...props.persistSearchFilters,
-            [props.queryFilterKey]: jsonSafe,
-          } as any,
-        });
+        if (props.onSubmit) {
+          props.onSubmit(jsonSafe as T);
+          return;
+        }
       }}
     >
       {props.searchFiltersBlueprint.map((blueprint, idx) => (
         <RenderInput
-          key={`input-${blueprint.name}-${idx}-${
+          key={`input-${blueprint.queryKey}-${idx}-${
             props.initialValues[blueprint.accessor]
           }`}
           blueprint={blueprint}
@@ -196,7 +197,11 @@ function ModuleSearchFilters<T extends KeyValueObject>(
             setValues((prev) => ({ ...prev, [blueprint.accessor]: insert }));
           }}
           directSetter={(input: any) => {
-            setValues((prev) => ({ ...prev, [blueprint.accessor]: input }));
+            setValues((prev) => {
+              const formIt = { ...prev, [blueprint.accessor]: input };
+              // console.log(formIt);
+              return formIt;
+            });
           }}
         />
       ))}
@@ -204,9 +209,6 @@ function ModuleSearchFilters<T extends KeyValueObject>(
       <Button type="reset" color="gray">
         Clear
       </Button>
-      {/* <div className="col-span-1 overflow-y-auto text-xs sm:col-span-2 md:col-span-5">
-        {JSON.stringify(values)}
-      </div> */}
     </form>
   );
 }
@@ -228,7 +230,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <TextInput
         label={blueprint.label}
-        key={`input-${blueprint.name}`}
+        key={`input-${blueprint.queryKey}`}
         onChange={onChange}
         type={blueprint.type}
         value={
@@ -245,23 +247,32 @@ const RenderInput = <T extends KeyValueObject>({
   if (blueprint.type === "single-dropdown") {
     const getValue = () => {
       if (typeof value !== "undefined") {
-        const item = `${value}`;
+        const item = value;
         const find = blueprint.options.find((el) => el.value === item);
         return find;
       }
 
       return undefined;
     };
+    const getPlaceholder = () => {
+      const find = blueprint.options.find((el) => el.isPlaceholder);
+      if (find) {
+        return find;
+      }
+      return undefined;
+    };
     return (
       <SelectInput
         label={blueprint.label}
-        key={`input-${blueprint.name}-${typeof value}`}
+        key={`input-${blueprint.queryKey}`}
         options={blueprint.options}
-        value={typeof value === "undefined" ? undefined : getValue()}
+        value={getValue()}
         onSelect={(item) => {
-          onChange({ target: { value: item ? item.value : undefined } });
+          if (item) {
+            directSetter(item?.value);
+          }
         }}
-        includeBlank={false}
+        placeHolderSchema={getPlaceholder()}
       />
     );
   }
@@ -272,7 +283,7 @@ const RenderInput = <T extends KeyValueObject>({
         const sendItems: TSelectInputOption[] = [];
         value.forEach((item) => {
           const found = blueprint.options.find(
-            (option) => option.value === `${item}`
+            (option) => option.value === item
           );
           if (found) {
             sendItems.push(found);
@@ -282,14 +293,37 @@ const RenderInput = <T extends KeyValueObject>({
       }
       return [];
     };
+    const getPlaceholder = () => {
+      const find = blueprint.options.find(
+        (el) => typeof el.value === "undefined"
+      );
+      if (find) {
+        return find;
+      }
+      return undefined;
+    };
 
     return (
       <MultiSelectInput
         label={blueprint.label}
-        key={`input-${blueprint.name}-${typeof value}`}
+        key={`input-${blueprint.queryKey}-${typeof value}`}
         values={getValues()}
         onSelect={(selectValues) => {
-          if (selectValues.map((item) => item.value).includes("undefined")) {
+          const allUndefined = selectValues.filter(
+            (item) => item.value === undefined
+          );
+          const allIsSelectAll = allUndefined.filter((e) => e.isSelectAll);
+
+          if (allIsSelectAll.length > 0) {
+            if (selectValues.length === blueprint.options.length) {
+              directSetter([]);
+            } else {
+              directSetter([...blueprint.options.map((e) => e.value)]);
+            }
+            return;
+          } else if (
+            selectValues.map((item) => item.value).includes("undefined")
+          ) {
             directSetter([]);
             return;
           }
@@ -297,7 +331,7 @@ const RenderInput = <T extends KeyValueObject>({
           directSetter(selectValues.map((item) => item.value));
         }}
         options={blueprint.options}
-        includeBlank={false}
+        placeHolderSchema={getPlaceholder()}
       />
     );
   }
@@ -306,9 +340,9 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <TextInput
         type="date"
-        key={`input-${blueprint.name}-${typeof value}`}
+        key={`input-${blueprint.queryKey}-${typeof value}`}
         label={blueprint.label}
-        name={blueprint.name}
+        name={blueprint.queryKey}
         value={typeof value === "undefined" ? "" : value}
         onChange={onChange}
       />
@@ -316,7 +350,9 @@ const RenderInput = <T extends KeyValueObject>({
   }
 
   if (blueprint.type === "hidden") {
-    return <input id={id} type="hidden" name={blueprint.name} value={value} />;
+    return (
+      <input id={id} type="hidden" name={blueprint.queryKey} value={value} />
+    );
   }
 
   return <span>none</span>;

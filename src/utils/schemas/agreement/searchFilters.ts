@@ -3,7 +3,7 @@ import { z } from "zod";
 export const AgreementFiltersSchema = z
   .object({
     AgreementStatusName: z.string().optional(),
-    Statuses: z.array(z.coerce.number()).optional(),
+    Statuses: z.array(z.string()).optional(),
     IsSearchOverdues: z.coerce.boolean().optional(),
     StartDate: z.string().optional(),
     EndDate: z.string().optional(),
