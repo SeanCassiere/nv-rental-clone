@@ -105,8 +105,7 @@ export const MultiSelectInput = (props: MultiSelectInputProps) => {
                               />
                               <span
                                 className={classNames(
-                                  selected ? "font-semibold" : "font-normal",
-                                  "ml-3 block truncate"
+                                  "ml-3 block truncate font-normal"
                                 )}
                               >
                                 {option.label}

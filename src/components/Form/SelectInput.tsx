@@ -72,10 +72,7 @@ export const SelectInput = forwardRef((props: SelectProps, ref) => {
                       {({ selected, active }) => (
                         <>
                           <span
-                            className={classNames(
-                              selected ? "font-semibold" : "font-normal",
-                              "block truncate"
-                            )}
+                            className={classNames("block truncate font-normal")}
                           >
                             {person.label}
                           </span>
