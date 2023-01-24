@@ -112,7 +112,7 @@ export const VehicleSummary = ({
         search: () => ({
           filters: {
             VehicleNo: vehicleNo ?? "",
-            Statuses: [2, 7],
+            Statuses: ["2", "7"],
           },
         }),
         preload: "intent",
@@ -184,7 +184,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/agreements",
         search: () => ({
-          filters: { VehicleNo: vehicleNo ?? "", Statuses: [5] },
+          filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
         }),
         preload: "intent",
       },

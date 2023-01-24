@@ -33,7 +33,7 @@ export const CustomerSummary = ({
         to: "/reservations",
         search: () => ({
           filters: {
-            Statuses: [2],
+            Statuses: ["2"],
             CustomerId: `${summaryData.customerId}`,
           },
         }),
@@ -48,7 +48,7 @@ export const CustomerSummary = ({
         to: "/reservations",
         search: () => ({
           filters: {
-            Statuses: [3],
+            Statuses: ["3"],
             CustomerId: `${summaryData.customerId}`,
           },
         }),
@@ -63,7 +63,7 @@ export const CustomerSummary = ({
         to: "/reservations",
         search: () => ({
           filters: {
-            Statuses: [4],
+            Statuses: ["4"],
             CustomerId: `${summaryData.customerId}`,
           },
         }),
@@ -78,7 +78,7 @@ export const CustomerSummary = ({
         to: "/reservations",
         search: () => ({
           filters: {
-            Statuses: [5],
+            Statuses: ["5"],
             CustomerId: `${summaryData.customerId}`,
           },
         }),
@@ -93,7 +93,7 @@ export const CustomerSummary = ({
         to: "/agreements",
         search: () => ({
           filters: {
-            Statuses: [2],
+            Statuses: ["2"],
             CustomerId: `${summaryData.customerId}`,
             IsSearchOverdues: false,
           },
@@ -109,7 +109,7 @@ export const CustomerSummary = ({
         to: "/agreements",
         search: () => ({
           filters: {
-            Statuses: [3],
+            Statuses: ["3"],
             CustomerId: `${summaryData.customerId}`,
             IsSearchOverdues: false,
           },
@@ -130,7 +130,7 @@ export const CustomerSummary = ({
         to: "/agreements",
         search: () => ({
           filters: {
-            Statuses: [5],
+            Statuses: ["5"],
             CustomerId: `${summaryData.customerId}`,
             IsSearchOverdues: false,
           },
@@ -146,7 +146,7 @@ export const CustomerSummary = ({
         to: "/agreements",
         search: () => ({
           filters: {
-            Statuses: [7],
+            Statuses: ["7"],
             CustomerId: `${summaryData.customerId}`,
             IsSearchOverdues: false,
           },
