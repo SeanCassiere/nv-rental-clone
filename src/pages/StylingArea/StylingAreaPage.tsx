@@ -5,6 +5,7 @@ import {
   MultiSelectInput,
   type TSelectInputOption,
 } from "../../components/Form";
+import { Button } from "../../components/Form/Button";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },
@@ -92,7 +93,28 @@ const StylingAreaPage: React.FC = () => {
             value={textValue}
             onChange={(evt) => setTextValue(evt.target.value)}
             required
+            error={textValue.length > 0}
+            errorText={textValue.length ? "Longer than 0" : undefined}
           />
+        </div>
+        <div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+            iure nam facilis tempora ducimus temporibus, numquam culpa
+            voluptatibus, quia nostrum, minus at! Soluta quos ducimus ipsa nemo
+            eaque dolores itaque?
+          </p>
+        </div>
+      </section>
+      <section className="py-10 md:mx-28">
+        <h2 className="text-2xl">Button</h2>
+        <div className="relative my-2 flex w-full gap-2">
+          <Button>Hello World</Button>
+          <Button disabled>Hello World</Button>
+          <Button color="gray">Hello World</Button>
+          <Button color="gray" disabled>
+            Hello World
+          </Button>
         </div>
         <div>
           <p>

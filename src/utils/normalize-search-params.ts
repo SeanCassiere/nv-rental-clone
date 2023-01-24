@@ -22,6 +22,10 @@ export function normalizeAgreementListSearchParams(
     CustomerId: filters?.CustomerId || undefined,
     VehicleId: filters?.VehicleId || undefined,
     VehicleNo: filters?.VehicleNo || undefined,
+    VehicleTypeId: filters?.VehicleTypeId || undefined,
+    PickupLocationId: filters?.PickupLocationId || undefined,
+    ReturnLocationId: filters?.ReturnLocationId || undefined,
+    AgreementTypes: filters?.AgreementTypes || undefined,
   };
 
   const pageNumber = page || 1;
@@ -37,6 +41,7 @@ export function normalizeCustomerListSearchParams(
   const searchFilters = {
     Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
     SortDirection: filters?.SortDirection || "ASC",
+    CustomerTypes: filters?.CustomerTypes || undefined,
   };
 
   const pageNumber = page || 1;
@@ -57,6 +62,10 @@ export function normalizeReservationListSearchParams(
     CustomerId: filters?.CustomerId || undefined,
     VehicleId: filters?.VehicleId || undefined,
     VehicleNo: filters?.VehicleNo || undefined,
+    VehicleTypeId: filters?.VehicleTypeId || undefined,
+    CheckoutLocationId: filters?.CheckoutLocationId || undefined,
+    CheckinLocationId: filters?.CheckinLocationId || undefined,
+    ReservationTypes: filters?.ReservationTypes || undefined,
   };
 
   const pageNumber = page || 1;
@@ -73,6 +82,9 @@ export function normalizeVehicleListSearchParams(search: TVehicleSearchQuery) {
     VehicleNo: filters?.VehicleNo || undefined,
     VehicleId: filters?.VehicleId || undefined,
     VehicleStatus: filters?.VehicleStatus || undefined,
+    VehicleTypeId: filters?.VehicleTypeId || undefined,
+    OwningLocationId: filters?.OwningLocationId || undefined,
+    CurrentLocationId: filters?.CurrentLocationId || undefined,
   };
 
   const pageNumber = page || 1;

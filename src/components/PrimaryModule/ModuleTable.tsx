@@ -58,20 +58,20 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
       ref={isDisabled ? undefined : setDroppableNodeRef}
       colSpan={header.colSpan}
       scope="col"
-      className={classNames(
-        "text-base font-medium text-teal-900",
-        header.index === 0 ? "px-4 sm:pl-6" : "px-4"
-      )}
+      className={classNames("text-base font-medium text-gray-100")}
     >
       <button
         ref={setDraggableNodeRef}
         className={classNames(
+          header.index === 0 ? "px-4 sm:pl-6" : "px-4",
           "h-full w-full py-3 text-left",
           (isDragging && isDisabled) || (isDragging && over?.disabled)
             ? "cursor-no-drop"
             : "",
-          isDisabled ? "cursor-pointer" : "cursor-grab",
-          isDragging ? "bg-gray-300" : "bg-gray-200"
+          isDisabled
+            ? "cursor-pointer hover:cursor-not-allowed"
+            : "cursor-grab",
+          isDragging ? "bg-gray-500" : "bg-gray-600"
         )}
         style={{ transform: CSS.Translate.toString(transform), transition }}
         {...listeners}
@@ -167,11 +167,11 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   return (
     <>
       {showExtraActions && (
-        <div className="flex w-[100%] items-center justify-end bg-gray-200 px-4 pt-4 pb-2">
+        <div className="flex w-[100%] items-center justify-end bg-gray-600 px-4 pt-3 pb-1.5">
           {props.showColumnPicker && (
             <div className="relative">
               <Menu>
-                <Menu.Button className="rounded-full bg-gray-300 p-2 text-xs text-teal-600">
+                <Menu.Button className="rounded-full bg-gray-500 p-2 text-xs text-white shadow">
                   <EyeSlashOutline className="h-5 w-5" />
                 </Menu.Button>
                 <Menu.Items
@@ -221,7 +221,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
           )}
         </div>
       )}
-      <div className="overflow-x-auto md:rounded-sm">
+      <div className="overflow-x-auto">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
@@ -229,7 +229,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
           modifiers={[restrictToHorizontalAxis]}
         >
           <table className="min-w-full table-auto divide-y divide-gray-300">
-            <thead className="bg-gray-200">
+            <thead className="bg-gray-600">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   <SortableContext

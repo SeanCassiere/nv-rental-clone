@@ -12,6 +12,10 @@ export const AgreementFiltersSchema = z
     CustomerId: z.string().optional(),
     VehicleId: z.string().optional(),
     VehicleNo: z.coerce.string().optional(),
+    VehicleTypeId: z.coerce.string().optional(),
+    PickupLocationId: z.coerce.string().optional(),
+    ReturnLocationId: z.coerce.string().optional(),
+    AgreementTypes: z.coerce.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
     if (StartDate && EndDate && StartDate > EndDate) {

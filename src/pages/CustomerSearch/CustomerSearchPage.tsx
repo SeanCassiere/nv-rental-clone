@@ -18,6 +18,7 @@ import { CustomerFiltersSchema } from "../../utils/schemas/customer";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
+import { useGetCustomerTypesList } from "../../hooks/network/customer/useGetCustomerTypes";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -35,6 +36,7 @@ function CustomerSearchPage() {
     pageSize: size,
     filters: searchFilters,
   });
+  const customerTypesList = useGetCustomerTypesList();
 
   const columnsData = useGetModuleColumns({ module: "customers" });
 
@@ -103,7 +105,7 @@ function CustomerSearchPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-900">Customers</h1>
+          <h1 className="text-2xl font-semibold text-gray-700">Customers</h1>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -112,6 +114,20 @@ function CustomerSearchPage() {
               validationSchema={CustomerFiltersSchema}
               initialValues={searchFilters}
               searchFiltersBlueprint={[
+                {
+                  name: "CustomerTypes",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "CustomerTypes",
+                  label: "Type",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...customerTypesList.data.map((item) => ({
+                      value: `${item.typeName}`,
+                      label: item.typeName,
+                    })),
+                  ],
+                },
                 {
                   name: "Active",
                   type: "single-dropdown",
@@ -128,7 +144,7 @@ function CustomerSearchPage() {
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
-                  label: "Sort Direction",
+                  label: "Sort direction",
                   options: [
                     { value: "ASC", label: "ASC" },
                     { value: "DESC", label: "DESC" },

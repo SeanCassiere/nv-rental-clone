@@ -178,7 +178,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
               <div className="flex flex-shrink-0 items-center px-4">
                 <img
                   className="h-8 w-auto"
-                  // src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                  // src="https://tailwindui.com/img/logos/workflow-logo-teal-600-mark-gray-800-text.svg"
                   src="/rental-logo-full.png"
                   alt="RENTAL"
                   style={{ imageRendering: "crisp-edges" }}
@@ -272,7 +272,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
           <button
             type="button"
-            className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+            className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500 md:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
@@ -304,14 +304,14 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             <div className="ml-4 flex items-center gap-1 md:ml-6">
               <button
                 type="button"
-                className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0"
+                className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-0"
               >
                 <span className="sr-only">View notifications</span>
                 <BellIconOutline className="h-6 w-6" aria-hidden="true" />
               </button>
               <button
                 type="button"
-                className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0"
+                className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-0"
               >
                 <span className="sr-only">View settings</span>
                 <SettingsCogOutline className="h-6 w-6" aria-hidden="true" />
@@ -320,7 +320,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
               {/* Profile dropdown */}
               <Menu as="div" className="relative ml-1.5">
                 <div>
-                  <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
                     <span className="sr-only">Open user menu</span>
                     <img
                       className="h-8 w-8 rounded-full"

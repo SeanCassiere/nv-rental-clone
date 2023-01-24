@@ -19,6 +19,9 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetReservationStatusList } from "../../hooks/network/reservation/useGetReservationStatusList";
 import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
 import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
+import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
+import { useGetReservationTypesList } from "../../hooks/network/reservation/useGetReservationTypes";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -38,6 +41,9 @@ function ReservationsSearchPage() {
   });
 
   const reservationStatusList = useGetReservationStatusList();
+  const vehicleTypesList = useGetVehicleTypesList();
+  const locationsList = useGetLocationsList({ locationIsActive: true });
+  const reservationTypesList = useGetReservationTypesList();
 
   const columnsData = useGetModuleColumns({ module: "reservations" });
 
@@ -102,7 +108,7 @@ function ReservationsSearchPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-900">Reservations</h1>
+          <h1 className="text-2xl font-semibold text-gray-700">Reservations</h1>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -118,10 +124,24 @@ function ReservationsSearchPage() {
                   accessor: "Statuses",
                   label: "Status",
                   options: [
-                    { value: "undefined", label: "Select" },
+                    { value: "undefined", label: "All" },
                     ...reservationStatusList.data.map((item) => ({
                       value: `${item.id}`,
                       label: item.name,
+                    })),
+                  ],
+                },
+                {
+                  name: "ReservationTypes",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "ReservationTypes",
+                  label: "Type",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...reservationTypesList.data.map((item) => ({
+                      value: `${item.typeName}`,
+                      label: item.typeName,
                     })),
                   ],
                 },
@@ -140,6 +160,48 @@ function ReservationsSearchPage() {
                   label: "End date",
                 },
                 {
+                  name: "PickupLocationId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "CheckoutLocationId",
+                  label: "Checkout location",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...locationsList.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
+                  ],
+                },
+                {
+                  name: "ReturnLocationId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "CheckinLocationId",
+                  label: "Checkin location",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...locationsList.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
+                  ],
+                },
+                {
+                  name: "VehicleTypeId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "VehicleTypeId",
+                  label: "Vehicle type",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...vehicleTypesList.data.map((item) => ({
+                      value: `${item.VehicleTypeId}`,
+                      label: item.VehicleTypeName,
+                    })),
+                  ],
+                },
+                {
                   name: "CustomerId",
                   type: "hidden",
                   required: false,
@@ -151,7 +213,7 @@ function ReservationsSearchPage() {
                   type: "text",
                   required: false,
                   accessor: "VehicleNo",
-                  label: "VehicleNo",
+                  label: "Vehicle no.",
                 },
                 {
                   name: "VehicleId",
@@ -165,7 +227,7 @@ function ReservationsSearchPage() {
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
-                  label: "Sort Direction",
+                  label: "Sort direction",
                   options: [
                     { value: "ASC", label: "ASC" },
                     { value: "DESC", label: "DESC" },

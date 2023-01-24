@@ -1,5 +1,6 @@
 import { useId, forwardRef } from "react";
 import classNames from "classnames";
+import { ExclamationCircleIconOutline } from "../icons";
 
 interface TextInputProps
   extends React.DetailedHTMLProps<
@@ -7,6 +8,8 @@ interface TextInputProps
     HTMLInputElement
   > {
   label: string;
+  error?: boolean;
+  errorText?: string | null;
 }
 
 export const TextInput = forwardRef<any, TextInputProps>(
@@ -18,38 +21,59 @@ export const TextInput = forwardRef<any, TextInputProps>(
       label,
       className,
       required,
+      error,
+      errorText,
       ...inputProps
     } = props;
     const id = propsId ?? reactId;
 
     return (
-      <div className="relative">
-        <input
-          id={id}
-          placeholder={`${label}${required ? "*" : ""}`}
-          type={type ?? "text"}
-          {...inputProps}
-          required={required}
-          className={classNames(
-            "peer h-12 w-full border-b-2 border-gray-300 pt-2 text-gray-900 placeholder-transparent placeholder:px-4 focus:border-teal-600 focus:outline-none",
-            className
-          )}
-          ref={ref}
-        />
-        <label
-          htmlFor={id}
-          className={classNames(
-            "absolute left-3 top-0 text-xs text-gray-500 transition-all",
-            "peer-placeholder-shown:top-2.5 peer-placeholder-shown:left-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500",
-            "peer-focus:top-0 peer-focus:left-3 peer-focus:text-xs peer-focus:text-gray-500"
-          )}
-        >
-          {label}
-          {required ? (
-            <span className="pl-[0.15em] text-red-500">*</span>
+      <>
+        <div className="w-full">
+          <label
+            htmlFor={id}
+            className="block text-sm font-medium text-gray-700"
+          >
+            {label}
+          </label>
+          <div className="relative mt-1 rounded-md shadow-sm">
+            <input
+              type={type ?? "text"}
+              id={id}
+              className={classNames(
+                "block w-full rounded-sm border-gray-300 focus:outline-none sm:text-sm",
+                error
+                  ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
+                  : "focus:border-teal-500 focus:ring-teal-500",
+                error ? "pr-10" : undefined
+              )}
+              placeholder={inputProps.placeholder || label}
+              {...(error
+                ? {
+                    "aria-invalid": "true",
+                  }
+                : undefined)}
+              aria-describedby={`${id}-error`}
+              ref={ref}
+              required={required}
+              {...inputProps}
+            />
+            {error && (
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <ExclamationCircleIconOutline
+                  className="h-5 w-5 text-red-500"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+          </div>
+          {error && errorText ? (
+            <p className="mt-2 text-sm text-red-600" id={`${id}-error`}>
+              {errorText}
+            </p>
           ) : null}
-        </label>
-      </div>
+        </div>
+      </>
     );
   }
 );

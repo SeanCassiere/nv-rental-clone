@@ -1,7 +1,7 @@
 import { useId, Fragment, forwardRef } from "react";
 import { Transition, Listbox } from "@headlessui/react";
 import classNames from "classnames";
-import { TextInput } from ".";
+import { CheckIconOutline, ChevronUpDownSolid } from "../icons";
 
 export type TSelectInputOption = {
   label: string;
@@ -18,68 +18,85 @@ interface SelectProps {
   required?: boolean;
 }
 
+const blankOption = { label: "Select", value: "undefined" };
+
 export const SelectInput = forwardRef((props: SelectProps, ref) => {
   const id = useId();
-  const { value, includeBlank, options, onSelect, label, required, name } =
-    props;
+  const { value, includeBlank, options, onSelect, label, name } = props;
 
   const selectOptions = [...options];
   if (includeBlank) {
-    selectOptions.unshift({ label: "Select", value: "undefined" });
+    selectOptions.unshift(blankOption);
   }
 
   return (
-    <div className="relative">
+    <div>
       <Listbox value={value} onChange={onSelect} name={name ?? id}>
         {({ open }) => (
           <>
-            <Listbox.Button
-              key={`${name ?? id}-${JSON.stringify(value ?? []).length}`}
-              as={TextInput}
-              defaultValue={value ? value.label : "Select"}
-              ref={ref}
-              readOnly
-              label={label}
-              required={required}
-            />
+            <Listbox.Label className="block text-sm font-medium text-gray-700">
+              {label}
+            </Listbox.Label>
+            <div className="relative mt-1">
+              <Listbox.Button className="relative w-full cursor-default rounded-sm border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm">
+                <span className="block truncate">
+                  {value?.label ?? blankOption.label}
+                </span>
+                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ChevronUpDownSolid
+                    className="h-5 w-5 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </span>
+              </Listbox.Button>
 
-            <Transition
-              show={open}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-75 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
-              className="absolute left-0 top-full z-10 min-w-full"
-            >
-              <Listbox.Options
-                static
-                className="max-h-[250px] overflow-y-auto shadow-sm"
+              <Transition
+                show={open}
+                as={Fragment}
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
               >
-                {selectOptions.map((option) => (
-                  <Listbox.Option
-                    key={`${id}-${option.label}`}
-                    value={option}
-                    as={Fragment}
-                  >
-                    {({ active, selected }) => (
-                      <li
-                        className={classNames(
-                          active
-                            ? "bg-blue-500 text-white hover:bg-blue-500"
-                            : "bg-white text-black",
-                          selected ? "bg-blue-600" : "",
-                          "px-2 py-1 text-sm"
-                        )}
-                      >
-                        {option.label}
-                      </li>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Transition>
+                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  {selectOptions.map((person) => (
+                    <Listbox.Option
+                      key={person.value}
+                      className={({ active }) =>
+                        classNames(
+                          active ? "bg-teal-600 text-white" : "text-gray-900",
+                          "relative cursor-default select-none py-2 pl-3 pr-9"
+                        )
+                      }
+                      value={person}
+                    >
+                      {({ selected, active }) => (
+                        <>
+                          <span
+                            className={classNames("block truncate font-normal")}
+                          >
+                            {person.label}
+                          </span>
+
+                          {selected ? (
+                            <span
+                              className={classNames(
+                                active ? "text-white" : "text-teal-600",
+                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                              )}
+                            >
+                              <CheckIconOutline
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          ) : null}
+                        </>
+                      )}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </Transition>
+            </div>
           </>
         )}
       </Listbox>

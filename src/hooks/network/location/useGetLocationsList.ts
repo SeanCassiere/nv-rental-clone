@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchVehicleStatusesList } from "../../../api/vehicles";
-import { vehicleQKeys } from "../../../utils/query-key";
 
-export function useGetVehicleStatusList() {
+import { fetchLocationsList } from "../../../api/locations";
+import { locationQKeys } from "../../../utils/query-key";
+
+export function useGetLocationsList(params: { locationIsActive: boolean }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: vehicleQKeys.statuses(),
+    queryKey: locationQKeys.all(),
     queryFn: async () =>
-      await fetchVehicleStatusesList({
+      await fetchLocationsList({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
+        withActive: params.locationIsActive,
       }),
     enabled: auth.isAuthenticated,
     initialData: [],

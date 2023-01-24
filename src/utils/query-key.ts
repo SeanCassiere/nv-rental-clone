@@ -14,6 +14,7 @@ export const agreementQKeys = {
     filters: Filters;
   }) => [agreementQKeys.rootKey, pagination, filters],
   statuses: () => [agreementQKeys.rootKey, "statuses"],
+  types: () => [agreementQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-agreement",
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
@@ -32,6 +33,7 @@ export const reservationQKeys = {
     filters: Filters;
   }) => [reservationQKeys.rootKey, pagination, filters],
   statuses: () => [reservationQKeys.rootKey, "statuses"],
+  types: () => [reservationQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-reservation",
   id: (id: ReferenceId) => [reservationQKeys.viewKey, id, "data"],
@@ -49,6 +51,7 @@ export const customerQKeys = {
     pagination: Pagination;
     filters: Filters;
   }) => [customerQKeys.rootKey, pagination, filters],
+  types: () => [customerQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-customer",
   id: (id: ReferenceId) => [customerQKeys.viewKey, id, "data"],
@@ -88,4 +91,14 @@ export const dashboardQKeys = {
   widgets: () => [dashboardQKeys.rootKey, "widgets"],
   stats: () => [dashboardQKeys.rootKey, "statistics"],
   notices: () => [dashboardQKeys.rootKey, "notices"],
+};
+
+export const vehicleTypeQKeys = {
+  rootKey: "vehicle-types",
+  all: () => [vehicleTypeQKeys.rootKey, "all"],
+};
+
+export const locationQKeys = {
+  rootKey: "locations",
+  all: () => [locationQKeys.rootKey, "all"],
 };

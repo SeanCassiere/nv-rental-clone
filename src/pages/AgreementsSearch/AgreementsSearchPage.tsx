@@ -19,6 +19,9 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
 import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
+import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
+import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -38,6 +41,9 @@ function AgreementsSearchPage() {
   });
 
   const agreementStatusList = useGetAgreementStatusList();
+  const vehicleTypesList = useGetVehicleTypesList();
+  const locationsList = useGetLocationsList({ locationIsActive: true });
+  const agreementTypesList = useGetAgreementTypesList();
 
   const columnsData = useGetModuleColumns({ module: "agreements" });
 
@@ -103,7 +109,7 @@ function AgreementsSearchPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-900">Agreements</h1>
+          <h1 className="text-2xl font-semibold text-gray-700">Agreements</h1>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -119,7 +125,7 @@ function AgreementsSearchPage() {
                   accessor: "Statuses",
                   label: "Status",
                   options: [
-                    { value: "undefined", label: "Select" },
+                    { value: "undefined", label: "All" },
                     ...agreementStatusList.data.map((item) => ({
                       value: `${item.id}`,
                       label: item.name,
@@ -127,14 +133,17 @@ function AgreementsSearchPage() {
                   ],
                 },
                 {
-                  name: "IsSearchOverdues",
+                  name: "AgreementTypes",
                   type: "single-dropdown",
                   required: false,
-                  accessor: "IsSearchOverdues",
-                  label: "Search Overdues?",
+                  accessor: "AgreementTypes",
+                  label: "Type",
                   options: [
-                    { value: "true", label: "true" },
-                    { value: "false", label: "false" },
+                    { value: "undefined", label: "All" },
+                    ...agreementTypesList.data.map((item) => ({
+                      value: `${item.typeName}`,
+                      label: item.typeName,
+                    })),
                   ],
                 },
                 {
@@ -159,11 +168,53 @@ function AgreementsSearchPage() {
                   label: "CustomerId",
                 },
                 {
+                  name: "PickupLocationId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "PickupLocationId",
+                  label: "Checkout location",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...locationsList.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
+                  ],
+                },
+                {
+                  name: "ReturnLocationId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "ReturnLocationId",
+                  label: "Checkin location",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...locationsList.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
+                  ],
+                },
+                {
+                  name: "VehicleTypeId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "VehicleTypeId",
+                  label: "Vehicle type",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...vehicleTypesList.data.map((item) => ({
+                      value: `${item.VehicleTypeId}`,
+                      label: item.VehicleTypeName,
+                    })),
+                  ],
+                },
+                {
                   name: "VehicleNo",
                   type: "text",
                   required: false,
                   accessor: "VehicleNo",
-                  label: "VehicleNo",
+                  label: "Vehicle no.",
                 },
                 {
                   name: "VehicleId",
@@ -171,6 +222,17 @@ function AgreementsSearchPage() {
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",
+                },
+                {
+                  name: "IsSearchOverdues",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "IsSearchOverdues",
+                  label: "Search overdues?",
+                  options: [
+                    { value: "true", label: "true" },
+                    { value: "false", label: "false" },
+                  ],
                 },
                 {
                   name: "SortBy",
@@ -185,7 +247,7 @@ function AgreementsSearchPage() {
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
-                  label: "Sort Direction",
+                  label: "Sort direction",
                   options: [
                     { value: "ASC", label: "ASC" },
                     { value: "DESC", label: "DESC" },

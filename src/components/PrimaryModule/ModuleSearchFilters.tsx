@@ -7,6 +7,7 @@ import {
   SelectInput,
   type TSelectInputOption,
 } from "../Form";
+import { Button } from "../Form/Button";
 type KeyValueObject = { [key: string]: any };
 
 function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {
@@ -117,7 +118,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
   const [values, setValues] = useState(props.initialValues);
   return (
     <form
-      className="grid grid-cols-1 gap-2 md:grid-cols-4 lg:grid-cols-5"
+      className="grid grid-cols-1 items-end gap-2 md:grid-cols-4 lg:grid-cols-6"
       onReset={(evt) => {
         evt.preventDefault();
         router.navigate<any>({
@@ -199,15 +200,13 @@ function ModuleSearchFilters<T extends KeyValueObject>(
           }}
         />
       ))}
-      <button type="submit" className="bg-teal-500 px-4 py-2.5 text-white">
-        Submit
-      </button>
-      <button type="reset" className="bg-gray-500 px-4 py-2.5 text-white">
+      <Button type="submit">Submit</Button>
+      <Button type="reset" color="gray">
         Clear
-      </button>
-      <div className="col-span-1 overflow-y-auto text-xs sm:col-span-2 md:col-span-5">
+      </Button>
+      {/* <div className="col-span-1 overflow-y-auto text-xs sm:col-span-2 md:col-span-5">
         {JSON.stringify(values)}
-      </div>
+      </div> */}
     </form>
   );
 }
@@ -229,7 +228,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <TextInput
         label={blueprint.label}
-        key={`input-${blueprint.name}-${typeof value}`}
+        key={`input-${blueprint.name}`}
         onChange={onChange}
         type={blueprint.type}
         value={
@@ -262,6 +261,7 @@ const RenderInput = <T extends KeyValueObject>({
         onSelect={(item) => {
           onChange({ target: { value: item ? item.value : undefined } });
         }}
+        includeBlank={false}
       />
     );
   }
@@ -297,6 +297,7 @@ const RenderInput = <T extends KeyValueObject>({
           directSetter(selectValues.map((item) => item.value));
         }}
         options={blueprint.options}
+        includeBlank={false}
       />
     );
   }

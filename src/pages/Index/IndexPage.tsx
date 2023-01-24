@@ -38,11 +38,23 @@ function IndexPage() {
       )}
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+          <h1 className="text-2xl font-semibold text-gray-700">Dashboard</h1>
         </div>
         <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
+          <div className="pb-4">
+            <h2 className="text-xl font-semibold text-gray-700">Overview</h2>
+            <p className="pt-2 text-base text-gray-600">
+              Jump into what's going on with your fleet.
+            </p>
+          </div>
           <DashboardStatsBlock statistics={statistics.data} />
 
+          <div className="pt-6 pb-2">
+            <h2 className="text-xl font-semibold text-gray-700">Widgets</h2>
+            <p className="pt-2 text-base text-gray-600">
+              My list of personalized widgets.
+            </p>
+          </div>
           <div className="mt-4">
             <DashboardDndWidgetGrid
               key={`${JSON.stringify(widgetList.data)}`}
