@@ -163,7 +163,7 @@ function AgreementsSearchPage() {
                   type: "text",
                   required: false,
                   accessor: "VehicleNo",
-                  label: "VehicleNo",
+                  label: "Vehicle No",
                 },
                 {
                   name: "VehicleId",
