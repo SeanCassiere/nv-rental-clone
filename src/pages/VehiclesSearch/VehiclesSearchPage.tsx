@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useSearch, useRouter } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { searchVehiclesRoute } from "../../routes/vehicles/searchVehicles";
@@ -24,6 +24,8 @@ import { useGetLocationsList } from "../../hooks/network/location/useGetLocation
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
+  const router = useRouter();
+
   const search = useSearch({ from: searchVehiclesRoute.id });
   const { pageNumber, size, searchFilters } =
     normalizeVehicleListSearchParams(search);
@@ -105,15 +107,32 @@ function VehiclesSearchPage() {
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
               validationSchema={VehicleFiltersSchema}
               initialValues={searchFilters}
+              onSubmit={async (formValues) => {
+                router.navigate({
+                  to: "/vehicles",
+                  search: (current) => ({
+                    ...current,
+                    page: 1,
+                    size: 10,
+                    filters: { ...formValues },
+                  }),
+                });
+              }}
+              onReset={async () => {
+                router.navigate({
+                  to: "/vehicles",
+                  search: () => ({ page: 1, size: 10, filters: undefined }),
+                });
+              }}
               searchFiltersBlueprint={[
                 {
-                  name: "VehicleStatus",
+                  queryKey: "VehicleStatus",
                   type: "single-dropdown",
                   required: false,
                   accessor: "VehicleStatus",
                   label: "Status",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...vehicleStatusList.data.map((item) => ({
                       value: `${item.id}`,
                       label: item.name,
@@ -121,13 +140,13 @@ function VehiclesSearchPage() {
                   ],
                 },
                 {
-                  name: "VehicleTypeId",
+                  queryKey: "VehicleTypeId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "VehicleTypeId",
                   label: "Vehicle type",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...vehicleTypesList.data.map((item) => ({
                       value: `${item.VehicleTypeId}`,
                       label: item.VehicleTypeName,
@@ -135,20 +154,20 @@ function VehiclesSearchPage() {
                   ],
                 },
                 {
-                  name: "VehicleNo",
+                  queryKey: "VehicleNo",
                   type: "text",
                   required: false,
                   accessor: "VehicleNo",
                   label: "Vehicle no.",
                 },
                 {
-                  name: "PickupLocationId",
+                  queryKey: "PickupLocationId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "OwningLocationId",
                   label: "Owning location",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...locationsList.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
@@ -156,13 +175,13 @@ function VehiclesSearchPage() {
                   ],
                 },
                 {
-                  name: "ReturnLocationId",
+                  queryKey: "ReturnLocationId",
                   type: "single-dropdown",
                   required: false,
                   accessor: "CurrentLocationId",
                   label: "Current location",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...locationsList.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
@@ -170,32 +189,32 @@ function VehiclesSearchPage() {
                   ],
                 },
                 {
-                  name: "VehicleId",
+                  queryKey: "VehicleId",
                   type: "hidden",
                   required: false,
                   accessor: "VehicleId",
                   label: "VehicleId",
                 },
                 {
-                  name: "Active",
+                  queryKey: "Active",
                   type: "single-dropdown",
                   required: false,
                   accessor: "Active",
                   label: "Active",
                   options: [
-                    { value: "true", label: "true" },
+                    { value: "true", label: "true", isPlaceholder: true },
                     { value: "false", label: "false" },
                   ],
                 },
                 {
-                  name: "SortDirection",
+                  queryKey: "SortDirection",
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
                   label: "Sort direction",
                   options: [
                     { value: "ASC", label: "ASC" },
-                    { value: "DESC", label: "DESC" },
+                    { value: "DESC", label: "DESC", isPlaceholder: true },
                   ],
                 },
               ]}

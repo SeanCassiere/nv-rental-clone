@@ -13,9 +13,6 @@ import { normalizeAgreementListSearchParams } from "../../utils/normalize-search
 
 export const searchAgreementsRoute = agreementsRoute.createRoute({
   path: "/",
-  component: lazy(
-    () => import("../../pages/AgreementsSearch/AgreementsSearchPage")
-  ),
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
@@ -82,4 +79,7 @@ export const searchAgreementsRoute = agreementsRoute.createRoute({
     }
     return {};
   },
+  component: lazy(
+    () => import("../../pages/AgreementsSearch/AgreementsSearchPage")
+  ),
 });

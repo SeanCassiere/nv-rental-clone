@@ -5,29 +5,24 @@ import { CheckIconOutline, ChevronUpDownSolid } from "../icons";
 
 export type TSelectInputOption = {
   label: string;
-  value: string;
+  value: string | undefined;
 };
 
 interface SelectProps {
   value: TSelectInputOption | null | undefined;
   options: TSelectInputOption[];
   onSelect: (value: TSelectInputOption | null) => void;
-  includeBlank?: boolean;
   label: string;
   name?: string;
   required?: boolean;
+  placeHolderSchema?: { value: any; label: string };
 }
-
-const blankOption = { label: "Select", value: "undefined" };
 
 export const SelectInput = forwardRef((props: SelectProps, ref) => {
   const id = useId();
-  const { value, includeBlank, options, onSelect, label, name } = props;
+  const { value, options, onSelect, label, name, placeHolderSchema } = props;
 
   const selectOptions = [...options];
-  if (includeBlank) {
-    selectOptions.unshift(blankOption);
-  }
 
   return (
     <div>
@@ -40,7 +35,9 @@ export const SelectInput = forwardRef((props: SelectProps, ref) => {
             <div className="relative mt-1">
               <Listbox.Button className="relative w-full cursor-default rounded-sm border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm">
                 <span className="block truncate">
-                  {value?.label ?? blankOption.label}
+                  {typeof value?.value === "undefined" && placeHolderSchema
+                    ? placeHolderSchema.label
+                    : value?.label ?? "Select"}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownSolid

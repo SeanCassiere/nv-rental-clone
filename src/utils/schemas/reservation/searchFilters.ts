@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const ReservationFiltersSchema = z
   .object({
-    Statuses: z.array(z.coerce.number()).optional(),
+    Statuses: z.array(z.string()).optional(),
     CreatedDateFrom: z.string().optional(),
     CreatedDateTo: z.string().optional(),
     SortDirection: z.string().optional(),

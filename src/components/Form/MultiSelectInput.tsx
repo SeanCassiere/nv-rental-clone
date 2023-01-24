@@ -4,14 +4,19 @@ import classNames from "classnames";
 import { type TSelectInputOption } from ".";
 import { ChevronUpDownSolid } from "../icons";
 
+interface TMultiSelectInputOption extends TSelectInputOption {
+  isSelectAll?: boolean;
+}
 interface MultiSelectInputProps {
-  values: TSelectInputOption[];
-  options: TSelectInputOption[];
-  onSelect: (value: TSelectInputOption[]) => void;
+  values: TMultiSelectInputOption[];
+  options: TMultiSelectInputOption[];
+  onSelect: (option: TMultiSelectInputOption[]) => void;
   includeBlank?: boolean;
   label: string;
   name?: string;
   required?: boolean;
+  placeHolderSchema?: { value: any; label: string };
+  clearAll?: () => void;
 }
 
 const blankOption = { label: "Select", value: "undefined" };
@@ -38,13 +43,17 @@ export const MultiSelectInput = (props: MultiSelectInputProps) => {
         value={values.map((v) => v.value)}
         onChange={(items) => {
           const itemSend: TSelectInputOption[] = [];
-          items.forEach((item) => {
-            const found = options.find((option) => option.value === item);
-            if (found) {
-              itemSend.push(found);
-            }
-          });
-          onSelect(itemSend);
+          if (values.map((item) => item.value).includes(undefined)) {
+            onSelect([]);
+          } else {
+            items.forEach((item) => {
+              const found = options.find((option) => option.value === item);
+              if (found) {
+                itemSend.push(found);
+              }
+            });
+            onSelect(itemSend);
+          }
         }}
         name={name ?? id}
         multiple
@@ -94,28 +103,31 @@ export const MultiSelectInput = (props: MultiSelectInputProps) => {
                         const isSelected = values
                           .map((item) => item.value)
                           .includes(option.value);
+
+                        const isSelectedAll =
+                          option.isSelectAll &&
+                          Boolean(values.find((v) => v.isSelectAll));
+
                         return (
-                          <>
-                            <div className="flex items-center">
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                className="h-3.5 w-3.5 flex-shrink-0 rounded border-gray-300 text-teal-500 focus:ring-teal-500"
-                                readOnly
-                              />
-                              <span
-                                className={classNames(
-                                  "ml-3 block truncate font-normal"
-                                )}
-                              >
-                                {option.label}
-                                <span className="sr-only">
-                                  {" "}
-                                  is {selected ? "selected" : "not selected"}
-                                </span>
+                          <div className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={isSelectedAll || isSelected}
+                              className="h-3.5 w-3.5 flex-shrink-0 rounded border-gray-300 text-teal-500 focus:ring-teal-500"
+                              readOnly
+                            />
+                            <span
+                              className={classNames(
+                                "ml-3 block truncate font-normal"
+                              )}
+                            >
+                              {option.label}
+                              <span className="sr-only">
+                                {" "}
+                                is {selected ? "selected" : "not selected"}
                               </span>
-                            </div>
-                          </>
+                            </span>
+                          </div>
                         );
                       }}
                     </Listbox.Option>

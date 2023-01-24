@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -27,6 +27,7 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
+  const router = useRouter();
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeCustomerListSearchParams(search);
@@ -113,15 +114,32 @@ function CustomerSearchPage() {
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
               validationSchema={CustomerFiltersSchema}
               initialValues={searchFilters}
+              onSubmit={async (formValues) => {
+                router.navigate({
+                  to: "/customers",
+                  search: (current) => ({
+                    ...current,
+                    page: 1,
+                    size: 10,
+                    filters: { ...formValues },
+                  }),
+                });
+              }}
+              onReset={async () => {
+                router.navigate({
+                  to: "/customers",
+                  search: () => ({ page: 1, size: 10, filters: undefined }),
+                });
+              }}
               searchFiltersBlueprint={[
                 {
-                  name: "CustomerTypes",
+                  queryKey: "CustomerTypes",
                   type: "single-dropdown",
                   required: false,
                   accessor: "CustomerTypes",
                   label: "Type",
                   options: [
-                    { value: "undefined", label: "All" },
+                    { value: undefined, label: "All", isPlaceholder: true },
                     ...customerTypesList.data.map((item) => ({
                       value: `${item.typeName}`,
                       label: item.typeName,
@@ -129,24 +147,24 @@ function CustomerSearchPage() {
                   ],
                 },
                 {
-                  name: "Active",
+                  queryKey: "Active",
                   type: "single-dropdown",
                   required: false,
                   accessor: "Active",
                   label: "Active",
                   options: [
-                    { value: "true", label: "true" },
+                    { value: "true", label: "true", isPlaceholder: true },
                     { value: "false", label: "false" },
                   ],
                 },
                 {
-                  name: "SortDirection",
+                  queryKey: "SortDirection",
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
                   label: "Sort direction",
                   options: [
-                    { value: "ASC", label: "ASC" },
+                    { value: "ASC", label: "ASC", isPlaceholder: true },
                     { value: "DESC", label: "DESC" },
                   ],
                 },

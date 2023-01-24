@@ -44,9 +44,9 @@ export const viewAgreementRoute = agreementsRoute.createRoute({
     }
     return {};
   },
-  component: lazy(() => import("../../pages/AgreementView/AgreementViewPage")),
   parseParams: (params) => ({
     agreementId: z.string().parse(params.agreementId),
   }),
   stringifyParams: (params) => ({ agreementId: `${params.agreementId}` }),
+  component: lazy(() => import("../../pages/AgreementView/AgreementViewPage")),
 });
