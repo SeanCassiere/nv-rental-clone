@@ -228,7 +228,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <TextInput
         label={blueprint.label}
-        key={`input-${blueprint.name}-${typeof value}`}
+        key={`input-${blueprint.name}`}
         onChange={onChange}
         type={blueprint.type}
         value={

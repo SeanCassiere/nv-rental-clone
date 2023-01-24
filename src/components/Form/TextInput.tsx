@@ -41,10 +41,10 @@ export const TextInput = forwardRef<any, TextInputProps>(
               type={type ?? "text"}
               id={id}
               className={classNames(
-                "block w-full rounded-sm border-gray-300 focus:border-teal-500 focus:outline-none focus:ring-teal-500 sm:text-sm",
+                "block w-full rounded-sm border-gray-300 focus:outline-none sm:text-sm",
                 error
                   ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-                  : undefined,
+                  : "focus:border-teal-500 focus:ring-teal-500",
                 error ? "pr-10" : undefined
               )}
               placeholder={inputProps.placeholder || label}
@@ -67,7 +67,7 @@ export const TextInput = forwardRef<any, TextInputProps>(
               </div>
             )}
           </div>
-          {error ? (
+          {error && errorText ? (
             <p className="mt-2 text-sm text-red-600" id={`${id}-error`}>
               {errorText}
             </p>
