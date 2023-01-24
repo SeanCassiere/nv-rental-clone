@@ -3,11 +3,11 @@ import classNames from "classnames";
 import { forwardRef } from "react";
 
 const buttonStyles = cva(
-  "flex justify-center h-max rounded-sm border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2",
+  "flex justify-center h-max rounded-sm border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm",
   {
     variants: {
       color: {
-        teal: "bg-teal-600 hover:bg-teal-700 focus:ring-teal-500",
+        teal: "bg-teal-500 hover:bg-teal-600 focus:ring-teal-500",
         gray: "bg-gray-600 hover:bg-gray-700 focus:ring-gray-500",
       },
       fullWidth: {
