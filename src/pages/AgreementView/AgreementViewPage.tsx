@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import {
+  Link,
   useNavigate,
   useParams,
   useRouter,
@@ -9,7 +10,7 @@ import {
 import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 import Protector from "../../components/Protector";
 import {
-  ChevronLeftOutline,
+  ChevronRightOutline,
   HamburgerMenuOutline,
 } from "../../components/icons";
 import ScrollToTop from "../../components/ScrollToTop";
@@ -76,7 +77,7 @@ function AgreementViewPage() {
     router.history.go(-1);
   };
 
-  useGetAgreementData({
+  const agreement = useGetAgreementData({
     agreementId,
     onError: onFindError,
   });
@@ -87,21 +88,38 @@ function AgreementViewPage() {
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center md:gap-8">
-            <div className="flex flex-row items-center gap-4 md:gap-8">
-              <button
-                onClick={() => {
-                  router.history.go(-1);
-                }}
-                className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-100 font-semibold shadow"
-              >
-                <ChevronLeftOutline className="h-7 w-7" />
-                <span className="sr-only">Go back</span>
-              </button>
-              <h1 className="truncate text-2xl font-semibold text-gray-900">
-                No.&nbsp;
-                <span className="text-gray-600">{agreementId}</span>
-              </h1>
-            </div>
+            <nav className="flex grow items-center" aria-label="Breadcrumb">
+              <ol className="flex items-center space-x-2">
+                <li>
+                  <div className="flex">
+                    <Link
+                      to=".."
+                      className="text-2xl font-semibold text-gray-600 hover:text-gray-800"
+                      onClick={() => {
+                        router.history.go(-1);
+                      }}
+                    >
+                      Agreements
+                    </Link>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <ChevronRightOutline
+                      className="h-5 w-5 flex-shrink-0 text-gray-500"
+                      aria-hidden="true"
+                    />
+                    <Link
+                      to={viewAgreementRoute.id}
+                      params={{ agreementId }}
+                      className="pl-2 text-2xl text-gray-900"
+                    >
+                      {agreement?.data?.agreementNumber}
+                    </Link>
+                  </div>
+                </li>
+              </ol>
+            </nav>
             {/*  */}
             <div className="flex flex-row items-center justify-end gap-4 md:gap-8">
               <button
