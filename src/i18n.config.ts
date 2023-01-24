@@ -2,7 +2,15 @@ import i18n from "i18next";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import dayjs from "dayjs";
+
+import { format as dateFnsFormat, type Locale } from "date-fns";
+import { enUS, enNZ, ru } from "date-fns/locale";
+
+const fnsLocales: Record<string, Locale> = {
+  "en-US": enUS,
+  "en-NZ": enNZ,
+  ru: ru,
+};
 
 const common = "common";
 
@@ -38,15 +46,20 @@ i18n
     },
     interpolation: {
       escapeValue: false,
-      format: (value, format, lng, options) => {
-        if (format === "datetime") {
-          return dayjs(value, { locale: lng }).format("DD/MM/YYYY hh:mm A");
+      format: (value, i18nFormat, lng, options) => {
+        if (i18nFormat === "datetime") {
+          const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
+          return dateFnsFormat(new Date(value), "dd/MM/yyyy hh:mm a", {
+            locale,
+          });
         }
 
-        if (format === "date") {
-          return dayjs(value, { locale: lng }).format("DD/MM/YYYY");
+        if (i18nFormat === "date") {
+          const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
+          return dateFnsFormat(new Date(value), "dd/MM/yyyy", { locale });
         }
-        if (format === "currency") {
+
+        if (i18nFormat === "currency") {
           const { currency, value: numberValue = 0 } = options as any;
 
           if (currency !== "") {
