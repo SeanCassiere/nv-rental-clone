@@ -6,6 +6,7 @@ import {
   type TSelectInputOption,
 } from "../../components/Form";
 import { Button } from "../../components/Form/Button";
+import JsURLDecoder from "./JsURLDecoder";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },
@@ -34,7 +35,11 @@ const StylingAreaPage: React.FC = () => {
   const [textValue, setTextValue] = React.useState("");
 
   return (
-    <div className="h-full divide-y-2 divide-teal-400 bg-gray-200 px-2">
+    <div className="h-full divide-y-2 divide-teal-400 overflow-y-auto bg-gray-200 px-2">
+      <section className="py-10 md:mx-28">
+        <h2 className="text-2xl">JSURL Utils</h2>
+        <JsURLDecoder />
+      </section>
       <section className="py-10 md:mx-28">
         <h2 className="text-2xl">Multi-Select</h2>
         <div className="relative w-[420px]">
