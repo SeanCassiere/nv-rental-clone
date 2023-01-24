@@ -18,6 +18,8 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetVehicleStatusList } from "../../hooks/network/vehicle/useGetVehicleStatusList";
 import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
+import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -33,6 +35,8 @@ function VehiclesSearchPage() {
   });
 
   const vehicleStatusList = useGetVehicleStatusList();
+  const vehicleTypesList = useGetVehicleTypesList();
+  const locationsList = useGetLocationsList({ locationIsActive: true });
 
   const columnsData = useGetModuleColumns({ module: "vehicles" });
 
@@ -109,10 +113,24 @@ function VehiclesSearchPage() {
                   accessor: "VehicleStatus",
                   label: "Status",
                   options: [
-                    { value: "undefined", label: "Select" },
+                    { value: "undefined", label: "All" },
                     ...vehicleStatusList.data.map((item) => ({
                       value: `${item.id}`,
                       label: item.name,
+                    })),
+                  ],
+                },
+                {
+                  name: "VehicleTypeId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "VehicleTypeId",
+                  label: "Vehicle type",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...vehicleTypesList.data.map((item) => ({
+                      value: `${item.VehicleTypeId}`,
+                      label: item.VehicleTypeName,
                     })),
                   ],
                 },
@@ -121,7 +139,35 @@ function VehiclesSearchPage() {
                   type: "text",
                   required: false,
                   accessor: "VehicleNo",
-                  label: "VehicleNo",
+                  label: "Vehicle no.",
+                },
+                {
+                  name: "PickupLocationId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "OwningLocationId",
+                  label: "Owning location",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...locationsList.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
+                  ],
+                },
+                {
+                  name: "ReturnLocationId",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "CurrentLocationId",
+                  label: "Current location",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...locationsList.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
+                  ],
                 },
                 {
                   name: "VehicleId",
@@ -146,7 +192,7 @@ function VehiclesSearchPage() {
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
-                  label: "Sort Direction",
+                  label: "Sort direction",
                   options: [
                     { value: "ASC", label: "ASC" },
                     { value: "DESC", label: "DESC" },

@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchVehicleStatusesList } from "../../../api/vehicles";
-import { vehicleQKeys } from "../../../utils/query-key";
+import { fetchCustomerTypesList } from "../../../api/customer";
+import { customerQKeys } from "../../../utils/query-key";
 
-export function useGetVehicleStatusList() {
+export function useGetCustomerTypesList() {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: vehicleQKeys.statuses(),
+    queryKey: customerQKeys.types(),
     queryFn: async () =>
-      await fetchVehicleStatusesList({
+      await fetchCustomerTypesList({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",

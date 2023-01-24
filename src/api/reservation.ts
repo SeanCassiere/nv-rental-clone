@@ -1,6 +1,9 @@
 import { localDateToQueryYearMonthDay } from "../utils/date";
 import { AgreementStatusListSchema } from "../utils/schemas/agreement";
-import { ReservationDataSchema } from "../utils/schemas/reservation";
+import {
+  ReservationDataSchema,
+  ReservationTypeArraySchema,
+} from "../utils/schemas/reservation";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchReservationsList = async (
@@ -58,4 +61,18 @@ export const fetchReservationStatusesList = async (opts: CommonAuthParams) => {
       },
     }
   ).then((res) => AgreementStatusListSchema.parse(res.data));
+};
+
+export const fetchReservationTypesList = async (opts: CommonAuthParams) => {
+  return await callV3Api(
+    makeUrl(`/v3/reservations/types`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => ReservationTypeArraySchema.parse(res.data));
 };

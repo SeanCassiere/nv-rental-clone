@@ -1,6 +1,7 @@
 import {
   AgreementDataSchema,
   AgreementStatusListSchema,
+  AgreementTypeArraySchema,
 } from "../utils/schemas/agreement";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
@@ -57,4 +58,18 @@ export const fetchAgreementStatusesList = async (opts: CommonAuthParams) => {
       },
     }
   ).then((res) => AgreementStatusListSchema.parse(res.data));
+};
+
+export const fetchAgreementTypesList = async (opts: CommonAuthParams) => {
+  return await callV3Api(
+    makeUrl(`/v3/agreements/types`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => AgreementTypeArraySchema.parse(res.data));
 };

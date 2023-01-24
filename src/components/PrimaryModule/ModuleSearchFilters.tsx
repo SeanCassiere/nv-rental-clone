@@ -261,6 +261,7 @@ const RenderInput = <T extends KeyValueObject>({
         onSelect={(item) => {
           onChange({ target: { value: item ? item.value : undefined } });
         }}
+        includeBlank={false}
       />
     );
   }
@@ -296,6 +297,7 @@ const RenderInput = <T extends KeyValueObject>({
           directSetter(selectValues.map((item) => item.value));
         }}
         options={blueprint.options}
+        includeBlank={false}
       />
     );
   }

@@ -18,6 +18,7 @@ import { CustomerFiltersSchema } from "../../utils/schemas/customer";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
+import { useGetCustomerTypesList } from "../../hooks/network/customer/useGetCustomerTypes";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -35,6 +36,7 @@ function CustomerSearchPage() {
     pageSize: size,
     filters: searchFilters,
   });
+  const customerTypesList = useGetCustomerTypesList();
 
   const columnsData = useGetModuleColumns({ module: "customers" });
 
@@ -113,6 +115,20 @@ function CustomerSearchPage() {
               initialValues={searchFilters}
               searchFiltersBlueprint={[
                 {
+                  name: "CustomerTypes",
+                  type: "single-dropdown",
+                  required: false,
+                  accessor: "CustomerTypes",
+                  label: "Type",
+                  options: [
+                    { value: "undefined", label: "All" },
+                    ...customerTypesList.data.map((item) => ({
+                      value: `${item.typeName}`,
+                      label: item.typeName,
+                    })),
+                  ],
+                },
+                {
                   name: "Active",
                   type: "single-dropdown",
                   required: false,
@@ -128,7 +144,7 @@ function CustomerSearchPage() {
                   type: "single-dropdown",
                   required: false,
                   accessor: "SortDirection",
-                  label: "Sort Direction",
+                  label: "Sort direction",
                   options: [
                     { value: "ASC", label: "ASC" },
                     { value: "DESC", label: "DESC" },
