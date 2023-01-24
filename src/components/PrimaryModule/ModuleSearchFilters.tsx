@@ -118,7 +118,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
   const [values, setValues] = useState(props.initialValues);
   return (
     <form
-      className="grid grid-cols-1 items-end gap-2 md:grid-cols-4 lg:grid-cols-5"
+      className="grid grid-cols-1 items-end gap-2 md:grid-cols-4 lg:grid-cols-6"
       onReset={(evt) => {
         evt.preventDefault();
         router.navigate<any>({
@@ -204,9 +204,9 @@ function ModuleSearchFilters<T extends KeyValueObject>(
       <Button type="reset" color="gray">
         Clear
       </Button>
-      <div className="col-span-1 overflow-y-auto text-xs sm:col-span-2 md:col-span-5">
+      {/* <div className="col-span-1 overflow-y-auto text-xs sm:col-span-2 md:col-span-5">
         {JSON.stringify(values)}
-      </div>
+      </div> */}
     </form>
   );
 }
