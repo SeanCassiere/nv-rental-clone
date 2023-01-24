@@ -15,7 +15,7 @@ export const searchAgreementsRoute = agreementsRoute.createRoute({
   path: "/",
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
-    (search) => ({
+    ({ filters, ...search }) => ({
       ...search,
       page: search?.page || 1,
       size: search?.size || 10,
