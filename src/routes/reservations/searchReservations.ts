@@ -18,7 +18,7 @@ export const searchReservationsRoute = reservationsRoute.createRoute({
   ),
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
-    (search) => ({
+    ({ filters, ...search }) => ({
       ...search,
       page: search.page || 1,
       size: search.size || 10,
