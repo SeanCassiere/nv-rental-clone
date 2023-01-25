@@ -1,5 +1,5 @@
-import { APPLICATION_NAME } from "./constants";
+import { UI_APPLICATION_NAME } from "./constants";
 
 export function titleMaker(title: string) {
-  return `${title} | ${APPLICATION_NAME}`;
+  return `${title} | ${UI_APPLICATION_NAME}`;
 }
