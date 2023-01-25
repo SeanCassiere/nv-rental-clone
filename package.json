@@ -9,7 +9,8 @@
     "build": "tsc && vite build",
     "lint": "eslint --max-warnings=0 src",
     "lint:fix": "eslint --fix --max-warnings=0 src",
-    "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./prettier.config.cjs"
+    "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./prettier.config.cjs",
+    "preview": "vite preview --port 3000"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.0.7",
@@ -20,6 +21,7 @@
     "@tanstack/react-query": "^4.23.0",
     "@tanstack/react-query-devtools": "^4.23.0",
     "@tanstack/react-router": "^0.0.1-beta.60",
+    "@tanstack/react-router-devtools": "^0.0.1-beta.60",
     "@tanstack/react-table": "^8.7.6",
     "class-variance-authority": "^0.4.0",
     "classnames": "^2.3.2",
