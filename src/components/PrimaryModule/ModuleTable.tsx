@@ -68,9 +68,9 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
           (isDragging && isDisabled) || (isDragging && over?.disabled)
             ? "cursor-no-drop"
             : "",
-          isDragging ? "bg-slate-100" : "bg-slate-50 text-slate-600",
+          isDragging ? "bg-slate-100" : "bg-slate-50 text-gray-700",
           isDisabled
-            ? "cursor-pointer text-slate-800 hover:cursor-not-allowed"
+            ? "cursor-pointer text-gray-800 hover:cursor-not-allowed"
             : "cursor-grab"
         )}
         style={{ transform: CSS.Translate.toString(transform), transition }}
@@ -165,7 +165,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   };
 
   return (
-    <div className="border border-slate-200">
+    <div className="overflow-hidden rounded border border-slate-200">
       {showExtraActions && (
         <div className="flex w-[100%] items-center justify-end bg-slate-50 px-4 pt-3 pb-1.5">
           {props.showColumnPicker && (
