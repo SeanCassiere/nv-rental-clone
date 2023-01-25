@@ -26,8 +26,8 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
   const canViewRentalInformation = true;
 
   return (
-    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 md:grid-cols-12">
-      <div className="flex flex-col gap-4 md:col-span-7">
+    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
+      <div className="flex flex-col gap-4 lg:col-span-7">
         {canViewCustomerInformation && (
           <CustomerInformation
             mode="reservation"
@@ -102,7 +102,7 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
         <div className="bg-slate-50">Reservation block 2</div> */}
       </div>
       {/*  */}
-      <div className="flex flex-col gap-4 md:col-span-5">
+      <div className="flex flex-col gap-4 lg:col-span-5">
         <RentalRatesSummary
           module="reservations"
           summaryData={rentalRatesSummary.data}

@@ -14,10 +14,10 @@ interface TInformationBlockProps {
 const InformationBlock = (props: TInformationBlockProps) => {
   return (
     <div className="grid gap-0.5 border-b border-b-slate-200 px-4 pb-2">
-      <span className="text-base font-bold text-slate-800">
+      <span className="truncate text-base font-bold text-slate-800">
         {props.heading}
       </span>
-      <span className="pt-1.5 pb-2 text-base leading-3 text-slate-700">
+      <span className="truncate pt-1.5 pb-2 text-base leading-3 text-slate-700">
         {props.isLoading ? "Loading" : props.value}
       </span>
     </div>
@@ -44,9 +44,9 @@ export const InformationBlockCard = (props: TInformationBlockCardProps) => {
         </span>
       </div>
       <div
-        className={classNames("grid gap-y-4 pt-3", {
-          "grid-cols-3": props.numberPerBlock === 3,
-          "grid-cols-4": props.numberPerBlock === 4,
+        className={classNames("grid grid-cols-1 gap-y-4 pt-3 sm:grid-cols-2", {
+          "lg:grid-cols-3": props.numberPerBlock === 3,
+          "lg:grid-cols-4": props.numberPerBlock === 4,
         })}
       >
         {props.blocks.map((block) => (

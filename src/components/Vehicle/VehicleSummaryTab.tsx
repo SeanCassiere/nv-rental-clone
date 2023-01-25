@@ -18,8 +18,8 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   const clientProfile = useGetClientProfile();
 
   return (
-    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 md:grid-cols-12">
-      <div className="flex flex-col gap-4 md:col-span-7">
+    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
+      <div className="flex flex-col gap-4 lg:col-span-7">
         <div className="max-h-[500px] overflow-x-scroll bg-slate-50">
           <h2>Vehicle data</h2>
           <code className="text-xs">
@@ -28,7 +28,7 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
         </div>
       </div>
       {/*  */}
-      <div className="flex flex-col gap-4 md:col-span-5">
+      <div className="flex flex-col gap-4 lg:col-span-5">
         <VehicleSummary
           summaryData={vehicleSummary.data}
           currency={clientProfile.data?.currency || undefined}
