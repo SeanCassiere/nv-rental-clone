@@ -49,14 +49,31 @@ i18n
       format: (value, i18nFormat, lng, options) => {
         if (i18nFormat === "datetime") {
           const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
-          return dateFnsFormat(new Date(value), "dd/MM/yyyy hh:mm a", {
-            locale,
-          });
+          try {
+            return dateFnsFormat(new Date(value), "dd/MM/yyyy hh:mm a", {
+              locale,
+            });
+          } catch (error) {
+            return "could not parse for intlDateTime";
+          }
+        }
+
+        if (i18nFormat === "monthyear") {
+          try {
+            const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
+            return dateFnsFormat(new Date(value), "MM/yyyy", { locale });
+          } catch (error) {
+            return "could not parse for intlMonthYear";
+          }
         }
 
         if (i18nFormat === "date") {
-          const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
-          return dateFnsFormat(new Date(value), "dd/MM/yyyy", { locale });
+          try {
+            const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
+            return dateFnsFormat(new Date(value), "dd/MM/yyyy", { locale });
+          } catch (error) {
+            return "could not parse for intlDate";
+          }
         }
 
         if (i18nFormat === "currency") {
