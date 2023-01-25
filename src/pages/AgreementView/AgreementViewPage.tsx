@@ -9,10 +9,7 @@ import {
 
 import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 import Protector from "../../components/Protector";
-import {
-  ChevronRightOutline,
-  HamburgerMenuOutline,
-} from "../../components/icons";
+import { ChevronRightOutline } from "../../components/icons";
 import ScrollToTop from "../../components/ScrollToTop";
 
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
@@ -106,7 +103,7 @@ function AgreementViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
             <nav className="flex grow items-center" aria-label="Breadcrumb">
-              <ol className="flex items-center space-x-2">
+              <ol className="flex items-end space-x-2">
                 <li>
                   <div className="flex">
                     <Link
@@ -123,14 +120,14 @@ function AgreementViewPage() {
                 <li>
                   <div className="flex items-center">
                     <ChevronRightOutline
-                      className="h-5 w-5 flex-shrink-0 text-gray-500"
+                      className="h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                       aria-hidden="true"
                     />
                     <Link
                       to={viewAgreementRoute.id}
                       search={(current) => ({ tab: current?.tab || "summary" })}
                       params={{ agreementId }}
-                      className="max-w-[230px] truncate pl-2 text-2xl text-gray-900 md:max-w-full"
+                      className="max-w-[230px] truncate pl-2 text-xl text-gray-900 md:max-w-full"
                     >
                       {agreement?.data?.agreementNumber}
                     </Link>
@@ -139,15 +136,6 @@ function AgreementViewPage() {
               </ol>
             </nav>
             {/*  */}
-            <div className="flex flex-row items-center justify-end gap-4 md:gap-8">
-              <button
-                type="button"
-                className="flex h-10 w-10 items-center justify-center rounded-md bg-gray-100 font-semibold shadow"
-              >
-                <HamburgerMenuOutline className="h-7 w-7" />
-                <span className="sr-only">Options</span>
-              </button>
-            </div>
           </div>
           <div className="mt-6 bg-slate-50 p-4">
             Agreement information modes
