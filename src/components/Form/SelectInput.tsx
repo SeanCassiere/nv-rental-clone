@@ -1,4 +1,4 @@
-import { useId, Fragment, forwardRef } from "react";
+import { useId, Fragment } from "react";
 import { Transition, Listbox } from "@headlessui/react";
 import classNames from "classnames";
 import { CheckIconOutline, ChevronUpDownSolid } from "../icons";
@@ -18,7 +18,7 @@ interface SelectProps {
   placeHolderSchema?: { value: any; label: string };
 }
 
-export const SelectInput = forwardRef((props: SelectProps, ref) => {
+export const SelectInput = (props: SelectProps) => {
   const id = useId();
   const { value, options, onSelect, label, name, placeHolderSchema } = props;
 
@@ -55,9 +55,9 @@ export const SelectInput = forwardRef((props: SelectProps, ref) => {
                 leaveTo="opacity-0"
               >
                 <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                  {selectOptions.map((person) => (
+                  {selectOptions.map((person, idx) => (
                     <Listbox.Option
-                      key={person.value}
+                      key={`${person.value}.${idx}`}
                       className={({ active }) =>
                         classNames(
                           active ? "bg-teal-600 text-white" : "text-gray-900",
@@ -99,4 +99,4 @@ export const SelectInput = forwardRef((props: SelectProps, ref) => {
       </Listbox>
     </div>
   );
-});
+};

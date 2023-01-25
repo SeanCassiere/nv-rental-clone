@@ -154,9 +154,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
     >
       {props.searchFiltersBlueprint.map((blueprint, idx) => (
         <RenderInput
-          key={`input-${blueprint.queryKey}-${idx}-${
-            props.initialValues[blueprint.accessor]
-          }`}
+          key={`input-${blueprint.queryKey}-${idx}`}
           blueprint={blueprint}
           value={values[blueprint.accessor]}
           onChange={(evt: any) => {
@@ -303,7 +301,7 @@ const RenderInput = <T extends KeyValueObject>({
     return (
       <MultiSelectInput
         label={blueprint.label}
-        key={`input-${blueprint.queryKey}-${typeof value}`}
+        key={`input-${blueprint.queryKey}`}
         values={getValues()}
         onSelect={(selectValues) => {
           const allUndefined = selectValues.filter(
@@ -348,11 +346,17 @@ const RenderInput = <T extends KeyValueObject>({
 
   if (blueprint.type === "hidden") {
     return (
-      <input id={id} type="hidden" name={blueprint.queryKey} value={value} />
+      <input
+        id={id}
+        key={`input-${blueprint.queryKey}`}
+        type="hidden"
+        name={blueprint.queryKey}
+        value={value}
+      />
     );
   }
 
-  return <span>none</span>;
+  return <span key={`input-${blueprint.queryKey}`}>none</span>;
 };
 
 export default ModuleSearchFilters;
