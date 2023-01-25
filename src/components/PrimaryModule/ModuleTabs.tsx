@@ -41,7 +41,7 @@ export const ModuleTabs = (props: {
                   className={classNames(
                     selected
                       ? "bg-slate-100 text-slate-600 hover:shadow-sm"
-                      : "font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-700",
+                      : "font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700",
                     "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-medium transition-all duration-200 ease-in-out",
                     selected ? "" : ""
                   )}
