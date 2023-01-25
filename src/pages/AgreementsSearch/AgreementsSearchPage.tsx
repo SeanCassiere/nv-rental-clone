@@ -67,7 +67,7 @@ function AgreementsSearchPage() {
                   to={viewAgreementRoute.id}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
-                  className="font-medium text-teal-700"
+                  className="font-medium text-slate-800"
                   preload="intent"
                 >
                   {value}
@@ -118,7 +118,9 @@ function AgreementsSearchPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-700">Agreements</h1>
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-gray-700">
+            Agreements
+          </h2>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -293,13 +295,10 @@ function AgreementsSearchPage() {
                   ],
                 },
               ]}
-              persistSearchFilters={{ page: 1, size: 10 }}
-              toLocation="/agreements"
-              queryFilterKey="filters"
             />
           </div>
 
-          <div className="shadow">
+          <div>
             <ModuleTable
               // key={`table-cols-${columnDefs.length}`}
               // key={`table-data-length-${

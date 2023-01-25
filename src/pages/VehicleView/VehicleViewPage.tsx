@@ -73,14 +73,14 @@ function VehicleViewPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center md:gap-8">
+          <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
             <nav className="flex grow items-center" aria-label="Breadcrumb">
               <ol className="flex items-center space-x-2">
                 <li>
                   <div className="flex">
                     <Link
                       to=".."
-                      className="text-2xl font-semibold text-gray-600 hover:text-gray-800"
+                      className="text-2xl font-semibold leading-tight tracking-tight text-gray-700 hover:text-gray-800"
                       onClick={() => {
                         router.history.go(-1);
                       }}
@@ -99,7 +99,7 @@ function VehicleViewPage() {
                       to={viewVehicleRoute.id}
                       params={{ vehicleId }}
                       search={(current) => ({ tab: current?.tab || "summary" })}
-                      className="pl-2 text-2xl text-gray-900"
+                      className="max-w-[230px] truncate pl-2 text-2xl text-gray-900 md:max-w-full"
                     >
                       {vehicle?.data?.vehicle.vehicleNo}
                     </Link>
@@ -118,7 +118,7 @@ function VehicleViewPage() {
               </button>
             </div>
           </div>
-          <div className="mt-6 bg-white p-4">Vehicle information modes</div>
+          <div className="mt-6 bg-slate-50 p-4">Vehicle information modes</div>
         </div>
 
         <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">

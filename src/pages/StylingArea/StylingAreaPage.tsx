@@ -40,7 +40,7 @@ const StylingAreaPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-full divide-y-2 divide-teal-400 overflow-y-auto bg-gray-200 px-2">
+    <div className="h-full divide-y-2 divide-slate-200 overflow-y-auto bg-slate-50 px-2">
       <section className="py-10 md:mx-28">
         <h2 className="text-2xl">JSURL Utils</h2>
         <JsURLDecoder />

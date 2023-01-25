@@ -62,7 +62,7 @@ function CustomerSearchPage() {
                   to={viewCustomerRoute.id}
                   params={{ customerId: String(customerId) }}
                   search={() => ({ tab: "summary" })}
-                  className="font-medium text-teal-700"
+                  className="font-medium text-slate-800"
                   preload="intent"
                 >
                   {value}
@@ -113,7 +113,9 @@ function CustomerSearchPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-700">Customers</h1>
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-gray-700">
+            Customers
+          </h2>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -176,13 +178,10 @@ function CustomerSearchPage() {
                   ],
                 },
               ]}
-              persistSearchFilters={{ page: 1, size: 10 }}
-              toLocation="/customers"
-              queryFilterKey="filters"
             />
           </div>
 
-          <div className="shadow">
+          <div>
             <ModuleTable
               key={`table-cols-${columnDefs.length}`}
               data={customersData.data?.data || []}

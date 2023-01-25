@@ -113,9 +113,6 @@ interface ModuleSearchFiltersProps<T extends KeyValueObject> {
   validationSchema: ZodSchema<T>;
   initialValues: T;
   searchFiltersBlueprint: SearchBlueprint<T>[];
-  persistSearchFilters: { [key: string]: any };
-  toLocation: string;
-  queryFilterKey: string;
   onSubmit?: (values: T) => Promise<void>;
   onReset?: () => Promise<void>;
 }
@@ -206,7 +203,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
         />
       ))}
       <Button type="submit">Submit</Button>
-      <Button type="reset" color="gray">
+      <Button type="reset" color="slate">
         Clear
       </Button>
     </form>

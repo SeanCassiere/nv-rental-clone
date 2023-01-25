@@ -20,7 +20,6 @@ export const searchVehiclesRoute = new Route({
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
     ({ filters, ...search }) => ({
-      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),

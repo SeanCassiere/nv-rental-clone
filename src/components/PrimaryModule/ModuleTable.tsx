@@ -58,7 +58,7 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
       ref={isDisabled ? undefined : setDroppableNodeRef}
       colSpan={header.colSpan}
       scope="col"
-      className={classNames("text-base font-medium text-gray-100")}
+      className={classNames("text-base font-medium")}
     >
       <button
         ref={setDraggableNodeRef}
@@ -68,10 +68,10 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
           (isDragging && isDisabled) || (isDragging && over?.disabled)
             ? "cursor-no-drop"
             : "",
+          isDragging ? "bg-slate-100" : "bg-slate-50 text-slate-600",
           isDisabled
-            ? "cursor-pointer hover:cursor-not-allowed"
-            : "cursor-grab",
-          isDragging ? "bg-gray-500" : "bg-gray-600"
+            ? "cursor-pointer text-slate-800 hover:cursor-not-allowed"
+            : "cursor-grab"
         )}
         style={{ transform: CSS.Translate.toString(transform), transition }}
         {...listeners}
@@ -165,13 +165,13 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   };
 
   return (
-    <>
+    <div className="border border-slate-200">
       {showExtraActions && (
-        <div className="flex w-[100%] items-center justify-end bg-gray-600 px-4 pt-3 pb-1.5">
+        <div className="flex w-[100%] items-center justify-end bg-slate-50 px-4 pt-3 pb-1.5">
           {props.showColumnPicker && (
             <div className="relative">
               <Menu>
-                <Menu.Button className="rounded-full bg-gray-500 p-2 text-xs text-white shadow">
+                <Menu.Button className="rounded-full bg-slate-200 p-2 text-xs text-slate-700 shadow-sm transition-all duration-150 hover:bg-teal-500">
                   <EyeSlashOutline className="h-5 w-5" />
                 </Menu.Button>
                 <Menu.Items
@@ -191,7 +191,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                     >
                       {() => (
                         <>
-                          <div className="flex items-center gap-2 py-2 px-4 hover:bg-gray-50">
+                          <div className="flex items-center gap-2 py-2 px-4 hover:bg-slate-50">
                             <input
                               type="checkbox"
                               checked={column.getIsVisible()}
@@ -201,11 +201,11 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                               }}
                               id={`html-for-${column.id}`}
                               name={`html-for-${column.id}`}
-                              className="rounded-full text-teal-500 disabled:text-gray-400"
+                              className="rounded-full text-teal-500 disabled:text-slate-400"
                               disabled={lockedColumns.includes(column.id)}
                             />
                             <label
-                              className="w-full select-none text-gray-600"
+                              className="w-full select-none text-slate-600"
                               htmlFor={`html-for-${column.id}`}
                             >
                               {getColumnDescription(column.id)}
@@ -228,8 +228,8 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
           onDragEnd={handleDndDragEnd}
           modifiers={[restrictToHorizontalAxis]}
         >
-          <table className="min-w-full table-auto divide-y divide-gray-300">
-            <thead className="bg-gray-600">
+          <table className="min-w-full table-auto divide-y divide-slate-100 bg-slate-50">
+            <thead className="bg-slate-50">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   <SortableContext
@@ -247,7 +247,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                 </tr>
               ))}
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
+            <tbody className="divide-y divide-slate-200 bg-white">
               {props.noRows === false &&
                 table.getRowModel().rows.map((row) => (
                   <tr key={row.id}>
@@ -255,7 +255,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                       <td
                         key={cell.id}
                         className={classNames(
-                          "whitespace-nowrap py-4 text-base font-normal text-gray-700",
+                          "whitespace-nowrap py-4 text-base font-normal text-slate-700",
                           cellIdx === 0 ? "px-4 sm:pl-6" : "px-4"
                         )}
                       >
@@ -271,7 +271,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                 <tr>
                   <td
                     colSpan={table.getAllColumns().length}
-                    className="whitespace-nowrap px-4 py-4 text-center text-base text-gray-700"
+                    className="whitespace-nowrap px-4 py-4 text-center text-base text-slate-700"
                   >
                     No data
                   </td>
@@ -281,7 +281,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
           </table>
         </DndContext>
       </div>
-    </>
+    </div>
   );
 };
 

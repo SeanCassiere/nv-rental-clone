@@ -20,7 +20,6 @@ export const searchReservationsRoute = new Route({
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
     ({ filters, ...search }) => ({
-      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),

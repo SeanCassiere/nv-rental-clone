@@ -151,7 +151,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4">
+            <div className="relative flex w-full max-w-xs flex-1 flex-col bg-slate-50 pt-5 pb-4">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -193,8 +193,8 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                       to={item.href as any}
                       className={classNames(
                         item.current
-                          ? "bg-gray-100 text-teal-400"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-teal-500",
+                          ? "bg-slate-100 text-teal-400"
+                          : "text-slate-600 hover:bg-slate-50 hover:text-teal-500",
                         "group flex items-center rounded-md px-2 py-2 text-base font-medium"
                       )}
                       preload="intent"
@@ -204,7 +204,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                         className={classNames(
                           item.current
                             ? "text-teal-400"
-                            : "text-gray-400 group-hover:text-teal-500",
+                            : "text-slate-400 group-hover:text-teal-500",
                           "mr-4 h-6 w-6 flex-shrink-0"
                         )}
                         aria-hidden="true"
@@ -226,7 +226,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       {/* md:w-64 */}
       <div className="hidden md:fixed md:inset-y-0 md:flex md:w-16 md:flex-col md:overflow-hidden">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-4">
+        <div className="flex flex-grow flex-col overflow-y-auto border-r border-slate-200 bg-slate-50 pt-4">
           <div className="flex flex-shrink-0 items-center px-2">
             <img
               className="h-7 w-auto"
@@ -244,8 +244,8 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                   to={item.href as any}
                   className={classNames(
                     item.current
-                      ? "bg-gray-100  text-teal-400"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-teal-500",
+                      ? "bg-slate-100  text-teal-400"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-teal-500",
                     "group flex items-center px-2 py-4 text-sm font-medium"
                   )}
                   preload="intent"
@@ -255,7 +255,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                     className={classNames(
                       item.current
                         ? "text-teal-400"
-                        : "text-gray-400 group-hover:text-teal-500",
+                        : "text-slate-400 group-hover:text-teal-500",
                       "mx-auto h-5 w-5 flex-shrink-0"
                     )}
                     aria-hidden="true"
@@ -272,7 +272,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
           <button
             type="button"
-            className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500 md:hidden"
+            className="border-r border-slate-200 px-4 text-slate-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500 md:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
@@ -284,7 +284,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                 <label htmlFor="search-field" className="sr-only">
                   Search
                 </label>
-                <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                <div className="relative w-full text-slate-400 focus-within:text-slate-600">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
                     <MagnifyingGlassOutline
                       className="h-5 w-5"
@@ -293,7 +293,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                   </div>
                   <input
                     id="search-field"
-                    className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
+                    className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-slate-900 placeholder-slate-500 focus:border-transparent focus:placeholder-slate-400 focus:outline-none focus:ring-0 sm:text-sm"
                     placeholder="Search"
                     type="search"
                     name="search"
@@ -304,14 +304,14 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             <div className="ml-4 flex items-center gap-1 md:ml-6">
               <button
                 type="button"
-                className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-0"
+                className="rounded-full bg-white p-1 text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-0"
               >
                 <span className="sr-only">View notifications</span>
                 <BellIconOutline className="h-6 w-6" aria-hidden="true" />
               </button>
               <button
                 type="button"
-                className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-0"
+                className="rounded-full bg-white p-1 text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-0"
               >
                 <span className="sr-only">View settings</span>
                 <SettingsCogOutline className="h-6 w-6" aria-hidden="true" />
@@ -351,8 +351,8 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                               <span>
                                 <Link<any>
                                   className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
+                                    active ? "bg-slate-100" : "",
+                                    "block px-4 py-2 text-sm text-slate-700"
                                   )}
                                   {...item.props}
                                 >
@@ -364,8 +364,8 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                           return (
                             <button
                               className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block w-full px-4 py-2 text-left text-sm text-gray-700"
+                                active ? "bg-slate-100" : "",
+                                "block w-full px-4 py-2 text-left text-sm text-slate-700"
                               )}
                               {...item.props}
                             >
@@ -382,22 +382,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
           </div>
         </div>
 
-        <main className="h-full flex-1">
-          {children}
-          {/* <div className="py-6">
-              <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-                <h1 className="text-2xl font-semibold text-gray-900">
-                  Dashboard
-                </h1>
-              </div>
-              <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-                
-                <div className="py-4">
-                  <div className="min-h-[300px] rounded-lg border-4 border-dashed border-gray-200"></div>
-                </div>
-              </div>
-            </div> */}
-        </main>
+        <main className="h-full flex-1">{children}</main>
       </div>
     </div>
   );
