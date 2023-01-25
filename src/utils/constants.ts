@@ -12,4 +12,4 @@ export const OIDC_SILENT_REDIRECT_URI =
   import.meta.env.VITE_APP_AUTH_SILENT_REDIRECT_URI ?? "";
 
 export const APPLICATION_NAME =
-  import.meta.env.VITE_APP_APPLICATION_NAME ?? "Rental Clone";
+  import.meta.env.VITE_APP_UI_APPLICATION_NAME ?? "Rental Clone";
