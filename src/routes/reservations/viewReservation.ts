@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { reservationsRoute } from ".";
@@ -8,7 +8,8 @@ import { fetchRentalRateSummaryAmounts } from "../../api/summary";
 import { getAuthToken } from "../../utils/authLocal";
 import { reservationQKeys } from "../../utils/query-key";
 
-export const viewReservationRoute = reservationsRoute.createRoute({
+export const viewReservationRoute = new Route({
+  getParentRoute: () => reservationsRoute,
   path: "$reservationId",
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),

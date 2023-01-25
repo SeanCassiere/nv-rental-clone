@@ -1,8 +1,8 @@
-import { createRouteConfig, Outlet } from "@tanstack/react-router";
+import { Outlet, RootRoute } from "@tanstack/react-router";
 
 import AppShellLayout from "../components/AppShellLayout";
 
-export const rootRoute = createRouteConfig({
+export const rootRoute = new RootRoute({
   component: () => {
     return (
       <AppShellLayout>

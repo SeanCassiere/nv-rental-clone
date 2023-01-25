@@ -92,6 +92,7 @@ function CustomerViewPage() {
                     <Link
                       to={viewCustomerRoute.id}
                       params={{ customerId }}
+                      search={() => ({ tab: "summary" })}
                       className="pl-2 text-2xl text-gray-900"
                     >
                       {customer?.data?.firstName}&nbsp;

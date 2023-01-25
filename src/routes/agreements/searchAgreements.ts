@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 
 import { agreementsRoute } from ".";
 import { queryClient as qc } from "../../App";
@@ -11,7 +11,8 @@ import { agreementQKeys } from "../../utils/query-key";
 import { AgreementSearchQuerySchema } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 
-export const searchAgreementsRoute = agreementsRoute.createRoute({
+export const searchAgreementsRoute = new Route({
+  getParentRoute: () => agreementsRoute,
   path: "/",
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [

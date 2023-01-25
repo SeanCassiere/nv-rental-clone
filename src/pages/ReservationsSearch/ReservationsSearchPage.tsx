@@ -22,6 +22,7 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetReservationTypesList } from "../../hooks/network/reservation/useGetReservationTypes";
+import { viewReservationRoute } from "../../routes/reservations/viewReservation";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -61,8 +62,9 @@ function ReservationsSearchPage() {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to="/reservations/$reservationId"
+                  to={viewReservationRoute.id}
                   params={{ reservationId: String(reservationId) }}
+                  search={() => ({ tab: "summary" })}
                   className="font-medium text-teal-700"
                   preload="intent"
                 >

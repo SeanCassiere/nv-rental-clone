@@ -36,21 +36,21 @@ import { vehiclesRoute } from "./routes/vehicles";
 import { searchVehiclesRoute } from "./routes/vehicles/searchVehicles";
 import { viewVehicleRoute } from "./routes/vehicles/viewVehicle";
 
-const routeConfig = rootRoute.addChildren([
+const routeTree = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
   stylingRoute,
   agreementsRoute.addChildren([searchAgreementsRoute, viewAgreementRoute]),
+  customersRoute.addChildren([searchCustomersRoute, viewCustomerRoute]),
   reservationsRoute.addChildren([
     searchReservationsRoute,
     viewReservationRoute,
   ]),
-  customersRoute.addChildren([searchCustomersRoute, viewCustomerRoute]),
   vehiclesRoute.addChildren([searchVehiclesRoute, viewVehicleRoute]),
 ]);
 
 export const router = new ReactRouter({
-  routeConfig,
+  routeTree,
   parseSearch: parseSearchWith((value) => JSURL.parse(value)),
   stringifySearch: stringifySearchWith((value) => JSURL.stringify(value)),
   // parseSearch: parseSearchWith((value) => JSON.parse(decodeFromBinary(value))),

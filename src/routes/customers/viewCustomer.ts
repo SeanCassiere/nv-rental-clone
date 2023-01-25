@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { customersRoute } from ".";
@@ -8,7 +8,8 @@ import { fetchCustomerSummaryAmounts } from "../../api/summary";
 import { getAuthToken } from "../../utils/authLocal";
 import { customerQKeys } from "../../utils/query-key";
 
-export const viewCustomerRoute = customersRoute.createRoute({
+export const viewCustomerRoute = new Route({
+  getParentRoute: () => customersRoute,
   path: "$customerId",
   component: lazy(() => import("../../pages/CustomerView/CustomerViewPage")),
   validateSearch: (search) =>

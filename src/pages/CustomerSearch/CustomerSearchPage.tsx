@@ -19,6 +19,7 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
 import { useGetCustomerTypesList } from "../../hooks/network/customer/useGetCustomerTypes";
+import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -57,8 +58,9 @@ function CustomerSearchPage() {
                 .CustomerId;
               return (
                 <Link
-                  to="/customers/$customerId"
+                  to={viewCustomerRoute.id}
                   params={{ customerId: String(customerId) }}
+                  search={() => ({ tab: "summary" })}
                   className="font-medium text-teal-700"
                   preload="intent"
                 >

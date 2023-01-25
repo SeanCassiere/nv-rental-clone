@@ -22,6 +22,7 @@ import { normalizeAgreementListSearchParams } from "../../utils/normalize-search
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
+import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -62,8 +63,9 @@ function AgreementsSearchPage() {
                 .AgreementId;
               return (
                 <Link
-                  to="/agreements/$agreementId"
+                  to={viewAgreementRoute.id}
                   params={{ agreementId: String(agreementId) }}
+                  search={() => ({ tab: "summary" })}
                   className="font-medium text-teal-700"
                   preload="intent"
                 >

@@ -11,7 +11,7 @@ import {
 import {
   Link,
   type MakeLinkOptions,
-  type RegisteredAllRouteInfo,
+  type RegisteredRoutesInfo,
 } from "@tanstack/react-router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
 import type { TDashboardStats } from "../../utils/schemas/dashboard";
@@ -141,7 +141,7 @@ const StatBlock = ({
   title: string;
   value: string;
   icon: ({ className }: IconProps) => JSX.Element;
-  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo["routePaths"], ".">;
+  linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
 }) => {
   return (
     <Link {...(linkProps as any)}>

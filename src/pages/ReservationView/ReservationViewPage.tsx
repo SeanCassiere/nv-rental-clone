@@ -107,6 +107,7 @@ function ReservationViewPage() {
                     <Link
                       to={viewReservationRoute.id}
                       params={{ reservationId }}
+                      search={(current) => ({ tab: current?.tab || "summary" })}
                       className="pl-2 text-2xl text-gray-900"
                     >
                       {reservation?.data?.reservationview?.reservationNumber}

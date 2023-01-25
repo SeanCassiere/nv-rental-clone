@@ -20,6 +20,7 @@ import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
+import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -54,8 +55,9 @@ function VehiclesSearchPage() {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to="/vehicles/$vehicleId"
+                  to={viewVehicleRoute.id}
                   params={{ vehicleId: String(vehicleId) }}
+                  search={() => ({ tab: "summary" })}
                   className="font-medium text-teal-700"
                   preload="intent"
                 >

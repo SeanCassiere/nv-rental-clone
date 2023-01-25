@@ -91,6 +91,7 @@ function VehicleViewPage() {
                     <Link
                       to={viewVehicleRoute.id}
                       params={{ vehicleId }}
+                      search={(current) => ({ tab: current?.tab || "summary" })}
                       className="pl-2 text-2xl text-gray-900"
                     >
                       {vehicle?.data?.vehicle.vehicleNo}

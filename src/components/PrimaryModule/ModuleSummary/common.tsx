@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {
   type MakeLinkOptions,
-  type RegisteredAllRouteInfo,
+  type RegisteredRoutesInfo,
   Link,
 } from "@tanstack/react-router";
 import { type ReactNode } from "react";
@@ -26,7 +26,7 @@ export type TSummaryLineItemProps = {
   id: string;
   label: string;
   type?: "text" | "link";
-  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo["routePaths"], ".">;
+  linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
   amount: string | number | null;
   shown?: boolean;
   redHighlight?: boolean;

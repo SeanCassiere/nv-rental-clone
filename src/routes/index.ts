@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 
 import { rootRoute } from "./__root";
 import { queryClient as qc } from "../App";
@@ -7,7 +7,8 @@ import { fetchDashboardNoticeListModded } from "../hooks/network/dashboard/useGe
 import { getAuthToken } from "../utils/authLocal";
 import { dashboardQKeys } from "../utils/query-key";
 
-export const indexRoute = rootRoute.createRoute({
+export const indexRoute = new Route({
+  getParentRoute: () => rootRoute,
   path: "/",
   onLoad: async () => {
     const auth = getAuthToken();

@@ -111,6 +111,7 @@ function AgreementViewPage() {
                     />
                     <Link
                       to={viewAgreementRoute.id}
+                      search={(current) => ({ tab: current?.tab || "summary" })}
                       params={{ agreementId }}
                       className="pl-2 text-2xl text-gray-900"
                     >
