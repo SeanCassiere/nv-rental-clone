@@ -11,7 +11,7 @@ import {
 import {
   Link,
   type MakeLinkOptions,
-  type RegisteredAllRouteInfo,
+  type RegisteredRoutesInfo,
 } from "@tanstack/react-router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
 import type { TDashboardStats } from "../../utils/schemas/dashboard";
@@ -22,7 +22,7 @@ const DashboardStatsBlock = ({
   statistics: TDashboardStats;
 }) => {
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
       <li>
         <StatBlock
           title="Reservation"
@@ -141,24 +141,31 @@ const StatBlock = ({
   title: string;
   value: string;
   icon: ({ className }: IconProps) => JSX.Element;
-  linkProps?: MakeLinkOptions<RegisteredAllRouteInfo["routePaths"], ".">;
+  linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
 }) => {
   return (
     <Link {...(linkProps as any)}>
       <div
         className={classNames(
-          "grid cursor-pointer grid-cols-7 overflow-hidden rounded-sm bg-white px-4 py-4 shadow"
+          "group grid cursor-pointer grid-cols-7 overflow-hidden rounded border border-slate-200 bg-slate-50 px-4 py-4 transition-all duration-150 ease-in hover:bg-slate-100"
         )}
       >
         <div className="col-span-2">
-          <div className="inline-block rounded-full bg-gray-100 p-4">
-            <Icon className="h-6 w-6 text-teal-400" />
+          <div className="inline-block p-4">
+            <Icon className="h-6 w-6 text-slate-500 transition-all duration-200 ease-in hover:bg-slate-100 group-hover:text-teal-500" />
             <span className="sr-only">{title} icon</span>
           </div>
         </div>
         <div className="col-span-5">
-          <div className="text-5xl font-semibold text-gray-900">{value}</div>
-          <div className="truncate text-sm font-medium text-gray-500">
+          <div
+            className={classNames(
+              "text-5xl font-semibold",
+              value !== "0" ? "text-slate-800" : "text-slate-700"
+            )}
+          >
+            {value}
+          </div>
+          <div className="truncate text-sm font-medium text-slate-500">
             {title}
           </div>
         </div>

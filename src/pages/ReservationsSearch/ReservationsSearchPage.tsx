@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -22,6 +22,8 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetReservationTypesList } from "../../hooks/network/reservation/useGetReservationTypes";
+import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -61,9 +63,10 @@ function ReservationsSearchPage() {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to="/reservations/$reservationId"
+                  to={viewReservationRoute.id}
                   params={{ reservationId: String(reservationId) }}
-                  className="font-medium text-teal-700"
+                  search={() => ({ tab: "summary" })}
+                  className="font-medium text-slate-800"
                   preload="intent"
                 >
                   {value}
@@ -105,12 +108,18 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  useEffect(() => {
+    document.title = titleMaker("Reservations");
+  }, []);
+
   return (
     <Protector>
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-700">Reservations</h1>
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-gray-700">
+            Reservations
+          </h2>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -258,13 +267,10 @@ function ReservationsSearchPage() {
                   ],
                 },
               ]}
-              persistSearchFilters={{ page: 1, size: 10 }}
-              toLocation="/reservations"
-              queryFilterKey="filters"
             />
           </div>
 
-          <div className="shadow">
+          <div>
             <ModuleTable
               key={`table-cols-${columnDefs.length}`}
               data={reservationsData.data?.data || []}

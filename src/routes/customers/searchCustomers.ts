@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 
 import { customersRoute } from ".";
 import { makeInitialApiData } from "../../api/fetcher";
@@ -11,7 +11,8 @@ import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-
 import { customerQKeys } from "../../utils/query-key";
 import { CustomerSearchQuerySchema } from "../../utils/schemas/customer";
 
-export const searchCustomersRoute = customersRoute.createRoute({
+export const searchCustomersRoute = new Route({
+  getParentRoute: () => customersRoute,
   path: "/",
   component: lazy(
     () => import("../../pages/CustomerSearch/CustomerSearchPage")
@@ -19,7 +20,6 @@ export const searchCustomersRoute = customersRoute.createRoute({
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
     ({ filters, ...search }) => ({
-      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),

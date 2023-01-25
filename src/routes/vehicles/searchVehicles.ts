@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 
 import { vehiclesRoute } from ".";
 import { queryClient } from "../../App";
@@ -11,7 +11,8 @@ import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-p
 import { vehicleQKeys } from "../../utils/query-key";
 import { VehicleSearchQuerySchema } from "../../utils/schemas/vehicle";
 
-export const searchVehiclesRoute = vehiclesRoute.createRoute({
+export const searchVehiclesRoute = new Route({
+  getParentRoute: () => vehiclesRoute,
   path: "/",
   component: lazy(
     () => import("../../pages/VehiclesSearch/VehiclesSearchPage")
@@ -19,7 +20,6 @@ export const searchVehiclesRoute = vehiclesRoute.createRoute({
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
     ({ filters, ...search }) => ({
-      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
 import DashboardBannerNotices from "../../components/Dashboard/DashboardBannerNotices";
@@ -9,6 +11,7 @@ import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashbo
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
+import { titleMaker } from "../../utils/title-maker";
 
 function IndexPage() {
   const statistics = useGetDashboardStats({
@@ -25,6 +28,10 @@ function IndexPage() {
   const handleWidgetSortingEnd = (widgets: DashboardWidgetItemParsed[]) => {
     saveDashboardWidgetsMutation.mutate({ widgets });
   };
+
+  useEffect(() => {
+    document.title = titleMaker("Dashboard");
+  }, []);
 
   return (
     <Protector>
@@ -43,7 +50,7 @@ function IndexPage() {
         <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
           <div className="pb-4">
             <h2 className="text-xl font-semibold text-gray-700">Overview</h2>
-            <p className="pt-2 text-base text-gray-600">
+            <p className="hidden pt-2 text-sm text-gray-600 sm:block">
               Jump into what's going on with your fleet.
             </p>
           </div>
@@ -51,7 +58,7 @@ function IndexPage() {
 
           <div className="pt-6 pb-2">
             <h2 className="text-xl font-semibold text-gray-700">Widgets</h2>
-            <p className="pt-2 text-base text-gray-600">
+            <p className="hidden pt-2 text-sm text-gray-600 sm:block">
               My list of personalized widgets.
             </p>
           </div>

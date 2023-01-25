@@ -10,3 +10,6 @@ export const OIDC_POST_LOGOUT_REDIRECT_URI =
   import.meta.env.VITE_APP_AUTH_POST_LOGOUT_REDIRECT_URI ?? "";
 export const OIDC_SILENT_REDIRECT_URI =
   import.meta.env.VITE_APP_AUTH_SILENT_REDIRECT_URI ?? "";
+
+export const APPLICATION_NAME =
+  import.meta.env.VITE_APP_UI_APPLICATION_NAME ?? "Rental Clone";

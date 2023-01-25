@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useSearch, useRouter } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -20,6 +20,8 @@ import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
+import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -54,9 +56,10 @@ function VehiclesSearchPage() {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to="/vehicles/$vehicleId"
+                  to={viewVehicleRoute.id}
                   params={{ vehicleId: String(vehicleId) }}
-                  className="font-medium text-teal-700"
+                  search={() => ({ tab: "summary" })}
+                  className="font-medium text-slate-800"
                   preload="intent"
                 >
                   {value}
@@ -94,12 +97,18 @@ function VehiclesSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  useEffect(() => {
+    document.title = titleMaker("Vehicles");
+  }, []);
+
   return (
     <Protector>
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-700">Vehicles</h1>
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-gray-700">
+            Vehicles
+          </h2>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -218,13 +227,10 @@ function VehiclesSearchPage() {
                   ],
                 },
               ]}
-              persistSearchFilters={{ page: 1, size: 10 }}
-              toLocation="/vehicles"
-              queryFilterKey="filters"
             />
           </div>
 
-          <div className="shadow">
+          <div>
             <ModuleTable
               key={`table-cols-${columnDefs.length}`}
               data={vehiclesData.data?.data || []}

@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 
 import { reservationsRoute } from ".";
 import { queryClient } from "../../App";
@@ -11,7 +11,8 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { reservationQKeys } from "../../utils/query-key";
 import { ReservationSearchQuerySchema } from "../../utils/schemas/reservation";
 
-export const searchReservationsRoute = reservationsRoute.createRoute({
+export const searchReservationsRoute = new Route({
+  getParentRoute: () => reservationsRoute,
   path: "/",
   component: lazy(
     () => import("../../pages/ReservationsSearch/ReservationsSearchPage")
@@ -19,7 +20,6 @@ export const searchReservationsRoute = reservationsRoute.createRoute({
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
     ({ filters, ...search }) => ({
-      ...search,
       page: search.page || 1,
       size: search.size || 10,
     }),

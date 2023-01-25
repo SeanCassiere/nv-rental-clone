@@ -165,7 +165,7 @@ function WidgetSizingContainer({
     >
       <div
         ref={setDraggableNodeRef}
-        className="h-full w-full bg-white shadow"
+        className="h-full w-full rounded border border-slate-200 bg-slate-50"
         style={{ transform: CSS.Translate.toString(transform), transition }}
         {...listeners}
         {...attributes}

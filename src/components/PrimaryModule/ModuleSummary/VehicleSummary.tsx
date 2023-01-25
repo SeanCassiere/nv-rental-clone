@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
+import { viewAgreementRoute } from "../../../routes/agreements/viewAgreement";
 
+import { viewReservationRoute } from "../../../routes/reservations/viewReservation";
 import { type TVehicleSummarySchema } from "../../../utils/schemas/summary/vehicleSummary";
 import { CurrencyDollarSolid } from "../../icons";
 import {
@@ -74,7 +76,7 @@ export const VehicleSummary = ({
       amount: summaryData.totalNoOfReservation,
       linkProps: {
         to: "/reservations",
-        search: () => ({
+        search: (current) => ({
           filters: { VehicleNo: vehicleNo ?? "" },
         }),
         preload: "intent",
@@ -97,7 +99,7 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: "/reservations/$reservationId",
+        to: viewReservationRoute.id,
         params: { reservationId: `${summaryData.currentReservation}` },
         preload: "intent",
       },
@@ -147,7 +149,7 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: "/agreements/$agreementId",
+        to: viewAgreementRoute.id,
         params: { agreementId: `${summaryData.currentAgreement}` },
         preload: "intent",
       },
@@ -204,7 +206,7 @@ export const VehicleSummary = ({
   }));
 
   return (
-    <div className="grid divide-y divide-gray-200 rounded bg-white py-1 shadow-sm">
+    <div className="grid divide-y divide-gray-200 rounded border border-slate-200 bg-slate-50 py-1 shadow-sm">
       <SummaryHeader
         title="Summary"
         icon={<CurrencyDollarSolid className="h-5 w-5 text-gray-700" />}

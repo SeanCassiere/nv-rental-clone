@@ -1,3 +1,8 @@
+import { Route } from "@tanstack/react-router";
+
 import { rootRoute } from "../__root";
 
-export const agreementsRoute = rootRoute.createRoute({ path: "agreements" });
+export const agreementsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "agreements",
+});

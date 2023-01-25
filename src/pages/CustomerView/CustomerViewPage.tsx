@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import {
   Link,
   useNavigate,
@@ -22,6 +22,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("../../components/Customer/CustomerSummaryTab")
@@ -31,7 +32,9 @@ function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { tab: tabName = "" } = useSearch({ from: viewCustomerRoute.id });
+  const { tab: tabName = "summary" } = useSearch({
+    from: viewCustomerRoute.id,
+  });
 
   const navigate = useNavigate({ from: viewCustomerRoute.id });
 
@@ -49,10 +52,10 @@ function CustomerViewPage() {
     router.history.go(-1);
   };
 
-  const onTabClick = (newTabName: string) => {
+  const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewCustomerRoute.id,
-      search: (others) => ({ ...others, tab: newTabName }),
+      search: (others) => ({ ...others, tab: newTab.id }),
       replace: true,
     });
   };
@@ -62,19 +65,27 @@ function CustomerViewPage() {
     onError: onFindError,
   });
 
+  useEffect(() => {
+    document.title = titleMaker(
+      (customer.data?.firstName && customer.data?.lastName
+        ? customer.data?.firstName + " " + customer.data?.lastName
+        : "Loading") + " - Customers"
+    );
+  }, [customer.data?.firstName, customer.data?.lastName]);
+
   return (
     <Protector>
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center md:gap-8">
+          <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
             <nav className="flex grow items-center" aria-label="Breadcrumb">
               <ol className="flex items-center space-x-2">
                 <li>
                   <div className="flex">
                     <Link
                       to=".."
-                      className="text-2xl font-semibold text-gray-600 hover:text-gray-800"
+                      className="text-2xl font-semibold leading-tight tracking-tight text-gray-700 hover:text-gray-800"
                       onClick={() => {
                         router.history.go(-1);
                       }}
@@ -92,7 +103,8 @@ function CustomerViewPage() {
                     <Link
                       to={viewCustomerRoute.id}
                       params={{ customerId }}
-                      className="pl-2 text-2xl text-gray-900"
+                      search={() => ({ tab: "summary" })}
+                      className="max-w-[230px] truncate pl-2 text-2xl text-gray-900 md:max-w-full"
                     >
                       {customer?.data?.firstName}&nbsp;
                       {customer?.data?.lastName}
@@ -112,7 +124,7 @@ function CustomerViewPage() {
               </button>
             </div>
           </div>
-          <div className="mt-6 bg-white p-4">Customer information modes</div>
+          <div className="mt-6 bg-slate-50 p-4">Customer information modes</div>
         </div>
 
         <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">

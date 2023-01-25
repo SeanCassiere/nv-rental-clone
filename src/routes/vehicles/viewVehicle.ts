@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { vehiclesRoute } from ".";
@@ -7,7 +7,8 @@ import { queryClient as qc } from "../../App";
 import { getAuthToken } from "../../utils/authLocal";
 import { vehicleQKeys } from "../../utils/query-key";
 
-export const viewVehicleRoute = vehiclesRoute.createRoute({
+export const viewVehicleRoute = new Route({
+  getParentRoute: () => vehiclesRoute,
   path: "$vehicleId",
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),

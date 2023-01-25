@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -22,6 +22,8 @@ import { normalizeAgreementListSearchParams } from "../../utils/normalize-search
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
+import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -62,9 +64,10 @@ function AgreementsSearchPage() {
                 .AgreementId;
               return (
                 <Link
-                  to="/agreements/$agreementId"
+                  to={viewAgreementRoute.id}
                   params={{ agreementId: String(agreementId) }}
-                  className="font-medium text-teal-700"
+                  search={() => ({ tab: "summary" })}
+                  className="font-medium text-slate-800"
                   preload="intent"
                 >
                   {value}
@@ -106,12 +109,18 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  useEffect(() => {
+    document.title = titleMaker("Agreements");
+  }, []);
+
   return (
     <Protector>
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-700">Agreements</h1>
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-gray-700">
+            Agreements
+          </h2>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -286,13 +295,10 @@ function AgreementsSearchPage() {
                   ],
                 },
               ]}
-              persistSearchFilters={{ page: 1, size: 10 }}
-              toLocation="/agreements"
-              queryFilterKey="filters"
             />
           </div>
 
-          <div className="shadow">
+          <div>
             <ModuleTable
               // key={`table-cols-${columnDefs.length}`}
               // key={`table-data-length-${

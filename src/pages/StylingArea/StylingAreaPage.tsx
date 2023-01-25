@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TextInput,
   SelectInput,
@@ -6,6 +6,8 @@ import {
   type TSelectInputOption,
 } from "../../components/Form";
 import { Button } from "../../components/Form/Button";
+import { titleMaker } from "../../utils/title-maker";
+import JsURLDecoder from "./JsURLDecoder";
 
 const people = [
   { id: 1, name: "Durward Reynolds" },
@@ -33,55 +35,65 @@ const StylingAreaPage: React.FC = () => {
 
   const [textValue, setTextValue] = React.useState("");
 
+  useEffect(() => {
+    document.title = titleMaker("Styling Area");
+  }, []);
+
   return (
-    <div className="h-full divide-y-2 divide-teal-400 bg-gray-200 px-2">
+    <div className="h-full divide-y-2 divide-slate-200 overflow-y-auto bg-slate-50 px-2">
       <section className="py-10 md:mx-28">
-        <h2 className="text-2xl">Multi-Select</h2>
-        <div className="relative w-[420px]">
-          <MultiSelectInput
-            values={selectedPeople}
-            options={people.map((item) => ({
-              label: item.name,
-              value: `${item.id}`,
-            }))}
-            onSelect={(items) => {
-              setSelectedPeople(items);
-            }}
-            label="People"
-          />
-        </div>
-        <div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
-            iure nam facilis tempora ducimus temporibus, numquam culpa
-            voluptatibus, quia nostrum, minus at! Soluta quos ducimus ipsa nemo
-            eaque dolores itaque?
-          </p>
-        </div>
+        <h2 className="text-2xl">JSURL Utils</h2>
+        <JsURLDecoder />
       </section>
-      <section className="py-10 md:mx-28">
-        <h2 className="text-2xl">Single-Select</h2>
-        <div className="relative w-[420px]">
-          <SelectInput
-            label="Person"
-            value={selectedPerson}
-            options={people.map((person) => ({
-              value: `${person.id}`,
-              label: person.name,
-            }))}
-            onSelect={(item) => {
-              if (typeof item === "undefined") return;
-              setSelectedPerson(item);
-            }}
-          />
+      <section className="grid grid-cols-1 gap-4 py-10 md:mx-28 md:grid-cols-2">
+        <div>
+          <h2 className="text-2xl">Multi-Select</h2>
+          <div className="relative">
+            <MultiSelectInput
+              values={selectedPeople}
+              options={people.map((item) => ({
+                label: item.name,
+                value: `${item.id}`,
+              }))}
+              onSelect={(items) => {
+                setSelectedPeople(items);
+              }}
+              label="People"
+            />
+          </div>
+          <div>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+              iure nam facilis tempora ducimus temporibus, numquam culpa
+              voluptatibus, quia nostrum, minus at! Soluta quos ducimus ipsa
+              nemo eaque dolores itaque?
+            </p>
+          </div>
         </div>
         <div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
-            iure nam facilis tempora ducimus temporibus, numquam culpa
-            voluptatibus, quia nostrum, minus at! Soluta quos ducimus ipsa nemo
-            eaque dolores itaque?
-          </p>
+          <h2 className="text-2xl">Single-Select</h2>
+          <div className="relative">
+            <SelectInput
+              label="Person"
+              value={selectedPerson}
+              options={people.map((person) => ({
+                value: `${person.id}`,
+                label: person.name,
+              }))}
+              onSelect={(item) => {
+                if (typeof item === "undefined") return;
+                setSelectedPerson(item);
+              }}
+            />
+          </div>
+          <div>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+              iure nam facilis tempora ducimus temporibus, numquam culpa
+              voluptatibus, quia nostrum, minus at! Soluta quos ducimus ipsa
+              nemo eaque dolores itaque?
+            </p>
+          </div>
         </div>
       </section>
       <section className="py-10 md:mx-28">

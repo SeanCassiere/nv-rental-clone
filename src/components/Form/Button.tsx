@@ -9,6 +9,9 @@ const buttonStyles = cva(
       color: {
         teal: "bg-teal-500 hover:bg-teal-600 focus:ring-teal-500",
         gray: "bg-gray-600 hover:bg-gray-700 focus:ring-gray-500",
+        slate:
+          "bg-slate-100 text-slate-900 hover:bg-slate-200 focus:ring-slate-500",
+        "dark-gray": "bg-slate-900 text-white hover:bg-slate-700",
       },
       fullWidth: {
         true: "w-full",
@@ -32,9 +35,15 @@ const buttonStyles = cva(
         className:
           "disabled:bg-gray-500 disabled:text-gray-200 disabled:opacity-75",
       },
+      {
+        color: "slate",
+        disabled: true,
+        className:
+          "disabled:bg-slate-300 disabled:text-slate-700 disabled:text-slate-200 disabled:opacity-75 disabled:shadow-none",
+      },
     ],
     defaultVariants: {
-      color: "teal",
+      color: "dark-gray",
       fullWidth: false,
       disabled: false,
     },

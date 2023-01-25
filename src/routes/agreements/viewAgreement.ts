@@ -1,4 +1,4 @@
-import { lazy } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { agreementsRoute } from ".";
@@ -8,7 +8,8 @@ import { fetchRentalRateSummaryAmounts } from "../../api/summary";
 import { getAuthToken } from "../../utils/authLocal";
 import { agreementQKeys } from "../../utils/query-key";
 
-export const viewAgreementRoute = agreementsRoute.createRoute({
+export const viewAgreementRoute = new Route({
+  getParentRoute: () => agreementsRoute,
   path: "$agreementId",
   validateSearch: (search) =>
     z

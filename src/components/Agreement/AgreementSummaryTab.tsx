@@ -20,16 +20,16 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
   const clientProfile = useGetClientProfile();
 
   return (
-    <div className="grid max-w-full grid-cols-1 gap-4 md:grid-cols-12">
+    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 md:grid-cols-12">
       <div className="flex flex-col gap-4 md:col-span-7">
-        <div className="overflow-x-scroll bg-white">
+        <div className="overflow-x-scroll bg-slate-50">
           <h2>Agreement data</h2>
           <code className="text-xs">
             <pre>{JSON.stringify(agreementData.data, null, 2)}</pre>
           </code>
         </div>
-        <div className="bg-white">Agreement block 1</div>
-        <div className="bg-white">Agreement block 2</div>
+        <div className="bg-slate-50">Agreement block 1</div>
+        <div className="bg-slate-50">Agreement block 2</div>
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 md:col-span-5">

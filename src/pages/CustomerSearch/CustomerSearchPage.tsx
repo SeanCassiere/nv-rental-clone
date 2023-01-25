@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -19,6 +19,8 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
 import { useGetCustomerTypesList } from "../../hooks/network/customer/useGetCustomerTypes";
+import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -57,9 +59,10 @@ function CustomerSearchPage() {
                 .CustomerId;
               return (
                 <Link
-                  to="/customers/$customerId"
+                  to={viewCustomerRoute.id}
                   params={{ customerId: String(customerId) }}
-                  className="font-medium text-teal-700"
+                  search={() => ({ tab: "summary" })}
+                  className="font-medium text-slate-800"
                   preload="intent"
                 >
                   {value}
@@ -101,12 +104,18 @@ function CustomerSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  useEffect(() => {
+    document.title = titleMaker("Customers");
+  }, []);
+
   return (
     <Protector>
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-700">Customers</h1>
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-gray-700">
+            Customers
+          </h2>
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
@@ -169,13 +178,10 @@ function CustomerSearchPage() {
                   ],
                 },
               ]}
-              persistSearchFilters={{ page: 1, size: 10 }}
-              toLocation="/customers"
-              queryFilterKey="filters"
             />
           </div>
 
-          <div className="shadow">
+          <div>
             <ModuleTable
               key={`table-cols-${columnDefs.length}`}
               data={customersData.data?.data || []}

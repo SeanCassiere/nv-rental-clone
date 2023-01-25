@@ -11,13 +11,13 @@ export type ModuleTabConfigItem = {
 export const ModuleTabs = (props: {
   tabConfig: ModuleTabConfigItem[];
   startingIndex: number;
-  onTabClick?: (tabName: string) => void;
+  onTabClick?: (tab: ModuleTabConfigItem) => void;
 }) => {
   const index = props.startingIndex || 0;
 
   const handleChangeIndex = (changingIndex: number) => {
     if (props.onTabClick && props.tabConfig[changingIndex]) {
-      props.onTabClick(props.tabConfig[changingIndex]!.id);
+      props.onTabClick(props.tabConfig[changingIndex]!);
     }
     // setIndex(changingIndex);
   };
@@ -33,17 +33,17 @@ export const ModuleTabs = (props: {
   return (
     <div className="w-full">
       <Tab.Group selectedIndex={index} onChange={handleChangeIndex}>
-        <Tab.List className="my-2 flex gap-1 overflow-x-auto py-2 md:px-3">
-          {props.tabConfig.map((item, idx) => (
+        <Tab.List className="mt-2 mb-2.5 flex w-max max-w-full gap-1 overflow-x-auto rounded py-1.5">
+          {props.tabConfig.map((item) => (
             <Tab key={`tab-header-${item.id}`} as={Fragment}>
               {({ selected }) => (
                 <button
                   className={classNames(
                     selected
-                      ? "bg-teal-400 font-semibold text-gray-50"
-                      : "bg-gray-200 font-medium text-gray-500 hover:bg-gray-300 hover:text-gray-600",
-                    "inline-block min-w-[150px] shrink-0 rounded-sm px-4 py-3 text-sm transition-all duration-200 ease-in-out hover:shadow-sm",
-                    selected ? "shadow-sm" : ""
+                      ? "bg-slate-100 text-slate-600 hover:shadow-sm"
+                      : "font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700",
+                    "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-medium transition-all duration-200 ease-in-out",
+                    selected ? "" : ""
                   )}
                 >
                   {item.label}
