@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import {
   useNavigate,
   useRouter,
@@ -21,6 +21,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("../../components/Vehicle/VehicleSummaryTab")
@@ -40,10 +41,10 @@ function VehicleViewPage() {
     router.history.go(-1);
   };
 
-  const onTabClick = (newTabName: string) => {
+  const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewVehicleRoute.id,
-      search: (others) => ({ ...others, tab: newTabName }),
+      search: (others) => ({ ...others, tab: newTab.id }),
       replace: true,
     });
   };
@@ -60,6 +61,12 @@ function VehicleViewPage() {
     vehicleId,
     onError: onFindError,
   });
+
+  useEffect(() => {
+    document.title = titleMaker(
+      (vehicle.data?.vehicle.vehicleNo || "Loading") + " - Vehicles"
+    );
+  }, [vehicle.data?.vehicle.vehicleNo]);
 
   return (
     <Protector>

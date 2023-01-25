@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -23,6 +23,7 @@ import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetV
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetReservationTypesList } from "../../hooks/network/reservation/useGetReservationTypes";
 import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -106,6 +107,10 @@ function ReservationsSearchPage() {
     },
     [columnsData.data, saveColumnsMutation]
   );
+
+  useEffect(() => {
+    document.title = titleMaker("Reservations");
+  }, []);
 
   return (
     <Protector>

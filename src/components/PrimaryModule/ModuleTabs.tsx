@@ -11,13 +11,13 @@ export type ModuleTabConfigItem = {
 export const ModuleTabs = (props: {
   tabConfig: ModuleTabConfigItem[];
   startingIndex: number;
-  onTabClick?: (tabName: string) => void;
+  onTabClick?: (tab: ModuleTabConfigItem) => void;
 }) => {
   const index = props.startingIndex || 0;
 
   const handleChangeIndex = (changingIndex: number) => {
     if (props.onTabClick && props.tabConfig[changingIndex]) {
-      props.onTabClick(props.tabConfig[changingIndex]!.id);
+      props.onTabClick(props.tabConfig[changingIndex]!);
     }
     // setIndex(changingIndex);
   };

@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -23,6 +23,7 @@ import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetV
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
 import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -107,6 +108,10 @@ function AgreementsSearchPage() {
     },
     [columnsData.data, saveColumnsMutation]
   );
+
+  useEffect(() => {
+    document.title = titleMaker("Agreements");
+  }, []);
 
   return (
     <Protector>

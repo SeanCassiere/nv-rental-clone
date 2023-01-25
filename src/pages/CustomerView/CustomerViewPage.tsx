@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import {
   Link,
   useNavigate,
@@ -22,6 +22,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("../../components/Customer/CustomerSummaryTab")
@@ -31,7 +32,9 @@ function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { tab: tabName = "" } = useSearch({ from: viewCustomerRoute.id });
+  const { tab: tabName = "summary" } = useSearch({
+    from: viewCustomerRoute.id,
+  });
 
   const navigate = useNavigate({ from: viewCustomerRoute.id });
 
@@ -49,10 +52,10 @@ function CustomerViewPage() {
     router.history.go(-1);
   };
 
-  const onTabClick = (newTabName: string) => {
+  const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewCustomerRoute.id,
-      search: (others) => ({ ...others, tab: newTabName }),
+      search: (others) => ({ ...others, tab: newTab.id }),
       replace: true,
     });
   };
@@ -61,6 +64,14 @@ function CustomerViewPage() {
     customerId,
     onError: onFindError,
   });
+
+  useEffect(() => {
+    document.title = titleMaker(
+      (customer.data?.firstName && customer.data?.lastName
+        ? customer.data?.firstName + " " + customer.data?.lastName
+        : "Loading") + " - Customers"
+    );
+  }, [customer.data?.firstName, customer.data?.lastName]);
 
   return (
     <Protector>

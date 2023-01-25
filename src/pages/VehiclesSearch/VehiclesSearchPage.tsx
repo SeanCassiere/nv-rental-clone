@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useSearch, useRouter } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -21,6 +21,7 @@ import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-p
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -95,6 +96,10 @@ function VehiclesSearchPage() {
     },
     [columnsData.data, saveColumnsMutation]
   );
+
+  useEffect(() => {
+    document.title = titleMaker("Vehicles");
+  }, []);
 
   return (
     <Protector>

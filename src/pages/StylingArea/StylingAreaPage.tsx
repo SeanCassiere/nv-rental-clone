@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TextInput,
   SelectInput,
@@ -6,6 +6,7 @@ import {
   type TSelectInputOption,
 } from "../../components/Form";
 import { Button } from "../../components/Form/Button";
+import { titleMaker } from "../../utils/title-maker";
 import JsURLDecoder from "./JsURLDecoder";
 
 const people = [
@@ -33,6 +34,10 @@ const StylingAreaPage: React.FC = () => {
     React.useState<TSelectInputOption | null>(null);
 
   const [textValue, setTextValue] = React.useState("");
+
+  useEffect(() => {
+    document.title = titleMaker("Styling Area");
+  }, []);
 
   return (
     <div className="h-full divide-y-2 divide-teal-400 overflow-y-auto bg-gray-200 px-2">

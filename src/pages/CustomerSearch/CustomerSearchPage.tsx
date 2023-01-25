@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
 import { useGetCustomerTypesList } from "../../hooks/network/customer/useGetCustomerTypes";
 import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
+import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -102,6 +103,10 @@ function CustomerSearchPage() {
     },
     [columnsData.data, saveColumnsMutation]
   );
+
+  useEffect(() => {
+    document.title = titleMaker("Customers");
+  }, []);
 
   return (
     <Protector>

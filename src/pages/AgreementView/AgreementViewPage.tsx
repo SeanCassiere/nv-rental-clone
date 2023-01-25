@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import {
   Link,
   useNavigate,
@@ -21,6 +21,7 @@ import {
   type ModuleTabConfigItem,
 } from "../../components/PrimaryModule/ModuleTabs";
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")
@@ -35,7 +36,7 @@ const InvoicesTab = lazy(
 function AgreementViewPage() {
   const router = useRouter();
 
-  const { tab: tabName = "" } = useSearch({
+  const { tab: tabName = "summary" } = useSearch({
     from: viewAgreementRoute.id,
   });
 
@@ -65,10 +66,10 @@ function AgreementViewPage() {
     },
   ];
 
-  const onTabClick = (newTabName: string) => {
+  const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewAgreementRoute.id,
-      search: (others) => ({ ...others, tab: newTabName }),
+      search: (others) => ({ ...others, tab: newTab.id }),
       replace: true,
     });
   };
@@ -81,6 +82,12 @@ function AgreementViewPage() {
     agreementId,
     onError: onFindError,
   });
+
+  useEffect(() => {
+    document.title = titleMaker(
+      (agreement.data?.agreementNumber || "Loading") + " - Agreements"
+    );
+  }, [agreement.data?.agreementNumber]);
 
   return (
     <Protector>

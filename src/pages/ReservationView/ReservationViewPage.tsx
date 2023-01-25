@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import {
   useNavigate,
   useRouter,
@@ -21,6 +21,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")
@@ -36,7 +37,9 @@ function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { tab: tabName = "" } = useSearch({ from: viewReservationRoute.id });
+  const { tab: tabName = "summary" } = useSearch({
+    from: viewReservationRoute.id,
+  });
 
   const navigate = useNavigate({ from: viewReservationRoute.id });
 
@@ -64,10 +67,10 @@ function ReservationViewPage() {
     router.history.go(-1);
   };
 
-  const onTabClick = (newTabName: string) => {
+  const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewReservationRoute.id,
-      search: (others) => ({ ...others, tab: newTabName }),
+      search: (others) => ({ ...others, tab: newTab.id }),
       replace: true,
     });
   };
@@ -76,6 +79,13 @@ function ReservationViewPage() {
     reservationId,
     onError: onFindError,
   });
+
+  useEffect(() => {
+    document.title = titleMaker(
+      (reservation.data?.reservationview.reservationNumber || "Loading") +
+        " - Reservations"
+    );
+  }, [reservation.data?.reservationview.reservationNumber]);
 
   return (
     <Protector>

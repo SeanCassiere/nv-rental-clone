@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
 import DashboardBannerNotices from "../../components/Dashboard/DashboardBannerNotices";
@@ -9,6 +11,7 @@ import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashbo
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
+import { titleMaker } from "../../utils/title-maker";
 
 function IndexPage() {
   const statistics = useGetDashboardStats({
@@ -25,6 +28,10 @@ function IndexPage() {
   const handleWidgetSortingEnd = (widgets: DashboardWidgetItemParsed[]) => {
     saveDashboardWidgetsMutation.mutate({ widgets });
   };
+
+  useEffect(() => {
+    document.title = titleMaker("Dashboard");
+  }, []);
 
   return (
     <Protector>
