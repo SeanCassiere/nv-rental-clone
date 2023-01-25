@@ -18,7 +18,7 @@ const InformationBlock = (props: TInformationBlockProps) => {
         {props.heading}
       </span>
       <span className="truncate pt-1.5 pb-2 text-base leading-3 text-slate-700">
-        {props.isLoading ? "Loading" : props.value}
+        {props.isLoading ? EMPTY_KEY : props.value}
       </span>
     </div>
   );

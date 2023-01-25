@@ -1,10 +1,10 @@
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import { sortObject } from "../../utils/sortObject";
 import CustomerInformation from "../PrimaryModule/ModuleInformation/CustomerInformation";
 import RentalInformation from "../PrimaryModule/ModuleInformation/RentalInformation";
 import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
+
+import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
+import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 
 type AgreementSummaryTabProps = {
   agreementId: string;
@@ -50,6 +50,8 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
                 agreementData.data?.customerDetails?.creditCardExpiryDate,
               creditCardSecurityCode:
                 agreementData.data?.customerDetails?.creditCardCVSNo,
+              checkoutDate: agreementData.data?.checkoutDate,
+              checkinDate: agreementData.data?.checkinDate,
             }}
             isLoading={agreementData.isLoading}
           />
@@ -87,12 +89,6 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
             currency={clientProfile.data?.currency || undefined}
           />
         )}
-        <div className="max-h-[500px] overflow-x-scroll bg-slate-50">
-          <h2>Agreement data</h2>
-          <code className="text-xs">
-            <pre>{JSON.stringify(sortObject(agreementData.data), null, 2)}</pre>
-          </code>
-        </div>
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-5">

@@ -18,7 +18,9 @@ export function useGetAgreementData(params: {
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
       }),
-    enabled: auth.isAuthenticated,
+    enabled:
+      auth.isAuthenticated &&
+      Boolean(params.agreementId && params.agreementId !== "0"),
     onError: (err) => {
       if (params?.onError) {
         params?.onError(err);

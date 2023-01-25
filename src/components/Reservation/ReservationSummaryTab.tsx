@@ -1,10 +1,10 @@
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
-import { sortObject } from "../../utils/sortObject";
 import CustomerInformation from "../PrimaryModule/ModuleInformation/CustomerInformation";
 import RentalInformation from "../PrimaryModule/ModuleInformation/RentalInformation";
 import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
+
+import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
+import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
 
 type ReservationSummaryTabProps = {
   reservationId: string;
@@ -90,16 +90,6 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
             currency={clientProfile.data?.currency || undefined}
           />
         )}
-        <div className="max-h-[400px] overflow-x-scroll bg-slate-50">
-          <h2>Reservation data</h2>
-          <code className="text-xs">
-            <pre>
-              {JSON.stringify(sortObject(reservationData.data), null, 2)}
-            </pre>
-          </code>
-        </div>
-        {/* <div className="bg-slate-50">Reservation block 1</div>
-        <div className="bg-slate-50">Reservation block 2</div> */}
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-5">

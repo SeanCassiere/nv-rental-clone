@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy, useEffect, useMemo } from "react";
 import {
   useNavigate,
   useRouter,
@@ -46,13 +46,37 @@ function VehicleViewPage() {
     });
   };
 
-  const tabsConfig: ModuleTabConfigItem[] = [
-    {
+  const tabsConfig: ModuleTabConfigItem[] = useMemo(() => {
+    const tabs: ModuleTabConfigItem[] = [];
+
+    tabs.push({
       id: "summary",
       label: "Summary",
       component: <SummaryTab vehicleId={vehicleId} />,
-    },
-  ];
+    });
+    tabs.push({
+      id: "notes",
+      label: "Notes",
+      component: "Notes Tab",
+    });
+    tabs.push({
+      id: "documents",
+      label: "Documents",
+      component: "Documents Tab",
+    });
+    tabs.push({
+      id: "reservations",
+      label: "Reservations",
+      component: "Reservations Tab",
+    });
+    tabs.push({
+      id: "agreements",
+      label: "Agreements",
+      component: "Agreements Tab",
+    });
+
+    return tabs;
+  }, [vehicleId]);
 
   const vehicle = useGetVehicleData({
     vehicleId,

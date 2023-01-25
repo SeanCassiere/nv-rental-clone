@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy, useEffect, useMemo } from "react";
 import {
   Link,
   useNavigate,
@@ -39,13 +39,27 @@ function CustomerViewPage() {
 
   const customerId = params.customerId || "";
 
-  const tabsConfig: ModuleTabConfigItem[] = [
-    {
+  const tabsConfig = useMemo(() => {
+    const tabs: ModuleTabConfigItem[] = [];
+
+    tabs.push({
       id: "summary",
       label: "Summary",
       component: <SummaryTab customerId={customerId} />,
-    },
-  ];
+    });
+    tabs.push({
+      id: "notes",
+      label: "Notes",
+      component: "Notes Tab",
+    });
+    tabs.push({
+      id: "documents",
+      label: "Documents",
+      component: "Documents Tab",
+    });
+
+    return tabs;
+  }, [customerId]);
 
   const onFindError = () => {
     router.history.go(-1);
