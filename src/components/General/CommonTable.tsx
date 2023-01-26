@@ -49,22 +49,33 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
               </tr>
             ))}
           </thead>
-          <tbody className="min-h-[80px]">
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell, cellIdx) => (
-                  <td
-                    key={cell.id}
-                    className={classNames(
-                      cellIdx === 0 ? "sm:pl-6" : "",
-                      "whitespace-nowrap px-4 py-3 text-base font-normal text-slate-700"
-                    )}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+          <tbody>
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell, cellIdx) => (
+                    <td
+                      key={cell.id}
+                      className={classNames(
+                        cellIdx === 0 ? "sm:pl-6" : "",
+                        "whitespace-nowrap px-4 py-3 text-base font-normal text-slate-700"
+                      )}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={table.getAllColumns().length}>
+                  <span className="block min-h-[50px]">&nbsp;</span>
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
