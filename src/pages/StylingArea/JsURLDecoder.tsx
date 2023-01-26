@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { TextInput } from "../../components/Form";
+import { TextInput, Button } from "../../components/Form";
 import JSURL from "jsurl2";
-import { Button } from "../../components/Form/Button";
 
 const JsURLDecoder = () => {
   const [encodeValue, setEncodeValue] = useState("");

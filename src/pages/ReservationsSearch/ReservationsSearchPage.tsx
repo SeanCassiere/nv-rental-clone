@@ -27,7 +27,11 @@ import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-const DateTimeColumns = ["CreatedDate", "StartDate", "EndDate"];
+export const ReservationDateTimeColumns = [
+  "CreatedDate",
+  "StartDate",
+  "EndDate",
+];
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
@@ -74,7 +78,7 @@ function ReservationsSearchPage() {
               );
             }
 
-            if (DateTimeColumns.includes(column.columnHeader)) {
+            if (ReservationDateTimeColumns.includes(column.columnHeader)) {
               return t("intlDateTime", { value: new Date(value) });
             }
 

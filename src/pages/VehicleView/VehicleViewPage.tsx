@@ -23,6 +23,9 @@ import { titleMaker } from "../../utils/title-maker";
 const SummaryTab = lazy(
   () => import("../../components/Vehicle/VehicleSummaryTab")
 );
+const VehicleReservationsTab = lazy(
+  () => import("../../components/Vehicle/VehicleReservationsTab")
+);
 
 function VehicleViewPage() {
   const router = useRouter();
@@ -46,6 +49,11 @@ function VehicleViewPage() {
     });
   };
 
+  const vehicle = useGetVehicleData({
+    vehicleId,
+    onError: onFindError,
+  });
+
   const tabsConfig: ModuleTabConfigItem[] = useMemo(() => {
     const tabs: ModuleTabConfigItem[] = [];
 
@@ -67,7 +75,12 @@ function VehicleViewPage() {
     tabs.push({
       id: "reservations",
       label: "Reservations",
-      component: "Reservations Tab",
+      component: (
+        <VehicleReservationsTab
+          vehicleId={vehicleId}
+          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
+        />
+      ),
     });
     tabs.push({
       id: "agreements",
@@ -76,12 +89,7 @@ function VehicleViewPage() {
     });
 
     return tabs;
-  }, [vehicleId]);
-
-  const vehicle = useGetVehicleData({
-    vehicleId,
-    onError: onFindError,
-  });
+  }, [vehicleId, vehicle.data]);
 
   useEffect(() => {
     document.title = titleMaker(
