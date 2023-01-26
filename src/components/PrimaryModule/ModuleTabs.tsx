@@ -19,7 +19,6 @@ export const ModuleTabs = (props: {
     if (props.onTabClick && props.tabConfig[changingIndex]) {
       props.onTabClick(props.tabConfig[changingIndex]!);
     }
-    // setIndex(changingIndex);
   };
 
   const isTabIndexSelected = (tabId: string) => {
@@ -42,7 +41,7 @@ export const ModuleTabs = (props: {
                     selected
                       ? "bg-slate-100 text-slate-600 hover:shadow-sm"
                       : "font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700",
-                    "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-medium transition-all duration-200 ease-in-out",
+                    "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-0",
                     selected ? "" : ""
                   )}
                 >

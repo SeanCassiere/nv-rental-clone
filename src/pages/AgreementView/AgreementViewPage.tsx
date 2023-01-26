@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy, useEffect, useMemo } from "react";
 import {
   Link,
   useNavigate,
@@ -23,12 +23,6 @@ import { titleMaker } from "../../utils/title-maker";
 const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")
 );
-const PaymentsTab = lazy(
-  () => import("../../components/PrimaryModule/ModulePayments/Tab")
-);
-const InvoicesTab = lazy(
-  () => import("../../components/PrimaryModule/ModuleInvoices/Tab")
-);
 
 function AgreementViewPage() {
   const router = useRouter();
@@ -45,33 +39,41 @@ function AgreementViewPage() {
 
   const agreementId = params.agreementId || "";
 
-  const tabsConfig: ModuleTabConfigItem[] = [
-    {
+  const tabsConfig = useMemo(() => {
+    const tabs: ModuleTabConfigItem[] = [];
+
+    tabs.push({
       id: "summary",
       label: "Summary",
       component: <SummaryTab agreementId={agreementId} />,
-    },
-    {
+    });
+    tabs.push({
+      id: "notes",
+      label: "Notes",
+      component: "Notes Tab",
+    });
+    tabs.push({
       id: "payments",
       label: "Payments",
-      component: <PaymentsTab />,
-    },
-    {
+      component: "Payments Tab",
+    });
+    tabs.push({
       id: "invoices",
       label: "Invoices",
-      component: <InvoicesTab />,
-    },
-    {
+      component: "Invoices Tab",
+    });
+    tabs.push({
       id: "documents",
       label: "Documents",
-      component: <InvoicesTab />,
-    },
-    {
+      component: "Documents Tab",
+    });
+    tabs.push({
       id: "charges",
       label: "Charges",
-      component: <InvoicesTab />,
-    },
-  ];
+      component: "Charges Tab",
+    });
+    return tabs;
+  }, [agreementId]);
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({

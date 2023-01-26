@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy, useEffect, useMemo } from "react";
 import {
   useNavigate,
   useRouter,
@@ -23,12 +23,6 @@ import { titleMaker } from "../../utils/title-maker";
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")
 );
-const PaymentsTab = lazy(
-  () => import("../../components/PrimaryModule/ModulePayments/Tab")
-);
-const InvoicesTab = lazy(
-  () => import("../../components/PrimaryModule/ModuleInvoices/Tab")
-);
 
 function ReservationViewPage() {
   const router = useRouter();
@@ -42,23 +36,32 @@ function ReservationViewPage() {
 
   const reservationId = params.reservationId || "";
 
-  const tabsConfig: ModuleTabConfigItem[] = [
-    {
+  const tabsConfig: ModuleTabConfigItem[] = useMemo(() => {
+    const tabs: ModuleTabConfigItem[] = [];
+
+    tabs.push({
       id: "summary",
       label: "Summary",
       component: <SummaryTab reservationId={reservationId} />,
-    },
-    {
+    });
+    tabs.push({
+      id: "notes",
+      label: "Notes",
+      component: "Notes Tab",
+    });
+    tabs.push({
       id: "payments",
       label: "Payments",
-      component: <PaymentsTab />,
-    },
-    {
+      component: "Payments Tab",
+    });
+    tabs.push({
       id: "invoices",
       label: "Invoices",
-      component: <InvoicesTab />,
-    },
-  ];
+      component: "Invoices Tab",
+    });
+
+    return tabs;
+  }, [reservationId]);
 
   const onFindError = () => {
     router.history.go(-1);

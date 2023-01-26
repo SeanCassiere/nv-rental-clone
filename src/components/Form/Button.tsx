@@ -58,29 +58,30 @@ interface CustomButtonProps
 
 type ButtonProps = CustomButtonProps & VariantProps<typeof buttonStyles>;
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props) => {
-  const {
-    children,
-    ref,
-    type = "button",
-    color,
-    disabled,
-    fullWidth,
-    className,
-    ...otherProps
-  } = props;
-  return (
-    <button
-      ref={ref}
-      type={type}
-      disabled={disabled}
-      className={classNames(
-        buttonStyles({ fullWidth, disabled, color }),
-        className
-      )}
-      {...otherProps}
-    >
-      {children}
-    </button>
-  );
-});
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    const {
+      children,
+      type = "button",
+      color,
+      disabled,
+      fullWidth,
+      className,
+      ...otherProps
+    } = props;
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={disabled}
+        className={classNames(
+          buttonStyles({ fullWidth, disabled, color }),
+          className
+        )}
+        {...otherProps}
+      >
+        {children}
+      </button>
+    );
+  }
+);

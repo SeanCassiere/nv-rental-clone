@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import {
   InformationBlockCard,
@@ -9,7 +10,6 @@ import {
 } from "./common";
 import { UserSolid } from "../../icons";
 import { viewCustomerRoute } from "../../../routes/customers/viewCustomer";
-import { useTranslation } from "react-i18next";
 
 interface TCustomerInformationProps {
   data: {
@@ -26,14 +26,25 @@ interface TCustomerInformationProps {
     creditCardExpirationDate?: TAnyCustomerValueType;
     creditCardSecurityCode?: TAnyCustomerValueType;
     dateOfBirth?: TAnyCustomerValueType;
+    checkoutDate?: TAnyCustomerValueType;
+    checkinDate?: TAnyCustomerValueType;
   };
   isLoading: boolean;
-  mode: "agreement" | "reservation";
+  mode: "agreement" | "reservation" | "vehicle";
 }
 
 const CustomerInformation = (props: TCustomerInformationProps) => {
   const { data, isLoading, mode } = props;
   const { t } = useTranslation();
+
+  const title = useMemo(() => {
+    let currentTitle = "Customer information";
+    if (mode === "vehicle") {
+      currentTitle = "Current customer";
+    }
+
+    return currentTitle;
+  }, [mode]);
 
   const infoBlocks = useMemo(() => {
     const fullName = data?.firstName
@@ -118,6 +129,22 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
           : EMPTY_KEY,
       });
     };
+    const pushCheckoutDate = () => {
+      blocks.push({
+        heading: "Checkout date",
+        value: data?.checkoutDate
+          ? t("intlDateTime", { value: data.checkoutDate })
+          : EMPTY_KEY,
+      });
+    };
+    const pushCheckinDate = () => {
+      blocks.push({
+        heading: "Checkin date",
+        value: data?.checkoutDate
+          ? t("intlDateTime", { value: data.checkinDate })
+          : EMPTY_KEY,
+      });
+    };
 
     if (mode === "agreement") {
       pushFullName();
@@ -135,6 +162,13 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
       pushDateOfBirth();
       pushLicenseNumber();
     }
+    if (mode === "vehicle") {
+      pushFullName();
+      pushMobileNumber();
+      pushLicenseNumber();
+      pushCheckoutDate();
+      pushCheckinDate();
+    }
     return blocks;
   }, [t, data, mode]);
 
@@ -142,7 +176,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
     <InformationBlockCard
       identifier="customer-information"
       icon={<UserSolid className="h-5 w-5" />}
-      title="Customer information"
+      title={title}
       blocks={infoBlocks}
       numberPerBlock={3}
       isLoading={isLoading}

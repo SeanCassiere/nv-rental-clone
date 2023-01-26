@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { viewAgreementRoute } from "../../../routes/agreements/viewAgreement";
 
 import { viewReservationRoute } from "../../../routes/reservations/viewReservation";
+import { viewVehicleRoute } from "../../../routes/vehicles/viewVehicle";
 import { type TVehicleSummarySchema } from "../../../utils/schemas/summary/vehicleSummary";
 import { CurrencyDollarSolid } from "../../icons";
 import {
@@ -14,10 +15,12 @@ export const VehicleSummary = ({
   summaryData,
   currency = "",
   vehicleNo,
+  vehicleId,
 }: {
   summaryData: TVehicleSummarySchema;
   currency?: string;
   vehicleNo?: string;
+  vehicleId: string;
 }) => {
   const { t } = useTranslation();
 
@@ -28,21 +31,25 @@ export const VehicleSummary = ({
       biggerText: true,
       primaryTextHighlight: Boolean(summaryData?.totalRevenue),
     },
+
     {
       label: "Total expenses",
       amount: t("intlCurrency", { value: summaryData?.totalExpense, currency }),
       primaryTextHighlight: Boolean(summaryData?.totalExpense),
     },
+
     {
       label: "Total profits",
       amount: t("intlCurrency", { value: summaryData?.totalProfit, currency }),
       primaryTextHighlight: Boolean(summaryData?.totalProfit),
     },
+
     {
       label: "Balances owing",
       amount: t("intlCurrency", { value: summaryData?.balanceOwing, currency }),
       primaryTextHighlight: Boolean(summaryData?.balanceOwing),
     },
+
     {
       label: "Monthly payment",
       amount: t("intlCurrency", {
@@ -51,6 +58,7 @@ export const VehicleSummary = ({
       }),
       primaryTextHighlight: Boolean(summaryData?.monthlyPayment),
     },
+
     {
       label: "Lease payout",
       amount: t("intlCurrency", {
@@ -59,6 +67,7 @@ export const VehicleSummary = ({
       }),
       primaryTextHighlight: Boolean(summaryData?.leasePayoutAmount),
     },
+
     {
       label: "Final payment date",
       amount: summaryData.finalPaymentDate
@@ -69,16 +78,18 @@ export const VehicleSummary = ({
         : "No date",
       primaryTextHighlight: Boolean(summaryData?.finalPaymentDate),
     },
+
     {
       label: "Total reservations",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfReservation),
       type: summaryData.totalNoOfReservation ? "link" : "text",
       amount: summaryData.totalNoOfReservation,
       linkProps: {
-        to: "/reservations",
+        to: viewVehicleRoute.id,
         search: (current) => ({
-          filters: { VehicleNo: vehicleNo ?? "" },
+          tab: "reservations",
         }),
+        params: { vehicleId: vehicleId },
         preload: "intent",
       },
     },
@@ -104,6 +115,7 @@ export const VehicleSummary = ({
         preload: "intent",
       },
     },
+
     {
       label: "Future reservations",
       primaryTextHighlight: Boolean(summaryData?.futureNoOfReservation),
@@ -120,19 +132,22 @@ export const VehicleSummary = ({
         preload: "intent",
       },
     },
+
     {
       label: "Total agreements",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfAgreement),
       type: summaryData.totalNoOfAgreement ? "link" : "text",
       amount: summaryData.totalNoOfAgreement,
       linkProps: {
-        to: "/agreements",
+        to: viewVehicleRoute.id,
         search: () => ({
-          filters: { VehicleNo: vehicleNo ?? "" },
+          tab: "agreements",
         }),
+        params: { vehicleId: vehicleId },
         preload: "intent",
       },
     },
+
     {
       label: "Current agreement",
       primaryTextHighlight:
@@ -154,6 +169,7 @@ export const VehicleSummary = ({
         preload: "intent",
       },
     },
+
     {
       label: "Current net value",
       amount: t("intlCurrency", {
@@ -162,6 +178,7 @@ export const VehicleSummary = ({
       }),
       primaryTextHighlight: Boolean(summaryData?.currentNetValue),
     },
+
     {
       label: "Monthly depreciation",
       amount: t("intlCurrency", {
@@ -170,6 +187,7 @@ export const VehicleSummary = ({
       }),
       primaryTextHighlight: Boolean(summaryData?.monthlyDepreciation),
     },
+
     {
       label: "Total depreciation",
       amount: t("intlCurrency", {
@@ -178,6 +196,7 @@ export const VehicleSummary = ({
       }),
       primaryTextHighlight: Boolean(summaryData?.totalAmountDepreciated),
     },
+
     {
       label: "Pending payments",
       primaryTextHighlight: Boolean(summaryData?.pendingPayment),
@@ -191,12 +210,12 @@ export const VehicleSummary = ({
         preload: "intent",
       },
     },
+
     {
       label: "Last rental date",
       amount: summaryData.lastRentalDate
         ? t("intlDate", { value: summaryData?.lastRentalDate, currency })
         : "None",
-      primaryTextHighlight: Boolean(summaryData?.lastRentalDate),
     },
   ];
 
@@ -206,7 +225,7 @@ export const VehicleSummary = ({
   }));
 
   return (
-    <div className="grid divide-y divide-gray-200 rounded border border-slate-200 bg-slate-50 py-1 shadow-sm">
+    <div className="grid divide-y divide-gray-200 rounded border border-slate-200 bg-slate-50 pb-1 shadow-sm">
       <SummaryHeader
         title="Summary"
         icon={<CurrencyDollarSolid className="h-5 w-5 text-gray-700" />}

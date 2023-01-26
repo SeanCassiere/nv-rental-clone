@@ -9,7 +9,7 @@ export const rootRoute = new RootRoute({
     return (
       <AppShellLayout>
         <Outlet />
-        {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS && (
+        {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
           <TanStackRouterDevtools position="bottom-right" />
         )}
       </AppShellLayout>

@@ -1,10 +1,11 @@
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import { sortObject } from "../../utils/sortObject";
 import CustomerInformation from "../PrimaryModule/ModuleInformation/CustomerInformation";
 import RentalInformation from "../PrimaryModule/ModuleInformation/RentalInformation";
 import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
+
+import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
+import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
+import VehicleInformation from "../PrimaryModule/ModuleInformation/VehicleInformation";
 
 type AgreementSummaryTabProps = {
   agreementId: string;
@@ -15,6 +16,8 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
     agreementId: props.agreementId,
   });
 
+  const isCheckedIn = agreementData.data?.returnDate ? true : false;
+
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
     module: "agreements",
     referenceId: props.agreementId,
@@ -24,10 +27,11 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
+  const canViewVehicleInformation = true;
 
   return (
-    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 md:grid-cols-12">
-      <div className="flex flex-col gap-4 md:col-span-7">
+    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
+      <div className="flex flex-col gap-4 lg:col-span-7">
         {canViewCustomerInformation && (
           <CustomerInformation
             mode="agreement"
@@ -50,8 +54,35 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
                 agreementData.data?.customerDetails?.creditCardExpiryDate,
               creditCardSecurityCode:
                 agreementData.data?.customerDetails?.creditCardCVSNo,
+              checkoutDate: agreementData.data?.checkoutDate,
+              checkinDate: agreementData.data?.checkinDate,
             }}
             isLoading={agreementData.isLoading}
+          />
+        )}
+        {canViewVehicleInformation && (
+          <VehicleInformation
+            mode={
+              isCheckedIn ? "agreement-checked-in" : "agreement-checked-out"
+            }
+            isLoading={agreementData.isLoading}
+            data={
+              agreementData.data
+                ? {
+                    vehicleId: agreementData.data?.vehicleId,
+                    vehicleNo: agreementData.data?.vehicleNo,
+                    vehicleType: agreementData.data?.vehicleType,
+                    licenseNo: agreementData.data?.licenseNo,
+                    make: agreementData.data?.vehicleMakeName,
+                    model: agreementData.data?.modelName,
+                    year: agreementData.data?.year,
+                    fuelLevelOut: agreementData.data?.fuelLevelOut,
+                    fuelLevelIn: agreementData.data?.fuelLevelIn,
+                    odometerOut: agreementData.data?.odometerOut,
+                    odometerIn: agreementData.data?.odometerIn,
+                  }
+                : {}
+            }
           />
         )}
         {canViewRentalInformation && (
@@ -87,15 +118,9 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
             currency={clientProfile.data?.currency || undefined}
           />
         )}
-        <div className="max-h-[500px] overflow-x-scroll bg-slate-50">
-          <h2>Agreement data</h2>
-          <code className="text-xs">
-            <pre>{JSON.stringify(sortObject(agreementData.data), null, 2)}</pre>
-          </code>
-        </div>
       </div>
       {/*  */}
-      <div className="flex flex-col gap-4 md:col-span-5">
+      <div className="flex flex-col gap-4 lg:col-span-5">
         <RentalRatesSummary
           module="agreements"
           summaryData={rentalRatesSummary.data}
