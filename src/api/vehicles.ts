@@ -37,7 +37,7 @@ export const fetchVehicleData = async (
       clientId: opts.clientId,
       userId: opts.userId,
       getMakeDetails: "true",
-      clientTime: localDateTimeToQueryYearMonthDay(opts.clientTime, true),
+      clientTime: localDateTimeToQueryYearMonthDay(opts.clientTime),
     }),
     {
       headers: {

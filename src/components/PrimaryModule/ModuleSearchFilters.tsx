@@ -140,7 +140,6 @@ function ModuleSearchFilters<T extends KeyValueObject>(
         const withDates = Object.entries(values).reduce((acc, [key, value]) => {
           let setValue = value;
           if (value instanceof Date) {
-            console.log(localDateToQueryYearMonthDay(value));
             setValue = localDateToQueryYearMonthDay(value);
           }
           return {
@@ -152,7 +151,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
         const insert = makeBackToArray(withDates, props.initialValues);
 
         const result = props.validationSchema.safeParse(insert);
-
+        console.log({ result });
         if (!result.success) {
           console.error("failed submitting module filters\n\n", result.error);
           return;

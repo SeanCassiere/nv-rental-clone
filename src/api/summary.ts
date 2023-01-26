@@ -55,7 +55,7 @@ export const fetchVehicleSummaryAmounts = async (
     makeUrl(`/v3/vehicles/${opts.vehicleId}/summary`, {
       clientId: opts.clientId,
       userId: opts.userId,
-      clientTime: localDateTimeToQueryYearMonthDay(opts.clientDate, true),
+      clientTime: localDateTimeToQueryYearMonthDay(opts.clientDate),
     }),
     {
       headers: {
