@@ -26,6 +26,9 @@ const SummaryTab = lazy(
 const VehicleReservationsTab = lazy(
   () => import("../../components/Vehicle/VehicleReservationsTab")
 );
+const VehicleAgreementsTab = lazy(
+  () => import("../../components/Vehicle/VehicleAgreementsTab")
+);
 
 function VehicleViewPage() {
   const router = useRouter();
@@ -85,7 +88,12 @@ function VehicleViewPage() {
     tabs.push({
       id: "agreements",
       label: "Agreements",
-      component: "Agreements Tab",
+      component: (
+        <VehicleAgreementsTab
+          vehicleId={vehicleId}
+          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
+        />
+      ),
     });
 
     return tabs;

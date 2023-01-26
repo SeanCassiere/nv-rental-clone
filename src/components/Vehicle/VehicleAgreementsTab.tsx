@@ -5,52 +5,51 @@ import { useTranslation } from "react-i18next";
 
 import CommonTable from "../General/CommonTable";
 
-import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 
-import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
-import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
+import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
-import { ReservationDateTimeColumns } from "../../pages/ReservationsSearch/ReservationsSearchPage";
+import { AgreementDateTimeColumns } from "../../pages/AgreementsSearch/AgreementsSearchPage";
+import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
+import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
   vehicleNo: string | undefined;
 }
 
-const columnHelper = createColumnHelper<TReservationListItemParsed>();
+const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
 const acceptedColumns = [
-  "ReservationNumber",
-  "ReservationType",
-  "ReservationStatusName",
-  "FirstName",
-  "LastName",
-  "StartDate",
-  "EndDate",
-  "StartLocationName",
-  "EndLocationName",
+  "AgreementNumber",
+  "AgreementType",
+  "AgreementStatusName",
+  "FullName",
+  "CheckoutDate",
+  "CheckinDate",
+  "CheckoutLocationName",
+  "CheckinLocationName",
 ];
 
-const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
+const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
   const { t } = useTranslation();
-  const items = normalizeReservationListSearchParams({
+  const items = normalizeAgreementListSearchParams({
     page: 1,
     size: 50,
     filters: { VehicleNo: props.vehicleNo },
   });
 
-  const columnsData = useGetModuleColumns({ module: "reservations" });
+  const columnsData = useGetModuleColumns({ module: "agreements" });
 
-  const dataList = useGetReservationsList({
+  const dataList = useGetAgreementsList({
     page: items.pageNumber,
     pageSize: items.size,
     filters: items.searchFilters,
   });
 
   const columnDefs = useMemo(() => {
-    const columns: ColumnDef<TReservationListItemParsed>[] = [];
+    const columns: ColumnDef<TAgreementListItemParsed>[] = [];
 
     columnsData.data.sort(sortColOrderByOrderIndex).forEach((column) => {
       if (acceptedColumns.includes(column.columnHeader) === false) return;
@@ -61,12 +60,13 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
           header: () => column.columnHeaderDescription,
           cell: (item) => {
             const value = item.getValue();
-            if (column.columnHeader === "ReservationNumber") {
-              const reservationId = item.table.getRow(item.row.id).original.id;
+            if (column.columnHeader === "AgreementNumber") {
+              const agreementId = item.table.getRow(item.row.id).original
+                .AgreementId;
               return (
                 <Link
-                  to={viewReservationRoute.id}
-                  params={{ reservationId: String(reservationId) }}
+                  to={viewAgreementRoute.id}
+                  params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-medium text-slate-800"
                   preload="intent"
@@ -76,7 +76,7 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
               );
             }
 
-            if (ReservationDateTimeColumns.includes(column.columnHeader)) {
+            if (AgreementDateTimeColumns.includes(column.columnHeader)) {
               return t("intlDateTime", { value: new Date(value as any) });
             }
 
@@ -96,15 +96,15 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
       <CommonTable data={dataList.data.data || []} columns={columnDefs} />
       <div className="py-4">
         <Link
-          to="/reservations"
+          to="/agreements"
           search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
           className="text-slate-600"
         >
-          Need more filters? Click here to search for reservations.
+          Need more filters? Click here to search for agreements.
         </Link>
       </div>
     </div>
   );
 };
 
-export default VehicleReservationsTab;
+export default VehicleAgreementsTab;
