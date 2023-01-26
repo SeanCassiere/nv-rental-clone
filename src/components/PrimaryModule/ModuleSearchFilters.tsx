@@ -5,9 +5,9 @@ import {
   TextInput,
   MultiSelectInput,
   SelectInput,
+  Button,
   type TSelectInputOption,
 } from "../Form";
-import { Button } from "../Form/Button";
 type KeyValueObject = { [key: string]: any };
 
 function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {

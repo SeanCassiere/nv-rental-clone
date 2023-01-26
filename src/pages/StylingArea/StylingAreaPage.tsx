@@ -3,9 +3,9 @@ import {
   TextInput,
   SelectInput,
   MultiSelectInput,
+  Button,
   type TSelectInputOption,
 } from "../../components/Form";
-import { Button } from "../../components/Form/Button";
 import { titleMaker } from "../../utils/title-maker";
 import JsURLDecoder from "./JsURLDecoder";
 

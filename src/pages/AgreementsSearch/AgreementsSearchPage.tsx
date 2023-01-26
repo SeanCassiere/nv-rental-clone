@@ -27,7 +27,11 @@ import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
-const DateTimeColumns = ["CreatedDate", "CheckoutDate", "CheckinDate"];
+export const AgreementDateTimeColumns = [
+  "CreatedDate",
+  "CheckoutDate",
+  "CheckinDate",
+];
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
@@ -75,7 +79,7 @@ function AgreementsSearchPage() {
               );
             }
 
-            if (DateTimeColumns.includes(column.columnHeader)) {
+            if (AgreementDateTimeColumns.includes(column.columnHeader)) {
               return t("intlDateTime", { value: new Date(value) });
             }
 
