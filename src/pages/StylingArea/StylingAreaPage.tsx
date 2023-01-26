@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextInput,
   SelectInput,
   MultiSelectInput,
   Button,
   type TSelectInputOption,
+  DatePicker,
 } from "../../components/Form";
 import { titleMaker } from "../../utils/title-maker";
 import JsURLDecoder from "./JsURLDecoder";
@@ -35,6 +36,8 @@ const StylingAreaPage: React.FC = () => {
 
   const [textValue, setTextValue] = React.useState("");
 
+  const [date, setDate] = useState<Date | null>(null);
+
   useEffect(() => {
     document.title = titleMaker("Styling Area");
   }, []);
@@ -45,6 +48,7 @@ const StylingAreaPage: React.FC = () => {
         <h2 className="text-2xl">JSURL Utils</h2>
         <JsURLDecoder />
       </section>
+
       <section className="grid grid-cols-1 gap-4 py-10 md:mx-28 md:grid-cols-2">
         <div>
           <h2 className="text-2xl">Multi-Select</h2>
@@ -96,6 +100,19 @@ const StylingAreaPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/*  */}
+      <section className="py-10 md:mx-28">
+        <h2 className="text-2xl">Dates</h2>
+        <DatePicker
+          selected={date}
+          onChange={(dv) => setDate(dv)}
+          label="Select a date"
+          placeholderText="Select a date"
+        />
+      </section>
+      {/*  */}
+
       <section className="py-10 md:mx-28">
         <h2 className="text-2xl">TextInput</h2>
         <div className="relative my-2 w-full">
