@@ -98,6 +98,7 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-5">
         <VehicleSummary
+          vehicleId={props.vehicleId}
           summaryData={vehicleSummary.data}
           currency={clientProfile.data?.currency || undefined}
           vehicleNo={vehicleData.data?.vehicle.vehicleNo || undefined}
