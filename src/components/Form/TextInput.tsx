@@ -1,4 +1,4 @@
-import { useId, forwardRef } from "react";
+import { useId, forwardRef, type ReactNode } from "react";
 import classNames from "classnames";
 import { ExclamationCircleIconOutline } from "../icons";
 
@@ -10,9 +10,10 @@ interface TextInputProps
   label: string;
   error?: boolean;
   errorText?: string | null;
+  endIcon?: ReactNode;
 }
 
-export const TextInput = forwardRef<any, TextInputProps>(
+export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (props: TextInputProps, ref) => {
     const reactId = useId();
     const {
@@ -36,12 +37,12 @@ export const TextInput = forwardRef<any, TextInputProps>(
           >
             {label}
           </label>
-          <div className="relative mt-1 rounded-md shadow-sm">
+          <div className="relative mt-1 rounded shadow-sm">
             <input
               type={type ?? "text"}
               id={id}
               className={classNames(
-                "block w-full rounded-sm border-gray-300 focus:outline-none sm:text-sm",
+                "block w-full rounded border-gray-300 focus:outline-none sm:text-sm",
                 error
                   ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
                   : "focus:border-teal-500 focus:ring-teal-500",
@@ -58,7 +59,7 @@ export const TextInput = forwardRef<any, TextInputProps>(
               required={required}
               {...inputProps}
             />
-            {error && (
+            {error && !props?.endIcon && (
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <ExclamationCircleIconOutline
                   className="h-5 w-5 text-red-500"
@@ -66,6 +67,11 @@ export const TextInput = forwardRef<any, TextInputProps>(
                 />
               </div>
             )}
+            {props.endIcon ? (
+              <button className="pointer-events-none absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3">
+                {props.endIcon}
+              </button>
+            ) : null}
           </div>
           {error && errorText ? (
             <p className="mt-2 text-sm text-red-600" id={`${id}-error`}>

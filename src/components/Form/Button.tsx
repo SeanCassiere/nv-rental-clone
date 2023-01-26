@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { forwardRef } from "react";
 
 const buttonStyles = cva(
-  "flex justify-center h-max rounded-sm border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm",
+  "flex justify-center h-max rounded border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm",
   {
     variants: {
       color: {
