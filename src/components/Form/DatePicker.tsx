@@ -5,10 +5,12 @@ import ReactDatePicker, {
 
 import { TextInput } from "./index";
 import {
-  CalendarSolid,
+  CalendarOutline,
   ChevronLeftOutline,
   ChevronRightOutline,
 } from "../icons";
+import { dateFormat, getDateFnsLocale } from "../../i18n.config";
+import { useTranslation } from "react-i18next";
 
 type TSelectedReactDatePickerProps = Omit<
   ReactDatePickerProps,
@@ -20,13 +22,14 @@ type TSelectedReactDatePickerProps = Omit<
   | "dateFormat"
 >;
 
-interface DatePickerProps extends TSelectedReactDatePickerProps {
+export interface DatePickerProps extends TSelectedReactDatePickerProps {
   placeholderText: string;
   label?: string;
 }
 
 export const DatePicker = (props: DatePickerProps) => {
   const { ...pickerProps } = props;
+  const { i18n } = useTranslation();
 
   return (
     <div className="app-day-picker">
@@ -35,14 +38,17 @@ export const DatePicker = (props: DatePickerProps) => {
         customInput={
           <TextInput
             label={props?.label || props.placeholderText}
-            endIcon={<CalendarSolid className="h-4 w-4" />}
+            endIcon={<CalendarOutline className="h-4 w-4 text-gray-400" />}
+            autoComplete="off"
           />
         }
         calendarContainer={CalendarContainer}
         previousMonthButtonLabel={<ChevronLeftOutline className="h-4 w-4" />}
         nextMonthButtonLabel={<ChevronRightOutline className="h-4 w-4" />}
-        dateFormat="dd/MM/yyyy"
+        dateFormat={dateFormat}
         popperPlacement="bottom-start"
+        autoComplete="off"
+        locale={getDateFnsLocale(i18n.language)}
       />
     </div>
   );

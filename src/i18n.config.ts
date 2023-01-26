@@ -6,11 +6,18 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import { format as dateFnsFormat, type Locale } from "date-fns";
 import { enUS, enNZ, ru } from "date-fns/locale";
 
-const fnsLocales: Record<string, Locale> = {
+export const dateFormatWithTime = "dd/MM/yyyy hh:mm a";
+export const dateFormat = "dd/MM/yyyy";
+
+const dateFnsLocales: Record<string, Locale> = {
   "en-US": enUS,
   "en-NZ": enNZ,
   ru: ru,
 };
+export function getDateFnsLocale(lng?: string) {
+  if (lng && dateFnsLocales[lng]) return dateFnsLocales[lng];
+  return enUS;
+}
 
 const common = "common";
 
@@ -48,10 +55,9 @@ i18n
       escapeValue: false,
       format: (value, i18nFormat, lng, options) => {
         if (i18nFormat === "datetime") {
-          const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
           try {
-            return dateFnsFormat(new Date(value), "dd/MM/yyyy hh:mm a", {
-              locale,
+            return dateFnsFormat(new Date(value), dateFormatWithTime, {
+              locale: getDateFnsLocale(lng),
             });
           } catch (error) {
             return "could not parse for intlDateTime";
@@ -60,8 +66,9 @@ i18n
 
         if (i18nFormat === "monthyear") {
           try {
-            const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
-            return dateFnsFormat(new Date(value), "MM/yyyy", { locale });
+            return dateFnsFormat(new Date(value), "MM/yyyy", {
+              locale: getDateFnsLocale(lng),
+            });
           } catch (error) {
             return "could not parse for intlMonthYear";
           }
@@ -69,8 +76,9 @@ i18n
 
         if (i18nFormat === "date") {
           try {
-            const locale = lng && fnsLocales[lng] ? fnsLocales[lng] : enUS;
-            return dateFnsFormat(new Date(value), "dd/MM/yyyy", { locale });
+            return dateFnsFormat(new Date(value), dateFormat, {
+              locale: getDateFnsLocale(lng),
+            });
           } catch (error) {
             return "could not parse for intlDate";
           }

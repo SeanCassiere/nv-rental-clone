@@ -33,7 +33,7 @@ export const SelectInput = (props: SelectProps) => {
               {label}
             </Listbox.Label>
             <div className="relative mt-1">
-              <Listbox.Button className="relative w-full cursor-default rounded-sm border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm">
+              <Listbox.Button className="relative w-full cursor-default rounded border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm">
                 <span className="block truncate">
                   {typeof value?.value === "undefined" && placeHolderSchema
                     ? placeHolderSchema.label
@@ -54,7 +54,7 @@ export const SelectInput = (props: SelectProps) => {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {selectOptions.map((person, idx) => (
                     <Listbox.Option
                       key={`${person.value}.${idx}`}

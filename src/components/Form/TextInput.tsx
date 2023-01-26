@@ -37,12 +37,12 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           >
             {label}
           </label>
-          <div className="relative mt-1 rounded-md shadow-sm">
+          <div className="relative mt-1 rounded shadow-sm">
             <input
               type={type ?? "text"}
               id={id}
               className={classNames(
-                "block w-full rounded-sm border-gray-300 focus:outline-none sm:text-sm",
+                "block w-full rounded border-gray-300 focus:outline-none sm:text-sm",
                 error
                   ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
                   : "focus:border-teal-500 focus:ring-teal-500",

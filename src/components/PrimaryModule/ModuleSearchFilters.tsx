@@ -1,11 +1,13 @@
 import { useId, useState } from "react";
 import { type ZodSchema } from "zod";
+import { localDateToQueryYearMonthDay } from "../../utils/date";
 
 import {
   TextInput,
   MultiSelectInput,
   SelectInput,
   Button,
+  DatePicker,
   type TSelectInputOption,
 } from "../Form";
 type KeyValueObject = { [key: string]: any };
@@ -134,7 +136,20 @@ function ModuleSearchFilters<T extends KeyValueObject>(
       onSubmit={(evt) => {
         evt.preventDefault();
 
-        const insert = makeBackToArray(values, props.initialValues);
+        // convert dates to query format
+        const withDates = Object.entries(values).reduce((acc, [key, value]) => {
+          let setValue = value;
+          if (value instanceof Date) {
+            console.log(localDateToQueryYearMonthDay(value));
+            setValue = localDateToQueryYearMonthDay(value);
+          }
+          return {
+            ...acc,
+            [key]: setValue,
+          };
+        }, {});
+
+        const insert = makeBackToArray(withDates, props.initialValues);
 
         const result = props.validationSchema.safeParse(insert);
 
@@ -331,15 +346,36 @@ const RenderInput = <T extends KeyValueObject>({
     );
   }
 
+  // if (blueprint.type === "date") {
+  //   return (
+  //     <TextInput
+  //       type="date"
+  //       key={`input-${blueprint.queryKey}-${typeof value}`}
+  //       label={blueprint.label}
+  //       name={blueprint.queryKey}
+  //       value={typeof value === "undefined" ? "" : value}
+  //       onChange={onChange}
+  //     />
+  //   );
+  // }
+
   if (blueprint.type === "date") {
     return (
-      <TextInput
-        type="date"
-        key={`input-${blueprint.queryKey}-${typeof value}`}
-        label={blueprint.label}
+      <DatePicker
+        selected={
+          typeof value === "undefined" || value === null
+            ? undefined
+            : new Date(value)
+        }
+        placeholderText={blueprint.label}
         name={blueprint.queryKey}
-        value={typeof value === "undefined" ? "" : value}
-        onChange={onChange}
+        onChange={(date) => {
+          if (date) {
+            directSetter(date);
+          } else {
+            directSetter(undefined);
+          }
+        }}
       />
     );
   }
