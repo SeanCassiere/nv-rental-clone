@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import {
   InformationBlockCard,
@@ -9,7 +10,6 @@ import {
 } from "./common";
 import { UserSolid } from "../../icons";
 import { viewCustomerRoute } from "../../../routes/customers/viewCustomer";
-import { useTranslation } from "react-i18next";
 
 interface TCustomerInformationProps {
   data: {

@@ -12,6 +12,7 @@ import { useGetClientProfile } from "../../hooks/network/client/useGetClientProf
 import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
 import { useGetVehicleSummary } from "../../hooks/network/vehicle/useGetVehicleSummary";
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import VehicleInformation from "../PrimaryModule/ModuleInformation/VehicleInformation";
 
 type VehicleSummaryTabProps = {
   vehicleId: string;
@@ -35,7 +36,32 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   const tabsConfig = useMemo(() => {
     const tabs: ModuleTabConfigItem[] = [];
 
-    tabs.push({ id: "general", label: "General", component: "General" });
+    tabs.push({
+      id: "general",
+      label: "General",
+      component: (
+        <VehicleInformation
+          mode="vehicle"
+          isLoading={vehicleData.isLoading}
+          data={
+            vehicleData.data
+              ? {
+                  doors: vehicleData.data.vehicle?.doors,
+                  batteryLevel: vehicleData.data.vehicle?.batteryLevel,
+                  cylinders: vehicleData.data.vehicle?.cylinders,
+                  fuelLevel: vehicleData.data.vehicle?.fuelLevel,
+                  trim: vehicleData.data.vehicle?.trim,
+                  spotNo: vehicleData.data.vehicle?.spotNumber,
+                  tankSize: vehicleData.data.vehicle?.tankSize,
+                  fuelType: vehicleData.data.vehicle?.fuelType,
+                  transmission: vehicleData.data.vehicle?.transmission,
+                  originalOdometer: vehicleData.data.vehicle?.origionalOdometer,
+                }
+              : {}
+          }
+        />
+      ),
+    });
     tabs.push({ id: "ownership", label: "Ownership", component: "Ownership" });
     tabs.push({
       id: "license-and-insurance",
@@ -50,7 +76,7 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
     });
 
     return tabs;
-  }, []);
+  }, [vehicleData.data, vehicleData.isLoading]);
 
   const handleTabClick = useCallback((newTab: ModuleTabConfigItem) => {
     setCurrentTab(newTab.id);

@@ -9,11 +9,21 @@ interface TInformationBlockProps {
   heading: string;
   value: ReactNode;
   isLoading: boolean;
+  isHiddenOnMobile?: boolean;
 }
 
 const InformationBlock = (props: TInformationBlockProps) => {
+  const { isHiddenOnMobile } = props;
   return (
-    <div className="grid gap-0.5 border-b border-b-slate-200 px-4 pb-2">
+    <div
+      className={classNames(
+        {
+          hidden: isHiddenOnMobile,
+          grid: !isHiddenOnMobile,
+        },
+        "gap-0.5 border-b border-b-slate-200 px-4 pb-2 sm:grid"
+      )}
+    >
       <span className="select-none truncate text-base font-bold text-slate-800">
         {props.heading}
       </span>
@@ -34,8 +44,8 @@ export interface TInformationBlockCardProps {
 }
 export const InformationBlockCard = (props: TInformationBlockCardProps) => {
   return (
-    <div className="rounded border border-slate-200 bg-slate-50 pt-1">
-      <div className="flex select-none gap-4 border-b border-b-slate-200 px-4 py-2">
+    <div className="rounded border border-slate-200 bg-slate-50">
+      <div className="flex select-none gap-4 border-b border-b-slate-200 bg-slate-100 px-4 pt-3 pb-2">
         <span className="flex items-center justify-center text-slate-700">
           {props.icon}
         </span>

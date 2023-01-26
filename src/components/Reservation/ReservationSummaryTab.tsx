@@ -5,6 +5,7 @@ import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSu
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
+import VehicleInformation from "../PrimaryModule/ModuleInformation/VehicleInformation";
 
 type ReservationSummaryTabProps = {
   reservationId: string;
@@ -24,6 +25,7 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
+  const canViewVehicleInformation = true;
 
   return (
     <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
@@ -50,6 +52,21 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
                 reservationData.data?.customerDetails?.creditCardExpiryDate,
               creditCardSecurityCode:
                 reservationData.data?.customerDetails?.creditCardCVSNo,
+            }}
+            isLoading={reservationData.isLoading}
+          />
+        )}
+        {canViewVehicleInformation && (
+          <VehicleInformation
+            mode="reservation"
+            data={{
+              vehicleId: reservationData.data?.reservationview?.vehicleId,
+              vehicleNo: reservationData.data?.reservationview?.vehicleNo,
+              vehicleType: reservationData.data?.reservationview?.vehicleType,
+              licenseNo: reservationData.data?.reservationview?.licenseNo,
+              make: reservationData.data?.reservationview?.vehicleMakeName,
+              model: reservationData.data?.reservationview?.modelName,
+              year: reservationData.data?.reservationview?.year,
             }}
             isLoading={reservationData.isLoading}
           />

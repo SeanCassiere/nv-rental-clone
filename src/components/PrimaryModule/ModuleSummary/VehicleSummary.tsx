@@ -225,7 +225,7 @@ export const VehicleSummary = ({
   }));
 
   return (
-    <div className="grid divide-y divide-gray-200 rounded border border-slate-200 bg-slate-50 py-1 shadow-sm">
+    <div className="grid divide-y divide-gray-200 rounded border border-slate-200 bg-slate-50 pb-1 shadow-sm">
       <SummaryHeader
         title="Summary"
         icon={<CurrencyDollarSolid className="h-5 w-5 text-gray-700" />}

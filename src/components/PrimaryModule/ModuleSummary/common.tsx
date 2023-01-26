@@ -13,7 +13,7 @@ export const SummaryHeader = ({
   icon: ReactNode;
 }) => {
   return (
-    <div className="flex select-none items-center gap-4 py-2 px-4">
+    <div className="flex select-none items-center gap-4 bg-slate-100 px-4 pt-3 pb-2">
       <span>{icon}</span>
       <span className="truncate text-lg font-medium text-gray-700">
         {title}

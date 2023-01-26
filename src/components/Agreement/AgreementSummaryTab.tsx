@@ -5,6 +5,7 @@ import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSu
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
+import VehicleInformation from "../PrimaryModule/ModuleInformation/VehicleInformation";
 
 type AgreementSummaryTabProps = {
   agreementId: string;
@@ -15,6 +16,8 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
     agreementId: props.agreementId,
   });
 
+  const isCheckedIn = agreementData.data?.returnDate ? true : false;
+
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
     module: "agreements",
     referenceId: props.agreementId,
@@ -24,6 +27,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
+  const canViewVehicleInformation = true;
 
   return (
     <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
@@ -54,6 +58,31 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
               checkinDate: agreementData.data?.checkinDate,
             }}
             isLoading={agreementData.isLoading}
+          />
+        )}
+        {canViewVehicleInformation && (
+          <VehicleInformation
+            mode={
+              isCheckedIn ? "agreement-checked-in" : "agreement-checked-out"
+            }
+            isLoading={agreementData.isLoading}
+            data={
+              agreementData.data
+                ? {
+                    vehicleId: agreementData.data?.vehicleId,
+                    vehicleNo: agreementData.data?.vehicleNo,
+                    vehicleType: agreementData.data?.vehicleType,
+                    licenseNo: agreementData.data?.licenseNo,
+                    make: agreementData.data?.vehicleMakeName,
+                    model: agreementData.data?.modelName,
+                    year: agreementData.data?.year,
+                    fuelLevelOut: agreementData.data?.fuelLevelOut,
+                    fuelLevelIn: agreementData.data?.fuelLevelIn,
+                    odometerOut: agreementData.data?.odometerOut,
+                    odometerIn: agreementData.data?.odometerIn,
+                  }
+                : {}
+            }
           />
         )}
         {canViewRentalInformation && (

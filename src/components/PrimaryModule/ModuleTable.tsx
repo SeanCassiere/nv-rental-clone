@@ -68,7 +68,7 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
           (isDragging && isDisabled) || (isDragging && over?.disabled)
             ? "cursor-no-drop"
             : "",
-          isDragging ? "bg-slate-100" : "bg-slate-50 text-gray-700",
+          isDragging ? "bg-slate-200" : "bg-slate-100 text-gray-700",
           isDisabled
             ? "cursor-pointer text-gray-800 hover:cursor-not-allowed"
             : "cursor-grab"
@@ -167,7 +167,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   return (
     <div className="overflow-hidden rounded border border-slate-200">
       {showExtraActions && (
-        <div className="flex w-[100%] items-center justify-end bg-slate-50 px-4 pt-3 pb-1.5">
+        <div className="flex w-[100%] items-center justify-end bg-slate-100 px-4 pt-3 pb-1.5">
           {props.showColumnPicker && (
             <div className="relative">
               <Menu>
@@ -228,8 +228,8 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
           onDragEnd={handleDndDragEnd}
           modifiers={[restrictToHorizontalAxis]}
         >
-          <table className="min-w-full table-auto divide-y divide-slate-100 bg-slate-50">
-            <thead className="bg-slate-50">
+          <table className="min-w-full table-auto divide-y divide-slate-200 bg-slate-50">
+            <thead className="bg-slate-100">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   <SortableContext
@@ -247,7 +247,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                 </tr>
               ))}
             </thead>
-            <tbody className="divide-y divide-slate-200 bg-white">
+            <tbody className="divide-y divide-slate-200 bg-slate-50">
               {props.noRows === false &&
                 table.getRowModel().rows.map((row) => (
                   <tr key={row.id}>
