@@ -133,7 +133,6 @@ function CustomerViewPage() {
 
         <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
           <ModuleTabs
-            key={`changing-tab-${tabName}`}
             tabConfig={tabsConfig}
             startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
             onTabClick={onTabClick}
