@@ -62,6 +62,7 @@ export const router = new ReactRouter({
       <div>Code-split loading...</div>
     </div>
   ),
+  defaultPreload: "intent",
 });
 
 declare module "@tanstack/react-router" {
