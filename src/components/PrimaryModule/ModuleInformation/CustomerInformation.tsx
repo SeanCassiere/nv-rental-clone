@@ -111,7 +111,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
         value: data?.creditCardType || EMPTY_KEY,
       });
       blocks.push({
-        heading: "Card expiry",
+        heading: "Card expiration",
         value: data?.creditCardExpirationDate
           ? t("intlMonthYear", { value: data.creditCardExpirationDate })
           : EMPTY_KEY,
