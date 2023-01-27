@@ -138,7 +138,7 @@ const StatBlock = ({
   linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
 }) => {
   return (
-    <Link {...linkProps}>
+    <Link {...(linkProps as any)}>
       <div
         className={classNames(
           "group grid cursor-pointer grid-cols-7 overflow-hidden rounded border border-slate-200 bg-slate-50 px-4 py-4 transition-all duration-150 ease-in hover:bg-slate-100"
