@@ -23,6 +23,9 @@ import { titleMaker } from "../../utils/title-maker";
 const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")
 );
+const ModuleNotesTabContent = lazy(
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+);
 
 function AgreementViewPage() {
   const router = useRouter();
@@ -50,7 +53,9 @@ function AgreementViewPage() {
     tabs.push({
       id: "notes",
       label: "Notes",
-      component: "Notes Tab",
+      component: (
+        <ModuleNotesTabContent module="agreements" referenceId={agreementId} />
+      ),
     });
     tabs.push({
       id: "payments",

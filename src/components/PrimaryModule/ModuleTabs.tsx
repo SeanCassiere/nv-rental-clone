@@ -32,7 +32,11 @@ export const ModuleTabs = (props: {
   return (
     <div className="w-full">
       <Tab.Group selectedIndex={index} onChange={handleChangeIndex}>
-        <Tab.List className="mt-2 mb-2.5 flex w-max max-w-full gap-1 overflow-x-auto rounded py-1.5">
+        <Tab.List
+          className={classNames(
+            "mt-2 mb-2.5 flex w-max max-w-full gap-1 overflow-x-auto rounded py-1.5"
+          )}
+        >
           {props.tabConfig.map((item) => (
             <Tab key={`tab-header-${item.id}`} as={Fragment}>
               {({ selected }) => (
@@ -41,8 +45,7 @@ export const ModuleTabs = (props: {
                     selected
                       ? "bg-slate-100 text-slate-600 hover:shadow-sm"
                       : "font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700",
-                    "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-0",
-                    selected ? "" : ""
+                    "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-medium outline-none transition-all duration-200 ease-in-out focus:outline-none focus:ring focus:ring-inset focus:ring-slate-200"
                   )}
                 >
                   {item.label}
@@ -51,9 +54,12 @@ export const ModuleTabs = (props: {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className="w-full">
+        <Tab.Panels className={classNames("w-full")}>
           {props.tabConfig.map((item) => (
-            <Tab.Panel key={`tab-panel-${item.id}`}>
+            <Tab.Panel
+              key={`tab-panel-${item.id}`}
+              className="outline-none ring-0 focus:outline-none focus:ring-0"
+            >
               <Suspense
                 fallback={
                   <div className="text-aqua-500 text-lg font-semibold">

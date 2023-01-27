@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
 import type { TDashboardStats } from "../../utils/schemas/dashboard";
+import { indexRoute } from "../../routes";
 
 const DashboardStatsBlock = ({
   statistics,
@@ -28,21 +29,19 @@ const DashboardStatsBlock = ({
           title="Reservation"
           icon={CreditCardOutline}
           value={Number(statistics.todaysReservationCount).toString()}
-          linkProps={
-            {
-              to: "/reservations",
-              search: () => ({
-                page: 1,
-                size: 10,
-                filters: {
-                  Statuses: ["2"],
-                  CreatedDateFrom: localDateToQueryYearMonthDay(new Date()),
-                  CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
-                },
-              }),
-              preload: "intent",
-            } as any
-          }
+          linkProps={{
+            to: "/reservations",
+            search: () => ({
+              page: 1,
+              size: 10,
+              filters: {
+                Statuses: ["2"],
+                CreatedDateFrom: localDateToQueryYearMonthDay(new Date()),
+                CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
+              },
+            }),
+            preload: "intent",
+          }}
         />
       </li>
       <li>
@@ -50,21 +49,19 @@ const DashboardStatsBlock = ({
           title="Return"
           icon={ArrowDownRightOutline}
           value={Number(statistics.todaysArrivalsCount).toString()}
-          linkProps={
-            {
-              to: "/agreements",
-              search: () => ({
-                page: 1,
-                size: 10,
-                filters: {
-                  EndDate: localDateToQueryYearMonthDay(new Date()),
-                  Statuses: ["2"],
-                  IsSearchOverdues: false,
-                },
-              }),
-              preload: "intent",
-            } as any
-          }
+          linkProps={{
+            to: "/agreements",
+            search: () => ({
+              page: 1,
+              size: 10,
+              filters: {
+                EndDate: localDateToQueryYearMonthDay(new Date()),
+                Statuses: ["2"],
+                IsSearchOverdues: false,
+              },
+            }),
+            preload: "intent",
+          }}
         />
       </li>
       <li>
@@ -72,17 +69,15 @@ const DashboardStatsBlock = ({
           title="On rent"
           icon={TruckOutline}
           value={Number(statistics.openAgreement).toString()}
-          linkProps={
-            {
-              to: "/agreements",
-              search: () => ({
-                page: 1,
-                size: 10,
-                filters: { Statuses: ["2"] },
-              }),
-              preload: "intent",
-            } as any
-          }
+          linkProps={{
+            to: "/agreements", // because searchAgreementsRoute has trailing slash bug
+            search: () => ({
+              page: 1,
+              size: 10,
+              filters: { Statuses: ["2"] },
+            }),
+            preload: "intent",
+          }}
         />
       </li>
       <li>
@@ -90,17 +85,15 @@ const DashboardStatsBlock = ({
           title="Overdue"
           icon={CreditCardOutline}
           value={Number(statistics.overDues).toString()}
-          linkProps={
-            {
-              to: "/agreements",
-              search: () => ({
-                page: 1,
-                size: 10,
-                filters: { Statuses: ["2"], IsSearchOverdues: true },
-              }),
-              preload: "intent",
-            } as any
-          }
+          linkProps={{
+            to: "/agreements",
+            search: () => ({
+              page: 1,
+              size: 10,
+              filters: { Statuses: ["2"], IsSearchOverdues: true },
+            }),
+            preload: "intent",
+          }}
         />
       </li>
       <li>
@@ -108,17 +101,15 @@ const DashboardStatsBlock = ({
           title="Pending payment"
           icon={BankNotesOutline}
           value={Number(statistics.pendingPayment).toString()}
-          linkProps={
-            {
-              to: "/agreements",
-              search: () => ({
-                page: 1,
-                size: 10,
-                filters: { Statuses: ["5"] },
-              }),
-              preload: "intent",
-            } as any
-          }
+          linkProps={{
+            to: "/agreements",
+            search: () => ({
+              page: 1,
+              size: 10,
+              filters: { Statuses: ["5"] },
+            }),
+            preload: "intent",
+          }}
         />
       </li>
       <li>
@@ -126,6 +117,9 @@ const DashboardStatsBlock = ({
           title="Service alert"
           icon={BellIconOutline}
           value={Number(statistics.serviceAlerts).toString()}
+          linkProps={{
+            to: indexRoute.id,
+          }}
         />
       </li>
     </ul>

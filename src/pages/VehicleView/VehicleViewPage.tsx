@@ -30,6 +30,10 @@ const VehicleAgreementsTab = lazy(
   () => import("../../components/Vehicle/VehicleAgreementsTab")
 );
 
+const ModuleNotesTabContent = lazy(
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+);
+
 function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
@@ -68,7 +72,9 @@ function VehicleViewPage() {
     tabs.push({
       id: "notes",
       label: "Notes",
-      component: "Notes Tab",
+      component: (
+        <ModuleNotesTabContent module="vehicles" referenceId={vehicleId} />
+      ),
     });
     tabs.push({
       id: "documents",

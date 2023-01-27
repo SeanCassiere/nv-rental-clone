@@ -129,7 +129,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
         <Dialog
           as="div"
           className="fixed inset-0 z-40 flex md:hidden"
-          onClose={setSidebarOpen}
+          onClose={() => setSidebarOpen(false)}
         >
           <Transition.Child
             as={Fragment}
@@ -140,7 +140,10 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+            <Dialog.Overlay
+              className="fixed inset-0 bg-gray-600 bg-opacity-75"
+              aria-hidden="true"
+            />
           </Transition.Child>
           <Transition.Child
             as={Fragment}
@@ -151,7 +154,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex w-full max-w-xs flex-1 flex-col bg-slate-50 pt-5 pb-4">
+            <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-slate-50 pt-5 pb-4">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -188,33 +191,34 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                 <nav className="space-y-1 px-2">
                   {/* render in mobile sidebar */}
                   {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href as any}
-                      className={classNames(
-                        item.current
-                          ? "bg-slate-100 text-teal-400"
-                          : "text-slate-600 hover:bg-slate-50 hover:text-teal-500",
-                        "group flex items-center rounded-md px-2 py-2 text-base font-medium"
-                      )}
-                      preload="intent"
-                      {...item.props}
-                    >
-                      <item.icon
+                    <span key={item.name} onClick={() => setSidebarOpen(false)}>
+                      <Link
+                        to={item.href as any}
+                        preload="intent"
                         className={classNames(
                           item.current
-                            ? "text-teal-400"
-                            : "text-slate-400 group-hover:text-teal-500",
-                          "mr-4 h-6 w-6 flex-shrink-0"
+                            ? "bg-slate-100 text-teal-400"
+                            : "text-slate-600 hover:bg-slate-50 hover:text-teal-500",
+                          "group flex items-center rounded-md px-2 py-2 text-base font-medium"
                         )}
-                        aria-hidden="true"
-                      />
-                      {item.name}
-                    </Link>
+                        {...item.props}
+                      >
+                        <item.icon
+                          className={classNames(
+                            item.current
+                              ? "text-teal-400"
+                              : "text-slate-400 group-hover:text-teal-500",
+                            "mr-4 h-6 w-6 flex-shrink-0"
+                          )}
+                          aria-hidden="true"
+                        />
+                        {item.name}
+                      </Link>
+                    </span>
                   ))}
                 </nav>
               </div>
-            </div>
+            </Dialog.Panel>
           </Transition.Child>
           <div className="w-14 flex-shrink-0" aria-hidden="true">
             {/* Dummy element to force sidebar to shrink to fit close icon */}
@@ -272,7 +276,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
           <button
             type="button"
-            className="border-r border-slate-200 px-4 text-slate-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500 md:hidden"
+            className="border-r border-slate-200 px-4 text-slate-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 md:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>

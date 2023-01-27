@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parse, isBefore } from "date-fns";
 
 export const ReservationFiltersSchema = z
   .object({
@@ -15,11 +16,23 @@ export const ReservationFiltersSchema = z
     ReservationTypes: z.coerce.string().optional(),
   })
   .superRefine(({ CreatedDateFrom, CreatedDateTo }, ctx) => {
-    if (CreatedDateFrom && CreatedDateTo && CreatedDateFrom > CreatedDateTo) {
-      ctx.addIssue({
-        message: "CreatedDateFrom must be before the CreatedDateTo",
-        code: "custom",
-      });
+    if (CreatedDateFrom && CreatedDateTo) {
+      const createdDateFromParsed = parse(
+        CreatedDateFrom,
+        "yyyy-MM-dd",
+        new Date()
+      );
+      const createdDateToParsed = parse(
+        CreatedDateTo,
+        "yyyy-MM-dd",
+        new Date()
+      );
+      if (isBefore(createdDateToParsed, createdDateFromParsed)) {
+        ctx.addIssue({
+          message: "Start date must be before the End date",
+          code: "custom",
+        });
+      }
     }
   });
 

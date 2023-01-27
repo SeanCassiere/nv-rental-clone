@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parse, isBefore } from "date-fns";
 
 export const AgreementFiltersSchema = z
   .object({
@@ -18,11 +19,16 @@ export const AgreementFiltersSchema = z
     AgreementTypes: z.coerce.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
-    if (StartDate && EndDate && StartDate > EndDate) {
-      ctx.addIssue({
-        message: "Start date must be before the End date",
-        code: "custom",
-      });
+    if (StartDate && EndDate) {
+      const startDateParsed = parse(StartDate, "yyyy-MM-dd", new Date());
+      const endDateParsed = parse(EndDate, "yyyy-MM-dd", new Date());
+
+      if (isBefore(endDateParsed, startDateParsed)) {
+        ctx.addIssue({
+          message: "Start date must be before the End date",
+          code: "custom",
+        });
+      }
     }
   });
 

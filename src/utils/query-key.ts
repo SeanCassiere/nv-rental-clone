@@ -19,6 +19,7 @@ export const agreementQKeys = {
   viewKey: "view-agreement",
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [agreementQKeys.viewKey, id, "summary"],
+  notes: (id: ReferenceId) => [agreementQKeys.viewKey, id, "notes"],
 };
 
 export const reservationQKeys = {
@@ -38,6 +39,7 @@ export const reservationQKeys = {
   viewKey: "view-reservation",
   id: (id: ReferenceId) => [reservationQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
+  notes: (id: ReferenceId) => [reservationQKeys.viewKey, id, "notes"],
 };
 
 export const customerQKeys = {
@@ -56,6 +58,7 @@ export const customerQKeys = {
   viewKey: "view-customer",
   id: (id: ReferenceId) => [customerQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [customerQKeys.viewKey, id, "summary"],
+  notes: (id: ReferenceId) => [customerQKeys.viewKey, id, "notes"],
 };
 
 export const vehicleQKeys = {
@@ -74,6 +77,7 @@ export const vehicleQKeys = {
   viewKey: "view-vehicle",
   id: (id: ReferenceId) => [vehicleQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [vehicleQKeys.viewKey, id, "summary"],
+  notes: (id: ReferenceId) => [vehicleQKeys.viewKey, id, "notes"],
 };
 
 export const clientQKeys = {

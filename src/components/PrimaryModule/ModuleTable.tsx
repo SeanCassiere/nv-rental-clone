@@ -24,7 +24,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Menu } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 
 import { EyeSlashOutline } from "../icons";
 import { type TColumnListItemParsed } from "../../utils/schemas/column";
@@ -174,48 +174,57 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                 <Menu.Button className="rounded-full bg-slate-200 p-2 text-xs text-slate-700 shadow-sm transition-all duration-150 hover:bg-teal-500">
                   <EyeSlashOutline className="h-5 w-5" />
                 </Menu.Button>
-                <Menu.Items
-                  onBlur={() => {
-                    if (!hasVisibilityChanges) return;
-                    setHasVisibilityChanges(false);
-                    if (props.onColumnVisibilityChange) {
-                      props.onColumnVisibilityChange(columnVisibility);
-                    }
-                  }}
-                  className="absolute top-12 right-0 max-h-96 w-72 overflow-y-auto bg-white py-2 shadow md:max-h-80 md:w-64"
+                <Transition
+                  enter="transition duration-100 ease-out"
+                  enterFrom="transform scale-95 opacity-0"
+                  enterTo="transform scale-100 opacity-100"
+                  leave="transition duration-75 ease-out"
+                  leaveFrom="transform scale-100 opacity-100"
+                  leaveTo="transform scale-95 opacity-0"
                 >
-                  {table.getAllLeafColumns().map((column) => (
-                    <Menu.Item
-                      key={`select-column-${column.id}`}
-                      disabled={lockedColumns.includes(column.id)}
-                    >
-                      {() => (
-                        <>
-                          <div className="flex items-center gap-2 py-2 px-4 hover:bg-slate-50">
-                            <input
-                              type="checkbox"
-                              checked={column.getIsVisible()}
-                              onChange={(evt) => {
-                                setHasVisibilityChanges(true);
-                                column.getToggleVisibilityHandler()(evt);
-                              }}
-                              id={`html-for-${column.id}`}
-                              name={`html-for-${column.id}`}
-                              className="rounded-full text-teal-500 disabled:text-slate-400"
-                              disabled={lockedColumns.includes(column.id)}
-                            />
-                            <label
-                              className="w-full select-none text-slate-600"
-                              htmlFor={`html-for-${column.id}`}
-                            >
-                              {getColumnDescription(column.id)}
-                            </label>
-                          </div>
-                        </>
-                      )}
-                    </Menu.Item>
-                  ))}
-                </Menu.Items>
+                  <Menu.Items
+                    onBlur={() => {
+                      if (!hasVisibilityChanges) return;
+                      setHasVisibilityChanges(false);
+                      if (props.onColumnVisibilityChange) {
+                        props.onColumnVisibilityChange(columnVisibility);
+                      }
+                    }}
+                    className="absolute top-12 right-0 max-h-96 w-72 overflow-y-auto bg-white py-2 shadow md:max-h-80 md:w-64"
+                  >
+                    {table.getAllLeafColumns().map((column) => (
+                      <Menu.Item
+                        key={`select-column-${column.id}`}
+                        disabled={lockedColumns.includes(column.id)}
+                      >
+                        {() => (
+                          <>
+                            <div className="flex items-center gap-2 py-2 px-4 hover:bg-slate-50">
+                              <input
+                                type="checkbox"
+                                checked={column.getIsVisible()}
+                                onChange={(evt) => {
+                                  setHasVisibilityChanges(true);
+                                  column.getToggleVisibilityHandler()(evt);
+                                }}
+                                id={`html-for-${column.id}`}
+                                name={`html-for-${column.id}`}
+                                className="rounded-full text-teal-500 disabled:text-slate-400"
+                                disabled={lockedColumns.includes(column.id)}
+                              />
+                              <label
+                                className="w-full select-none text-slate-600"
+                                htmlFor={`html-for-${column.id}`}
+                              >
+                                {getColumnDescription(column.id)}
+                              </label>
+                            </div>
+                          </>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </Menu.Items>
+                </Transition>
               </Menu>
             </div>
           )}
