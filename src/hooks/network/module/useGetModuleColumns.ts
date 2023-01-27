@@ -13,7 +13,7 @@ import {
   type TColumnListItemParsed,
 } from "../../../utils/schemas/column";
 
-const selectorKey = (module: AppPrimaryModuleType) => {
+export const allModulesKeySelector = (module: AppPrimaryModuleType) => {
   switch (module) {
     case "reservations":
       return reservationQKeys;
@@ -33,7 +33,7 @@ export function useGetModuleColumns({
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: selectorKey(module).columns(),
+    queryKey: allModulesKeySelector(module).columns(),
     queryFn: () =>
       fetchModuleColumnsModded({
         clientId: auth.user?.profile.navotar_clientid || "",

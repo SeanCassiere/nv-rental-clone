@@ -23,6 +23,9 @@ import { titleMaker } from "../../utils/title-maker";
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")
 );
+const ModuleNotesTabContent = lazy(
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+);
 
 function ReservationViewPage() {
   const router = useRouter();
@@ -47,7 +50,12 @@ function ReservationViewPage() {
     tabs.push({
       id: "notes",
       label: "Notes",
-      component: "Notes Tab",
+      component: (
+        <ModuleNotesTabContent
+          module="reservations"
+          referenceId={reservationId}
+        />
+      ),
     });
     tabs.push({
       id: "payments",
