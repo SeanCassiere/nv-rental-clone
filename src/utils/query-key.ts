@@ -20,6 +20,7 @@ export const agreementQKeys = {
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [agreementQKeys.viewKey, id, "summary"],
   notes: (id: ReferenceId) => [agreementQKeys.viewKey, id, "notes"],
+  exchanges: (id: ReferenceId) => [agreementQKeys.viewKey, id, "exchanges"],
 };
 
 export const reservationQKeys = {

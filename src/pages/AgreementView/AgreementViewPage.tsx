@@ -26,6 +26,9 @@ const SummaryTab = lazy(
 const ModuleNotesTabContent = lazy(
   () => import("../../components/PrimaryModule/ModuleNotesTabContent")
 );
+const AgreementExchangesTab = lazy(
+  () => import("../../components/Agreement/AgreementExchangesTab")
+);
 
 function AgreementViewPage() {
   const router = useRouter();
@@ -76,6 +79,11 @@ function AgreementViewPage() {
       id: "charges",
       label: "Charges",
       component: "Charges Tab",
+    });
+    tabs.push({
+      id: "exchanges",
+      label: "Exchanges",
+      component: <AgreementExchangesTab referenceId={agreementId} />,
     });
     return tabs;
   }, [agreementId]);
