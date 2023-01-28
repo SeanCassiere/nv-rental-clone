@@ -1,6 +1,7 @@
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type VehicleDataParsed } from "../../../utils/schemas/vehicle";
 import { useGetVehicleStatusList } from "../../../hooks/network/vehicle/useGetVehicleStatusList";
+import classNames from "classnames";
 
 const VehicleModuleStatBlock = ({
   vehicle,
@@ -29,9 +30,9 @@ const VehicleModuleStatBlock = ({
       subtitle="See what's going on with this vehicle."
     >
       <ModuleStatBlock
-        header="Status"
+        header="Fleet status"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {getStatusById(vehicle?.vehicle.statusId)}
           </span>
         }
@@ -39,7 +40,7 @@ const VehicleModuleStatBlock = ({
       <ModuleStatBlock
         header="Vehicle type"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {vehicle?.vehicle.vehicleType ?? "-"}
           </span>
         }
@@ -47,7 +48,7 @@ const VehicleModuleStatBlock = ({
       <ModuleStatBlock
         header="License no."
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {vehicle?.vehicle.licenseNo ?? "-"}
           </span>
         }
@@ -55,7 +56,7 @@ const VehicleModuleStatBlock = ({
       <ModuleStatBlock
         header="Make & model"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {getVehicleName()}
           </span>
         }
@@ -63,7 +64,7 @@ const VehicleModuleStatBlock = ({
       <ModuleStatBlock
         header="Year"
         stat={
-          <span className="select-none truncate text-2xl font-bold text-slate-600">
+          <span className="select-none truncate text-xl font-bold text-slate-600 xl:text-2xl">
             {vehicle?.vehicle.year ?? "-"}
           </span>
         }
@@ -71,7 +72,7 @@ const VehicleModuleStatBlock = ({
       <ModuleStatBlock
         header="Color"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {vehicle?.vehicle.color ?? "-"}
           </span>
         }
@@ -79,16 +80,21 @@ const VehicleModuleStatBlock = ({
       <ModuleStatBlock
         header="Odometer"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {vehicle?.vehicle.currentOdometer ?? "0"}
           </span>
         }
       />
       <ModuleStatBlock
-        header="In fleet?"
+        header="State"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
-            {vehicle?.vehicle.active ? "Online" : "Offline"}
+          <span
+            className={classNames(
+              "select-none text-xl font-bold xl:text-2xl",
+              vehicle?.vehicle.active ? "text-slate-600" : "text-red-500"
+            )}
+          >
+            {vehicle?.vehicle.active ? "Active" : "Inactive"}
           </span>
         }
       />

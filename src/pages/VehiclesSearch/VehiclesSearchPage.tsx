@@ -106,7 +106,7 @@ function VehiclesSearchPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-gray-700">
+          <h2 className="select-none text-2xl font-semibold leading-tight tracking-tight text-gray-700">
             Vehicles
           </h2>
         </div>
@@ -139,7 +139,7 @@ function VehiclesSearchPage() {
                   type: "single-dropdown",
                   required: false,
                   accessor: "VehicleStatus",
-                  label: "Status",
+                  label: "Fleet status",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
                     ...vehicleStatusList.data.map((item) => ({
