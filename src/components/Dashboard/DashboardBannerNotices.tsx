@@ -1,8 +1,14 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import type { TDashboardNotice } from "../../utils/schemas/dashboard";
+
 import { MegaPhoneOutline, XMarkOutline } from "../icons";
+import type { TDashboardNotice } from "../../utils/schemas/dashboard";
+import {
+  getLocalStorageForUser,
+  setLocalStorageForUser,
+  userLocalStorageKeys,
+} from "../../utils/user-local-storage";
 
 const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
   const auth = useAuth();
@@ -10,11 +16,27 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
 
   const onDismiss = () => {
     setShow(false);
-    const localStorageKey = `${auth.user?.profile.navotar_clientid}:${auth.user?.profile.navotar_userid}:dismissed-notices`;
-    const local = localStorage.getItem(localStorageKey);
+    if (
+      !auth.user?.profile.navotar_clientid ||
+      !auth.user?.profile.navotar_userid
+    )
+      return;
+
+    const local = getLocalStorageForUser(
+      auth.user?.profile.navotar_clientid,
+      auth.user?.profile.navotar_userid,
+      userLocalStorageKeys.dismissedNotices
+    );
     const data: string[] = local ? JSON.parse(local) : [];
+
     data.push(notice.id);
-    localStorage.setItem(localStorageKey, JSON.stringify(data));
+
+    setLocalStorageForUser(
+      auth.user?.profile.navotar_clientid,
+      auth.user?.profile.navotar_userid,
+      "dismissed-notices",
+      JSON.stringify(data)
+    );
   };
 
   if (!show) return null;

@@ -5,9 +5,15 @@ import { useTranslation } from "react-i18next";
 import { fetchUserProfile } from "../../../api/users";
 import { userQKeys } from "../../../utils/query-key";
 import { UserProfileSchema } from "../../../utils/schemas/user";
+import { dfnsDateFormat, dfnsTimeFormat } from "../../../i18n.config";
+import {
+  setLocalStorageForUser,
+  userLocalStorageKeys,
+} from "../../../utils/user-local-storage";
 
 export function useGetUserProfile() {
   const { i18n } = useTranslation();
+
   const auth = useAuth();
   const query = useQuery({
     queryKey: userQKeys.me(),
@@ -21,6 +27,27 @@ export function useGetUserProfile() {
     onSuccess: (data) => {
       if (data?.language) {
         i18n.changeLanguage(data.language);
+      }
+
+      if (
+        auth.user?.profile.navotar_clientid &&
+        auth.user?.profile.navotar_userid
+      ) {
+        const clientId = auth.user?.profile.navotar_clientid;
+        const userId = auth.user?.profile.navotar_userid;
+
+        setLocalStorageForUser(
+          clientId,
+          userId,
+          userLocalStorageKeys.dateFormat,
+          data?.overrideDateFormat || dfnsDateFormat
+        );
+        setLocalStorageForUser(
+          clientId,
+          userId,
+          userLocalStorageKeys.timeFormat,
+          data?.overrideTimeFormat || dfnsTimeFormat
+        );
       }
     },
   });
