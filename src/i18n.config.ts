@@ -5,9 +5,11 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import { format as dateFnsFormat, type Locale } from "date-fns";
 import { enUS, enNZ, ru } from "date-fns/locale";
+import { getAuthToken } from "./utils/authLocal";
+import { getLocalStorageForUser } from "./utils/user-local-storage";
 
-export const dateFormatWithTime = "dd/MM/yyyy hh:mm a";
-export const dateFormat = "dd/MM/yyyy";
+export const dfnsTimeFormat = "hh:mm a";
+export const dfnsDateFormat = "dd/MM/yyyy";
 
 const dateFnsLocales: Record<string, Locale> = {
   "en-US": enUS,
@@ -55,12 +57,30 @@ i18n
       escapeValue: false,
       format: (value, i18nFormat, lng, options) => {
         if (i18nFormat === "datetime") {
+          const auth = getAuthToken();
+          const clientId = auth?.profile.navotar_clientid;
+          const userId = auth?.profile.navotar_userid;
+
+          const dateFormat =
+            getLocalStorageForUser(
+              clientId ?? "",
+              userId ?? "",
+              "date-format"
+            ) || dfnsDateFormat;
+          const timeFormat =
+            getLocalStorageForUser(
+              clientId ?? "",
+              userId ?? "",
+              "time-format"
+            ) || dfnsTimeFormat;
+          const dfnsDateFormatWithTime = `${dateFormat} ${timeFormat}`;
+
           try {
-            return dateFnsFormat(new Date(value), dateFormatWithTime, {
+            return dateFnsFormat(new Date(value), dfnsDateFormatWithTime, {
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
-            return "could not parse for intlDateTime";
+            return "intlDateTime";
           }
         }
 
@@ -70,17 +90,27 @@ i18n
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
-            return "could not parse for intlMonthYear";
+            return "intlMonthYear";
           }
         }
 
         if (i18nFormat === "date") {
+          const auth = getAuthToken();
+          const clientId = auth?.profile.navotar_clientid;
+          const userId = auth?.profile.navotar_userid;
+
+          const dateFormat =
+            getLocalStorageForUser(
+              clientId ?? "",
+              userId ?? "",
+              "date-format"
+            ) || dfnsDateFormat;
           try {
             return dateFnsFormat(new Date(value), dateFormat, {
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
-            return "could not parse for intlDate";
+            return "intlDate";
           }
         }
 

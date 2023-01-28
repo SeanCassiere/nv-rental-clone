@@ -7,6 +7,7 @@ const ApiResponseMetaSchema = z.object({
   totalRecords: z.number().default(1),
   status: z.number().default(200),
   ok: z.boolean().default(true),
+  isRequestMade: z.boolean().default(false),
 });
 
 export function validateApiResWithZodSchema<TItemSchema extends z.ZodSchema>(

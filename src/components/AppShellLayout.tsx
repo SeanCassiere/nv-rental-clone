@@ -18,16 +18,7 @@ import {
   TruckFilled,
 } from "./icons";
 import { useGetUserProfile } from "../hooks/network/user/useGetUserProfile";
-
-export function removeAllLocalStorageKeysForUser(
-  clientId: string,
-  userId: string
-) {
-  const localStorageKeyPrefix = `${clientId}:${userId}:`;
-  Object.keys(window.localStorage)
-    .filter((key) => key.startsWith(localStorageKeyPrefix))
-    .forEach((key) => window.localStorage.removeItem(key));
-}
+import { removeAllLocalStorageKeysForUser } from "../utils/user-local-storage";
 
 const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -301,6 +292,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                     placeholder="Search"
                     type="search"
                     name="search"
+                    autoComplete="off"
                   />
                 </div>
               </form>

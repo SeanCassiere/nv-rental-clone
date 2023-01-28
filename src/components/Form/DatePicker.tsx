@@ -2,6 +2,8 @@ import ReactDatePicker, {
   type ReactDatePickerProps,
   CalendarContainer,
 } from "react-datepicker";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import { TextInput } from "./index";
 import {
@@ -9,8 +11,11 @@ import {
   ChevronLeftOutline,
   ChevronRightOutline,
 } from "../icons";
-import { dateFormat, getDateFnsLocale } from "../../i18n.config";
-import { useTranslation } from "react-i18next";
+import { dfnsDateFormat, getDateFnsLocale } from "../../i18n.config";
+import {
+  getLocalStorageForUser,
+  userLocalStorageKeys,
+} from "../../utils/user-local-storage";
 
 type TSelectedReactDatePickerProps = Omit<
   ReactDatePickerProps,
@@ -30,6 +35,21 @@ export interface DatePickerProps extends TSelectedReactDatePickerProps {
 export const DatePicker = (props: DatePickerProps) => {
   const { ...pickerProps } = props;
   const { i18n } = useTranslation();
+  const auth = useAuth();
+
+  const clientId = auth.user?.profile.navotar_clientid;
+  const userId = auth.user?.profile.navotar_userid;
+
+  const fromStorage =
+    clientId && userId
+      ? getLocalStorageForUser(
+          clientId,
+          userId,
+          userLocalStorageKeys.dateFormat
+        )
+      : null;
+
+  const dateFormat = fromStorage ? fromStorage : dfnsDateFormat;
 
   return (
     <div className="app-day-picker">

@@ -20,7 +20,7 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Status"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {reservation?.reservationview.reservationStatusName ?? "-"}
           </span>
         }
@@ -29,7 +29,7 @@ const ReservationModuleStatBlock = ({
         <ModuleStatBlock
           header="Cancellation date"
           stat={
-            <span className="select-none text-2xl font-bold text-slate-600">
+            <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
               {reservation?.reservationview.canceledDate
                 ? t("intlDateTime", {
                     value: reservation?.reservationview.canceledDate,
@@ -42,7 +42,7 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Reservation type"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {reservation?.reservationview.reservationType ?? "-"}
           </span>
         }
@@ -50,7 +50,7 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Vehicle type"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {reservation?.reservationview.vehicleType ?? "-"}
           </span>
         }
@@ -58,7 +58,7 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkout date"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {reservation?.reservationview.startDate
               ? t("intlDateTime", {
                   value: reservation?.reservationview.startDate,
@@ -70,7 +70,7 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkout location"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {reservation?.reservationview.startLocationName ?? "-"}
           </span>
         }
@@ -78,7 +78,7 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkin date"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {reservation?.reservationview.endDate
               ? t("intlDateTime", {
                   value: reservation?.reservationview.endDate,
@@ -90,7 +90,7 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkout location"
         stat={
-          <span className="select-none text-2xl font-bold text-slate-600">
+          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
             {reservation?.reservationview.endLocationName ?? "-"}
           </span>
         }

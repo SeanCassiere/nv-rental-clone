@@ -1,8 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
+
 import { fetchDashboardNoticeList } from "../../../api/dashboard";
 import { dashboardQKeys } from "../../../utils/query-key";
 import { DashboardNoticeListParsed } from "../../../utils/schemas/dashboard";
+import {
+  getLocalStorageForUser,
+  userLocalStorageKeys,
+} from "../../../utils/user-local-storage";
 
 export function useGetDashboardNoticeList() {
   const auth = useAuth();
@@ -30,8 +35,10 @@ export async function fetchDashboardNoticeListModded({
   return await fetchDashboardNoticeList()
     .then((data) => DashboardNoticeListParsed.parse(data))
     .then((res) => {
-      const local = window.localStorage.getItem(
-        `${navotar_clientid}:${navotar_userid}:dismissed-notices`
+      const local = getLocalStorageForUser(
+        navotar_clientid,
+        navotar_userid,
+        userLocalStorageKeys.dismissedNotices
       );
       const dismissedNoticeIds: string[] = local ? JSON.parse(local) : [];
 
