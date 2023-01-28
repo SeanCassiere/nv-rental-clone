@@ -17,6 +17,7 @@ export function makeInitialApiData<T>(initialData: T) {
     totalRecords: 0,
     status: 200,
     ok: true,
+    isRequestMade: false,
   };
 }
 
@@ -106,6 +107,7 @@ export const handleSuccess = async (response: Response) => {
     totalPages,
     totalRecords,
     data: await response.json(),
+    isRequestMade: true,
   };
 };
 
