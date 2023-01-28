@@ -145,9 +145,6 @@ function AgreementViewPage() {
                       className="flex max-w-[230px] items-center truncate pl-2 text-xl text-gray-900 md:max-w-full"
                     >
                       {agreement?.data?.agreementNumber}
-                      {agreement.data && (
-                        <>&nbsp;-&nbsp;{agreement.data.agreementType}</>
-                      )}
                     </Link>
                   </div>
                 </li>
