@@ -27,13 +27,13 @@ function Protector({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     return auth.events.addAccessTokenExpiring(() => {
-      if (
-        window.confirm(
-          "You're about to be signed out due to inactivity. Press continue to stay signed in."
-        )
-      ) {
-        auth.signinSilent();
-      }
+      auth.signinSilent();
+    });
+  }, [auth, auth.events, auth.signinSilent]);
+
+  useEffect(() => {
+    return auth.events.addAccessTokenExpired(() => {
+      auth.signinSilent();
     });
   }, [auth, auth.events, auth.signinSilent]);
 
@@ -54,7 +54,11 @@ function Protector({ children }: { children: React.ReactNode }) {
 
   const isAuthenticated = auth.isAuthenticated;
 
-  return <>{isAuthenticated ? children : null}</>;
+  return isAuthenticated ? (
+    <>{children}</>
+  ) : (
+    <div>Protector auth loading...</div>
+  );
 }
 
 export default Protector;
