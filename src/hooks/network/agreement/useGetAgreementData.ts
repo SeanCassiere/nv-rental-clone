@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
+
 import { fetchAgreementData } from "../../../api/agreements";
 import { agreementQKeys } from "../../../utils/query-key";
-import { type AgreementDataParsed } from "../../../utils/schemas/agreement";
 
 export function useGetAgreementData(params: {
   agreementId: string | number;
   onError?: (err: unknown) => void;
 }) {
   const auth = useAuth();
-  const query = useQuery<AgreementDataParsed>({
+  const query = useQuery({
     queryKey: agreementQKeys.id(params.agreementId),
     queryFn: async () =>
       fetchAgreementData({

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { reservationsRoute } from ".";
 import { queryClient as qc } from "../../App";
 import { fetchRentalRateSummaryAmounts } from "../../api/summary";
+import { fetchReservationData } from "../../api/reservation";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { reservationQKeys } from "../../utils/query-key";
@@ -33,6 +34,24 @@ export const viewReservationRoute = new Route({
                 module: "reservations",
                 referenceId: reservationId,
               }),
+          })
+        );
+      }
+
+      const dataKey = reservationQKeys.id(reservationId);
+      if (!qc.getQueryData(dataKey)) {
+        promises.push(
+          qc.prefetchQuery({
+            queryKey: dataKey,
+            queryFn: () => {
+              return fetchReservationData({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                reservationId,
+              });
+            },
+            retry: 0,
           })
         );
       }

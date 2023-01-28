@@ -3,6 +3,8 @@ import { z } from "zod";
 
 import { vehiclesRoute } from ".";
 import { fetchVehicleSummaryAmounts } from "../../api/summary";
+import { fetchVehicleData } from "../../api/vehicles";
+
 import { queryClient as qc } from "../../App";
 import { getAuthToken } from "../../utils/authLocal";
 import { vehicleQKeys } from "../../utils/query-key";
@@ -32,6 +34,25 @@ export const viewVehicleRoute = new Route({
                 vehicleId,
                 clientDate: new Date(),
               }),
+          })
+        );
+      }
+
+      const dataKey = vehicleQKeys.id(vehicleId);
+      if (!qc.getQueryData(dataKey)) {
+        promises.push(
+          qc.prefetchQuery({
+            queryKey: dataKey,
+            queryFn: () => {
+              return fetchVehicleData({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                vehicleId,
+                clientTime: new Date(),
+              });
+            },
+            retry: 0,
           })
         );
       }
