@@ -4,6 +4,7 @@ import { z } from "zod";
 import { customersRoute } from ".";
 import { queryClient as qc } from "../../App";
 import { fetchCustomerSummaryAmounts } from "../../api/summary";
+import { fetchCustomerData } from "../../api/customer";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { customerQKeys } from "../../utils/query-key";
@@ -33,6 +34,24 @@ export const viewCustomerRoute = new Route({
                 accessToken: auth.access_token,
                 customerId,
               }),
+          })
+        );
+      }
+
+      const dataKey = customerQKeys.id(customerId);
+      if (!qc.getQueryData(dataKey)) {
+        promises.push(
+          qc.prefetchQuery({
+            queryKey: dataKey,
+            queryFn: () => {
+              return fetchCustomerData({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                customerId,
+              });
+            },
+            retry: 0,
           })
         );
       }

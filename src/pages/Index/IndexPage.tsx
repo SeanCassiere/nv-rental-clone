@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import classNames from "classnames";
 
 import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
@@ -12,12 +13,19 @@ import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetD
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
 import { titleMaker } from "../../utils/title-maker";
+import {
+  LockClosedOutline,
+  LockOpenOutline,
+  SettingsCogOutline,
+} from "../../components/icons";
 
 function IndexPage() {
   const statistics = useGetDashboardStats({
     locationId: 0,
     clientDate: new Date(),
   });
+
+  const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
 
   const widgetList = useGetDashboardWidgetList();
 
@@ -57,7 +65,27 @@ function IndexPage() {
           <DashboardStatsBlock statistics={statistics.data} />
 
           <div className="pt-6 pb-2">
-            <h2 className="text-xl font-semibold text-gray-700">Widgets</h2>
+            <h2 className="text-xl font-semibold text-gray-700">
+              Widgets
+              <span className="ml-4 inline-block sm:ml-5">
+                <button className="pt-2 text-slate-500 sm:pt-0">
+                  <SettingsCogOutline className="h-5 w-5 sm:h-4 sm:w-4" />
+                </button>
+                <button
+                  className={classNames(
+                    "ml-2 text-slate-500 sm:pt-0",
+                    isWidgetsLocked ? "" : "pl-0.5"
+                  )}
+                  onClick={() => setIsWidgetsLocked((prev) => !prev)}
+                >
+                  {isWidgetsLocked ? (
+                    <LockClosedOutline className="h-5 w-5 sm:h-4 sm:w-4" />
+                  ) : (
+                    <LockOpenOutline className="h-5 w-5 sm:h-4 sm:w-4" />
+                  )}
+                </button>
+              </span>
+            </h2>
             <p className="hidden pt-2 text-sm text-gray-600 sm:block">
               My list of personalized widgets.
             </p>
@@ -68,6 +96,7 @@ function IndexPage() {
               widgets={widgetList.data}
               selectedLocationIds={[0]}
               onWidgetSortingEnd={handleWidgetSortingEnd}
+              isLocked={isWidgetsLocked}
             />
           </div>
         </div>

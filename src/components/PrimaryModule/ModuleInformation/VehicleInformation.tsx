@@ -33,6 +33,7 @@ interface TVehicleInformationProps {
     originalOdometer?: TAnyCustomerValueType;
     odometerOut?: TAnyCustomerValueType;
     odometerIn?: TAnyCustomerValueType;
+    vin?: TAnyCustomerValueType;
   };
   isLoading: boolean;
   mode:
@@ -57,13 +58,13 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
   const infoBlocks = useMemo(() => {
     const blocks: TInformationBlockCardProps["blocks"] = [];
 
-    const pushBlank = () => {
-      blocks.push({
-        heading: "",
-        value: "",
-        isHiddenOnMobile: true,
-      });
-    };
+    // const pushBlank = () => {
+    //   blocks.push({
+    //     heading: "",
+    //     value: "",
+    //     isHiddenOnMobile: true,
+    //   });
+    // };
     const pushVehicleNo = () => {
       if (data.vehicleId && data.vehicleNo) {
         blocks.push({
@@ -152,6 +153,12 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
         value: data?.licenseNo || EMPTY_KEY,
       });
     };
+    const pushVin = () => {
+      blocks.push({
+        heading: "VIN.",
+        value: data?.vin || EMPTY_KEY,
+      });
+    };
     const pushMake = () => {
       blocks.push({
         heading: "Make",
@@ -208,28 +215,28 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
 
     if (mode === "agreement-checked-out") {
       pushVehicleNo();
-      pushVehicleType();
+      pushFuelOut();
+      pushOdometerOut();
       pushLicenseNo();
+      pushVehicleType();
       pushMake();
       pushModel();
       pushYear();
-      pushFuelOut();
-      pushOdometerOut();
     }
     if (mode === "agreement-checked-in") {
       pushVehicleNo();
-      pushVehicleType();
+      pushFuelOut();
+      pushOdometerOut();
+      pushFuelIn();
+      pushOdometerIn();
       pushLicenseNo();
+      pushVehicleType();
       pushMake();
       pushModel();
       pushYear();
-      pushFuelOut();
-      pushOdometerOut();
-      pushBlank();
-      pushFuelIn();
-      pushOdometerIn();
     }
     if (mode === "vehicle") {
+      pushVin();
       pushDoors();
       pushBatteryLevel();
       pushCylinders();

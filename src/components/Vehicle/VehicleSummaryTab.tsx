@@ -56,6 +56,7 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
                   fuelType: vehicleData.data.vehicle?.fuelType,
                   transmission: vehicleData.data.vehicle?.transmission,
                   originalOdometer: vehicleData.data.vehicle?.origionalOdometer,
+                  vin: vehicleData.data.vehicle?.vin,
                 }
               : {}
           }

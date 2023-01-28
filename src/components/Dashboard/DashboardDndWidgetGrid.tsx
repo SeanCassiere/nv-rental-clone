@@ -30,9 +30,11 @@ interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
   selectedLocationIds: number[];
   onWidgetSortingEnd: (widgets: DashboardWidgetItemParsed[]) => void;
+  isLocked: boolean;
 }
 const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   const { widgets: widgetList, onWidgetSortingEnd } = props;
+  const isDisabled = props.isLocked;
 
   const [widgets, setWidgets] = useState([
     ...widgetList.sort(sortByUserPositionFn),
@@ -76,6 +78,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
           key={widgetIdsList.toString()}
           items={widgetIdsList}
           strategy={rectSortingStrategy}
+          disabled={isDisabled}
         >
           {widgets
             .filter((widget) => widget.isDeleted === false)
@@ -84,6 +87,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
               <WidgetSizingContainer
                 widget={widget}
                 key={`widget-${widget.widgetID}`}
+                isDisabled={isDisabled}
               />
             ))}
         </SortableContext>
@@ -130,8 +134,10 @@ function reorderBasedOnWidgetIdPositions({
 
 function WidgetSizingContainer({
   widget,
+  isDisabled,
 }: {
   widget: DashboardWidgetItemParsed;
+  isDisabled: boolean;
 }) {
   const {
     setDroppableNodeRef,
@@ -142,6 +148,7 @@ function WidgetSizingContainer({
     transition,
   } = useSortable({
     id: widget.widgetID,
+    disabled: isDisabled,
   });
 
   return (
@@ -165,7 +172,10 @@ function WidgetSizingContainer({
     >
       <div
         ref={setDraggableNodeRef}
-        className="h-full w-full rounded border border-slate-200 bg-slate-50"
+        className={classNames(
+          "h-full w-full rounded border border-slate-200 bg-slate-50",
+          { "cursor-move": !isDisabled, "cursor-default": isDisabled }
+        )}
         style={{ transform: CSS.Translate.toString(transform), transition }}
         {...listeners}
         {...attributes}

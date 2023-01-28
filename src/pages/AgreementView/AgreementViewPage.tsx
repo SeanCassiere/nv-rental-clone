@@ -10,13 +10,13 @@ import {
 import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 import Protector from "../../components/Protector";
 import { ChevronRightOutline } from "../../components/icons";
-import ScrollToTop from "../../components/ScrollToTop";
-
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "../../components/PrimaryModule/ModuleTabs";
+import AgreementModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
+
+import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
@@ -104,6 +104,7 @@ function AgreementViewPage() {
     agreementId,
     onError: onFindError,
   });
+  const isCheckedIn = agreement.data?.returnDate ? true : false;
 
   useEffect(() => {
     document.title = titleMaker(
@@ -113,12 +114,11 @@ function AgreementViewPage() {
 
   return (
     <Protector>
-      <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
-            <nav className="flex grow items-center" aria-label="Breadcrumb">
-              <ol className="flex items-end space-x-2">
+            <nav className="flex grow items-end" aria-label="Breadcrumb">
+              <ol className="flex items-center space-x-2">
                 <li>
                   <div className="flex">
                     <Link
@@ -142,9 +142,12 @@ function AgreementViewPage() {
                       to={viewAgreementRoute.id}
                       search={(current) => ({ tab: current?.tab || "summary" })}
                       params={{ agreementId }}
-                      className="max-w-[230px] truncate pl-2 text-xl text-gray-900 md:max-w-full"
+                      className="flex max-w-[230px] items-center truncate pl-2 text-xl text-gray-900 md:max-w-full"
                     >
                       {agreement?.data?.agreementNumber}
+                      {agreement.data && (
+                        <>&nbsp;-&nbsp;{agreement.data.agreementType}</>
+                      )}
                     </Link>
                   </div>
                 </li>
@@ -152,8 +155,11 @@ function AgreementViewPage() {
             </nav>
             {/*  */}
           </div>
-          <div className="mt-6 bg-slate-50 p-4">
-            Agreement information modes
+          <div className="my-4 mt-6">
+            <AgreementModuleStatBlock
+              agreement={agreement.data}
+              isCheckedIn={isCheckedIn}
+            />
           </div>
         </div>
 

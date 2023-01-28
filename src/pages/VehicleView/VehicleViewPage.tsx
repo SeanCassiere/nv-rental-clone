@@ -16,6 +16,7 @@ import {
   ModuleTabs,
 } from "../../components/PrimaryModule/ModuleTabs";
 import ScrollToTop from "../../components/ScrollToTop";
+import VehicleModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
@@ -152,7 +153,9 @@ function VehicleViewPage() {
             </nav>
             {/*  */}
           </div>
-          <div className="mt-6 bg-slate-50 p-4">Vehicle information modes</div>
+          <div className="my-4 mt-6">
+            <VehicleModuleStatBlock vehicle={vehicle.data} />
+          </div>
         </div>
 
         <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">

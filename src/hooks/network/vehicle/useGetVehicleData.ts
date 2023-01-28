@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
+
 import { fetchVehicleData } from "../../../api/vehicles";
 import { vehicleQKeys } from "../../../utils/query-key";
-import { type VehicleDataParsed } from "../../../utils/schemas/vehicle";
 
 export function useGetVehicleData(params: {
   vehicleId: string | number;
   onError?: (err: unknown) => void;
 }) {
   const auth = useAuth();
-  const query = useQuery<VehicleDataParsed>({
+  const query = useQuery({
     queryKey: vehicleQKeys.id(params.vehicleId),
     queryFn: async () =>
       fetchVehicleData({
