@@ -19,6 +19,7 @@ import ScrollToTop from "../../components/ScrollToTop";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
+import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
 
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")
@@ -136,8 +137,8 @@ function ReservationViewPage() {
             </nav>
             {/*  */}
           </div>
-          <div className="mt-6 bg-slate-50 p-4">
-            Reservation information modes
+          <div className="my-4 mt-6">
+            <ReservationModuleStatBlock reservation={reservation.data} />
           </div>
         </div>
 
