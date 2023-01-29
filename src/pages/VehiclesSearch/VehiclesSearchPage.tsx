@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { Link, useSearch, useNavigate } from "@tanstack/react-router";
-import { createColumnHelper } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  type PaginationState,
+} from "@tanstack/react-table";
 
 import Protector from "../../components/Protector";
 import ModuleTable, {
@@ -36,6 +39,14 @@ function VehiclesSearchPage() {
   const search = useSearch({ from: searchVehiclesRoute.id });
   const { pageNumber, size, searchFilters } =
     normalizeVehicleListSearchParams(search);
+
+  const pagination: PaginationState = useMemo(
+    () => ({
+      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+      pageSize: size,
+    }),
+    [pageNumber, size]
+  );
 
   const vehiclesData = useGetVehiclesList({
     page: pageNumber,
@@ -253,7 +264,6 @@ function VehiclesSearchPage() {
           ) : (
             <div>
               <ModuleTable
-                key={`table-cols-${columnDefs.length}`}
                 data={vehiclesData.data?.data || []}
                 columns={columnDefs}
                 noRows={
@@ -265,43 +275,21 @@ function VehiclesSearchPage() {
                 rawColumnsData={columnsData?.data || []}
                 showColumnPicker
                 onColumnVisibilityChange={handleSaveColumnVisibility}
+                pagination={pagination}
+                totalPages={
+                  Math.ceil(vehiclesData.data.totalRecords / size) ?? -1
+                }
+                onPaginationChange={(newPaginationState) => {
+                  navigate({
+                    to: "/vehicles",
+                    search: (current) => ({
+                      ...current,
+                      page: newPaginationState.pageIndex + 1,
+                      size: newPaginationState.pageSize,
+                    }),
+                  });
+                }}
               />
-            </div>
-          )}
-
-          {vehiclesData.data.isRequestMade === false ? null : vehiclesData.data
-              .data.length === 0 ? null : (
-            <div>
-              <p>
-                <Link
-                  to="/vehicles"
-                  search={(search) => ({
-                    ...search,
-                    page: pageNumber === 1 ? 1 : pageNumber - 1,
-                    size,
-                  })}
-                  preload="intent"
-                  disabled={pageNumber === 1}
-                >
-                  less
-                </Link>
-                &nbsp;|&nbsp;
-                <Link
-                  to="/vehicles"
-                  search={(search) => ({
-                    ...search,
-                    page:
-                      pageNumber === vehiclesData.data?.totalPages
-                        ? pageNumber
-                        : pageNumber + 1,
-                    size,
-                  })}
-                  preload="intent"
-                  disabled={pageNumber === vehiclesData.data?.totalPages}
-                >
-                  plus
-                </Link>
-              </p>
             </div>
           )}
         </div>

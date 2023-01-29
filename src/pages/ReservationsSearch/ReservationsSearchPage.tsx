@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { createColumnHelper } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  type PaginationState,
+} from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
@@ -46,6 +49,14 @@ function ReservationsSearchPage() {
   const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
     normalizeReservationListSearchParams(search);
+
+  const pagination: PaginationState = useMemo(
+    () => ({
+      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+      pageSize: size,
+    }),
+    [pageNumber, size]
+  );
 
   const reservationsData = useGetReservationsList({
     page: pageNumber,
@@ -295,7 +306,6 @@ function ReservationsSearchPage() {
           ) : (
             <div>
               <ModuleTable
-                key={`table-cols-${columnDefs.length}`}
                 data={reservationsData.data?.data || []}
                 columns={columnDefs}
                 noRows={
@@ -307,43 +317,21 @@ function ReservationsSearchPage() {
                 rawColumnsData={columnsData?.data || []}
                 showColumnPicker
                 onColumnVisibilityChange={handleSaveColumnVisibility}
+                pagination={pagination}
+                totalPages={
+                  Math.ceil(reservationsData.data.totalRecords / size) ?? -1
+                }
+                onPaginationChange={(newPaginationState) => {
+                  navigate({
+                    to: "/reservations",
+                    search: (current) => ({
+                      ...current,
+                      page: newPaginationState.pageIndex + 1,
+                      size: newPaginationState.pageSize,
+                    }),
+                  });
+                }}
               />
-            </div>
-          )}
-
-          {reservationsData.data.isRequestMade ===
-          false ? null : reservationsData.data.data.length === 0 ? null : (
-            <div>
-              <p>
-                <Link
-                  to="/reservations"
-                  search={(search) => ({
-                    ...search,
-                    page: pageNumber === 1 ? 1 : pageNumber - 1,
-                    size,
-                  })}
-                  preload="intent"
-                  disabled={pageNumber === 1}
-                >
-                  less
-                </Link>
-                &nbsp;|&nbsp;
-                <Link
-                  to="/reservations"
-                  search={(search) => ({
-                    ...search,
-                    page:
-                      pageNumber === reservationsData.data?.totalPages
-                        ? pageNumber
-                        : pageNumber + 1,
-                    size,
-                  })}
-                  preload="intent"
-                  disabled={pageNumber === reservationsData.data?.totalPages}
-                >
-                  plus
-                </Link>
-              </p>
             </div>
           )}
         </div>

@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { createColumnHelper } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  type PaginationState,
+} from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
@@ -39,6 +42,14 @@ function CustomerSearchPage() {
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeCustomerListSearchParams(search);
+
+  const pagination: PaginationState = useMemo(
+    () => ({
+      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+      pageSize: size,
+    }),
+    [pageNumber, size]
+  );
 
   const customersData = useGetCustomersList({
     page: pageNumber,
@@ -203,7 +214,6 @@ function CustomerSearchPage() {
           ) : (
             <div>
               <ModuleTable
-                key={`table-cols-${columnDefs.length}`}
                 data={customersData.data?.data || []}
                 columns={columnDefs}
                 noRows={
@@ -215,43 +225,21 @@ function CustomerSearchPage() {
                 rawColumnsData={columnsData?.data || []}
                 showColumnPicker
                 onColumnVisibilityChange={handleSaveColumnVisibility}
+                pagination={pagination}
+                totalPages={
+                  Math.ceil(customersData.data.totalRecords / size) ?? -1
+                }
+                onPaginationChange={(newPaginationState) => {
+                  navigate({
+                    to: "/customers",
+                    search: (current) => ({
+                      ...current,
+                      page: newPaginationState.pageIndex + 1,
+                      size: newPaginationState.pageSize,
+                    }),
+                  });
+                }}
               />
-            </div>
-          )}
-
-          {customersData.data.isRequestMade === false ? null : customersData
-              .data.data.length === 0 ? null : (
-            <div>
-              <p>
-                <Link
-                  to="/customers"
-                  search={(search) => ({
-                    ...search,
-                    page: pageNumber === 1 ? 1 : pageNumber - 1,
-                    size,
-                  })}
-                  preload="intent"
-                  disabled={pageNumber === 1}
-                >
-                  less
-                </Link>
-                &nbsp;|&nbsp;
-                <Link
-                  to="/customers"
-                  search={(search) => ({
-                    ...search,
-                    page:
-                      pageNumber === customersData.data?.totalPages
-                        ? pageNumber
-                        : pageNumber + 1,
-                    size,
-                  })}
-                  preload="intent"
-                  disabled={pageNumber === customersData.data?.totalPages}
-                >
-                  plus
-                </Link>
-              </p>
             </div>
           )}
         </div>
