@@ -1,6 +1,6 @@
 import { lazy, Route } from "@tanstack/react-router";
 
-import { vehiclesRoute } from ".";
+import { fleetRoute } from ".";
 import { queryClient } from "../../App";
 
 import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
@@ -8,15 +8,13 @@ import { fetchVehiclesListModded } from "../../hooks/network/vehicle/useGetVehic
 
 import { getAuthToken } from "../../utils/authLocal";
 import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
-import { vehicleQKeys } from "../../utils/query-key";
+import { fleetQKeys } from "../../utils/query-key";
 import { VehicleSearchQuerySchema } from "../../utils/schemas/vehicle";
 
-export const searchVehiclesRoute = new Route({
-  getParentRoute: () => vehiclesRoute,
+export const searchFleetRoute = new Route({
+  getParentRoute: () => fleetRoute,
   path: "/",
-  component: lazy(
-    () => import("../../pages/VehiclesSearch/VehiclesSearchPage")
-  ),
+  component: lazy(() => import("../../pages/FleetSearch/FleetSearchPage")),
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
     () => ({
@@ -33,7 +31,7 @@ export const searchVehiclesRoute = new Route({
       const promises = [];
 
       // get columns
-      const columnsKey = vehicleQKeys.columns();
+      const columnsKey = fleetQKeys.columns();
       if (!queryClient.getQueryData(columnsKey)) {
         promises.push(
           queryClient.prefetchQuery({
@@ -51,7 +49,7 @@ export const searchVehiclesRoute = new Route({
       }
 
       // get search
-      const searchKey = vehicleQKeys.search({
+      const searchKey = fleetQKeys.search({
         pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });

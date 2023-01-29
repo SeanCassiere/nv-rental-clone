@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchVehicleData } from "../../../api/vehicles";
-import { vehicleQKeys } from "../../../utils/query-key";
+import { fleetQKeys } from "../../../utils/query-key";
 
 export function useGetVehicleData(params: {
   vehicleId: string | number;
@@ -10,7 +10,7 @@ export function useGetVehicleData(params: {
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: vehicleQKeys.id(params.vehicleId),
+    queryKey: fleetQKeys.id(params.vehicleId),
     queryFn: async () =>
       fetchVehicleData({
         vehicleId: params.vehicleId,

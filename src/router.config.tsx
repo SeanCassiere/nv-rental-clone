@@ -31,10 +31,10 @@ import { reservationsRoute } from "./routes/reservations";
 import { searchReservationsRoute } from "./routes/reservations/searchReservations";
 import { viewReservationRoute } from "./routes/reservations/viewReservation";
 
-// /vehicles
-import { vehiclesRoute } from "./routes/vehicles";
-import { searchVehiclesRoute } from "./routes/vehicles/searchVehicles";
-import { viewVehicleRoute } from "./routes/vehicles/viewVehicle";
+// /fleet
+import { fleetRoute } from "./routes/fleet";
+import { searchFleetRoute } from "./routes/fleet/searchFleet";
+import { viewFleetRoute } from "./routes/fleet/viewFleet";
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -46,7 +46,7 @@ const routeTree = rootRoute.addChildren([
     searchReservationsRoute,
     viewReservationRoute,
   ]),
-  vehiclesRoute.addChildren([searchVehiclesRoute, viewVehicleRoute]),
+  fleetRoute.addChildren([searchFleetRoute, viewFleetRoute]),
 ]);
 
 export const router = new ReactRouter({

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchVehiclesList } from "../../../api/vehicles";
-import { vehicleQKeys } from "../../../utils/query-key";
+import { fleetQKeys } from "../../../utils/query-key";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
 import { VehicleListItemListSchema } from "../../../utils/schemas/vehicle";
 
@@ -13,7 +13,7 @@ export function useGetVehiclesList(params: {
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: vehicleQKeys.search({
+    queryKey: fleetQKeys.search({
       pagination: { page: params.page, pageSize: params.pageSize },
       filters: params.filters,
     }),

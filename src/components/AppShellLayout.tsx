@@ -73,9 +73,9 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
     },
     {
       name: "Vehicles",
-      href: "/vehicles",
+      href: "/fleet",
       icon: TruckFilled,
-      current: matches(["/vehicles", "/vehicles/$vehicleId"]),
+      current: matches(["/fleet", "/fleet/$vehicleId"]),
       props: {},
     },
     {

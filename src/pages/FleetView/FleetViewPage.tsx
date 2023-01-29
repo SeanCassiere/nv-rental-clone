@@ -17,7 +17,7 @@ import ScrollToTop from "../../components/ScrollToTop";
 import VehicleModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
 
-import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
+import { viewFleetRoute } from "../../routes/fleet/viewFleet";
 
 import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
 
@@ -42,9 +42,9 @@ function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { tab: tabName = "" } = useSearch({ from: viewVehicleRoute.id });
+  const { tab: tabName = "" } = useSearch({ from: viewFleetRoute.id });
 
-  const navigate = useNavigate({ from: viewVehicleRoute.id });
+  const navigate = useNavigate({ from: viewFleetRoute.id });
 
   const vehicleId = params.vehicleId || "";
 
@@ -54,7 +54,7 @@ function VehicleViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewVehicleRoute.id,
+      to: viewFleetRoute.id,
       search: (others) => ({ ...others, tab: newTab.id }),
       replace: true,
     });
@@ -111,7 +111,7 @@ function VehicleViewPage() {
 
   useEffect(() => {
     document.title = titleMaker(
-      (vehicle.data?.vehicle.vehicleNo || "Loading") + " - Vehicles"
+      (vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet"
     );
   }, [vehicle.data?.vehicle.vehicleNo]);
 
@@ -130,14 +130,14 @@ function VehicleViewPage() {
                     router.history.go(-1);
                   }}
                 >
-                  Vehicles
+                  Fleet
                 </Link>
                 <ChevronRightOutline
                   className="h-4 w-4 flex-shrink-0 text-gray-500"
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewVehicleRoute.id}
+                  to={viewFleetRoute.id}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ vehicleId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

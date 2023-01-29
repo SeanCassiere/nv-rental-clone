@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchVehicleStatusesList } from "../../../api/vehicles";
-import { vehicleQKeys } from "../../../utils/query-key";
+import { fleetQKeys } from "../../../utils/query-key";
 
 export function useGetVehicleStatusList() {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: vehicleQKeys.statuses(),
+    queryKey: fleetQKeys.statuses(),
     queryFn: async () =>
       await fetchVehicleStatusesList({
         clientId: auth.user?.profile.navotar_clientid || "",
