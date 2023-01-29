@@ -35,11 +35,13 @@ const acceptedColumns = [
   "EndLocationName",
 ];
 
+const pageSize = 50;
+
 const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
   const { t } = useTranslation();
   const items = normalizeReservationListSearchParams({
     page: 1,
-    size: 50,
+    size: pageSize,
     filters: { VehicleNo: props.vehicleNo },
   });
 
@@ -111,12 +113,15 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
       {dataList.data.isRequestMade === false ? null : dataList.data.data
           .length === 0 ? null : (
         <div className="py-4">
+          <p className="text-slate-700">
+            Showing a maximum of {pageSize} records.
+          </p>
           <Link
             to="/reservations"
             search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
-            className="text-slate-600"
+            className="text-slate-600 underline hover:text-slate-800"
           >
-            Need more filters? Click here to search for reservations.
+            Need more? Click here to search for reservations.
           </Link>
         </div>
       )}
