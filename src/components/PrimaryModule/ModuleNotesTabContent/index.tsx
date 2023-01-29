@@ -1,12 +1,15 @@
 import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
+import { parseISO } from "date-fns";
 
 import CommonTable from "../../General/CommonTable";
+import { DocumentTextSolid } from "../../icons";
+import CommonEmptyStateContent from "../../Layout/CommonEmptyStateContent";
+
 import { useGetModuleNotes } from "../../../hooks/network/module/useGetModuleNotes";
 import { type TNoteDataParsed } from "../../../utils/schemas/note";
 import { type AppPrimaryModuleType } from "../../../types/General";
-import { useTranslation } from "react-i18next";
-import { parseISO } from "date-fns";
 
 const columnHelper = createColumnHelper<TNoteDataParsed>();
 
@@ -39,6 +42,28 @@ const agreementNoteColumns: TNoteKeyHelp[] = [
   { type: "text", accessor: "noteType", header: "Note Type" },
 ];
 
+const emptyContentLabels: Record<
+  AppPrimaryModuleType,
+  { title: string; subtitle: string }
+> = {
+  vehicles: {
+    title: "No notes",
+    subtitle: "No notes have been added to this vehicle",
+  },
+  reservations: {
+    title: "No notes",
+    subtitle: "No notes have been added to this reservation",
+  },
+  agreements: {
+    title: "No notes",
+    subtitle: "No notes have been added to this agreement",
+  },
+  customers: {
+    title: "No notes",
+    subtitle: "No notes have been added to this customer",
+  },
+};
+
 const ModuleNotesTabContent = ({
   module,
   referenceId,
@@ -47,7 +72,7 @@ const ModuleNotesTabContent = ({
   referenceId: string;
 }) => {
   const { t } = useTranslation();
-  const notesData = useGetModuleNotes({ module, referenceId });
+  const notesQuery = useGetModuleNotes({ module, referenceId });
 
   const colDefs = useMemo(() => {
     const columns: ColumnDef<TNoteDataParsed>[] = [];
@@ -92,7 +117,18 @@ const ModuleNotesTabContent = ({
 
   return (
     <div className="max-w-full focus:ring-0">
-      <CommonTable data={notesData.data || []} columns={colDefs} />
+      {notesQuery.data.isRequestMade === false ? null : notesQuery.data.data
+          .length === 0 ? (
+        <CommonEmptyStateContent
+          title={emptyContentLabels[module]?.title ?? ""}
+          subtitle={emptyContentLabels[module]?.subtitle ?? ""}
+          icon={
+            <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
+          }
+        />
+      ) : (
+        <CommonTable data={notesQuery.data?.data || []} columns={colDefs} />
+      )}
     </div>
   );
 };

@@ -11,6 +11,8 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
+import { DocumentTextSolid } from "../../components/icons";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
@@ -223,7 +225,7 @@ function AgreementsSearchPage() {
                   label: "Checkout location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
@@ -237,7 +239,7 @@ function AgreementsSearchPage() {
                   label: "Checkin location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
@@ -311,61 +313,66 @@ function AgreementsSearchPage() {
             />
           </div>
 
-          <div>
-            <ModuleTable
-              // key={`table-cols-${columnDefs.length}`}
-              // key={`table-data-length-${
-              //   JSON.stringify(columnsData.data).length
-              // }`}
-              data={agreementsData.data?.data || []}
-              columns={columnDefs}
-              noRows={
-                agreementsData.isLoading === false &&
-                agreementsData.data?.data.length === 0
+          {agreementsData.data.isRequestMade === false ? null : agreementsData
+              .data.data.length === 0 ? (
+            <CommonEmptyStateContent
+              title="No agreements"
+              subtitle="You don't have any rental agreements to show here."
+              icon={
+                <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
               }
-              onColumnOrderChange={handleSaveColumnsOrder}
-              lockedColumns={["AgreementNumber"]}
-              rawColumnsData={columnsData?.data || []}
-              showColumnPicker
-              onColumnVisibilityChange={handleSaveColumnVisibility}
             />
-          </div>
-          <div>
-            <p>
-              <Link
-                to="/agreements"
-                search={(search) => ({
-                  ...search,
-                  page: pageNumber === 1 ? 1 : pageNumber - 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                less
-              </Link>
-              &nbsp;|&nbsp;
-              <Link
-                to="/agreements"
-                search={(search) => ({
-                  ...search,
-                  page:
-                    pageNumber === agreementsData.data?.totalPages
-                      ? pageNumber
-                      : pageNumber + 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                plus
-              </Link>
-            </p>
-            <p>
-              {JSON.stringify({
-                totalPages: agreementsData.data?.totalPages,
-                totalRecords: agreementsData.data?.totalRecords,
-              })}
-            </p>
-          </div>
+          ) : (
+            <div>
+              <ModuleTable
+                data={agreementsData.data?.data || []}
+                columns={columnDefs}
+                noRows={
+                  agreementsData.isLoading === false &&
+                  agreementsData.data?.data.length === 0
+                }
+                onColumnOrderChange={handleSaveColumnsOrder}
+                lockedColumns={["AgreementNumber"]}
+                rawColumnsData={columnsData?.data || []}
+                showColumnPicker
+                onColumnVisibilityChange={handleSaveColumnVisibility}
+              />
+            </div>
+          )}
+
+          {agreementsData.data.isRequestMade === false ? null : agreementsData
+              .data.data.length === 0 ? null : (
+            <div>
+              <p>
+                <Link
+                  to="/agreements"
+                  search={(search) => ({
+                    ...search,
+                    page: pageNumber === 1 ? 1 : pageNumber - 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  less
+                </Link>
+                &nbsp;|&nbsp;
+                <Link
+                  to="/agreements"
+                  search={(search) => ({
+                    ...search,
+                    page:
+                      pageNumber === agreementsData.data?.totalPages
+                        ? pageNumber
+                        : pageNumber + 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  plus
+                </Link>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </Protector>

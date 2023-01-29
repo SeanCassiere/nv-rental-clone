@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import CommonTable from "../General/CommonTable";
+import { DocumentTextSolid } from "../icons";
+import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
 
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 
@@ -93,16 +95,33 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      <CommonTable data={dataList.data.data || []} columns={columnDefs} />
-      <div className="py-4">
-        <Link
-          to="/agreements"
-          search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
-          className="text-slate-600"
-        >
-          Need more filters? Click here to search for agreements.
-        </Link>
-      </div>
+      {dataList.data.isRequestMade === false ? null : dataList.data.data
+          .length === 0 ? (
+        <CommonEmptyStateContent
+          title="No agreements"
+          subtitle="You don't have any rental agreements for this vehicle."
+          icon={
+            <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
+          }
+        />
+      ) : (
+        <div>
+          <CommonTable data={dataList.data.data || []} columns={columnDefs} />
+        </div>
+      )}
+
+      {dataList.data.isRequestMade === false ? null : dataList.data.data
+          .length === 0 ? null : (
+        <div className="py-4">
+          <Link
+            to="/agreements"
+            search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
+            className="text-slate-600"
+          >
+            Need more filters? Click here to search for agreements.
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

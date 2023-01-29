@@ -60,13 +60,7 @@ export const ModuleTabs = (props: {
               key={`tab-panel-${item.id}`}
               className="outline-none ring-0 focus:outline-none focus:ring-0"
             >
-              <Suspense
-                fallback={
-                  <div className="text-aqua-500 text-lg font-semibold">
-                    loading component
-                  </div>
-                }
-              >
+              <Suspense fallback={<div className="min-h-[400px]"></div>}>
                 {isTabIndexSelected(item.id) && <>{item.component}</>}
               </Suspense>
             </Tab.Panel>

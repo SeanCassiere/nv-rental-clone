@@ -9,6 +9,8 @@ import ModuleTable, {
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
+import { TruckFilled } from "../../components/icons";
 
 import { searchVehiclesRoute } from "../../routes/vehicles/searchVehicles";
 import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
@@ -186,7 +188,7 @@ function VehiclesSearchPage() {
                   label: "Owning location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
@@ -200,7 +202,7 @@ function VehiclesSearchPage() {
                   label: "Current location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
@@ -239,58 +241,67 @@ function VehiclesSearchPage() {
             />
           </div>
 
-          <div>
-            <ModuleTable
-              key={`table-cols-${columnDefs.length}`}
-              data={vehiclesData.data?.data || []}
-              columns={columnDefs}
-              noRows={
-                vehiclesData.isLoading === false &&
-                vehiclesData.data?.data.length === 0
+          {vehiclesData.data.isRequestMade === false ? null : vehiclesData.data
+              .data.length === 0 ? (
+            <CommonEmptyStateContent
+              title="No vehicles"
+              subtitle="You don't have any vehicles to be shown here."
+              icon={
+                <TruckFilled className="mx-auto h-12 w-12 text-slate-400" />
               }
-              onColumnOrderChange={handleSaveColumnsOrder}
-              lockedColumns={["VehicleNo"]}
-              rawColumnsData={columnsData?.data || []}
-              showColumnPicker
-              onColumnVisibilityChange={handleSaveColumnVisibility}
             />
-          </div>
-          <div>
-            <p>
-              <Link
-                to="/vehicles"
-                search={(search) => ({
-                  ...search,
-                  page: pageNumber === 1 ? 1 : pageNumber - 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                less
-              </Link>
-              &nbsp;|&nbsp;
-              <Link
-                to="/vehicles"
-                search={(search) => ({
-                  ...search,
-                  page:
-                    pageNumber === vehiclesData.data?.totalPages
-                      ? pageNumber
-                      : pageNumber + 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                plus
-              </Link>
-            </p>
-            <p>
-              {JSON.stringify({
-                totalPages: vehiclesData.data?.totalPages,
-                totalRecords: vehiclesData.data?.totalRecords,
-              })}
-            </p>
-          </div>
+          ) : (
+            <div>
+              <ModuleTable
+                key={`table-cols-${columnDefs.length}`}
+                data={vehiclesData.data?.data || []}
+                columns={columnDefs}
+                noRows={
+                  vehiclesData.isLoading === false &&
+                  vehiclesData.data?.data.length === 0
+                }
+                onColumnOrderChange={handleSaveColumnsOrder}
+                lockedColumns={["VehicleNo"]}
+                rawColumnsData={columnsData?.data || []}
+                showColumnPicker
+                onColumnVisibilityChange={handleSaveColumnVisibility}
+              />
+            </div>
+          )}
+
+          {vehiclesData.data.isRequestMade === false ? null : vehiclesData.data
+              .data.length === 0 ? null : (
+            <div>
+              <p>
+                <Link
+                  to="/vehicles"
+                  search={(search) => ({
+                    ...search,
+                    page: pageNumber === 1 ? 1 : pageNumber - 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  less
+                </Link>
+                &nbsp;|&nbsp;
+                <Link
+                  to="/vehicles"
+                  search={(search) => ({
+                    ...search,
+                    page:
+                      pageNumber === vehiclesData.data?.totalPages
+                        ? pageNumber
+                        : pageNumber + 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  plus
+                </Link>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </Protector>

@@ -24,6 +24,8 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
+import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
+import { UsersSolid } from "../../components/icons";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -190,58 +192,65 @@ function CustomerSearchPage() {
             />
           </div>
 
-          <div>
-            <ModuleTable
-              key={`table-cols-${columnDefs.length}`}
-              data={customersData.data?.data || []}
-              columns={columnDefs}
-              noRows={
-                customersData.isLoading === false &&
-                customersData.data?.data.length === 0
-              }
-              onColumnOrderChange={handleSaveColumnsOrder}
-              lockedColumns={["FirstName"]}
-              rawColumnsData={columnsData?.data || []}
-              showColumnPicker
-              onColumnVisibilityChange={handleSaveColumnVisibility}
+          {customersData.data.isRequestMade === false ? null : customersData
+              .data.data.length === 0 ? (
+            <CommonEmptyStateContent
+              title="No customers"
+              subtitle="You don't have any customers to show here."
+              icon={<UsersSolid className="mx-auto h-12 w-12 text-slate-400" />}
             />
-          </div>
-          <div>
-            <p>
-              <Link
-                to="/customers"
-                search={(search) => ({
-                  ...search,
-                  page: pageNumber === 1 ? 1 : pageNumber - 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                less
-              </Link>
-              &nbsp;|&nbsp;
-              <Link
-                to="/customers"
-                search={(search) => ({
-                  ...search,
-                  page:
-                    pageNumber === customersData.data?.totalPages
-                      ? pageNumber
-                      : pageNumber + 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                plus
-              </Link>
-            </p>
-            <p>
-              {JSON.stringify({
-                totalPages: customersData.data?.totalPages,
-                totalRecords: customersData.data?.totalRecords,
-              })}
-            </p>
-          </div>
+          ) : (
+            <div>
+              <ModuleTable
+                key={`table-cols-${columnDefs.length}`}
+                data={customersData.data?.data || []}
+                columns={columnDefs}
+                noRows={
+                  customersData.isLoading === false &&
+                  customersData.data?.data.length === 0
+                }
+                onColumnOrderChange={handleSaveColumnsOrder}
+                lockedColumns={["FirstName"]}
+                rawColumnsData={columnsData?.data || []}
+                showColumnPicker
+                onColumnVisibilityChange={handleSaveColumnVisibility}
+              />
+            </div>
+          )}
+
+          {customersData.data.isRequestMade === false ? null : customersData
+              .data.data.length === 0 ? null : (
+            <div>
+              <p>
+                <Link
+                  to="/customers"
+                  search={(search) => ({
+                    ...search,
+                    page: pageNumber === 1 ? 1 : pageNumber - 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  less
+                </Link>
+                &nbsp;|&nbsp;
+                <Link
+                  to="/customers"
+                  search={(search) => ({
+                    ...search,
+                    page:
+                      pageNumber === customersData.data?.totalPages
+                        ? pageNumber
+                        : pageNumber + 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  plus
+                </Link>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </Protector>

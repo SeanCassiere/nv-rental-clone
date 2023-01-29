@@ -10,6 +10,8 @@ import ModuleTable, {
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
+import { BookFilled } from "../../components/icons";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import { viewReservationRoute } from "../../routes/reservations/viewReservation";
@@ -213,7 +215,7 @@ function ReservationsSearchPage() {
                   label: "Checkout location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
@@ -227,7 +229,7 @@ function ReservationsSearchPage() {
                   label: "Checkin location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
@@ -283,58 +285,65 @@ function ReservationsSearchPage() {
             />
           </div>
 
-          <div>
-            <ModuleTable
-              key={`table-cols-${columnDefs.length}`}
-              data={reservationsData.data?.data || []}
-              columns={columnDefs}
-              noRows={
-                reservationsData.isLoading === false &&
-                reservationsData.data?.data.length === 0
-              }
-              onColumnOrderChange={handleSaveColumnsOrder}
-              lockedColumns={["ReservationNumber"]}
-              rawColumnsData={columnsData?.data || []}
-              showColumnPicker
-              onColumnVisibilityChange={handleSaveColumnVisibility}
+          {reservationsData.data.isRequestMade ===
+          false ? null : reservationsData.data.data.length === 0 ? (
+            <CommonEmptyStateContent
+              title="No reservations"
+              subtitle="You don't have any reservations to show here."
+              icon={<BookFilled className="mx-auto h-12 w-12 text-slate-400" />}
             />
-          </div>
-          <div>
-            <p>
-              <Link
-                to="/reservations"
-                search={(search) => ({
-                  ...search,
-                  page: pageNumber === 1 ? 1 : pageNumber - 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                less
-              </Link>
-              &nbsp;|&nbsp;
-              <Link
-                to="/reservations"
-                search={(search) => ({
-                  ...search,
-                  page:
-                    pageNumber === reservationsData.data?.totalPages
-                      ? pageNumber
-                      : pageNumber + 1,
-                  size,
-                })}
-                preload="intent"
-              >
-                plus
-              </Link>
-            </p>
-            <p>
-              {JSON.stringify({
-                totalPages: reservationsData.data?.totalPages,
-                totalRecords: reservationsData.data?.totalRecords,
-              })}
-            </p>
-          </div>
+          ) : (
+            <div>
+              <ModuleTable
+                key={`table-cols-${columnDefs.length}`}
+                data={reservationsData.data?.data || []}
+                columns={columnDefs}
+                noRows={
+                  reservationsData.isLoading === false &&
+                  reservationsData.data?.data.length === 0
+                }
+                onColumnOrderChange={handleSaveColumnsOrder}
+                lockedColumns={["ReservationNumber"]}
+                rawColumnsData={columnsData?.data || []}
+                showColumnPicker
+                onColumnVisibilityChange={handleSaveColumnVisibility}
+              />
+            </div>
+          )}
+
+          {reservationsData.data.isRequestMade ===
+          false ? null : reservationsData.data.data.length === 0 ? null : (
+            <div>
+              <p>
+                <Link
+                  to="/reservations"
+                  search={(search) => ({
+                    ...search,
+                    page: pageNumber === 1 ? 1 : pageNumber - 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  less
+                </Link>
+                &nbsp;|&nbsp;
+                <Link
+                  to="/reservations"
+                  search={(search) => ({
+                    ...search,
+                    page:
+                      pageNumber === reservationsData.data?.totalPages
+                        ? pageNumber
+                        : pageNumber + 1,
+                    size,
+                  })}
+                  preload="intent"
+                >
+                  plus
+                </Link>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </Protector>
