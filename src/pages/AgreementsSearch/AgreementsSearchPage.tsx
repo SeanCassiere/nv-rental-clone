@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { Link, useRouter, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -41,7 +41,7 @@ export const AgreementDateTimeColumns = [
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  const router = useRouter();
+  const navigate = useNavigate({ from: searchAgreementsRoute.id });
 
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -144,10 +144,9 @@ function AgreementsSearchPage() {
               validationSchema={AgreementFiltersSchema}
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
-                router.navigate({
+                navigate({
                   to: "/agreements",
-                  search: (current) => ({
-                    ...current,
+                  search: () => ({
                     page: 1,
                     size: 10,
                     filters: { ...formValues },
@@ -155,9 +154,13 @@ function AgreementsSearchPage() {
                 });
               }}
               onReset={async () => {
-                router.navigate({
+                navigate({
                   to: "/agreements",
-                  search: () => ({ page: 1, size: 10, filters: undefined }),
+                  search: () => ({
+                    page: 1,
+                    size: 10,
+                    filters: undefined,
+                  }),
                 });
               }}
               searchFiltersBlueprint={[

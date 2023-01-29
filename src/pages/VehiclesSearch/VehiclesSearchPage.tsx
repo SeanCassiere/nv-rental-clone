@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { Link, useSearch, useRouter } from "@tanstack/react-router";
+import { Link, useSearch, useNavigate } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import Protector from "../../components/Protector";
@@ -31,7 +31,7 @@ import { titleMaker } from "../../utils/title-maker";
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  const router = useRouter();
+  const navigate = useNavigate({ from: searchVehiclesRoute.id });
 
   const search = useSearch({ from: searchVehiclesRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -128,7 +128,7 @@ function VehiclesSearchPage() {
               validationSchema={VehicleFiltersSchema}
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
-                router.navigate({
+                navigate({
                   to: "/vehicles",
                   search: (current) => ({
                     ...current,
@@ -139,7 +139,7 @@ function VehiclesSearchPage() {
                 });
               }}
               onReset={async () => {
-                router.navigate({
+                navigate({
                   to: "/vehicles",
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
@@ -281,6 +281,7 @@ function VehiclesSearchPage() {
                     size,
                   })}
                   preload="intent"
+                  disabled={pageNumber === 1}
                 >
                   less
                 </Link>
@@ -296,6 +297,7 @@ function VehiclesSearchPage() {
                     size,
                   })}
                   preload="intent"
+                  disabled={pageNumber === vehiclesData.data?.totalPages}
                 >
                   plus
                 </Link>

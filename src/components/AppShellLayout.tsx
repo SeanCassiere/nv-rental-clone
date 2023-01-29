@@ -2,7 +2,11 @@
 import React, { Fragment, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { Dialog, Menu, Transition } from "@headlessui/react";
-import { Link, useRouterStore } from "@tanstack/react-router";
+import {
+  Link,
+  // useRouterStore,
+  useRouter,
+} from "@tanstack/react-router";
 import classNames from "classnames";
 
 import {
@@ -26,10 +30,13 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const auth = useAuth();
 
-  const routerStore = useRouterStore();
+  const router = useRouter();
+
+  const routerStore = router.store.state;
+  // const routerStore = useRouterStore();
 
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
-    const matching = [
+    const matching: string[] = [
       ...routerStore.currentMatches.map((mat) => mat.route.fullPath),
     ];
 
