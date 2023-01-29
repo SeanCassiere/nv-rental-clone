@@ -7,7 +7,6 @@ import {
   useSearch,
 } from "@tanstack/react-router";
 
-import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 import Protector from "../../components/Protector";
 import { ChevronRightOutline } from "../../components/icons";
 import {
@@ -15,8 +14,12 @@ import {
   type ModuleTabConfigItem,
 } from "../../components/PrimaryModule/ModuleTabs";
 import AgreementModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
+import CommonHeader from "../../components/Layout/CommonHeader";
+
+import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
+
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
@@ -116,43 +119,35 @@ function AgreementViewPage() {
     <Protector>
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
-            <nav className="flex grow items-end" aria-label="Breadcrumb">
-              <ol className="flex items-center space-x-2">
-                <li>
-                  <div className="flex">
-                    <Link
-                      to=".."
-                      className="text-2xl font-semibold leading-tight tracking-tight text-gray-700 hover:text-gray-800"
-                      onClick={() => {
-                        router.history.go(-1);
-                      }}
-                    >
-                      Agreements
-                    </Link>
-                  </div>
-                </li>
-                <li>
-                  <div className="flex items-center">
-                    <ChevronRightOutline
-                      className="h-3.5 w-3.5 flex-shrink-0 text-gray-500"
-                      aria-hidden="true"
-                    />
-                    <Link
-                      to={viewAgreementRoute.id}
-                      search={(current) => ({ tab: current?.tab || "summary" })}
-                      params={{ agreementId }}
-                      className="flex max-w-[230px] items-center truncate pl-2 text-xl text-gray-900 md:max-w-full"
-                    >
-                      {agreement?.data?.agreementNumber}
-                    </Link>
-                  </div>
-                </li>
-              </ol>
-            </nav>
-            {/*  */}
-          </div>
-          <div className="my-4 mt-6">
+          <CommonHeader
+            titleContent={
+              <div className="flex items-center gap-2">
+                <Link
+                  to=".."
+                  className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                  onClick={() => {
+                    router.history.go(-1);
+                  }}
+                >
+                  Agreements
+                </Link>
+                <ChevronRightOutline
+                  className="h-4 w-4 flex-shrink-0 text-gray-500"
+                  aria-hidden="true"
+                />
+                <Link
+                  to={viewAgreementRoute.id}
+                  search={(current) => ({ tab: current?.tab || "summary" })}
+                  params={{ agreementId }}
+                  className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                >
+                  {agreement?.data?.agreementNumber}
+                </Link>
+              </div>
+            }
+            headerActionContent
+          />
+          <div className="my-4 mt-2 sm:mt-6">
             <AgreementModuleStatBlock
               agreement={agreement.data}
               isCheckedIn={isCheckedIn}

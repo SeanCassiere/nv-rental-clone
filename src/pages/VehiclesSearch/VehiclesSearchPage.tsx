@@ -2,25 +2,28 @@ import { useCallback, useEffect, useMemo } from "react";
 import { Link, useSearch, useRouter } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { searchVehiclesRoute } from "../../routes/vehicles/searchVehicles";
 import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
+import CommonHeader from "../../components/Layout/CommonHeader";
+
+import { searchVehiclesRoute } from "../../routes/vehicles/searchVehicles";
+import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetVehicleStatusList } from "../../hooks/network/vehicle/useGetVehicleStatusList";
-import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
-import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
-import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
+
+import { sortColOrderByOrderIndex } from "../../utils/ordering";
+import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
+import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
+import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
 import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
@@ -105,10 +108,16 @@ function VehiclesSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h2 className="select-none text-2xl font-semibold leading-tight tracking-tight text-gray-700">
-            Vehicles
-          </h2>
+        <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
+          <CommonHeader
+            titleContent={
+              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                Vehicle
+              </h1>
+            }
+            subtitleText="Search through your fleet and view details."
+            includeBottomBorder
+          />
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">

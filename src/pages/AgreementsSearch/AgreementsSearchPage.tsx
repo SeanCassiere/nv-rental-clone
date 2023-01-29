@@ -3,7 +3,6 @@ import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
@@ -11,18 +10,22 @@ import ModuleTable, {
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import ScrollToTop from "../../components/ScrollToTop";
+import CommonHeader from "../../components/Layout/CommonHeader";
+
+import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
-import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
-import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
+import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
-import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+
+import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
+import { sortColOrderByOrderIndex } from "../../utils/ordering";
+import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
@@ -121,10 +124,16 @@ function AgreementsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h2 className="select-none text-2xl font-semibold leading-tight tracking-tight text-gray-700">
-            Agreements
-          </h2>
+        <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
+          <CommonHeader
+            titleContent={
+              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                Agreements
+              </h1>
+            }
+            subtitleText="Search through your rental agreements and view details."
+            includeBottomBorder
+          />
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">

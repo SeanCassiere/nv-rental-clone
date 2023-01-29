@@ -8,18 +8,21 @@ import {
 } from "@tanstack/react-router";
 
 import Protector from "../../components/Protector";
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
 import { ChevronRightOutline } from "../../components/icons";
-import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
 } from "../../components/PrimaryModule/ModuleTabs";
 import ScrollToTop from "../../components/ScrollToTop";
+import CommonHeader from "../../components/Layout/CommonHeader";
+import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
+
+import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+
+import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
-import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
 
 const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")
@@ -101,43 +104,36 @@ function ReservationViewPage() {
       <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
-            <nav className="flex grow items-center" aria-label="Breadcrumb">
-              <ol className="flex items-end space-x-2">
-                <li>
-                  <div className="flex">
-                    <Link
-                      to=".."
-                      className="text-2xl font-semibold leading-tight tracking-tight text-gray-700 hover:text-gray-800"
-                      onClick={() => {
-                        router.history.go(-1);
-                      }}
-                    >
-                      Reservations
-                    </Link>
-                  </div>
-                </li>
-                <li>
-                  <div className="flex items-center">
-                    <ChevronRightOutline
-                      className="h-3.5 w-3.5 flex-shrink-0 text-gray-500"
-                      aria-hidden="true"
-                    />
-                    <Link
-                      to={viewReservationRoute.id}
-                      params={{ reservationId }}
-                      search={(current) => ({ tab: current?.tab || "summary" })}
-                      className="max-w-[230px] truncate pl-2 text-xl text-gray-900 md:max-w-full"
-                    >
-                      {reservation?.data?.reservationview?.reservationNumber}
-                    </Link>
-                  </div>
-                </li>
-              </ol>
-            </nav>
-            {/*  */}
-          </div>
-          <div className="my-4 mt-6">
+          <CommonHeader
+            titleContent={
+              <div className="flex items-center gap-2">
+                <Link
+                  to=".."
+                  className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                  onClick={() => {
+                    router.history.go(-1);
+                  }}
+                >
+                  Reservations
+                </Link>
+                <ChevronRightOutline
+                  className="h-4 w-4 flex-shrink-0 text-gray-500"
+                  aria-hidden="true"
+                />
+                <Link
+                  to={viewReservationRoute.id}
+                  search={(current) => ({ tab: current?.tab || "summary" })}
+                  params={{ reservationId }}
+                  className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                >
+                  {reservation?.data?.reservationview?.reservationNumber}
+                </Link>
+              </div>
+            }
+            headerActionContent
+          />
+
+          <div className="my-4 mt-2 sm:mt-6">
             <ReservationModuleStatBlock reservation={reservation.data} />
           </div>
         </div>

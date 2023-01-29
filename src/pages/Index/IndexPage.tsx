@@ -6,6 +6,12 @@ import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock"
 import DashboardBannerNotices from "../../components/Dashboard/DashboardBannerNotices";
 import DashboardDndWidgetGrid from "../../components/Dashboard/DashboardDndWidgetGrid";
 import ScrollToTop from "../../components/ScrollToTop";
+import CommonHeader from "../../components/Layout/CommonHeader";
+import {
+  LockClosedOutline,
+  LockOpenOutline,
+  SettingsCogOutline,
+} from "../../components/icons";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
@@ -13,11 +19,6 @@ import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetD
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
 import { titleMaker } from "../../utils/title-maker";
-import {
-  LockClosedOutline,
-  LockOpenOutline,
-  SettingsCogOutline,
-} from "../../components/icons";
 
 function IndexPage() {
   const statistics = useGetDashboardStats({
@@ -53,45 +54,59 @@ function IndexPage() {
       )}
       <div className="py-6">
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h1 className="select-none text-2xl font-semibold text-gray-700">
-            Dashboard
-          </h1>
+          <CommonHeader
+            titleContent={
+              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                Dashboard
+              </h1>
+            }
+          />
         </div>
+
         <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
           <div className="pb-4">
-            <h2 className="text-xl font-semibold text-gray-700">Overview</h2>
-            <p className="hidden select-none pt-2 text-sm text-gray-600 sm:block">
-              Jump into what's going on with your fleet.
-            </p>
+            <CommonHeader
+              titleContent={
+                <h2 className="select-none text-xl font-semibold leading-6 text-gray-700">
+                  Overview
+                </h2>
+              }
+              subtitleText="Jump into what's going on with your fleet."
+              includeBottomBorder
+            />
           </div>
           <DashboardStatsBlock statistics={statistics.data} />
 
-          <div className="pt-6 pb-2">
-            <h2 className="select-none text-xl font-semibold text-gray-700">
-              Widgets
-              <span className="ml-4 inline-block sm:ml-5">
-                <button className="pt-2 text-slate-500 sm:pt-0">
-                  <SettingsCogOutline className="h-5 w-5 sm:h-4 sm:w-4" />
-                </button>
-                <button
-                  className={classNames(
-                    "ml-2 text-slate-500 sm:pt-0",
-                    isWidgetsLocked ? "" : "pl-0.5"
-                  )}
-                  onClick={() => setIsWidgetsLocked((prev) => !prev)}
-                >
-                  {isWidgetsLocked ? (
-                    <LockClosedOutline className="h-5 w-5 sm:h-4 sm:w-4" />
-                  ) : (
-                    <LockOpenOutline className="h-5 w-5 sm:h-4 sm:w-4" />
-                  )}
-                </button>
-              </span>
-            </h2>
-            <p className="hidden select-none pt-2 text-sm text-gray-600 sm:block">
-              My list of personalized widgets.
-            </p>
+          <div className="pt-8">
+            <CommonHeader
+              titleContent={
+                <h2 className="select-none text-xl font-semibold leading-6 text-gray-700">
+                  Widgets
+                  <span className="ml-4 inline-block sm:ml-5">
+                    <button className="pt-2 text-slate-500 sm:pt-0">
+                      <SettingsCogOutline className="h-5 w-5 sm:h-4 sm:w-4" />
+                    </button>
+                    <button
+                      className={classNames(
+                        "ml-2 text-slate-500 sm:pt-0",
+                        isWidgetsLocked ? "" : "pl-0.5"
+                      )}
+                      onClick={() => setIsWidgetsLocked((prev) => !prev)}
+                    >
+                      {isWidgetsLocked ? (
+                        <LockClosedOutline className="h-5 w-5 sm:h-4 sm:w-4" />
+                      ) : (
+                        <LockOpenOutline className="h-5 w-5 sm:h-4 sm:w-4" />
+                      )}
+                    </button>
+                  </span>
+                </h2>
+              }
+              subtitleText="My list of personalized widgets."
+              includeBottomBorder
+            />
           </div>
+
           <div className="mt-4">
             <DashboardDndWidgetGrid
               key={`${JSON.stringify(widgetList.data)}`}
