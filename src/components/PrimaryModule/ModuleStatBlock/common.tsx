@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-// status, reference type (retail, insurance),vehicle-type, checkout, checkin, return
+import CommonHeader from "../../Layout/CommonHeader";
 
 export const ModuleStatBlockContainer = ({
   children,
@@ -13,14 +13,15 @@ export const ModuleStatBlockContainer = ({
 }) => {
   return (
     <div className="">
-      <div className="select-none text-xl font-semibold text-gray-700">
-        {title}
-      </div>
-      {subtitle && (
-        <span className="hidden select-none pt-2 text-sm text-gray-600 sm:block">
-          {subtitle}
-        </span>
-      )}
+      <CommonHeader
+        titleContent={
+          <h2 className="select-none text-xl font-semibold leading-6 text-gray-700">
+            {title}
+          </h2>
+        }
+        {...(subtitle ? { subtitleText: subtitle } : {})}
+        includeBottomBorder
+      />
       <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {children}
       </div>

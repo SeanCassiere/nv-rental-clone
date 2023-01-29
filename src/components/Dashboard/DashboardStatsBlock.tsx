@@ -153,13 +153,13 @@ const StatBlock = ({
         <div className="col-span-5">
           <div
             className={classNames(
-              "text-5xl font-semibold",
+              "text-5xl font-semibold transition-all duration-200 ease-in group-hover:text-teal-500",
               value !== "0" ? "text-slate-800" : "text-slate-700"
             )}
           >
             {value}
           </div>
-          <div className="truncate text-sm font-medium text-slate-500">
+          <div className="truncate text-sm font-medium text-slate-500 transition-all duration-200 ease-in group-hover:text-teal-500">
             {title}
           </div>
         </div>

@@ -3,26 +3,29 @@ import { Link, useRouter, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import Protector from "../../components/Protector";
 import ModuleTable, {
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
+import CommonHeader from "../../components/Layout/CommonHeader";
+
+import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
+import { viewReservationRoute } from "../../routes/reservations/viewReservation";
 
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { useGetReservationStatusList } from "../../hooks/network/reservation/useGetReservationStatusList";
-import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
-import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetReservationTypesList } from "../../hooks/network/reservation/useGetReservationTypes";
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+
+import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
+import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
+import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
+import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
@@ -120,10 +123,16 @@ function ReservationsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
-          <h2 className="select-none text-2xl font-semibold leading-tight tracking-tight text-gray-700">
-            Reservations
-          </h2>
+        <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
+          <CommonHeader
+            titleContent={
+              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                Reservations
+              </h1>
+            }
+            subtitleText="Search through your rental reservations and view details."
+            includeBottomBorder
+          />
         </div>
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">

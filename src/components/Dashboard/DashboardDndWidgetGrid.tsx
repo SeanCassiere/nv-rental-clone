@@ -173,8 +173,9 @@ function WidgetSizingContainer({
       <div
         ref={setDraggableNodeRef}
         className={classNames(
-          "h-full w-full rounded border border-slate-200 bg-slate-50",
-          { "cursor-move": !isDisabled, "cursor-default": isDisabled }
+          "h-full w-full rounded border border-slate-200 text-slate-600 transition-all duration-200 ease-in",
+          { "cursor-move": !isDisabled, "cursor-default": isDisabled },
+          isDisabled ? "bg-slate-50" : "bg-slate-100"
         )}
         style={{ transform: CSS.Translate.toString(transform), transition }}
         {...listeners}
