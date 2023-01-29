@@ -62,23 +62,23 @@ export const customerQKeys = {
   notes: (id: ReferenceId) => [customerQKeys.viewKey, id, "notes"],
 };
 
-export const vehicleQKeys = {
+export const fleetQKeys = {
   // search
-  rootKey: "vehicles",
-  columns: () => [vehicleQKeys.rootKey, "columns"],
+  rootKey: "fleet",
+  columns: () => [fleetQKeys.rootKey, "columns"],
   search: ({
     filters,
     pagination,
   }: {
     pagination: Pagination;
     filters: Filters;
-  }) => [vehicleQKeys.rootKey, pagination, filters],
-  statuses: () => [vehicleQKeys.rootKey, "statuses"],
+  }) => [fleetQKeys.rootKey, pagination, filters],
+  statuses: () => [fleetQKeys.rootKey, "statuses"],
   // view by ID
-  viewKey: "view-vehicle",
-  id: (id: ReferenceId) => [vehicleQKeys.viewKey, id, "data"],
-  summary: (id: ReferenceId) => [vehicleQKeys.viewKey, id, "summary"],
-  notes: (id: ReferenceId) => [vehicleQKeys.viewKey, id, "notes"],
+  viewKey: "view-fleet",
+  id: (id: ReferenceId) => [fleetQKeys.viewKey, id, "data"],
+  summary: (id: ReferenceId) => [fleetQKeys.viewKey, id, "summary"],
+  notes: (id: ReferenceId) => [fleetQKeys.viewKey, id, "notes"],
 };
 
 export const clientQKeys = {

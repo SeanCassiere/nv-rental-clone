@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { viewAgreementRoute } from "../../../routes/agreements/viewAgreement";
 
 import { viewReservationRoute } from "../../../routes/reservations/viewReservation";
-import { viewVehicleRoute } from "../../../routes/vehicles/viewVehicle";
+import { viewFleetRoute } from "../../../routes/fleet/viewFleet";
 import { type TVehicleSummarySchema } from "../../../utils/schemas/summary/vehicleSummary";
 import { CurrencyDollarSolid } from "../../icons";
 import {
@@ -85,7 +85,7 @@ export const VehicleSummary = ({
       type: summaryData.totalNoOfReservation ? "link" : "text",
       amount: summaryData.totalNoOfReservation,
       linkProps: {
-        to: viewVehicleRoute.id,
+        to: viewFleetRoute.id,
         search: (current) => ({
           tab: "reservations",
         }),
@@ -139,7 +139,7 @@ export const VehicleSummary = ({
       type: summaryData.totalNoOfAgreement ? "link" : "text",
       amount: summaryData.totalNoOfAgreement,
       linkProps: {
-        to: viewVehicleRoute.id,
+        to: viewFleetRoute.id,
         search: () => ({
           tab: "agreements",
         }),

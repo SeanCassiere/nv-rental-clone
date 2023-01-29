@@ -327,8 +327,8 @@ function AgreementsSearchPage() {
             />
           </div>
 
-          {agreementsData.data.isRequestMade === false ? null : agreementsData
-              .data.data.length === 0 ? (
+          {agreementsData.data?.isRequestMade === false ? null : agreementsData
+              .data?.data.length === 0 ? (
             <CommonEmptyStateContent
               title="No agreements"
               subtitle="You don't have any rental agreements to show here."
@@ -352,7 +352,9 @@ function AgreementsSearchPage() {
                 onColumnVisibilityChange={handleSaveColumnVisibility}
                 pagination={pagination}
                 totalPages={
-                  Math.ceil(agreementsData.data.totalRecords / size) ?? -1
+                  agreementsData.data?.totalRecords
+                    ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
+                    : 0
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({

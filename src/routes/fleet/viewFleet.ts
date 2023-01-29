@@ -1,16 +1,16 @@
 import { lazy, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { vehiclesRoute } from ".";
+import { fleetRoute } from ".";
 import { fetchVehicleSummaryAmounts } from "../../api/summary";
 import { fetchVehicleData } from "../../api/vehicles";
 
 import { queryClient as qc } from "../../App";
 import { getAuthToken } from "../../utils/authLocal";
-import { vehicleQKeys } from "../../utils/query-key";
+import { fleetQKeys } from "../../utils/query-key";
 
-export const viewVehicleRoute = new Route({
-  getParentRoute: () => vehiclesRoute,
+export const viewFleetRoute = new Route({
+  getParentRoute: () => fleetRoute,
   path: "$vehicleId",
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
@@ -21,7 +21,7 @@ export const viewVehicleRoute = new Route({
     if (auth) {
       const promises = [];
       // get summary
-      const summaryKey = vehicleQKeys.summary(vehicleId);
+      const summaryKey = fleetQKeys.summary(vehicleId);
       if (!qc.getQueryData(summaryKey)) {
         promises.push(
           qc.prefetchQuery({
@@ -38,7 +38,7 @@ export const viewVehicleRoute = new Route({
         );
       }
 
-      const dataKey = vehicleQKeys.id(vehicleId);
+      const dataKey = fleetQKeys.id(vehicleId);
       if (!qc.getQueryData(dataKey)) {
         promises.push(
           qc.prefetchQuery({
@@ -61,7 +61,7 @@ export const viewVehicleRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../../pages/VehicleView/VehicleViewPage")),
+  component: lazy(() => import("../../pages/FleetView/FleetViewPage")),
   parseParams: (params) => ({
     vehicleId: z.string().parse(params.vehicleId),
   }),

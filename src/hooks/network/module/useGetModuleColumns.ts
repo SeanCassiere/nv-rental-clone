@@ -6,7 +6,7 @@ import {
   agreementQKeys,
   reservationQKeys,
   customerQKeys,
-  vehicleQKeys,
+  fleetQKeys,
 } from "../../../utils/query-key";
 import {
   ColumnListItemListSchema,
@@ -22,7 +22,7 @@ export const allModulesKeySelector = (module: AppPrimaryModuleType) => {
     case "customers":
       return customerQKeys;
     case "vehicles":
-      return vehicleQKeys;
+      return fleetQKeys;
   }
 };
 

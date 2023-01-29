@@ -97,7 +97,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.data.isRequestMade === false ? null : dataList.data.data
+      {dataList.data?.isRequestMade === false ? null : dataList.data?.data
           .length === 0 ? (
         <CommonEmptyStateContent
           title="No agreements"
@@ -108,11 +108,11 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
         />
       ) : (
         <div>
-          <CommonTable data={dataList.data.data || []} columns={columnDefs} />
+          <CommonTable data={dataList.data?.data || []} columns={columnDefs} />
         </div>
       )}
 
-      {dataList.data.isRequestMade === false ? null : dataList.data.data
+      {dataList.data?.isRequestMade === false ? null : dataList.data?.data
           .length === 0 ? null : (
         <div className="py-4">
           <p className="text-slate-700">

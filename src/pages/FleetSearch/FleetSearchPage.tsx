@@ -15,8 +15,8 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
 import { TruckFilled } from "../../components/icons";
 
-import { searchVehiclesRoute } from "../../routes/vehicles/searchVehicles";
-import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
+import { searchFleetRoute } from "../../routes/fleet/searchFleet";
+import { viewFleetRoute } from "../../routes/fleet/viewFleet";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -34,9 +34,9 @@ import { titleMaker } from "../../utils/title-maker";
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  const navigate = useNavigate({ from: searchVehiclesRoute.id });
+  const navigate = useNavigate({ from: searchFleetRoute.id });
 
-  const search = useSearch({ from: searchVehiclesRoute.id });
+  const search = useSearch({ from: searchFleetRoute.id });
   const { pageNumber, size, searchFilters } =
     normalizeVehicleListSearchParams(search);
 
@@ -72,7 +72,7 @@ function VehiclesSearchPage() {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewVehicleRoute.id}
+                  to={viewFleetRoute.id}
                   params={{ vehicleId: String(vehicleId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-medium text-slate-800"
@@ -114,7 +114,7 @@ function VehiclesSearchPage() {
   );
 
   useEffect(() => {
-    document.title = titleMaker("Vehicles");
+    document.title = titleMaker("Fleet");
   }, []);
 
   return (
@@ -125,7 +125,7 @@ function VehiclesSearchPage() {
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Vehicles
+                Fleet
               </h1>
             }
             subtitleText="Search through your fleet and view details."
@@ -140,7 +140,7 @@ function VehiclesSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: "/vehicles",
+                  to: "/fleet",
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -151,7 +151,7 @@ function VehiclesSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: "/vehicles",
+                  to: "/fleet",
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -252,8 +252,8 @@ function VehiclesSearchPage() {
             />
           </div>
 
-          {vehiclesData.data.isRequestMade === false ? null : vehiclesData.data
-              .data.length === 0 ? (
+          {vehiclesData.data?.isRequestMade === false ? null : vehiclesData.data
+              ?.data.length === 0 ? (
             <CommonEmptyStateContent
               title="No vehicles"
               subtitle="You don't have any vehicles to be shown here."
@@ -277,11 +277,13 @@ function VehiclesSearchPage() {
                 onColumnVisibilityChange={handleSaveColumnVisibility}
                 pagination={pagination}
                 totalPages={
-                  Math.ceil(vehiclesData.data.totalRecords / size) ?? -1
+                  vehiclesData.data?.totalRecords
+                    ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
+                    : 0
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: "/vehicles",
+                    to: "/fleet",
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

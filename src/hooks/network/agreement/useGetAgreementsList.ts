@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchAgreementsList } from "../../../api/agreements";
-import { makeInitialApiData } from "../../../api/fetcher";
 import { AgreementListItemListSchema } from "../../../utils/schemas/agreement";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
 import { agreementQKeys } from "../../../utils/query-key";
@@ -28,7 +27,7 @@ export function useGetAgreementsList(params: {
         filters: params.filters,
       }),
     enabled: auth.isAuthenticated,
-    initialData: makeInitialApiData([]),
+    keepPreviousData: true,
   });
   return query;
 }

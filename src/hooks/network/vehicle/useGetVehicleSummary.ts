@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchVehicleSummaryAmounts } from "../../../api/summary";
-import { vehicleQKeys } from "../../../utils/query-key";
+import { fleetQKeys } from "../../../utils/query-key";
 
 export function useGetVehicleSummary(params: { vehicleId: string | number }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: vehicleQKeys.summary(params.vehicleId),
+    queryKey: fleetQKeys.summary(params.vehicleId),
     queryFn: async () =>
       await fetchVehicleSummaryAmounts({
         vehicleId: params.vehicleId,
