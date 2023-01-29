@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { Link, useRouter, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -10,6 +10,8 @@ import ModuleTable, {
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
+import { UsersSolid } from "../../components/icons";
 
 import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
 import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
@@ -24,8 +26,6 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
-import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { UsersSolid } from "../../components/icons";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -34,7 +34,8 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  const router = useRouter();
+  const navigate = useNavigate({ from: searchCustomersRoute.id });
+
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeCustomerListSearchParams(search);
@@ -135,7 +136,7 @@ function CustomerSearchPage() {
               validationSchema={CustomerFiltersSchema}
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
-                router.navigate({
+                navigate({
                   to: "/customers",
                   search: (current) => ({
                     ...current,
@@ -146,7 +147,7 @@ function CustomerSearchPage() {
                 });
               }}
               onReset={async () => {
-                router.navigate({
+                navigate({
                   to: "/customers",
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
@@ -230,6 +231,7 @@ function CustomerSearchPage() {
                     size,
                   })}
                   preload="intent"
+                  disabled={pageNumber === 1}
                 >
                   less
                 </Link>
@@ -245,6 +247,7 @@ function CustomerSearchPage() {
                     size,
                   })}
                   preload="intent"
+                  disabled={pageNumber === customersData.data?.totalPages}
                 >
                   plus
                 </Link>

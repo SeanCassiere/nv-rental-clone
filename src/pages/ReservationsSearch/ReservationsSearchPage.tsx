@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { Link, useRouter, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -41,7 +41,7 @@ export const ReservationDateTimeColumns = [
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  const router = useRouter();
+  const navigate = useNavigate({ from: searchReservationsRoute.id });
 
   const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -143,7 +143,7 @@ function ReservationsSearchPage() {
               validationSchema={ReservationFiltersSchema}
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
-                router.navigate({
+                navigate({
                   to: "/reservations",
                   search: (current) => ({
                     ...current,
@@ -154,7 +154,7 @@ function ReservationsSearchPage() {
                 });
               }}
               onReset={async () => {
-                router.navigate({
+                navigate({
                   to: "/reservations",
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
@@ -323,6 +323,7 @@ function ReservationsSearchPage() {
                     size,
                   })}
                   preload="intent"
+                  disabled={pageNumber === 1}
                 >
                   less
                 </Link>
@@ -338,6 +339,7 @@ function ReservationsSearchPage() {
                     size,
                   })}
                   preload="intent"
+                  disabled={pageNumber === reservationsData.data?.totalPages}
                 >
                   plus
                 </Link>
