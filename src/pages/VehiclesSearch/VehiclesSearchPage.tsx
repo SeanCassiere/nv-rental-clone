@@ -112,7 +112,7 @@ function VehiclesSearchPage() {
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Vehicle
+                Vehicles
               </h1>
             }
             subtitleText="Search through your fleet and view details."
