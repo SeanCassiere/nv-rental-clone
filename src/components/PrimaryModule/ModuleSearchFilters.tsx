@@ -57,6 +57,12 @@ function makeBackToArray<T extends KeyValueObject>(
       useableValue = value.filter((i) => i !== undefined);
     }
 
+    if (value === "true") {
+      useableValue = true;
+    } else if (value === "false") {
+      useableValue = false;
+    }
+
     return {
       ...prev,
       [key]: useableValue,
@@ -151,7 +157,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
         const insert = makeBackToArray(withDates, props.initialValues);
 
         const result = props.validationSchema.safeParse(insert);
-        console.log({ result });
+
         if (!result.success) {
           console.error("failed submitting module filters\n\n", result.error);
           return;
@@ -242,6 +248,7 @@ const RenderInput = <T extends KeyValueObject>({
         key={`input-${blueprint.queryKey}`}
         onChange={onChange}
         type={blueprint.type}
+        autoComplete="off"
         value={
           typeof value === "undefined"
             ? ""
@@ -257,7 +264,9 @@ const RenderInput = <T extends KeyValueObject>({
     const getValue = () => {
       if (typeof value !== "undefined") {
         const item = value;
-        const find = blueprint.options.find((el) => el.value === item);
+        const find = blueprint.options.find(
+          (el) => `${el.value}` === `${item}`
+        );
         return find;
       }
 
@@ -265,7 +274,7 @@ const RenderInput = <T extends KeyValueObject>({
     };
     const getPlaceholder = () => {
       const find = blueprint.options.find((el) => el.isPlaceholder);
-      if (find) {
+      if (typeof find !== "undefined") {
         return find;
       }
       return undefined;
@@ -387,6 +396,7 @@ const RenderInput = <T extends KeyValueObject>({
         type="hidden"
         name={blueprint.queryKey}
         value={value}
+        autoComplete="off"
       />
     );
   }
