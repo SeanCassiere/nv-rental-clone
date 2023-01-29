@@ -204,8 +204,8 @@ function CustomerSearchPage() {
             />
           </div>
 
-          {customersData.data.isRequestMade === false ? null : customersData
-              .data.data.length === 0 ? (
+          {customersData.data?.isRequestMade === false ? null : customersData
+              .data?.data.length === 0 ? (
             <CommonEmptyStateContent
               title="No customers"
               subtitle="You don't have any customers to show here."
@@ -227,7 +227,9 @@ function CustomerSearchPage() {
                 onColumnVisibilityChange={handleSaveColumnVisibility}
                 pagination={pagination}
                 totalPages={
-                  Math.ceil(customersData.data.totalRecords / size) ?? -1
+                  customersData.data?.totalRecords
+                    ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
+                    : 0
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
+
 import { fetchReservationsList } from "../../../api/reservation";
-import { makeInitialApiData } from "../../../api/fetcher";
 import { ReservationListItemListSchema } from "../../../utils/schemas/reservation";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
 import { reservationQKeys } from "../../../utils/query-key";
@@ -28,7 +28,7 @@ export function useGetReservationsList(params: {
         clientDate: new Date(),
       }),
     enabled: auth.isAuthenticated,
-    initialData: makeInitialApiData([] as any[]),
+    keepPreviousData: true,
   });
   return query;
 }

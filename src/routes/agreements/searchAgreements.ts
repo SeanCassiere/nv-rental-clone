@@ -2,7 +2,6 @@ import { lazy, Route } from "@tanstack/react-router";
 
 import { agreementsRoute } from ".";
 import { queryClient as qc } from "../../App";
-import { makeInitialApiData } from "../../api/fetcher";
 import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
 import { fetchAgreementsListModded } from "../../hooks/network/agreement/useGetAgreementsList";
 
@@ -16,9 +15,9 @@ export const searchAgreementsRoute = new Route({
   path: "/",
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
-    (search) => ({
-      page: search?.page || 1,
-      size: search?.size || 10,
+    () => ({
+      page: 1,
+      size: 10,
     }),
   ],
   onLoad: async ({ search }) => {
@@ -70,7 +69,6 @@ export const searchAgreementsRoute = new Route({
                 currentDate: new Date(),
                 filters: searchFilters,
               }),
-            initialData: makeInitialApiData([]),
           })
         );
       }

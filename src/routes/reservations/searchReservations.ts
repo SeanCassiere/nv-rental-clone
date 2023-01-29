@@ -2,7 +2,7 @@ import { lazy, Route } from "@tanstack/react-router";
 
 import { reservationsRoute } from ".";
 import { queryClient } from "../../App";
-import { makeInitialApiData } from "../../api/fetcher";
+
 import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
 import { fetchReservationsListModded } from "../../hooks/network/reservation/useGetReservationsList";
 
@@ -19,9 +19,9 @@ export const searchReservationsRoute = new Route({
   ),
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
-    ({ filters, ...search }) => ({
-      page: search.page || 1,
-      size: search.size || 10,
+    () => ({
+      page: 1,
+      size: 10,
     }),
   ],
   onLoad: async ({ search }) => {
@@ -70,7 +70,6 @@ export const searchReservationsRoute = new Route({
                 filters: searchFilters,
                 clientDate: new Date(),
               }),
-            initialData: makeInitialApiData([]),
           })
         );
       }

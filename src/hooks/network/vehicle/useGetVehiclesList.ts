@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { makeInitialApiData } from "../../../api/fetcher";
+
 import { fetchVehiclesList } from "../../../api/vehicles";
 import { vehicleQKeys } from "../../../utils/query-key";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
@@ -27,7 +27,7 @@ export function useGetVehiclesList(params: {
         filters: params.filters,
       }),
     enabled: auth.isAuthenticated,
-    initialData: makeInitialApiData([] as any[]),
+    keepPreviousData: true,
   });
   return query;
 }

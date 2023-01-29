@@ -296,8 +296,8 @@ function ReservationsSearchPage() {
             />
           </div>
 
-          {reservationsData.data.isRequestMade ===
-          false ? null : reservationsData.data.data.length === 0 ? (
+          {reservationsData.data?.isRequestMade ===
+          false ? null : reservationsData.data?.data.length === 0 ? (
             <CommonEmptyStateContent
               title="No reservations"
               subtitle="You don't have any reservations to show here."
@@ -319,7 +319,10 @@ function ReservationsSearchPage() {
                 onColumnVisibilityChange={handleSaveColumnVisibility}
                 pagination={pagination}
                 totalPages={
-                  Math.ceil(reservationsData.data.totalRecords / size) ?? -1
+                  reservationsData.data?.totalRecords
+                    ? Math.ceil(reservationsData.data?.totalRecords / size) ??
+                      -1
+                    : 0
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({

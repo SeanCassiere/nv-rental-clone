@@ -1,7 +1,6 @@
 import { lazy, Route } from "@tanstack/react-router";
 
 import { customersRoute } from ".";
-import { makeInitialApiData } from "../../api/fetcher";
 import { queryClient as qc } from "../../App";
 import { fetchCustomersListModded } from "../../hooks/network/customer/useGetCustomersList";
 import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
@@ -19,9 +18,9 @@ export const searchCustomersRoute = new Route({
   ),
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
-    ({ filters, ...search }) => ({
-      page: search.page || 1,
-      size: search.size || 10,
+    () => ({
+      page: 1,
+      size: 10,
     }),
   ],
   onLoad: async ({ search }) => {
@@ -69,8 +68,6 @@ export const searchCustomersRoute = new Route({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
-
-            initialData: makeInitialApiData([]),
           })
         );
       }

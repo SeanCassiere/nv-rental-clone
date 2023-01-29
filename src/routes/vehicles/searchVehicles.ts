@@ -2,7 +2,7 @@ import { lazy, Route } from "@tanstack/react-router";
 
 import { vehiclesRoute } from ".";
 import { queryClient } from "../../App";
-import { makeInitialApiData } from "../../api/fetcher";
+
 import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
 import { fetchVehiclesListModded } from "../../hooks/network/vehicle/useGetVehiclesList";
 
@@ -19,9 +19,9 @@ export const searchVehiclesRoute = new Route({
   ),
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
-    ({ filters, ...search }) => ({
-      page: search.page || 1,
-      size: search.size || 10,
+    () => ({
+      page: 1,
+      size: 10,
     }),
   ],
   onLoad: async ({ search }) => {
@@ -68,7 +68,6 @@ export const searchVehiclesRoute = new Route({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
-            initialData: makeInitialApiData([]),
           })
         );
       }

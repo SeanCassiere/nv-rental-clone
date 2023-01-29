@@ -252,8 +252,8 @@ function VehiclesSearchPage() {
             />
           </div>
 
-          {vehiclesData.data.isRequestMade === false ? null : vehiclesData.data
-              .data.length === 0 ? (
+          {vehiclesData.data?.isRequestMade === false ? null : vehiclesData.data
+              ?.data.length === 0 ? (
             <CommonEmptyStateContent
               title="No vehicles"
               subtitle="You don't have any vehicles to be shown here."
@@ -277,7 +277,9 @@ function VehiclesSearchPage() {
                 onColumnVisibilityChange={handleSaveColumnVisibility}
                 pagination={pagination}
                 totalPages={
-                  Math.ceil(vehiclesData.data.totalRecords / size) ?? -1
+                  vehiclesData.data?.totalRecords
+                    ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
+                    : 0
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
