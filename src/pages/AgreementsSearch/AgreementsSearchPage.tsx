@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { createColumnHelper } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  type PaginationState,
+} from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
@@ -46,6 +49,14 @@ function AgreementsSearchPage() {
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeAgreementListSearchParams(search);
+
+  const pagination: PaginationState = useMemo(
+    () => ({
+      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+      pageSize: size,
+    }),
+    [pageNumber, size]
+  );
 
   const agreementsData = useGetAgreementsList({
     page: pageNumber,
@@ -339,41 +350,21 @@ function AgreementsSearchPage() {
                 rawColumnsData={columnsData?.data || []}
                 showColumnPicker
                 onColumnVisibilityChange={handleSaveColumnVisibility}
+                pagination={pagination}
+                totalPages={
+                  Math.ceil(agreementsData.data.totalRecords / size) ?? -1
+                }
+                onPaginationChange={(newPaginationState) => {
+                  navigate({
+                    to: "/agreements",
+                    search: (current) => ({
+                      ...current,
+                      page: newPaginationState.pageIndex + 1,
+                      size: newPaginationState.pageSize,
+                    }),
+                  });
+                }}
               />
-            </div>
-          )}
-
-          {agreementsData.data.isRequestMade === false ? null : agreementsData
-              .data.data.length === 0 ? null : (
-            <div>
-              <p>
-                <Link
-                  to="/agreements"
-                  search={(search) => ({
-                    ...search,
-                    page: pageNumber === 1 ? 1 : pageNumber - 1,
-                    size,
-                  })}
-                  preload="intent"
-                >
-                  less
-                </Link>
-                &nbsp;|&nbsp;
-                <Link
-                  to="/agreements"
-                  search={(search) => ({
-                    ...search,
-                    page:
-                      pageNumber === agreementsData.data?.totalPages
-                        ? pageNumber
-                        : pageNumber + 1,
-                    size,
-                  })}
-                  preload="intent"
-                >
-                  plus
-                </Link>
-              </p>
             </div>
           )}
         </div>

@@ -1,10 +1,16 @@
-import { useState } from "react";
+import {
+  useState,
+  type ButtonHTMLAttributes,
+  type DetailedHTMLProps,
+} from "react";
 import {
   getCoreRowModel,
   useReactTable,
   flexRender,
   type Header,
   type ColumnOrderState,
+  type ColumnDef,
+  type PaginationState,
 } from "@tanstack/react-table";
 import classNames from "classnames";
 import {
@@ -26,9 +32,15 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { Menu, Transition } from "@headlessui/react";
 
-import { EyeSlashOutline } from "../icons";
+import {
+  ChevronLeftOutline,
+  ChevronRightOutline,
+  EyeSlashOutline,
+} from "../icons";
+
 import { type TColumnListItemParsed } from "../../utils/schemas/column";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
+import { paginationOptionsMaker } from "../../utils/pagination";
 
 interface DraggableColumnHeaderProps {
   header: Header<any, unknown>;
@@ -89,13 +101,16 @@ export type ColumnVisibilityGraph = { [columnHeader: string]: boolean };
 
 interface ModuleTableProps<T> {
   data: T[];
-  columns: any[];
+  columns: ColumnDef<T>[];
   rawColumnsData: TColumnListItemParsed[];
   noRows: boolean;
   onColumnOrderChange?: (accessorKeys: string[]) => void;
   lockedColumns?: (keyof T)[];
   showColumnPicker?: boolean;
   onColumnVisibilityChange?: (visibilityGraph: ColumnVisibilityGraph) => void;
+  pagination: PaginationState;
+  totalPages: number;
+  onPaginationChange: (pagination: PaginationState) => void;
 }
 
 const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
@@ -108,7 +123,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
-    columns.map((col) => col.accessorKey)
+    columns.map((col) => col.id!)
   );
   const [columnVisibility, setColumnVisibility] = useState(
     props.rawColumnsData
@@ -122,9 +137,12 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   const table = useReactTable({
     data: props.data,
     columns: props.columns,
+    manualPagination: true,
+    pageCount: props.totalPages,
     state: {
       columnOrder,
       columnVisibility,
+      pagination: props.pagination,
     },
     onColumnOrderChange: (order) => {
       setColumnOrder(order);
@@ -136,6 +154,11 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       setColumnVisibility(changesFunc);
     },
     getCoreRowModel: getCoreRowModel(),
+    onPaginationChange: (paginationUpdaterFunction) => {
+      // @ts-expect-error
+      const newPagination = paginationUpdaterFunction(props.pagination!);
+      props.onPaginationChange(newPagination);
+    },
   });
 
   const sensors = useSensors(
@@ -290,7 +313,97 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
           </table>
         </DndContext>
       </div>
+      {/* pagination */}
+      <div className="flex flex-1 justify-between bg-slate-50 px-2 py-2.5 sm:hidden">
+        <button
+          className="relative inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300"
+          disabled={!table.getCanPreviousPage()}
+          onClick={() => table.previousPage()}
+        >
+          Previous
+        </button>
+        <button
+          className="relative ml-3 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300"
+          disabled={!table.getCanNextPage()}
+          onClick={() => table.nextPage()}
+        >
+          Next
+        </button>
+      </div>
+      <div className="hidden border-t border-slate-200 bg-slate-50 sm:flex sm:flex-1 sm:items-center sm:justify-between sm:px-4 sm:py-3.5">
+        <div>
+          <nav
+            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+            aria-label="Pagination"
+          >
+            <DesktopPaginationButton
+              className="rounded-l px-2"
+              disabled={!table.getCanPreviousPage()}
+              onClick={() => table.previousPage()}
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftOutline className="h-5 w-5" aria-hidden="true" />
+            </DesktopPaginationButton>
+            {paginationOptionsMaker(
+              props.pagination.pageIndex + 1,
+              table.getPageCount()
+            ).map((opt) => {
+              if (opt === "..." || typeof opt === "string") {
+                return (
+                  <span className="relative inline-flex select-none items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700">
+                    ...
+                  </span>
+                );
+              }
+              return (
+                <DesktopPaginationButton
+                  key={`pagination-${opt}`}
+                  current={props.pagination.pageIndex + 1 === opt}
+                  onClick={() => {
+                    table.setPageIndex(opt - 1);
+                  }}
+                >
+                  {opt}
+                </DesktopPaginationButton>
+              );
+            })}
+            <DesktopPaginationButton
+              className="rounded-r px-2"
+              disabled={!table.getCanNextPage()}
+              onClick={() => table.nextPage()}
+            >
+              <span className="sr-only">Next</span>
+              <ChevronRightOutline className="h-5 w-5" aria-hidden="true" />
+            </DesktopPaginationButton>
+          </nav>
+        </div>
+      </div>
     </div>
+  );
+};
+
+const DesktopPaginationButton = (
+  props: DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > & { current?: boolean }
+) => {
+  const { children, current, className } = props;
+  return (
+    <button
+      {...props}
+      className={classNames(
+        "relative inline-flex items-center border px-4 py-2 text-sm font-medium hover:bg-slate-50 focus:z-20",
+        current
+          ? "z-10 border-teal-500 bg-teal-50 text-teal-600"
+          : "border-slate-300 bg-white text-slate-500",
+        "disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300",
+        className
+      )}
+      {...(current ? { "aria-current": "page" } : {})}
+    >
+      {children}
+    </button>
   );
 };
 
