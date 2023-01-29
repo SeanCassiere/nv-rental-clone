@@ -81,24 +81,6 @@ export const handleSuccess = async (response: Response) => {
     }
   }
 
-  // if (response.ok) {
-  //   const dto: any = {
-  //     status: response.status,
-  //     page,
-  //     pageSize,
-  //     totalPages,
-  //     totalRecords,
-  //     data: await response.json(),
-  //   };
-  //   return dto as any;
-  // } else {
-  //   await response.json().then((data) => {
-  //     const message =
-  //       data?.message ||
-  //       "handleSuccess: something went wrong with the api call";
-  //     throw message;
-  //   });
-  // }
   return {
     ok: response.ok,
     status: response.status,
@@ -106,8 +88,8 @@ export const handleSuccess = async (response: Response) => {
     pageSize,
     totalPages,
     totalRecords,
-    data: await response.json(),
     isRequestMade: true,
+    data: await response.json(),
   };
 };
 

@@ -1,6 +1,7 @@
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import { type AppPrimaryModuleType } from "../types/General";
 import { NotesDataListSchema } from "../utils/schemas/note";
+import { validateApiResWithZodSchema } from "../utils/schemas/apiFetcher";
 
 export const fetchNotesForModule = async (
   opts: {
@@ -28,5 +29,10 @@ export const fetchNotesForModule = async (
     headers: {
       Authorization: `Bearer ${opts.accessToken}`,
     },
-  }).then((res) => NotesDataListSchema.parse(res.data));
+  })
+    .then((res) => {
+      if (res.ok) return res;
+      return { ...res, data: [] };
+    })
+    .then((res) => validateApiResWithZodSchema(NotesDataListSchema, res));
 };

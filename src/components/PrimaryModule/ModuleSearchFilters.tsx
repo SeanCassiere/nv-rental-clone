@@ -261,16 +261,11 @@ const RenderInput = <T extends KeyValueObject>({
 
   if (blueprint.type === "single-dropdown") {
     const getValue = () => {
-      if (typeof value !== "undefined") {
-        const item = value;
-        const find = blueprint.options.find(
-          (el) => `${el.value}` === `${item}`
-        );
-        return find;
-      }
-
-      return undefined;
+      const item = value;
+      const find = blueprint.options.find((el) => `${el.value}` === `${item}`);
+      return find ?? undefined;
     };
+
     const getPlaceholder = () => {
       const find = blueprint.options.find((el) => el.isPlaceholder);
       if (typeof find !== "undefined") {

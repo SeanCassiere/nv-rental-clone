@@ -1,3 +1,4 @@
+import { validateApiResWithZodSchema } from "../utils/schemas/apiFetcher";
 import { VehicleExchangeItemListSchema } from "../utils/schemas/vehicleExchange";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
@@ -17,5 +18,7 @@ export const fetchExchangesForAgreement = async (
         Authorization: `Bearer ${opts.accessToken}`,
       },
     }
-  ).then((res) => VehicleExchangeItemListSchema.parse(res.data));
+  ).then((res) =>
+    validateApiResWithZodSchema(VehicleExchangeItemListSchema, res)
+  );
 };

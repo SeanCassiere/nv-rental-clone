@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import CommonTable from "../General/CommonTable";
+import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
+import { BookFilled } from "../icons";
 
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -93,16 +95,31 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      <CommonTable data={dataList.data.data || []} columns={columnDefs} />
-      <div className="py-4">
-        <Link
-          to="/reservations"
-          search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
-          className="text-slate-600"
-        >
-          Need more filters? Click here to search for reservations.
-        </Link>
-      </div>
+      {dataList.data.isRequestMade === false ? null : dataList.data.data
+          .length === 0 ? (
+        <CommonEmptyStateContent
+          title="No reservations"
+          subtitle="You don't have any reservations for this vehicle."
+          icon={<BookFilled className="mx-auto h-12 w-12 text-slate-400" />}
+        />
+      ) : (
+        <div>
+          <CommonTable data={dataList.data.data || []} columns={columnDefs} />
+        </div>
+      )}
+
+      {dataList.data.isRequestMade === false ? null : dataList.data.data
+          .length === 0 ? null : (
+        <div className="py-4">
+          <Link
+            to="/reservations"
+            search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
+            className="text-slate-600"
+          >
+            Need more filters? Click here to search for reservations.
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

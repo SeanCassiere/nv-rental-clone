@@ -17,5 +17,13 @@ export function validateApiResWithZodSchema<TItemSchema extends z.ZodSchema>(
   const ApiResponseWithDataSchema = ApiResponseMetaSchema.extend({
     data: schema,
   });
-  return ApiResponseWithDataSchema.parse(response);
+
+  const result = ApiResponseWithDataSchema.safeParse(response);
+
+  if (!result.success) {
+    console.error("API response validation failed", result.error);
+    throw new Error("API response validation failed");
+  }
+
+  return result.data;
 }

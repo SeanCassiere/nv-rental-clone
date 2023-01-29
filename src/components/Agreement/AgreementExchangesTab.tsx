@@ -2,11 +2,14 @@ import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { parseISO } from "date-fns";
 
 import CommonTable from "../General/CommonTable";
+import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
+import { DocumentTextSolid } from "../icons";
+
 import { type TVehicleExchangeListItemParsed } from "../../utils/schemas/vehicleExchange";
 import { useGetVehicleExchanges } from "../../hooks/network/vehicle-exchange/useGetVehicleExchanges";
-import { parseISO } from "date-fns";
 import { viewVehicleRoute } from "../../routes/vehicles/viewVehicle";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
@@ -87,7 +90,18 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      <CommonTable columns={colDefs} data={dataList.data || []} />
+      {dataList.data.isRequestMade === false ? null : dataList.data.data
+          .length === 0 ? (
+        <CommonEmptyStateContent
+          title="No exchanges"
+          subtitle="You haven't made any vehicle exchanges for this rental agreement."
+          icon={
+            <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
+          }
+        />
+      ) : (
+        <CommonTable columns={colDefs} data={dataList.data.data || []} />
+      )}
     </div>
   );
 };

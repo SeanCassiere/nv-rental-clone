@@ -225,7 +225,7 @@ function AgreementsSearchPage() {
                   label: "Checkout location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
@@ -239,7 +239,7 @@ function AgreementsSearchPage() {
                   label: "Checkin location",
                   options: [
                     { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.map((item) => ({
+                    ...locationsList.data.data.map((item) => ({
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
