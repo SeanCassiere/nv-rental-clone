@@ -214,7 +214,6 @@ function ModuleSearchFilters<T extends KeyValueObject>(
           directSetter={(input: any) => {
             setValues((prev) => {
               const formIt = { ...prev, [blueprint.accessor]: input };
-              // console.log(formIt);
               return formIt;
             });
           }}

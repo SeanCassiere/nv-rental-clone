@@ -10,7 +10,7 @@ export function sortObject(object: any) {
     sortedObj = object.map((item) => sortObject(item));
   } else {
     const keys = Object.keys(object);
-    // console.log(keys);
+
     keys.sort(function (key1, key2) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-sequences
       (key1 = key1.toLowerCase()), (key2 = key2.toLowerCase());

@@ -55,7 +55,7 @@ export async function fetchDashboardNoticeListModded({
       return notices;
     })
     .catch((e) => {
-      console.log(e);
+      console.error(e);
       throw e;
     });
 }
