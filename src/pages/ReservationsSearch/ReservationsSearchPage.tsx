@@ -155,7 +155,6 @@ function ReservationsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: "/reservations",
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -166,7 +165,6 @@ function ReservationsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: "/reservations",
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -326,7 +324,6 @@ function ReservationsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: "/reservations",
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

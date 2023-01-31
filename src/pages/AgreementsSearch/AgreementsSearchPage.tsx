@@ -156,7 +156,6 @@ function AgreementsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: "/agreements",
                   search: () => ({
                     page: 1,
                     size: 10,
@@ -166,7 +165,6 @@ function AgreementsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: "/agreements",
                   search: () => ({
                     page: 1,
                     size: 10,
@@ -358,7 +356,6 @@ function AgreementsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: "/agreements",
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

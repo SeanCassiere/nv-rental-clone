@@ -140,7 +140,6 @@ function VehiclesSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: "/fleet",
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -151,7 +150,6 @@ function VehiclesSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: "/fleet",
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -283,7 +281,6 @@ function VehiclesSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: "/fleet",
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

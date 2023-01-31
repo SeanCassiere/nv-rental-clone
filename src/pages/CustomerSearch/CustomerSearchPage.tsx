@@ -148,7 +148,6 @@ function CustomerSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: "/customers",
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -159,7 +158,6 @@ function CustomerSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: "/customers",
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -233,7 +231,6 @@ function CustomerSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: "/customers",
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,
