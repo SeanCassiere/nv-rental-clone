@@ -34,7 +34,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["2"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
           },
         }),
       },
@@ -49,7 +49,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["3"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
           },
         }),
       },
@@ -64,7 +64,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["4"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
           },
         }),
       },
@@ -79,7 +79,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["5"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
           },
         }),
       },
@@ -94,7 +94,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["2"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
             IsSearchOverdues: false,
           },
         }),
@@ -110,7 +110,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["3"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
             IsSearchOverdues: false,
           },
         }),
@@ -131,7 +131,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["5"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
             IsSearchOverdues: false,
           },
         }),
@@ -147,7 +147,7 @@ export const CustomerSummary = ({
         search: () => ({
           filters: {
             Statuses: ["7"],
-            CustomerId: `${summaryData.customerId}`,
+            CustomerId: `${summaryData?.customerId}`,
             IsSearchOverdues: false,
           },
         }),

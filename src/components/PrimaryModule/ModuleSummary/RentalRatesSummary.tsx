@@ -22,7 +22,7 @@ export const RentalRatesSummary = ({
     {
       label: "Base rate",
       amount: t("intlCurrency", { value: summaryData?.baseRate, currency }),
-      primaryTextHighlight: Boolean(summaryData.baseRate),
+      primaryTextHighlight: Boolean(summaryData?.baseRate),
     },
     {
       label: "Discount on base rate",
@@ -30,7 +30,7 @@ export const RentalRatesSummary = ({
         value: summaryData?.promotionDiscount,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.promotionDiscount),
+      primaryTextHighlight: Boolean(summaryData?.promotionDiscount),
     },
     {
       label: "Final base rate",
@@ -38,7 +38,7 @@ export const RentalRatesSummary = ({
         value: summaryData?.finalBaseRate,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.finalBaseRate),
+      primaryTextHighlight: Boolean(summaryData?.finalBaseRate),
     },
     {
       label: "Total miscellaneous charges",
@@ -46,7 +46,7 @@ export const RentalRatesSummary = ({
         value: summaryData?.totalInventoryChargesTaxable,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.totalMiscChargesTaxable),
+      primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
     },
     {
       label: "Total miscellaneous charges (non-taxable)",
@@ -54,7 +54,7 @@ export const RentalRatesSummary = ({
         value: summaryData?.totalInventoryChargesNonTaxable,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.totalMiscChargesNonTaxable),
+      primaryTextHighlight: Boolean(summaryData?.totalMiscChargesNonTaxable),
     },
     {
       label: "Extra mileage charges",
@@ -62,8 +62,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.extraMilesCharge,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.extraMilesCharge),
-      shown: summaryData.isExtraMileageChargeTaxable || false,
+      primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
+      shown: summaryData?.isExtraMileageChargeTaxable || false,
     },
     {
       label: "Extra duration charges",
@@ -71,8 +71,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.extraDayCharge,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.extraDayCharge),
-      shown: summaryData.isExtraDayChargeTaxable || false,
+      primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
+      shown: summaryData?.isExtraDayChargeTaxable || false,
     },
     {
       label: "Fuel charges",
@@ -80,8 +80,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.extraFuelCharge,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.extraFuelCharge),
-      shown: summaryData.isFuelChargeTaxable || false,
+      primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
+      shown: summaryData?.isFuelChargeTaxable || false,
     },
     {
       label: "Pre-tax adjustments",
@@ -89,14 +89,14 @@ export const RentalRatesSummary = ({
         value: summaryData?.preAdjustment,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.preAdjustment),
-      shown: Boolean(summaryData.preAdjustment),
+      primaryTextHighlight: Boolean(summaryData?.preAdjustment),
+      shown: Boolean(summaryData?.preAdjustment),
     },
     {
       label: "Pre-discount on subtotal",
       amount: t("intlCurrency", { value: summaryData?.preSubTotal, currency }),
-      primaryTextHighlight: Boolean(summaryData.preSubTotal),
-      shown: Boolean(summaryData.promotionDiscountOnSubTotal),
+      primaryTextHighlight: Boolean(summaryData?.preSubTotal),
+      shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
     },
     {
       label: "Discount on subtotal",
@@ -104,18 +104,18 @@ export const RentalRatesSummary = ({
         value: summaryData?.promotionDiscountOnSubTotal,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.promotionDiscountOnSubTotal),
-      shown: Boolean(summaryData.promotionDiscountOnSubTotal),
+      primaryTextHighlight: Boolean(summaryData?.promotionDiscountOnSubTotal),
+      shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
     },
     {
       label: "Subtotal",
       amount: t("intlCurrency", { value: summaryData?.subTotal, currency }),
-      primaryTextHighlight: Boolean(summaryData.subTotal),
+      primaryTextHighlight: Boolean(summaryData?.subTotal),
     },
     {
       label: "Total taxes",
       amount: t("intlCurrency", { value: summaryData?.totalTax, currency }),
-      primaryTextHighlight: Boolean(summaryData.totalTax),
+      primaryTextHighlight: Boolean(summaryData?.totalTax),
     },
     {
       label: "Extra mileage charges",
@@ -123,8 +123,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.extraMilesCharge,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.extraMilesCharge),
-      shown: !summaryData.isExtraMileageChargeTaxable || false,
+      primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
+      shown: !summaryData?.isExtraMileageChargeTaxable || false,
     },
     {
       label: "Extra duration charges",
@@ -132,8 +132,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.extraDayCharge,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.extraDayCharge),
-      shown: !summaryData.isExtraDayChargeTaxable || false,
+      primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
+      shown: !summaryData?.isExtraDayChargeTaxable || false,
     },
     {
       label: "Fuel charges",
@@ -141,8 +141,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.extraFuelCharge,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.extraFuelCharge),
-      shown: !summaryData.isFuelChargeTaxable || false,
+      primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
+      shown: !summaryData?.isFuelChargeTaxable || false,
     },
     {
       label: "Additional charges",
@@ -150,8 +150,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.additionalCharge,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.additionalCharge),
-      shown: Boolean(summaryData.additionalCharge),
+      primaryTextHighlight: Boolean(summaryData?.additionalCharge),
+      shown: Boolean(summaryData?.additionalCharge),
     },
     {
       label: "Post-tax adjustments",
@@ -159,8 +159,8 @@ export const RentalRatesSummary = ({
         value: summaryData?.postAdjustment,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.postAdjustment),
-      shown: Boolean(summaryData.postAdjustment),
+      primaryTextHighlight: Boolean(summaryData?.postAdjustment),
+      shown: Boolean(summaryData?.postAdjustment),
     },
     {
       label: "Grand total",
@@ -171,12 +171,12 @@ export const RentalRatesSummary = ({
     {
       label: "Amount paid",
       amount: t("intlCurrency", { value: summaryData?.amountPaid, currency }),
-      primaryTextHighlight: Boolean(summaryData.amountPaid),
+      primaryTextHighlight: Boolean(summaryData?.amountPaid),
     },
     {
       label: "Balance due",
       amount: t("intlCurrency", { value: summaryData?.balanceDue, currency }),
-      redHighlight: Boolean(summaryData.balanceDue),
+      redHighlight: Boolean(summaryData?.balanceDue),
     },
     {
       label: "Security deposit",
@@ -184,7 +184,7 @@ export const RentalRatesSummary = ({
         value: summaryData?.securityDeposit,
         currency,
       }),
-      primaryTextHighlight: Boolean(summaryData.securityDeposit),
+      primaryTextHighlight: Boolean(summaryData?.securityDeposit),
     },
   ];
 

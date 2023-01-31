@@ -70,7 +70,7 @@ export const VehicleSummary = ({
 
     {
       label: "Final payment date",
-      amount: summaryData.finalPaymentDate
+      amount: summaryData?.finalPaymentDate
         ? t("intlDate", {
             value: summaryData?.finalPaymentDate,
             currency,
@@ -82,8 +82,8 @@ export const VehicleSummary = ({
     {
       label: "Total reservations",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfReservation),
-      type: summaryData.totalNoOfReservation ? "link" : "text",
-      amount: summaryData.totalNoOfReservation,
+      type: summaryData?.totalNoOfReservation ? "link" : "text",
+      amount: summaryData?.totalNoOfReservation,
       linkProps: {
         to: viewFleetRoute.id,
         search: (current) => ({
@@ -97,21 +97,21 @@ export const VehicleSummary = ({
     {
       label: "Current reservation",
       primaryTextHighlight:
-        summaryData.currentReservation !== "" &&
-        summaryData.currentReservation !== "0",
+        summaryData?.currentReservation !== "" &&
+        summaryData?.currentReservation !== "0",
       type:
-        summaryData.currentReservation !== "" &&
-        summaryData.currentReservation !== "0"
+        summaryData?.currentReservation !== "" &&
+        summaryData?.currentReservation !== "0"
           ? "link"
           : "text",
       amount:
-        summaryData.currentReservation !== "" &&
-        summaryData.currentReservation !== "0"
+        summaryData?.currentReservation !== "" &&
+        summaryData?.currentReservation !== "0"
           ? "View"
           : "None",
       linkProps: {
         to: viewReservationRoute.id,
-        params: { reservationId: `${summaryData.currentReservation}` },
+        params: { reservationId: `${summaryData?.currentReservation}` },
         preload: "intent",
       },
     },
@@ -119,8 +119,8 @@ export const VehicleSummary = ({
     {
       label: "Future reservations",
       primaryTextHighlight: Boolean(summaryData?.futureNoOfReservation),
-      type: summaryData.futureNoOfReservation ? "link" : "text",
-      amount: summaryData.futureNoOfReservation,
+      type: summaryData?.futureNoOfReservation ? "link" : "text",
+      amount: summaryData?.futureNoOfReservation,
       linkProps: {
         to: "/reservations",
         search: () => ({
@@ -136,8 +136,8 @@ export const VehicleSummary = ({
     {
       label: "Total agreements",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfAgreement),
-      type: summaryData.totalNoOfAgreement ? "link" : "text",
-      amount: summaryData.totalNoOfAgreement,
+      type: summaryData?.totalNoOfAgreement ? "link" : "text",
+      amount: summaryData?.totalNoOfAgreement,
       linkProps: {
         to: viewFleetRoute.id,
         search: () => ({
@@ -151,21 +151,21 @@ export const VehicleSummary = ({
     {
       label: "Current agreement",
       primaryTextHighlight:
-        summaryData.currentAgreement !== "" &&
-        summaryData.currentAgreement !== "0",
+        summaryData?.currentAgreement !== "" &&
+        summaryData?.currentAgreement !== "0",
       type:
-        summaryData.currentAgreement !== "" &&
-        summaryData.currentAgreement !== "0"
+        summaryData?.currentAgreement !== "" &&
+        summaryData?.currentAgreement !== "0"
           ? "link"
           : "text",
       amount:
-        summaryData.currentAgreement !== "" &&
-        summaryData.currentAgreement !== "0"
+        summaryData?.currentAgreement !== "" &&
+        summaryData?.currentAgreement !== "0"
           ? "View"
           : "None",
       linkProps: {
         to: viewAgreementRoute.id,
-        params: { agreementId: `${summaryData.currentAgreement}` },
+        params: { agreementId: `${summaryData?.currentAgreement}` },
         preload: "intent",
       },
     },
@@ -200,8 +200,10 @@ export const VehicleSummary = ({
     {
       label: "Pending payments",
       primaryTextHighlight: Boolean(summaryData?.pendingPayment),
-      type: summaryData.pendingPayment ? "link" : "text",
-      amount: summaryData.pendingPayment ? summaryData.pendingPayment : "None",
+      type: summaryData?.pendingPayment ? "link" : "text",
+      amount: summaryData?.pendingPayment
+        ? summaryData?.pendingPayment
+        : "None",
       linkProps: {
         to: "/agreements",
         search: () => ({
@@ -213,7 +215,7 @@ export const VehicleSummary = ({
 
     {
       label: "Last rental date",
-      amount: summaryData.lastRentalDate
+      amount: summaryData?.lastRentalDate
         ? t("intlDate", { value: summaryData?.lastRentalDate, currency })
         : "None",
     },
