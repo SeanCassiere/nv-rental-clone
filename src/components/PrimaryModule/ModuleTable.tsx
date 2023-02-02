@@ -1,4 +1,5 @@
 import {
+  useMemo,
   useState,
   type ButtonHTMLAttributes,
   type DetailedHTMLProps,
@@ -40,7 +41,7 @@ import {
 
 import { type TColumnListItemParsed } from "../../utils/schemas/column";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { paginationOptionsMaker } from "../../utils/pagination";
+import { getPaginationWithDoubleEllipsis } from "../../utils/pagination";
 
 interface DraggableColumnHeaderProps {
   header: Header<any, unknown>;
@@ -186,6 +187,16 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     const description = find ? find.columnHeaderDescription : "Not found";
     return description;
   };
+
+  const pageNumbers = useMemo(
+    () =>
+      getPaginationWithDoubleEllipsis(
+        props.pagination.pageIndex + 1,
+        props.totalPages,
+        7
+      ),
+    [props.pagination.pageIndex, props.totalPages]
+  );
 
   return (
     <div className="overflow-hidden rounded border border-slate-200">
@@ -344,29 +355,18 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
               <span className="sr-only">Previous</span>
               <ChevronLeftOutline className="h-5 w-5" aria-hidden="true" />
             </DesktopPaginationButton>
-            {paginationOptionsMaker(
-              props.pagination.pageIndex + 1,
-              table.getPageCount()
-            ).map((opt) => {
-              if (opt === "..." || typeof opt === "string") {
-                return (
-                  <span className="relative inline-flex select-none items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700">
-                    ...
-                  </span>
-                );
-              }
-              return (
-                <DesktopPaginationButton
-                  key={`pagination-${opt}`}
-                  current={props.pagination.pageIndex + 1 === opt}
-                  onClick={() => {
-                    table.setPageIndex(opt - 1);
-                  }}
-                >
-                  {opt}
-                </DesktopPaginationButton>
-              );
-            })}
+            {pageNumbers.map((pageNum, idx) => (
+              <DesktopPaginationButton
+                key={`module-table-pagination-button-${pageNum}-${idx}`}
+                disabled={isNaN(pageNum)}
+                onClick={() => {
+                  !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
+                }}
+                current={props.pagination.pageIndex + 1 === pageNum}
+              >
+                {!isNaN(pageNum) ? pageNum : "..."}
+              </DesktopPaginationButton>
+            ))}
             <DesktopPaginationButton
               className="rounded-r px-2"
               disabled={!table.getCanNextPage()}
