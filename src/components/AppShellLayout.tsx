@@ -102,15 +102,12 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       type: "Button",
       props: {
         onClick: () => {
-          if (
-            auth.user?.profile.navotar_clientid &&
-            auth.user?.profile.navotar_userid
-          ) {
-            removeAllLocalStorageKeysForUser(
-              auth.user?.profile.navotar_clientid,
-              auth.user?.profile.navotar_userid
-            );
+          const client_id = auth.user?.profile.navotar_clientid;
+          const user_id = auth.user?.profile.navotar_userid;
+          if (client_id && user_id) {
+            removeAllLocalStorageKeysForUser(client_id, user_id);
           }
+
           auth.signoutRedirect();
         },
       },
@@ -241,7 +238,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             <nav className="flex-1 space-y-1 pb-4">
               {/* render in desktop sidebar */}
               {navigation.map((item) => (
-                <Link<any>
+                <Link
                   key={item.name}
                   to={item.href as any}
                   className={classNames(
@@ -352,7 +349,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                           if (item.type === "Link") {
                             return (
                               <span>
-                                <Link<any>
+                                <Link
                                   className={classNames(
                                     active ? "bg-slate-100" : "",
                                     "block px-4 py-2 text-sm text-slate-700"

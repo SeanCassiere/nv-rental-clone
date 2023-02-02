@@ -1,9 +1,3 @@
-export const userLocalStorageKeys = {
-  dateFormat: "date-format",
-  timeFormat: "time-format",
-  dismissedNotices: "dismissed-notices",
-};
-
 export function removeAllLocalStorageKeysForUser(
   clientId: string,
   userId: string
