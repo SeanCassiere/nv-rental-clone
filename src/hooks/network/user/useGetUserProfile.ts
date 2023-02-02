@@ -6,10 +6,8 @@ import { fetchUserProfile } from "../../../api/users";
 import { userQKeys } from "../../../utils/query-key";
 import { UserProfileSchema } from "../../../utils/schemas/user";
 import { dfnsDateFormat, dfnsTimeFormat } from "../../../i18n.config";
-import {
-  setLocalStorageForUser,
-  userLocalStorageKeys,
-} from "../../../utils/user-local-storage";
+import { setLocalStorageForUser } from "../../../utils/user-local-storage";
+import { USER_STORAGE_KEYS } from "../../../utils/constants";
 
 export function useGetUserProfile() {
   const { i18n } = useTranslation();
@@ -39,13 +37,13 @@ export function useGetUserProfile() {
         setLocalStorageForUser(
           clientId,
           userId,
-          userLocalStorageKeys.dateFormat,
+          USER_STORAGE_KEYS.dateFormat,
           data?.overrideDateFormat || dfnsDateFormat
         );
         setLocalStorageForUser(
           clientId,
           userId,
-          userLocalStorageKeys.timeFormat,
+          USER_STORAGE_KEYS.timeFormat,
           data?.overrideTimeFormat || dfnsTimeFormat
         );
       }

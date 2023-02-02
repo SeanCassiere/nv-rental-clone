@@ -1,4 +1,10 @@
-export const LS_OIDC_REDIRECT_URI_KEY = "oidc:redirect_uri";
+export const LS_OIDC_REDIRECT_URI_KEY = "oidc:redirect_uri" as const;
+
+export const USER_STORAGE_KEYS = {
+  dateFormat: "date-format",
+  timeFormat: "time-format",
+  dismissedNotices: "dismissed-notices",
+} as const;
 
 export const OIDC_AUTHORITY =
   import.meta.env.VITE_APP_AUTH_AUTHORITY || "https://testauth.appnavotar.com/";

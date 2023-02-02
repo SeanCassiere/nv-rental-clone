@@ -7,8 +7,8 @@ import type { TDashboardNotice } from "../../utils/schemas/dashboard";
 import {
   getLocalStorageForUser,
   setLocalStorageForUser,
-  userLocalStorageKeys,
 } from "../../utils/user-local-storage";
+import { USER_STORAGE_KEYS } from "../../utils/constants";
 
 const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
   const auth = useAuth();
@@ -25,7 +25,7 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
     const local = getLocalStorageForUser(
       auth.user?.profile.navotar_clientid,
       auth.user?.profile.navotar_userid,
-      userLocalStorageKeys.dismissedNotices
+      USER_STORAGE_KEYS.dismissedNotices
     );
     const data: string[] = local ? JSON.parse(local) : [];
 

@@ -12,10 +12,8 @@ import {
   ChevronRightOutline,
 } from "../icons";
 import { dfnsDateFormat, getDateFnsLocale } from "../../i18n.config";
-import {
-  getLocalStorageForUser,
-  userLocalStorageKeys,
-} from "../../utils/user-local-storage";
+import { getLocalStorageForUser } from "../../utils/user-local-storage";
+import { USER_STORAGE_KEYS } from "../../utils/constants";
 
 type TSelectedReactDatePickerProps = Omit<
   ReactDatePickerProps,
@@ -42,11 +40,7 @@ export const DatePicker = (props: DatePickerProps) => {
 
   const fromStorage =
     clientId && userId
-      ? getLocalStorageForUser(
-          clientId,
-          userId,
-          userLocalStorageKeys.dateFormat
-        )
+      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.dateFormat)
       : null;
 
   const dateFormat = fromStorage ? fromStorage : dfnsDateFormat;
