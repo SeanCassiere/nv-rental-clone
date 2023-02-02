@@ -43,7 +43,7 @@ export const RentalRatesSummary = ({
     {
       label: "Total miscellaneous charges",
       amount: t("intlCurrency", {
-        value: summaryData?.totalInventoryChargesTaxable,
+        value: summaryData?.totalMiscChargesTaxable,
         currency,
       }),
       primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
@@ -51,7 +51,7 @@ export const RentalRatesSummary = ({
     {
       label: "Total miscellaneous charges (non-taxable)",
       amount: t("intlCurrency", {
-        value: summaryData?.totalInventoryChargesNonTaxable,
+        value: summaryData?.totalMiscChargesNonTaxable,
         currency,
       }),
       primaryTextHighlight: Boolean(summaryData?.totalMiscChargesNonTaxable),
