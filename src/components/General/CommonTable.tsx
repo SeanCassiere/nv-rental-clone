@@ -24,10 +24,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
         <table className="min-w-full table-auto divide-y divide-slate-200 bg-slate-50">
           <thead className="bg-slate-100">
             {table.getHeaderGroups().map((headerGroup) => (
-              <tr
-                key={headerGroup.id}
-                className="bg-slate-100 text-base font-medium text-gray-700"
-              >
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
@@ -35,7 +32,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                     colSpan={header.colSpan}
                     className={classNames(
                       header.index === 0 ? "sm:pl-6" : "",
-                      "px-4 py-5 text-left"
+                      "px-4 py-5 text-left text-base font-medium text-gray-700"
                     )}
                   >
                     {header.isPlaceholder
@@ -49,7 +46,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
               </tr>
             ))}
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-200">
             {table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>

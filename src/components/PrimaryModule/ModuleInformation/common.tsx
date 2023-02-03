@@ -24,7 +24,7 @@ const InformationBlock = (props: TInformationBlockProps) => {
         "gap-0.5 border-b border-b-slate-200 px-4 pb-2 sm:grid"
       )}
     >
-      <span className="select-none truncate text-base font-bold text-slate-800">
+      <span className="select-none truncate text-base font-semibold text-slate-800">
         {props.heading}
       </span>
       <span className="truncate pt-1.5 pb-2 text-base leading-3 text-slate-700">

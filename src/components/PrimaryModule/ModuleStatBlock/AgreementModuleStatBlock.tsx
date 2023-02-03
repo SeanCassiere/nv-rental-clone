@@ -20,7 +20,7 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Status"
         stat={
-          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
+          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
             {agreement?.agreementStatusName ?? "-"}
           </span>
         }
@@ -28,7 +28,7 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Agreement type"
         stat={
-          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
+          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
             {agreement?.agreementType ?? "-"}
           </span>
         }
@@ -36,7 +36,7 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Vehicle type"
         stat={
-          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
+          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
             {agreement?.vehicleType ?? "-"}
           </span>
         }
@@ -44,7 +44,7 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkout date"
         stat={
-          <span className="select-none truncate text-xl font-bold text-slate-600 xl:text-2xl">
+          <span className="select-none truncate text-xl font-semibold text-slate-600 xl:text-2xl">
             {agreement?.checkoutDate
               ? t("intlDateTime", {
                   value: agreement?.checkoutDate,
@@ -56,7 +56,7 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkout location"
         stat={
-          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
+          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
             {agreement?.checkoutLocationName ?? "-"}
           </span>
         }
@@ -64,7 +64,7 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkin date"
         stat={
-          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
+          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
             {agreement?.checkinDate
               ? t("intlDateTime", {
                   value: agreement?.checkinDate,
@@ -76,7 +76,7 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Checkin location"
         stat={
-          <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
+          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
             {agreement?.checkinLocationName ?? "-"}
           </span>
         }
@@ -85,7 +85,7 @@ const AgreementModuleStatBlock = ({
         <ModuleStatBlock
           header="Return date"
           stat={
-            <span className="select-none text-xl font-bold text-slate-600 xl:text-2xl">
+            <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
               {agreement?.returnDate
                 ? t("intlDateTime", {
                     value: agreement?.returnDate,

@@ -2,9 +2,205 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .react-datepicker__input-container input {
-  @apply form-input block w-full rounded border border-gray-300 bg-white text-base shadow-sm md:text-sm;
-} */
+@layer base {
+  /* Poppins Thin -> Tw Thin */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-thin-webfont.woff2") format("woff2"),
+      url("/assets/fonts/poppins/poppins-thin-webfont.woff") format("woff");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-thinitalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-thinitalic-webfont.woff")
+        format("woff");
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins ExtraLight -> Tw ExtraLight */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-extralight-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-extralight-webfont.woff")
+        format("woff");
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-extralightitalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-extralightitalic-webfont.woff")
+        format("woff");
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins Light -> Tw Light */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-light-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-light-webfont.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-lightitalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-lightitalic-webfont.woff")
+        format("woff");
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins Normal -> Tw Normal */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-regular-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-regular-webfont.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-italic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-italic-webfont.woff") format("woff");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins Medium -> Tw Medium */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-medium-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-medium-webfont.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-mediumitalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-mediumitalic-webfont.woff")
+        format("woff");
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins SemiBold -> Tw SemiBold */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-semibold-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-semibold-webfont.woff") format("woff");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-semibolditalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-semibolditalic-webfont.woff")
+        format("woff");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins Bold -> Tw Bold */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-bold-webfont.woff2") format("woff2"),
+      url("/assets/fonts/poppins/poppins-bold-webfont.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-bolditalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-bolditalic-webfont.woff")
+        format("woff");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins ExtraBold -> Tw ExtraBold */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-extrabold-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-extrabold-webfont.woff") format("woff");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-extrabolditalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-extrabolditalic-webfont.woff")
+        format("woff");
+    font-weight: 800;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* Poppins Black -> Tw Black */
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-black-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-black-webfont.woff") format("woff");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/poppins-blackitalic-webfont.woff2")
+        format("woff2"),
+      url("/assets/fonts/poppins/poppins-blackitalic-webfont.woff")
+        format("woff");
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+  }
+}
+
+/* react-datepicker styles */
 
 .app-day-picker .react-datepicker-popper {
   @apply z-40 mt-1 ml-0 w-72 rounded border border-slate-200 bg-white px-3 pt-3 pb-2 text-sm shadow-lg sm:w-60;
