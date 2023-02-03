@@ -10,6 +10,8 @@ import {
   SummaryLineItem,
   type TSummaryLineItemProps,
 } from "./common";
+import { searchReservationsRoute } from "../../../routes/reservations/searchReservations";
+import { searchAgreementsRoute } from "../../../routes/agreements/searchAgreements";
 
 export const VehicleSummary = ({
   summaryData,
@@ -122,7 +124,7 @@ export const VehicleSummary = ({
       type: summaryData?.futureNoOfReservation ? "link" : "text",
       amount: summaryData?.futureNoOfReservation,
       linkProps: {
-        to: "/reservations",
+        to: searchReservationsRoute.fullPath,
         search: () => ({
           filters: {
             VehicleNo: vehicleNo ?? "",
@@ -205,7 +207,7 @@ export const VehicleSummary = ({
         ? summaryData?.pendingPayment
         : "None",
       linkProps: {
-        to: "/agreements",
+        to: searchAgreementsRoute.fullPath,
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
         }),

@@ -15,6 +15,7 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { AgreementDateTimeColumns } from "../../pages/AgreementsSearch/AgreementsSearchPage";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -119,7 +120,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
             Showing a maximum of {pageSize} records.
           </p>
           <Link
-            to="/agreements"
+            to={searchAgreementsRoute.fullPath}
             search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
             className="text-slate-600 underline hover:text-slate-800"
           >

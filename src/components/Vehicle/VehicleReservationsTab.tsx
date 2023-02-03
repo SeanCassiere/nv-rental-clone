@@ -15,6 +15,7 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { viewReservationRoute } from "../../routes/reservations/viewReservation";
 import { ReservationDateTimeColumns } from "../../pages/ReservationsSearch/ReservationsSearchPage";
+import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -117,7 +118,7 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
             Showing a maximum of {pageSize} records.
           </p>
           <Link
-            to="/reservations"
+            to={searchReservationsRoute.fullPath}
             search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
             className="text-slate-600 underline hover:text-slate-800"
           >
