@@ -24,6 +24,12 @@ import {
 import { useGetUserProfile } from "../hooks/network/user/useGetUserProfile";
 import { removeAllLocalStorageKeysForUser } from "../utils/user-local-storage";
 
+import { searchAgreementsRoute } from "../routes/agreements/searchAgreements";
+import { searchReservationsRoute } from "../routes/reservations/searchReservations";
+import { searchFleetRoute } from "../routes/fleet/searchFleet";
+import { searchCustomersRoute } from "../routes/customers/searchCustomers";
+import { indexRoute } from "../routes";
+
 const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -59,35 +65,35 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const navigation = [
     {
       name: "Dashboard",
-      href: "/",
+      href: indexRoute.fullPath,
       icon: RectangleGroupSolid,
       current: matches(["/"], "="),
       props: {},
     },
     {
       name: "Customers",
-      href: "/customers",
+      href: searchCustomersRoute.fullPath,
       icon: UsersSolid,
       current: matches(["/customers", "/customers/$customerId"]),
       props: {},
     },
     {
-      name: "Vehicles",
-      href: "/fleet",
+      name: "Fleet",
+      href: searchFleetRoute.fullPath,
       icon: TruckFilled,
       current: matches(["/fleet", "/fleet/$vehicleId"]),
       props: {},
     },
     {
       name: "Reservations",
-      href: "/reservations",
+      href: searchReservationsRoute.fullPath,
       icon: BookFilled,
       current: matches(["/reservations", "/reservations/$reservationId"]),
       props: {},
     },
     {
       name: "Agreements",
-      href: "/agreements",
+      href: searchAgreementsRoute.fullPath,
       icon: DocumentTextSolid,
       current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {},

@@ -15,7 +15,10 @@ import {
 } from "@tanstack/react-router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
 import type { TDashboardStats } from "../../utils/schemas/dashboard";
+
 import { indexRoute } from "../../routes";
+import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
+import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 
 const DashboardStatsBlock = ({
   statistics,
@@ -30,7 +33,7 @@ const DashboardStatsBlock = ({
           icon={CreditCardOutline}
           value={Number(statistics.todaysReservationCount).toString()}
           linkProps={{
-            to: "/reservations",
+            to: searchReservationsRoute.fullPath,
             search: () => ({
               page: 1,
               size: 10,
@@ -50,7 +53,7 @@ const DashboardStatsBlock = ({
           icon={ArrowDownRightOutline}
           value={Number(statistics.todaysArrivalsCount).toString()}
           linkProps={{
-            to: "/agreements",
+            to: searchAgreementsRoute.fullPath,
             search: () => ({
               page: 1,
               size: 10,
@@ -70,7 +73,7 @@ const DashboardStatsBlock = ({
           icon={TruckOutline}
           value={Number(statistics.openAgreement).toString()}
           linkProps={{
-            to: "/agreements", // because searchAgreementsRoute has trailing slash bug
+            to: searchAgreementsRoute.fullPath,
             search: () => ({
               page: 1,
               size: 10,
@@ -86,7 +89,7 @@ const DashboardStatsBlock = ({
           icon={CreditCardOutline}
           value={Number(statistics.overDues).toString()}
           linkProps={{
-            to: "/agreements",
+            to: searchAgreementsRoute.fullPath,
             search: () => ({
               page: 1,
               size: 10,
@@ -102,7 +105,7 @@ const DashboardStatsBlock = ({
           icon={BankNotesOutline}
           value={Number(statistics.pendingPayment).toString()}
           linkProps={{
-            to: "/agreements",
+            to: searchAgreementsRoute.fullPath,
             search: () => ({
               page: 1,
               size: 10,
