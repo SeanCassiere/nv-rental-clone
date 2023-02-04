@@ -73,7 +73,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
     >
       <span
         className={classNames(
-          "flex-shrink break-all font-medium md:max-w-none",
+          "flex-shrink break-all font-semibold md:max-w-none",
           !data.primaryBlockHighlight ? "text-gray-700" : "",
           data.biggerText ? "text-lg" : "text-base"
         )}

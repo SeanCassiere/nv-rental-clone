@@ -3,33 +3,12 @@
 @tailwind utilities;
 
 @layer base {
-  /* Poppins Thin -> Tw Thin */
+  /* Source Sans Pro ExtraLight */
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-thin-webfont.woff2") format("woff2"),
-      url("/assets/fonts/poppins/poppins-thin-webfont.woff") format("woff");
-    font-weight: 100;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-thinitalic-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-ExtraLight.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-thinitalic-webfont.woff")
-        format("woff");
-    font-weight: 100;
-    font-style: italic;
-    font-display: swap;
-  }
-
-  /* Poppins ExtraLight -> Tw ExtraLight */
-  @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-extralight-webfont.woff2")
-        format("woff2"),
-      url("/assets/fonts/poppins/poppins-extralight-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-ExtraLight.woff")
         format("woff");
     font-weight: 200;
     font-style: normal;
@@ -37,162 +16,125 @@
   }
 
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-extralightitalic-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-ExtraLightItalic.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-extralightitalic-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-ExtraLightItalic.woff")
         format("woff");
     font-weight: 200;
     font-style: italic;
     font-display: swap;
   }
 
-  /* Poppins Light -> Tw Light */
+  /* Source Sans Pro Light */
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-light-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-Light.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-light-webfont.woff") format("woff");
+      url("/assets/fonts/source-sans-pro/SourceSansPro-Light.woff")
+        format("woff");
     font-weight: 300;
     font-style: normal;
     font-display: swap;
   }
 
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-lightitalic-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-LightItalic.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-lightitalic-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-LightItalic.woff")
         format("woff");
     font-weight: 300;
     font-style: italic;
     font-display: swap;
   }
 
-  /* Poppins Normal -> Tw Normal */
+  /* Source Sans Pro Regular */
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-regular-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-Regular.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-regular-webfont.woff") format("woff");
+      url("/assets/fonts/source-sans-pro/SourceSansPro-Regular.woff")
+        format("woff");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
   }
 
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-italic-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-Italic.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-italic-webfont.woff") format("woff");
+      url("/assets/fonts/source-sans-pro/SourceSansPro-Italic.woff")
+        format("woff");
     font-weight: 400;
     font-style: italic;
     font-display: swap;
   }
 
-  /* Poppins Medium -> Tw Medium */
+  /* Source Sans Pro SemiBold */
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-medium-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-SemiBold.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-medium-webfont.woff") format("woff");
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-mediumitalic-webfont.woff2")
-        format("woff2"),
-      url("/assets/fonts/poppins/poppins-mediumitalic-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-SemiBold.woff")
         format("woff");
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
-  }
-
-  /* Poppins SemiBold -> Tw SemiBold */
-  @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-semibold-webfont.woff2")
-        format("woff2"),
-      url("/assets/fonts/poppins/poppins-semibold-webfont.woff") format("woff");
     font-weight: 600;
     font-style: normal;
     font-display: swap;
   }
 
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-semibolditalic-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-SemiBoldItalic.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-semibolditalic-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-SemiBoldItalic.woff")
         format("woff");
     font-weight: 600;
     font-style: italic;
     font-display: swap;
   }
 
-  /* Poppins Bold -> Tw Bold */
+  /* Source Sans Pro Bold */
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-bold-webfont.woff2") format("woff2"),
-      url("/assets/fonts/poppins/poppins-bold-webfont.woff") format("woff");
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-Bold.woff2")
+        format("woff2"),
+      url("/assets/fonts/source-sans-pro/SourceSansPro-Bold.woff")
+        format("woff");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
   }
 
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-bolditalic-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-BoldItalic.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-bolditalic-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-BoldItalic.woff")
         format("woff");
     font-weight: 700;
     font-style: italic;
     font-display: swap;
   }
 
-  /* Poppins ExtraBold -> Tw ExtraBold */
+  /* Source Sans Pro Black */
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-extrabold-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-Black.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-extrabold-webfont.woff") format("woff");
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-extrabolditalic-webfont.woff2")
-        format("woff2"),
-      url("/assets/fonts/poppins/poppins-extrabolditalic-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-Black.woff")
         format("woff");
-    font-weight: 800;
-    font-style: italic;
-    font-display: swap;
-  }
-
-  /* Poppins Black -> Tw Black */
-  @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-black-webfont.woff2")
-        format("woff2"),
-      url("/assets/fonts/poppins/poppins-black-webfont.woff") format("woff");
     font-weight: 900;
     font-style: normal;
     font-display: swap;
   }
 
   @font-face {
-    font-family: "Poppins";
-    src: url("/assets/fonts/poppins/poppins-blackitalic-webfont.woff2")
+    font-family: "Source Sans Pro";
+    src: url("/assets/fonts/source-sans-pro/SourceSansPro-BlackItalic.woff2")
         format("woff2"),
-      url("/assets/fonts/poppins/poppins-blackitalic-webfont.woff")
+      url("/assets/fonts/source-sans-pro/SourceSansPro-BlackItalic.woff")
         format("woff");
     font-weight: 900;
     font-style: italic;

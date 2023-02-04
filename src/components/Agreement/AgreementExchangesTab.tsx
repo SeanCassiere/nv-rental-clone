@@ -61,7 +61,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
                     to={viewFleetRoute.id}
                     params={{ vehicleId: `${vehicleId}` }}
                     search={() => ({ tab: "summary" })}
-                    className="font-medium text-slate-800"
+                    className="font-semibold text-slate-800"
                     preload="intent"
                   >
                     {String(value)}
