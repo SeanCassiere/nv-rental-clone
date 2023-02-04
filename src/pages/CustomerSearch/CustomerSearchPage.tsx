@@ -79,7 +79,7 @@ function CustomerSearchPage() {
                   to={viewCustomerRoute.id}
                   params={{ customerId: String(customerId) }}
                   search={() => ({ tab: "summary" })}
-                  className="font-medium text-slate-800"
+                  className="font-semibold text-slate-800"
                   preload="intent"
                 >
                   {value}

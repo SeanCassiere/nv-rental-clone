@@ -32,7 +32,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                     colSpan={header.colSpan}
                     className={classNames(
                       header.index === 0 ? "sm:pl-6" : "",
-                      "px-4 py-5 text-left text-base font-medium text-gray-700"
+                      "px-4 py-5 text-left text-base font-semibold text-gray-700"
                     )}
                   >
                     {header.isPlaceholder

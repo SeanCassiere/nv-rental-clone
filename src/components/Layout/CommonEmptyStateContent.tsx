@@ -31,7 +31,7 @@ const CommonEmptyStateContent = ({
             />
           </svg>
         )}
-        <h3 className="mt-2 text-sm font-medium text-slate-900">{title}</h3>
+        <h3 className="mt-2 text-sm font-semibold text-slate-900">{title}</h3>
         <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
         {/* <div className="mt-6">
         <button

@@ -73,7 +73,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
                   to={viewAgreementRoute.id}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
-                  className="font-medium text-slate-800"
+                  className="font-semibold text-slate-800"
                   preload="intent"
                 >
                   {value as any}

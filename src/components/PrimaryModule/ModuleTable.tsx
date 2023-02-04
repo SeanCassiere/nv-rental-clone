@@ -71,7 +71,7 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
       ref={isDisabled ? undefined : setDroppableNodeRef}
       colSpan={header.colSpan}
       scope="col"
-      className={classNames("text-base font-medium")}
+      className={classNames("text-base font-semibold")}
     >
       <button
         ref={setDraggableNodeRef}
