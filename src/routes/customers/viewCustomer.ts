@@ -8,6 +8,7 @@ import { fetchCustomerData } from "../../api/customer";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { customerQKeys } from "../../utils/query-key";
+import { b64_decode, b64_encode } from "../../utils/base64";
 
 export const viewCustomerRoute = new Route({
   getParentRoute: () => customersRoute,
@@ -61,7 +62,9 @@ export const viewCustomerRoute = new Route({
     return {};
   },
   parseParams: (params) => ({
-    customerId: z.string().parse(params.customerId),
+    customerId: b64_decode(z.string().parse(params.customerId)),
   }),
-  stringifyParams: (params) => ({ customerId: `${params.customerId}` }),
+  stringifyParams: (params) => ({
+    customerId: b64_encode(`${params.customerId}`),
+  }),
 });

@@ -14,7 +14,6 @@ import { VehicleSearchQuerySchema } from "../../utils/schemas/vehicle";
 export const searchFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "/",
-  component: lazy(() => import("../../pages/FleetSearch/FleetSearchPage")),
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
     () => ({
@@ -74,4 +73,5 @@ export const searchFleetRoute = new Route({
     }
     return {};
   },
+  component: lazy(() => import("../../pages/FleetSearch/FleetSearchPage")),
 });

@@ -8,6 +8,7 @@ import { fetchAgreementData } from "../../api/agreements";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { agreementQKeys } from "../../utils/query-key";
+import { b64_decode, b64_encode } from "../../utils/base64";
 
 export const viewAgreementRoute = new Route({
   getParentRoute: () => agreementsRoute,
@@ -65,8 +66,10 @@ export const viewAgreementRoute = new Route({
     return {};
   },
   parseParams: (params) => ({
-    agreementId: z.string().parse(params.agreementId),
+    agreementId: b64_decode(z.string().parse(params.agreementId)),
   }),
-  stringifyParams: (params) => ({ agreementId: `${params.agreementId}` }),
+  stringifyParams: (params) => ({
+    agreementId: b64_encode(`${params.agreementId}`),
+  }),
   component: lazy(() => import("../../pages/AgreementView/AgreementViewPage")),
 });
