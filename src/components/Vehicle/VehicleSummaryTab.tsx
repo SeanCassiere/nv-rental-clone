@@ -26,7 +26,7 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   const vehicleSummary = useGetVehicleSummary({ vehicleId: props.vehicleId });
 
   const agreementData = useGetAgreementData({
-    agreementId: vehicleSummary.data.currentAgreement,
+    agreementId: vehicleSummary.data?.currentAgreement,
   });
 
   const clientProfile = useGetClientProfile();

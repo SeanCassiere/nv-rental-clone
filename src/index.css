@@ -144,6 +144,10 @@
 
 /* react-datepicker styles */
 
+.app-day-picker .react-datepicker__aria-live {
+  @apply hidden;
+}
+
 .app-day-picker .react-datepicker-popper {
   @apply z-40 mt-1 ml-0 w-72 rounded border border-slate-200 bg-white px-3 pt-3 pb-2 text-sm shadow-lg sm:w-60;
 }

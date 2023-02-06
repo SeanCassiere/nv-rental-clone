@@ -64,7 +64,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
               to={viewCustomerRoute.id}
               params={{ customerId: String(data.customerId) }}
               search={() => ({ tab: "summary" })}
-              className="font-medium text-slate-800 hover:text-slate-600"
+              className="font-semibold text-slate-800 hover:text-slate-600"
             >
               {fullName}
             </Link>

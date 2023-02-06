@@ -58,13 +58,6 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
   const infoBlocks = useMemo(() => {
     const blocks: TInformationBlockCardProps["blocks"] = [];
 
-    // const pushBlank = () => {
-    //   blocks.push({
-    //     heading: "",
-    //     value: "",
-    //     isHiddenOnMobile: true,
-    //   });
-    // };
     const pushVehicleNo = () => {
       if (data.vehicleId && data.vehicleNo) {
         blocks.push({
@@ -74,7 +67,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
               to={viewFleetRoute.id}
               params={{ vehicleId: String(data.vehicleId) }}
               search={() => ({ tab: "summary" })}
-              className="font-medium text-slate-800 hover:text-slate-600"
+              className="font-semibold text-slate-800 hover:text-slate-600"
             >
               {data.vehicleNo}
             </Link>

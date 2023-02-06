@@ -2,10 +2,10 @@ import { lazy, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { fleetRoute } from ".";
+import { queryClient as qc } from "../../App";
 import { fetchVehicleSummaryAmounts } from "../../api/summary";
 import { fetchVehicleData } from "../../api/vehicles";
 
-import { queryClient as qc } from "../../App";
 import { getAuthToken } from "../../utils/authLocal";
 import { fleetQKeys } from "../../utils/query-key";
 
@@ -13,7 +13,11 @@ export const viewFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
   validateSearch: (search) =>
-    z.object({ tab: z.string().optional() }).parse(search),
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
   onLoad: async ({ params: { vehicleId } }) => {
     const auth = getAuthToken();
@@ -61,9 +65,11 @@ export const viewFleetRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../../pages/FleetView/FleetViewPage")),
   parseParams: (params) => ({
     vehicleId: z.string().parse(params.vehicleId),
   }),
-  stringifyParams: (params) => ({ vehicleId: `${params.vehicleId}` }),
+  stringifyParams: (params) => ({
+    vehicleId: `${params.vehicleId}`,
+  }),
+  component: lazy(() => import("../../pages/FleetView/FleetViewPage")),
 });
