@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useSearch, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -24,6 +24,7 @@ import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleCo
 import { useGetVehicleStatusList } from "../../hooks/network/vehicle/useGetVehicleStatusList";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
@@ -114,9 +115,7 @@ function VehiclesSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
-  useEffect(() => {
-    document.title = titleMaker("Fleet");
-  }, []);
+  useDocumentTitle(titleMaker("Fleet"));
 
   return (
     <Protector>

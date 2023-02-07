@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TextInput,
   SelectInput,
@@ -7,6 +7,7 @@ import {
   type TSelectInputOption,
   DatePicker,
 } from "../../components/Form";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
 import JsURLDecoder from "./JsURLDecoder";
 
@@ -38,9 +39,7 @@ const StylingAreaPage: React.FC = () => {
 
   const [date, setDate] = useState<Date | null>(null);
 
-  useEffect(() => {
-    document.title = titleMaker("Styling Area");
-  }, []);
+  useDocumentTitle(titleMaker("Styling Area"));
 
   return (
     <div className="h-full divide-y-2 divide-slate-200 overflow-y-auto bg-slate-50 px-2">
