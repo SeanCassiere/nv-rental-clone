@@ -38,8 +38,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
 
   const router = useRouter();
 
-  const routerStore = router.store.state;
-  // const routerStore = useRouterStore();
+  const routerStore = router.__store.state;
 
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
     const matching: string[] = [
