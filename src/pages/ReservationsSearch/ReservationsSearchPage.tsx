@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -26,6 +26,7 @@ import { useGetReservationStatusList } from "../../hooks/network/reservation/use
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetReservationTypesList } from "../../hooks/network/reservation/useGetReservationTypes";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
 import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
@@ -44,7 +45,8 @@ export const ReservationDateTimeColumns = [
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  const navigate = useNavigate({ from: searchReservationsRoute.id });
+  // const navigate = useNavigate({ from: searchReservationsRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -128,9 +130,7 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
-  useEffect(() => {
-    document.title = titleMaker("Reservations");
-  }, []);
+  useDocumentTitle(titleMaker("Reservations"));
 
   return (
     <Protector>
@@ -155,8 +155,7 @@ function ReservationsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  search: (current) => ({
-                    ...current,
+                  search: () => ({
                     page: 1,
                     size: 10,
                     filters: { ...formValues },

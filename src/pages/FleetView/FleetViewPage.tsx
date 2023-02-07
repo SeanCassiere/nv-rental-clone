@@ -1,4 +1,4 @@
-import { lazy, useEffect, useMemo } from "react";
+import { lazy, useMemo } from "react";
 import {
   useNavigate,
   useRouter,
@@ -20,6 +20,7 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import { viewFleetRoute } from "../../routes/fleet/viewFleet";
 
 import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
@@ -109,11 +110,9 @@ function VehicleViewPage() {
     return tabs;
   }, [vehicleId, vehicle.data]);
 
-  useEffect(() => {
-    document.title = titleMaker(
-      (vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet"
-    );
-  }, [vehicle.data?.vehicle.vehicleNo]);
+  useDocumentTitle(
+    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
+  );
 
   return (
     <Protector>

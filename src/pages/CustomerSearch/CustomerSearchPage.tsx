@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -23,6 +23,7 @@ import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomer
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
 import { useGetCustomerTypesList } from "../../hooks/network/customer/useGetCustomerTypes";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { CustomerFiltersSchema } from "../../utils/schemas/customer";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
@@ -37,7 +38,8 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  const navigate = useNavigate({ from: searchCustomersRoute.id });
+  // const navigate = useNavigate({ from: searchCustomersRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -121,9 +123,7 @@ function CustomerSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
-  useEffect(() => {
-    document.title = titleMaker("Customers");
-  }, []);
+  useDocumentTitle(titleMaker("Customers"));
 
   return (
     <Protector>

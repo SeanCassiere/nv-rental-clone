@@ -1,13 +1,11 @@
-import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 
 import ScrollToTop from "../../components/ScrollToTop";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
 
 const LoggedOutPage = () => {
-  useEffect(() => {
-    document.title = titleMaker("Logged out");
-  }, []);
+  useDocumentTitle(titleMaker("Logged out"));
 
   return (
     <>

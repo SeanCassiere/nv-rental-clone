@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -26,6 +26,7 @@ import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleCo
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
@@ -44,7 +45,8 @@ export const AgreementDateTimeColumns = [
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  const navigate = useNavigate({ from: searchAgreementsRoute.id });
+  // const navigate = useNavigate({ from: searchAgreementsRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -129,9 +131,7 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
-  useEffect(() => {
-    document.title = titleMaker("Agreements");
-  }, []);
+  useDocumentTitle(titleMaker("Agreements"));
 
   return (
     <Protector>

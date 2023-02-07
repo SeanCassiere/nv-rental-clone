@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 
 import Protector from "../../components/Protector";
@@ -18,6 +18,7 @@ import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashbo
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
 
 function IndexPage() {
@@ -38,9 +39,7 @@ function IndexPage() {
     saveDashboardWidgetsMutation.mutate({ widgets });
   };
 
-  useEffect(() => {
-    document.title = titleMaker("Dashboard");
-  }, []);
+  useDocumentTitle(titleMaker("Dashboard"));
 
   return (
     <Protector>

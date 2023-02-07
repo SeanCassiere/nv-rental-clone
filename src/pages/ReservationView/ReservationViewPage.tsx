@@ -1,4 +1,4 @@
-import { lazy, useEffect, useMemo } from "react";
+import { lazy, useMemo } from "react";
 import {
   useNavigate,
   useRouter,
@@ -20,6 +20,7 @@ import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleSta
 import { viewReservationRoute } from "../../routes/reservations/viewReservation";
 
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
@@ -92,12 +93,12 @@ function ReservationViewPage() {
     onError: onFindError,
   });
 
-  useEffect(() => {
-    document.title = titleMaker(
+  useDocumentTitle(
+    titleMaker(
       (reservation.data?.reservationview.reservationNumber || "Loading") +
         " - Reservations"
-    );
-  }, [reservation.data?.reservationview.reservationNumber]);
+    )
+  );
 
   return (
     <Protector>

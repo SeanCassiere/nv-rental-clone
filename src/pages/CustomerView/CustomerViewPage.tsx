@@ -1,4 +1,4 @@
-import { lazy, useEffect, useMemo } from "react";
+import { lazy, useMemo } from "react";
 import {
   Link,
   useNavigate,
@@ -19,6 +19,7 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
 
 import { useGetCustomerData } from "../../hooks/network/customer/useGetCustomerData";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
@@ -83,13 +84,13 @@ function CustomerViewPage() {
     onError: onFindError,
   });
 
-  useEffect(() => {
-    document.title = titleMaker(
+  useDocumentTitle(
+    titleMaker(
       (customer.data?.firstName && customer.data?.lastName
         ? customer.data?.firstName + " " + customer.data?.lastName
         : "Loading") + " - Customers"
-    );
-  }, [customer.data?.firstName, customer.data?.lastName]);
+    )
+  );
 
   return (
     <Protector>

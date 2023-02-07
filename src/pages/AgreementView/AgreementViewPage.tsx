@@ -1,4 +1,4 @@
-import { lazy, useEffect, useMemo } from "react";
+import { lazy, useMemo } from "react";
 import {
   Link,
   useNavigate,
@@ -19,6 +19,7 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
 
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
+import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
@@ -109,11 +110,9 @@ function AgreementViewPage() {
   });
   const isCheckedIn = agreement.data?.returnDate ? true : false;
 
-  useEffect(() => {
-    document.title = titleMaker(
-      (agreement.data?.agreementNumber || "Loading") + " - Agreements"
-    );
-  }, [agreement.data?.agreementNumber]);
+  useDocumentTitle(
+    titleMaker((agreement.data?.agreementNumber || "Loading") + " - Agreements")
+  );
 
   return (
     <Protector>
