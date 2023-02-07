@@ -34,7 +34,8 @@ import { titleMaker } from "../../utils/title-maker";
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  const navigate = useNavigate({ from: searchFleetRoute.id });
+  // const navigate = useNavigate({ from: searchFleetRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchFleetRoute.id });
   const { pageNumber, size, searchFilters } =

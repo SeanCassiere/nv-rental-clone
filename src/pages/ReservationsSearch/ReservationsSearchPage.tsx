@@ -44,7 +44,8 @@ export const ReservationDateTimeColumns = [
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  const navigate = useNavigate({ from: searchReservationsRoute.id });
+  // const navigate = useNavigate({ from: searchReservationsRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -155,8 +156,7 @@ function ReservationsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  search: (current) => ({
-                    ...current,
+                  search: () => ({
                     page: 1,
                     size: 10,
                     filters: { ...formValues },

@@ -37,7 +37,8 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  const navigate = useNavigate({ from: searchCustomersRoute.id });
+  // const navigate = useNavigate({ from: searchCustomersRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
