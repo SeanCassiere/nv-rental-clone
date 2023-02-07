@@ -40,13 +40,30 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
   stylingRoute,
-  agreementsRoute.addChildren([searchAgreementsRoute, viewAgreementRoute]),
-  customersRoute.addChildren([searchCustomersRoute, viewCustomerRoute]),
+  agreementsRoute.addChildren([
+    // /agreements/:agreementId
+    viewAgreementRoute,
+    // /agreements
+    searchAgreementsRoute,
+  ]),
+  customersRoute.addChildren([
+    // /customers
+    searchCustomersRoute,
+    // /customers/:customerId
+    viewCustomerRoute,
+  ]),
   reservationsRoute.addChildren([
+    // /reservations
     searchReservationsRoute,
+    // /reservations/:reservationId
     viewReservationRoute,
   ]),
-  fleetRoute.addChildren([searchFleetRoute, viewFleetRoute]),
+  fleetRoute.addChildren([
+    // /fleet
+    searchFleetRoute,
+    // /fleet/:fleetId
+    viewFleetRoute,
+  ]),
 ]);
 
 export const router = new ReactRouter({
@@ -66,7 +83,7 @@ export const router = new ReactRouter({
 });
 
 declare module "@tanstack/react-router" {
-  interface RegisterRouter {
+  interface Register {
     router: typeof router;
   }
 }
