@@ -41,10 +41,10 @@ const routeTree = rootRoute.addChildren([
   loggedOutRoute,
   stylingRoute,
   agreementsRoute.addChildren([
-    // /agreements/:agreementId
-    viewAgreementRoute,
     // /agreements
     searchAgreementsRoute,
+    // /agreements/:agreementId
+    viewAgreementRoute,
   ]),
   customersRoute.addChildren([
     // /customers

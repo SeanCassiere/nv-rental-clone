@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { RouterProvider } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useAuth, type AuthContext } from "react-oidc-context";
 
 import { OidcAuthProvider } from "./components/OidcAuthProvider";
 import { router } from "./router.config";
@@ -27,19 +26,9 @@ const App = () => {
 const SubApp = () => {
   return (
     <>
-      <RouterProvider
-        router={router}
-        context={{ auth: useAuth() }}
-        defaultPreload="intent"
-      />
+      <RouterProvider router={router} defaultPreload="intent" />
     </>
   );
 };
-
-declare module "@tanstack/react-router" {
-  interface RouterContext {
-    auth: typeof AuthContext;
-  }
-}
 
 export default App;
