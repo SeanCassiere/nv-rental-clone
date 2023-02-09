@@ -86,7 +86,7 @@ function AgreementsSearchPage() {
                 .AgreementId;
               return (
                 <Link
-                  to={viewAgreementRoute.id}
+                  to={viewAgreementRoute.fullPath}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

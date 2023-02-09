@@ -64,7 +64,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
           heading: "Vehicle no.",
           value: (
             <Link
-              to={viewFleetRoute.id}
+              to={viewFleetRoute.fullPath}
               params={{ vehicleId: String(data.vehicleId) }}
               search={() => ({ tab: "summary" })}
               className="font-semibold text-slate-800 hover:text-slate-600"
