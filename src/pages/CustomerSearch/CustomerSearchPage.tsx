@@ -78,7 +78,7 @@ function CustomerSearchPage() {
                 .CustomerId;
               return (
                 <Link
-                  to={viewCustomerRoute.id}
+                  to={viewCustomerRoute.fullPath}
                   params={{ customerId: String(customerId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

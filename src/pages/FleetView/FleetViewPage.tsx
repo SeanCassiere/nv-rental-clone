@@ -136,7 +136,7 @@ function VehicleViewPage() {
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewFleetRoute.id}
+                  to={viewFleetRoute.fullPath}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ vehicleId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

@@ -103,7 +103,7 @@ const ReservationModuleStatBlock = ({
             header="Agreement no."
             stat={
               <Link
-                to={viewAgreementRoute.id}
+                to={viewAgreementRoute.fullPath}
                 params={{
                   agreementId: String(reservation.reservationview.agreementId),
                 }}

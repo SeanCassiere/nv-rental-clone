@@ -114,7 +114,7 @@ function CustomerViewPage() {
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewCustomerRoute.id}
+                  to={viewCustomerRoute.fullPath}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ customerId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

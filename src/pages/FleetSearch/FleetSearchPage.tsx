@@ -74,7 +74,7 @@ function VehiclesSearchPage() {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewFleetRoute.id}
+                  to={viewFleetRoute.fullPath}
                   params={{ vehicleId: String(vehicleId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

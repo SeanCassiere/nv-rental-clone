@@ -58,7 +58,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
                 return (
                   <Link
-                    to={viewFleetRoute.id}
+                    to={viewFleetRoute.fullPath}
                     params={{ vehicleId: `${vehicleId}` }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"

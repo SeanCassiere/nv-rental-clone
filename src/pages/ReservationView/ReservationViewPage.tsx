@@ -122,7 +122,7 @@ function ReservationViewPage() {
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewReservationRoute.id}
+                  to={viewReservationRoute.fullPath}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ reservationId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
