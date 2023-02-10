@@ -8,7 +8,6 @@ import { fetchReservationData } from "../../api/reservation";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { reservationQKeys } from "../../utils/query-key";
-import { b64_decode, b64_encode } from "../../utils/base64";
 
 export const viewReservationRoute = new Route({
   getParentRoute: () => reservationsRoute,
@@ -65,9 +64,9 @@ export const viewReservationRoute = new Route({
     () => import("../../pages/ReservationView/ReservationViewPage")
   ),
   parseParams: (params) => ({
-    reservationId: b64_decode(z.string().parse(params.reservationId)),
+    reservationId: z.string().parse(params.reservationId),
   }),
   stringifyParams: (params) => ({
-    reservationId: b64_encode(`${params.reservationId}`),
+    reservationId: `${params.reservationId}`,
   }),
 });
