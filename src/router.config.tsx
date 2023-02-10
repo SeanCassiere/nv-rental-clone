@@ -20,6 +20,7 @@ import { stylingRoute } from "./routes/styles";
 import { agreementsRoute } from "./routes/agreements";
 import { searchAgreementsRoute } from "./routes/agreements/searchAgreements";
 import { viewAgreementRoute } from "./routes/agreements/viewAgreement";
+import { addAgreementRoute } from "./routes/agreements/addAgreement";
 
 // /customers
 import { customersRoute } from "./routes/customers";
@@ -30,6 +31,7 @@ import { viewCustomerRoute } from "./routes/customers/viewCustomer";
 import { reservationsRoute } from "./routes/reservations";
 import { searchReservationsRoute } from "./routes/reservations/searchReservations";
 import { viewReservationRoute } from "./routes/reservations/viewReservation";
+import { addReservationRoute } from "./routes/reservations/addReservation";
 
 // /fleet
 import { fleetRoute } from "./routes/fleet";
@@ -41,6 +43,8 @@ const routeTree = rootRoute.addChildren([
   loggedOutRoute,
   stylingRoute,
   agreementsRoute.addChildren([
+    // /agreements/add
+    addAgreementRoute,
     // /agreements
     searchAgreementsRoute,
     // /agreements/:agreementId
@@ -55,6 +59,8 @@ const routeTree = rootRoute.addChildren([
   reservationsRoute.addChildren([
     // /reservations
     searchReservationsRoute,
+    // /reservations/add
+    addReservationRoute,
     // /reservations/:reservationId
     viewReservationRoute,
   ]),
