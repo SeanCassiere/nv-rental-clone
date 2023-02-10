@@ -16,8 +16,12 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 import VehicleModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import { LinkButton } from "../../components/Form";
 
-import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
+import {
+  editFleetByIdRoute,
+  viewFleetByIdRoute,
+} from "../../routes/fleet/fleetIdPath";
 
 import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -122,28 +126,39 @@ function VehicleViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex items-center gap-2">
-                <Link
-                  to=".."
-                  className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                  onClick={() => {
-                    router.history.go(-1);
-                  }}
-                >
-                  Fleet
-                </Link>
-                <ChevronRightOutline
-                  className="h-4 w-4 flex-shrink-0 text-gray-500"
-                  aria-hidden="true"
-                />
-                <Link
-                  to={viewFleetByIdRoute.fullPath}
-                  search={(current) => ({ tab: current?.tab || "summary" })}
-                  params={{ vehicleId }}
-                  className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                >
-                  {vehicle?.data?.vehicle.vehicleNo}
-                </Link>
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <Link
+                    to=".."
+                    className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                    onClick={() => {
+                      router.history.go(-1);
+                    }}
+                  >
+                    Fleet
+                  </Link>
+                  <ChevronRightOutline
+                    className="h-4 w-4 flex-shrink-0 text-gray-500"
+                    aria-hidden="true"
+                  />
+                  <Link
+                    to={viewFleetByIdRoute.fullPath}
+                    search={(current) => ({ tab: current?.tab || "summary" })}
+                    params={{ vehicleId }}
+                    className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                  >
+                    {vehicle?.data?.vehicle.vehicleNo}
+                  </Link>
+                </div>
+                <div>
+                  <LinkButton
+                    to={editFleetByIdRoute.fullPath}
+                    search={() => ({})}
+                    params={{ vehicleId: String(vehicleId) }}
+                  >
+                    Edit
+                  </LinkButton>
+                </div>
               </div>
             }
             headerActionContent

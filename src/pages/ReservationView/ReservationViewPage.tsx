@@ -16,6 +16,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
+import { LinkButton } from "../../components/Form";
 
 import {
   editReservationByIdRoute,
@@ -136,14 +137,13 @@ function ReservationViewPage() {
                   </Link>
                 </div>
                 <div>
-                  <Link
+                  <LinkButton
                     to={editReservationByIdRoute.fullPath}
-                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
-                    search={() => ({ stage: "rental-information" })}
-                    params={{ reservationId }}
+                    search={() => ({})}
+                    params={{ reservationId: String(reservationId) }}
                   >
                     Edit
-                  </Link>
+                  </LinkButton>
                 </div>
               </div>
             }

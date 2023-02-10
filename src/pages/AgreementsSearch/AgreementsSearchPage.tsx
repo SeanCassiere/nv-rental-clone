@@ -16,6 +16,7 @@ import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
 import { DocumentTextSolid } from "../../components/icons";
+import { LinkButton } from "../../components/Form";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
@@ -145,13 +146,13 @@ function AgreementsSearchPage() {
                   Agreements
                 </h1>
                 <div>
-                  <Link
+                  <LinkButton
+                    color="teal"
                     to={addAgreementRoute.fullPath}
-                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     search={() => ({ stage: "rental-information" })}
                   >
                     New Agreement
-                  </Link>
+                  </LinkButton>
                 </div>
               </div>
             }

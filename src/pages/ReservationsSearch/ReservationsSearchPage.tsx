@@ -15,9 +15,11 @@ import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
 import { BookFilled } from "../../components/icons";
+import { LinkButton } from "../../components/Form";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
+import { addReservationRoute } from "../../routes/reservations/addReservation";
 
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -33,7 +35,6 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
-import { addReservationRoute } from "../../routes/reservations/addReservation";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -144,13 +145,13 @@ function ReservationsSearchPage() {
                   Reservations
                 </h1>
                 <div>
-                  <Link
+                  <LinkButton
+                    color="teal"
                     to={addReservationRoute.fullPath}
-                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     search={() => ({ stage: "rental-information" })}
                   >
                     New Reservation
-                  </Link>
+                  </LinkButton>
                 </div>
               </div>
             }

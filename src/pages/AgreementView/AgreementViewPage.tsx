@@ -15,6 +15,7 @@ import {
 } from "../../components/PrimaryModule/ModuleTabs";
 import AgreementModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import { LinkButton } from "../../components/Form";
 
 import {
   editAgreementByIdRoute,
@@ -149,14 +150,13 @@ function AgreementViewPage() {
                   </Link>
                 </div>
                 <div>
-                  <Link
+                  <LinkButton
                     to={editAgreementByIdRoute.fullPath}
-                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     search={() => ({ stage: "rental-information" })}
-                    params={{ agreementId }}
+                    params={{ agreementId: String(agreementId) }}
                   >
                     Edit
-                  </Link>
+                  </LinkButton>
                 </div>
               </div>
             }
