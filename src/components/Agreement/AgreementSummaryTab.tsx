@@ -123,7 +123,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
 
   return (
     <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
-      <div className="flex flex-col gap-4 lg:col-span-7">
+      <div className="flex flex-col gap-4 lg:col-span-8">
         {canViewCustomerInformation && (
           <CustomerInformation
             mode="agreement"
@@ -160,7 +160,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
         />
       </div>
       {/*  */}
-      <div className="flex flex-col gap-4 lg:col-span-5">
+      <div className="flex flex-col gap-4 lg:col-span-4">
         <RentalRatesSummary
           module="agreements"
           summaryData={rentalRatesSummary.data}
