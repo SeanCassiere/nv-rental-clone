@@ -52,8 +52,8 @@ const AddAgreementPage = () => {
         currentStage={stage}
         module="agreement"
         onStageTabClick={handleStageTabClick}
-        onAgreementSaveComplete={handleAgreementSaveComplete}
-        onCancelClick={handleCancelAddAgreement}
+        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalCancelClick={handleCancelAddAgreement}
       />
     </Protector>
   );

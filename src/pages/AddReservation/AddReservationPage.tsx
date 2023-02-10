@@ -52,8 +52,8 @@ const AddReservationPage = () => {
         currentStage={stage}
         module="reservation"
         onStageTabClick={handleStageTabClick}
-        onAgreementSaveComplete={handleReservationSaveComplete}
-        onCancelClick={handleCancelAddReservation}
+        onRentalSaveClick={handleReservationSaveComplete}
+        onRentalCancelClick={handleCancelAddReservation}
       />
     </Protector>
   );

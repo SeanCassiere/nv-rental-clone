@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 
 import Protector from "../../components/Protector";
-import { ChevronRightOutline } from "../../components/icons";
+import { ChevronRightOutline, PencilIconFilled } from "../../components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
@@ -104,7 +104,7 @@ function CustomerViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <div className="flex items-center gap-2">
                   <Link
                     to=".."
@@ -129,12 +129,14 @@ function CustomerViewPage() {
                     {customer?.data?.lastName}
                   </Link>
                 </div>
-                <div>
+                <div className="flex flex-col gap-3 md:flex-row">
                   <LinkButton
                     to={editCustomerByIdRoute.fullPath}
                     search={() => ({})}
                     params={{ customerId: String(customerId) }}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PencilIconFilled className="h-3 w-3" />
                     Edit
                   </LinkButton>
                 </div>

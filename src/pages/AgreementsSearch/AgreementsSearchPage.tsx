@@ -15,7 +15,7 @@ import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreem
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { DocumentTextSolid } from "../../components/icons";
+import { DocumentTextSolid, PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
@@ -141,7 +141,7 @@ function AgreementsSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
                   Agreements
                 </h1>
@@ -150,7 +150,9 @@ function AgreementsSearchPage() {
                     color="teal"
                     to={addAgreementRoute.fullPath}
                     search={() => ({ stage: "rental-information" })}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PlusIconFilled className="h-4 w-4" />
                     New Agreement
                   </LinkButton>
                 </div>

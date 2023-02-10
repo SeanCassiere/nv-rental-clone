@@ -74,9 +74,10 @@ const EditAgreementPage = () => {
         currentStage={stage}
         module="agreement"
         onStageTabClick={handleStageTabClick}
-        onAgreementSaveComplete={handleAgreementSaveComplete}
-        onCancelClick={handleCancelEditAgreement}
+        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalCancelClick={handleCancelEditAgreement}
         referenceNumber={summaryData.data?.agreementNumber || undefined}
+        agreementData={summaryData.data || undefined}
         summaryData={rentalRatesSummary.data}
       />
     </Protector>

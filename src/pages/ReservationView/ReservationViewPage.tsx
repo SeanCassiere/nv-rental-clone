@@ -8,7 +8,11 @@ import {
 } from "@tanstack/react-router";
 
 import Protector from "../../components/Protector";
-import { ChevronRightOutline } from "../../components/icons";
+import {
+  ChevronRightOutline,
+  PencilIconFilled,
+  PrintIconFilled,
+} from "../../components/icons";
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
@@ -16,7 +20,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
-import { LinkButton } from "../../components/Form";
+import { Button, LinkButton } from "../../components/Form";
 
 import {
   editReservationByIdRoute,
@@ -112,7 +116,7 @@ function ReservationViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <div className="flex items-center gap-2">
                   <Link
                     to=".."
@@ -136,14 +140,24 @@ function ReservationViewPage() {
                     {reservation?.data?.reservationview?.reservationNumber}
                   </Link>
                 </div>
-                <div>
+                <div className="flex flex-col gap-3 md:flex-row">
                   <LinkButton
                     to={editReservationByIdRoute.fullPath}
                     search={() => ({})}
                     params={{ reservationId: String(reservationId) }}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PencilIconFilled className="h-3 w-3" />
                     Edit
                   </LinkButton>
+                  <Button
+                    type="button"
+                    color="teal"
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <PrintIconFilled className="h-3 w-3" />
+                    Print
+                  </Button>
                 </div>
               </div>
             }

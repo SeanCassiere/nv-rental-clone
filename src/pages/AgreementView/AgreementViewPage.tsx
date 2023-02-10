@@ -8,14 +8,19 @@ import {
 } from "@tanstack/react-router";
 
 import Protector from "../../components/Protector";
-import { ChevronRightOutline } from "../../components/icons";
+import {
+  ArrowDownLeftOutline,
+  ChevronRightOutline,
+  PencilIconFilled,
+  PrintIconFilled,
+} from "../../components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "../../components/PrimaryModule/ModuleTabs";
 import AgreementModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
-import { LinkButton } from "../../components/Form";
+import { Button, LinkButton } from "../../components/Form";
 
 import {
   editAgreementByIdRoute,
@@ -125,7 +130,7 @@ function AgreementViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <div className="flex items-center gap-2">
                   <Link
                     to=".."
@@ -149,14 +154,34 @@ function AgreementViewPage() {
                     {agreement?.data?.agreementNumber}
                   </Link>
                 </div>
-                <div>
+                <div className="flex flex-col gap-3 md:flex-row">
                   <LinkButton
                     to={editAgreementByIdRoute.fullPath}
                     search={() => ({ stage: "rental-information" })}
                     params={{ agreementId: String(agreementId) }}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PencilIconFilled className="h-3 w-3" />
                     Edit
                   </LinkButton>
+                  {!isCheckedIn && (
+                    <Button
+                      type="button"
+                      color="teal"
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <ArrowDownLeftOutline className="h-3.5 w-3.5" />
+                      Checkin
+                    </Button>
+                  )}
+                  <Button
+                    type="button"
+                    color="teal"
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <PrintIconFilled className="h-3 w-3" />
+                    Print
+                  </Button>
                 </div>
               </div>
             }

@@ -13,7 +13,7 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { TruckFilled } from "../../components/icons";
+import { PlusIconFilled, TruckFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
 
 import { searchFleetRoute } from "../../routes/fleet/searchFleet";
@@ -125,7 +125,7 @@ function VehiclesSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
                   Fleet
                 </h1>
@@ -134,7 +134,9 @@ function VehiclesSearchPage() {
                     color="teal"
                     to={addFleetRoute.fullPath}
                     search={() => ({})}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PlusIconFilled className="h-4 w-4" />
                     New Vehicle
                   </LinkButton>
                 </div>

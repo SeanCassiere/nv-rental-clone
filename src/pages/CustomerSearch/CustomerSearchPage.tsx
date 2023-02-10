@@ -14,7 +14,7 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { UsersSolid } from "../../components/icons";
+import { PlusIconFilled, UsersSolid } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
 
 import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
@@ -142,7 +142,9 @@ function CustomerSearchPage() {
                     color="teal"
                     to={addCustomerRoute.fullPath}
                     search={() => ({})}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PlusIconFilled className="h-4 w-4" />
                     New Customer
                   </LinkButton>
                 </div>

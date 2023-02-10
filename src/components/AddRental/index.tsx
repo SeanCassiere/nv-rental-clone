@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
 import CommonHeader from "../Layout/CommonHeader";
-import { ChevronRightOutline } from "../icons";
+import { ChevronRightOutline, PlayIconFilled } from "../icons";
 import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
 import { Button } from "../Form";
 import {
@@ -27,16 +27,29 @@ import {
 } from "../../routes/reservations/reservationIdPath";
 
 import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
+import { type ReservationDataParsed } from "../../utils/schemas/reservation";
+import { type AgreementDataParsed } from "../../utils/schemas/agreement";
+import { sortObject } from "../../utils/sortObject";
 
 interface TAddRentalParentFormProps {
   referenceId: number | string;
   currentStage: string;
   module: "agreement" | "reservation";
   onStageTabClick: (destinationTab: ModuleTabConfigItem) => void;
-  onAgreementSaveComplete: (agreementId: number) => void;
-  onCancelClick?: () => void;
+  onRentalSaveClick: (agreementId: number) => void;
+  onRentalCancelClick: () => void;
   referenceNumber?: string;
   summaryData?: TRentalRatesSummarySchema;
+  agreementData?: AgreementDataParsed;
+  reservationData?: ReservationDataParsed;
+}
+
+function DummyComponent(data: any) {
+  return (
+    <pre className="max-h-[600px] overflow-y-auto text-xs">
+      <code>{JSON.stringify(sortObject(data), null, 2)}</code>
+    </pre>
+  );
 }
 
 const AddRentalParentForm = ({
@@ -44,9 +57,11 @@ const AddRentalParentForm = ({
   currentStage: stage,
   module,
   onStageTabClick: handleStageTabClick,
+  onRentalCancelClick: handleRentalCancelClick,
   referenceNumber,
   summaryData,
-  onCancelClick,
+  agreementData,
+  reservationData,
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
   const [isDataModified] = useState(false);
@@ -59,7 +74,11 @@ const AddRentalParentForm = ({
       tabs.push({
         id: "rental-information",
         label: "Rental information",
-        component: "Rental information",
+        component: (
+          <DummyComponent
+            {...(agreementData ? agreementData : { rental: null })}
+          />
+        ),
       });
       tabs.push({
         id: "vehicle-information",
@@ -86,7 +105,11 @@ const AddRentalParentForm = ({
       tabs.push({
         id: "rental-information",
         label: "Rental information",
-        component: "Rental information",
+        component: (
+          <DummyComponent
+            {...(reservationData ? reservationData : { rental: null })}
+          />
+        ),
       });
       tabs.push({
         id: "vehicle-information",
@@ -111,7 +134,7 @@ const AddRentalParentForm = ({
     }
 
     return tabs;
-  }, [module]);
+  }, [module, agreementData, reservationData]);
 
   return (
     <>
@@ -119,7 +142,7 @@ const AddRentalParentForm = ({
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <div className="flex flex-col items-center justify-start gap-2 align-top md:flex-row">
                   {!isEdit && module === "agreement" && (
                     <>
@@ -230,15 +253,27 @@ const AddRentalParentForm = ({
                     </>
                   )}
                 </div>
-                <div>
+                <div className="flex flex-col gap-2 md:flex-row">
                   <Button
                     type="button"
                     color="red"
                     onClick={() => {
-                      onCancelClick?.();
+                      handleRentalCancelClick?.();
                     }}
+                    fullWidth
                   >
                     Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      console.log("Functionality not implemented yet.");
+                    }}
+                    fullWidth
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <PlayIconFilled className="h-3 w-3" />
+                    {isEdit ? "Save" : "Create"}
                   </Button>
                 </div>
               </div>

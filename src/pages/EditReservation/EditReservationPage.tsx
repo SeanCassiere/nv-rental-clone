@@ -78,11 +78,12 @@ const EditReservationPage = () => {
         currentStage={stage}
         module="reservation"
         onStageTabClick={handleStageTabClick}
-        onAgreementSaveComplete={handleAgreementSaveComplete}
-        onCancelClick={handleCancelEditReservation}
+        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalCancelClick={handleCancelEditReservation}
         referenceNumber={
           reservationData.data?.reservationview.reservationNumber || undefined
         }
+        reservationData={reservationData.data || undefined}
         summaryData={summaryData.data}
       />
     </Protector>
