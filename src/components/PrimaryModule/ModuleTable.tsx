@@ -362,7 +362,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                 onClick={() => {
                   !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
                 }}
-                current={props.pagination.pageIndex + 1 === pageNum}
+                current={Boolean(props.pagination.pageIndex + 1 === pageNum)}
               >
                 {!isNaN(pageNum) ? pageNum : "..."}
               </DesktopPaginationButton>
@@ -388,10 +388,10 @@ const DesktopPaginationButton = (
     HTMLButtonElement
   > & { current?: boolean }
 ) => {
-  const { children, current, className } = props;
+  const { children, current, className, ...otherProps } = props;
   return (
     <button
-      {...props}
+      {...otherProps}
       className={classNames(
         "relative inline-flex items-center border px-4 py-2 text-sm font-medium hover:bg-slate-50 focus:z-20",
         current
@@ -400,7 +400,7 @@ const DesktopPaginationButton = (
         "disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300",
         className
       )}
-      {...(current ? { "aria-current": "page" } : {})}
+      {...(current ? { "aria-current": "page", current: `${current}` } : {})}
     >
       {children}
     </button>
