@@ -16,7 +16,7 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { TruckFilled } from "../../components/icons";
 
 import { searchFleetRoute } from "../../routes/fleet/searchFleet";
-import { viewFleetRoute } from "../../routes/fleet/viewFleet";
+import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -74,7 +74,7 @@ function VehiclesSearchPage() {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewFleetRoute.fullPath}
+                  to={viewFleetByIdRoute.fullPath}
                   params={{ vehicleId: String(vehicleId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

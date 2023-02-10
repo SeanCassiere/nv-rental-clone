@@ -14,7 +14,7 @@ import { normalizeAgreementListSearchParams } from "../../utils/normalize-search
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { AgreementDateTimeColumns } from "../../pages/AgreementsSearch/AgreementsSearchPage";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
-import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 
 interface VehicleReservationsTabProps {
@@ -70,7 +70,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
                 .AgreementId;
               return (
                 <Link
-                  to={viewAgreementRoute.fullPath}
+                  to={viewAgreementByIdRoute.fullPath}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

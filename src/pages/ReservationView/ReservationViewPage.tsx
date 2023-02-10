@@ -17,7 +17,7 @@ import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
 
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
 
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -37,10 +37,10 @@ function ReservationViewPage() {
   const params = useParams();
 
   const { tab: tabName = "summary" } = useSearch({
-    from: viewReservationRoute.id,
+    from: viewReservationByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewReservationRoute.id });
+  const navigate = useNavigate({ from: viewReservationByIdRoute.id });
 
   const reservationId = params.reservationId || "";
 
@@ -82,10 +82,10 @@ function ReservationViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewReservationRoute.id,
-      search: (others) => ({ ...others, tab: newTab.id }),
+      to: viewReservationByIdRoute.fullPath,
+      search: (others: any) => ({ ...others, tab: newTab.id }),
       replace: true,
-    });
+    } as unknown as any);
   };
 
   const reservation = useGetReservationData({
@@ -122,7 +122,7 @@ function ReservationViewPage() {
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewReservationRoute.fullPath}
+                  to={viewReservationByIdRoute.fullPath}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ reservationId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

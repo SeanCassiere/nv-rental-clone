@@ -9,13 +9,9 @@ import { fetchCustomerData } from "../../api/customer";
 import { getAuthToken } from "../../utils/authLocal";
 import { customerQKeys } from "../../utils/query-key";
 
-export const viewCustomerRoute = new Route({
+export const customerPathIdRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "$customerId",
-  component: lazy(() => import("../../pages/CustomerView/CustomerViewPage")),
-  validateSearch: (search) =>
-    z.object({ tab: z.string().optional() }).parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
   onLoad: async ({ params: { customerId } }) => {
     const auth = getAuthToken();
 
@@ -66,4 +62,19 @@ export const viewCustomerRoute = new Route({
   stringifyParams: (params) => ({
     customerId: `${params.customerId}`,
   }),
+});
+
+export const viewCustomerByIdRoute = new Route({
+  getParentRoute: () => customerPathIdRoute,
+  path: "/",
+  validateSearch: (search) =>
+    z.object({ tab: z.string().optional() }).parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
+  component: lazy(() => import("../../pages/CustomerView/CustomerViewPage")),
+});
+
+export const editCustomerByIdRoute = new Route({
+  getParentRoute: () => customerPathIdRoute,
+  path: "edit",
+  component: () => "Edit Customer Route",
 });

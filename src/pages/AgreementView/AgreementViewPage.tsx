@@ -16,7 +16,7 @@ import {
 import AgreementModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
 
-import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -38,13 +38,13 @@ function AgreementViewPage() {
   const router = useRouter();
 
   const { tab: tabName = "summary" } = useSearch({
-    from: viewAgreementRoute.id,
+    from: viewAgreementByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewAgreementRoute.id });
+  const navigate = useNavigate({ from: viewAgreementByIdRoute.id });
 
   const params = useParams({
-    from: viewAgreementRoute.id,
+    from: viewAgreementByIdRoute.id,
   });
 
   const agreementId = params.agreementId || "";
@@ -94,10 +94,10 @@ function AgreementViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewAgreementRoute.id,
-      search: (others) => ({ ...others, tab: newTab.id }),
+      to: viewAgreementByIdRoute.fullPath,
+      search: (others: any) => ({ ...others, tab: newTab.id }),
       replace: true,
-    });
+    } as unknown as any);
   };
 
   const onFindError = () => {
@@ -135,7 +135,7 @@ function AgreementViewPage() {
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewAgreementRoute.fullPath}
+                  to={viewAgreementByIdRoute.fullPath}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ agreementId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

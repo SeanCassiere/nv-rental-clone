@@ -9,12 +9,9 @@ import { fetchReservationData } from "../../api/reservation";
 import { getAuthToken } from "../../utils/authLocal";
 import { reservationQKeys } from "../../utils/query-key";
 
-export const viewReservationRoute = new Route({
+export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "$reservationId",
-  validateSearch: (search) =>
-    z.object({ tab: z.string().optional() }).parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
   onLoad: async ({ params: { reservationId } }) => {
     const auth = getAuthToken();
 
@@ -60,13 +57,31 @@ export const viewReservationRoute = new Route({
     }
     return {};
   },
-  component: lazy(
-    () => import("../../pages/ReservationView/ReservationViewPage")
-  ),
   parseParams: (params) => ({
     reservationId: z.string().parse(params.reservationId),
   }),
   stringifyParams: (params) => ({
     reservationId: `${params.reservationId}`,
   }),
+});
+
+export const viewReservationByIdRoute = new Route({
+  getParentRoute: () => reservationPathIdRoute,
+  path: "/",
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
+  component: lazy(
+    () => import("../../pages/ReservationView/ReservationViewPage")
+  ),
+});
+
+export const editReservationByIdRoute = new Route({
+  getParentRoute: () => reservationPathIdRoute,
+  path: "edit",
+  component: () => "Edit Reservation Route",
 });

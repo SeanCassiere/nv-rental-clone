@@ -9,7 +9,7 @@ import {
   EMPTY_KEY,
 } from "./common";
 import { UserSolid } from "../../icons";
-import { viewCustomerRoute } from "../../../routes/customers/viewCustomer";
+import { viewCustomerByIdRoute } from "../../../routes/customers/customerIdPath";
 
 interface TCustomerInformationProps {
   data: {
@@ -61,7 +61,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
           heading: "Full name",
           value: (
             <Link
-              to={viewCustomerRoute.fullPath}
+              to={viewCustomerByIdRoute.fullPath}
               params={{ customerId: String(data.customerId) }}
               search={() => ({ tab: "summary" })}
               className="font-semibold text-slate-800 hover:text-slate-600"

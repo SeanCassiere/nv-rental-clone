@@ -17,7 +17,7 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { BookFilled } from "../../components/icons";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
 
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -85,7 +85,7 @@ function ReservationsSearchPage() {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewReservationRoute.fullPath}
+                  to={viewReservationByIdRoute.fullPath}
                   params={{ reservationId: String(reservationId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

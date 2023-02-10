@@ -9,16 +9,9 @@ import { fetchVehicleData } from "../../api/vehicles";
 import { getAuthToken } from "../../utils/authLocal";
 import { fleetQKeys } from "../../utils/query-key";
 
-export const viewFleetRoute = new Route({
+export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
-  validateSearch: (search) =>
-    z
-      .object({
-        tab: z.string().optional(),
-      })
-      .parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
   onLoad: async ({ params: { vehicleId } }) => {
     const auth = getAuthToken();
 
@@ -71,5 +64,24 @@ export const viewFleetRoute = new Route({
   stringifyParams: (params) => ({
     vehicleId: `${params.vehicleId}`,
   }),
+});
+
+export const viewFleetByIdRoute = new Route({
+  getParentRoute: () => fleetPathIdRoute,
+  path: "/",
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
+
   component: lazy(() => import("../../pages/FleetView/FleetViewPage")),
+});
+
+export const editFleetByIdRoute = new Route({
+  getParentRoute: () => fleetPathIdRoute,
+  path: "edit",
+  component: () => "Edit Vehicle Route",
 });

@@ -9,16 +9,9 @@ import { fetchAgreementData } from "../../api/agreements";
 import { getAuthToken } from "../../utils/authLocal";
 import { agreementQKeys } from "../../utils/query-key";
 
-export const viewAgreementRoute = new Route({
+export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "$agreementId",
-  validateSearch: (search) =>
-    z
-      .object({
-        tab: z.string().optional(),
-      })
-      .parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
   onLoad: async ({ params: { agreementId } }) => {
     const auth = getAuthToken();
 
@@ -70,5 +63,23 @@ export const viewAgreementRoute = new Route({
   stringifyParams: (params) => ({
     agreementId: `${params.agreementId}`,
   }),
+});
+
+export const viewAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
+  path: "/",
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
   component: lazy(() => import("../../pages/AgreementView/AgreementViewPage")),
+});
+
+export const editAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
+  path: "edit",
+  component: () => "Edit Agreement Route",
 });

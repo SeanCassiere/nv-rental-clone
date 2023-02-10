@@ -17,7 +17,7 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { UsersSolid } from "../../components/icons";
 
 import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
-import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
+import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
 
 import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -78,7 +78,7 @@ function CustomerSearchPage() {
                 .CustomerId;
               return (
                 <Link
-                  to={viewCustomerRoute.fullPath}
+                  to={viewCustomerByIdRoute.fullPath}
                   params={{ customerId: String(customerId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

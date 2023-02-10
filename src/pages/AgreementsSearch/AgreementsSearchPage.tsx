@@ -18,7 +18,7 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { DocumentTextSolid } from "../../components/icons";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
-import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
@@ -86,7 +86,7 @@ function AgreementsSearchPage() {
                 .AgreementId;
               return (
                 <Link
-                  to={viewAgreementRoute.fullPath}
+                  to={viewAgreementByIdRoute.fullPath}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

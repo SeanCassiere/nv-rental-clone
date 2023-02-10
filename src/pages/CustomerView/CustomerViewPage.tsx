@@ -16,7 +16,7 @@ import {
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 
-import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
+import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
 
 import { useGetCustomerData } from "../../hooks/network/customer/useGetCustomerData";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -36,10 +36,10 @@ function CustomerViewPage() {
   const params = useParams();
 
   const { tab: tabName = "summary" } = useSearch({
-    from: viewCustomerRoute.id,
+    from: viewCustomerByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewCustomerRoute.id });
+  const navigate = useNavigate({ from: viewCustomerByIdRoute.id });
 
   const customerId = params.customerId || "";
 
@@ -73,10 +73,10 @@ function CustomerViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewCustomerRoute.id,
-      search: (others) => ({ ...others, tab: newTab.id }),
+      to: viewCustomerByIdRoute.fullPath,
+      search: (others: any) => ({ ...others, tab: newTab.id }),
       replace: true,
-    });
+    } as unknown as any);
   };
 
   const customer = useGetCustomerData({
@@ -114,7 +114,7 @@ function CustomerViewPage() {
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewCustomerRoute.fullPath}
+                  to={viewCustomerByIdRoute.fullPath}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ customerId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

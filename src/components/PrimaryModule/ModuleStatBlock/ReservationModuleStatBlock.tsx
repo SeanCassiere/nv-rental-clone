@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type ReservationDataParsed } from "../../../utils/schemas/reservation";
-import { viewAgreementRoute } from "../../../routes/agreements/viewAgreement";
+import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPath";
 
 const ReservationModuleStatBlock = ({
   reservation,
@@ -103,7 +103,7 @@ const ReservationModuleStatBlock = ({
             header="Agreement no."
             stat={
               <Link
-                to={viewAgreementRoute.fullPath}
+                to={viewAgreementByIdRoute.fullPath}
                 params={{
                   agreementId: String(reservation.reservationview.agreementId),
                 }}
