@@ -10,7 +10,7 @@ const buttonStyles = cva(
         teal: "bg-teal-500 hover:bg-teal-600 focus:ring-teal-500",
         gray: "bg-gray-600 hover:bg-gray-700 focus:ring-gray-500",
         slate:
-          "bg-slate-100 text-slate-900 hover:bg-slate-200 focus:ring-slate-500",
+          "bg-slate-400 text-slate-900 hover:bg-slate-500 focus:ring-slate-500",
         "dark-gray": "bg-slate-900 text-white hover:bg-slate-700",
       },
       fullWidth: {
