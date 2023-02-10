@@ -38,8 +38,7 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  // const navigate = useNavigate({ from: searchCustomersRoute.id });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: searchCustomersRoute.id });
 
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -148,6 +147,8 @@ function CustomerSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
+                  to: searchCustomersRoute.fullPath,
+                  params: {},
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -158,6 +159,8 @@ function CustomerSearchPage() {
               }}
               onReset={async () => {
                 navigate({
+                  to: searchCustomersRoute.fullPath,
+                  params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -231,6 +234,8 @@ function CustomerSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
+                    to: searchCustomersRoute.fullPath,
+                    params: {},
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

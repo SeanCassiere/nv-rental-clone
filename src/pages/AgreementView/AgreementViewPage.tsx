@@ -98,9 +98,10 @@ function AgreementViewPage() {
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewAgreementByIdRoute.fullPath,
-      search: (others: any) => ({ ...others, tab: newTab.id }),
+      search: (others) => ({ ...others, tab: newTab.id }),
+      params: { agreementId },
       replace: true,
-    } as unknown as any);
+    });
   };
 
   const onFindError = () => {

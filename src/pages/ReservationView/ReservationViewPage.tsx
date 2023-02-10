@@ -86,9 +86,10 @@ function ReservationViewPage() {
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewReservationByIdRoute.fullPath,
-      search: (others: any) => ({ ...others, tab: newTab.id }),
+      search: (others) => ({ ...others, tab: newTab.id }),
+      params: { reservationId },
       replace: true,
-    } as unknown as any);
+    });
   };
 
   const reservation = useGetReservationData({

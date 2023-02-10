@@ -35,8 +35,7 @@ import { titleMaker } from "../../utils/title-maker";
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  // const navigate = useNavigate({ from: searchFleetRoute.id });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: searchFleetRoute.id });
 
   const search = useSearch({ from: searchFleetRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -140,6 +139,8 @@ function VehiclesSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
+                  to: searchFleetRoute.fullPath,
+                  params: {},
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -150,6 +151,8 @@ function VehiclesSearchPage() {
               }}
               onReset={async () => {
                 navigate({
+                  to: searchFleetRoute.fullPath,
+                  params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -281,6 +284,8 @@ function VehiclesSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
+                    to: searchFleetRoute.fullPath,
+                    params: {},
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

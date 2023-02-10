@@ -74,9 +74,10 @@ function CustomerViewPage() {
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewCustomerByIdRoute.fullPath,
-      search: (others: any) => ({ ...others, tab: newTab.id }),
+      search: (others) => ({ ...others, tab: newTab.id }),
+      params: { customerId },
       replace: true,
-    } as unknown as any);
+    });
   };
 
   const customer = useGetCustomerData({

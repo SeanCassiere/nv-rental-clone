@@ -56,9 +56,10 @@ function VehicleViewPage() {
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
       to: viewFleetByIdRoute.fullPath,
-      search: (others: any) => ({ ...others, tab: newTab.id }),
+      search: (others) => ({ ...others, tab: newTab.id }),
+      params: { vehicleId },
       replace: true,
-    } as unknown as any);
+    });
   };
 
   const vehicle = useGetVehicleData({

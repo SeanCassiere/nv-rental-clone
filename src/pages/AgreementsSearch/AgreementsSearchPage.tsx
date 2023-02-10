@@ -46,8 +46,7 @@ export const AgreementDateTimeColumns = [
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  // const navigate = useNavigate({ from: searchAgreementsRoute.id });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: searchAgreementsRoute.id });
 
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -168,6 +167,8 @@ function AgreementsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
+                  to: searchAgreementsRoute.fullPath,
+                  params: {},
                   search: () => ({
                     page: 1,
                     size: 10,
@@ -177,6 +178,8 @@ function AgreementsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
+                  to: searchAgreementsRoute.fullPath,
+                  params: {},
                   search: () => ({
                     page: 1,
                     size: 10,
@@ -368,6 +371,8 @@ function AgreementsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
+                    to: searchAgreementsRoute.fullPath,
+                    params: {},
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,
