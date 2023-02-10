@@ -11,6 +11,6 @@ import { fleetRoute } from ".";
 
 export const addFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
-  path: "add",
+  path: "new",
   component: () => "Add Fleet Route",
 });

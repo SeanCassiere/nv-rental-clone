@@ -8,7 +8,7 @@ import { reservationsRoute } from ".";
 
 export const addReservationRoute = new Route({
   getParentRoute: () => reservationsRoute,
-  path: "add",
+  path: "new",
   component: lazy(
     () => import("../../pages/AddReservation/AddReservationPage")
   ),

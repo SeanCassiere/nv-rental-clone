@@ -11,6 +11,6 @@ import { customersRoute } from ".";
 
 export const addCustomerRoute = new Route({
   getParentRoute: () => customersRoute,
-  path: "add",
+  path: "new",
   component: () => "Add Customer Route",
 });

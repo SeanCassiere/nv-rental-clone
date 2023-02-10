@@ -8,6 +8,6 @@ import { agreementsRoute } from ".";
 
 export const addAgreementRoute = new Route({
   getParentRoute: () => agreementsRoute,
-  path: "add",
+  path: "new",
   component: lazy(() => import("../../pages/AddAgreement/AddAgreementPage")),
 });

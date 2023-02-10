@@ -61,10 +61,10 @@ const routeTree = rootRoute.addChildren([
   loggedOutRoute,
   ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
   agreementsRoute.addChildren([
-    // /agreements/add
-    addAgreementRoute,
     // /agreements
     searchAgreementsRoute,
+    // /agreements/new
+    addAgreementRoute,
     // /agreements/:agreementId
     agreementPathIdRoute.addChildren([
       // /agreements/:agreementId/
@@ -76,7 +76,7 @@ const routeTree = rootRoute.addChildren([
   customersRoute.addChildren([
     // /customers
     searchCustomersRoute,
-    // /customers/add
+    // /customers/new
     addCustomerRoute,
     // /customers/:customerId
     customerPathIdRoute.addChildren([
@@ -89,7 +89,7 @@ const routeTree = rootRoute.addChildren([
   reservationsRoute.addChildren([
     // /reservations
     searchReservationsRoute,
-    // /reservations/add
+    // /reservations/new
     addReservationRoute,
     // /reservations/:reservationId
     reservationPathIdRoute.addChildren([
@@ -102,7 +102,7 @@ const routeTree = rootRoute.addChildren([
   fleetRoute.addChildren([
     // /fleet
     searchFleetRoute,
-    // /fleet/add
+    // /fleet/new
     addFleetRoute,
     // /fleet/:fleetId
     fleetPathIdRoute.addChildren([
