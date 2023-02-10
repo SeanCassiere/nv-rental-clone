@@ -81,5 +81,12 @@ export const viewAgreementByIdRoute = new Route({
 export const editAgreementByIdRoute = new Route({
   getParentRoute: () => agreementPathIdRoute,
   path: "edit",
-  component: () => "Edit Agreement Route",
+  validateSearch: (search) =>
+    z
+      .object({
+        stage: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ stage: "rental-information" })],
+  component: lazy(() => import("../../pages/EditAgreement/EditAgreementPage")),
 });

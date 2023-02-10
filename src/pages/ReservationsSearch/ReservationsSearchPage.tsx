@@ -33,6 +33,7 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
+import { addReservationRoute } from "../../routes/reservations/addReservation";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -139,9 +140,20 @@ function ReservationsSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Reservations
-              </h1>
+              <div className="flex justify-between">
+                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                  Reservations
+                </h1>
+                <div>
+                  <Link
+                    to={addReservationRoute.fullPath}
+                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                    search={() => ({ stage: "rental-information" })}
+                  >
+                    New Reservation
+                  </Link>
+                </div>
+              </div>
             }
             subtitleText="Search through your rental reservations and view details."
             includeBottomBorder

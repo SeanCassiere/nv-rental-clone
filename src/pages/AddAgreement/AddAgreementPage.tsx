@@ -1,13 +1,52 @@
-import AddAgreement from "../../components/AddRental/AddAgreement";
+import { useCallback } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+
+import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
+
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
+import { addAgreementRoute } from "../../routes/agreements/addAgreement";
+
 import { titleMaker } from "../../utils/title-maker";
+import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 
 const AddAgreementPage = () => {
-  useDocumentTitle(titleMaker("Add Agreement"));
+  const navigate = useNavigate({ from: addAgreementRoute.id });
+  const { stage = "rental-information" } = useSearch({
+    from: addAgreementRoute.id,
+  });
+
+  const handleStageTabClick = useCallback(
+    (destination: ModuleTabConfigItem) => {
+      navigate({
+        search: () => ({ stage: destination.id }),
+      });
+    },
+    [navigate]
+  );
+
+  const handleAgreementSaveComplete = useCallback(
+    (agreementId: number) => {
+      navigate({
+        to: viewAgreementByIdRoute.fullPath,
+        params: { agreementId: String(agreementId) },
+        search: () => ({ tab: "summary" }),
+      });
+    },
+    [navigate]
+  );
+
+  useDocumentTitle(titleMaker("New - Agreement"));
   return (
     <Protector>
-      <AddAgreement agreementId={0} />
+      <AddRentalParentForm
+        referenceId={0}
+        currentStage={stage}
+        module="agreement"
+        onStageTabClick={handleStageTabClick}
+        onAgreementSaveComplete={handleAgreementSaveComplete}
+      />
     </Protector>
   );
 };

@@ -83,5 +83,14 @@ export const viewReservationByIdRoute = new Route({
 export const editReservationByIdRoute = new Route({
   getParentRoute: () => reservationPathIdRoute,
   path: "edit",
-  component: () => "Edit Reservation Route",
+  validateSearch: (search) =>
+    z
+      .object({
+        stage: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ stage: "rental-information" })],
+  component: lazy(
+    () => import("../../pages/EditReservation/EditReservationPage")
+  ),
 });

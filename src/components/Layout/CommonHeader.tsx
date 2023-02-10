@@ -20,7 +20,7 @@ const CommonHeader = ({
       )}
     >
       <div className="sm:flex sm:items-center sm:justify-between">
-        <div className="">{titleContent}</div>
+        <div className="w-full">{titleContent}</div>
         {headerActionContent && (
           <>{headerActionContent}</>
           // <div className="mt-3 flex w-min sm:mt-0 sm:ml-4">
