@@ -6,6 +6,7 @@ import { reservationQKeys } from "../../../utils/query-key";
 export function useGetReservationData(params: {
   reservationId: string | number;
   onError?: (err: unknown) => void;
+  onSuccess?: (data: Awaited<ReturnType<typeof fetchReservationData>>) => void;
 }) {
   const auth = useAuth();
   const query = useQuery({
@@ -19,9 +20,10 @@ export function useGetReservationData(params: {
       }),
     enabled: auth.isAuthenticated,
     onError: (err) => {
-      if (params?.onError) {
-        params?.onError(err);
-      }
+      params?.onError?.(err);
+    },
+    onSuccess: (data) => {
+      params?.onSuccess?.(data);
     },
     retry: 2,
   });

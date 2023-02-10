@@ -8,14 +8,16 @@ import {
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
+import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+
+import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { editAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
+import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { titleMaker } from "../../utils/title-maker";
-import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
-import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 
 const EditAgreementPage = () => {
   const navigate = useNavigate({ from: editAgreementByIdRoute.id });
@@ -28,9 +30,14 @@ const EditAgreementPage = () => {
 
   const handleFindError = () => router.history.go(-1);
 
-  const agreementData = useGetAgreementData({
+  const summaryData = useGetAgreementData({
     agreementId,
     onError: handleFindError,
+  });
+
+  const rentalRatesSummary = useGetModuleRentalRatesSummary({
+    module: "agreements",
+    referenceId: agreementId,
   });
 
   const handleStageTabClick = useCallback(
@@ -51,8 +58,14 @@ const EditAgreementPage = () => {
     });
   }, [agreementId, navigate]);
 
+  const handleCancelEditAgreement = useCallback(() => {
+    navigate({
+      to: "..",
+    });
+  }, [navigate]);
+
   useDocumentTitle(
-    titleMaker(`Edit - ${agreementData.data?.agreementNumber} - Agreement`)
+    titleMaker(`Edit - ${summaryData.data?.agreementNumber} - Agreement`)
   );
   return (
     <Protector>
@@ -62,7 +75,9 @@ const EditAgreementPage = () => {
         module="agreement"
         onStageTabClick={handleStageTabClick}
         onAgreementSaveComplete={handleAgreementSaveComplete}
-        referenceNumber={agreementData.data?.agreementNumber || undefined}
+        onCancelClick={handleCancelEditAgreement}
+        referenceNumber={summaryData.data?.agreementNumber || undefined}
+        summaryData={rentalRatesSummary.data}
       />
     </Protector>
   );

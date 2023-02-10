@@ -12,6 +12,7 @@ import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleT
 
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { titleMaker } from "../../utils/title-maker";
 
@@ -36,6 +37,11 @@ const EditReservationPage = () => {
     onError: handleFindError,
   });
 
+  const summaryData = useGetModuleRentalRatesSummary({
+    module: "reservations",
+    referenceId: reservationId,
+  });
+
   const handleStageTabClick = useCallback(
     (destination: ModuleTabConfigItem) => {
       navigate({
@@ -54,6 +60,12 @@ const EditReservationPage = () => {
     });
   }, [reservationId, navigate]);
 
+  const handleCancelEditReservation = useCallback(() => {
+    navigate({
+      to: "..",
+    });
+  }, [navigate]);
+
   useDocumentTitle(
     titleMaker(
       `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`
@@ -67,9 +79,11 @@ const EditReservationPage = () => {
         module="reservation"
         onStageTabClick={handleStageTabClick}
         onAgreementSaveComplete={handleAgreementSaveComplete}
+        onCancelClick={handleCancelEditReservation}
         referenceNumber={
           reservationData.data?.reservationview.reservationNumber || undefined
         }
+        summaryData={summaryData.data}
       />
     </Protector>
   );

@@ -38,6 +38,12 @@ const AddReservationPage = () => {
     [navigate]
   );
 
+  const handleCancelAddReservation = useCallback(() => {
+    navigate({
+      to: "..",
+    });
+  }, [navigate]);
+
   useDocumentTitle(titleMaker("New - Reservation"));
   return (
     <Protector>
@@ -47,6 +53,7 @@ const AddReservationPage = () => {
         module="reservation"
         onStageTabClick={handleStageTabClick}
         onAgreementSaveComplete={handleReservationSaveComplete}
+        onCancelClick={handleCancelAddReservation}
       />
     </Protector>
   );
