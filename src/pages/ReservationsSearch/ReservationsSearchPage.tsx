@@ -14,10 +14,12 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { BookFilled } from "../../components/icons";
+import { BookFilled, PlusIconFilled } from "../../components/icons";
+import { LinkButton } from "../../components/Form";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
+import { addReservationRoute } from "../../routes/reservations/addReservation";
 
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -33,7 +35,6 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
-import { addReservationRoute } from "../../routes/reservations/addReservation";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -139,18 +140,20 @@ function ReservationsSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
                   Reservations
                 </h1>
                 <div>
-                  <Link
+                  <LinkButton
+                    color="teal"
                     to={addReservationRoute.fullPath}
-                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     search={() => ({ stage: "rental-information" })}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PlusIconFilled className="h-4 w-4" />
                     New Reservation
-                  </Link>
+                  </LinkButton>
                 </div>
               </div>
             }

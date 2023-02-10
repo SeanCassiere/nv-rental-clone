@@ -8,13 +8,19 @@ import {
 } from "@tanstack/react-router";
 
 import Protector from "../../components/Protector";
-import { ChevronRightOutline } from "../../components/icons";
+import {
+  ArrowDownLeftOutline,
+  ChevronRightOutline,
+  PencilIconFilled,
+  PrintIconFilled,
+} from "../../components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "../../components/PrimaryModule/ModuleTabs";
 import AgreementModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import { Button, LinkButton } from "../../components/Form";
 
 import {
   editAgreementByIdRoute,
@@ -104,13 +110,13 @@ function AgreementViewPage() {
     });
   };
 
-  const onFindError = () => {
+  const handleFindError = () => {
     router.history.go(-1);
   };
 
   const agreement = useGetAgreementData({
     agreementId,
-    onError: onFindError,
+    onError: handleFindError,
   });
   const isCheckedIn = agreement.data?.returnDate ? true : false;
 
@@ -124,7 +130,7 @@ function AgreementViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <div className="flex items-center gap-2">
                   <Link
                     to=".."
@@ -148,15 +154,34 @@ function AgreementViewPage() {
                     {agreement?.data?.agreementNumber}
                   </Link>
                 </div>
-                <div>
-                  <Link
+                <div className="flex flex-col gap-3 md:flex-row">
+                  <LinkButton
                     to={editAgreementByIdRoute.fullPath}
-                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                     search={() => ({ stage: "rental-information" })}
-                    params={{ agreementId }}
+                    params={{ agreementId: String(agreementId) }}
+                    className="flex items-center justify-center gap-2"
                   >
+                    <PencilIconFilled className="h-3 w-3" />
                     Edit
-                  </Link>
+                  </LinkButton>
+                  {!isCheckedIn && (
+                    <Button
+                      type="button"
+                      color="teal"
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <ArrowDownLeftOutline className="h-3.5 w-3.5" />
+                      Checkin
+                    </Button>
+                  )}
+                  <Button
+                    type="button"
+                    color="teal"
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <PrintIconFilled className="h-3 w-3" />
+                    Print
+                  </Button>
                 </div>
               </div>
             }

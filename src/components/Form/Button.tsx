@@ -1,6 +1,7 @@
+import { forwardRef, type ReactNode } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import classNames from "classnames";
-import { forwardRef } from "react";
+import { Link, type LinkPropsOptions } from "@tanstack/react-router";
 
 const buttonStyles = cva(
   "flex justify-center h-max rounded border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm",
@@ -12,6 +13,7 @@ const buttonStyles = cva(
         slate:
           "bg-slate-400 text-slate-900 hover:bg-slate-500 focus:ring-slate-500",
         "dark-gray": "bg-slate-900 text-white hover:bg-slate-700",
+        red: "bg-red-500 hover:bg-red-600 focus:ring-red-500",
       },
       fullWidth: {
         true: "w-full",
@@ -40,6 +42,16 @@ const buttonStyles = cva(
         disabled: true,
         className:
           "disabled:bg-slate-300 disabled:text-slate-700 disabled:text-slate-200 disabled:opacity-75 disabled:shadow-none",
+      },
+      {
+        color: "dark-gray",
+        disabled: true,
+        className: "disabled:bg-slate-700 disabled:shadow-none",
+      },
+      {
+        color: "red",
+        disabled: true,
+        className: "disabled:bg-red-800 disabled:shadow-none",
       },
     ],
     defaultVariants: {
@@ -85,3 +97,29 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
+type CustomLinkButtonProps = LinkPropsOptions & {
+  children: ReactNode;
+  className?: string;
+};
+
+export const LinkButton = forwardRef<
+  HTMLAnchorElement,
+  CustomLinkButtonProps & VariantProps<typeof buttonStyles>
+>((props, ref) => {
+  const { children, color, disabled, fullWidth, className, ...otherProps } =
+    props;
+  return (
+    <Link
+      ref={ref}
+      {...otherProps}
+      className={classNames(
+        buttonStyles({ fullWidth, disabled, color }),
+        className
+      )}
+      disabled={disabled}
+    >
+      {children}
+    </Link>
+  );
+});

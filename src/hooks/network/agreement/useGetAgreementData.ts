@@ -7,6 +7,7 @@ import { agreementQKeys } from "../../../utils/query-key";
 export function useGetAgreementData(params: {
   agreementId: string | number;
   onError?: (err: unknown) => void;
+  onSuccess?: (data: Awaited<ReturnType<typeof fetchAgreementData>>) => void;
 }) {
   const auth = useAuth();
   const query = useQuery({
@@ -22,9 +23,10 @@ export function useGetAgreementData(params: {
       auth.isAuthenticated &&
       Boolean(params.agreementId && params.agreementId !== "0"),
     onError: (err) => {
-      if (params?.onError) {
-        params?.onError(err);
-      }
+      params?.onError?.(err);
+    },
+    onSuccess: (data) => {
+      params?.onSuccess?.(data);
     },
     retry: 2,
   });

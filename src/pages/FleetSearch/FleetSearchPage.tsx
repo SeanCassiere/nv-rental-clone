@@ -13,10 +13,12 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { TruckFilled } from "../../components/icons";
+import { PlusIconFilled, TruckFilled } from "../../components/icons";
+import { LinkButton } from "../../components/Form";
 
 import { searchFleetRoute } from "../../routes/fleet/searchFleet";
 import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
+import { addFleetRoute } from "../../routes/fleet/addFleet";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -123,9 +125,22 @@ function VehiclesSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Fleet
-              </h1>
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
+                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                  Fleet
+                </h1>
+                <div>
+                  <LinkButton
+                    color="teal"
+                    to={addFleetRoute.fullPath}
+                    search={() => ({})}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <PlusIconFilled className="h-4 w-4" />
+                    New Vehicle
+                  </LinkButton>
+                </div>
+              </div>
             }
             subtitleText="Search through your fleet and view details."
             includeBottomBorder

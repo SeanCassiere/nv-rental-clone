@@ -8,15 +8,19 @@ import {
 } from "@tanstack/react-router";
 
 import Protector from "../../components/Protector";
-import { ChevronRightOutline } from "../../components/icons";
+import { ChevronRightOutline, PencilIconFilled } from "../../components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "../../components/PrimaryModule/ModuleTabs";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
+import { LinkButton } from "../../components/Form";
 
-import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
+import {
+  editCustomerByIdRoute,
+  viewCustomerByIdRoute,
+} from "../../routes/customers/customerIdPath";
 
 import { useGetCustomerData } from "../../hooks/network/customer/useGetCustomerData";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -67,7 +71,7 @@ function CustomerViewPage() {
     return tabs;
   }, [customerId]);
 
-  const onFindError = () => {
+  const handleFindError = () => {
     router.history.go(-1);
   };
 
@@ -82,7 +86,7 @@ function CustomerViewPage() {
 
   const customer = useGetCustomerData({
     customerId,
-    onError: onFindError,
+    onError: handleFindError,
   });
 
   useDocumentTitle(
@@ -100,29 +104,42 @@ function CustomerViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex items-center gap-2">
-                <Link
-                  to=".."
-                  className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                  onClick={() => {
-                    router.history.go(-1);
-                  }}
-                >
-                  Customers
-                </Link>
-                <ChevronRightOutline
-                  className="h-4 w-4 flex-shrink-0 text-gray-500"
-                  aria-hidden="true"
-                />
-                <Link
-                  to={viewCustomerByIdRoute.fullPath}
-                  search={(current) => ({ tab: current?.tab || "summary" })}
-                  params={{ customerId }}
-                  className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                >
-                  {customer?.data?.firstName}&nbsp;
-                  {customer?.data?.lastName}
-                </Link>
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
+                <div className="flex items-center gap-2">
+                  <Link
+                    to=".."
+                    className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                    onClick={() => {
+                      router.history.go(-1);
+                    }}
+                  >
+                    Customers
+                  </Link>
+                  <ChevronRightOutline
+                    className="h-4 w-4 flex-shrink-0 text-gray-500"
+                    aria-hidden="true"
+                  />
+                  <Link
+                    to={viewCustomerByIdRoute.fullPath}
+                    search={(current) => ({ tab: current?.tab || "summary" })}
+                    params={{ customerId }}
+                    className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                  >
+                    {customer?.data?.firstName}&nbsp;
+                    {customer?.data?.lastName}
+                  </Link>
+                </div>
+                <div className="flex flex-col gap-3 md:flex-row">
+                  <LinkButton
+                    to={editCustomerByIdRoute.fullPath}
+                    search={() => ({})}
+                    params={{ customerId: String(customerId) }}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <PencilIconFilled className="h-3 w-3" />
+                    Edit
+                  </LinkButton>
+                </div>
               </div>
             }
             headerActionContent

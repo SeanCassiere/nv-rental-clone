@@ -14,10 +14,12 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { UsersSolid } from "../../components/icons";
+import { PlusIconFilled, UsersSolid } from "../../components/icons";
+import { LinkButton } from "../../components/Form";
 
 import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
 import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
+import { addCustomerRoute } from "../../routes/customers/addCustomer";
 
 import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -131,9 +133,22 @@ function CustomerSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Customers
-              </h1>
+              <div className="flex justify-between">
+                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                  Customers
+                </h1>
+                <div>
+                  <LinkButton
+                    color="teal"
+                    to={addCustomerRoute.fullPath}
+                    search={() => ({})}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <PlusIconFilled className="h-4 w-4" />
+                    New Customer
+                  </LinkButton>
+                </div>
+              </div>
             }
             subtitleText="Search through your registered customers and view details."
             includeBottomBorder

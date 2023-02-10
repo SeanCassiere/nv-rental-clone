@@ -13,6 +13,7 @@ import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath"
 
 const AddAgreementPage = () => {
   const navigate = useNavigate({ from: addAgreementRoute.id });
+
   const { stage = "rental-information" } = useSearch({
     from: addAgreementRoute.id,
   });
@@ -37,6 +38,12 @@ const AddAgreementPage = () => {
     [navigate]
   );
 
+  const handleCancelAddAgreement = useCallback(() => {
+    navigate({
+      to: "..",
+    });
+  }, [navigate]);
+
   useDocumentTitle(titleMaker("New - Agreement"));
   return (
     <Protector>
@@ -45,7 +52,8 @@ const AddAgreementPage = () => {
         currentStage={stage}
         module="agreement"
         onStageTabClick={handleStageTabClick}
-        onAgreementSaveComplete={handleAgreementSaveComplete}
+        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalCancelClick={handleCancelAddAgreement}
       />
     </Protector>
   );

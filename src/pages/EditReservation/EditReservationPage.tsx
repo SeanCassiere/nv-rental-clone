@@ -1,5 +1,10 @@
 import { useCallback } from "react";
-import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import {
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -7,6 +12,7 @@ import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleT
 
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
+import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { titleMaker } from "../../utils/title-maker";
 
@@ -17,13 +23,24 @@ import {
 
 const EditReservationPage = () => {
   const navigate = useNavigate({ from: editReservationByIdRoute.id });
+  const router = useRouter();
 
   const { stage = "rental-information" } = useSearch({
     from: editReservationByIdRoute.id,
   });
   const { reservationId } = useParams({ from: editReservationByIdRoute.id });
 
-  const reservationData = useGetReservationData({ reservationId });
+  const handleFindError = () => router.history.go(-1);
+
+  const reservationData = useGetReservationData({
+    reservationId,
+    onError: handleFindError,
+  });
+
+  const summaryData = useGetModuleRentalRatesSummary({
+    module: "reservations",
+    referenceId: reservationId,
+  });
 
   const handleStageTabClick = useCallback(
     (destination: ModuleTabConfigItem) => {
@@ -43,6 +60,12 @@ const EditReservationPage = () => {
     });
   }, [reservationId, navigate]);
 
+  const handleCancelEditReservation = useCallback(() => {
+    navigate({
+      to: "..",
+    });
+  }, [navigate]);
+
   useDocumentTitle(
     titleMaker(
       `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`
@@ -55,10 +78,13 @@ const EditReservationPage = () => {
         currentStage={stage}
         module="reservation"
         onStageTabClick={handleStageTabClick}
-        onAgreementSaveComplete={handleAgreementSaveComplete}
+        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalCancelClick={handleCancelEditReservation}
         referenceNumber={
           reservationData.data?.reservationview.reservationNumber || undefined
         }
+        reservationData={reservationData.data || undefined}
+        summaryData={summaryData.data}
       />
     </Protector>
   );
