@@ -16,7 +16,7 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { TruckFilled } from "../../components/icons";
 
 import { searchFleetRoute } from "../../routes/fleet/searchFleet";
-import { viewFleetRoute } from "../../routes/fleet/viewFleet";
+import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -35,8 +35,7 @@ import { titleMaker } from "../../utils/title-maker";
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 function VehiclesSearchPage() {
-  // const navigate = useNavigate({ from: searchFleetRoute.id });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: searchFleetRoute.id });
 
   const search = useSearch({ from: searchFleetRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -74,7 +73,7 @@ function VehiclesSearchPage() {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewFleetRoute.fullPath}
+                  to={viewFleetByIdRoute.fullPath}
                   params={{ vehicleId: String(vehicleId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -140,6 +139,8 @@ function VehiclesSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
+                  to: searchFleetRoute.fullPath,
+                  params: {},
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -150,6 +151,8 @@ function VehiclesSearchPage() {
               }}
               onReset={async () => {
                 navigate({
+                  to: searchFleetRoute.fullPath,
+                  params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -281,6 +284,8 @@ function VehiclesSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
+                    to: searchFleetRoute.fullPath,
+                    params: {},
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

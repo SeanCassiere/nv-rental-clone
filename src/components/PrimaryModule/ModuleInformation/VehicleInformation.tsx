@@ -8,7 +8,7 @@ import {
   EMPTY_KEY,
 } from "./common";
 import { TruckFilled } from "../../icons";
-import { viewFleetRoute } from "../../../routes/fleet/viewFleet";
+import { viewFleetByIdRoute } from "../../../routes/fleet/fleetIdPath";
 
 interface TVehicleInformationProps {
   data: {
@@ -64,7 +64,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
           heading: "Vehicle no.",
           value: (
             <Link
-              to={viewFleetRoute.fullPath}
+              to={viewFleetByIdRoute.fullPath}
               params={{ vehicleId: String(data.vehicleId) }}
               search={() => ({ tab: "summary" })}
               className="font-semibold text-slate-800 hover:text-slate-600"

@@ -8,14 +8,10 @@ import { fetchReservationData } from "../../api/reservation";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { reservationQKeys } from "../../utils/query-key";
-import { b64_decode, b64_encode } from "../../utils/base64";
 
-export const viewReservationRoute = new Route({
+export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "$reservationId",
-  validateSearch: (search) =>
-    z.object({ tab: z.string().optional() }).parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
   onLoad: async ({ params: { reservationId } }) => {
     const auth = getAuthToken();
 
@@ -61,13 +57,40 @@ export const viewReservationRoute = new Route({
     }
     return {};
   },
+  parseParams: (params) => ({
+    reservationId: z.string().parse(params.reservationId),
+  }),
+  stringifyParams: (params) => ({
+    reservationId: `${params.reservationId}`,
+  }),
+});
+
+export const viewReservationByIdRoute = new Route({
+  getParentRoute: () => reservationPathIdRoute,
+  path: "/",
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
   component: lazy(
     () => import("../../pages/ReservationView/ReservationViewPage")
   ),
-  parseParams: (params) => ({
-    reservationId: b64_decode(z.string().parse(params.reservationId)),
-  }),
-  stringifyParams: (params) => ({
-    reservationId: b64_encode(`${params.reservationId}`),
-  }),
+});
+
+export const editReservationByIdRoute = new Route({
+  getParentRoute: () => reservationPathIdRoute,
+  path: "edit",
+  validateSearch: (search) =>
+    z
+      .object({
+        stage: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ stage: "rental-information" })],
+  component: lazy(
+    () => import("../../pages/EditReservation/EditReservationPage")
+  ),
 });

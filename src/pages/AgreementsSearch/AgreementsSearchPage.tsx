@@ -18,7 +18,8 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { DocumentTextSolid } from "../../components/icons";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
-import { viewAgreementRoute } from "../../routes/agreements/viewAgreement";
+import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
+import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
@@ -45,8 +46,7 @@ export const AgreementDateTimeColumns = [
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  // const navigate = useNavigate({ from: searchAgreementsRoute.id });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: searchAgreementsRoute.id });
 
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -86,7 +86,7 @@ function AgreementsSearchPage() {
                 .AgreementId;
               return (
                 <Link
-                  to={viewAgreementRoute.fullPath}
+                  to={viewAgreementByIdRoute.fullPath}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -140,9 +140,20 @@ function AgreementsSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Agreements
-              </h1>
+              <div className="flex justify-between">
+                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                  Agreements
+                </h1>
+                <div>
+                  <Link
+                    to={addAgreementRoute.fullPath}
+                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                    search={() => ({ stage: "rental-information" })}
+                  >
+                    New Agreement
+                  </Link>
+                </div>
+              </div>
             }
             subtitleText="Search through your rental agreements and view details."
             includeBottomBorder
@@ -156,6 +167,8 @@ function AgreementsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
+                  to: searchAgreementsRoute.fullPath,
+                  params: {},
                   search: () => ({
                     page: 1,
                     size: 10,
@@ -165,6 +178,8 @@ function AgreementsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
+                  to: searchAgreementsRoute.fullPath,
+                  params: {},
                   search: () => ({
                     page: 1,
                     size: 10,
@@ -356,6 +371,8 @@ function AgreementsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
+                    to: searchAgreementsRoute.fullPath,
+                    params: {},
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

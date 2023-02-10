@@ -17,7 +17,10 @@ import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
 
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+import {
+  editReservationByIdRoute,
+  viewReservationByIdRoute,
+} from "../../routes/reservations/reservationIdPath";
 
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -37,10 +40,10 @@ function ReservationViewPage() {
   const params = useParams();
 
   const { tab: tabName = "summary" } = useSearch({
-    from: viewReservationRoute.id,
+    from: viewReservationByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewReservationRoute.id });
+  const navigate = useNavigate({ from: viewReservationByIdRoute.id });
 
   const reservationId = params.reservationId || "";
 
@@ -82,8 +85,9 @@ function ReservationViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewReservationRoute.id,
+      to: viewReservationByIdRoute.fullPath,
       search: (others) => ({ ...others, tab: newTab.id }),
+      params: { reservationId },
       replace: true,
     });
   };
@@ -107,28 +111,40 @@ function ReservationViewPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex items-center gap-2">
-                <Link
-                  to=".."
-                  className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                  onClick={() => {
-                    router.history.go(-1);
-                  }}
-                >
-                  Reservations
-                </Link>
-                <ChevronRightOutline
-                  className="h-4 w-4 flex-shrink-0 text-gray-500"
-                  aria-hidden="true"
-                />
-                <Link
-                  to={viewReservationRoute.fullPath}
-                  search={(current) => ({ tab: current?.tab || "summary" })}
-                  params={{ reservationId }}
-                  className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                >
-                  {reservation?.data?.reservationview?.reservationNumber}
-                </Link>
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <Link
+                    to=".."
+                    className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                    onClick={() => {
+                      router.history.go(-1);
+                    }}
+                  >
+                    Reservations
+                  </Link>
+                  <ChevronRightOutline
+                    className="h-4 w-4 flex-shrink-0 text-gray-500"
+                    aria-hidden="true"
+                  />
+                  <Link
+                    to={viewReservationByIdRoute.fullPath}
+                    search={(current) => ({ tab: current?.tab || "summary" })}
+                    params={{ reservationId }}
+                    className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                  >
+                    {reservation?.data?.reservationview?.reservationNumber}
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    to={editReservationByIdRoute.fullPath}
+                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                    search={() => ({ stage: "rental-information" })}
+                    params={{ reservationId }}
+                  >
+                    Edit
+                  </Link>
+                </div>
               </div>
             }
             headerActionContent

@@ -17,7 +17,7 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { UsersSolid } from "../../components/icons";
 
 import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
-import { viewCustomerRoute } from "../../routes/customers/viewCustomer";
+import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
 
 import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -38,8 +38,7 @@ const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 function CustomerSearchPage() {
   const { t } = useTranslation();
 
-  // const navigate = useNavigate({ from: searchCustomersRoute.id });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: searchCustomersRoute.id });
 
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
@@ -78,7 +77,7 @@ function CustomerSearchPage() {
                 .CustomerId;
               return (
                 <Link
-                  to={viewCustomerRoute.fullPath}
+                  to={viewCustomerByIdRoute.fullPath}
                   params={{ customerId: String(customerId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -148,6 +147,8 @@ function CustomerSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
+                  to: searchCustomersRoute.fullPath,
+                  params: {},
                   search: (current) => ({
                     ...current,
                     page: 1,
@@ -158,6 +159,8 @@ function CustomerSearchPage() {
               }}
               onReset={async () => {
                 navigate({
+                  to: searchCustomersRoute.fullPath,
+                  params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -231,6 +234,8 @@ function CustomerSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
+                    to: searchCustomersRoute.fullPath,
+                    params: {},
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

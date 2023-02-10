@@ -19,50 +19,98 @@ import { stylingRoute } from "./routes/styles";
 // /agreements
 import { agreementsRoute } from "./routes/agreements";
 import { searchAgreementsRoute } from "./routes/agreements/searchAgreements";
-import { viewAgreementRoute } from "./routes/agreements/viewAgreement";
+import { addAgreementRoute } from "./routes/agreements/addAgreement";
+import {
+  agreementPathIdRoute,
+  viewAgreementByIdRoute,
+  editAgreementByIdRoute,
+} from "./routes/agreements/agreementIdPath";
 
 // /customers
 import { customersRoute } from "./routes/customers";
 import { searchCustomersRoute } from "./routes/customers/searchCustomers";
-import { viewCustomerRoute } from "./routes/customers/viewCustomer";
+import { addCustomerRoute } from "./routes/customers/addCustomer";
+import {
+  customerPathIdRoute,
+  viewCustomerByIdRoute,
+  editCustomerByIdRoute,
+} from "./routes/customers/customerIdPath";
 
 // /reservations
 import { reservationsRoute } from "./routes/reservations";
 import { searchReservationsRoute } from "./routes/reservations/searchReservations";
-import { viewReservationRoute } from "./routes/reservations/viewReservation";
+import { addReservationRoute } from "./routes/reservations/addReservation";
+import {
+  reservationPathIdRoute,
+  viewReservationByIdRoute,
+  editReservationByIdRoute,
+} from "./routes/reservations/reservationIdPath";
 
 // /fleet
 import { fleetRoute } from "./routes/fleet";
 import { searchFleetRoute } from "./routes/fleet/searchFleet";
-import { viewFleetRoute } from "./routes/fleet/viewFleet";
+import { addFleetRoute } from "./routes/fleet/addFleet";
+import {
+  fleetPathIdRoute,
+  viewFleetByIdRoute,
+  editFleetByIdRoute,
+} from "./routes/fleet/fleetIdPath";
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loggedOutRoute,
-  stylingRoute,
+  ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
   agreementsRoute.addChildren([
     // /agreements
     searchAgreementsRoute,
+    // /agreements/new
+    addAgreementRoute,
     // /agreements/:agreementId
-    viewAgreementRoute,
+    agreementPathIdRoute.addChildren([
+      // /agreements/:agreementId/
+      viewAgreementByIdRoute,
+      // /agreements/:agreementId/edit
+      editAgreementByIdRoute,
+    ]),
   ]),
   customersRoute.addChildren([
     // /customers
     searchCustomersRoute,
+    // /customers/new
+    addCustomerRoute,
     // /customers/:customerId
-    viewCustomerRoute,
+    customerPathIdRoute.addChildren([
+      // /customers/:customerId/
+      viewCustomerByIdRoute,
+      // /customers/:customerId/edit
+      editCustomerByIdRoute,
+    ]),
   ]),
   reservationsRoute.addChildren([
     // /reservations
     searchReservationsRoute,
+    // /reservations/new
+    addReservationRoute,
     // /reservations/:reservationId
-    viewReservationRoute,
+    reservationPathIdRoute.addChildren([
+      // /reservations/:reservationId/
+      viewReservationByIdRoute,
+      // /reservations/:reservationId/edit
+      editReservationByIdRoute,
+    ]),
   ]),
   fleetRoute.addChildren([
     // /fleet
     searchFleetRoute,
+    // /fleet/new
+    addFleetRoute,
     // /fleet/:fleetId
-    viewFleetRoute,
+    fleetPathIdRoute.addChildren([
+      // /fleet/:fleetId/
+      viewFleetByIdRoute,
+      // /fleet/:fleetId/edit
+      editFleetByIdRoute,
+    ]),
   ]),
 ]);
 

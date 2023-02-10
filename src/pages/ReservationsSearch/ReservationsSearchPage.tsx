@@ -17,7 +17,7 @@ import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateCon
 import { BookFilled } from "../../components/icons";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
 
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -33,6 +33,7 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
+import { addReservationRoute } from "../../routes/reservations/addReservation";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -45,8 +46,7 @@ export const ReservationDateTimeColumns = [
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  // const navigate = useNavigate({ from: searchReservationsRoute.id });
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: searchReservationsRoute.id });
 
   const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
@@ -85,7 +85,7 @@ function ReservationsSearchPage() {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewReservationRoute.fullPath}
+                  to={viewReservationByIdRoute.fullPath}
                   params={{ reservationId: String(reservationId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -139,9 +139,20 @@ function ReservationsSearchPage() {
         <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Reservations
-              </h1>
+              <div className="flex justify-between">
+                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                  Reservations
+                </h1>
+                <div>
+                  <Link
+                    to={addReservationRoute.fullPath}
+                    className="ml-3 inline-flex items-center rounded-md border border-transparent bg-teal-600 px-4 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                    search={() => ({ stage: "rental-information" })}
+                  >
+                    New Reservation
+                  </Link>
+                </div>
+              </div>
             }
             subtitleText="Search through your rental reservations and view details."
             includeBottomBorder
@@ -155,6 +166,8 @@ function ReservationsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
+                  to: searchReservationsRoute.fullPath,
+                  params: {},
                   search: () => ({
                     page: 1,
                     size: 10,
@@ -164,6 +177,8 @@ function ReservationsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
+                  to: searchReservationsRoute.fullPath,
+                  params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
               }}
@@ -323,6 +338,8 @@ function ReservationsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
+                    to: searchReservationsRoute.fullPath,
+                    params: {},
                     search: (current) => ({
                       ...current,
                       page: newPaginationState.pageIndex + 1,

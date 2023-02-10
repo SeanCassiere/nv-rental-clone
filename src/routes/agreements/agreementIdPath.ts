@@ -8,18 +8,10 @@ import { fetchAgreementData } from "../../api/agreements";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { agreementQKeys } from "../../utils/query-key";
-import { b64_decode, b64_encode } from "../../utils/base64";
 
-export const viewAgreementRoute = new Route({
+export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "$agreementId",
-  validateSearch: (search) =>
-    z
-      .object({
-        tab: z.string().optional(),
-      })
-      .parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
   onLoad: async ({ params: { agreementId } }) => {
     const auth = getAuthToken();
 
@@ -66,10 +58,35 @@ export const viewAgreementRoute = new Route({
     return {};
   },
   parseParams: (params) => ({
-    agreementId: b64_decode(z.string().parse(params.agreementId)),
+    agreementId: z.string().parse(params.agreementId),
   }),
   stringifyParams: (params) => ({
-    agreementId: b64_encode(`${params.agreementId}`),
+    agreementId: `${params.agreementId}`,
   }),
+});
+
+export const viewAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
+  path: "/",
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ tab: "summary" })],
   component: lazy(() => import("../../pages/AgreementView/AgreementViewPage")),
+});
+
+export const editAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
+  path: "edit",
+  validateSearch: (search) =>
+    z
+      .object({
+        stage: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ stage: "rental-information" })],
+  component: lazy(() => import("../../pages/EditAgreement/EditAgreementPage")),
 });

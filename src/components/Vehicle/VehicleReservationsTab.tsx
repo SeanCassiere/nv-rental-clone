@@ -13,7 +13,7 @@ import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColu
 import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
 import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { viewReservationRoute } from "../../routes/reservations/viewReservation";
+import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
 import { ReservationDateTimeColumns } from "../../pages/ReservationsSearch/ReservationsSearchPage";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 
@@ -70,7 +70,7 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewReservationRoute.fullPath}
+                  to={viewReservationByIdRoute.fullPath}
                   params={{ reservationId: String(reservationId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"

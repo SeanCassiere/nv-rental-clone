@@ -17,7 +17,7 @@ import ScrollToTop from "../../components/ScrollToTop";
 import VehicleModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
 
-import { viewFleetRoute } from "../../routes/fleet/viewFleet";
+import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
 
 import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -43,9 +43,9 @@ function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { tab: tabName = "" } = useSearch({ from: viewFleetRoute.id });
+  const { tab: tabName = "" } = useSearch({ from: viewFleetByIdRoute.id });
 
-  const navigate = useNavigate({ from: viewFleetRoute.id });
+  const navigate = useNavigate({ from: viewFleetByIdRoute.id });
 
   const vehicleId = params.vehicleId || "";
 
@@ -55,8 +55,9 @@ function VehicleViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewFleetRoute.id,
+      to: viewFleetByIdRoute.fullPath,
       search: (others) => ({ ...others, tab: newTab.id }),
+      params: { vehicleId },
       replace: true,
     });
   };
@@ -136,7 +137,7 @@ function VehicleViewPage() {
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewFleetRoute.fullPath}
+                  to={viewFleetByIdRoute.fullPath}
                   search={(current) => ({ tab: current?.tab || "summary" })}
                   params={{ vehicleId }}
                   className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

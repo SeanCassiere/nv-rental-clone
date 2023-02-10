@@ -24,6 +24,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       required,
       error,
       errorText,
+      endIcon,
       ...inputProps
     } = props;
     const id = propsId ?? reactId;
@@ -59,7 +60,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               required={required}
               {...inputProps}
             />
-            {error && !props?.endIcon && (
+            {error && !endIcon && (
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <ExclamationCircleIconOutline
                   className="h-5 w-5 text-red-500"

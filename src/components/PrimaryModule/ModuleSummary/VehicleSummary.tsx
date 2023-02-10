@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { viewAgreementRoute } from "../../../routes/agreements/viewAgreement";
+import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPath";
 
-import { viewReservationRoute } from "../../../routes/reservations/viewReservation";
-import { viewFleetRoute } from "../../../routes/fleet/viewFleet";
+import { viewReservationByIdRoute } from "../../../routes/reservations/reservationIdPath";
+import { viewFleetByIdRoute } from "../../../routes/fleet/fleetIdPath";
 import { type TVehicleSummarySchema } from "../../../utils/schemas/summary/vehicleSummary";
 import { CurrencyDollarSolid } from "../../icons";
 import {
@@ -87,7 +87,7 @@ export const VehicleSummary = ({
       type: summaryData?.totalNoOfReservation ? "link" : "text",
       amount: summaryData?.totalNoOfReservation,
       linkProps: {
-        to: viewFleetRoute.id,
+        to: viewFleetByIdRoute.fullPath,
         search: (current) => ({
           tab: "reservations",
         }),
@@ -112,7 +112,7 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: viewReservationRoute.id,
+        to: viewReservationByIdRoute.fullPath,
         params: { reservationId: `${summaryData?.currentReservation}` },
         preload: "intent",
       },
@@ -141,7 +141,7 @@ export const VehicleSummary = ({
       type: summaryData?.totalNoOfAgreement ? "link" : "text",
       amount: summaryData?.totalNoOfAgreement,
       linkProps: {
-        to: viewFleetRoute.id,
+        to: viewFleetByIdRoute.fullPath,
         search: () => ({
           tab: "agreements",
         }),
@@ -166,7 +166,7 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: viewAgreementRoute.id,
+        to: viewAgreementByIdRoute.fullPath,
         params: { agreementId: `${summaryData?.currentAgreement}` },
         preload: "intent",
       },

@@ -10,7 +10,7 @@ import { DocumentTextSolid } from "../icons";
 
 import { type TVehicleExchangeListItemParsed } from "../../utils/schemas/vehicleExchange";
 import { useGetVehicleExchanges } from "../../hooks/network/vehicle-exchange/useGetVehicleExchanges";
-import { viewFleetRoute } from "../../routes/fleet/viewFleet";
+import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
 type TVehicleExchangeKeyHelp = {
@@ -58,7 +58,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
                 return (
                   <Link
-                    to={viewFleetRoute.fullPath}
+                    to={viewFleetByIdRoute.fullPath}
                     params={{ vehicleId: `${vehicleId}` }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"
