@@ -79,7 +79,7 @@ function ReservationViewPage() {
     return tabs;
   }, [reservationId]);
 
-  const onFindError = () => {
+  const handleFindError = () => {
     router.history.go(-1);
   };
 
@@ -94,7 +94,7 @@ function ReservationViewPage() {
 
   const reservation = useGetReservationData({
     reservationId,
-    onError: onFindError,
+    onError: handleFindError,
   });
 
   useDocumentTitle(

@@ -104,13 +104,13 @@ function AgreementViewPage() {
     });
   };
 
-  const onFindError = () => {
+  const handleFindError = () => {
     router.history.go(-1);
   };
 
   const agreement = useGetAgreementData({
     agreementId,
-    onError: onFindError,
+    onError: handleFindError,
   });
   const isCheckedIn = agreement.data?.returnDate ? true : false;
 

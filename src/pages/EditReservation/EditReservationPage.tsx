@@ -1,5 +1,10 @@
 import { useCallback } from "react";
-import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import {
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -17,13 +22,19 @@ import {
 
 const EditReservationPage = () => {
   const navigate = useNavigate({ from: editReservationByIdRoute.id });
+  const router = useRouter();
 
   const { stage = "rental-information" } = useSearch({
     from: editReservationByIdRoute.id,
   });
   const { reservationId } = useParams({ from: editReservationByIdRoute.id });
 
-  const reservationData = useGetReservationData({ reservationId });
+  const handleFindError = () => router.history.go(-1);
+
+  const reservationData = useGetReservationData({
+    reservationId,
+    onError: handleFindError,
+  });
 
   const handleStageTabClick = useCallback(
     (destination: ModuleTabConfigItem) => {

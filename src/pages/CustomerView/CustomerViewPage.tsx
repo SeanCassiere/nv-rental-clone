@@ -67,7 +67,7 @@ function CustomerViewPage() {
     return tabs;
   }, [customerId]);
 
-  const onFindError = () => {
+  const handleFindError = () => {
     router.history.go(-1);
   };
 
@@ -82,7 +82,7 @@ function CustomerViewPage() {
 
   const customer = useGetCustomerData({
     customerId,
-    onError: onFindError,
+    onError: handleFindError,
   });
 
   useDocumentTitle(

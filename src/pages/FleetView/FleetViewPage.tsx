@@ -49,7 +49,7 @@ function VehicleViewPage() {
 
   const vehicleId = params.vehicleId || "";
 
-  const onFindError = () => {
+  const handleFindError = () => {
     router.history.go(-1);
   };
 
@@ -64,7 +64,7 @@ function VehicleViewPage() {
 
   const vehicle = useGetVehicleData({
     vehicleId,
-    onError: onFindError,
+    onError: handleFindError,
   });
 
   const tabsConfig: ModuleTabConfigItem[] = useMemo(() => {

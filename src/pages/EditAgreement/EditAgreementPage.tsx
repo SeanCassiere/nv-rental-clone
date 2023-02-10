@@ -1,5 +1,10 @@
 import { useCallback } from "react";
-import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import {
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -14,13 +19,19 @@ import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreeme
 
 const EditAgreementPage = () => {
   const navigate = useNavigate({ from: editAgreementByIdRoute.id });
+  const router = useRouter();
 
   const { stage = "rental-information" } = useSearch({
     from: editAgreementByIdRoute.id,
   });
   const { agreementId } = useParams({ from: editAgreementByIdRoute.id });
 
-  const agreementData = useGetAgreementData({ agreementId });
+  const handleFindError = () => router.history.go(-1);
+
+  const agreementData = useGetAgreementData({
+    agreementId,
+    onError: handleFindError,
+  });
 
   const handleStageTabClick = useCallback(
     (destination: ModuleTabConfigItem) => {
