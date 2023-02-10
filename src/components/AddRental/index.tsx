@@ -221,11 +221,11 @@ const AddRentalParentForm = ({
             }
             subtitleText={
               module === "agreement" && isEdit
-                ? "Edit the rental contract"
+                ? "Edit the rental contract."
                 : module === "agreement" && !isEdit
                 ? "Create a new rental contract."
                 : module === "reservation" && isEdit
-                ? "Edit the reservation"
+                ? "Edit the reservation."
                 : module === "reservation" && !isEdit
                 ? "Create a new reservation."
                 : ""
