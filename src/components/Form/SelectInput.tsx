@@ -16,11 +16,22 @@ interface SelectProps {
   name?: string;
   required?: boolean;
   placeHolderSchema?: { value: any; label: string };
+  error?: boolean;
+  errorText?: string | null;
 }
 
 export const SelectInput = (props: SelectProps) => {
   const id = useId();
-  const { value, options, onSelect, label, name, placeHolderSchema } = props;
+  const {
+    value,
+    options,
+    onSelect,
+    label,
+    name,
+    placeHolderSchema,
+    error,
+    errorText,
+  } = props;
 
   const selectOptions = [...options];
 
@@ -33,18 +44,35 @@ export const SelectInput = (props: SelectProps) => {
               {label}
             </Listbox.Label>
             <div className="relative mt-1">
-              <Listbox.Button className="relative w-full cursor-default rounded border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm">
-                <span className="block truncate">
-                  {typeof value?.value === "undefined" && placeHolderSchema
-                    ? placeHolderSchema.label
-                    : value?.label ?? "Select"}
-                </span>
-                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <ChevronUpDownSolid
-                    className="h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </span>
+              <Listbox.Button className="relative w-full">
+                <div
+                  className={classNames(
+                    "relative cursor-default rounded border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm",
+                    error
+                      ? "border-red-300 text-red-500 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
+                      : undefined
+                  )}
+                >
+                  <span className="block truncate">
+                    {typeof value?.value === "undefined" && placeHolderSchema
+                      ? placeHolderSchema.label
+                      : value?.label ?? "Select"}
+                  </span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                    <ChevronUpDownSolid
+                      className={classNames(
+                        "h-5 w-5 text-gray-400",
+                        error ? "text-red-500" : undefined
+                      )}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+                {error && (
+                  <div className="mt-2 text-left text-sm text-red-600">
+                    {errorText}
+                  </div>
+                )}
               </Listbox.Button>
 
               <Transition
