@@ -18,6 +18,7 @@ interface SelectProps {
   placeHolderSchema?: { value: any; label: string };
   error?: boolean;
   errorText?: string | null;
+  disabled?: boolean;
 }
 
 export const SelectInput = (props: SelectProps) => {
@@ -31,14 +32,20 @@ export const SelectInput = (props: SelectProps) => {
     placeHolderSchema,
     error,
     errorText,
+    disabled: isDisabled,
   } = props;
 
   const selectOptions = [...options];
 
   return (
     <div>
-      <Listbox value={value} onChange={onSelect} name={name ?? id}>
-        {({ open }) => (
+      <Listbox
+        value={value}
+        onChange={onSelect}
+        name={name ?? id}
+        disabled={isDisabled}
+      >
+        {({ open, disabled }) => (
           <>
             <Listbox.Label className="block text-sm font-medium text-gray-700">
               {label}
@@ -53,7 +60,12 @@ export const SelectInput = (props: SelectProps) => {
                       : undefined
                   )}
                 >
-                  <span className="block truncate">
+                  <span
+                    className={classNames(
+                      "block truncate",
+                      disabled ? "text-slate-500" : ""
+                    )}
+                  >
                     {typeof value?.value === "undefined" && placeHolderSchema
                       ? placeHolderSchema.label
                       : value?.label ?? "Select"}
@@ -61,7 +73,8 @@ export const SelectInput = (props: SelectProps) => {
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownSolid
                       className={classNames(
-                        "h-5 w-5 text-gray-400",
+                        "h-5 w-5 ",
+                        disabled ? "text-slate-500" : "text-gray-400",
                         error ? "text-red-500" : undefined
                       )}
                       aria-hidden="true"
@@ -85,6 +98,7 @@ export const SelectInput = (props: SelectProps) => {
                 <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {selectOptions.map((person, idx) => (
                     <Listbox.Option
+                      disabled={disabled}
                       key={`${person.value}.${idx}`}
                       className={({ active }) =>
                         classNames(

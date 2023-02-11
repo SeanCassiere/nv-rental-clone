@@ -128,7 +128,11 @@ const AgreementVehicleInformationTab = ({
       title="Vehicle information"
       isLoading={false}
     >
-      {!checkoutLocation && <span>Location not selected</span>}
+      {!checkoutLocation && (
+        <div className="px-4 pt-4 text-red-500">
+          Checkout location not selected.
+        </div>
+      )}
       <form
         onSubmit={handleSubmit(async (data) => {
           onCompleted?.(data);
@@ -155,6 +159,7 @@ const AgreementVehicleInformationTab = ({
               }}
               error={!!errors.vehicleTypeId}
               errorText={errors.vehicleTypeId?.message}
+              disabled={Boolean(checkoutLocation) ? false : true}
             />
           </div>
           <div>
@@ -179,6 +184,7 @@ const AgreementVehicleInformationTab = ({
               }}
               error={!!errors.vehicleId}
               errorText={errors.vehicleId?.message}
+              disabled={Boolean(getValues("vehicleTypeId")) ? false : true}
             />
           </div>
           <div>
@@ -196,6 +202,7 @@ const AgreementVehicleInformationTab = ({
               }}
               error={!!errors.fuelOut}
               errorText={errors.fuelOut?.message}
+              disabled={Boolean(getValues("vehicleId")) ? false : true}
             />
           </div>
           <div>
@@ -206,6 +213,7 @@ const AgreementVehicleInformationTab = ({
               {...register("odometerOut")}
               error={!!errors.odometerOut}
               errorText={errors.odometerOut?.message}
+              disabled={Boolean(getValues("vehicleId")) ? false : true}
             />
           </div>
         </div>
