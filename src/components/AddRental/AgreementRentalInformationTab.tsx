@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { add, isBefore, isEqual } from "date-fns";
+import { add, isBefore, isEqual, differenceInSeconds } from "date-fns";
 
 import { DocumentTextSolid } from "../icons";
 import { Button, TextInput, DatePicker, SelectInput } from "../Form";
@@ -43,17 +43,13 @@ const AgreementRentalInformationSchema = z
       }),
   })
   .superRefine((values, ctx) => {
-    if (isBefore(values.checkinDate, values.checkoutDate)) {
+    if (
+      isBefore(values.checkinDate, values.checkoutDate) ||
+      isEqual(values.checkinDate, values.checkoutDate)
+    ) {
       ctx.addIssue({
         code: "custom",
-        message: "Cannot be before checkout date",
-        path: ["checkinDate"],
-      });
-    }
-    if (isEqual(values.checkinDate, values.checkoutDate)) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Cannot be the same as checkout date",
+        message: "Must be after checkout date",
         path: ["checkinDate"],
       });
     }
@@ -188,7 +184,22 @@ const AgreementRentalInformationTab = ({
               {...register("checkoutDate")}
               selected={getValues("checkoutDate")}
               onChange={(date) => {
+                const previousCheckoutDate = getValues("checkoutDate");
+                const previousCheckinDate = getValues("checkinDate");
+
+                const differenceInSecondsBetweenDates = differenceInSeconds(
+                  previousCheckinDate,
+                  previousCheckoutDate
+                );
                 setValue("checkoutDate", date as any, { shouldValidate: true });
+                if (date) {
+                  const newCheckinDate = add(new Date(date), {
+                    seconds: differenceInSecondsBetweenDates,
+                  });
+                  setValue("checkinDate", newCheckinDate, {
+                    shouldValidate: true,
+                  });
+                }
               }}
               inputProps={{
                 error: !!errors.checkoutDate,
