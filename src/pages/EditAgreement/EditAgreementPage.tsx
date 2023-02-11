@@ -65,7 +65,9 @@ const EditAgreementPage = () => {
   }, [navigate]);
 
   useDocumentTitle(
-    titleMaker(`Edit - ${summaryData.data?.agreementNumber} - Agreement`)
+    titleMaker(
+      `Edit - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
+    )
   );
   return (
     <Protector>
@@ -77,7 +79,6 @@ const EditAgreementPage = () => {
         onRentalSaveClick={handleAgreementSaveComplete}
         onRentalCancelClick={handleCancelEditAgreement}
         referenceNumber={summaryData.data?.agreementNumber || undefined}
-        agreementData={summaryData.data || undefined}
         summaryData={rentalRatesSummary.data}
       />
     </Protector>
