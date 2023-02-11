@@ -177,8 +177,12 @@ const AgreementVehicleInformationTab = ({
                     (v) => v.VehicleId === parseInt(value.value ?? "0")
                   );
                   if (vehicle) {
-                    setValue("fuelOut", vehicle.FuelLevel ?? "");
-                    setValue("odometerOut", vehicle.CurrentOdometer ?? 0);
+                    setValue("fuelOut", vehicle.FuelLevel ?? "", {
+                      shouldValidate: true,
+                    });
+                    setValue("odometerOut", vehicle.CurrentOdometer ?? 0, {
+                      shouldValidate: true,
+                    });
                   }
                 }
               }}
