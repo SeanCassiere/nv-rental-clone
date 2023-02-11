@@ -70,3 +70,24 @@ export const InformationBlockCard = (props: TInformationBlockCardProps) => {
     </div>
   );
 };
+
+export const InformationBlockCardWithChildren = (
+  props: Omit<
+    TInformationBlockCardProps & { children: ReactNode },
+    "numberPerBlock" | "blocks"
+  >
+) => {
+  return (
+    <div className="rounded border border-slate-200 bg-slate-50">
+      <div className="flex select-none gap-4 border-b border-b-slate-200 bg-slate-100 px-4 pt-3 pb-2">
+        <span className="flex items-center justify-center text-slate-700">
+          {props.icon}
+        </span>
+        <span className="col-span-11 truncate text-lg font-medium text-gray-700">
+          {props.title}
+        </span>
+      </div>
+      {props.children}
+    </div>
+  );
+};
