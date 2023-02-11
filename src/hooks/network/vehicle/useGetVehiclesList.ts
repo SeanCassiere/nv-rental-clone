@@ -10,7 +10,9 @@ export function useGetVehiclesList(params: {
   page: number;
   pageSize: number;
   filters: any;
+  enabled?: boolean;
 }) {
+  const enabled = typeof params.enabled !== "undefined" ? params.enabled : true;
   const auth = useAuth();
   const query = useQuery({
     queryKey: fleetQKeys.search({
@@ -26,7 +28,7 @@ export function useGetVehiclesList(params: {
         accessToken: auth.user?.access_token || "",
         filters: params.filters,
       }),
-    enabled: auth.isAuthenticated,
+    enabled: enabled && auth.isAuthenticated,
     keepPreviousData: true,
   });
   return query;

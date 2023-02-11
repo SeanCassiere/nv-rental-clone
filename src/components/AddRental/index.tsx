@@ -13,7 +13,9 @@ import {
 import AgreementRentalInformationTab, {
   type AgreementRentalInformationSchemaParsed,
 } from "./AgreementRentalInformationTab";
-import AgreementVehicleInformationTab from "./AgreementVehicleInformationTab";
+import AgreementVehicleInformationTab, {
+  type AgreementVehicleInformationSchemaParsed,
+} from "./AgreementVehicleInformationTab";
 
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
@@ -68,7 +70,7 @@ const AddRentalParentForm = ({
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
   const [isSafeToFetchSummary] = useState(false);
-  const [agreementStagesComplete, setAgreementStageComplete] = useState({
+  const [creationStagesComplete, setCreationStageComplete] = useState({
     "rental-information": false,
     "customer-information": false,
     "vehicle-information": false,
@@ -78,6 +80,9 @@ const AddRentalParentForm = ({
 
   const [agreementRentalInformation, setAgreementRentalInformation] =
     useState<AgreementRentalInformationSchemaParsed | null>(null);
+  const [agreementVehicleInformation, setAgreementVehicleInformation] =
+    useState<AgreementVehicleInformationSchemaParsed | null>(null);
+
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
@@ -108,13 +113,15 @@ const AddRentalParentForm = ({
         component: (
           <AgreementVehicleInformationTab
             rentalInformation={agreementRentalInformation || undefined}
+            vehicleInformation={agreementVehicleInformation || undefined}
             isEdit={isEdit}
-            onCompleted={() => {
-              setAgreementStageComplete((prev) => ({
+            onCompleted={(data) => {
+              setAgreementVehicleInformation(data);
+              setCreationStageComplete((prev) => ({
                 ...prev,
                 "vehicle-information": true,
               }));
-              handleStageTabClick(ratesAndTaxes);
+              handleStageTabClick(customerInformation);
             }}
           />
         ),
@@ -129,7 +136,7 @@ const AddRentalParentForm = ({
             initialData={agreementRentalInformation ?? undefined}
             onCompleted={(data) => {
               setAgreementRentalInformation(data);
-              setAgreementStageComplete((prev) => ({
+              setCreationStageComplete((prev) => ({
                 ...prev,
                 "rental-information": true,
               }));
@@ -179,6 +186,7 @@ const AddRentalParentForm = ({
     return tabs;
   }, [
     agreementRentalInformation,
+    agreementVehicleInformation,
     handleStageTabClick,
     isEdit,
     module,
@@ -199,9 +207,21 @@ const AddRentalParentForm = ({
           checkoutDate: parseISO(data.checkoutDate),
           checkinDate: parseISO(data.checkinDate),
         });
-        setAgreementStageComplete((prev) => ({
+        setCreationStageComplete((prev) => ({
           ...prev,
           "rental-information": true,
+        }));
+      }
+      if (!agreementVehicleInformation) {
+        setAgreementVehicleInformation({
+          fuelOut: data.fuelLevelOut ?? "",
+          odometerOut: data.odometerOut ?? 0,
+          vehicleTypeId: data.vehicleTypeId ?? 0,
+          vehicleId: data.vehicleId ?? 0,
+        });
+        setCreationStageComplete((prev) => ({
+          ...prev,
+          "vehicle-information": true,
         }));
       }
     },
@@ -345,7 +365,7 @@ const AddRentalParentForm = ({
                       fullWidth
                       className="flex items-center justify-center gap-2"
                       disabled={
-                        !Object.values(agreementStagesComplete).every(
+                        !Object.values(creationStagesComplete).every(
                           (obj) => obj === true
                         )
                       }

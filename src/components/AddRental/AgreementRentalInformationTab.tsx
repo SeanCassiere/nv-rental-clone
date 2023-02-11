@@ -4,12 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { add, isBefore, isEqual } from "date-fns";
 
+import { DocumentTextSolid } from "../icons";
 import { Button, TextInput, DatePicker, SelectInput } from "../Form";
+import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
+
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
 import { useGetNewAgreementNumber } from "../../hooks/network/agreement/useGetNewAgreementNumber";
-import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
-import { DocumentTextSolid } from "../icons";
 
 const AgreementRentalInformationSchema = z
   .object({
@@ -145,7 +146,7 @@ const AgreementRentalInformationTab = ({
         className="flex flex-col gap-4 p-4"
         autoComplete="off"
       >
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-4 md:grid-cols-3">
           <div>
             <TextInput
               label="Agreement No."

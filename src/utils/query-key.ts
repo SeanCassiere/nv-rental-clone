@@ -79,6 +79,7 @@ export const fleetQKeys = {
     filters: Filters;
   }) => [fleetQKeys.rootKey, pagination, filters],
   statuses: () => [fleetQKeys.rootKey, "statuses"],
+  fuelLevels: () => [fleetQKeys.rootKey, "fuel-levels"],
   // view by ID
   viewKey: "view-fleet",
   id: (id: ReferenceId) => [fleetQKeys.viewKey, id, "data"],
