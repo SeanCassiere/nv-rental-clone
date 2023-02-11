@@ -15,6 +15,11 @@ export const agreementQKeys = {
   }) => [agreementQKeys.rootKey, pagination, filters],
   statuses: () => [agreementQKeys.rootKey, "statuses"],
   types: () => [agreementQKeys.rootKey, "types"],
+  generateNumber: (type: string) => [
+    agreementQKeys.rootKey,
+    "generate-number",
+    type,
+  ],
   // view by ID
   viewKey: "view-agreement",
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],

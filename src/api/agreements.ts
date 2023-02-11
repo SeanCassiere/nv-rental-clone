@@ -2,6 +2,7 @@ import {
   AgreementDataSchema,
   AgreementStatusListSchema,
   AgreementTypeArraySchema,
+  GenerateAgreementNumberSchema,
 } from "../utils/schemas/agreement";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
@@ -72,4 +73,21 @@ export const fetchAgreementTypesList = async (opts: CommonAuthParams) => {
       },
     }
   ).then((res) => AgreementTypeArraySchema.parse(res.data));
+};
+
+export const fetchNewAgreementNo = async (
+  opts: CommonAuthParams & { agreementType: string }
+) => {
+  return await callV3Api(
+    makeUrl(`/v3/agreements/generateAgreementNo`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+      agreementType: opts.agreementType,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => GenerateAgreementNumberSchema.parse(res.data));
 };
