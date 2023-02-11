@@ -28,10 +28,11 @@ type TSelectedReactDatePickerProps = Omit<
 export interface DatePickerProps extends TSelectedReactDatePickerProps {
   placeholderText: string;
   label?: string;
+  inputProps?: Omit<Parameters<typeof TextInput>[0], "label" | "placeholder">;
 }
 
 export const DatePicker = (props: DatePickerProps) => {
-  const { ...pickerProps } = props;
+  const { inputProps, ...pickerProps } = props;
   const { i18n } = useTranslation();
   const auth = useAuth();
 
@@ -54,6 +55,7 @@ export const DatePicker = (props: DatePickerProps) => {
             label={props?.label || props.placeholderText}
             endIcon={<CalendarOutline className="h-4 w-4 text-gray-400" />}
             autoComplete="off"
+            {...inputProps}
           />
         }
         calendarContainer={CalendarContainer}

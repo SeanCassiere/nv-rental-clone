@@ -15,6 +15,11 @@ export const agreementQKeys = {
   }) => [agreementQKeys.rootKey, pagination, filters],
   statuses: () => [agreementQKeys.rootKey, "statuses"],
   types: () => [agreementQKeys.rootKey, "types"],
+  generateNumber: (type: string) => [
+    agreementQKeys.rootKey,
+    "generate-number",
+    type,
+  ],
   // view by ID
   viewKey: "view-agreement",
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
@@ -74,6 +79,7 @@ export const fleetQKeys = {
     filters: Filters;
   }) => [fleetQKeys.rootKey, pagination, filters],
   statuses: () => [fleetQKeys.rootKey, "statuses"],
+  fuelLevels: () => [fleetQKeys.rootKey, "fuel-levels"],
   // view by ID
   viewKey: "view-fleet",
   id: (id: ReferenceId) => [fleetQKeys.viewKey, id, "data"],

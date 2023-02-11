@@ -10,3 +10,10 @@ export function localDateTimeToQueryYearMonthDay(date: Date) {
   const print = `${format(date, dateMaker)}T${format(date, timeMaker)}`;
   return print;
 }
+
+export function localDateTimeWithoutSecondsToQueryYearMonthDay(date: Date) {
+  const dateMaker = "yyyy-MM-dd";
+  const timeMaker = "HH:mm";
+  const print = `${format(date, dateMaker)}T${format(date, timeMaker)}`;
+  return print;
+}

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { parseISO } from "date-fns";
 
 import CommonHeader from "../Layout/CommonHeader";
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
@@ -9,8 +10,15 @@ import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "../PrimaryModule/ModuleTabs";
+import AgreementRentalInformationTab, {
+  type AgreementRentalInformationSchemaParsed,
+} from "./AgreementRentalInformationTab";
+import AgreementVehicleInformationTab, {
+  type AgreementVehicleInformationSchemaParsed,
+} from "./AgreementVehicleInformationTab";
 
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
+import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 
 import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
@@ -28,7 +36,6 @@ import {
 
 import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
 import { type ReservationDataParsed } from "../../utils/schemas/reservation";
-import { type AgreementDataParsed } from "../../utils/schemas/agreement";
 import { sortObject } from "../../utils/sortObject";
 
 interface TAddRentalParentFormProps {
@@ -40,7 +47,6 @@ interface TAddRentalParentFormProps {
   onRentalCancelClick: () => void;
   referenceNumber?: string;
   summaryData?: TRentalRatesSummarySchema;
-  agreementData?: AgreementDataParsed;
   reservationData?: ReservationDataParsed;
 }
 
@@ -60,46 +66,90 @@ const AddRentalParentForm = ({
   onRentalCancelClick: handleRentalCancelClick,
   referenceNumber,
   summaryData,
-  agreementData,
   reservationData,
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
-  const [isDataModified] = useState(false);
+  const [isSafeToFetchSummary] = useState(false);
+  const [creationStagesComplete, setCreationStageComplete] = useState({
+    "rental-information": false,
+    "customer-information": false,
+    "vehicle-information": false,
+    "rates-and-taxes": false,
+    "other-information": true,
+  });
+
+  const [agreementRentalInformation, setAgreementRentalInformation] =
+    useState<AgreementRentalInformationSchemaParsed | null>(null);
+  const [agreementVehicleInformation, setAgreementVehicleInformation] =
+    useState<AgreementVehicleInformationSchemaParsed | null>(null);
 
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
     const tabs: ModuleTabConfigItem[] = [];
     if (module === "agreement") {
-      tabs.push({
-        id: "rental-information",
-        label: "Rental information",
-        component: (
-          <DummyComponent
-            {...(agreementData ? agreementData : { rental: null })}
-          />
-        ),
-      });
-      tabs.push({
-        id: "vehicle-information",
-        label: "Vehicle information",
-        component: "Vehicle information",
-      });
-      tabs.push({
-        id: "customer-information",
-        label: "Customer information",
-        component: "Customer information",
-      });
-      tabs.push({
-        id: "rates-and-taxes",
-        label: "Rates and taxes",
-        component: "Rates and taxes",
-      });
-      tabs.push({
+      const others = {
+        // 5
         id: "others",
         label: "Other information",
         component: "Other information",
-      });
+      };
+      const ratesAndTaxes = {
+        // 4
+        id: "rates-and-taxes",
+        label: "Rates and taxes",
+        component: "Rates and taxes",
+      };
+      const customerInformation = {
+        // 3
+        id: "customer-information",
+        label: "Customer information",
+        component: "Customer information",
+      };
+      const vehicleInformation = {
+        // 2
+        id: "vehicle-information",
+        label: "Vehicle information",
+        component: (
+          <AgreementVehicleInformationTab
+            rentalInformation={agreementRentalInformation || undefined}
+            vehicleInformation={agreementVehicleInformation || undefined}
+            isEdit={isEdit}
+            onCompleted={(data) => {
+              setAgreementVehicleInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                "vehicle-information": true,
+              }));
+              handleStageTabClick(customerInformation);
+            }}
+          />
+        ),
+      };
+      const rentalInformation = {
+        // 1
+        id: "rental-information",
+        label: "Rental information",
+        component: (
+          <AgreementRentalInformationTab
+            isEdit={isEdit}
+            initialData={agreementRentalInformation ?? undefined}
+            onCompleted={(data) => {
+              setAgreementRentalInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                "rental-information": true,
+              }));
+              handleStageTabClick(vehicleInformation);
+            }}
+          />
+        ),
+      };
+      tabs.push(rentalInformation);
+      tabs.push(vehicleInformation);
+      tabs.push(customerInformation);
+      tabs.push(ratesAndTaxes);
+      tabs.push(others);
     }
     if (module === "reservation") {
       tabs.push({
@@ -134,7 +184,48 @@ const AddRentalParentForm = ({
     }
 
     return tabs;
-  }, [module, agreementData, reservationData]);
+  }, [
+    agreementRentalInformation,
+    agreementVehicleInformation,
+    handleStageTabClick,
+    isEdit,
+    module,
+    reservationData,
+  ]);
+
+  useGetAgreementData({
+    agreementId:
+      module === "agreement" && isEdit && referenceId ? referenceId : 0,
+    onSuccess: (data) => {
+      if (!agreementRentalInformation) {
+        setAgreementRentalInformation({
+          agreementNumber: data.agreementNumber ?? "",
+          agreementType: data.agreementType ?? "",
+          destination: data.destination ?? "",
+          checkoutLocation: data.checkoutLocation,
+          checkinLocation: data.checkinLocation,
+          checkoutDate: parseISO(data.checkoutDate),
+          checkinDate: parseISO(data.checkinDate),
+        });
+        setCreationStageComplete((prev) => ({
+          ...prev,
+          "rental-information": true,
+        }));
+      }
+      if (!agreementVehicleInformation) {
+        setAgreementVehicleInformation({
+          fuelOut: data.fuelLevelOut ?? "",
+          odometerOut: data.odometerOut ?? 0,
+          vehicleTypeId: data.vehicleTypeId ?? 0,
+          vehicleId: data.vehicleId ?? 0,
+        });
+        setCreationStageComplete((prev) => ({
+          ...prev,
+          "vehicle-information": true,
+        }));
+      }
+    },
+  });
 
   return (
     <>
@@ -264,18 +355,39 @@ const AddRentalParentForm = ({
                   >
                     Cancel
                   </Button>
-                  <Button
-                    type="button"
-                    color="teal"
-                    onClick={() => {
-                      console.log("Functionality not implemented yet.");
-                    }}
-                    fullWidth
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <PlayIconFilled className="h-3 w-3" />
-                    {isEdit ? "Save" : "Create"}
-                  </Button>
+                  {module === "agreement" ? (
+                    <Button
+                      type="button"
+                      color="teal"
+                      onClick={() => {
+                        console.log("Functionality not implemented yet.");
+                      }}
+                      fullWidth
+                      className="flex items-center justify-center gap-2"
+                      disabled={
+                        !Object.values(creationStagesComplete).every(
+                          (obj) => obj === true
+                        )
+                      }
+                    >
+                      <PlayIconFilled className="h-3 w-3" />
+                      {isEdit ? "Save" : "Create"}
+                    </Button>
+                  ) : null}
+                  {module === "reservation" ? (
+                    <Button
+                      type="button"
+                      color="teal"
+                      onClick={() => {
+                        console.log("Functionality not implemented yet.");
+                      }}
+                      fullWidth
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <PlayIconFilled className="h-3 w-3" />
+                      {isEdit ? "Save" : "Create"}
+                    </Button>
+                  ) : null}
                 </div>
               </div>
             }
@@ -313,7 +425,7 @@ const AddRentalParentForm = ({
                 }
                 currency={clientProfile.data?.currency || undefined}
                 summaryData={
-                  isEdit && !isDataModified && summaryData
+                  isEdit && !isSafeToFetchSummary && summaryData
                     ? summaryData
                     : undefined
                 }

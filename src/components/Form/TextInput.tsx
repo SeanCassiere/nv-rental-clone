@@ -46,7 +46,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 "block w-full rounded border-gray-300 focus:outline-none sm:text-sm",
                 error
                   ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-                  : "focus:border-teal-500 focus:ring-teal-500",
+                  : "read-only:text-slate-500 focus:border-teal-500 focus:ring-teal-500 read-only:focus:border-slate-400 read-only:focus:ring-slate-400",
                 error ? "pr-10" : undefined
               )}
               placeholder={inputProps.placeholder || label}
