@@ -57,59 +57,43 @@ import {
 } from "./routes/fleet/fleetIdPath";
 
 const routeTree = rootRoute.addChildren([
-  indexRoute,
-  loggedOutRoute,
+  indexRoute, // /
+  loggedOutRoute, // /logged-out
   ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
   agreementsRoute.addChildren([
-    // /agreements
-    searchAgreementsRoute,
-    // /agreements/new
-    addAgreementRoute,
-    // /agreements/:agreementId
+    searchAgreementsRoute, // /agreements
+    addAgreementRoute, // /agreements/new
     agreementPathIdRoute.addChildren([
-      // /agreements/:agreementId/
-      viewAgreementByIdRoute,
-      // /agreements/:agreementId/edit
-      editAgreementByIdRoute,
+      // /agreements/:agreementId
+      viewAgreementByIdRoute, // /agreements/:agreementId/
+      editAgreementByIdRoute, // /agreements/:agreementId/edit
     ]),
   ]),
   customersRoute.addChildren([
-    // /customers
-    searchCustomersRoute,
-    // /customers/new
-    addCustomerRoute,
-    // /customers/:customerId
+    searchCustomersRoute, // /customers
+    addCustomerRoute, // /customers/new
     customerPathIdRoute.addChildren([
-      // /customers/:customerId/
-      viewCustomerByIdRoute,
-      // /customers/:customerId/edit
-      editCustomerByIdRoute,
+      // /customers/:customerId
+      viewCustomerByIdRoute, // /customers/:customerId/
+      editCustomerByIdRoute, // /customers/:customerId/edit
     ]),
   ]),
   reservationsRoute.addChildren([
-    // /reservations
-    searchReservationsRoute,
-    // /reservations/new
-    addReservationRoute,
-    // /reservations/:reservationId
+    searchReservationsRoute, // /reservations
+    addReservationRoute, // /reservations/new
     reservationPathIdRoute.addChildren([
-      // /reservations/:reservationId/
-      viewReservationByIdRoute,
-      // /reservations/:reservationId/edit
-      editReservationByIdRoute,
+      // /reservations/:reservationId
+      viewReservationByIdRoute, // /reservations/:reservationId/
+      editReservationByIdRoute, // /reservations/:reservationId/edit
     ]),
   ]),
   fleetRoute.addChildren([
-    // /fleet
-    searchFleetRoute,
-    // /fleet/new
-    addFleetRoute,
-    // /fleet/:fleetId
+    searchFleetRoute, // /fleet
+    addFleetRoute, // /fleet/new
     fleetPathIdRoute.addChildren([
-      // /fleet/:fleetId/
-      viewFleetByIdRoute,
-      // /fleet/:fleetId/edit
-      editFleetByIdRoute,
+      // /fleet/:fleetId
+      viewFleetByIdRoute, // /fleet/:fleetId/
+      editFleetByIdRoute, // /fleet/:fleetId/edit
     ]),
   ]),
 ]);
