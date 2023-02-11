@@ -184,15 +184,15 @@ const AgreementRentalInformationTab = ({
               {...register("checkoutDate")}
               selected={getValues("checkoutDate")}
               onChange={(date) => {
-                const previousCheckoutDate = getValues("checkoutDate");
-                const previousCheckinDate = getValues("checkinDate");
-
-                const differenceInSecondsBetweenDates = differenceInSeconds(
-                  previousCheckinDate,
-                  previousCheckoutDate
-                );
                 setValue("checkoutDate", date as any, { shouldValidate: true });
                 if (date) {
+                  const previousCheckoutDate = getValues("checkoutDate");
+                  const previousCheckinDate = getValues("checkinDate");
+
+                  const differenceInSecondsBetweenDates = differenceInSeconds(
+                    previousCheckinDate,
+                    previousCheckoutDate
+                  );
                   const newCheckinDate = add(new Date(date), {
                     seconds: differenceInSecondsBetweenDates,
                   });
