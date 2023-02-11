@@ -266,6 +266,7 @@ const AddRentalParentForm = ({
                   </Button>
                   <Button
                     type="button"
+                    color="teal"
                     onClick={() => {
                       console.log("Functionality not implemented yet.");
                     }}
