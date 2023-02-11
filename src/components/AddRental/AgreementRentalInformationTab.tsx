@@ -184,7 +184,6 @@ const AgreementRentalInformationTab = ({
               {...register("checkoutDate")}
               selected={getValues("checkoutDate")}
               onChange={(date) => {
-                setValue("checkoutDate", date as any, { shouldValidate: true });
                 if (date) {
                   const previousCheckoutDate = getValues("checkoutDate");
                   const previousCheckinDate = getValues("checkinDate");
@@ -200,6 +199,7 @@ const AgreementRentalInformationTab = ({
                     shouldValidate: true,
                   });
                 }
+                setValue("checkoutDate", date as any, { shouldValidate: true });
               }}
               inputProps={{
                 error: !!errors.checkoutDate,
