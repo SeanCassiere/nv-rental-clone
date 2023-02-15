@@ -75,7 +75,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             ) : null}
           </div>
           {error && errorText ? (
-            <p className="mt-2 text-sm text-red-600" id={`${id}-error`}>
+            <p className="mt-0.5 text-sm text-red-600" id={`${id}-error`}>
               {errorText}
             </p>
           ) : null}

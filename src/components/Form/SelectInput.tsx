@@ -73,7 +73,7 @@ export const SelectInput = (props: SelectProps) => {
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownSolid
                       className={classNames(
-                        "h-5 w-5 ",
+                        "h-5 w-5",
                         disabled ? "text-slate-500" : "text-gray-400",
                         error ? "text-red-500" : undefined
                       )}
@@ -82,7 +82,7 @@ export const SelectInput = (props: SelectProps) => {
                   </span>
                 </div>
                 {error && (
-                  <div className="mt-2 text-left text-sm text-red-600">
+                  <div className="mt-0.5 text-left text-sm text-red-600">
                     {errorText}
                   </div>
                 )}

@@ -17,6 +17,7 @@ interface MultiSelectInputProps {
   required?: boolean;
   placeHolderSchema?: { value: any; label: string };
   clearAll?: () => void;
+  disabled?: boolean;
 }
 
 const blankOption = { label: "Select", value: "undefined" };
@@ -30,6 +31,7 @@ export const MultiSelectInput = (props: MultiSelectInputProps) => {
     onSelect,
     name,
     label,
+    disabled: isDisabled,
   } = props;
 
   const selectOptions = [...options];
@@ -57,6 +59,7 @@ export const MultiSelectInput = (props: MultiSelectInputProps) => {
         }}
         name={name ?? id}
         multiple
+        disabled={isDisabled}
       >
         {({ open }) => (
           <>
