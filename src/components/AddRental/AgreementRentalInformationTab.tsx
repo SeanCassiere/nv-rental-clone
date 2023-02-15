@@ -5,7 +5,7 @@ import { z } from "zod";
 import { add, isBefore, isEqual, differenceInSeconds } from "date-fns";
 
 import { DocumentTextSolid } from "../icons";
-import { Button, TextInput, DatePicker, SelectInput } from "../Form";
+import { Button, TextInput, SelectInput, DateTimePicker } from "../Form";
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
 
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
@@ -178,15 +178,17 @@ const AgreementRentalInformationTab = ({
             />
           </div>
           <div>
-            <DatePicker
+            <DateTimePicker
               label="Checkout Date"
               placeholderText="Checkout Date"
               {...register("checkoutDate")}
               selected={getValues("checkoutDate")}
               onChange={(date) => {
                 if (date) {
-                  const previousCheckoutDate = getValues("checkoutDate");
-                  const previousCheckinDate = getValues("checkinDate");
+                  const previousCheckoutDate =
+                    getValues("checkoutDate") ?? values.checkoutDate;
+                  const previousCheckinDate =
+                    getValues("checkinDate") ?? values.checkinDate;
 
                   const differenceInSecondsBetweenDates = differenceInSeconds(
                     previousCheckinDate,
@@ -225,7 +227,7 @@ const AgreementRentalInformationTab = ({
             />
           </div>
           <div>
-            <DatePicker
+            <DateTimePicker
               label="Checkin Date"
               placeholderText="Checkin Date"
               {...register("checkinDate")}

@@ -6,6 +6,7 @@ import {
   Button,
   type TSelectInputOption,
   DatePicker,
+  DateTimePicker,
 } from "../../components/Form";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
@@ -102,7 +103,16 @@ const StylingAreaPage: React.FC = () => {
 
       {/*  */}
       <section className="py-10 md:mx-28">
-        <h2 className="text-2xl">Dates</h2>
+        <h2 className="text-2xl">DateTime Picker</h2>
+        <DateTimePicker
+          selected={date}
+          onChange={(dv) => setDate(dv)}
+          label="Date-time"
+          placeholderText="Select a date & time"
+        />
+      </section>
+      <section className="py-10 md:mx-28">
+        <h2 className="text-2xl">DatePicker</h2>
         <DatePicker
           selected={date}
           onChange={(dv) => setDate(dv)}

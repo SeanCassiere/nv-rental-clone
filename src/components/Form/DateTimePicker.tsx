@@ -11,7 +11,11 @@ import {
   ChevronLeftOutline,
   ChevronRightOutline,
 } from "../icons";
-import { dfnsDateFormat, getDateFnsLocale } from "../../i18n.config";
+import {
+  dfnsDateFormat,
+  dfnsTimeFormat,
+  getDateFnsLocale,
+} from "../../i18n.config";
 import { getLocalStorageForUser } from "../../utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "../../utils/constants";
 
@@ -23,15 +27,16 @@ type TSelectedReactDatePickerProps = Omit<
   | "nextMonthButtonLabel"
   | "previousMonthButtonLabel"
   | "dateFormat"
+  | "dropdownMode"
 >;
 
-export interface DatePickerProps extends TSelectedReactDatePickerProps {
+export interface DateTimePickerProps extends TSelectedReactDatePickerProps {
   placeholderText: string;
   label?: string;
   inputProps?: Omit<Parameters<typeof TextInput>[0], "label" | "placeholder">;
 }
 
-export const DatePicker = (props: DatePickerProps) => {
+export const DateTimePicker = (props: DateTimePickerProps) => {
   const { inputProps, ...pickerProps } = props;
   const { i18n } = useTranslation();
   const auth = useAuth();
@@ -39,15 +44,26 @@ export const DatePicker = (props: DatePickerProps) => {
   const clientId = auth.user?.profile.navotar_clientid;
   const userId = auth.user?.profile.navotar_userid;
 
-  const fromStorage =
+  const fromStorageDate =
     clientId && userId
       ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.dateFormat)
       : null;
+  const fromStorageTime =
+    clientId && userId
+      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.timeFormat)
+      : null;
 
-  const dateFormat = fromStorage ? fromStorage : dfnsDateFormat;
+  const defaultDateTimeFormat = `${dfnsDateFormat} ${dfnsTimeFormat}`;
+  const parsedUserDateTimeFormat = `${fromStorageDate} ${fromStorageTime}`;
+
+  const dateFormat =
+    fromStorageDate && fromStorageTime
+      ? parsedUserDateTimeFormat
+      : defaultDateTimeFormat;
+  const timeFormat = fromStorageTime ? fromStorageTime : dfnsTimeFormat;
 
   return (
-    <div className="app-date-picker">
+    <div className="app-datetime-picker">
       <ReactDatePicker
         {...pickerProps}
         customInput={
@@ -65,7 +81,31 @@ export const DatePicker = (props: DatePickerProps) => {
         popperPlacement="bottom-start"
         autoComplete="off"
         locale={getDateFnsLocale(i18n.language)}
+        timeFormat={timeFormat}
+        showTimeInput
+        customTimeInput={<CustomTimeInput />}
+        dropdownMode="select"
       />
     </div>
+  );
+};
+
+const CustomTimeInput = (props: {
+  onChange?: any;
+  date?: any;
+  value?: string;
+}) => {
+  const { onChange, value, ...others } = props;
+  return (
+    <input
+      type="time"
+      value={value}
+      onChange={(evt) => {
+        onChange?.(evt.target.value);
+      }}
+      className="border-gray-20 w-full rounded border border-gray-300 py-1.5 text-gray-700 focus:border-teal-500 focus:outline-none focus:ring-teal-500"
+      autoComplete="off"
+      {...others}
+    />
   );
 };
