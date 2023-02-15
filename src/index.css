@@ -378,13 +378,13 @@
 }
 
 .app-datetime-picker .react-datepicker__input-time-container {
-  @apply mx-2 mt-1 mb-2 flex flex-col;
+  @apply ml-0.5 mt-0.5 mb-2 flex flex-col;
 }
 
 .app-datetime-picker
   .react-datepicker__input-time-container
   .react-datepicker-time__caption {
-  @apply text-sm text-gray-600;
+  @apply mb-0.5 ml-1 text-sm text-gray-600;
 }
 
 .app-datetime-picker
