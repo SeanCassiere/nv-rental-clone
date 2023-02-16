@@ -167,6 +167,7 @@ const AgreementRentalInformationTab = ({
               }}
               error={!!errors.agreementType}
               errorText={errors.agreementType?.message}
+              disabled={isEdit}
             />
           </div>
           <div>
