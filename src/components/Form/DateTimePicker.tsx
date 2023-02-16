@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import ReactDatePicker, {
   type ReactDatePickerProps,
   CalendarContainer,
@@ -36,59 +37,62 @@ export interface DateTimePickerProps extends TSelectedReactDatePickerProps {
   inputProps?: Omit<Parameters<typeof TextInput>[0], "label" | "placeholder">;
 }
 
-export const DateTimePicker = (props: DateTimePickerProps) => {
-  const { inputProps, ...pickerProps } = props;
-  const { i18n } = useTranslation();
-  const auth = useAuth();
+export const DateTimePicker = forwardRef<any, DateTimePickerProps>(
+  (props, ref) => {
+    const { inputProps, ...pickerProps } = props;
+    const { i18n } = useTranslation();
+    const auth = useAuth();
 
-  const clientId = auth.user?.profile.navotar_clientid;
-  const userId = auth.user?.profile.navotar_userid;
+    const clientId = auth.user?.profile.navotar_clientid;
+    const userId = auth.user?.profile.navotar_userid;
 
-  const fromStorageDate =
-    clientId && userId
-      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.dateFormat)
-      : null;
-  const fromStorageTime =
-    clientId && userId
-      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.timeFormat)
-      : null;
+    const fromStorageDate =
+      clientId && userId
+        ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.dateFormat)
+        : null;
+    const fromStorageTime =
+      clientId && userId
+        ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.timeFormat)
+        : null;
 
-  const defaultDateTimeFormat = `${dfnsDateFormat} ${dfnsTimeFormat}`;
-  const parsedUserDateTimeFormat = `${fromStorageDate} ${fromStorageTime}`;
+    const defaultDateTimeFormat = `${dfnsDateFormat} ${dfnsTimeFormat}`;
+    const parsedUserDateTimeFormat = `${fromStorageDate} ${fromStorageTime}`;
 
-  const dateFormat =
-    fromStorageDate && fromStorageTime
-      ? parsedUserDateTimeFormat
-      : defaultDateTimeFormat;
-  const timeFormat = fromStorageTime ? fromStorageTime : dfnsTimeFormat;
+    const dateFormat =
+      fromStorageDate && fromStorageTime
+        ? parsedUserDateTimeFormat
+        : defaultDateTimeFormat;
+    const timeFormat = fromStorageTime ? fromStorageTime : dfnsTimeFormat;
 
-  return (
-    <div className="app-datetime-picker">
-      <ReactDatePicker
-        {...pickerProps}
-        customInput={
-          <TextInput
-            label={props?.label || props.placeholderText}
-            endIcon={<CalendarOutline className="h-4 w-4 text-gray-400" />}
-            autoComplete="off"
-            {...inputProps}
-          />
-        }
-        calendarContainer={CalendarContainer}
-        previousMonthButtonLabel={<ChevronLeftOutline className="h-4 w-4" />}
-        nextMonthButtonLabel={<ChevronRightOutline className="h-4 w-4" />}
-        dateFormat={dateFormat}
-        popperPlacement="bottom-start"
-        autoComplete="off"
-        locale={getDateFnsLocale(i18n.language)}
-        timeFormat={timeFormat}
-        showTimeInput
-        customTimeInput={<CustomTimeInput />}
-        dropdownMode="select"
-      />
-    </div>
-  );
-};
+    return (
+      <div className="app-datetime-picker">
+        <ReactDatePicker
+          {...pickerProps}
+          customInput={
+            <TextInput
+              label={props?.label || props.placeholderText}
+              endIcon={<CalendarOutline className="h-4 w-4 text-gray-400" />}
+              autoComplete="off"
+              {...inputProps}
+            />
+          }
+          calendarContainer={CalendarContainer}
+          previousMonthButtonLabel={<ChevronLeftOutline className="h-4 w-4" />}
+          nextMonthButtonLabel={<ChevronRightOutline className="h-4 w-4" />}
+          dateFormat={dateFormat}
+          popperPlacement="bottom-start"
+          autoComplete="off"
+          locale={getDateFnsLocale(i18n.language)}
+          timeFormat={timeFormat}
+          showTimeInput
+          customTimeInput={<CustomTimeInput />}
+          dropdownMode="select"
+          ref={ref}
+        />
+      </div>
+    );
+  }
+);
 
 const CustomTimeInput = (props: {
   onChange?: any;

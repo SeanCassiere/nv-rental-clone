@@ -1,4 +1,4 @@
-import { useId, Fragment } from "react";
+import { useId, Fragment, forwardRef } from "react";
 import { Transition, Listbox } from "@headlessui/react";
 import classNames from "classnames";
 import { CheckIconOutline, ChevronUpDownSolid } from "../icons";
@@ -21,7 +21,7 @@ interface SelectProps {
   disabled?: boolean;
 }
 
-export const SelectInput = (props: SelectProps) => {
+export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
   const id = useId();
   const {
     value,
@@ -38,9 +38,9 @@ export const SelectInput = (props: SelectProps) => {
   const selectOptions = [...options];
 
   return (
-    <div>
+    <div ref={ref}>
       <Listbox
-        value={value}
+        value={value ?? null}
         onChange={onSelect}
         name={name ?? id}
         disabled={isDisabled}
@@ -141,4 +141,4 @@ export const SelectInput = (props: SelectProps) => {
       </Listbox>
     </div>
   );
-};
+});

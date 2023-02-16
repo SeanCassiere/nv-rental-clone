@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import ReactDatePicker, {
   type ReactDatePickerProps,
   CalendarContainer,
@@ -31,7 +32,7 @@ export interface DatePickerProps extends TSelectedReactDatePickerProps {
   inputProps?: Omit<Parameters<typeof TextInput>[0], "label" | "placeholder">;
 }
 
-export const DatePicker = (props: DatePickerProps) => {
+export const DatePicker = forwardRef<any, DatePickerProps>((props, ref) => {
   const { inputProps, ...pickerProps } = props;
   const { i18n } = useTranslation();
   const auth = useAuth();
@@ -65,7 +66,8 @@ export const DatePicker = (props: DatePickerProps) => {
         popperPlacement="bottom-start"
         autoComplete="off"
         locale={getDateFnsLocale(i18n.language)}
+        ref={ref}
       />
     </div>
   );
-};
+});
