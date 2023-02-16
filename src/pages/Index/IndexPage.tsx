@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
 
 import Protector from "../../components/Protector";
@@ -30,14 +30,32 @@ function IndexPage() {
   const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
 
   const widgetList = useGetDashboardWidgetList();
+  const widgetIds = useMemo(() => {
+    if (widgetList.data && Array.isArray(widgetList.data)) {
+      return widgetList.data
+
+        .filter((widget) => widget.isDeleted === false)
+        .map((widget) => widget.widgetID);
+    }
+    return [];
+  }, [widgetList.data]);
+  const widgets = useMemo(() => {
+    if (widgetList.data && Array.isArray(widgetList.data)) {
+      return widgetList.data;
+    }
+    return [];
+  }, [widgetList]);
 
   const noticeList = useGetDashboardNoticeList();
 
   const saveDashboardWidgetsMutation = useSaveDashboardWidgetList();
 
-  const handleWidgetSortingEnd = (widgets: DashboardWidgetItemParsed[]) => {
-    saveDashboardWidgetsMutation.mutate({ widgets });
-  };
+  const handleWidgetSortingEnd = useCallback(
+    (widgets: DashboardWidgetItemParsed[]) => {
+      saveDashboardWidgetsMutation.mutate({ widgets });
+    },
+    [saveDashboardWidgetsMutation]
+  );
 
   useDocumentTitle(titleMaker("Dashboard"));
 
@@ -108,8 +126,8 @@ function IndexPage() {
 
           <div className="mt-4">
             <DashboardDndWidgetGrid
-              key={`${JSON.stringify(widgetList.data)}`}
-              widgets={widgetList.data}
+              key={widgetIds.join(",")}
+              widgets={widgets}
               selectedLocationIds={[0]}
               onWidgetSortingEnd={handleWidgetSortingEnd}
               isLocked={isWidgetsLocked}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import classNames from "classnames";
 import {
   type DragEndEvent,
@@ -33,13 +33,13 @@ interface DashboardDndWidgetGridProps {
   isLocked: boolean;
 }
 const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
-  const { widgets: widgetList, onWidgetSortingEnd } = props;
+  const { widgets: widgetList = [], onWidgetSortingEnd } = props;
   const isDisabled = props.isLocked;
 
-  const [widgets, setWidgets] = useState([
-    ...widgetList.sort(sortByUserPositionFn),
-  ]);
-  const widgetIdsList = widgets
+  const [localWidgets, setLocalWidgets] = useState(
+    [...widgetList].sort(sortByUserPositionFn)
+  );
+  const widgetIdsList = localWidgets
     .filter((widget) => widget.isDeleted === false)
     .map((widget) => widget.widgetID);
 
@@ -48,24 +48,29 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
     useSensor(TouchSensor, {})
   );
 
-  const handleDragEnd = (evt: DragEndEvent) => {
-    if (!evt.over || evt.over.disabled || evt.active.id === evt.over.id) return;
+  const handleDragEnd = useCallback(
+    (evt: DragEndEvent) => {
+      if (!evt.over || evt.over.disabled) {
+        return;
+      }
 
-    const draggingId = evt.active.id;
-    const overId = evt.over.id;
+      const draggingId = evt.active.id;
+      const overId = evt.over.id;
 
-    const newWidgetIdOrder = arrayMove(
-      widgetIdsList,
-      widgetIdsList.indexOf(draggingId as string),
-      widgetIdsList.indexOf(overId as string)
-    );
-    const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
-      widgets: widgetList,
-      orderedWidgetIds: newWidgetIdOrder,
-    });
-    setWidgets(reorderedWidgetsList);
-    onWidgetSortingEnd(reorderedWidgetsList);
-  };
+      const newWidgetIdOrder = arrayMove(
+        widgetIdsList,
+        widgetIdsList.indexOf(String(draggingId)),
+        widgetIdsList.indexOf(String(overId))
+      );
+      const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
+        widgets: localWidgets,
+        orderedWidgetIds: newWidgetIdOrder,
+      }); // return using sortByUserPositionFn;
+      setLocalWidgets(reorderedWidgetsList);
+      onWidgetSortingEnd(reorderedWidgetsList);
+    },
+    [localWidgets, onWidgetSortingEnd, widgetIdsList]
+  );
 
   return (
     <DndContext
@@ -75,14 +80,12 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
     >
       <div className="grid min-h-[500px] w-full grid-cols-1 gap-4 md:grid-cols-12">
         <SortableContext
-          key={widgetIdsList.toString()}
           items={widgetIdsList}
           strategy={rectSortingStrategy}
           disabled={isDisabled}
         >
-          {widgets
+          {localWidgets
             .filter((widget) => widget.isDeleted === false)
-            .sort(sortByUserPositionFn)
             .map((widget) => (
               <WidgetSizingContainer
                 widget={widget}
