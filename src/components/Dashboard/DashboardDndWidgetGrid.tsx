@@ -19,13 +19,6 @@ import { CSS } from "@dnd-kit/utilities";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 
-function sortByUserPositionFn(
-  widgetA: DashboardWidgetItemParsed,
-  widgetB: DashboardWidgetItemParsed
-) {
-  return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
-}
-
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
   selectedLocationIds: number[];
@@ -73,12 +66,12 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   );
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="grid min-h-[500px] w-full grid-cols-1 gap-4 md:grid-cols-12">
+    <ul className="grid min-h-[500px] w-full grid-cols-1 gap-4 transition-all md:grid-cols-12">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragEnd={handleDragEnd}
+      >
         <SortableContext
           items={widgetIdsList}
           strategy={rectSortingStrategy}
@@ -94,8 +87,8 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
               />
             ))}
         </SortableContext>
-      </div>
-    </DndContext>
+      </DndContext>
+    </ul>
   );
 };
 
@@ -135,6 +128,13 @@ function reorderBasedOnWidgetIdPositions({
   return returnableWidgets.sort(sortByUserPositionFn);
 }
 
+function sortByUserPositionFn(
+  widgetA: DashboardWidgetItemParsed,
+  widgetB: DashboardWidgetItemParsed
+) {
+  return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
+}
+
 function WidgetSizingContainer({
   widget,
   isDisabled,
@@ -143,20 +143,24 @@ function WidgetSizingContainer({
   isDisabled: boolean;
 }) {
   const {
-    setDroppableNodeRef,
-    setDraggableNodeRef,
+    // setDroppableNodeRef,
+    // setDraggableNodeRef,
     listeners,
     attributes,
     transform,
     transition,
+    isDragging,
+    setNodeRef,
+    setActivatorNodeRef,
   } = useSortable({
     id: widget.widgetID,
     disabled: isDisabled,
   });
 
   return (
-    <div
-      ref={setDroppableNodeRef}
+    <li
+      ref={setNodeRef}
+      // ref={setDroppableNodeRef}
       className={classNames(
         "col-span-1",
         widget.widgetScale === 1 ? "md:col-span-1" : "",
@@ -172,21 +176,23 @@ function WidgetSizingContainer({
         widget.widgetScale === 11 ? "md:col-span-11" : "",
         widget.widgetScale === 12 ? "md:col-span-12" : ""
       )}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
     >
       <div
-        ref={setDraggableNodeRef}
+        ref={setActivatorNodeRef}
+        // ref={setDraggableNodeRef}
         className={classNames(
-          "h-full w-full rounded border border-slate-200 text-slate-600 transition-all duration-200 ease-in",
+          "h-full w-full rounded border border-slate-200 text-slate-600",
+          !isDragging ? "transition-all duration-200 ease-in" : "",
           { "cursor-move": !isDisabled, "cursor-default": isDisabled },
           isDisabled ? "bg-slate-50" : "bg-slate-100"
         )}
-        style={{ transform: CSS.Translate.toString(transform), transition }}
         {...listeners}
         {...attributes}
       >
         {widget.widgetName}
       </div>
-    </div>
+    </li>
   );
 }
 
