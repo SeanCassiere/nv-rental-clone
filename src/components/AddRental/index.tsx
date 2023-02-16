@@ -37,6 +37,8 @@ import {
 import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
 import { type ReservationDataParsed } from "../../utils/schemas/reservation";
 import { sortObject } from "../../utils/sortObject";
+import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 
 interface TAddRentalParentFormProps {
   referenceId: number | string;
@@ -227,6 +229,29 @@ const AddRentalParentForm = ({
     },
   });
 
+  // fetching the data before page navigation
+  useGetVehicleTypesList({
+    StartDate:
+      module === "agreement"
+        ? agreementRentalInformation?.checkoutDate
+        : undefined,
+    EndDate:
+      module === "agreement"
+        ? agreementRentalInformation?.checkinDate
+        : undefined,
+    LocationID: agreementRentalInformation?.checkoutLocation ?? 0,
+  });
+
+  // fetching the data before page navigation only for rentals in edit mode
+  useGetVehiclesList({
+    page: 1,
+    pageSize: 2000,
+    enabled: isEdit,
+    filters: {
+      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
+      CurrentLocationId: agreementRentalInformation?.checkoutLocation ?? 0,
+    },
+  });
   return (
     <>
       <div className="py-6">
