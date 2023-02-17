@@ -1,10 +1,13 @@
+import { useState, type ReactNode } from "react";
 import classNames from "classnames";
 import {
   type MakeLinkOptions,
   type RegisteredRoutesInfo,
   Link,
 } from "@tanstack/react-router";
-import { type ReactNode } from "react";
+import { Transition } from "@headlessui/react";
+
+import { ChevronDownOutline, ChevronRightOutline } from "../../icons";
 export const SummaryHeader = ({
   title,
   icon,
@@ -33,6 +36,10 @@ export type TSummaryLineItemProps = {
   primaryTextHighlight?: boolean;
   primaryBlockHighlight?: boolean;
   biggerText?: boolean;
+  dropdownContent?: ReactNode;
+  hasDropdownContent?: boolean;
+  isDropdownContentInitiallyShown?: boolean;
+  dropdownContentLabel?: string;
 };
 
 export const makeSummaryDataStyles = (
@@ -60,37 +67,87 @@ export const makeSummaryDataStyles = (
 };
 
 export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
-  const { type: lineItemType = "text" } = data;
+  const {
+    type: lineItemType = "text",
+    hasDropdownContent = false,
+    isDropdownContentInitiallyShown = false,
+    dropdownContentLabel = "More info",
+    dropdownContent,
+  } = data;
+
+  const [showDropdownContent, setShowDropdownContent] = useState(
+    isDropdownContentInitiallyShown
+  );
 
   return (
     <div
       className={classNames(
-        "flex select-none items-center justify-between gap-4 py-2 px-4",
-        !data.primaryTextHighlight && data.primaryBlockHighlight
-          ? "bg-teal-400 text-white"
-          : ""
+        "flex flex-col",
+        data.primaryBlockHighlight ? "" : "py-2 px-4"
       )}
     >
-      <span
+      <div
         className={classNames(
-          "flex-shrink break-all font-semibold md:max-w-none",
-          !data.primaryBlockHighlight ? "text-gray-700" : "",
-          data.biggerText ? "text-lg" : "text-base"
+          "flex items-start justify-between gap-4",
+          !data.primaryTextHighlight && data.primaryBlockHighlight
+            ? "bg-teal-400 text-white"
+            : "",
+          data.primaryBlockHighlight ? "py-2 px-4" : ""
         )}
       >
-        {data.label}
-      </span>
-      {lineItemType === "text" && (
-        <span className={makeSummaryDataStyles(data)}>{data.amount}</span>
-      )}
-      {lineItemType === "link" && (
-        <Link
-          {...(data?.linkProps as any)}
-          className={makeSummaryDataStyles(data)}
+        <span
+          className={classNames(
+            "flex-shrink break-all font-semibold md:max-w-none",
+            !data.primaryBlockHighlight ? "text-gray-700" : "",
+            data.biggerText ? "text-lg" : "text-base"
+          )}
         >
-          {data.amount}
-        </Link>
-      )}
+          {data.label}
+          {hasDropdownContent && (
+            <>
+              <br />
+              <button
+                className="flex items-center font-normal text-slate-500"
+                onClick={() => {
+                  setShowDropdownContent((prev) => !prev);
+                }}
+              >
+                {showDropdownContent ? (
+                  <ChevronDownOutline className="h-3 w-3" />
+                ) : (
+                  <ChevronRightOutline className="h-3 w-3" />
+                )}
+                &nbsp;{dropdownContentLabel}
+              </button>
+            </>
+          )}
+        </span>
+        {lineItemType === "text" && (
+          <span className={makeSummaryDataStyles(data)}>{data.amount}</span>
+        )}
+        {lineItemType === "link" && (
+          <Link
+            {...(data?.linkProps as any)}
+            className={makeSummaryDataStyles(data)}
+          >
+            {data.amount}
+          </Link>
+        )}
+      </div>
+      <Transition
+        show={Boolean(
+          hasDropdownContent && showDropdownContent && dropdownContent
+        )}
+        className="grid origin-top-left gap-1 pt-1 md:pl-6"
+        enter="transition-all duration-75"
+        enterFrom="opacity-0 scale-0"
+        enterTo="opacity-100 scale-100"
+        leave="transition-all duration-75"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-0"
+      >
+        {dropdownContent}
+      </Transition>
     </div>
   );
 };
