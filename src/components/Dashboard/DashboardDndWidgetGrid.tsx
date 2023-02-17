@@ -145,8 +145,6 @@ function WidgetSizingContainer({
   isDisabled: boolean;
 }) {
   const {
-    // setDroppableNodeRef,
-    // setDraggableNodeRef,
     listeners,
     attributes,
     transform,

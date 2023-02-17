@@ -55,12 +55,12 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
   const {
     attributes,
     listeners,
-    setDraggableNodeRef,
-    setDroppableNodeRef,
     transform,
     isDragging,
     transition,
     over,
+    setNodeRef,
+    setActivatorNodeRef,
   } = useSortable({
     id: header.id,
     disabled: isDisabled,
@@ -68,13 +68,14 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
 
   return (
     <th
-      ref={isDisabled ? undefined : setDroppableNodeRef}
+      ref={isDisabled ? undefined : setNodeRef}
       colSpan={header.colSpan}
       scope="col"
       className={classNames("text-base font-semibold")}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
     >
       <button
-        ref={setDraggableNodeRef}
+        ref={setActivatorNodeRef}
         className={classNames(
           header.index === 0 ? "px-4 sm:pl-6" : "px-4",
           "h-full w-full py-3 text-left",
@@ -86,7 +87,6 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
             ? "cursor-pointer text-gray-800 hover:cursor-not-allowed"
             : "cursor-grab"
         )}
-        style={{ transform: CSS.Translate.toString(transform), transition }}
         {...listeners}
         {...attributes}
       >
