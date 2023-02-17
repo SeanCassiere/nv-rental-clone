@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
+
 import { fetchModuleColumns } from "../../../api/columns";
 import type { AppPrimaryModuleType } from "../../../types/General";
 import {
@@ -34,8 +35,8 @@ export function useGetModuleColumns({
   const auth = useAuth();
   const query = useQuery({
     queryKey: allModulesKeySelector(module).columns(),
-    queryFn: () =>
-      fetchModuleColumnsModded({
+    queryFn: async () =>
+      await fetchModuleColumnsModded({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",

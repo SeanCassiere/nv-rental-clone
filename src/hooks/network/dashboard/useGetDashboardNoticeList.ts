@@ -12,11 +12,12 @@ export function useGetDashboardNoticeList() {
 
   const query = useQuery({
     queryKey: dashboardQKeys.notices(),
-    queryFn: () =>
-      fetchDashboardNoticeListModded({
+    queryFn: async () => {
+      return await fetchDashboardNoticeListModded({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
-      }),
+      });
+    },
     enabled: auth.isAuthenticated,
     initialData: [],
   });

@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
+
 import { saveDashboardWidgetItem } from "../../../api/dashboard";
+import { dashboardQKeys } from "../../../utils/query-key";
 import type { DashboardWidgetItemParsed } from "../../../utils/schemas/dashboard";
 
 export function useSaveDashboardWidgetList() {
@@ -23,7 +25,10 @@ export function useSaveDashboardWidgetList() {
       await Promise.all(savePromises);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["dashboard", "widgets"]);
+      queryClient.invalidateQueries({ queryKey: dashboardQKeys.widgets() });
+    },
+    onMutate: () => {
+      queryClient.cancelQueries({ queryKey: dashboardQKeys.widgets() });
     },
   });
 

@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveModuleColumns } from "../../../api/columns";
 import { useAuth } from "react-oidc-context";
+
+import { saveModuleColumns } from "../../../api/columns";
+import { allModulesKeySelector } from "./useGetModuleColumns";
 import type { AppPrimaryModuleType } from "../../../types/General";
 import { type TColumnListItemParsed } from "../../../utils/schemas/column";
 
@@ -65,7 +67,9 @@ export function useSaveModuleColumns({
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries([module, "columns"]);
+      queryClient.invalidateQueries({
+        queryKey: allModulesKeySelector(module).columns(),
+      });
     },
   });
   return mutation;

@@ -29,17 +29,13 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   const { widgets: widgetList = [], onWidgetSortingEnd } = props;
   const isDisabled = props.isLocked;
 
+  // used purely to reliably let the animation functions run
   const [localWidgets, setLocalWidgets] = useState(
     [...widgetList].sort(sortByUserPositionFn)
   );
   const widgetIdsList = localWidgets
     .filter((widget) => widget.isDeleted === false)
     .map((widget) => widget.widgetID);
-
-  const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {})
-  );
 
   const handleDragEnd = useCallback(
     (evt: DragEndEvent) => {
@@ -56,13 +52,18 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
         widgetIdsList.indexOf(String(overId))
       );
       const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
-        widgets: localWidgets,
+        widgets: widgetList,
         orderedWidgetIds: newWidgetIdOrder,
       }); // return using sortByUserPositionFn;
       setLocalWidgets(reorderedWidgetsList);
       onWidgetSortingEnd(reorderedWidgetsList);
     },
-    [localWidgets, onWidgetSortingEnd, widgetIdsList]
+    [widgetList, onWidgetSortingEnd, widgetIdsList]
+  );
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {})
   );
 
   return (
@@ -77,7 +78,8 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
           strategy={rectSortingStrategy}
           disabled={isDisabled}
         >
-          {localWidgets
+          {widgetList
+            .sort(sortByUserPositionFn)
             .filter((widget) => widget.isDeleted === false)
             .map((widget) => (
               <WidgetSizingContainer

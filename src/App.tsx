@@ -8,7 +8,14 @@ import { router } from "./router.config";
 import "./i18n.config";
 
 // Create a client for react-query
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
+    },
+  },
+});
 
 const App = () => {
   return (

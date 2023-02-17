@@ -44,7 +44,7 @@ function IndexPage() {
       return widgetList.data;
     }
     return [];
-  }, [widgetList]);
+  }, [widgetList.data]);
 
   const noticeList = useGetDashboardNoticeList();
 

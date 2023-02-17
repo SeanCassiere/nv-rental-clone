@@ -21,8 +21,8 @@ export const indexRoute = new Route({
         promises.push(
           qc.prefetchQuery({
             queryKey: noticesKey,
-            queryFn: () =>
-              fetchDashboardNoticeListModded({
+            queryFn: async () =>
+              await fetchDashboardNoticeListModded({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
               }),
@@ -38,8 +38,8 @@ export const indexRoute = new Route({
         promises.push(
           qc.prefetchQuery({
             queryKey: widgetsKey,
-            queryFn: () =>
-              fetchDashboardWidgetList({
+            queryFn: async () =>
+              await fetchDashboardWidgetList({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
