@@ -24,7 +24,7 @@ import { Button } from "../Form";
 import {
   reorderBasedOnWidgetIdPositions,
   sortWidgetsByUserPositionFn,
-} from "./DashboardDndWidgetGrid";
+} from "../Dashboard/DashboardDndWidgetGrid";
 import DarkBgDialog from "../Layout/DarkBgDialog";
 
 import { type DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
