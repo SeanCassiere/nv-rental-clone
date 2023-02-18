@@ -347,6 +347,7 @@ function ReservationsSearchPage() {
                       ...current,
                       page: newPaginationState.pageIndex + 1,
                       size: newPaginationState.pageSize,
+                      filters: searchFilters,
                     }),
                   });
                 }}
