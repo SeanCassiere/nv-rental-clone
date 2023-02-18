@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, Suspense, lazy } from "react";
 import classNames from "classnames";
 import {
   type DragEndEvent,
@@ -18,6 +18,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+
+const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
 
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
@@ -152,6 +154,16 @@ export function sortWidgetsByUserPositionFn(
   return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
 }
 
+function selectWidgetView(widget: DashboardWidgetItemParsed) {
+  const widgetId = widget.widgetID;
+  switch (widgetId) {
+    case "VehicleStatus":
+      return <VehicleStatusWidget />;
+    default:
+      return <div>Widget "{widgetId}" not found</div>;
+  }
+}
+
 function WidgetSizingContainer({
   widget,
   isDisabled,
@@ -175,7 +187,6 @@ function WidgetSizingContainer({
   return (
     <li
       ref={setNodeRef}
-      // ref={setDroppableNodeRef}
       className={classNames(
         "col-span-1",
         widget.widgetScale === 1 ? "md:col-span-1" : "",
@@ -195,7 +206,6 @@ function WidgetSizingContainer({
     >
       <div
         ref={setActivatorNodeRef}
-        // ref={setDraggableNodeRef}
         className={classNames(
           "h-full w-full rounded border border-slate-200 text-slate-600",
           !isDragging ? "transition-all duration-200 ease-in" : "",
@@ -205,7 +215,7 @@ function WidgetSizingContainer({
         {...listeners}
         {...attributes}
       >
-        {widget.widgetName}
+        <Suspense fallback={"..."}>{selectWidgetView(widget)}</Suspense>
       </div>
     </li>
   );
