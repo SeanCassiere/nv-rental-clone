@@ -1,21 +1,33 @@
-import type { TDashboardNotice } from "../utils/schemas/dashboard";
-import { localDateToQueryYearMonthDay } from "../utils/date";
+import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
+import {
+  type TDashboardNotice,
+  VehicleStatusCountListSchema,
+} from "../utils/schemas/dashboard";
 import {
   DashboardWidgetItemListSchema,
   DashboardStatsSchema,
   type DashboardWidgetItemParsed,
 } from "../utils/schemas/dashboard";
-import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
+import { localDateToQueryYearMonthDay } from "../utils/date";
+import { type StringNumberIdType } from "../utils/query-key";
 
 export const fetchDashboardStats = async (
-  opts: { locationId: number; clientDate: Date } & CommonAuthParams
+  opts: {
+    locationId: StringNumberIdType[];
+    clientDate: Date;
+  } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/statistics`, {
       clientId: opts.clientId,
       userId: opts.userId,
-      locationId: opts.locationId ?? 0,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
+      ...(opts.locationId.length === 1 && opts.locationId.includes(0)
+        ? { locationId: opts.locationId[0] || 0 }
+        : {}),
+      ...(opts.locationId.length > 1
+        ? { MultipleLocation: opts.locationId }
+        : {}),
     }),
     {
       headers: {
@@ -106,4 +118,37 @@ export const saveDashboardWidgetItem = async (
       Authorization: `Bearer ${opts.accessToken}`,
     },
   });
+};
+
+export const fetchVehicleStatusCounts = async (
+  opts: CommonAuthParams & {
+    locationIds: StringNumberIdType[];
+    vehicleType: string | number;
+    clientDate: Date;
+  }
+) => {
+  return await callV3Api(
+    makeUrl(`/v3/statistics/vehicleStatusCounts`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+      clientDate: localDateToQueryYearMonthDay(opts.clientDate),
+      ...(opts.locationIds &&
+      !opts.locationIds.includes(0) &&
+      !opts.locationIds.includes("0")
+        ? {
+            ...(opts.locationIds.length === 1
+              ? { locationId: opts.locationIds[0] }
+              : { multipleLocation: opts.locationIds }),
+          }
+        : {}),
+      ...(opts.vehicleType && opts.vehicleType !== 0 && opts.vehicleType !== "0"
+        ? { vehicleType: opts.vehicleType }
+        : {}),
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => VehicleStatusCountListSchema.parse(res.data));
 };

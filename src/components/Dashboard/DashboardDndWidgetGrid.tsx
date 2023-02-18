@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, Suspense, lazy } from "react";
 import classNames from "classnames";
 import {
   type DragEndEvent,
@@ -18,10 +18,13 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+import { type StringNumberIdType } from "../../utils/query-key";
+
+const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
 
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
-  selectedLocationIds: number[];
+  selectedLocationIds: StringNumberIdType[];
   onWidgetSortingEnd: (widgets: DashboardWidgetItemParsed[]) => void;
   isLocked: boolean;
 }
@@ -87,6 +90,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
                 widget={widget}
                 key={`widget-${widget.widgetID}`}
                 isDisabled={isDisabled}
+                currentLocations={props.selectedLocationIds}
               />
             ))}
         </SortableContext>
@@ -152,12 +156,27 @@ export function sortWidgetsByUserPositionFn(
   return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
 }
 
+function renderWidgetView(
+  widget: DashboardWidgetItemParsed,
+  { locations }: { locations: StringNumberIdType[] }
+) {
+  const widgetId = widget.widgetID;
+  switch (widgetId) {
+    case "VehicleStatus":
+      return <VehicleStatusWidget currentLocations={locations} />;
+    default:
+      return <div>Widget "{widgetId}" not found</div>;
+  }
+}
+
 function WidgetSizingContainer({
   widget,
   isDisabled,
+  currentLocations,
 }: {
   widget: DashboardWidgetItemParsed;
   isDisabled: boolean;
+  currentLocations: StringNumberIdType[];
 }) {
   const {
     listeners,
@@ -175,7 +194,6 @@ function WidgetSizingContainer({
   return (
     <li
       ref={setNodeRef}
-      // ref={setDroppableNodeRef}
       className={classNames(
         "col-span-1",
         widget.widgetScale === 1 ? "md:col-span-1" : "",
@@ -195,7 +213,6 @@ function WidgetSizingContainer({
     >
       <div
         ref={setActivatorNodeRef}
-        // ref={setDraggableNodeRef}
         className={classNames(
           "h-full w-full rounded border border-slate-200 text-slate-600",
           !isDragging ? "transition-all duration-200 ease-in" : "",
@@ -205,7 +222,9 @@ function WidgetSizingContainer({
         {...listeners}
         {...attributes}
       >
-        {widget.widgetName}
+        <Suspense fallback={"..."}>
+          {renderWidgetView(widget, { locations: currentLocations })}
+        </Suspense>
       </div>
     </li>
   );

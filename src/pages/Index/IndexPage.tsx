@@ -15,18 +15,21 @@ import {
 } from "../../components/icons";
 import DashboardWidgetPickerModal from "../../components/Dashboard/DashboardWidgetPickerModal";
 
-import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+import { indexRoute } from "../../routes";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
 import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
-import { indexRoute } from "../../routes";
+import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+import type { StringNumberIdType } from "../../utils/query-key";
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
   const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
+
+  const [currentLocationIds] = useState<StringNumberIdType[]>(["0"]);
 
   const { "show-widget-picker": showWidgetPickerModal = false } = useSearch({
     from: indexRoute.id,
@@ -60,7 +63,7 @@ function IndexPage() {
   }, [widgetList.data]);
 
   const statistics = useGetDashboardStats({
-    locationId: 0,
+    locationId: currentLocationIds,
     clientDate: new Date(),
   });
 
@@ -156,7 +159,7 @@ function IndexPage() {
             <DashboardDndWidgetGrid
               key={widgetIds.join(",")}
               widgets={widgets}
-              selectedLocationIds={[0]}
+              selectedLocationIds={currentLocationIds}
               onWidgetSortingEnd={handleWidgetSortingEnd}
               isLocked={isWidgetsLocked}
             />

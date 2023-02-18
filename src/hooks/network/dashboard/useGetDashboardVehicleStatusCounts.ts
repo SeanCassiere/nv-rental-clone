@@ -1,43 +1,39 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchDashboardStats } from "../../../api/dashboard";
+import { fetchVehicleStatusCounts } from "../../../api/dashboard";
 import {
   dashboardQKeys,
   type StringNumberIdType,
 } from "../../../utils/query-key";
 
-export function useGetDashboardStats({
-  locationId,
+export function useGetDashboardVehicleStatusCounts({
+  locationIds,
   clientDate,
+  vehicleType,
 }: {
-  locationId: StringNumberIdType[];
+  locationIds: StringNumberIdType[];
   clientDate: Date;
+  vehicleType: string | number;
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: dashboardQKeys.stats(),
+    queryKey: dashboardQKeys.vehicleStatusCounts({
+      vehicleType,
+      locationId: locationIds,
+    }),
     queryFn: async () => {
-      return await fetchDashboardStats({
+      return await fetchVehicleStatusCounts({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
-        locationId: [...locationId],
+        locationIds,
         clientDate,
+        vehicleType,
       });
     },
     enabled: auth.isAuthenticated,
-    initialData: {
-      openAgreement: 0,
-      overDues: 0,
-      dueIn: 0,
-      todaysReservationCount: 0,
-      todaysArrivalsCount: 0,
-      serviceAlerts: 0,
-      onHoldAgreements: 0,
-      paymentDelay: 0,
-      pendingPayment: 0,
-    },
+    initialData: [],
   });
   return query;
 }
