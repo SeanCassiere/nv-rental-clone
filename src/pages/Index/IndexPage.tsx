@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
@@ -12,6 +13,7 @@ import {
   LockOpenOutline,
   SettingsCogOutline,
 } from "../../components/icons";
+import DashboardWidgetPickerModal from "../../components/Dashboard/DashboardWidgetPickerModal";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
@@ -20,14 +22,25 @@ import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetD
 import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
+import { indexRoute } from "../../routes";
 
 function IndexPage() {
-  const statistics = useGetDashboardStats({
-    locationId: 0,
-    clientDate: new Date(),
+  const navigate = useNavigate({ from: indexRoute.id });
+  const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
+
+  const { "show-widget-picker": showWidgetPickerModal = false } = useSearch({
+    from: indexRoute.id,
   });
 
-  const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
+  const handleSetShowWidgetPickerModal = useCallback(
+    (show: boolean) => {
+      navigate({
+        search: () => ({ ...(show ? { "show-widget-picker": show } : {}) }),
+        replace: true,
+      });
+    },
+    [navigate]
+  );
 
   const widgetList = useGetDashboardWidgetList();
   const widgetIds = useMemo(() => {
@@ -46,6 +59,11 @@ function IndexPage() {
     return [];
   }, [widgetList.data]);
 
+  const statistics = useGetDashboardStats({
+    locationId: 0,
+    clientDate: new Date(),
+  });
+
   const noticeList = useGetDashboardNoticeList();
 
   const saveDashboardWidgetsMutation = useSaveDashboardWidgetList();
@@ -62,6 +80,11 @@ function IndexPage() {
   return (
     <Protector>
       <ScrollToTop />
+      <DashboardWidgetPickerModal
+        show={showWidgetPickerModal}
+        onModalStateChange={handleSetShowWidgetPickerModal}
+        onWidgetSave={handleWidgetSortingEnd}
+      />
       {noticeList.data.length > 0 && (
         <div className="grid gap-1">
           {noticeList.data.map((notice) => (
@@ -100,7 +123,12 @@ function IndexPage() {
                 <h2 className="select-none text-xl font-semibold leading-6 text-gray-700">
                   Widgets
                   <span className="ml-4 inline-block sm:ml-5">
-                    <button className="pt-2 text-slate-500 sm:pt-0">
+                    <button
+                      className="pt-2 text-slate-500 sm:pt-0"
+                      onClick={() => {
+                        handleSetShowWidgetPickerModal(true);
+                      }}
+                    >
                       <SettingsCogOutline className="h-5 w-5 sm:h-4 sm:w-4" />
                     </button>
                     <button

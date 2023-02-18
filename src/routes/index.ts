@@ -6,10 +6,12 @@ import { fetchDashboardWidgetList } from "../api/dashboard";
 import { fetchDashboardNoticeListModded } from "../hooks/network/dashboard/useGetDashboardNoticeList";
 import { getAuthToken } from "../utils/authLocal";
 import { dashboardQKeys } from "../utils/query-key";
+import { DashboardSearchQuerySchema } from "../utils/schemas/dashboard";
 
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
+  validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
   onLoad: async () => {
     const auth = getAuthToken();
     if (auth) {
