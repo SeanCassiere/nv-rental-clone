@@ -82,8 +82,8 @@ function IndexPage() {
       <ScrollToTop />
       <DashboardWidgetPickerModal
         show={showWidgetPickerModal}
-        widgets={widgets}
         onModalStateChange={handleSetShowWidgetPickerModal}
+        onWidgetSave={handleWidgetSortingEnd}
       />
       {noticeList.data.length > 0 && (
         <div className="grid gap-1">

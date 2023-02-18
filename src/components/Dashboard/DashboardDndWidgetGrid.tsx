@@ -31,7 +31,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
 
   // used purely to reliably let the animation functions run
   const [localWidgets, setLocalWidgets] = useState(
-    [...widgetList].sort(sortByUserPositionFn)
+    [...widgetList].sort(sortWidgetsByUserPositionFn)
   );
   const widgetIdsList = localWidgets
     .filter((widget) => widget.isDeleted === false)
@@ -54,6 +54,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
       const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
         widgets: widgetList,
         orderedWidgetIds: newWidgetIdOrder,
+        removeDeleted: true,
       }); // return using sortByUserPositionFn;
       setLocalWidgets(reorderedWidgetsList);
       onWidgetSortingEnd(reorderedWidgetsList);
@@ -79,7 +80,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
           disabled={isDisabled}
         >
           {widgetList
-            .sort(sortByUserPositionFn)
+            .sort(sortWidgetsByUserPositionFn)
             .filter((widget) => widget.isDeleted === false)
             .map((widget) => (
               <WidgetSizingContainer
@@ -94,16 +95,22 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   );
 };
 
-function reorderBasedOnWidgetIdPositions({
+export function reorderBasedOnWidgetIdPositions({
   widgets,
   orderedWidgetIds,
+  removeDeleted = false,
 }: {
   widgets: DashboardWidgetItemParsed[];
   orderedWidgetIds: string[];
+  removeDeleted?: boolean;
 }): DashboardWidgetItemParsed[] {
-  const copiedWidgetsWithoutDeleted = [
-    ...widgets.filter((w) => w.isDeleted === false).sort(sortByUserPositionFn),
-  ];
+  const copiedWidgetsWithoutDeleted = removeDeleted
+    ? [
+        ...widgets
+          .filter((w) => w.isDeleted === false)
+          .sort(sortWidgetsByUserPositionFn),
+      ]
+    : [...widgets].sort(sortWidgetsByUserPositionFn);
   const returnableWidgets: DashboardWidgetItemParsed[] = [];
 
   if (copiedWidgetsWithoutDeleted.length !== orderedWidgetIds.length) {
@@ -120,17 +127,25 @@ function reorderBasedOnWidgetIdPositions({
     }
   });
 
-  widgets
-    .filter((w) => w.isDeleted)
-    .forEach((widget, index) => {
-      widget.widgetUserPosition = returnableWidgets.length + index + 1;
-      returnableWidgets.push(widget);
-    });
+  if (removeDeleted) {
+    widgets
+      .filter((w) => w.isDeleted)
+      .forEach((widget, index) => {
+        widget.widgetUserPosition = returnableWidgets.length + index + 1;
+        returnableWidgets.push(widget);
+      });
+  }
 
-  return returnableWidgets.sort(sortByUserPositionFn);
+  // remove duplicates based on the widgetID
+  const withOutDuplicates = returnableWidgets.filter(
+    (thing, index, self) =>
+      index === self.findIndex((t) => t.widgetID === thing.widgetID)
+  );
+
+  return withOutDuplicates.sort(sortWidgetsByUserPositionFn);
 }
 
-function sortByUserPositionFn(
+export function sortWidgetsByUserPositionFn(
   widgetA: DashboardWidgetItemParsed,
   widgetB: DashboardWidgetItemParsed
 ) {

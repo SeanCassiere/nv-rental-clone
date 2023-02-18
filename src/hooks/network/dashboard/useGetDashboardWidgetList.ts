@@ -4,7 +4,12 @@ import { useAuth } from "react-oidc-context";
 import { fetchDashboardWidgetList } from "../../../api/dashboard";
 import { dashboardQKeys } from "../../../utils/query-key";
 
-export function useGetDashboardWidgetList() {
+export function useGetDashboardWidgetList(params?: {
+  onSuccess?: (
+    data: Awaited<ReturnType<typeof fetchDashboardWidgetList>>
+  ) => void;
+}) {
+  const { onSuccess } = params || {};
   const auth = useAuth();
 
   const query = useQuery({
@@ -18,6 +23,9 @@ export function useGetDashboardWidgetList() {
     },
     enabled: auth.isAuthenticated,
     initialData: [],
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
   });
   return query;
 }
