@@ -59,8 +59,9 @@ const DashboardWidgetPickerModal = ({
       }
     },
   });
+  const widgetIdsList = widgetsLocal.map((widget) => widget.widgetID);
 
-  const handleToggleWidgetVisibility = (widgetID: string) => {
+  const handleToggleWidgetVisibility = useCallback((widgetID: string) => {
     setWidgetsLocal((widgets) => {
       return widgets.map((widget) => {
         if (widget.widgetID === widgetID) {
@@ -72,7 +73,7 @@ const DashboardWidgetPickerModal = ({
         return widget;
       });
     });
-  };
+  }, []);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
@@ -85,8 +86,6 @@ const DashboardWidgetPickerModal = ({
     }
 
     const currentWidgets = [...widgetsLocal];
-
-    const widgetIdsList = widgetsLocal.map((widget) => widget.widgetID);
 
     const draggingId = evt.active.id;
     const overId = evt.over.id;
@@ -154,7 +153,7 @@ const DashboardWidgetPickerModal = ({
                   Select and order the widgets you want to see on your
                   dashboard.
                 </Dialog.Description>
-                <ul className="mt-1 mb-2 h-[360px] overflow-y-auto border-b border-gray-200 pb-2">
+                <ul className="my-2 flex h-[360px] flex-col overflow-y-auto border-b border-gray-200 pb-2">
                   <DndContext
                     sensors={sensors}
                     collisionDetection={closestCorners}
@@ -162,7 +161,7 @@ const DashboardWidgetPickerModal = ({
                     modifiers={[restrictToVerticalAxis]}
                   >
                     <SortableContext
-                      items={widgetsLocal.map((widget) => widget.widgetID)}
+                      items={widgetIdsList}
                       strategy={verticalListSortingStrategy}
                     >
                       {widgetsLocal.map((widget) => {
@@ -213,35 +212,47 @@ const WidgetOption = ({
     transition,
     isDragging,
   } = useSortable({ id: widget.widgetID });
+
   return (
     <li
       ref={setNodeRef}
       key={`picker-widget-${widget.widgetID}`}
-      className={classNames(
-        "my-1.5 flex items-center justify-between rounded border border-slate-300 bg-white py-1.5 px-3",
-        isDragging ? "z-50" : "z-40"
-      )}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }}
     >
-      <div className="flex items-center gap-3">
-        <button ref={setActivatorNodeRef} {...listeners} {...attributes}>
-          <Bars3Outline className="h-4 w-4" />
-        </button>
-        <span>{widget.widgetName}</span>
-      </div>
-      <div className="flex">
-        <button
-          className="p-2"
-          onClick={() => {
-            onToggleVisibility(widget.widgetID);
-          }}
-        >
-          {widget.isDeleted ? (
-            <EyeSlashOutline className="h-4 w-4" />
-          ) : (
-            <EyeOutline className="h-4 w-4" />
-          )}
-        </button>
+      <div
+        className={classNames(
+          "my-0.5 flex items-center justify-between rounded border border-white px-2 focus-within:border-slate-300",
+          isDragging ? "bg-slate-50" : "bg-white"
+        )}
+      >
+        <div className={classNames("flex items-center gap-3")}>
+          <button
+            ref={setActivatorNodeRef}
+            className="cursor-grab"
+            {...listeners}
+            {...attributes}
+          >
+            <Bars3Outline className="h-4 w-4" />
+          </button>
+          <span className="select-none">{widget.widgetName}</span>
+        </div>
+        <div className="flex">
+          <button
+            className="p-2"
+            onClick={() => {
+              onToggleVisibility(widget.widgetID);
+            }}
+          >
+            {widget.isDeleted ? (
+              <EyeSlashOutline className="h-4 w-4" />
+            ) : (
+              <EyeOutline className="h-4 w-4" />
+            )}
+          </button>
+        </div>
       </div>
     </li>
   );
