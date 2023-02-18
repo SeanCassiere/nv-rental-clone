@@ -63,7 +63,7 @@ function IndexPage() {
   }, [widgetList.data]);
 
   const statistics = useGetDashboardStats({
-    locationId: 0,
+    locationId: currentLocationIds,
     clientDate: new Date(),
   });
 

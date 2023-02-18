@@ -2,13 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchDashboardStats } from "../../../api/dashboard";
-import { dashboardQKeys } from "../../../utils/query-key";
+import {
+  dashboardQKeys,
+  type StringNumberIdType,
+} from "../../../utils/query-key";
 
 export function useGetDashboardStats({
   locationId,
   clientDate,
 }: {
-  locationId: number;
+  locationId: StringNumberIdType[];
   clientDate: Date;
 }) {
   const auth = useAuth();
@@ -19,7 +22,7 @@ export function useGetDashboardStats({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
-        locationId,
+        locationId: [...locationId],
         clientDate,
       });
     },
