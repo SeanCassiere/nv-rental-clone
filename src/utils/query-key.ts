@@ -1,6 +1,7 @@
 type Pagination = { page: number; pageSize: number };
 type Filters = Record<string, any>;
 type ReferenceId = string | number;
+export type StringNumberIdType = string | number;
 
 export const agreementQKeys = {
   // search
@@ -106,7 +107,7 @@ export const dashboardQKeys = {
     locationId,
     vehicleType,
   }: {
-    locationId: (string | number)[];
+    locationId: StringNumberIdType[];
     vehicleType: string | number;
   }) => [
     dashboardQKeys.rootKey,

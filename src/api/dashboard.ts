@@ -9,6 +9,7 @@ import {
   type DashboardWidgetItemParsed,
 } from "../utils/schemas/dashboard";
 import { localDateToQueryYearMonthDay } from "../utils/date";
+import { type StringNumberIdType } from "../utils/query-key";
 
 export const fetchDashboardStats = async (
   opts: { locationId: number; clientDate: Date } & CommonAuthParams
@@ -113,7 +114,7 @@ export const saveDashboardWidgetItem = async (
 
 export const fetchVehicleStatusCounts = async (
   opts: CommonAuthParams & {
-    locationIds: (string | number)[];
+    locationIds: StringNumberIdType[];
     vehicleType: string | number;
     clientDate: Date;
   }

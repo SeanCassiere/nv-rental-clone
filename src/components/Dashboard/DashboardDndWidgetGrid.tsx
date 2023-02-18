@@ -18,12 +18,13 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+import { type StringNumberIdType } from "../../utils/query-key";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
 
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
-  selectedLocationIds: number[];
+  selectedLocationIds: StringNumberIdType[];
   onWidgetSortingEnd: (widgets: DashboardWidgetItemParsed[]) => void;
   isLocked: boolean;
 }
@@ -89,6 +90,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
                 widget={widget}
                 key={`widget-${widget.widgetID}`}
                 isDisabled={isDisabled}
+                currentLocations={props.selectedLocationIds}
               />
             ))}
         </SortableContext>
@@ -154,11 +156,14 @@ export function sortWidgetsByUserPositionFn(
   return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
 }
 
-function selectWidgetView(widget: DashboardWidgetItemParsed) {
+function renderWidgetView(
+  widget: DashboardWidgetItemParsed,
+  { locations }: { locations: StringNumberIdType[] }
+) {
   const widgetId = widget.widgetID;
   switch (widgetId) {
     case "VehicleStatus":
-      return <VehicleStatusWidget />;
+      return <VehicleStatusWidget currentLocations={locations} />;
     default:
       return <div>Widget "{widgetId}" not found</div>;
   }
@@ -167,9 +172,11 @@ function selectWidgetView(widget: DashboardWidgetItemParsed) {
 function WidgetSizingContainer({
   widget,
   isDisabled,
+  currentLocations,
 }: {
   widget: DashboardWidgetItemParsed;
   isDisabled: boolean;
+  currentLocations: StringNumberIdType[];
 }) {
   const {
     listeners,
@@ -215,7 +222,9 @@ function WidgetSizingContainer({
         {...listeners}
         {...attributes}
       >
-        <Suspense fallback={"..."}>{selectWidgetView(widget)}</Suspense>
+        <Suspense fallback={"..."}>
+          {renderWidgetView(widget, { locations: currentLocations })}
+        </Suspense>
       </div>
     </li>
   );

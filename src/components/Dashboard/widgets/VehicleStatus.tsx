@@ -1,12 +1,18 @@
 import { Link } from "@tanstack/react-router";
+
+import { searchFleetRoute } from "../../../routes/fleet/searchFleet";
 import { useGetDashboardVehicleStatusCounts } from "../../../hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "../../../hooks/network/vehicle/useGetVehicleStatusList";
-import { searchFleetRoute } from "../../../routes/fleet/searchFleet";
+import type { StringNumberIdType } from "../../../utils/query-key";
 
-const VehicleStatusWidget = () => {
+const VehicleStatusWidget = ({
+  currentLocations,
+}: {
+  currentLocations: StringNumberIdType[];
+}) => {
   const vehicleTypeId = 0;
   const statusCounts = useGetDashboardVehicleStatusCounts({
-    locationIds: [0],
+    locationIds: currentLocations,
     vehicleType: vehicleTypeId,
     clientDate: new Date(),
   });
