@@ -12,7 +12,7 @@ interface DarkBgDialogProps {
   setShow: (showState: boolean) => void;
   restrictClose?: boolean;
   children?: ReactNode;
-  sizing?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  sizing?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
   hideCloseBtn?: boolean;
 }
 
@@ -50,22 +50,26 @@ const DarkBgDialog = (props: DarkBgDialogProps) => {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="fixed inset-0 z-30 flex items-center justify-center">
-            <Dialog.Panel className="mx-4">
+          <div className="fixed inset-0 z-10 flex w-full items-center justify-center">
+            <Dialog.Panel className="mx-1 md:mx-4">
               <div
                 className={classNames(
-                  "max-w max-h-[90vh] w-full rounded bg-white p-4",
+                  "max-w-sm",
                   {
-                    "max-w-xs": sizing === "xs",
-                    "max-w-sm": sizing === "sm",
-                    "max-w-md": sizing === "md",
-                    "max-w-lg": sizing === "lg",
-                    "max-w-xl": sizing === "xl",
-                    "max-w-2xl": sizing === "2xl",
-                  }
+                    "md:max-w-xs": sizing === "xs",
+                    "md:max-w-sm": sizing === "sm",
+                    "md:max-w-md": sizing === "md",
+                    "md:max-w-lg": sizing === "lg",
+                    "md:max-w-xl": sizing === "xl",
+                    "md:max-w-2xl": sizing === "2xl",
+                    "md:max-w-3xl": sizing === "3xl",
+                    "md:max-w-4xl": sizing === "4xl",
+                    "md:max-w-5xl": sizing === "5xl",
+                  },
+                  "w-full rounded bg-white p-4"
                 )}
               >
-                <Dialog.Title className="flex items-center justify-between">
+                <Dialog.Title className="flex w-full items-center justify-between">
                   <div className="flex select-none items-center pr-2 text-xl font-semibold leading-6 text-gray-700">
                     {props.title}
                   </div>
@@ -86,7 +90,11 @@ const DarkBgDialog = (props: DarkBgDialogProps) => {
                     {props.description}
                   </Dialog.Description>
                 )}
-                {props.children && <>{props.children}</>}
+                {props.children && (
+                  <div className="max-h-[80vh] overflow-y-auto">
+                    {props.children}
+                  </div>
+                )}
               </div>
             </Dialog.Panel>
           </div>
