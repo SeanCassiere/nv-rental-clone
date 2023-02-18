@@ -1,25 +1,79 @@
 import {
+  type ButtonHTMLAttributes,
+  type DetailedHTMLProps,
+  useState,
+  useMemo,
+} from "react";
+import {
   useReactTable,
   getCoreRowModel,
   flexRender,
   type ColumnDef,
+  type PaginationState,
 } from "@tanstack/react-table";
 import classNames from "classnames";
+import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
+import { getPaginationWithDoubleEllipsis } from "../../utils/pagination";
 
 interface TCommonTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
+  hasPagination?: boolean;
+  paginationMode?: "server" | "client";
+  paginationState?: PaginationState;
+  onPaginationChange?: (pagination: PaginationState) => void;
+  totalPages?: number;
 }
 
 const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
+  const hasPagination = props.hasPagination ?? false;
+  const [internalPagination, setInternalPagination] = useState<PaginationState>(
+    { pageIndex: 0, pageSize: 10 }
+  );
+
+  const totalPages =
+    props.paginationMode === "server" && props.totalPages
+      ? props.totalPages
+      : Math.ceil(props.data.length / internalPagination.pageSize) ?? -1;
+
+  const paginationState =
+    props?.paginationMode === "server" && props.paginationState
+      ? props.paginationState
+      : internalPagination;
+
   const table = useReactTable({
     data: props.data,
     columns: props.columns,
+    manualPagination: props?.paginationMode === "server",
+    pageCount: totalPages,
+    state: {
+      pagination: paginationState,
+    },
     getCoreRowModel: getCoreRowModel(),
+    onPaginationChange: (paginationUpdaterFn) => {
+      // @ts-expect-error
+      const newPagination = paginationUpdaterFn(paginationState);
+      if (props?.paginationMode === "server") {
+        props?.onPaginationChange?.(newPagination);
+      } else {
+        setInternalPagination(newPagination);
+      }
+    },
   });
 
+  const pageNumbers = useMemo(() => {
+    if (hasPagination) {
+      return getPaginationWithDoubleEllipsis(
+        paginationState.pageIndex + 1,
+        totalPages ?? 0,
+        7
+      );
+    }
+    return [];
+  }, [hasPagination, totalPages, paginationState.pageIndex]);
+
   return (
-    <div className="overflow-hidden rounded border border-slate-200">
+    <div className="w-full overflow-hidden rounded border border-slate-200">
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto divide-y divide-slate-200 bg-slate-50">
           <thead className="bg-slate-100">
@@ -76,8 +130,92 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
           </tbody>
         </table>
       </div>
+      {hasPagination && (
+        <>
+          <div className="flex flex-1 justify-between bg-slate-50 px-2 py-2.5 sm:hidden">
+            <button
+              className="relative inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300"
+              disabled={!table.getCanPreviousPage()}
+              onClick={() => table.previousPage()}
+            >
+              Previous
+            </button>
+            <button
+              className="relative ml-3 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300"
+              disabled={!table.getCanNextPage()}
+              onClick={() => table.nextPage()}
+            >
+              Next
+            </button>
+          </div>
+
+          {/* Desktop */}
+          <div className="hidden border-t border-slate-200 bg-slate-50 sm:flex sm:flex-1 sm:items-center sm:justify-between sm:px-4 sm:py-3.5">
+            <div>
+              <nav
+                className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                aria-label="Pagination"
+              >
+                <DesktopPaginationBtn
+                  className="rounded-l px-2"
+                  disabled={!table.getCanPreviousPage()}
+                  onClick={() => table.previousPage()}
+                >
+                  <span className="sr-only">Previous</span>
+                  <ChevronLeftOutline className="h-5 w-5" aria-hidden="true" />
+                </DesktopPaginationBtn>
+                {pageNumbers.map((pageNum, idx) => (
+                  <DesktopPaginationBtn
+                    key={`common-table-pagination-button-${pageNum}-${idx}`}
+                    disabled={isNaN(pageNum)}
+                    onClick={() => {
+                      !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
+                    }}
+                    current={Boolean(paginationState.pageIndex + 1 === pageNum)}
+                  >
+                    {!isNaN(pageNum) ? pageNum : "..."}
+                  </DesktopPaginationBtn>
+                ))}
+                <DesktopPaginationBtn
+                  className="rounded-r px-2"
+                  disabled={!table.getCanNextPage()}
+                  onClick={() => table.nextPage()}
+                >
+                  <span className="sr-only">Next</span>
+                  <ChevronRightOutline className="h-5 w-5" aria-hidden="true" />
+                </DesktopPaginationBtn>
+              </nav>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
 
 export default CommonTable;
+
+const DesktopPaginationBtn = (
+  props: DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > & { current?: boolean }
+) => {
+  const { children, current, className, ...otherProps } = props;
+  return (
+    <button
+      {...otherProps}
+      className={classNames(
+        "relative inline-flex items-center border px-4 py-2 text-sm font-medium hover:bg-slate-50 focus:z-20",
+        current
+          ? "z-10 border-teal-500 bg-teal-50 text-teal-600"
+          : "border-slate-300 bg-white text-slate-500",
+        "disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300",
+        className
+      )}
+      {...(current ? { "aria-current": "page", current: `${current}` } : {})}
+    >
+      {children}
+    </button>
+  );
+};
