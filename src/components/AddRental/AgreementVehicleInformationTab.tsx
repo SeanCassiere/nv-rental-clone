@@ -161,7 +161,7 @@ const AgreementVehicleInformationTab = ({
             onClick={() => {
               setShowFleetPicker(true);
             }}
-            // disabled={!checkoutLocation}
+            disabled={!checkoutLocation}
           >
             Search fleet
           </Button>

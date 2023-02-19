@@ -23,6 +23,7 @@ interface TCommonTableProps<T> {
   paginationState?: PaginationState;
   onPaginationChange?: (pagination: PaginationState) => void;
   totalPages?: number;
+  stickyHeader?: boolean;
 }
 
 const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
@@ -73,63 +74,72 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
   }, [hasPagination, totalPages, paginationState.pageIndex]);
 
   return (
-    <div className="w-full overflow-hidden rounded border border-slate-200">
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto divide-y divide-slate-200 bg-slate-50">
-          <thead className="bg-slate-100">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    scope="col"
-                    colSpan={header.colSpan}
+    <div
+      className={classNames(
+        "relative w-full overflow-hidden overflow-y-auto rounded border border-slate-200",
+        props.stickyHeader ? "mr-2 max-h-[650px]" : ""
+      )}
+    >
+      {/* <div className="overflow-x-auto"> */}
+      <table className="min-w-full table-auto divide-y divide-slate-200 overflow-x-auto bg-slate-50">
+        <thead
+          className={classNames(
+            "bg-slate-100",
+            props.stickyHeader
+              ? "sticky top-0 z-10 border-b border-slate-200"
+              : ""
+          )}
+        >
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  scope="col"
+                  colSpan={header.colSpan}
+                  className={classNames(
+                    header.index === 0 ? "sm:pl-6" : "",
+                    "px-4 py-5 text-left text-base font-semibold text-gray-700"
+                  )}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody className="divide-y divide-slate-200">
+          {table.getRowModel().rows.length > 0 ? (
+            table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell, cellIdx) => (
+                  <td
+                    key={cell.id}
                     className={classNames(
-                      header.index === 0 ? "sm:pl-6" : "",
-                      "px-4 py-5 text-left text-base font-semibold text-gray-700"
+                      cellIdx === 0 ? "sm:pl-6" : "",
+                      "whitespace-nowrap px-4 py-3 text-base font-normal text-slate-700"
                     )}
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
                 ))}
               </tr>
-            ))}
-          </thead>
-          <tbody className="divide-y divide-slate-200">
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell, cellIdx) => (
-                    <td
-                      key={cell.id}
-                      className={classNames(
-                        cellIdx === 0 ? "sm:pl-6" : "",
-                        "whitespace-nowrap px-4 py-3 text-base font-normal text-slate-700"
-                      )}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={table.getAllColumns().length}>
-                  <span className="block min-h-[50px]">&nbsp;</span>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={table.getAllColumns().length}>
+                <span className="block min-h-[50px]">&nbsp;</span>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      {/* </div> */}
       {hasPagination && (
         <>
           <div className="flex flex-1 justify-between bg-slate-50 px-2 py-2.5 sm:hidden">

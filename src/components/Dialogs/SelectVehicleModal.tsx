@@ -104,27 +104,30 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
       sizing="5xl"
       description="Select a fleet from the list below"
     >
-      <div className="block w-full overflow-x-auto pt-3 pb-3">
-        <CommonTable
-          data={vehicleListData.data?.data || []}
-          columns={columnDefs}
-          hasPagination
-          paginationMode="server"
-          paginationState={{
-            pageIndex: page - 1,
-            pageSize,
-          }}
-          onPaginationChange={(newState) => {
-            setPage(newState.pageIndex + 1);
-            setPageSize(newState.pageSize);
-          }}
-          totalPages={
-            vehicleListData.data?.totalRecords
-              ? Math.ceil(vehicleListData.data?.totalRecords / pageSize) ?? -1
-              : 0
-          }
-        />
-      </div>
+      {/* <div className="block w-full pt-3 pb-3">
+      </div> */}
+      {/* <div className="sticky top-0"> */}
+      <CommonTable
+        data={vehicleListData.data?.data || []}
+        columns={columnDefs}
+        hasPagination
+        paginationMode="server"
+        paginationState={{
+          pageIndex: page - 1,
+          pageSize,
+        }}
+        onPaginationChange={(newState) => {
+          setPage(newState.pageIndex + 1);
+          setPageSize(newState.pageSize);
+        }}
+        totalPages={
+          vehicleListData.data?.totalRecords
+            ? Math.ceil(vehicleListData.data?.totalRecords / pageSize) ?? -1
+            : 0
+        }
+        stickyHeader
+      />
+      {/* </div> */}
     </DarkBgDialog>
   );
 };
