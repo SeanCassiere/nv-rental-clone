@@ -13,7 +13,7 @@ import {
   LockOpenOutline,
   SettingsCogOutline,
 } from "../../components/icons";
-import DashboardWidgetPickerModal from "../../components/Dashboard/DashboardWidgetPickerModal";
+import DashboardWidgetPickerModal from "../../components/Dialogs/DashboardWidgetPickerModal";
 
 import { indexRoute } from "../../routes";
 import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";

@@ -16,6 +16,9 @@ import AgreementRentalInformationTab, {
 import AgreementVehicleInformationTab, {
   type AgreementVehicleInformationSchemaParsed,
 } from "./AgreementVehicleInformationTab";
+import CommonCustomerInformation, {
+  type CommonCustomerInformationSchemaParsed,
+} from "./CommonCustomerInformation";
 
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
@@ -85,6 +88,9 @@ const AddRentalParentForm = ({
   const [agreementVehicleInformation, setAgreementVehicleInformation] =
     useState<AgreementVehicleInformationSchemaParsed | null>(null);
 
+  const [commonCustomerInformation, setCommonCustomerInformation] =
+    useState<CommonCustomerInformationSchemaParsed | null>(null);
+
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
@@ -106,7 +112,20 @@ const AddRentalParentForm = ({
         // 3
         id: "customer-information",
         label: "Customer information",
-        component: "Customer information",
+        component: (
+          <CommonCustomerInformation
+            customerInformation={commonCustomerInformation || undefined}
+            isEdit={isEdit}
+            onCompleted={(data) => {
+              setCommonCustomerInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                "customer-information": true,
+              }));
+              handleStageTabClick(ratesAndTaxes);
+            }}
+          />
+        ),
       };
       const vehicleInformation = {
         // 2
@@ -154,7 +173,40 @@ const AddRentalParentForm = ({
       tabs.push(others);
     }
     if (module === "reservation") {
-      tabs.push({
+      const others = {
+        id: "others",
+        label: "Other information",
+        component: "Other information",
+      };
+      const ratesAndTaxes = {
+        id: "rates-and-taxes",
+        label: "Rates and taxes",
+        component: "Rates and taxes",
+      };
+      const customerInformation = {
+        id: "customer-information",
+        label: "Customer information",
+        component: (
+          <CommonCustomerInformation
+            customerInformation={commonCustomerInformation || undefined}
+            isEdit={isEdit}
+            onCompleted={(data) => {
+              setCommonCustomerInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                "customer-information": true,
+              }));
+              handleStageTabClick(ratesAndTaxes);
+            }}
+          />
+        ),
+      };
+      const vehicleInformation = {
+        id: "vehicle-information",
+        label: "Vehicle information",
+        component: "Vehicle information",
+      };
+      const rentalInformation = {
         id: "rental-information",
         label: "Rental information",
         component: (
@@ -162,33 +214,19 @@ const AddRentalParentForm = ({
             {...(reservationData ? reservationData : { rental: null })}
           />
         ),
-      });
-      tabs.push({
-        id: "vehicle-information",
-        label: "Vehicle information",
-        component: "Vehicle information",
-      });
-      tabs.push({
-        id: "customer-information",
-        label: "Customer information",
-        component: "Customer information",
-      });
-      tabs.push({
-        id: "rates-and-taxes",
-        label: "Rates and taxes",
-        component: "Rates and taxes",
-      });
-      tabs.push({
-        id: "others",
-        label: "Other information",
-        component: "Other information",
-      });
+      };
+      tabs.push(rentalInformation);
+      tabs.push(vehicleInformation);
+      tabs.push(customerInformation);
+      tabs.push(ratesAndTaxes);
+      tabs.push(others);
     }
 
     return tabs;
   }, [
     agreementRentalInformation,
     agreementVehicleInformation,
+    commonCustomerInformation,
     handleStageTabClick,
     isEdit,
     module,

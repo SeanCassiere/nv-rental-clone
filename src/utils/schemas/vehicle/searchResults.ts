@@ -22,7 +22,7 @@ const VehicleListItemSchema = z
     VehicleType: z.string().nullable(),
     CurrentOdometer: z.number(),
     Transmission: z.string().nullable(),
-    Cylinders: z.number(),
+    Cylinders: z.number().nullable(),
     Memo: z.string().nullable(),
     FuelLevel: z.string().nullable(),
     TankSize: z.number(),

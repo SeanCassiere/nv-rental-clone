@@ -261,7 +261,9 @@ const AgreementRentalInformationTab = ({
           </div>
         </div>
         <div>
-          <Button type="submit">Save & Continue</Button>
+          <Button type="submit" color="teal">
+            Save & Continue
+          </Button>
         </div>
       </form>
     </InformationBlockCardWithChildren>
