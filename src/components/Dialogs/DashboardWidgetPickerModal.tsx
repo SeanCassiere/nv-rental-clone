@@ -6,6 +6,7 @@ import {
   useSensor,
   MouseSensor,
   TouchSensor,
+  KeyboardSensor,
   closestCorners,
 } from "@dnd-kit/core";
 import {
@@ -13,6 +14,7 @@ import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
@@ -73,7 +75,10 @@ const DashboardWidgetPickerModal = ({
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {})
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
   );
 
   const handleDragEnd = (evt: DragEndEvent) => {
