@@ -277,7 +277,9 @@ const AddRentalParentForm = ({
           licenseExpiryDate: data?.customerDetails?.licenseExpiryDate || null,
           licenseIssueDate: data?.customerDetails?.licenseIssueDate || null,
           licenseNumber: data?.customerDetails?.licenseNumber || null,
-          phone: data?.customerDetails?.hPhone || "",
+          bPhone: data?.customerDetails?.bPhone || "",
+          cPhone: data?.customerDetails?.cPhone || "",
+          hPhone: data?.customerDetails?.hPhone || "",
           stateId: data?.stateId || 0,
           zipCode: data?.zipCode || "",
         });

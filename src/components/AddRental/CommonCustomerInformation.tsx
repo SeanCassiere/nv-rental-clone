@@ -27,7 +27,9 @@ function CommonCustomerInformationSchema() {
     licenseExpiryDate: z.string().nullable(),
     licenseIssueDate: z.string().nullable(),
     licenseNumber: z.string().nullable(),
-    phone: z.string().min(1, REQUIRED),
+    bPhone: z.string().nullable(),
+    cPhone: z.string().nullable(),
+    hPhone: z.string().nullable(),
     stateId: z.number().min(1, REQUIRED),
     zipCode: z.string().min(1, REQUIRED),
   });
@@ -63,7 +65,9 @@ const CommonCustomerInformation = ({
     licenseExpiryDate: customerInformation?.licenseExpiryDate || null,
     licenseIssueDate: customerInformation?.licenseIssueDate || null,
     licenseNumber: customerInformation?.licenseNumber || null,
-    phone: customerInformation?.phone || "",
+    bPhone: customerInformation?.bPhone || "",
+    cPhone: customerInformation?.cPhone || "",
+    hPhone: customerInformation?.hPhone || "",
     stateId: customerInformation?.stateId || 0,
     zipCode: customerInformation?.zipCode || "",
   };
@@ -105,7 +109,9 @@ const CommonCustomerInformation = ({
             valOpts
           );
           setValue("licenseNumber", customer.LicenseNumber ?? null, valOpts);
-          setValue("phone", customer.hPhone ?? "", valOpts);
+          setValue("bPhone", customer.bPhone ?? "", valOpts);
+          setValue("cPhone", customer.cPhone ?? "", valOpts);
+          setValue("hPhone", customer.hPhone ?? "", valOpts);
           setValue("stateId", customer.StateId ?? 0, valOpts);
           setValue("zipCode", customer.ZipCode ?? "", valOpts);
         }}
