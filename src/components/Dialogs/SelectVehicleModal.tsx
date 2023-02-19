@@ -9,17 +9,10 @@ import CommonTable from "../General/CommonTable";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
-type SelectedVehicleData = {
-  vehicleTypeId: number;
-  vehicleId: number;
-  fuelOut: string;
-  odometerOut: number;
-};
-
 interface SelectVehicleModalProps {
   show: boolean;
   setShow: (show: boolean) => void;
-  onSelect?: (vehicle: SelectedVehicleData) => void;
+  onSelect?: (vehicle: TVehicleListItemParsed) => void;
   filters: {
     StartDate: Date | undefined;
     EndDate: Date | undefined;
@@ -74,12 +67,7 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
               return (
                 <button
                   onClick={() => {
-                    props.onSelect?.({
-                      vehicleId: row.VehicleId,
-                      vehicleTypeId: row.VehicleTypeId,
-                      fuelOut: row.FuelLevel || "",
-                      odometerOut: row.CurrentOdometer || 0,
-                    });
+                    props.onSelect?.(row);
                     props.setShow(false);
                   }}
                 >

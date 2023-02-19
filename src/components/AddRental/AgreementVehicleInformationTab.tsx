@@ -135,12 +135,14 @@ const AgreementVehicleInformationTab = ({
           EndDate: rentalInformation?.checkinDate,
         }}
         onSelect={(vehicle) => {
-          setValue("vehicleTypeId", vehicle.vehicleTypeId, {
+          setValue("vehicleTypeId", vehicle.VehicleTypeId, {
             shouldValidate: true,
           });
-          setValue("vehicleId", vehicle.vehicleId, { shouldValidate: true });
-          setValue("fuelOut", vehicle.fuelOut, { shouldValidate: true });
-          setValue("odometerOut", vehicle.odometerOut, {
+          setValue("vehicleId", vehicle.VehicleId, { shouldValidate: true });
+          setValue("fuelOut", vehicle.FuelLevel ?? "Full", {
+            shouldValidate: true,
+          });
+          setValue("odometerOut", vehicle.CurrentOdometer ?? 0, {
             shouldValidate: true,
           });
         }}
