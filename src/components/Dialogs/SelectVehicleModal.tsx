@@ -2,10 +2,10 @@ import { useState, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import DarkBgDialog from "../Layout/DarkBgDialog";
+import CommonTable from "../General/CommonTable";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { type TVehicleListItemParsed } from "../../utils/schemas/vehicle";
-import CommonTable from "../General/CommonTable";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
