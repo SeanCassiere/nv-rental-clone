@@ -264,6 +264,30 @@ const AddRentalParentForm = ({
           "vehicle-information": true,
         }));
       }
+      if (!commonCustomerInformation) {
+        setCommonCustomerInformation({
+          address: data?.customerDetails?.address1 || "",
+          city: data?.customerDetails?.city || "",
+          countryId: data?.countryId || 0,
+          customerId: data?.customerDetails?.customerId || 0,
+          dateOfBirth: data?.customerDetails.dateOfbirth || "",
+          email: data?.customerDetails?.email || "",
+          firstName: data?.customerDetails?.firstName || "",
+          lastName: data?.customerDetails?.lastName || "",
+          licenseExpiryDate: data?.customerDetails?.licenseExpiryDate || null,
+          licenseIssueDate: data?.customerDetails?.licenseIssueDate || null,
+          licenseNumber: data?.customerDetails?.licenseNumber || null,
+          bPhone: data?.customerDetails?.bPhone || "",
+          cPhone: data?.customerDetails?.cPhone || "",
+          hPhone: data?.customerDetails?.hPhone || "",
+          stateId: data?.stateId || 0,
+          zipCode: data?.zipCode || "",
+        });
+        setCreationStageComplete((prev) => ({
+          ...prev,
+          "customer-information": true,
+        }));
+      }
     },
   });
 
