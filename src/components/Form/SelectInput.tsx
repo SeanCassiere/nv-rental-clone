@@ -62,7 +62,7 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                 >
                   <span
                     className={classNames(
-                      "block truncate",
+                      "block max-w-[17rem] truncate md:max-w-full",
                       disabled ? "text-slate-500" : ""
                     )}
                   >
