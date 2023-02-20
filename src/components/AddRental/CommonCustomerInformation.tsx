@@ -5,34 +5,41 @@ import { z } from "zod";
 
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
 import { DocumentTextSolid } from "../icons";
-import {
-  Button,
-  // TextInput
-} from "../Form";
+import { Button, DatePicker, TextInput } from "../Form";
 import SelectCustomerModal from "../Dialogs/SelectCustomerModal";
 
 const REQUIRED = "Required" as const;
 
 function CommonCustomerInformationSchema() {
-  return z.object({
-    address: z.string().min(1, REQUIRED),
-    city: z.string().min(1, REQUIRED),
-    countryId: z.number().min(1, REQUIRED),
-    customerId: z.number().min(1, REQUIRED),
-    dateOfBirth: z.string().min(1, REQUIRED).nullable(),
-    // driverType
-    email: z.string().min(1, REQUIRED),
-    firstName: z.string().min(1, REQUIRED),
-    lastName: z.string().min(1, REQUIRED),
-    licenseExpiryDate: z.string().nullable(),
-    licenseIssueDate: z.string().nullable(),
-    licenseNumber: z.string().nullable(),
-    bPhone: z.string().nullable(),
-    cPhone: z.string().nullable(),
-    hPhone: z.string().nullable(),
-    stateId: z.number().min(1, REQUIRED),
-    zipCode: z.string().min(1, REQUIRED),
-  });
+  return z
+    .object({
+      address: z.string().min(1, REQUIRED),
+      city: z.string().min(1, REQUIRED),
+      countryId: z.number().min(1, REQUIRED),
+      customerId: z.number().min(1, REQUIRED),
+      dateOfBirth: z.string().min(1, REQUIRED).nullable(),
+      // driverType
+      email: z.string().min(1, REQUIRED),
+      firstName: z.string().min(1, REQUIRED),
+      lastName: z.string().min(1, REQUIRED),
+      licenseExpiryDate: z.string().nullable(),
+      licenseIssueDate: z.string().nullable(),
+      licenseNumber: z.string().nullable(),
+      bPhone: z.string().nullable(),
+      cPhone: z.string().nullable(),
+      hPhone: z.string().nullable(),
+      stateId: z.number().min(1, REQUIRED),
+      zipCode: z.string().min(1, REQUIRED),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.hPhone && !data.bPhone && !data.cPhone) {
+        return ctx.addIssue({
+          code: "custom",
+          message: "A phone number is required",
+          path: ["hPhone"],
+        });
+      }
+    });
 }
 export type CommonCustomerInformationSchemaParsed = z.infer<
   ReturnType<typeof CommonCustomerInformationSchema>
@@ -74,7 +81,7 @@ const CommonCustomerInformation = ({
 
   const {
     handleSubmit,
-    // register,
+    register,
     formState: { errors },
     getValues,
     setValue,
@@ -138,16 +145,102 @@ const CommonCustomerInformation = ({
           className="flex flex-col gap-4 p-4"
           autoComplete="off"
         >
-          <p>Data</p>
-          <pre className="text-sm">{JSON.stringify(getValues(), null, 2)}</pre>
-          {[...Object.keys(errors)].length > 0 && (
-            <>
-              <p>Errors</p>
-              <pre className="text-sm">{JSON.stringify(errors, null, 2)}</pre>
-            </>
-          )}
-          <div className="grid gap-4 md:grid-cols-2">
-            <div></div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div>
+              <TextInput
+                label="First name"
+                {...register("firstName")}
+                error={!!errors.firstName}
+                errorText={errors.firstName?.message}
+                readOnly
+              />
+            </div>
+            <div>
+              <TextInput
+                label="Last name"
+                {...register("lastName")}
+                error={!!errors.lastName}
+                errorText={errors.lastName?.message}
+                readOnly
+              />
+            </div>
+            <div>
+              <DatePicker
+                selected={
+                  getValues("dateOfBirth")
+                    ? new Date(getValues("dateOfBirth")!)
+                    : null
+                }
+                onChange={(date) => {
+                  //
+                }}
+                placeholderText="Date of birth"
+                readOnly
+              />
+            </div>
+            <div>
+              <TextInput
+                label="Home phone"
+                {...register("hPhone")}
+                error={!!errors.hPhone}
+                errorText={errors.hPhone?.message}
+                readOnly
+              />
+            </div>
+            <div>
+              <TextInput
+                label="Work phone"
+                {...register("bPhone")}
+                error={!!errors.bPhone}
+                errorText={errors.bPhone?.message}
+                readOnly
+              />
+            </div>
+            <div>
+              <TextInput
+                label="Mobile phone"
+                {...register("cPhone")}
+                error={!!errors.cPhone}
+                errorText={errors.cPhone?.message}
+                readOnly
+              />
+            </div>
+            <div>
+              <TextInput
+                label="License no."
+                {...register("licenseNumber")}
+                error={!!errors.licenseNumber}
+                errorText={errors.licenseNumber?.message}
+                readOnly
+              />
+            </div>
+            <div className="md:col-span-2">
+              <TextInput
+                label="Address"
+                {...register("address")}
+                error={!!errors.address}
+                errorText={errors.address?.message}
+                readOnly
+              />
+            </div>
+            <div>
+              <TextInput
+                label="City"
+                {...register("city")}
+                error={!!errors.city}
+                errorText={errors.city?.message}
+                readOnly
+              />
+            </div>
+            <div>
+              <TextInput
+                label="Zip"
+                {...register("zipCode")}
+                error={!!errors.zipCode}
+                errorText={errors.zipCode?.message}
+                readOnly
+              />
+            </div>
           </div>
           <div>
             <Button type="submit" color="teal">
