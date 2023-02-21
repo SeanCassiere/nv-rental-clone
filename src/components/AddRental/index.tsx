@@ -19,6 +19,7 @@ import AgreementVehicleInformationTab, {
 import CommonCustomerInformation, {
   type CommonCustomerInformationSchemaParsed,
 } from "./CommonCustomerInformation";
+import StepRatesAndTaxesInformation from "./StepRatesAndTaxesInformation";
 
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
@@ -42,6 +43,7 @@ import { type ReservationDataParsed } from "../../utils/schemas/reservation";
 import { sortObject } from "../../utils/sortObject";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
+import { type RentalRateListItemParsed } from "../../utils/schemas/rate";
 
 interface TAddRentalParentFormProps {
   referenceId: number | string;
@@ -80,6 +82,7 @@ const AddRentalParentForm = ({
     "customer-information": false,
     "vehicle-information": false,
     "rates-and-taxes": false,
+    "charges-and-payments": false,
     "other-information": true,
   });
 
@@ -91,22 +94,83 @@ const AddRentalParentForm = ({
   const [commonCustomerInformation, setCommonCustomerInformation] =
     useState<CommonCustomerInformationSchemaParsed | null>(null);
 
+  const [commonRatesInformation, setCommonRatesInformation] =
+    useState<RentalRateListItemParsed | null>(null);
+  const [commonTaxesInformation] = useState(null);
+
+  const [commonMiscChargesInformation] = useState(null);
+
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
     const tabs: ModuleTabConfigItem[] = [];
     if (module === "agreement") {
       const others = {
-        // 5
+        // 6
         id: "others",
         label: "Other information",
         component: "Other information",
       };
+      const chargesAndPayments = {
+        // 5
+        id: "charges-and-payments",
+        label: "Charges & Payments",
+        component: (
+          <div>
+            Charges and payments
+            <br />
+            <button
+              onClick={() => {
+                setCreationStageComplete((prev) => ({
+                  ...prev,
+                  "charges-and-payments": true,
+                }));
+                handleStageTabClick(others);
+              }}
+            >
+              Next
+            </button>
+          </div>
+        ),
+      };
       const ratesAndTaxes = {
         // 4
         id: "rates-and-taxes",
-        label: "Rates and taxes",
-        component: "Rates and taxes",
+        label: "Rates & Taxes",
+        component: (
+          <StepRatesAndTaxesInformation
+            module="agreements"
+            isEdit={isEdit}
+            rentalInformation={
+              agreementRentalInformation
+                ? {
+                    checkinDate: agreementRentalInformation.checkinDate,
+                    checkoutDate: agreementRentalInformation.checkoutDate,
+                    checkoutLocation:
+                      agreementRentalInformation.checkoutLocation,
+                    checkinLocation: agreementRentalInformation.checkinLocation,
+                    rentalType: agreementRentalInformation.agreementType,
+                    rentalReferenceId: parseInt(String(referenceId))
+                      ? String(referenceId)
+                      : "0",
+                  }
+                : undefined
+            }
+            vehicleInformation={
+              agreementVehicleInformation
+                ? { vehicleTypeId: agreementVehicleInformation.vehicleTypeId }
+                : undefined
+            }
+            misCharges={[]}
+            onCompleted={() => {
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                "rates-and-taxes": true,
+              }));
+              handleStageTabClick(chargesAndPayments);
+            }}
+          />
+        ),
       };
       const customerInformation = {
         // 3
@@ -170,6 +234,7 @@ const AddRentalParentForm = ({
       tabs.push(vehicleInformation);
       tabs.push(customerInformation);
       tabs.push(ratesAndTaxes);
+      tabs.push(chargesAndPayments);
       tabs.push(others);
     }
     if (module === "reservation") {
@@ -230,6 +295,7 @@ const AddRentalParentForm = ({
     handleStageTabClick,
     isEdit,
     module,
+    referenceId,
     reservationData,
   ]);
 
@@ -252,6 +318,7 @@ const AddRentalParentForm = ({
           "rental-information": true,
         }));
       }
+
       if (!agreementVehicleInformation) {
         setAgreementVehicleInformation({
           fuelOut: data.fuelLevelOut ?? "",
@@ -264,6 +331,7 @@ const AddRentalParentForm = ({
           "vehicle-information": true,
         }));
       }
+
       if (!commonCustomerInformation) {
         setCommonCustomerInformation({
           address: data?.customerDetails?.address1 || "",
@@ -286,6 +354,27 @@ const AddRentalParentForm = ({
         setCreationStageComplete((prev) => ({
           ...prev,
           "customer-information": true,
+        }));
+      }
+
+      if (!commonRatesInformation && data?.rateList[0]) {
+        const rateListItem = data?.rateList[0];
+        if (rateListItem) {
+          setCommonRatesInformation(rateListItem);
+          console.log(rateListItem);
+        }
+      }
+      if (!commonTaxesInformation) {
+        // console.log('storing taxes not implemented')
+      }
+      if (
+        commonRatesInformation &&
+        commonTaxesInformation &&
+        commonMiscChargesInformation
+      ) {
+        setCreationStageComplete((prev) => ({
+          ...prev,
+          "rates-and-taxes": true,
         }));
       }
     },
