@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useState } from "react";
 
 import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
-import { useGetRentalRateTypes } from "../../hooks/network/rates/useGetRentalRateTypes";
+import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
 import type { StepRatesAndTaxesInformationProps } from "./StepRatesAndTaxesInformation";
 
 interface CommonRatesInformationProps {
@@ -23,7 +23,7 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
 
   const [selectedRateName, setSelectedRateName] = useState("");
 
-  const rateTypesData = useGetRentalRateTypes({
+  const rateTypesData = useGetRentalRateTypesForRentals({
     filters: {
       LocationId: String(checkoutLocation),
       VehicleTypeId: String(vehicleTypeId),

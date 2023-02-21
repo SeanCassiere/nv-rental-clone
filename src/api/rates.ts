@@ -51,7 +51,7 @@ export async function fetchRentalRates(
   ).then((res) => z.array(RentalRateSchema).parse(res.data));
 }
 
-export async function fetchRentalRateTypes(
+export async function fetchRentalRateTypesForRental(
   opts: CommonAuthParams & { LocationId: string; VehicleTypeId: string }
 ) {
   const { clientId, userId, accessToken, ...rest } = opts;
