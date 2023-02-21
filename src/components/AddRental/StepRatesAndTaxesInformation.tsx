@@ -30,13 +30,6 @@ const StepRatesAndTaxesInformation = (
   const [step, setStep] = useState(0);
   return (
     <div>
-      <p>Step: {Number(step).toString()}</p>
-      <CommonRatesInformation
-        isEdit={props.isEdit}
-        module={props.module}
-        rentalInformation={props.rentalInformation}
-        vehicleInformation={props.vehicleInformation}
-      />
       <button
         onClick={() => {
           if (step < 2) {
@@ -50,6 +43,13 @@ const StepRatesAndTaxesInformation = (
       >
         Next
       </button>
+      <p>Step: {Number(step).toString()}</p>
+      <CommonRatesInformation
+        isEdit={props.isEdit}
+        module={props.module}
+        rentalInformation={props.rentalInformation}
+        vehicleInformation={props.vehicleInformation}
+      />
     </div>
   );
 };

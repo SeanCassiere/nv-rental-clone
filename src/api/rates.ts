@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "../utils/date";
 import {
+  OptimalRateSchema,
   RentalRateSchema,
   RentalRateTypeListSchema,
 } from "../utils/schemas/rate";
@@ -61,4 +62,27 @@ export async function fetchRentalRateTypesForRental(
       headers: { Authorization: `Bearer ${accessToken}` },
     }
   ).then((res) => RentalRateTypeListSchema.parse(res.data));
+}
+
+export async function fetchOptimalRateForRental(
+  opts: CommonAuthParams & {
+    VehicleTypeId: string;
+    LocationId: string;
+    CheckoutDate: Date;
+    CheckinDate: Date;
+  }
+) {
+  const { accessToken, userId, clientId, CheckoutDate, CheckinDate, ...rest } =
+    opts;
+  return await callV3Api(
+    makeUrl("/v3/rates/ratesName/optimal", {
+      clientId,
+      // userId,
+      CheckoutDate:
+        localDateTimeWithoutSecondsToQueryYearMonthDay(CheckoutDate),
+      CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(CheckinDate),
+      ...rest,
+    }),
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  ).then((res) => OptimalRateSchema.parse(res.data));
 }

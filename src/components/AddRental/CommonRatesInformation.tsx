@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import { useState } from "react";
+import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOptimalRateForRental";
 
 import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
 import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
@@ -22,6 +22,26 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
   const hasVehicleInfo = Boolean(vehicleInformation);
 
   const [selectedRateName, setSelectedRateName] = useState("");
+
+  useGetOptimalRateForRental({
+    filters: {
+      CheckoutDate: rentalInformation?.checkoutDate ?? new Date(),
+      CheckinDate: rentalInformation?.checkinDate ?? new Date(),
+      VehicleTypeId: String(vehicleTypeId),
+      LocationId: String(checkoutLocation),
+    },
+    onSuccess: (data) => {
+      if (data && data?.rateName) {
+        setSelectedRateName((prev) => {
+          if (prev === "" && data.rateName !== null) {
+            return data.rateName;
+          }
+          return prev;
+        });
+      }
+    },
+    enabled: props.isEdit === false && selectedRateName === "",
+  });
 
   const rateTypesData = useGetRentalRateTypesForRentals({
     filters: {
@@ -48,27 +68,27 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
   });
   return (
     <code key="Hello" className="text-sm">
+      <p>Selected rate name: {selectedRateName ?? "not selected"}</p>
       <p>Rate Types</p>
-      <div className="flex gap-2">
-        {rateTypesData.data.map((rate) => (
-          <button
-            key={rate.rateId}
-            className={classNames(
-              "p-2 text-white",
-              selectedRateName === rate.rateName
-                ? "bg-orange-500"
-                : "bg-teal-500"
-            )}
-            onClick={() => {
-              setSelectedRateName(rate.rateName ?? "");
-            }}
-          >
-            {rate.rateName}
-          </button>
-        ))}
+      <div className="">
+        <select
+          value={selectedRateName}
+          onChange={(evt) => {
+            setSelectedRateName(evt.target.value);
+          }}
+        >
+          <option value="">Select</option>
+          {rateTypesData.data.map((rate) => (
+            <option key={`rate-opt-${rate.rateId}`}>{rate.rateName}</option>
+          ))}
+        </select>
       </div>
-      <p>Rates</p>
-      <pre>{JSON.stringify(ratesData.data, null, 2)}</pre>
+      {selectedRateName !== "" && (
+        <>
+          <p>Rates</p>
+          <pre>{JSON.stringify(ratesData.data, null, 2)}</pre>
+        </>
+      )}
     </code>
   );
 };
