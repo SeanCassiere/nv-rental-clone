@@ -79,3 +79,4 @@ export const RentalRateSchema = z.object({
   sunCount: NumNullableDefaultZero,
   type: z.any(),
 });
+export type RentalRateParsed = z.infer<typeof RentalRateSchema>;

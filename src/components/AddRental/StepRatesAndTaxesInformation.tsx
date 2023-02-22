@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import CommonRatesInformation from "./CommonRatesInformation";
+import { type RentalRateParsed } from "../../utils/schemas/rate";
 
 export interface StepRatesAndTaxesInformationProps {
   module: "agreements" | "reservations";
@@ -20,6 +21,10 @@ export interface StepRatesAndTaxesInformationProps {
         vehicleTypeId: number;
       }
     | undefined;
+  rateName: string;
+  onSelectRateName: (rateName: string) => void;
+  rate: RentalRateParsed | null;
+  onSelectedRate: (rate: RentalRateParsed) => void;
   misCharges: any[];
   onCompleted: () => void;
 }
@@ -49,6 +54,10 @@ const StepRatesAndTaxesInformation = (
         module={props.module}
         rentalInformation={props.rentalInformation}
         vehicleInformation={props.vehicleInformation}
+        rateName={props.rateName}
+        onSelectRateName={props.onSelectRateName}
+        rate={props.rate}
+        onSelectedRate={props.onSelectedRate}
       />
     </div>
   );

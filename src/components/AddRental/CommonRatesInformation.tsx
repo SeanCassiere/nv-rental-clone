@@ -1,7 +1,3 @@
-import { useState } from "react";
-import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOptimalRateForRental";
-
-import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
 import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
 import type { StepRatesAndTaxesInformationProps } from "./StepRatesAndTaxesInformation";
 
@@ -10,38 +6,18 @@ interface CommonRatesInformationProps {
   isEdit: StepRatesAndTaxesInformationProps["isEdit"];
   rentalInformation: StepRatesAndTaxesInformationProps["rentalInformation"];
   vehicleInformation: StepRatesAndTaxesInformationProps["vehicleInformation"];
+
+  rate: StepRatesAndTaxesInformationProps["rate"];
+  onSelectedRate: StepRatesAndTaxesInformationProps["onSelectedRate"];
+  rateName: StepRatesAndTaxesInformationProps["rateName"];
+  onSelectRateName: StepRatesAndTaxesInformationProps["onSelectRateName"];
 }
 
 const CommonRatesInformation = (props: CommonRatesInformationProps) => {
-  const { rentalInformation, vehicleInformation } = props;
+  const { rentalInformation, vehicleInformation, rateName, rate } = props;
 
   const checkoutLocation = rentalInformation?.checkoutLocation || 0;
   const vehicleTypeId = vehicleInformation?.vehicleTypeId || 0;
-
-  const hasCheckoutInfo = Boolean(rentalInformation);
-  const hasVehicleInfo = Boolean(vehicleInformation);
-
-  const [selectedRateName, setSelectedRateName] = useState("");
-
-  useGetOptimalRateForRental({
-    filters: {
-      CheckoutDate: rentalInformation?.checkoutDate ?? new Date(),
-      CheckinDate: rentalInformation?.checkinDate ?? new Date(),
-      VehicleTypeId: String(vehicleTypeId),
-      LocationId: String(checkoutLocation),
-    },
-    onSuccess: (data) => {
-      if (data && data?.rateName) {
-        setSelectedRateName((prev) => {
-          if (prev === "" && data.rateName !== null) {
-            return data.rateName;
-          }
-          return prev;
-        });
-      }
-    },
-    enabled: props.isEdit === false && selectedRateName === "",
-  });
 
   const rateTypesData = useGetRentalRateTypesForRentals({
     filters: {
@@ -50,31 +26,15 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
     },
   });
 
-  const ratesData = useGetRentalRates({
-    enabled: hasCheckoutInfo && hasVehicleInfo && Boolean(selectedRateName),
-    filters: {
-      LocationId: Number(checkoutLocation).toString(),
-      RateName: selectedRateName,
-      CheckoutDate: rentalInformation?.checkoutDate,
-      CheckinDate: rentalInformation?.checkinDate,
-      VehicleTypeId: Number(vehicleTypeId).toString(),
-      ...(props.module === "agreements"
-        ? {
-            AgreementId: rentalInformation?.rentalReferenceId,
-            AgreementTypeName: rentalInformation?.rentalType,
-          }
-        : {}),
-    },
-  });
   return (
     <code key="Hello" className="text-sm">
-      <p>Selected rate name: {selectedRateName ?? "not selected"}</p>
+      <p>Selected rate name: {rateName ?? "not selected"}</p>
       <p>Rate Types</p>
-      <div className="">
+      <div>
         <select
-          value={selectedRateName}
+          value={rateName}
           onChange={(evt) => {
-            setSelectedRateName(evt.target.value);
+            props.onSelectRateName(evt.target.value);
           }}
         >
           <option value="">Select</option>
@@ -83,12 +43,23 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
           ))}
         </select>
       </div>
-      {selectedRateName !== "" && (
-        <>
-          <p>Rates</p>
-          <pre>{JSON.stringify(ratesData.data, null, 2)}</pre>
-        </>
-      )}
+      <p>Rate Data:</p>
+      <p>
+        <button
+          onClick={() => {
+            if (rate) {
+              props.onSelectedRate({ ...rate, hourlyRate: 100 });
+            }
+          }}
+        >
+          Save it
+        </button>
+      </p>
+      <div>
+        <code className="break-all text-sm">
+          <pre>{JSON.stringify(props.rate, null, 2)}</pre>
+        </code>
+      </div>
     </code>
   );
 };
