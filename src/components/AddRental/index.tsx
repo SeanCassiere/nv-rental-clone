@@ -81,12 +81,15 @@ const AddRentalParentForm = ({
 
   const [isSafeToFetchSummary] = useState(false);
   const [creationStagesComplete, setCreationStageComplete] = useState({
-    "rental-information": false,
-    "customer-information": false,
-    "vehicle-information": false,
-    "rates-and-taxes": false,
-    "charges-and-payments": false,
-    "other-information": true,
+    rental: false,
+    customer: false,
+    insurance: true,
+    vehicle: false,
+    rates: false,
+    taxes: false,
+    misCharges: false,
+    payments: false,
+    others: true,
   });
 
   const [agreementRentalInformation, setAgreementRentalInformation] =
@@ -110,7 +113,7 @@ const AddRentalParentForm = ({
     setSelectedRate(rate);
     setCreationStageComplete((prev) => ({
       ...prev,
-      "rates-and-taxes": true,
+      rates: true,
     }));
   }, []);
 
@@ -137,7 +140,7 @@ const AddRentalParentForm = ({
               onClick={() => {
                 setCreationStageComplete((prev) => ({
                   ...prev,
-                  "charges-and-payments": true,
+                  misCharges: true,
                 }));
                 handleStageTabClick(others);
               }}
@@ -179,7 +182,7 @@ const AddRentalParentForm = ({
             onCompleted={() => {
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "rates-and-taxes": true,
+                rates: true,
               }));
               handleStageTabClick(chargesAndPayments);
             }}
@@ -202,7 +205,7 @@ const AddRentalParentForm = ({
               setCommonCustomerInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "customer-information": true,
+                customer: true,
               }));
               handleStageTabClick(ratesAndTaxes);
             }}
@@ -222,7 +225,7 @@ const AddRentalParentForm = ({
               setAgreementVehicleInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "vehicle-information": true,
+                vehicle: true,
               }));
               handleStageTabClick(customerInformation);
             }}
@@ -241,7 +244,7 @@ const AddRentalParentForm = ({
               setAgreementRentalInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "rental-information": true,
+                rental: true,
               }));
               handleStageTabClick(vehicleInformation);
             }}
@@ -277,7 +280,7 @@ const AddRentalParentForm = ({
               setCommonCustomerInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "customer-information": true,
+                customer: true,
               }));
               handleStageTabClick(ratesAndTaxes);
             }}
@@ -338,7 +341,7 @@ const AddRentalParentForm = ({
         });
         setCreationStageComplete((prev) => ({
           ...prev,
-          "rental-information": true,
+          rental: true,
         }));
       }
 
@@ -351,7 +354,7 @@ const AddRentalParentForm = ({
         });
         setCreationStageComplete((prev) => ({
           ...prev,
-          "vehicle-information": true,
+          vehicle: true,
         }));
       }
 
@@ -376,7 +379,7 @@ const AddRentalParentForm = ({
         });
         setCreationStageComplete((prev) => ({
           ...prev,
-          "customer-information": true,
+          customer: true,
         }));
       }
       if (selectedRateName === "") {
@@ -474,7 +477,7 @@ const AddRentalParentForm = ({
           setSelectedRate(rate);
           setCreationStageComplete((prev) => ({
             ...prev,
-            "rate-information": true,
+            rates: true,
           }));
         }
       }
