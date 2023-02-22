@@ -1,4 +1,7 @@
+import { useCallback, useMemo } from "react";
+
 import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
+import { Button, NativeSelectInput } from "../Form";
 import type { StepRatesAndTaxesInformationProps } from "./StepRatesAndTaxesInformation";
 
 interface CommonRatesInformationProps {
@@ -26,26 +29,44 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
     },
   });
 
+  const rateTypeOptions = useMemo(() => {
+    const empty = { value: "", label: "Select" };
+    if (!rateTypesData.data) return [empty];
+
+    return [
+      empty,
+      ...rateTypesData.data.map((rateOption) => ({
+        value: `${rateOption.rateName}`,
+        label: `${rateOption.rateName}`,
+      })),
+    ];
+  }, [rateTypesData.data]);
+  const getSelectedRateName = useCallback(
+    (value: string) =>
+      rateTypeOptions.find((option) => option.value === `${value}`),
+    [rateTypeOptions]
+  );
+
   return (
     <code key="Hello" className="text-sm">
       <p>Selected rate name: {rateName ?? "not selected"}</p>
-      <p>Rate Types</p>
+      <br />
       <div>
-        <select
-          value={rateName}
-          onChange={(evt) => {
-            props.onSelectRateName(evt.target.value);
+        <NativeSelectInput
+          label="Rate"
+          value={getSelectedRateName(rateName)}
+          options={rateTypeOptions}
+          onSelect={(value) => {
+            if (value && value.value && value.value !== "") {
+              props.onSelectRateName(value.value);
+            }
           }}
-        >
-          <option value="">Select</option>
-          {rateTypesData.data.map((rate) => (
-            <option key={`rate-opt-${rate.rateId}`}>{rate.rateName}</option>
-          ))}
-        </select>
+        />
       </div>
+      <br />
       <p>Rate Data:</p>
       <p>
-        <button
+        <Button
           onClick={() => {
             if (rate) {
               props.onSelectedRate({ ...rate, hourlyRate: 100 });
@@ -53,7 +74,7 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
           }}
         >
           Save it
-        </button>
+        </Button>
       </p>
       <div>
         <code className="break-all text-sm">
