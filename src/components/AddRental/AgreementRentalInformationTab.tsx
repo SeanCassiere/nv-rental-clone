@@ -261,7 +261,7 @@ const AgreementRentalInformationTab = ({
               options={locationOptions}
               value={getSelectedOptionForSelectInput(
                 locationOptions,
-                getValues("checkoutLocation")
+                getValues("checkinLocation")
               )}
               onSelect={(value) => {
                 if (value !== null && value.value !== "") {
