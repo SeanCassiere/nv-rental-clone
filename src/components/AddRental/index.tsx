@@ -100,10 +100,36 @@ const AddRentalParentForm = ({
   const [commonCustomerInformation, setCommonCustomerInformation] =
     useState<CommonCustomerInformationSchemaParsed | null>(null);
 
-  const [selectedRateName, setSelectedRateName] = useState<string>("");
-  const [selectedRate, setSelectedRate] = useState<RentalRateParsed | null>(
-    null
-  );
+  const [[selectedRateName, selectedRate], setRateDetails] = useState<
+    [string, RentalRateParsed | null]
+  >(["", null]);
+  const setSelectedRateName = (cb: string | ((name: string) => string)) => {
+    if (typeof cb === "function") {
+      setRateDetails((prev) => {
+        const pos1 = prev[0];
+        const cbReturn = cb(pos1);
+        return [cbReturn, prev[1]];
+      });
+      return;
+    }
+    setRateDetails((prev) => [cb, prev[1]]);
+  };
+  const setSelectedRate = (
+    cb:
+      | RentalRateParsed
+      | null
+      | ((prev: RentalRateParsed | null) => RentalRateParsed | null)
+  ) => {
+    if (typeof cb === "function") {
+      setRateDetails((prev) => {
+        const pos2 = prev[1];
+        const cbReturn = cb(pos2);
+        return [prev[0], cbReturn];
+      });
+      return;
+    }
+    setRateDetails((prev) => [prev[0], cb]);
+  };
 
   const handleSetSelectedRateName = useCallback((rateName: string) => {
     setSelectedRateName(rateName);
@@ -445,7 +471,6 @@ const AddRentalParentForm = ({
       module === "agreement"
         ? agreementConditionsForFetchingRates
         : reservationConditionsForFetchingRates,
-    // enabled: hasCheckoutInfo && hasVehicleInfo && Boolean(selectedRateName),
     filters: {
       LocationId: Number(
         agreementRentalInformation?.checkoutLocation
