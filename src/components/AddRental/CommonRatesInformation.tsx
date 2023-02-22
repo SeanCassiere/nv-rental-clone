@@ -1,12 +1,14 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
-import {
-  Button,
-  NativeSelectInput,
-  getSelectedOptionForSelectInput,
-} from "../Form";
 import type { StepRatesAndTaxesInformationProps } from "./StepRatesAndTaxesInformation";
+import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
+import { NativeSelectInput, getSelectedOptionForSelectInput } from "../Form";
+import {
+  RentalRateSchema,
+  type RentalRateParsed,
+} from "../../utils/schemas/rate";
 
 interface CommonRatesInformationProps {
   module: StepRatesAndTaxesInformationProps["module"];
@@ -46,41 +48,57 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
     ];
   }, [rateTypesData.data]);
 
+  const { handleSubmit, reset } = useForm<RentalRateParsed>({
+    resolver: zodResolver(RentalRateSchema),
+    defaultValues: useMemo(() => {
+      return rate !== null ? rate : undefined;
+    }, [rate]),
+  });
+
+  useEffect(() => {
+    if (rate) {
+      reset(rate);
+    }
+  }, [reset, rate, rate?.rateName, rateName]);
+
   return (
-    <code key="Hello" className="text-sm">
-      <p>Selected rate name: {rateName ?? "not selected"}</p>
-      <br />
-      <div>
-        <NativeSelectInput
-          label="Rate"
-          value={getSelectedOptionForSelectInput(rateTypeOptions, rateName)}
-          options={rateTypeOptions}
-          onSelect={(value) => {
-            if (value && value.value && value.value !== "") {
-              props.onSelectRateName(value.value);
-            }
-          }}
-        />
+    <div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="col-span-1">
+          <NativeSelectInput
+            label="Rate"
+            value={getSelectedOptionForSelectInput(rateTypeOptions, rateName)}
+            options={rateTypeOptions}
+            onSelect={(value) => {
+              if (value && value.value && value.value !== "") {
+                props.onSelectRateName(value.value);
+              }
+            }}
+          />
+        </div>
+        <div className="col-span-1">Number of days</div>
       </div>
-      <br />
-      <p>Rate Data:</p>
-      <p>
-        <Button
-          onClick={() => {
-            if (rate) {
-              props.onSelectedRate({ ...rate, hourlyRate: 100 });
-            }
-          }}
-        >
-          Save it
-        </Button>
-      </p>
-      <div>
-        <code className="break-all text-sm">
-          <pre>{JSON.stringify(props.rate, null, 2)}</pre>
-        </code>
-      </div>
-    </code>
+      <form
+        onSubmit={handleSubmit(
+          (data) => {
+            const valuesToSubmit = { ...data };
+            // const valuesToSubmit = { ...rate, ...data };
+            console.log("data", valuesToSubmit);
+            props.onSelectedRate(valuesToSubmit);
+          },
+          (errors) => {
+            console.log("errors", errors);
+          }
+        )}
+        className="text-sm"
+      >
+        <p>Selected rate name: {rateName ?? "not selected"}</p>
+        <br />
+        <div></div>
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   );
 };
 

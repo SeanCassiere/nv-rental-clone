@@ -499,18 +499,7 @@ const AddRentalParentForm = ({
       if (Array.isArray(data) && data.length > 0) {
         const rate = data[0];
         if (rate) {
-          // setSelectedRate(rate);
-          setRateDetails((prev) => {
-            const [name, existingRate] = prev;
-            if (
-              rate.rateName !== null &&
-              rate.rateName === name &&
-              existingRate === null
-            ) {
-              return [rate.rateName, rate];
-            }
-            return prev;
-          });
+          setSelectedRate(rate);
           setCreationStageComplete((prev) => ({
             ...prev,
             rates: true,
