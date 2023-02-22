@@ -445,13 +445,13 @@ const AddRentalParentForm = ({
     },
     onSuccess: (data) => {
       if (data && data?.rateName) {
-        setSelectedRateName((prev) => {
+        setRateDetails((values) => {
+          const [prev] = values;
           if (prev === "" && data.rateName !== null) {
-            return data.rateName;
+            return [data.rateName!, null];
           }
-          return prev;
+          return values;
         });
-        setSelectedRate(null);
       }
     },
     enabled:
@@ -499,7 +499,18 @@ const AddRentalParentForm = ({
       if (Array.isArray(data) && data.length > 0) {
         const rate = data[0];
         if (rate) {
-          setSelectedRate(rate);
+          // setSelectedRate(rate);
+          setRateDetails((prev) => {
+            const [name, existingRate] = prev;
+            if (
+              rate.rateName !== null &&
+              rate.rateName === name &&
+              existingRate === null
+            ) {
+              return [rate.rateName, rate];
+            }
+            return prev;
+          });
           setCreationStageComplete((prev) => ({
             ...prev,
             rates: true,
