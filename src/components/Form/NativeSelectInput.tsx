@@ -2,6 +2,14 @@ import classNames from "classnames";
 import { forwardRef, useId } from "react";
 import { type TSelectInputOption } from "./SelectInput";
 
+export function getSelectedOptionForSelectInput(
+  options: TSelectInputOption[],
+  value: string | number,
+  key: keyof TSelectInputOption = "value"
+) {
+  return options.find((option) => `${option[key]}` === `${value}`);
+}
+
 interface NativeSelectProps
   extends Omit<
     React.DetailedHTMLProps<

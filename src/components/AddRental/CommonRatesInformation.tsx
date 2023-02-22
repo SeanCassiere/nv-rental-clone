@@ -1,7 +1,11 @@
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
 import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
-import { Button, NativeSelectInput } from "../Form";
+import {
+  Button,
+  NativeSelectInput,
+  getSelectedOptionForSelectInput,
+} from "../Form";
 import type { StepRatesAndTaxesInformationProps } from "./StepRatesAndTaxesInformation";
 
 interface CommonRatesInformationProps {
@@ -41,11 +45,6 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
       })),
     ];
   }, [rateTypesData.data]);
-  const getSelectedRateName = useCallback(
-    (value: string) =>
-      rateTypeOptions.find((option) => option.value === `${value}`),
-    [rateTypeOptions]
-  );
 
   return (
     <code key="Hello" className="text-sm">
@@ -54,7 +53,7 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
       <div>
         <NativeSelectInput
           label="Rate"
-          value={getSelectedRateName(rateName)}
+          value={getSelectedOptionForSelectInput(rateTypeOptions, rateName)}
           options={rateTypeOptions}
           onSelect={(value) => {
             if (value && value.value && value.value !== "") {
