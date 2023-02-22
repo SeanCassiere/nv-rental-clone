@@ -2,9 +2,13 @@ import i18n from "i18next";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import dateFnsFormat from "date-fns/format";
+import { type Locale } from "date-fns";
 
-import { format as dateFnsFormat, type Locale } from "date-fns";
-import { enUS, enNZ, ru } from "date-fns/locale";
+import enUS from "date-fns/locale/en-US";
+import enNZ from "date-fns/locale/en-NZ";
+import ru from "date-fns/locale/ru";
+
 import { getAuthToken } from "./utils/authLocal";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
 

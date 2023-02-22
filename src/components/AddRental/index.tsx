@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { parseISO } from "date-fns";
+import parseISO from "date-fns/parseISO";
 
 import CommonHeader from "../Layout/CommonHeader";
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
