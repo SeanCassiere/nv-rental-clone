@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { RentalRateListItemSchema } from "../rate";
+import { AgreementMiscChargeItem } from "../agreement/agreementData";
 
 export type ReservationDataParsed = z.infer<typeof ReservationDataSchema>;
 export const ReservationDataSchema = z.object({
@@ -141,60 +142,7 @@ export const ReservationDataSchema = z.object({
     referralCalculationType: z.number().nullable(),
   }),
 
-  miscChargeList: z
-    .array(
-      z.object({
-        miscChargeId: z.number().nullable(),
-        miscChargeCode: z.number().nullable(),
-        unit: z.number().nullable(),
-        name: z.string().nullable(),
-        description: z.string().nullable(),
-        calculationType: z.string().nullable(),
-        taxNotAvailable: z.boolean(),
-        isCommission: z.boolean(),
-        value: z.number().nullable(),
-        totalValue: z.number().nullable(),
-        startDate: z.string().nullable(),
-        endDate: z.string().nullable(),
-        quantity: z.number().nullable(),
-        createdDate: z.string().nullable(),
-        gLcode: z.string().nullable(),
-        locationMiscChargeId: z.number().nullable(),
-        isChargeByPeriod: z.boolean().nullable(),
-        isTaxable: z.boolean().nullable(),
-        locationTaxIds: z.string().nullable(),
-        isSelected: z.boolean(),
-        isQuantity: z.boolean(),
-        locationMiscChargeID: z.number().nullable(),
-        vehicleTypeId: z.number().nullable(),
-        misChargeCode: z.number().nullable(),
-        isOptional: z.boolean().nullable(),
-        printValue: z.coerce.string().nullable(),
-        oldStartDateString: z.string().nullable(),
-        oldEndDateString: z.string().nullable(),
-        startDateString: z.string().nullable(),
-        createddateString: z.string().nullable(),
-        endDateString: z.string().nullable(),
-        isDeleted: z.boolean(),
-        isFreeze: z.boolean(),
-        isAlreadySelected: z.boolean(),
-        isDeductible: z.boolean(),
-        locationId: z.number().nullable(),
-        locationName: z.string().nullable(),
-        vehicleType: z.coerce.string().nullable(),
-        miscTaxList: z.any().nullable(),
-        totaltax: z.number().nullable(),
-        subTotal: z.number().nullable(),
-        amountPaid: z.number().nullable(),
-        amountRemaining: z.number().nullable(),
-        miscchargeTypeId: z.number().nullable(),
-        option: z.coerce.string().nullable(),
-        misChargeOptionList: z.array(z.any()).nullable(),
-        optionId: z.number().nullable(),
-        isBillToInsurance: z.boolean().nullable(),
-      })
-    )
-    .nullable(),
+  miscChargeList: z.array(AgreementMiscChargeItem).nullable(),
 
   taxList: z.array(
     z.object({
