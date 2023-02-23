@@ -5,6 +5,7 @@ import CommonRatesInformation from "./CommonRatesInformation";
 import { type RentalRateParsed } from "../../utils/schemas/rate";
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
+import classNames from "classnames";
 
 export interface StepRatesAndChargesInformationProps {
   module: "agreements" | "reservations";
@@ -46,15 +47,17 @@ const StepRatesAndChargesInformation = (
   };
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-1">
       <InformationBlockCardWithChildren
         identifier="rates-information"
         icon={<DocumentTextSolid className="h-5 w-5" />}
-        title="Rates information"
+        title="Rental rates information"
         isLoading={false}
         renderEndIcon={
           <button className="px-2 py-1" onClick={() => setStep(0)}>
-            <ChevronDownOutline className="h-4 w-4" />
+            <ChevronDownOutline
+              className={classNames("h-4 w-4", step === 0 ? "rotate-180" : "")}
+            />
           </button>
         }
       >
@@ -77,17 +80,23 @@ const StepRatesAndChargesInformation = (
             rate={props.rate}
             onSelectedRate={props.onSelectedRate}
             onNavigateNext={handleNext}
+            isSupportingInfoAvailable={
+              Boolean(props.rentalInformation) &&
+              Boolean(props.vehicleInformation)
+            }
           />
         </Transition>
       </InformationBlockCardWithChildren>
       <InformationBlockCardWithChildren
-        identifier="tax-information"
+        identifier="misc-charges-information"
         icon={<DocumentTextSolid className="h-5 w-5" />}
-        title="Taxes"
+        title="Miscellaneous charges information"
         isLoading={false}
         renderEndIcon={
           <button className="px-2 py-1" onClick={() => setStep(1)}>
-            <ChevronDownOutline className="h-4 w-4" />
+            <ChevronDownOutline
+              className={classNames("h-4 w-4", step === 1 ? "rotate-180" : "")}
+            />
           </button>
         }
       >
@@ -100,7 +109,7 @@ const StepRatesAndChargesInformation = (
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-100"
         >
-          <div>Taxes</div>
+          <div>Misc Charges</div>
           <button
             onClick={() => {
               handleNext();

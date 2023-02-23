@@ -54,7 +54,7 @@ export type TRentalCompleteStage = {
   vehicle: boolean;
   rates: boolean;
   taxes: boolean;
-  misCharges: boolean;
+  miscCharges: boolean;
   payments: boolean;
   others: boolean;
 };
@@ -100,8 +100,8 @@ const AddRentalParentForm = ({
       vehicle: false,
       rates: false,
       taxes: false,
-      misCharges: false,
-      payments: false,
+      miscCharges: true,
+      payments: true,
       others: true,
     });
 
@@ -180,7 +180,7 @@ const AddRentalParentForm = ({
               onClick={() => {
                 setCreationStageComplete((prev) => ({
                   ...prev,
-                  misCharges: true,
+                  miscCharges: true,
                 }));
                 handleStageTabClick(others);
               }}

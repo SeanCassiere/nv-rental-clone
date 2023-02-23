@@ -26,11 +26,24 @@ interface CommonRatesInformationProps {
   rateName: StepRatesAndChargesInformationProps["rateName"];
   onSelectRateName: StepRatesAndChargesInformationProps["onSelectRateName"];
 
+  hideRateSelector?: boolean;
+  hidePromotionCodesFields?: boolean;
+
+  isSupportingInfoAvailable: boolean;
+
   onNavigateNext: () => void;
 }
 
 const CommonRatesInformation = (props: CommonRatesInformationProps) => {
-  const { rentalInformation, vehicleInformation, rateName, rate } = props;
+  const {
+    rentalInformation,
+    vehicleInformation,
+    rateName,
+    rate,
+    hideRateSelector = false,
+    hidePromotionCodesFields = false,
+    isSupportingInfoAvailable,
+  } = props;
 
   const checkoutLocation = rentalInformation?.checkoutLocation || 0;
   const vehicleTypeId = vehicleInformation?.vehicleTypeId || 0;
@@ -82,22 +95,35 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
 
   return (
     <div className="mx-4 my-4">
+      {!isSupportingInfoAvailable && (
+        <div className="pb-4 text-red-500">
+          Rental and Vehicle information not entered.
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="col-span-1 text-base md:col-span-3">
           Total days: <span className="font-semibold">{rentalDays}</span>
         </div>
-        <div className="col-span-1">
-          <NativeSelectInput
-            label="Rate"
-            value={getSelectedOptionForSelectInput(rateTypeOptions, rateName)}
-            options={rateTypeOptions}
-            onSelect={(value) => {
-              if (value && value.value && value.value !== "") {
-                props.onSelectRateName(value.value);
-              }
-            }}
-          />
-        </div>
+        {!hideRateSelector && (
+          <div className="col-span-1">
+            <NativeSelectInput
+              label="Rate"
+              value={getSelectedOptionForSelectInput(rateTypeOptions, rateName)}
+              options={rateTypeOptions}
+              onSelect={(value) => {
+                if (value && value.value && value.value !== "") {
+                  props.onSelectRateName(value.value);
+                }
+              }}
+              disabled={!isSupportingInfoAvailable}
+            />
+          </div>
+        )}
+        {!hidePromotionCodesFields && (
+          <div className="col-span-1 flex items-end text-sm text-teal-500">
+            Implement promotion codes later
+          </div>
+        )}
       </div>
       <form
         onSubmit={handleSubmit((data) => {
