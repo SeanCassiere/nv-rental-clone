@@ -19,7 +19,7 @@ import AgreementVehicleInformationTab, {
 import CommonCustomerInformation, {
   type CommonCustomerInformationSchemaParsed,
 } from "./CommonCustomerInformation";
-import StepRatesAndTaxesInformation from "./StepRatesAndTaxesInformation";
+import StepRatesAndChargesInformation from "./StepRatesAndChargesInformation";
 
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
@@ -46,6 +46,18 @@ import { sortObject } from "../../utils/sortObject";
 import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
 import { type RentalRateParsed } from "../../utils/schemas/rate";
 import { type ReservationDataParsed } from "../../utils/schemas/reservation";
+
+export type TRentalCompleteStage = {
+  rental: boolean;
+  customer: boolean;
+  insurance: boolean;
+  vehicle: boolean;
+  rates: boolean;
+  taxes: boolean;
+  misCharges: boolean;
+  payments: boolean;
+  others: boolean;
+};
 
 interface TAddRentalParentFormProps {
   referenceId: number | string;
@@ -80,17 +92,18 @@ const AddRentalParentForm = ({
   const isEdit = Boolean(referenceId);
 
   const [isSafeToFetchSummary] = useState(false);
-  const [creationStagesComplete, setCreationStageComplete] = useState({
-    rental: false,
-    customer: false,
-    insurance: true,
-    vehicle: false,
-    rates: false,
-    taxes: false,
-    misCharges: false,
-    payments: false,
-    others: true,
-  });
+  const [creationStagesComplete, setCreationStageComplete] =
+    useState<TRentalCompleteStage>({
+      rental: false,
+      customer: false,
+      insurance: true,
+      vehicle: false,
+      rates: false,
+      taxes: false,
+      misCharges: false,
+      payments: false,
+      others: true,
+    });
 
   const [agreementRentalInformation, setAgreementRentalInformation] =
     useState<AgreementRentalInformationSchemaParsed | null>(null);
@@ -157,11 +170,11 @@ const AddRentalParentForm = ({
       };
       const chargesAndPayments = {
         // 5
-        id: "charges-and-payments",
-        label: "Charges & Payments",
+        id: "taxes-and-payments",
+        label: "Taxes & Payments",
         component: (
           <div>
-            Charges and payments
+            Taxes and payments
             <br />
             <button
               onClick={() => {
@@ -179,10 +192,10 @@ const AddRentalParentForm = ({
       };
       const ratesAndTaxes = {
         // 4
-        id: "rates-and-taxes",
-        label: "Rates & Taxes",
+        id: "rates-and-charges",
+        label: "Rates & Charges",
         component: (
-          <StepRatesAndTaxesInformation
+          <StepRatesAndChargesInformation
             module="agreements"
             isEdit={isEdit}
             rentalInformation={
@@ -337,18 +350,18 @@ const AddRentalParentForm = ({
 
     return tabs;
   }, [
-    isEdit,
     module,
-    referenceId,
+    isEdit,
     agreementRentalInformation,
+    referenceId,
     agreementVehicleInformation,
-    commonCustomerInformation,
-    handleSetSelectedRate,
+    selectedRateName,
     handleSetSelectedRateName,
+    selectedRate,
+    handleSetSelectedRate,
+    commonCustomerInformation,
     handleStageTabClick,
     reservationData,
-    selectedRate,
-    selectedRateName,
   ]);
 
   // fetching existing agreement data and set it to state
