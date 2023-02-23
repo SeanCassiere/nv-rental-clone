@@ -1,7 +1,33 @@
 import { useTranslation } from "react-i18next";
+import classNames from "classnames";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type AgreementDataParsed } from "../../../utils/schemas/agreement";
+
+const supportedList = [
+  "Open",
+  "Closed ",
+  "Void",
+  "Pending_Deposit",
+  "Pending_Payment",
+];
+const getTextColorForStatus = (status: string) => {
+  if (supportedList.includes(status)) {
+    if (status === "Open") return "text-green-500";
+    if (status === "Closed " || status === "Closed") return "text-red-500";
+    if (status === "Void") return "text-slate-900";
+    if (status === "Pending_Deposit") return "text-stone-500";
+    if (status === "Pending_Payment") return "text-indigo-500";
+  }
+  return "text-slate-600";
+};
+export const getAgreementStatusNameFromRaw = (status: string) => {
+  const name = status.trim();
+  if (name === "Closed") return "Closed";
+  if (name === "Pending_Deposit") return "Pending Payment";
+  if (name === "Pending_Payment") return "Pending Deposit";
+  return name;
+};
 
 const AgreementModuleStatBlock = ({
   agreement,
@@ -20,8 +46,15 @@ const AgreementModuleStatBlock = ({
       <ModuleStatBlock
         header="Status"
         stat={
-          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
-            {agreement?.agreementStatusName ?? "-"}
+          <span
+            className={classNames(
+              "select-none text-xl font-semibold xl:text-2xl",
+              getTextColorForStatus(agreement?.agreementStatusName ?? "")
+            )}
+          >
+            {agreement?.agreementStatusName
+              ? getAgreementStatusNameFromRaw(agreement?.agreementStatusName)
+              : "-"}
           </span>
         }
       />

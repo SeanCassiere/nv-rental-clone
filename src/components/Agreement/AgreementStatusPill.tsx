@@ -1,5 +1,7 @@
 import classNames from "classnames";
 
+import { getAgreementStatusNameFromRaw } from "../PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
+
 const supportedList = [
   "Open",
   "Closed ",
@@ -9,14 +11,7 @@ const supportedList = [
 ];
 
 const AgreementStatusPill = (props: { status: string }) => {
-  let statusName = props.status.trim();
-
-  if (statusName === "Pending_Deposit") {
-    statusName = "Pending Deposit";
-  }
-  if (statusName === "Pending_Payment") {
-    statusName = "Pending Payment";
-  }
+  const statusName = getAgreementStatusNameFromRaw(props.status);
 
   return (
     <span

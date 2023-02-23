@@ -1,13 +1,10 @@
 import classNames from "classnames";
+import { getVehicleStatusNameFromRaw } from "../PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
 
 const supportedList = ["Available", "OnRent"];
 
 const VehicleStatusPill = (props: { status: string }) => {
-  let statusName = props.status.trim();
-
-  if (statusName === "OnRent") {
-    statusName = "On rent";
-  }
+  const statusName = getVehicleStatusNameFromRaw(props.status.trim());
 
   return (
     <span

@@ -1,13 +1,11 @@
 import classNames from "classnames";
 
+import { getReservationStatusNameFromRaw } from "../PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
+
 const supportedList = ["Open", "CheckOut", "Canceled", "Quote", "New"];
 
 const ReservationStatusPill = (props: { status: string }) => {
-  let statusName = props.status.trim();
-
-  if (statusName === "Canceled") {
-    statusName = "Cancelled";
-  }
+  const statusName = getReservationStatusNameFromRaw(props.status.trim());
 
   return (
     <span
