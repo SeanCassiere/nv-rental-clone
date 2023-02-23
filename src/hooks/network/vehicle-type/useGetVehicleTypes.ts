@@ -10,7 +10,9 @@ export function useGetVehicleTypesList(params?: VehicleTypesListExtraOpts) {
   const otherSearch: VehicleTypesListExtraOpts = {
     ...(params?.StartDate ? { StartDate: params.StartDate } : {}),
     ...(params?.EndDate ? { EndDate: params.EndDate } : {}),
-    ...(params?.LocationID ? { LocationID: params.LocationID } : {}),
+    ...(typeof params?.LocationID !== "undefined"
+      ? { LocationID: params.LocationID }
+      : {}),
     ...(params
       ? {
           BaseRate: 0,

@@ -371,7 +371,6 @@ const AddRentalParentForm = ({
     agreementId:
       module === "agreement" && isEdit && referenceId ? referenceId : 0,
     onSuccess: (data) => {
-      console.log("agreement Data\n", data);
       if (!agreementRentalInformation) {
         setAgreementRentalInformation({
           agreementNumber: data.agreementNumber ?? "",

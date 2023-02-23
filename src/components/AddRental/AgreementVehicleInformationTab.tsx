@@ -40,7 +40,10 @@ const AgreementVehicleInformationTab = ({
   onCompleted: (data: AgreementVehicleInformationSchemaParsed) => void;
   isEdit: boolean;
 }) => {
-  const checkoutLocation = rentalInformation?.checkoutLocation || 0;
+  const checkoutLocation = useMemo(
+    () => rentalInformation?.checkoutLocation || 0,
+    [rentalInformation?.checkoutLocation]
+  );
 
   const [showFleetPicker, setShowFleetPicker] = useState(false);
 

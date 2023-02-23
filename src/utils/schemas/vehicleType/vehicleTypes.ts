@@ -6,7 +6,7 @@ const VehicleTypeSchema = z.object({
   FullValue: z.number().nullable(),
   Sample: z.string().default(""),
   Seats: z.string().default("0"),
-  Doors: z.string().default("0"),
+  Doors: z.string().default("0").nullable(),
   Baggages: z.number().default(0).nullable(),
   // Transmission: null,
   Deposit: z.number().default(0).nullable(),
