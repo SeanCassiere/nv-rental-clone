@@ -75,7 +75,7 @@ export const InformationBlockCardWithChildren = (
   props: Omit<
     TInformationBlockCardProps & { children: ReactNode },
     "numberPerBlock" | "blocks"
-  >
+  > & { renderEndIcon?: ReactNode }
 ) => {
   return (
     <div className="rounded border border-slate-200 bg-slate-50">
@@ -83,9 +83,10 @@ export const InformationBlockCardWithChildren = (
         <span className="flex items-center justify-center text-slate-700">
           {props.icon}
         </span>
-        <span className="col-span-11 truncate text-lg font-medium text-gray-700">
+        <span className="col-span-11 grow truncate text-lg font-medium text-gray-700">
           {props.title}
         </span>
+        {props.renderEndIcon && <>{props.renderEndIcon}</>}
       </div>
       {props.children}
     </div>

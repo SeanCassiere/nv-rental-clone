@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
-import { parseISO } from "date-fns";
+import parseISO from "date-fns/parseISO";
 
 import CommonTable from "../../General/CommonTable";
 import { DocumentTextSolid } from "../../icons";

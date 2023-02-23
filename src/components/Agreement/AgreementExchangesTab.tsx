@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { parseISO } from "date-fns";
+import parseISO from "date-fns/parseISO";
 
 import CommonTable from "../General/CommonTable";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";

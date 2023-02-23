@@ -1,11 +1,16 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
 import { DocumentTextSolid } from "../icons";
-import { Button, SelectInput, TextInput } from "../Form";
+import {
+  Button,
+  TextInput,
+  NativeSelectInput,
+  getSelectedOptionForSelectInput,
+} from "../Form";
 import { type AgreementRentalInformationSchemaParsed } from "./AgreementRentalInformationTab";
 import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
@@ -65,19 +70,17 @@ const AgreementVehicleInformationTab = ({
     LocationID: checkoutLocation,
   });
   const vehicleTypeOptions = useMemo(() => {
-    if (!vehicleTypesData.data) return [];
+    const empty = { value: "", label: "Select" };
+    if (!vehicleTypesData.data) return [empty];
 
-    return vehicleTypesData.data.map((option) => ({
-      value: `${option.VehicleTypeId}`,
-      label: `${option.VehicleTypeName}`,
-    }));
+    return [
+      empty,
+      ...vehicleTypesData.data.map((option) => ({
+        value: `${option.VehicleTypeId}`,
+        label: `${option.VehicleTypeName}`,
+      })),
+    ];
   }, [vehicleTypesData.data]);
-
-  const getSelectedVehicleType = useCallback(
-    (value: number) =>
-      vehicleTypeOptions.find((option) => option.value === `${value}`),
-    [vehicleTypeOptions]
-  );
 
   //
   const vehicleListData = useGetVehiclesList({
@@ -93,36 +96,32 @@ const AgreementVehicleInformationTab = ({
     },
   });
   const vehicleOptions = useMemo(() => {
-    if (!vehicleListData.data) return [];
+    const empty = { value: "", label: "Select" };
+    if (!vehicleListData.data) return [empty];
 
-    return vehicleListData.data.data.map((opt) => ({
-      value: `${opt.VehicleId}`,
-      label: `${opt.VehicleMakeName} ${opt.ModelName} ${opt.Year} ${opt.VehicleNo} ${opt.LicenseNo}`,
-    }));
+    return [
+      empty,
+      ...vehicleListData.data.data.map((opt) => ({
+        value: `${opt.VehicleId}`,
+        label: `${opt.VehicleMakeName} ${opt.ModelName} ${opt.Year} ${opt.VehicleNo} ${opt.LicenseNo}`,
+      })),
+    ];
   }, [vehicleListData.data]);
-
-  const getSelectedVehicle = useCallback(
-    (value: number) =>
-      vehicleOptions.find((option) => option.value === `${value}`),
-    [vehicleOptions]
-  );
 
   //
   const fuelLevelListData = useGetVehicleFuelLevelList();
   const fuelOptions = useMemo(() => {
-    if (!fuelLevelListData.data) return [];
+    const empty = { value: "", label: "Select" };
+    if (!fuelLevelListData.data) return [empty];
 
-    return fuelLevelListData.data.map((opt) => ({
-      value: `${opt.value}`,
-      label: `${opt.value}`,
-    }));
+    return [
+      empty,
+      ...fuelLevelListData.data.map((opt) => ({
+        value: `${opt.value}`,
+        label: `${opt.value}`,
+      })),
+    ];
   }, [fuelLevelListData.data]);
-
-  const getSelectedFuelLevel = useCallback(
-    (value: string) =>
-      fuelOptions.find((option) => option.value === `${value}`),
-    [fuelOptions]
-  );
 
   return (
     <>
@@ -177,11 +176,14 @@ const AgreementVehicleInformationTab = ({
         >
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <SelectInput
+              <NativeSelectInput
                 {...register("vehicleTypeId")}
                 label="Vehicle type"
                 options={vehicleTypeOptions}
-                value={getSelectedVehicleType(getValues("vehicleTypeId"))}
+                value={getSelectedOptionForSelectInput(
+                  vehicleTypeOptions,
+                  getValues("vehicleTypeId")
+                )}
                 onSelect={(value) => {
                   if (value !== null) {
                     setValue("vehicleTypeId", parseInt(value.value ?? "0"), {
@@ -198,11 +200,14 @@ const AgreementVehicleInformationTab = ({
               />
             </div>
             <div>
-              <SelectInput
+              <NativeSelectInput
                 {...register("vehicleId")}
                 label="Vehicle"
                 options={vehicleOptions}
-                value={getSelectedVehicle(getValues("vehicleId"))}
+                value={getSelectedOptionForSelectInput(
+                  vehicleOptions,
+                  getValues("vehicleId")
+                )}
                 onSelect={(value) => {
                   if (value !== null) {
                     setValue("vehicleId", parseInt(value.value ?? "0"), {
@@ -227,11 +232,14 @@ const AgreementVehicleInformationTab = ({
               />
             </div>
             <div>
-              <SelectInput
+              <NativeSelectInput
                 {...register("fuelOut")}
                 label="Fuel out"
                 options={fuelOptions}
-                value={getSelectedFuelLevel(getValues("fuelOut"))}
+                value={getSelectedOptionForSelectInput(
+                  fuelOptions,
+                  getValues("fuelOut")
+                )}
                 onSelect={(value) => {
                   if (value !== null) {
                     setValue("fuelOut", value.label, {

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import format from "date-fns/format";
 
 export function localDateToQueryYearMonthDay(date: Date) {
   return format(date, "yyyy-MM-dd");

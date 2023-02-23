@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "../utils/date";
 import {
   OptimalRateSchema,
@@ -49,7 +48,13 @@ export async function fetchRentalRates(
     {
       headers: { Authorization: `Bearer ${accessToken}` },
     }
-  ).then((res) => z.array(RentalRateSchema).parse(res.data));
+  ).then((res) => {
+    if (Array.isArray(res.data)) {
+      return res.data.map((rate) => RentalRateSchema.passthrough().parse(rate));
+    }
+
+    return [];
+  });
 }
 
 export async function fetchRentalRateTypesForRental(

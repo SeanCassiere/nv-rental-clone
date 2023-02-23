@@ -30,6 +30,7 @@ function CommonCustomerInformationSchema() {
       hPhone: z.string().nullable(),
       stateId: z.number().min(1, REQUIRED),
       zipCode: z.string().min(1, REQUIRED),
+      isTaxSaver: z.boolean().default(false),
     })
     .superRefine((data, ctx) => {
       if (!data.hPhone && !data.bPhone && !data.cPhone) {
@@ -77,6 +78,7 @@ const CommonCustomerInformation = ({
     hPhone: customerInformation?.hPhone || "",
     stateId: customerInformation?.stateId || 0,
     zipCode: customerInformation?.zipCode || "",
+    isTaxSaver: customerInformation?.isTaxSaver || false,
   };
 
   const {
@@ -121,6 +123,11 @@ const CommonCustomerInformation = ({
           setValue("hPhone", customer.hPhone ?? "", valOpts);
           setValue("stateId", customer.StateId ?? 0, valOpts);
           setValue("zipCode", customer.ZipCode ?? "", valOpts);
+          const isTaxSaver =
+            customer.CustomerType?.toLowerCase().includes("taxsaver") ||
+            customer.IsTaxExempt ||
+            false;
+          setValue("isTaxSaver", isTaxSaver, valOpts);
         }}
       />
       <InformationBlockCardWithChildren

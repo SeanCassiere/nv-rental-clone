@@ -9,6 +9,7 @@ export function useGetRentalRates(opts?: {
     Parameters<typeof fetchRentalRates>[0],
     "userId" | "clientId" | "accessToken"
   >;
+  onSuccess?: (data: Awaited<ReturnType<typeof fetchRentalRates>>) => void;
 }) {
   const auth = useAuth();
 
@@ -28,6 +29,9 @@ export function useGetRentalRates(opts?: {
     },
     enabled: auth.isAuthenticated && isEnabled,
     initialData: [],
+    onSuccess: (data) => {
+      opts?.onSuccess?.(data);
+    },
   });
 
   return query;

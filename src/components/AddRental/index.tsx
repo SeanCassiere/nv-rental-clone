@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { parseISO } from "date-fns";
+import parseISO from "date-fns/parseISO";
 
-import CommonHeader from "../Layout/CommonHeader";
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
+import CommonHeader from "../Layout/CommonHeader";
 import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
 import { Button } from "../Form";
 import {
@@ -19,10 +19,14 @@ import AgreementVehicleInformationTab, {
 import CommonCustomerInformation, {
   type CommonCustomerInformationSchemaParsed,
 } from "./CommonCustomerInformation";
-import StepRatesAndTaxesInformation from "./StepRatesAndTaxesInformation";
+import StepRatesAndChargesInformation from "./StepRatesAndChargesInformation";
 
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
+import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
+import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOptimalRateForRental";
+import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
 
 import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
@@ -38,12 +42,22 @@ import {
   viewReservationByIdRoute,
 } from "../../routes/reservations/reservationIdPath";
 
-import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
-import { type ReservationDataParsed } from "../../utils/schemas/reservation";
 import { sortObject } from "../../utils/sortObject";
-import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
-import { type RentalRateListItemParsed } from "../../utils/schemas/rate";
+import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
+import { type RentalRateParsed } from "../../utils/schemas/rate";
+import { type ReservationDataParsed } from "../../utils/schemas/reservation";
+
+export type TRentalCompleteStage = {
+  rental: boolean;
+  customer: boolean;
+  insurance: boolean;
+  vehicle: boolean;
+  rates: boolean;
+  taxes: boolean;
+  miscCharges: boolean;
+  payments: boolean;
+  others: boolean;
+};
 
 interface TAddRentalParentFormProps {
   referenceId: number | string;
@@ -76,15 +90,20 @@ const AddRentalParentForm = ({
   reservationData,
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
+
   const [isSafeToFetchSummary] = useState(false);
-  const [creationStagesComplete, setCreationStageComplete] = useState({
-    "rental-information": false,
-    "customer-information": false,
-    "vehicle-information": false,
-    "rates-and-taxes": false,
-    "charges-and-payments": false,
-    "other-information": true,
-  });
+  const [creationStagesComplete, setCreationStageComplete] =
+    useState<TRentalCompleteStage>({
+      rental: false,
+      customer: false,
+      insurance: true,
+      vehicle: false,
+      rates: false,
+      taxes: false,
+      miscCharges: true,
+      payments: true,
+      others: true,
+    });
 
   const [agreementRentalInformation, setAgreementRentalInformation] =
     useState<AgreementRentalInformationSchemaParsed | null>(null);
@@ -94,11 +113,49 @@ const AddRentalParentForm = ({
   const [commonCustomerInformation, setCommonCustomerInformation] =
     useState<CommonCustomerInformationSchemaParsed | null>(null);
 
-  const [commonRatesInformation, setCommonRatesInformation] =
-    useState<RentalRateListItemParsed | null>(null);
-  const [commonTaxesInformation] = useState(null);
+  const [[selectedRateName, selectedRate], setRateDetails] = useState<
+    [string, RentalRateParsed | null]
+  >(["", null]);
+  const setSelectedRateName = (cb: string | ((name: string) => string)) => {
+    if (typeof cb === "function") {
+      setRateDetails((prev) => {
+        const pos1 = prev[0];
+        const cbReturn = cb(pos1);
+        return [cbReturn, prev[1]];
+      });
+      return;
+    }
+    setRateDetails((prev) => [cb, prev[1]]);
+  };
+  const setSelectedRate = (
+    cb:
+      | RentalRateParsed
+      | null
+      | ((prev: RentalRateParsed | null) => RentalRateParsed | null)
+  ) => {
+    if (typeof cb === "function") {
+      setRateDetails((prev) => {
+        const pos2 = prev[1];
+        const cbReturn = cb(pos2);
+        return [prev[0], cbReturn];
+      });
+      return;
+    }
+    setRateDetails((prev) => [prev[0], cb]);
+  };
 
-  const [commonMiscChargesInformation] = useState(null);
+  const handleSetSelectedRateName = useCallback((rateName: string) => {
+    // setSelectedRateName(rateName);
+    setRateDetails([rateName, null]);
+  }, []);
+
+  const handleSetSelectedRate = useCallback((rate: RentalRateParsed) => {
+    setSelectedRate(rate);
+    setCreationStageComplete((prev) => ({
+      ...prev,
+      rates: true,
+    }));
+  }, []);
 
   const clientProfile = useGetClientProfile();
 
@@ -113,17 +170,17 @@ const AddRentalParentForm = ({
       };
       const chargesAndPayments = {
         // 5
-        id: "charges-and-payments",
-        label: "Charges & Payments",
+        id: "taxes-and-payments",
+        label: "Taxes & Payments",
         component: (
           <div>
-            Charges and payments
+            Taxes and payments
             <br />
             <button
               onClick={() => {
                 setCreationStageComplete((prev) => ({
                   ...prev,
-                  "charges-and-payments": true,
+                  miscCharges: true,
                 }));
                 handleStageTabClick(others);
               }}
@@ -135,10 +192,10 @@ const AddRentalParentForm = ({
       };
       const ratesAndTaxes = {
         // 4
-        id: "rates-and-taxes",
-        label: "Rates & Taxes",
+        id: "rates-and-charges",
+        label: "Rates & Charges",
         component: (
-          <StepRatesAndTaxesInformation
+          <StepRatesAndChargesInformation
             module="agreements"
             isEdit={isEdit}
             rentalInformation={
@@ -165,10 +222,14 @@ const AddRentalParentForm = ({
             onCompleted={() => {
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "rates-and-taxes": true,
+                rates: true,
               }));
               handleStageTabClick(chargesAndPayments);
             }}
+            rateName={selectedRateName}
+            onSelectRateName={handleSetSelectedRateName}
+            rate={selectedRate}
+            onSelectedRate={handleSetSelectedRate}
           />
         ),
       };
@@ -184,7 +245,7 @@ const AddRentalParentForm = ({
               setCommonCustomerInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "customer-information": true,
+                customer: true,
               }));
               handleStageTabClick(ratesAndTaxes);
             }}
@@ -204,7 +265,7 @@ const AddRentalParentForm = ({
               setAgreementVehicleInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "vehicle-information": true,
+                vehicle: true,
               }));
               handleStageTabClick(customerInformation);
             }}
@@ -223,7 +284,7 @@ const AddRentalParentForm = ({
               setAgreementRentalInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "rental-information": true,
+                rental: true,
               }));
               handleStageTabClick(vehicleInformation);
             }}
@@ -259,7 +320,7 @@ const AddRentalParentForm = ({
               setCommonCustomerInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
-                "customer-information": true,
+                customer: true,
               }));
               handleStageTabClick(ratesAndTaxes);
             }}
@@ -289,16 +350,21 @@ const AddRentalParentForm = ({
 
     return tabs;
   }, [
+    module,
+    isEdit,
     agreementRentalInformation,
+    referenceId,
     agreementVehicleInformation,
+    selectedRateName,
+    handleSetSelectedRateName,
+    selectedRate,
+    handleSetSelectedRate,
     commonCustomerInformation,
     handleStageTabClick,
-    isEdit,
-    module,
-    referenceId,
     reservationData,
   ]);
 
+  // fetching existing agreement data and set it to state
   useGetAgreementData({
     agreementId:
       module === "agreement" && isEdit && referenceId ? referenceId : 0,
@@ -315,7 +381,7 @@ const AddRentalParentForm = ({
         });
         setCreationStageComplete((prev) => ({
           ...prev,
-          "rental-information": true,
+          rental: true,
         }));
       }
 
@@ -328,7 +394,7 @@ const AddRentalParentForm = ({
         });
         setCreationStageComplete((prev) => ({
           ...prev,
-          "vehicle-information": true,
+          vehicle: true,
         }));
       }
 
@@ -350,32 +416,115 @@ const AddRentalParentForm = ({
           hPhone: data?.customerDetails?.hPhone || "",
           stateId: data?.stateId || 0,
           zipCode: data?.zipCode || "",
+          isTaxSaver:
+            data.customerDetails?.customerType
+              ?.toLowerCase()
+              .includes("taxsaver") ||
+            data?.customerDetails?.isTaxExempt ||
+            false,
         });
         setCreationStageComplete((prev) => ({
           ...prev,
-          "customer-information": true,
+          customer: true,
         }));
       }
-
-      if (!commonRatesInformation && data?.rateList[0]) {
-        const rateListItem = data?.rateList[0];
-        if (rateListItem) {
-          setCommonRatesInformation(rateListItem);
-          console.log(rateListItem);
+      if (selectedRateName === "") {
+        if (data.rateList && data.rateList[0]) {
+          const existingRateName = data.rateList[0].rateName;
+          setSelectedRateName(existingRateName ?? "");
         }
       }
-      if (!commonTaxesInformation) {
-        // console.log('storing taxes not implemented')
+    },
+  });
+
+  // fetching the optimal rate name for new rentals
+  const agreementConditionsForOptimalRateFetch =
+    isEdit === false &&
+    selectedRateName === "" &&
+    Boolean(agreementVehicleInformation?.vehicleTypeId) &&
+    Boolean(agreementRentalInformation?.checkoutLocation);
+  const reservationConditionsForOptimalRateFetch = false;
+  useGetOptimalRateForRental({
+    filters: {
+      CheckoutDate:
+        module === "agreement"
+          ? agreementRentalInformation?.checkoutDate || new Date()
+          : new Date(),
+      CheckinDate:
+        module === "agreement"
+          ? agreementRentalInformation?.checkinDate || new Date()
+          : new Date(),
+      VehicleTypeId:
+        module === "agreement"
+          ? String(agreementVehicleInformation?.vehicleTypeId)
+          : "demo-reservation-vehicle-type-id",
+      LocationId:
+        module === "agreement"
+          ? String(agreementRentalInformation?.checkoutLocation)
+          : "demo-reservation-location-id",
+    },
+    onSuccess: (data) => {
+      if (data && data?.rateName) {
+        setRateDetails((values) => {
+          const [prev] = values;
+          if (prev === "" && data.rateName !== null) {
+            return [data.rateName!, null];
+          }
+          return values;
+        });
       }
-      if (
-        commonRatesInformation &&
-        commonTaxesInformation &&
-        commonMiscChargesInformation
-      ) {
-        setCreationStageComplete((prev) => ({
-          ...prev,
-          "rates-and-taxes": true,
-        }));
+    },
+    enabled:
+      module === "agreement"
+        ? agreementConditionsForOptimalRateFetch
+        : reservationConditionsForOptimalRateFetch,
+  });
+
+  // fetching the rate for the rental
+  const agreementConditionsForFetchingRates =
+    Boolean(agreementRentalInformation) &&
+    Boolean(agreementVehicleInformation) &&
+    selectedRateName !== "";
+  const reservationConditionsForFetchingRates = false;
+  useGetRentalRates({
+    enabled:
+      module === "agreement"
+        ? agreementConditionsForFetchingRates
+        : reservationConditionsForFetchingRates,
+    filters: {
+      LocationId: Number(
+        agreementRentalInformation?.checkoutLocation
+      ).toString(),
+      RateName: selectedRateName,
+      CheckoutDate:
+        module === "agreement"
+          ? agreementRentalInformation?.checkoutDate || undefined
+          : undefined,
+      CheckinDate:
+        module === "agreement"
+          ? agreementRentalInformation?.checkinDate || undefined
+          : undefined,
+      VehicleTypeId:
+        module === "agreement"
+          ? Number(agreementVehicleInformation?.vehicleTypeId || "0").toString()
+          : "demo-reservation-vehicle-type-id",
+      ...(module === "agreement"
+        ? {
+            AgreementId: referenceId ? String(referenceId) : undefined,
+            AgreementTypeName: agreementRentalInformation?.agreementType || "",
+          }
+        : {}),
+    },
+    onSuccess: (data) => {
+      if (Array.isArray(data) && data.length > 0) {
+        const rate = data[0];
+        if (rate) {
+          setSelectedRate(rate);
+          setCreationStageComplete((prev) => ({
+            ...prev,
+            rates: true,
+          }));
+        }
       }
     },
   });
@@ -396,13 +545,19 @@ const AddRentalParentForm = ({
   // fetching the data before page navigation only for rentals in edit mode
   useGetVehiclesList({
     page: 1,
-    pageSize: 2000,
-    enabled: isEdit,
+    pageSize: 20,
+    enabled:
+      isEdit &&
+      ((module === "agreement" &&
+        Boolean(agreementVehicleInformation) &&
+        Boolean(agreementRentalInformation)) ||
+        (module === "reservation" && Date.now() < 0)), // reservation for now should return false
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       CurrentLocationId: agreementRentalInformation?.checkoutLocation ?? 0,
     },
   });
+
   return (
     <>
       <div className="py-6">

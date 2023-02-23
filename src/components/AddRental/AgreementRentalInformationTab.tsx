@@ -1,11 +1,20 @@
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { add, isBefore, isEqual, differenceInSeconds } from "date-fns";
+import add from "date-fns/add";
+import isBefore from "date-fns/isBefore";
+import isEqual from "date-fns/isEqual";
+import differenceInSeconds from "date-fns/differenceInSeconds";
 
 import { DocumentTextSolid } from "../icons";
-import { Button, TextInput, SelectInput, DateTimePicker } from "../Form";
+import {
+  Button,
+  TextInput,
+  DateTimePicker,
+  NativeSelectInput,
+  getSelectedOptionForSelectInput,
+} from "../Form";
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
 
 import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
@@ -90,35 +99,31 @@ const AgreementRentalInformationTab = ({
 
   const locationData = useGetLocationsList({ locationIsActive: true });
   const locationOptions = useMemo(() => {
-    if (!locationData.data) return [];
+    const empty = { value: "", label: "Select" };
+    if (!locationData.data) return [empty];
 
-    return locationData.data.data.map((option) => ({
-      value: `${option.locationId}`,
-      label: `${option.locationName}`,
-    }));
+    return [
+      empty,
+      ...locationData.data.data.map((option) => ({
+        value: `${option.locationId}`,
+        label: `${option.locationName}`,
+      })),
+    ];
   }, [locationData.data]);
-
-  const getSelectedLocation = useCallback(
-    (value: number) =>
-      locationOptions.find((option) => option.value === `${value}`),
-    [locationOptions]
-  );
 
   const agreementTypeData = useGetAgreementTypesList();
   const agreementTypeOptions = useMemo(() => {
-    if (!agreementTypeData.data) return [];
+    const empty = { value: "", label: "Select" };
+    if (!agreementTypeData.data) return [empty];
 
-    return agreementTypeData.data.map((option) => ({
-      value: `${option.typeId}`,
-      label: `${option.typeName}`,
-    }));
+    return [
+      empty,
+      ...agreementTypeData.data.map((option) => ({
+        value: `${option.typeId}`,
+        label: `${option.typeName}`,
+      })),
+    ];
   }, [agreementTypeData.data]);
-
-  const getSelectedAgreementType = useCallback(
-    (value: string) =>
-      agreementTypeOptions.find((option) => option.label === `${value}`),
-    [agreementTypeOptions]
-  );
 
   useGetNewAgreementNumber({
     agreementType: getValues("agreementType"),
@@ -153,13 +158,17 @@ const AgreementRentalInformationTab = ({
             />
           </div>
           <div>
-            <SelectInput
+            <NativeSelectInput
               {...register("agreementType")}
               label="Agreement type"
               options={agreementTypeOptions}
-              value={getSelectedAgreementType(getValues("agreementType"))}
+              value={getSelectedOptionForSelectInput(
+                agreementTypeOptions,
+                getValues("agreementType"),
+                "label"
+              )}
               onSelect={(value) => {
-                if (value !== null) {
+                if (value !== null && value.value !== "") {
                   setValue("agreementType", value.label as any, {
                     shouldValidate: true,
                   });
@@ -211,13 +220,16 @@ const AgreementRentalInformationTab = ({
             />
           </div>
           <div>
-            <SelectInput
+            <NativeSelectInput
               {...register("checkoutLocation")}
               label="Checkout location"
               options={locationOptions}
-              value={getSelectedLocation(getValues("checkoutLocation"))}
+              value={getSelectedOptionForSelectInput(
+                locationOptions,
+                getValues("checkoutLocation")
+              )}
               onSelect={(value) => {
-                if (value !== null) {
+                if (value !== null && value.value !== "") {
                   setValue("checkoutLocation", value.value as any, {
                     shouldValidate: true,
                   });
@@ -243,13 +255,16 @@ const AgreementRentalInformationTab = ({
             />
           </div>
           <div>
-            <SelectInput
+            <NativeSelectInput
               {...register("checkinLocation")}
               label="Checkin location"
               options={locationOptions}
-              value={getSelectedLocation(getValues("checkinLocation"))}
+              value={getSelectedOptionForSelectInput(
+                locationOptions,
+                getValues("checkinLocation")
+              )}
               onSelect={(value) => {
-                if (value !== null) {
+                if (value !== null && value.value !== "") {
                   setValue("checkinLocation", value.value as any, {
                     shouldValidate: true,
                   });
