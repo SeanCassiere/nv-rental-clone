@@ -1,8 +1,22 @@
+import classNames from "classnames";
+
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type VehicleDataParsed } from "../../../utils/schemas/vehicle";
 import { useGetVehicleStatusList } from "../../../hooks/network/vehicle/useGetVehicleStatusList";
-import classNames from "classnames";
 
+const supportedList = ["Available", "OnRent"];
+const getTextColorForStatus = (status: string) => {
+  if (supportedList.includes(status)) {
+    if (status === "Available") return "text-green-500";
+    if (status === "OnRent") return "text-orange-500";
+  }
+  return "text-slate-600";
+};
+export const getVehicleStatusNameFromRaw = (status: string) => {
+  const name = status.trim();
+  if (name === "OnRent") return "On rent";
+  return status;
+};
 const VehicleModuleStatBlock = ({
   vehicle,
 }: {
@@ -32,8 +46,15 @@ const VehicleModuleStatBlock = ({
       <ModuleStatBlock
         header="Fleet status"
         stat={
-          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
-            {getStatusById(vehicle?.vehicle.statusId)}
+          <span
+            className={classNames(
+              "select-none text-xl font-semibold xl:text-2xl",
+              getTextColorForStatus(getStatusById(vehicle?.vehicle.statusId))
+            )}
+          >
+            {getVehicleStatusNameFromRaw(
+              getStatusById(vehicle?.vehicle.statusId)
+            )}
           </span>
         }
       />

@@ -16,6 +16,7 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
 import { BookFilled, PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
+import ReservationStatusPill from "../../components/Reservation/ReservationStatusPill";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
@@ -95,6 +96,9 @@ function ReservationsSearchPage() {
                   {value}
                 </Link>
               );
+            }
+            if (column.columnHeader === "ReservationStatusName") {
+              return <ReservationStatusPill status={value} />;
             }
 
             if (ReservationDateTimeColumns.includes(column.columnHeader)) {

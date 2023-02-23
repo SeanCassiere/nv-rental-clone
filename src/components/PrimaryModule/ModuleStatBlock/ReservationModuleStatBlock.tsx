@@ -1,9 +1,28 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
+import classNames from "classnames";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type ReservationDataParsed } from "../../../utils/schemas/reservation";
 import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPath";
+
+const supportedList = ["Open", "CheckOut", "Canceled", "Quote", "New"];
+const getTextColorForStatus = (status: string) => {
+  if (supportedList.includes(status)) {
+    if (status === "Open") return "text-green-500";
+    if (status === "Canceled") return "text-red-900";
+    if (status === "CheckOut") return "text-orange-500";
+    if (status === "Quote") return "text-stone-500";
+    if (status === "New") return "text-indigo-500";
+  }
+  return "text-slate-600";
+};
+export const getReservationStatusNameFromRaw = (status: string) => {
+  const name = status.trim();
+  if (name === "Canceled") return "Cancelled";
+  if (name === "CheckOut") return "Checked Out";
+  return status;
+};
 
 const ReservationModuleStatBlock = ({
   reservation,
@@ -20,8 +39,19 @@ const ReservationModuleStatBlock = ({
       <ModuleStatBlock
         header="Status"
         stat={
-          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
-            {reservation?.reservationview.reservationStatusName ?? "-"}
+          <span
+            className={classNames(
+              "select-none text-xl font-semibold xl:text-2xl",
+              getTextColorForStatus(
+                reservation?.reservationview.reservationStatusName ?? ""
+              )
+            )}
+          >
+            {reservation?.reservationview.reservationStatusName
+              ? getReservationStatusNameFromRaw(
+                  reservation?.reservationview.reservationStatusName
+                )
+              : "-"}
           </span>
         }
       />

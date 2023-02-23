@@ -1,0 +1,31 @@
+import type { RentalRateParsed } from "../utils/schemas/rate";
+
+export type CalculateRentalSummaryAmountsInput = {
+  startDate: Date;
+  endDate: Date;
+  checkoutLocationId: number;
+  checkinLocationId: number;
+  miscCharges: any[];
+  rate: RentalRateParsed;
+  vehicleTypeId: number;
+  taxIds: number[];
+  advancePayment: number;
+  amountPaid: number;
+  preAdjustment: number;
+  postAdjustment: number;
+  securityDeposit: number;
+  additionalCharge: number;
+  unTaxableAdditional: number;
+  fuelLevelOut: string;
+  takeSize: number;
+  fuelLevelIn: string;
+  odometerOut: number;
+  odometerIn: number;
+  agreementId: number;
+  agreementTypeName?: string;
+  isCheckin: boolean;
+  promotionIds: any[];
+  agreementInsurance: null;
+  writeOffAmount: number | null;
+  customerId: number;
+};

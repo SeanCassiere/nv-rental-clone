@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import CommonTable from "../General/CommonTable";
 import { DocumentTextSolid } from "../icons";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
+import AgreementStatusPill from "../Agreement/AgreementStatusPill";
 
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 
@@ -79,6 +80,9 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
                   {value as any}
                 </Link>
               );
+            }
+            if (column.columnHeader === "AgreementStatusName") {
+              return <AgreementStatusPill status={String(value)} />;
             }
 
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {

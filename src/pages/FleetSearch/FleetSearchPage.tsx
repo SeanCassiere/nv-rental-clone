@@ -33,6 +33,7 @@ import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-p
 import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
 import { titleMaker } from "../../utils/title-maker";
+import VehicleStatusPill from "../../components/Vehicle/VehicleStatusPill";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -84,6 +85,9 @@ function VehiclesSearchPage() {
                   {value}
                 </Link>
               );
+            }
+            if (column.columnHeader === "VehicleStatus") {
+              return <VehicleStatusPill status={value} />;
             }
 
             return value;
