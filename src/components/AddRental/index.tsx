@@ -416,6 +416,12 @@ const AddRentalParentForm = ({
           hPhone: data?.customerDetails?.hPhone || "",
           stateId: data?.stateId || 0,
           zipCode: data?.zipCode || "",
+          isTaxSaver:
+            data.customerDetails?.customerType
+              ?.toLowerCase()
+              .includes("taxsaver") ||
+            data?.customerDetails?.isTaxExempt ||
+            false,
         });
         setCreationStageComplete((prev) => ({
           ...prev,
