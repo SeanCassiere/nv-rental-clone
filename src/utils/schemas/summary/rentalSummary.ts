@@ -147,7 +147,7 @@ export const RentalRatesSummarySchema = z.object({
   rateSummaryItems: z.array(RentalRateSummaryItemSchema),
   taxes: z.array(RentalSummaryTaxItemSchema),
   promotions: z.array(RentalSummaryPromotionItemSchema),
-  inventoryCharges: z.array(z.any()),
+  inventoryCharges: z.array(z.any()).nullable(),
   totalInventoryChargesTaxable: z.number(),
   totalInventoryChargesNonTaxable: z.number(),
   taxListString: z.string().nullable(),

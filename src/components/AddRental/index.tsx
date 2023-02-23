@@ -46,6 +46,7 @@ import { sortObject } from "../../utils/sortObject";
 import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
 import { type RentalRateParsed } from "../../utils/schemas/rate";
 import { type ReservationDataParsed } from "../../utils/schemas/reservation";
+import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/usePostCalculateRentalSummaryAmounts";
 
 export type TRentalCompleteStage = {
   rental: boolean;
@@ -91,7 +92,6 @@ const AddRentalParentForm = ({
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
 
-  const [isSafeToFetchSummary] = useState(false);
   const [creationStagesComplete, setCreationStageComplete] =
     useState<TRentalCompleteStage>({
       rental: false,
@@ -112,6 +112,8 @@ const AddRentalParentForm = ({
 
   const [commonCustomerInformation, setCommonCustomerInformation] =
     useState<CommonCustomerInformationSchemaParsed | null>(null);
+
+  const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
 
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
     [string, RentalRateParsed | null]
@@ -369,6 +371,7 @@ const AddRentalParentForm = ({
     agreementId:
       module === "agreement" && isEdit && referenceId ? referenceId : 0,
     onSuccess: (data) => {
+      console.log("agreement Data\n", data);
       if (!agreementRentalInformation) {
         setAgreementRentalInformation({
           agreementNumber: data.agreementNumber ?? "",
@@ -433,6 +436,14 @@ const AddRentalParentForm = ({
           const existingRateName = data.rateList[0].rateName;
           setSelectedRateName(existingRateName ?? "");
         }
+      }
+      if (selectedTaxIds.length === 0) {
+        const list = data.taxList.filter((tax) => tax.taxId !== null);
+        const taxIds = [...list.map((tax) => tax.taxId)].filter(
+          (taxId) => typeof taxId === "number" && taxId !== null
+        ) as number[];
+        setSelectedTaxIds(taxIds);
+        setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
       }
     },
   });
@@ -556,6 +567,47 @@ const AddRentalParentForm = ({
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       CurrentLocationId: agreementRentalInformation?.checkoutLocation ?? 0,
     },
+  });
+
+  const agreementConditionsForSummaryCalculation =
+    Boolean(agreementRentalInformation) &&
+    Boolean(agreementVehicleInformation) &&
+    Boolean(commonCustomerInformation) &&
+    Boolean(selectedRate);
+
+  // fetch a calculated rental summary
+  const calculatedSummaryData = usePostCalculateRentalSummaryAmounts({
+    input: {
+      isCheckin: false,
+      startDate: agreementRentalInformation?.checkoutDate || new Date(),
+      endDate: agreementRentalInformation?.checkoutDate || new Date(),
+      checkoutLocationId: agreementRentalInformation?.checkoutLocation || 0,
+      checkinLocationId: agreementRentalInformation?.checkinLocation || 0,
+      miscCharges: [],
+      rate: selectedRate!,
+      vehicleTypeId: agreementVehicleInformation?.vehicleTypeId || 0,
+      taxIds: selectedTaxIds,
+      advancePayment: 0,
+      amountPaid: 0,
+      preAdjustment: 0,
+      postAdjustment: 0,
+      securityDeposit: 0,
+      additionalCharge: 0,
+      unTaxableAdditional: 0,
+      fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
+      takeSize: 0,
+      fuelLevelIn: "",
+      odometerOut: agreementVehicleInformation?.odometerOut || 0,
+      odometerIn: 0,
+      agreementId: parseInt(referenceId ? String(referenceId) : "0"),
+      agreementTypeName: agreementRentalInformation?.agreementType || "",
+      promotionIds: [],
+      writeOffAmount: 0,
+      customerId: commonCustomerInformation?.customerId || 0,
+      agreementInsurance: null,
+    },
+    enabled:
+      module === "agreement" ? agreementConditionsForSummaryCalculation : false,
   });
 
   return (
@@ -756,8 +808,10 @@ const AddRentalParentForm = ({
                 }
                 currency={clientProfile.data?.currency || undefined}
                 summaryData={
-                  isEdit && !isSafeToFetchSummary && summaryData
+                  isEdit && !calculatedSummaryData.data
                     ? summaryData
+                    : calculatedSummaryData.data
+                    ? calculatedSummaryData.data
                     : undefined
                 }
               />
