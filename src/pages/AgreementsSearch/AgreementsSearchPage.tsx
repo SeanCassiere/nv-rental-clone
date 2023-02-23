@@ -17,6 +17,7 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
 import { DocumentTextSolid, PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
+import AgreementStatusPill from "../../components/Agreement/AgreementStatusPill";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
@@ -97,7 +98,9 @@ function AgreementsSearchPage() {
                 </Link>
               );
             }
-
+            if (column.columnHeader === "AgreementStatusName") {
+              return <AgreementStatusPill status={value} />;
+            }
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
               return t("intlDateTime", { value: new Date(value) });
             }

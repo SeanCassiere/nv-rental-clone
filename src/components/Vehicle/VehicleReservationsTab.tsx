@@ -16,6 +16,7 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
 import { ReservationDateTimeColumns } from "../../pages/ReservationsSearch/ReservationsSearchPage";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
+import ReservationStatusPill from "../Reservation/ReservationStatusPill";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -79,6 +80,9 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
                   {value as any}
                 </Link>
               );
+            }
+            if (column.columnHeader === "ReservationStatusName") {
+              return <ReservationStatusPill status={String(value)} />;
             }
 
             if (ReservationDateTimeColumns.includes(column.columnHeader)) {
