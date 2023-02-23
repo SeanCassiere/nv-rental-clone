@@ -2,8 +2,8 @@ import { useCallback, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import parseISO from "date-fns/parseISO";
 
-import CommonHeader from "../Layout/CommonHeader";
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
+import CommonHeader from "../Layout/CommonHeader";
 import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
 import { Button } from "../Form";
 import {
@@ -132,7 +132,8 @@ const AddRentalParentForm = ({
   };
 
   const handleSetSelectedRateName = useCallback((rateName: string) => {
-    setSelectedRateName(rateName);
+    // setSelectedRateName(rateName);
+    setRateDetails([rateName, null]);
   }, []);
 
   const handleSetSelectedRate = useCallback((rate: RentalRateParsed) => {
