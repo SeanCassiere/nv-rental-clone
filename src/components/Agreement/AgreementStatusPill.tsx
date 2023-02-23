@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 const supportedList = [
   "Open",
-  "Closed",
+  "Closed ",
   "Void",
   "Pending_Deposit",
   "Pending_Payment",
