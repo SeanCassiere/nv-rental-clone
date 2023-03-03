@@ -1,12 +1,9 @@
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 import React, { Fragment, useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { Dialog, Menu, Transition } from "@headlessui/react";
-import {
-  Link,
-  // useRouterStore,
-  useRouter,
-} from "@tanstack/react-router";
+import { Dialog, Menu, Transition, Popover, Listbox } from "@headlessui/react";
+import { usePopper } from "react-popper";
+import { Link, useRouter } from "@tanstack/react-router";
 import classNames from "classnames";
 
 import {
@@ -31,6 +28,11 @@ import { searchCustomersRoute } from "../routes/customers/searchCustomers";
 import { indexRoute } from "../routes";
 import { useDebounce } from "../hooks/internal/useDebounce";
 import { useGetGlobalSearch } from "../hooks/network/module/useGetGlobalSearch";
+import { agreementsRoute } from "../routes/agreements";
+import { viewAgreementByIdRoute } from "../routes/agreements/agreementIdPath";
+import { viewCustomerByIdRoute } from "../routes/customers/customerIdPath";
+import { viewFleetByIdRoute } from "../routes/fleet/fleetIdPath";
+import { viewReservationByIdRoute } from "../routes/reservations/reservationIdPath";
 
 const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -127,6 +129,27 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   const searchResults = useGetGlobalSearch({
     searchTerm: debouncedSearchValue,
   });
+
+  const [searchPopperButtonEl, setSearchPopperButtonEl] = useState<any>();
+  const [searchPopperPanelEl, setSearchPopperPanelEl] = useState<any>();
+
+  const searchPopper = usePopper(searchPopperButtonEl, searchPopperPanelEl, {
+    placement: "bottom-start",
+    modifiers: [
+      {
+        name: "offset",
+        options: {
+          offset: [0, 8],
+        },
+      },
+    ],
+  });
+
+  const handleSearchResultClickLink = () => {
+    setSearchValue("");
+    searchPopperButtonEl?.click?.();
+    searchPopperButtonEl?.blur?.();
+  };
 
   if (!auth.isAuthenticated) {
     return <>{children}</>;
@@ -292,8 +315,15 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             <HamburgerMenuOutline className="h-6 w-6" aria-hidden="true" />
           </button>
           <div className="flex flex-1 justify-between px-4">
-            <div className="flex flex-1">
-              <form className="flex w-full md:ml-0" action="#" method="GET">
+            <Popover className="flex flex-1">
+              <form
+                className="flex w-full md:ml-0"
+                action="#"
+                method="GET"
+                onSubmit={(evt) => {
+                  evt.preventDefault();
+                }}
+              >
                 <label htmlFor="search-field" className="sr-only">
                   Search
                 </label>
@@ -304,41 +334,106 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                       aria-hidden="true"
                     />
                   </div>
-                  <input
+                  <Popover.Button
+                    as="input"
+                    ref={setSearchPopperButtonEl}
                     id="search-field"
                     className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-slate-900 placeholder-slate-500 focus:border-transparent focus:placeholder-slate-400 focus:outline-none focus:ring-0 sm:text-sm"
                     placeholder="Search"
-                    type="search"
+                    type="text"
                     name="search"
                     autoComplete="off"
                     value={searchValue}
-                    onChange={(evt) => setSearchValue(evt.target.value)}
+                    onChange={(evt: any) => {
+                      setSearchValue(evt.target.value);
+                    }}
+                    onKeyDown={(evt: any) => {
+                      if (evt?.code === "Space") {
+                        setSearchValue((prev) => prev + " ");
+                      }
+                    }}
                   />
                 </div>
+                <Popover.Panel
+                  ref={setSearchPopperPanelEl}
+                  style={searchPopper.styles}
+                  className="absolute top-full right-2 left-2 mt-1 md:right-36 md:left-8"
+                  onBlur={() => {
+                    setSearchValue("");
+                  }}
+                  {...searchPopper.attributes.popper}
+                >
+                  {searchValue !== "" ? (
+                    <div className="flex max-h-36 flex-col items-start gap-2 overflow-hidden rounded bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5">
+                      {searchResults.status === "loading" && (
+                        <span>Loading</span>
+                      )}
+                      {searchResults.status !== "loading" &&
+                        searchResults.data?.length === 0 && (
+                          <span>No results</span>
+                        )}
+                      {searchResults.status !== "loading" &&
+                        (searchResults.data || []).length > 0 &&
+                        (searchResults.data || []).map((result) => {
+                          if (result.type === "internal") return <></>;
+                          if (result.type === "network") {
+                            const module = result.module;
+                            switch (module) {
+                              case "agreements":
+                                return (
+                                  <Link
+                                    to={viewAgreementByIdRoute.fullPath}
+                                    params={{ agreementId: result.referenceId }}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.fullDisplayText}
+                                  >
+                                    {result.displayText}
+                                  </Link>
+                                );
+                              case "customers":
+                                return (
+                                  <Link
+                                    to={viewCustomerByIdRoute.fullPath}
+                                    params={{ customerId: result.referenceId }}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.fullDisplayText}
+                                  >
+                                    {result.displayText}
+                                  </Link>
+                                );
+                              case "vehicles":
+                                return (
+                                  <Link
+                                    to={viewFleetByIdRoute.fullPath}
+                                    params={{ vehicleId: result.referenceId }}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.fullDisplayText}
+                                  >
+                                    {result.displayText}
+                                  </Link>
+                                );
+                              case "reservations":
+                                return (
+                                  <Link
+                                    to={viewReservationByIdRoute.fullPath}
+                                    params={{
+                                      reservationId: result.referenceId,
+                                    }}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.fullDisplayText}
+                                  >
+                                    {result.displayText}
+                                  </Link>
+                                );
+                            }
+                          }
+                          return null;
+                        })}
+                    </div>
+                  ) : null}
+                </Popover.Panel>
               </form>
-
-              {/* <form className="flex w-full md:ml-0" action="#" method="GET">
-                <label htmlFor="search-field" className="sr-only">
-                  Search
-                </label>
-                <div className="relative w-full text-slate-400 focus-within:text-slate-600">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
-                    <MagnifyingGlassOutline
-                      className="h-5 w-5"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <input
-                    id="search-field"
-                    className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-slate-900 placeholder-slate-500 focus:border-transparent focus:placeholder-slate-400 focus:outline-none focus:ring-0 sm:text-sm"
-                    placeholder="Search"
-                    type="search"
-                    name="search"
-                    autoComplete="off"
-                  />
-                </div>
-              </form> */}
-            </div>
+            </Popover>
             <div className="ml-4 flex items-center gap-1 md:ml-6">
               <button
                 type="button"

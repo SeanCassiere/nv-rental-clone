@@ -26,7 +26,6 @@ export function useGetGlobalSearch(params: {
     onSuccess: (data) => {
       onSuccess?.(data);
     },
-    initialData: [],
   });
   return query;
 }
