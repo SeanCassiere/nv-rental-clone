@@ -21,18 +21,18 @@ import {
 import { useGetUserProfile } from "../hooks/network/user/useGetUserProfile";
 import { removeAllLocalStorageKeysForUser } from "../utils/user-local-storage";
 
+import { indexRoute } from "../routes";
 import { searchAgreementsRoute } from "../routes/agreements/searchAgreements";
 import { searchReservationsRoute } from "../routes/reservations/searchReservations";
 import { searchFleetRoute } from "../routes/fleet/searchFleet";
 import { searchCustomersRoute } from "../routes/customers/searchCustomers";
-import { indexRoute } from "../routes";
-import { useDebounce } from "../hooks/internal/useDebounce";
-import { useGetGlobalSearch } from "../hooks/network/module/useGetGlobalSearch";
-import { agreementsRoute } from "../routes/agreements";
 import { viewAgreementByIdRoute } from "../routes/agreements/agreementIdPath";
 import { viewCustomerByIdRoute } from "../routes/customers/customerIdPath";
 import { viewFleetByIdRoute } from "../routes/fleet/fleetIdPath";
 import { viewReservationByIdRoute } from "../routes/reservations/reservationIdPath";
+
+import { useDebounce } from "../hooks/internal/useDebounce";
+import { useGetGlobalSearch } from "../hooks/network/module/useGetGlobalSearch";
 
 const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
