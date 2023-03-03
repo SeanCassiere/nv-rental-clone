@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchReservationStatusesList } from "../../../api/reservation";
+import { fetchReservationStatusesList } from "../../../api/reservations";
 import { reservationQKeys } from "../../../utils/query-key";
 import { type AgreementStatusListParsed } from "../../../utils/schemas/agreement";
 

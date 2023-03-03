@@ -4,7 +4,7 @@ import { z } from "zod";
 import { customersRoute } from ".";
 import { queryClient as qc } from "../../App";
 import { fetchCustomerSummaryAmounts } from "../../api/summary";
-import { fetchCustomerData } from "../../api/customer";
+import { fetchCustomerData } from "../../api/customers";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { customerQKeys } from "../../utils/query-key";

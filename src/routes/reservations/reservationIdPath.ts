@@ -4,7 +4,7 @@ import { z } from "zod";
 import { reservationsRoute } from ".";
 import { queryClient as qc } from "../../App";
 import { fetchRentalRateSummaryAmounts } from "../../api/summary";
-import { fetchReservationData } from "../../api/reservation";
+import { fetchReservationData } from "../../api/reservations";
 
 import { getAuthToken } from "../../utils/authLocal";
 import { reservationQKeys } from "../../utils/query-key";

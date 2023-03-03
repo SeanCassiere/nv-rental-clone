@@ -42,8 +42,8 @@ export async function fetchVehiclesListModded(
     clientId: params.clientId || "",
     userId: params.userId || "",
     accessToken: params.accessToken || "",
-    page: params.page,
-    pageSize: params.pageSize,
+    page: params?.page,
+    pageSize: params?.pageSize,
     filters: {
       ...params.filters,
       ...("StartDate" in params.filters
