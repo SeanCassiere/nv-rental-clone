@@ -347,7 +347,7 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                     onChange={(evt: any) => {
                       setSearchValue(evt.target.value);
                     }}
-                    onKeyDown={(evt: any) => {
+                    onKeyDownCapture={(evt: any) => {
                       if (evt?.code === "Space") {
                         setSearchValue((prev) => prev + " ");
                       }
