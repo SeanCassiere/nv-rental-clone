@@ -24,7 +24,6 @@ export function useGetGlobalSearch(params: {
     },
     enabled: searchTerm.length > 0,
     onSuccess: (data) => {
-      console.log("global search data\n", data);
       onSuccess?.(data);
     },
     initialData: [],

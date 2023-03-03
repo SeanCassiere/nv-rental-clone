@@ -19,7 +19,7 @@ type InternalAppSearchResultItem = {
   location: string;
 };
 
-type GlobalSearchReturnType = (
+export type GlobalSearchReturnType = (
   | NetworkSearchResultItem
   | InternalAppSearchResultItem
 )[];

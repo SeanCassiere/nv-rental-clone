@@ -29,6 +29,8 @@ import { searchReservationsRoute } from "../routes/reservations/searchReservatio
 import { searchFleetRoute } from "../routes/fleet/searchFleet";
 import { searchCustomersRoute } from "../routes/customers/searchCustomers";
 import { indexRoute } from "../routes";
+import { useDebounce } from "../hooks/internal/useDebounce";
+import { useGetGlobalSearch } from "../hooks/network/module/useGetGlobalSearch";
 
 const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -118,6 +120,13 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
       },
     },
   ];
+
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearchValue = useDebounce(searchValue, 500);
+
+  const searchResults = useGetGlobalSearch({
+    searchTerm: debouncedSearchValue,
+  });
 
   if (!auth.isAuthenticated) {
     return <>{children}</>;
@@ -302,9 +311,33 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                     type="search"
                     name="search"
                     autoComplete="off"
+                    value={searchValue}
+                    onChange={(evt) => setSearchValue(evt.target.value)}
                   />
                 </div>
               </form>
+
+              {/* <form className="flex w-full md:ml-0" action="#" method="GET">
+                <label htmlFor="search-field" className="sr-only">
+                  Search
+                </label>
+                <div className="relative w-full text-slate-400 focus-within:text-slate-600">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
+                    <MagnifyingGlassOutline
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <input
+                    id="search-field"
+                    className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-slate-900 placeholder-slate-500 focus:border-transparent focus:placeholder-slate-400 focus:outline-none focus:ring-0 sm:text-sm"
+                    placeholder="Search"
+                    type="search"
+                    name="search"
+                    autoComplete="off"
+                  />
+                </div>
+              </form> */}
             </div>
             <div className="ml-4 flex items-center gap-1 md:ml-6">
               <button
