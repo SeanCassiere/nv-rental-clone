@@ -8,8 +8,8 @@ import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchAgreementsList = async (
   opts: {
-    page: number;
-    pageSize: number;
+    page?: number;
+    pageSize?: number;
     currentDate: Date;
     filters: any;
   } & CommonAuthParams
@@ -20,8 +20,8 @@ export const fetchAgreementsList = async (
       currentDate: opts.currentDate.toISOString(),
       clientId: opts.clientId,
       userId: opts.userId,
-      page: opts.page,
-      pageSize: opts.pageSize,
+      page: opts?.page,
+      pageSize: opts?.pageSize,
     }),
     {
       headers: {

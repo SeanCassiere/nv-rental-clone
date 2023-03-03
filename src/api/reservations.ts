@@ -8,8 +8,8 @@ import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchReservationsList = async (
   opts: {
-    page: number;
-    pageSize: number;
+    page?: number;
+    pageSize?: number;
     clientDate: Date;
     filters: any;
   } & CommonAuthParams
@@ -18,8 +18,8 @@ export const fetchReservationsList = async (
     makeUrl(`/v3/reservations`, {
       ...opts.filters,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
-      Page: opts.page,
-      PageSize: opts.pageSize,
+      Page: opts?.page,
+      PageSize: opts?.pageSize,
       clientId: opts.clientId,
       userId: opts.userId,
     }),

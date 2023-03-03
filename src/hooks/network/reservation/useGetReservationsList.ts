@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchReservationsList } from "../../../api/reservation";
+import { fetchReservationsList } from "../../../api/reservations";
 import { ReservationListItemListSchema } from "../../../utils/schemas/reservation";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
 import { reservationQKeys } from "../../../utils/query-key";

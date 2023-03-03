@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchCustomersList } from "../../../api/customer";
+import { fetchCustomersList } from "../../../api/customers";
 import { CustomerListItemListSchema } from "../../../utils/schemas/customer";
 import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
 import { customerQKeys } from "../../../utils/query-key";
@@ -39,8 +39,8 @@ export async function fetchCustomersListModded(
     clientId: params.clientId || "",
     userId: params.userId || "",
     accessToken: params.accessToken || "",
-    page: params.page,
-    pageSize: params.pageSize,
+    page: params?.page,
+    pageSize: params?.pageSize,
     filters: params.filters,
   })
     .then((res) => {

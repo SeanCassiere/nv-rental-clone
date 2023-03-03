@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchCustomerTypesList } from "../../../api/customer";
+import { fetchCustomerTypesList } from "../../../api/customers";
 import { customerQKeys } from "../../../utils/query-key";
 
 export function useGetCustomerTypesList() {

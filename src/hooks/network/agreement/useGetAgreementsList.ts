@@ -39,8 +39,8 @@ export async function fetchAgreementsListModded(
     clientId: params.clientId || "",
     userId: params.userId || "",
     accessToken: params.accessToken || "",
-    page: params.page,
-    pageSize: params.pageSize,
+    page: params?.page,
+    pageSize: params?.pageSize,
     currentDate: params.currentDate,
     filters: params.filters,
   })

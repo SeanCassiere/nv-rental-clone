@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchCustomerData } from "../../../api/customer";
+import { fetchCustomerData } from "../../../api/customers";
 import { customerQKeys } from "../../../utils/query-key";
 
 export function useGetCustomerData(params: {
