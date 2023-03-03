@@ -6,7 +6,6 @@ import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
 import DashboardBannerNotices from "../../components/Dashboard/DashboardBannerNotices";
 import DashboardDndWidgetGrid from "../../components/Dashboard/DashboardDndWidgetGrid";
-import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import {
   LockClosedOutline,
@@ -82,7 +81,6 @@ function IndexPage() {
 
   return (
     <Protector>
-      <ScrollToTop />
       <DashboardWidgetPickerModal
         show={showWidgetPickerModal}
         onModalStateChange={handleSetShowWidgetPickerModal}
