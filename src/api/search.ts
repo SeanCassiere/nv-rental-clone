@@ -14,9 +14,16 @@ type NetworkSearchResultItem = {
   fullDisplayText: string;
 };
 
+type DestinationTypes =
+  | "search-customers"
+  | "search-vehicles"
+  | "search-fleet"
+  | "search-reservations"
+  | "search-agreements";
+
 type InternalAppSearchResultItem = {
   type: "internal";
-  location: string;
+  destination: DestinationTypes;
 };
 
 export type GlobalSearchReturnType = (
@@ -24,10 +31,31 @@ export type GlobalSearchReturnType = (
   | InternalAppSearchResultItem
 )[];
 
+const storedInternalSearches: {
+  searchText: string;
+  destination: DestinationTypes;
+}[] = [
+  { searchText: "customers", destination: "search-customers" },
+  { searchText: "vehicles", destination: "search-vehicles" },
+  { searchText: "fleet", destination: "search-fleet" },
+  { searchText: "reservations", destination: "search-reservations" },
+  { searchText: "agreements", destination: "search-agreements" },
+];
+
 export async function fetchGlobalSearchList(
   opts: CommonAuthParams & { currentDate: Date; searchTerm: string }
 ): Promise<GlobalSearchReturnType> {
   const { clientId, userId, accessToken, currentDate, searchTerm } = opts;
+
+  const internalSearches: InternalAppSearchResultItem[] = [];
+
+  storedInternalSearches.forEach((item) => {
+    if (item.searchText.toLowerCase().includes(searchTerm.toLowerCase().trim()))
+      internalSearches.push({
+        type: "internal",
+        destination: item.destination,
+      });
+  });
 
   const apiCalls = [
     fetchCustomersListModded({
@@ -133,10 +161,10 @@ export async function fetchGlobalSearchList(
       );
       returnableResults = [...returnableResults, ...agreementResults];
 
-      return returnableResults;
+      return [...internalSearches, ...returnableResults];
     })
     .catch((e) => {
       console.error("global search error: ", e);
-      return [];
+      return [...internalSearches];
     });
 }

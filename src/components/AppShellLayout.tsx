@@ -375,7 +375,56 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                       {searchResults.status !== "loading" &&
                         (searchResults.data || []).length > 0 &&
                         (searchResults.data || []).map((result) => {
-                          if (result.type === "internal") return <></>;
+                          if (result.type === "internal") {
+                            const dest = result.destination;
+                            switch (dest) {
+                              case "search-customers":
+                                return (
+                                  <Link
+                                    to={searchCustomersRoute.fullPath}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.destination}
+                                  >
+                                    Customers
+                                  </Link>
+                                );
+                              case "search-reservations":
+                                return (
+                                  <Link
+                                    to={searchReservationsRoute.fullPath}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.destination}
+                                  >
+                                    Reservations
+                                  </Link>
+                                );
+                              case "search-agreements":
+                                return (
+                                  <Link
+                                    to={searchAgreementsRoute.fullPath}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.destination}
+                                  >
+                                    Agreements
+                                  </Link>
+                                );
+                              case "search-fleet":
+                              case "search-vehicles":
+                                return (
+                                  <Link
+                                    to={searchFleetRoute.fullPath}
+                                    onClick={handleSearchResultClickLink}
+                                    key={result.destination}
+                                  >
+                                    {dest === "search-fleet"
+                                      ? "Fleet"
+                                      : "Vehicles"}
+                                  </Link>
+                                );
+                              default:
+                                return null;
+                            }
+                          }
                           if (result.type === "network") {
                             const module = result.module;
                             switch (module) {
