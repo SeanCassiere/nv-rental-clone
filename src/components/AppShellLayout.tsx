@@ -16,7 +16,6 @@ import {
   BookFilled,
   TruckFilled,
 } from "./icons";
-import { useGetUserProfile } from "../hooks/network/user/useGetUserProfile";
 import { removeAllLocalStorageKeysForUser } from "../utils/user-local-storage";
 
 import { indexRoute } from "../routes";
@@ -29,12 +28,10 @@ import { viewCustomerByIdRoute } from "../routes/customers/customerIdPath";
 import { viewFleetByIdRoute } from "../routes/fleet/fleetIdPath";
 import { viewReservationByIdRoute } from "../routes/reservations/reservationIdPath";
 
+import { type GlobalSearchReturnType } from "../api/search";
 import { useDebounce } from "../hooks/internal/useDebounce";
+import { useGetUserProfile } from "../hooks/network/user/useGetUserProfile";
 import { useGetGlobalSearch } from "../hooks/network/module/useGetGlobalSearch";
-
-const searchResultLinkClassNames = classNames(
-  "px-2 py-1 block w-full bg-gray-100 focus:bg-gray-200 outline outline-gray-200 focus:outline-gray-400 rounded"
-);
 
 const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -334,164 +331,16 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                     name="search"
                     autoComplete="off"
                     value={searchValue}
-                    onChange={(evt) => {
-                      setSearchValue(evt.target.value);
-                    }}
+                    onChange={(evt) => setSearchValue(evt.target.value)}
                   />
                 </div>
-                <Transition
+                <SearchResults
                   show={searchValue !== ""}
-                  as="div"
-                  enter="transition-opacity duration-75"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="transition-opacity duration-150"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                  className="absolute -left-5 top-full right-2 z-40 mt-2 h-[250px] w-[250px] overflow-hidden overscroll-y-auto rounded border border-gray-200 bg-white p-4 shadow-lg md:left-2 md:w-[95%]"
-                >
-                  <ol className="flex h-full w-full flex-col gap-2">
-                    {searchResults.status === "loading" && <span>Loading</span>}
-                    {searchResults.status !== "loading" &&
-                      searchResults.data?.length === 0 && <li>No results</li>}
-                    {searchResults.status !== "loading" &&
-                      (searchResults.data || []).length > 0 &&
-                      (searchResults.data || []).map((result, idx) => {
-                        let component: React.ReactNode = <p>No component</p>;
-                        let keyValue = `${idx}-search-result`;
-
-                        if (result.type === "internal") {
-                          const dest = result.destination;
-                          keyValue = result.destination;
-                          switch (dest) {
-                            case "search-customers":
-                              component = (
-                                <Link
-                                  to={searchCustomersRoute.fullPath}
-                                  onClick={handleSearchResultClickLink}
-                                  key={result.destination}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  Customers
-                                </Link>
-                              );
-                              break;
-                            case "search-reservations":
-                              component = (
-                                <Link
-                                  to={searchReservationsRoute.fullPath}
-                                  onClick={handleSearchResultClickLink}
-                                  key={result.destination}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  Reservations
-                                </Link>
-                              );
-                              break;
-                            case "search-agreements":
-                              component = (
-                                <Link
-                                  to={searchAgreementsRoute.fullPath}
-                                  onClick={handleSearchResultClickLink}
-                                  key={result.destination}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  Agreements
-                                </Link>
-                              );
-                              break;
-                            case "search-fleet":
-                            case "search-vehicles":
-                              component = (
-                                <Link
-                                  to={searchFleetRoute.fullPath}
-                                  onClick={handleSearchResultClickLink}
-                                  key={result.destination}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  {dest === "search-fleet"
-                                    ? "Fleet"
-                                    : "Vehicles"}
-                                </Link>
-                              );
-                              break;
-                            default:
-                              component = null;
-                              break;
-                          }
-                        }
-                        if (result.type === "network") {
-                          const module = result.module;
-                          keyValue = result.fullDisplayText;
-                          switch (module) {
-                            case "agreements":
-                              component = (
-                                <Link
-                                  to={viewAgreementByIdRoute.fullPath}
-                                  params={{ agreementId: result.referenceId }}
-                                  onClick={handleSearchResultClickLink}
-                                  key={result.fullDisplayText}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  {result.displayText}
-                                </Link>
-                              );
-                              break;
-                            case "customers":
-                              component = (
-                                <Link
-                                  to={viewCustomerByIdRoute.fullPath}
-                                  params={{ customerId: result.referenceId }}
-                                  onClick={handleSearchResultClickLink}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  {result.displayText}
-                                </Link>
-                              );
-                              break;
-                            case "vehicles":
-                              component = (
-                                <Link
-                                  to={viewFleetByIdRoute.fullPath}
-                                  params={{ vehicleId: result.referenceId }}
-                                  onClick={handleSearchResultClickLink}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  {result.displayText}
-                                </Link>
-                              );
-                              break;
-                            case "reservations":
-                              component = (
-                                <Link
-                                  to={viewReservationByIdRoute.fullPath}
-                                  params={{
-                                    reservationId: result.referenceId,
-                                  }}
-                                  onClick={handleSearchResultClickLink}
-                                  className={searchResultLinkClassNames}
-                                  onKeyDownCapture={handleSearchResultKeyDown}
-                                >
-                                  {result.displayText}
-                                </Link>
-                              );
-                              break;
-                            default:
-                              break;
-                          }
-                        }
-
-                        return <li key={keyValue}>{component}</li>;
-                      })}
-                  </ol>
-                </Transition>
+                  queryStatus={searchResults.status}
+                  results={searchResults.data}
+                  onLinkClick={handleSearchResultClickLink}
+                  onKeyDownCapture={handleSearchResultKeyDown}
+                />
               </form>
             </div>
             <div className="ml-4 flex items-center gap-1 md:ml-6">
@@ -582,3 +431,195 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
 };
 
 export default AppShellLayout;
+
+const searchResultLinkClassNames = classNames(
+  "px-1.5 py-0.5 flex items-center justify-start w-full bg-white focus:bg-gray-50 focus:outline focus:outline-gray-400 rounded text-base mx-0.5"
+);
+
+const SearchResults = (props: {
+  show: boolean;
+  onLinkClick: () => void;
+  onKeyDownCapture: (evt: React.KeyboardEvent<HTMLAnchorElement>) => void;
+  queryStatus: "success" | "loading" | "error";
+  results?: GlobalSearchReturnType;
+}) => {
+  const {
+    show,
+    results = [],
+    onLinkClick,
+    onKeyDownCapture,
+    queryStatus: status,
+  } = props;
+
+  return (
+    <Transition
+      show={show}
+      as="div"
+      enter="transition-opacity duration-75"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      leave="transition-opacity duration-150"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
+      className="absolute -left-5 top-full right-2 z-40 max-h-[180px] min-h-[100px] w-[250px] overflow-hidden overscroll-y-auto rounded-b border border-gray-200 bg-white px-1 py-1 shadow-lg md:left-0 md:w-[97%]"
+    >
+      <span className="mb-2.5 select-none px-1 text-sm text-slate-500">
+        Results
+      </span>
+      <ol className="flex h-full w-full flex-col gap-2 overflow-y-auto py-0.5 px-0.5">
+        {status === "loading" && (
+          <span className="px-1.5 py-0.5 text-base">Loading</span>
+        )}
+        {status !== "loading" && results?.length === 0 && (
+          <li className="px-1.5 py-0.5 text-base">No results</li>
+        )}
+        {status !== "loading" &&
+          (results || []).length > 0 &&
+          (results || []).map((result, idx) => {
+            let component: React.ReactNode = <p>No component</p>;
+            let keyValue = `${idx}-search-result`;
+
+            if (result.type === "internal") {
+              const dest = result.destination;
+              keyValue = result.destination;
+              switch (dest) {
+                case "search-customers":
+                  component = (
+                    <Link
+                      to={searchCustomersRoute.fullPath}
+                      onClick={onLinkClick}
+                      key={result.destination}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      Customers
+                    </Link>
+                  );
+                  break;
+                case "search-reservations":
+                  component = (
+                    <Link
+                      to={searchReservationsRoute.fullPath}
+                      onClick={onLinkClick}
+                      key={result.destination}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      Reservations
+                    </Link>
+                  );
+                  break;
+                case "search-agreements":
+                  component = (
+                    <Link
+                      to={searchAgreementsRoute.fullPath}
+                      onClick={onLinkClick}
+                      key={result.destination}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      Agreements
+                    </Link>
+                  );
+                  break;
+                case "search-fleet":
+                case "search-vehicles":
+                  component = (
+                    <Link
+                      to={searchFleetRoute.fullPath}
+                      onClick={onLinkClick}
+                      key={result.destination}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      {dest === "search-fleet" ? "Fleet" : "Vehicles"}
+                    </Link>
+                  );
+                  break;
+                default:
+                  component = null;
+                  break;
+              }
+            }
+            if (result.type === "network") {
+              const module = result.module;
+              keyValue = result.fullDisplayText;
+              switch (module) {
+                case "agreements":
+                  component = (
+                    <Link
+                      to={viewAgreementByIdRoute.fullPath}
+                      params={{ agreementId: result.referenceId }}
+                      onClick={onLinkClick}
+                      key={result.fullDisplayText}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      <span className="hidden md:inline-block">
+                        Agreements &gt;&gt;&nbsp;
+                      </span>
+                      {result.displayText}
+                    </Link>
+                  );
+                  break;
+                case "customers":
+                  component = (
+                    <Link
+                      to={viewCustomerByIdRoute.fullPath}
+                      params={{ customerId: result.referenceId }}
+                      onClick={onLinkClick}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      <span className="hidden md:inline-block">
+                        Customers &gt;&gt;&nbsp;
+                      </span>
+                      {result.displayText}
+                    </Link>
+                  );
+                  break;
+                case "vehicles":
+                  component = (
+                    <Link
+                      to={viewFleetByIdRoute.fullPath}
+                      params={{ vehicleId: result.referenceId }}
+                      onClick={onLinkClick}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      <span className="hidden md:inline-block">
+                        Fleet &gt;&gt;&nbsp;
+                      </span>
+                      {result.displayText}
+                    </Link>
+                  );
+                  break;
+                case "reservations":
+                  component = (
+                    <Link
+                      to={viewReservationByIdRoute.fullPath}
+                      params={{
+                        reservationId: result.referenceId,
+                      }}
+                      onClick={onLinkClick}
+                      className={searchResultLinkClassNames}
+                      onKeyDownCapture={onKeyDownCapture}
+                    >
+                      <span className="hidden md:inline-block">
+                        Reservations &gt;&gt;&nbsp;
+                      </span>
+                      {result.displayText}
+                    </Link>
+                  );
+                  break;
+                default:
+                  break;
+              }
+            }
+
+            return <li key={keyValue}>{component}</li>;
+          })}
+      </ol>
+    </Transition>
+  );
+};
