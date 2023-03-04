@@ -1,9 +1,7 @@
-/* eslint @typescript-eslint/no-unused-vars: 0 */
 import React, { Fragment, useState } from "react";
-import { useAuth } from "react-oidc-context";
-import { Dialog, Menu, Transition, Popover, Listbox } from "@headlessui/react";
-import { usePopper } from "react-popper";
 import { Link, useRouter } from "@tanstack/react-router";
+import { useAuth } from "react-oidc-context";
+import { Dialog, Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 
 import {
@@ -33,6 +31,10 @@ import { viewReservationByIdRoute } from "../routes/reservations/reservationIdPa
 
 import { useDebounce } from "../hooks/internal/useDebounce";
 import { useGetGlobalSearch } from "../hooks/network/module/useGetGlobalSearch";
+
+const searchResultLinkClassNames = classNames(
+  "px-2 py-1 block w-full bg-gray-100 focus:bg-gray-200 outline outline-gray-200 focus:outline-gray-400 rounded"
+);
 
 const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -130,25 +132,15 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
     searchTerm: debouncedSearchValue,
   });
 
-  const [searchPopperButtonEl, setSearchPopperButtonEl] = useState<any>();
-  const [searchPopperPanelEl, setSearchPopperPanelEl] = useState<any>();
-
-  const searchPopper = usePopper(searchPopperButtonEl, searchPopperPanelEl, {
-    placement: "bottom-start",
-    modifiers: [
-      {
-        name: "offset",
-        options: {
-          offset: [0, 8],
-        },
-      },
-    ],
-  });
-
   const handleSearchResultClickLink = () => {
     setSearchValue("");
-    searchPopperButtonEl?.click?.();
-    searchPopperButtonEl?.blur?.();
+  };
+  const handleSearchResultKeyDown = (
+    evt: React.KeyboardEvent<HTMLAnchorElement>
+  ) => {
+    if (evt.code.toLowerCase() === "escape") {
+      setSearchValue("");
+    }
   };
 
   if (!auth.isAuthenticated) {
@@ -315,9 +307,9 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
             <HamburgerMenuOutline className="h-6 w-6" aria-hidden="true" />
           </button>
           <div className="flex flex-1 justify-between px-4">
-            <Popover className="flex flex-1">
+            <div className="flex flex-1">
               <form
-                className="flex w-full md:ml-0"
+                className="relative flex w-full md:ml-0"
                 action="#"
                 method="GET"
                 onSubmit={(evt) => {
@@ -334,155 +326,174 @@ const AppShellLayout: React.FC<{ children: React.ReactNode }> = ({
                       aria-hidden="true"
                     />
                   </div>
-                  <Popover.Button
-                    as="input"
-                    ref={setSearchPopperButtonEl}
+                  <input
                     id="search-field"
                     className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-slate-900 placeholder-slate-500 focus:border-transparent focus:placeholder-slate-400 focus:outline-none focus:ring-0 sm:text-sm"
                     placeholder="Search"
-                    type="text"
+                    type="search"
                     name="search"
                     autoComplete="off"
                     value={searchValue}
-                    onChange={(evt: any) => {
+                    onChange={(evt) => {
                       setSearchValue(evt.target.value);
-                    }}
-                    onKeyDownCapture={(evt: any) => {
-                      if (evt?.code === "Space") {
-                        setSearchValue((prev) => prev + " ");
-                      }
                     }}
                   />
                 </div>
-                <Popover.Panel
-                  ref={setSearchPopperPanelEl}
-                  style={searchPopper.styles}
-                  className="absolute top-full right-2 left-2 mt-1 md:right-36 md:left-8"
-                  onBlur={() => {
-                    setSearchValue("");
-                  }}
-                  {...searchPopper.attributes.popper}
+                <Transition
+                  show={searchValue !== ""}
+                  as="div"
+                  enter="transition-opacity duration-75"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="transition-opacity duration-150"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                  className="absolute -left-5 top-full right-2 z-40 mt-2 h-[250px] w-[250px] overflow-hidden overscroll-y-auto rounded border border-gray-200 bg-white p-4 shadow-lg md:left-2 md:w-[95%]"
                 >
-                  {searchValue !== "" ? (
-                    <div className="flex max-h-36 flex-col items-start gap-2 overflow-hidden rounded bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5">
-                      {searchResults.status === "loading" && (
-                        <span>Loading</span>
-                      )}
-                      {searchResults.status !== "loading" &&
-                        searchResults.data?.length === 0 && (
-                          <span>No results</span>
-                        )}
-                      {searchResults.status !== "loading" &&
-                        (searchResults.data || []).length > 0 &&
-                        (searchResults.data || []).map((result) => {
-                          if (result.type === "internal") {
-                            const dest = result.destination;
-                            switch (dest) {
-                              case "search-customers":
-                                return (
-                                  <Link
-                                    to={searchCustomersRoute.fullPath}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.destination}
-                                  >
-                                    Customers
-                                  </Link>
-                                );
-                              case "search-reservations":
-                                return (
-                                  <Link
-                                    to={searchReservationsRoute.fullPath}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.destination}
-                                  >
-                                    Reservations
-                                  </Link>
-                                );
-                              case "search-agreements":
-                                return (
-                                  <Link
-                                    to={searchAgreementsRoute.fullPath}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.destination}
-                                  >
-                                    Agreements
-                                  </Link>
-                                );
-                              case "search-fleet":
-                              case "search-vehicles":
-                                return (
-                                  <Link
-                                    to={searchFleetRoute.fullPath}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.destination}
-                                  >
-                                    {dest === "search-fleet"
-                                      ? "Fleet"
-                                      : "Vehicles"}
-                                  </Link>
-                                );
-                              default:
-                                return null;
-                            }
+                  <ol className="flex h-full w-full flex-col gap-2">
+                    {searchResults.status === "loading" && <span>Loading</span>}
+                    {searchResults.status !== "loading" &&
+                      searchResults.data?.length === 0 && <li>No results</li>}
+                    {searchResults.status !== "loading" &&
+                      (searchResults.data || []).length > 0 &&
+                      (searchResults.data || []).map((result, idx) => {
+                        let component: React.ReactNode = <p>No component</p>;
+                        let keyValue = `${idx}-search-result`;
+
+                        if (result.type === "internal") {
+                          const dest = result.destination;
+                          keyValue = result.destination;
+                          switch (dest) {
+                            case "search-customers":
+                              component = (
+                                <Link
+                                  to={searchCustomersRoute.fullPath}
+                                  onClick={handleSearchResultClickLink}
+                                  key={result.destination}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  Customers
+                                </Link>
+                              );
+                              break;
+                            case "search-reservations":
+                              component = (
+                                <Link
+                                  to={searchReservationsRoute.fullPath}
+                                  onClick={handleSearchResultClickLink}
+                                  key={result.destination}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  Reservations
+                                </Link>
+                              );
+                              break;
+                            case "search-agreements":
+                              component = (
+                                <Link
+                                  to={searchAgreementsRoute.fullPath}
+                                  onClick={handleSearchResultClickLink}
+                                  key={result.destination}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  Agreements
+                                </Link>
+                              );
+                              break;
+                            case "search-fleet":
+                            case "search-vehicles":
+                              component = (
+                                <Link
+                                  to={searchFleetRoute.fullPath}
+                                  onClick={handleSearchResultClickLink}
+                                  key={result.destination}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  {dest === "search-fleet"
+                                    ? "Fleet"
+                                    : "Vehicles"}
+                                </Link>
+                              );
+                              break;
+                            default:
+                              component = null;
+                              break;
                           }
-                          if (result.type === "network") {
-                            const module = result.module;
-                            switch (module) {
-                              case "agreements":
-                                return (
-                                  <Link
-                                    to={viewAgreementByIdRoute.fullPath}
-                                    params={{ agreementId: result.referenceId }}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.fullDisplayText}
-                                  >
-                                    {result.displayText}
-                                  </Link>
-                                );
-                              case "customers":
-                                return (
-                                  <Link
-                                    to={viewCustomerByIdRoute.fullPath}
-                                    params={{ customerId: result.referenceId }}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.fullDisplayText}
-                                  >
-                                    {result.displayText}
-                                  </Link>
-                                );
-                              case "vehicles":
-                                return (
-                                  <Link
-                                    to={viewFleetByIdRoute.fullPath}
-                                    params={{ vehicleId: result.referenceId }}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.fullDisplayText}
-                                  >
-                                    {result.displayText}
-                                  </Link>
-                                );
-                              case "reservations":
-                                return (
-                                  <Link
-                                    to={viewReservationByIdRoute.fullPath}
-                                    params={{
-                                      reservationId: result.referenceId,
-                                    }}
-                                    onClick={handleSearchResultClickLink}
-                                    key={result.fullDisplayText}
-                                  >
-                                    {result.displayText}
-                                  </Link>
-                                );
-                            }
+                        }
+                        if (result.type === "network") {
+                          const module = result.module;
+                          keyValue = result.fullDisplayText;
+                          switch (module) {
+                            case "agreements":
+                              component = (
+                                <Link
+                                  to={viewAgreementByIdRoute.fullPath}
+                                  params={{ agreementId: result.referenceId }}
+                                  onClick={handleSearchResultClickLink}
+                                  key={result.fullDisplayText}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  {result.displayText}
+                                </Link>
+                              );
+                              break;
+                            case "customers":
+                              component = (
+                                <Link
+                                  to={viewCustomerByIdRoute.fullPath}
+                                  params={{ customerId: result.referenceId }}
+                                  onClick={handleSearchResultClickLink}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  {result.displayText}
+                                </Link>
+                              );
+                              break;
+                            case "vehicles":
+                              component = (
+                                <Link
+                                  to={viewFleetByIdRoute.fullPath}
+                                  params={{ vehicleId: result.referenceId }}
+                                  onClick={handleSearchResultClickLink}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  {result.displayText}
+                                </Link>
+                              );
+                              break;
+                            case "reservations":
+                              component = (
+                                <Link
+                                  to={viewReservationByIdRoute.fullPath}
+                                  params={{
+                                    reservationId: result.referenceId,
+                                  }}
+                                  onClick={handleSearchResultClickLink}
+                                  className={searchResultLinkClassNames}
+                                  onKeyDownCapture={handleSearchResultKeyDown}
+                                >
+                                  {result.displayText}
+                                </Link>
+                              );
+                              break;
+                            default:
+                              break;
                           }
-                          return null;
-                        })}
-                    </div>
-                  ) : null}
-                </Popover.Panel>
+                        }
+
+                        return <li key={keyValue}>{component}</li>;
+                      })}
+                  </ol>
+                </Transition>
               </form>
-            </Popover>
+            </div>
             <div className="ml-4 flex items-center gap-1 md:ml-6">
               <button
                 type="button"
