@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 import { Dialog, Menu, Transition } from "@headlessui/react";
@@ -451,6 +451,47 @@ const SearchResults = (props: {
     queryStatus: status,
   } = props;
 
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const navRefs = useRef<Record<string | number, HTMLAnchorElement | null>>({});
+  const setIndex = (index: number) => {
+    const nav = navRefs.current[index];
+    if (nav) {
+      nav.focus();
+    }
+  };
+
+  const onFocus = (index: number) => {
+    setSelectedIndex(index);
+  };
+
+  const onKeyDownCaptureFunc = (
+    event: React.KeyboardEvent<HTMLAnchorElement>
+  ) => {
+    const count = results.length;
+
+    const nextTab = () => setIndex((selectedIndex + 1) % count);
+    const prevTab = () => setIndex((selectedIndex - 1 + count) % count);
+    const firstTab = () => setIndex(0);
+    const lastTab = () => setIndex(count - 1);
+
+    const keyMap: Record<string, () => void> = {
+      ArrowDown: nextTab,
+      ArrowUp: prevTab,
+      Home: firstTab,
+      End: lastTab,
+    };
+
+    if (keyMap[event.key]) {
+      const action = keyMap[event.key];
+      if (action) {
+        event.preventDefault();
+        action();
+      }
+    } else {
+      onKeyDownCapture(event);
+    }
+  };
+
   return (
     <Transition
       show={show}
@@ -461,12 +502,16 @@ const SearchResults = (props: {
       leave="transition-opacity duration-150"
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
-      className="absolute -left-5 top-full right-2 z-40 max-h-[180px] min-h-[100px] w-[250px] overflow-hidden overscroll-y-auto rounded-b border border-gray-200 bg-white px-1 py-1 shadow-lg md:left-0 md:w-[97%]"
+      className="absolute -left-5 top-full right-2 z-40 max-h-[250px] min-h-[100px] w-[250px] overflow-hidden overflow-y-scroll rounded-b border border-gray-200 bg-white px-1 py-1 shadow-lg md:left-0 md:w-[97%]"
     >
       <span className="mb-2.5 select-none px-1 text-sm text-slate-500">
         Results
       </span>
-      <ol className="flex h-full w-full flex-col gap-2 overflow-y-auto py-0.5 px-0.5">
+      <ul
+        role="tablist"
+        aria-orientation="vertical"
+        className="flex h-full w-full flex-col gap-2 py-0.5 px-0.5"
+      >
         {status === "loading" && (
           <span className="px-1.5 py-0.5 text-base">Loading</span>
         )}
@@ -486,11 +531,15 @@ const SearchResults = (props: {
                 case "search-customers":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={searchCustomersRoute.fullPath}
                       onClick={onLinkClick}
-                      key={result.destination}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       Customers
                     </Link>
@@ -499,11 +548,15 @@ const SearchResults = (props: {
                 case "search-reservations":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={searchReservationsRoute.fullPath}
                       onClick={onLinkClick}
-                      key={result.destination}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       Reservations
                     </Link>
@@ -512,11 +565,15 @@ const SearchResults = (props: {
                 case "search-agreements":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={searchAgreementsRoute.fullPath}
                       onClick={onLinkClick}
-                      key={result.destination}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       Agreements
                     </Link>
@@ -526,11 +583,15 @@ const SearchResults = (props: {
                 case "search-vehicles":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={searchFleetRoute.fullPath}
                       onClick={onLinkClick}
-                      key={result.destination}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       {dest === "search-fleet" ? "Fleet" : "Vehicles"}
                     </Link>
@@ -548,12 +609,16 @@ const SearchResults = (props: {
                 case "agreements":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={viewAgreementByIdRoute.fullPath}
                       params={{ agreementId: result.referenceId }}
                       onClick={onLinkClick}
-                      key={result.fullDisplayText}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       <span className="hidden md:inline-block">
                         Agreements &gt;&gt;&nbsp;
@@ -565,11 +630,16 @@ const SearchResults = (props: {
                 case "customers":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={viewCustomerByIdRoute.fullPath}
                       params={{ customerId: result.referenceId }}
                       onClick={onLinkClick}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       <span className="hidden md:inline-block">
                         Customers &gt;&gt;&nbsp;
@@ -581,11 +651,16 @@ const SearchResults = (props: {
                 case "vehicles":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={viewFleetByIdRoute.fullPath}
                       params={{ vehicleId: result.referenceId }}
                       onClick={onLinkClick}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       <span className="hidden md:inline-block">
                         Fleet &gt;&gt;&nbsp;
@@ -597,13 +672,18 @@ const SearchResults = (props: {
                 case "reservations":
                   component = (
                     <Link
+                      role="tab"
+                      tabIndex={idx}
+                      aria-selected={selectedIndex === idx}
                       to={viewReservationByIdRoute.fullPath}
                       params={{
                         reservationId: result.referenceId,
                       }}
                       onClick={onLinkClick}
                       className={searchResultLinkClassNames}
-                      onKeyDownCapture={onKeyDownCapture}
+                      onKeyDownCapture={onKeyDownCaptureFunc}
+                      ref={(el) => (navRefs.current[idx] = el)}
+                      onFocus={() => onFocus(idx)}
                     >
                       <span className="hidden md:inline-block">
                         Reservations &gt;&gt;&nbsp;
@@ -617,9 +697,13 @@ const SearchResults = (props: {
               }
             }
 
-            return <li key={keyValue}>{component}</li>;
+            return (
+              <li role="presentation" key={keyValue}>
+                {component}
+              </li>
+            );
           })}
-      </ol>
+      </ul>
     </Transition>
   );
 };
