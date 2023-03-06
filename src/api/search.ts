@@ -19,7 +19,8 @@ type DestinationTypes =
   | "search-vehicles"
   | "search-fleet"
   | "search-reservations"
-  | "search-agreements";
+  | "search-agreements"
+  | "dashboard";
 
 type InternalAppSearchResultItem = {
   type: "internal";
@@ -35,6 +36,8 @@ const storedInternalSearches: {
   searchText: string;
   destination: DestinationTypes;
 }[] = [
+  { searchText: "dashboard", destination: "dashboard" },
+  { searchText: "home", destination: "dashboard" },
   { searchText: "customers", destination: "search-customers" },
   { searchText: "vehicles", destination: "search-vehicles" },
   { searchText: "fleet", destination: "search-fleet" },
@@ -74,14 +77,14 @@ export async function fetchGlobalSearchList(
       clientId,
       userId,
       accessToken,
-      filters: { ReservationNumber: searchTerm },
+      filters: { Keyword: searchTerm, Statuses: [2, 6, 7] },
       clientDate: currentDate,
     }),
     fetchAgreementsListModded({
       clientId,
       userId,
       accessToken,
-      filters: { AgreementNumber: searchTerm },
+      filters: { Keyword: searchTerm, Statuses: [2, 5, 7] },
       currentDate,
     }),
   ] as const;
@@ -127,6 +130,8 @@ export async function fetchGlobalSearchList(
             res.ReservationNumber +
               " | " +
               String(res.FirstName + " " + res.LastName).trim() +
+              " - " +
+              String(res.VehicleType) +
               (res.LicenseNo ? " - " + String(res.LicenseNo) : "")
           ).trim();
           return {
@@ -147,6 +152,8 @@ export async function fetchGlobalSearchList(
             agreement.AgreementNumber +
               " | " +
               String(agreement.FullName).trim() +
+              " - " +
+              String(agreement.VehicleType) +
               " - " +
               String(agreement.LicenseNo)
           ).trim();
