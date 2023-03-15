@@ -90,3 +90,18 @@ export const editAgreementByIdRoute = new Route({
   preSearchFilters: [() => ({ stage: "rental-information" })],
   component: lazy(() => import("../../pages/EditAgreement/EditAgreementPage")),
 });
+
+export const checkinAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
+  path: "check-in",
+  validateSearch: (search) =>
+    z
+      .object({
+        stage: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ stage: "rental-information" })],
+  component: lazy(
+    () => import("../../pages/CheckinAgreement/CheckinAgreementPage")
+  ),
+});

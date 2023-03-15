@@ -104,6 +104,7 @@ export async function postCalculateRentalSummaryAmounts(
     agreementInsurance: null,
     writeOffAmount: inputs.writeOffAmount,
     customerId: inputs.customerId,
+    isCheckin: inputs.isCheckin,
   };
 
   return await callV3Api(makeUrl(`/v3/summary`, {}), {

@@ -32,6 +32,7 @@ import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/
 import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import {
+  checkinAgreementByIdRoute,
   editAgreementByIdRoute,
   viewAgreementByIdRoute,
 } from "../../routes/agreements/agreementIdPath";
@@ -71,6 +72,7 @@ interface TAddRentalParentFormProps {
   referenceNumber?: string;
   summaryData?: TRentalRatesSummarySchema;
   reservationData?: ReservationDataParsed;
+  isCheckin?: boolean;
 }
 
 function DummyComponent(data: any) {
@@ -90,10 +92,9 @@ const AddRentalParentForm = ({
   referenceNumber,
   summaryData,
   reservationData,
+  isCheckin = false,
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
-
-  const [isCheckin] = useState(false);
 
   const [creationStagesComplete, setCreationStageComplete] =
     useState<TRentalCompleteStage>({
@@ -688,14 +689,25 @@ const AddRentalParentForm = ({
                         className="h-4 w-4 flex-shrink-0 text-gray-500"
                         aria-hidden="true"
                       />
-                      <Link
-                        to={editAgreementByIdRoute.fullPath}
-                        className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                        search={() => ({ stage })}
-                        params={{ agreementId: String(referenceId) }}
-                      >
-                        Edit Agreement
-                      </Link>
+                      {isCheckin ? (
+                        <Link
+                          to={checkinAgreementByIdRoute.fullPath}
+                          className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                          search={() => ({ stage })}
+                          params={{ agreementId: String(referenceId) }}
+                        >
+                          Check-in Agreement
+                        </Link>
+                      ) : (
+                        <Link
+                          to={editAgreementByIdRoute.fullPath}
+                          className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                          search={() => ({ stage })}
+                          params={{ agreementId: String(referenceId) }}
+                        >
+                          Edit Agreement
+                        </Link>
+                      )}
                     </>
                   )}
                   {!isEdit && module === "reservation" && (
