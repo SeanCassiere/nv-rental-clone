@@ -88,7 +88,7 @@ export async function postCalculateRentalSummaryAmounts(
       format: "extended",
       representation: "complete",
     }),
-    miscCharges: [],
+    miscCharges: inputs.miscCharges,
     taxIds: inputs.taxIds,
     rates: [rate],
     advancePayment: inputs.advancePayment,

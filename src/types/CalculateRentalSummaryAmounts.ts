@@ -5,7 +5,7 @@ export type CalculateRentalSummaryAmountsInput = {
   endDate: Date;
   checkoutLocationId: number;
   checkinLocationId: number;
-  miscCharges: any[];
+  miscCharges: CalculateRentalSummaryMiscChargeType[];
   rate: RentalRateParsed;
   vehicleTypeId: number;
   taxIds: number[];
@@ -28,4 +28,16 @@ export type CalculateRentalSummaryAmountsInput = {
   agreementInsurance: null;
   writeOffAmount: number | null;
   customerId: number;
+};
+export type CalculateRentalSummaryMiscChargeType = {
+  id: number; // misc-charge id
+  locationMiscChargeId: number;
+  quantity: number;
+  startDate: string;
+  endDate: string;
+  optionId: number;
+  isSelected: boolean;
+  value: number;
+  unit: number;
+  isTaxable: boolean;
 };
