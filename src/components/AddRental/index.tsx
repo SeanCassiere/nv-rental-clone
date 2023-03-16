@@ -28,6 +28,7 @@ import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesLi
 import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOptimalRateForRental";
 import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
 import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/usePostCalculateRentalSummaryAmounts";
+import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCharges";
 
 import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
@@ -169,6 +170,7 @@ const AddRentalParentForm = ({
   const handleSetSelectedMiscCharges = useCallback(
     (charges: CalculateRentalSummaryMiscChargeType[]) => {
       setSelectedMiscCharges(charges);
+      setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
     []
   );
@@ -607,6 +609,49 @@ const AddRentalParentForm = ({
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       CurrentLocationId: agreementRentalInformation?.checkoutLocation ?? 0,
+    },
+  });
+
+  // fetching the mandatory misc. charges
+  const miscChargesAgreementReady =
+    selectedMiscCharges.length === 0 &&
+    Boolean(agreementRentalInformation) &&
+    Boolean(agreementVehicleInformation) &&
+    isEdit === false;
+  const miscChargesReservationReady = false;
+  useGetMiscCharges({
+    filters: {
+      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
+      LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
+      CheckoutDate: agreementRentalInformation?.checkoutDate ?? new Date(),
+      CheckinDate: agreementRentalInformation?.checkinDate ?? new Date(),
+    },
+    enabled:
+      module === "agreement"
+        ? miscChargesAgreementReady
+        : miscChargesReservationReady,
+    onSuccess: (data) => {
+      const mandatoryCharges = (data || []).filter(
+        (charge) => charge.IsOptional === false
+      );
+      setSelectedMiscCharges((existing) => {
+        if (existing.length > 0) {
+          return existing;
+        }
+        return mandatoryCharges.map((charge) => ({
+          id: charge.Id,
+          locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
+          quantity: 1,
+          startDate: agreementRentalInformation!.checkoutDate.toISOString(),
+          endDate: agreementRentalInformation!.checkinDate.toISOString(),
+          optionId: 0,
+          isSelected: true,
+          value: charge.Total ?? 0,
+          unit: 0,
+          isTaxable: charge.IsTaxable ?? false,
+        }));
+      });
+      setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
   });
 
