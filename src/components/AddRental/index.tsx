@@ -447,21 +447,23 @@ const AddRentalParentForm = ({
         }
       }
 
-      const filledMiscCharges: CalculateRentalSummaryMiscChargeType[] = (
-        data.mischargeList || []
-      ).map((charge) => ({
-        id: charge.miscChargeId ?? 0,
-        locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
-        quantity: charge?.quantity ?? 0,
-        startDate: charge?.startDate ?? originalStartDate.toISOString(),
-        endDate: charge?.endDate ?? originalEndDate.toISOString(),
-        optionId: charge?.optionId ?? 0,
-        isSelected: charge?.isSelected ?? false,
-        value: charge?.value ?? 0,
-        unit: charge?.unit ?? 0,
-        isTaxable: charge?.isTaxable ?? false,
-      }));
-      setSelectedMiscCharges(filledMiscCharges);
+      if (selectedMiscCharges.length === 0) {
+        const filledMiscCharges: CalculateRentalSummaryMiscChargeType[] = (
+          data.mischargeList || []
+        ).map((charge) => ({
+          id: charge.miscChargeId ?? 0,
+          locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
+          quantity: charge?.quantity ?? 0,
+          startDate: charge?.startDate ?? originalStartDate.toISOString(),
+          endDate: charge?.endDate ?? originalEndDate.toISOString(),
+          optionId: charge?.optionId ?? 0,
+          isSelected: charge?.isSelected ?? false,
+          value: charge?.value ?? 0,
+          unit: charge?.unit ?? 0,
+          isTaxable: charge?.isTaxable ?? false,
+        }));
+        setSelectedMiscCharges(filledMiscCharges);
+      }
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
 
       if (selectedTaxIds.length === 0) {
