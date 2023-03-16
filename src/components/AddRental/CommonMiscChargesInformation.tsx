@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 
 import { type StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
 import { Button } from "../Form";
 import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCharges";
+
+import { localDateTimeToQueryYearMonthDay } from "../../utils/date";
 import { type MiscChargeListItem } from "../../utils/schemas/misCharges";
-import { useTranslation } from "react-i18next";
 
 interface CommonMiscChargesInformationProps {
   module: StepRatesAndChargesInformationProps["module"];
@@ -129,14 +131,15 @@ function MiscChargeItem(props: {
   const startDate = useMemo(
     () =>
       selectedCharge?.startDate
-        ? new Date(Date.parse(selectedCharge?.startDate))
+        ? new Date(selectedCharge?.startDate)
         : dates.startDate,
     [dates.startDate, selectedCharge?.startDate]
   );
+
   const endDate = useMemo(
     () =>
       selectedCharge?.endDate
-        ? new Date(Date.parse(selectedCharge?.endDate))
+        ? new Date(selectedCharge?.endDate)
         : dates.endDate,
     [dates.endDate, selectedCharge?.endDate]
   );
@@ -184,8 +187,8 @@ function MiscChargeItem(props: {
         id: charge.Id,
         locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
         quantity: qtyToSave,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
+        startDate: localDateTimeToQueryYearMonthDay(startDate),
+        endDate: localDateTimeToQueryYearMonthDay(endDate),
         optionId: saveOptionId,
         isSelected: true,
         value: savePrice,
