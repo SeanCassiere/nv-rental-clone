@@ -693,7 +693,7 @@ const AddRentalParentForm = ({
                       <Link
                         to={viewAgreementByIdRoute.fullPath}
                         params={{ agreementId: String(referenceId) }}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                        className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         {referenceNumber ?? "-"}
                       </Link>
@@ -758,7 +758,7 @@ const AddRentalParentForm = ({
                       <Link
                         to={viewReservationByIdRoute.fullPath}
                         params={{ reservationId: String(referenceId) }}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                        className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         {referenceNumber ?? "-"}
                       </Link>
