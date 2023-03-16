@@ -683,8 +683,7 @@ const AddRentalParentForm = ({
   // fetch taxes for the rental
   const taxesAgreementReady =
     creationStagesComplete.taxes === false &&
-    Boolean(agreementRentalInformation) &&
-    isEdit === false;
+    Boolean(agreementRentalInformation);
   const taxesReservationReady = false;
   useGetTaxes({
     filters: {
