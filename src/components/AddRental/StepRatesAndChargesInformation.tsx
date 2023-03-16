@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
+import classNames from "classnames";
 
 import CommonRatesInformation from "./CommonRatesInformation";
-import { type RentalRateParsed } from "../../utils/schemas/rate";
+import CommonMiscChargesInformation from "./CommonMiscChargesInformation";
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
-import classNames from "classnames";
+import { type RentalRateParsed } from "../../utils/schemas/rate";
+import { type CalculateRentalSummaryMiscChargeType } from "../../types/CalculateRentalSummaryAmounts";
 
 export interface StepRatesAndChargesInformationProps {
   module: "agreements" | "reservations";
@@ -29,8 +31,13 @@ export interface StepRatesAndChargesInformationProps {
   onSelectRateName: (rateName: string) => void;
   rate: RentalRateParsed | null;
   onSelectedRate: (rate: RentalRateParsed) => void;
-  misCharges: any[];
+  misCharges: CalculateRentalSummaryMiscChargeType[];
+  onSelectedMiscCharges: (
+    charges: CalculateRentalSummaryMiscChargeType[]
+  ) => void;
+
   onCompleted: () => void;
+  currency?: string;
 }
 
 const StepRatesAndChargesInformation = (
@@ -109,14 +116,20 @@ const StepRatesAndChargesInformation = (
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-100"
         >
-          <div>Misc Charges</div>
-          <button
-            onClick={() => {
-              handleNext();
-            }}
-          >
-            Next
-          </button>
+          <CommonMiscChargesInformation
+            isEdit={props.isEdit}
+            module={props.module}
+            rentalInformation={props.rentalInformation}
+            vehicleInformation={props.vehicleInformation}
+            selectedMisCharges={props.misCharges}
+            onSaveMisCharges={props.onSelectedMiscCharges}
+            onNavigateNext={handleNext}
+            isSupportingInfoAvailable={
+              Boolean(props.rentalInformation) &&
+              Boolean(props.vehicleInformation)
+            }
+            currency={props.currency}
+          />
         </Transition>
       </InformationBlockCardWithChildren>
     </div>

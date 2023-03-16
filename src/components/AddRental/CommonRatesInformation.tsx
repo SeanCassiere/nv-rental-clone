@@ -1,19 +1,19 @@
 import { useEffect, useMemo } from "react";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import classNames from "classnames";
 
 import type { StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
-import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
 import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,
   Button,
 } from "../Form";
+import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
 import {
   RentalRateSchema,
   type RentalRateParsed,
 } from "../../utils/schemas/rate";
-import classNames from "classnames";
 
 interface CommonRatesInformationProps {
   module: StepRatesAndChargesInformationProps["module"];

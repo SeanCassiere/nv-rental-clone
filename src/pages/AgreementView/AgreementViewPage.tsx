@@ -178,14 +178,15 @@ function AgreementViewPage() {
                     </LinkButton>
                   )}
                   {!isCheckedIn && (
-                    <Button
-                      type="button"
-                      color="teal"
+                    <LinkButton
+                      to={checkinAgreementByIdRoute.fullPath}
+                      search={() => ({ stage: "rental-information" })}
+                      params={{ agreementId: String(agreementId) }}
                       className="flex items-center justify-center gap-2"
                     >
                       <ArrowDownLeftOutline className="h-3.5 w-3.5" />
                       Checkin
-                    </Button>
+                    </LinkButton>
                   )}
                   <Button
                     type="button"

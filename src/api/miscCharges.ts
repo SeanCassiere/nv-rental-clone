@@ -36,6 +36,8 @@ export async function fetchMiscCharges(
         }
       : {}),
     ...(Active ? { Active: Active ? "true" : "false" } : {}),
+    clientId,
+    userId,
   };
 
   return await callV3Api(makeUrl(`/v3/miscCharges`, search), {

@@ -166,6 +166,13 @@ const AddRentalParentForm = ({
     }));
   }, []);
 
+  const handleSetSelectedMiscCharges = useCallback(
+    (charges: CalculateRentalSummaryMiscChargeType[]) => {
+      setSelectedMiscCharges(charges);
+    },
+    []
+  );
+
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
@@ -227,7 +234,8 @@ const AddRentalParentForm = ({
                 ? { vehicleTypeId: agreementVehicleInformation.vehicleTypeId }
                 : undefined
             }
-            misCharges={[]}
+            misCharges={selectedMiscCharges}
+            onSelectedMiscCharges={handleSetSelectedMiscCharges}
             onCompleted={() => {
               setCreationStageComplete((prev) => ({
                 ...prev,
@@ -239,6 +247,7 @@ const AddRentalParentForm = ({
             onSelectRateName={handleSetSelectedRateName}
             rate={selectedRate}
             onSelectedRate={handleSetSelectedRate}
+            currency={clientProfile.data?.currency || undefined}
           />
         ),
       };
@@ -364,10 +373,13 @@ const AddRentalParentForm = ({
     agreementRentalInformation,
     referenceId,
     agreementVehicleInformation,
+    selectedMiscCharges,
+    handleSetSelectedMiscCharges,
     selectedRateName,
     handleSetSelectedRateName,
     selectedRate,
     handleSetSelectedRate,
+    clientProfile.data?.currency,
     commonCustomerInformation,
     handleStageTabClick,
     reservationData,
@@ -683,7 +695,7 @@ const AddRentalParentForm = ({
                       <Link
                         to={viewAgreementByIdRoute.fullPath}
                         params={{ agreementId: String(referenceId) }}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                        className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         {referenceNumber ?? "-"}
                       </Link>
@@ -748,7 +760,7 @@ const AddRentalParentForm = ({
                       <Link
                         to={viewReservationByIdRoute.fullPath}
                         params={{ reservationId: String(referenceId) }}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
+                        className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         {referenceNumber ?? "-"}
                       </Link>
