@@ -68,12 +68,12 @@ export const RentalRatesSummary = ({
   const defaultLineItemsList = useMemo(() => {
     let lineItems: Omit<TSummaryLineItemProps, "id">[] = [];
 
-    const taxableMischarges = (summaryData?.miscCharges || []).filter(
-      (charge) => charge.isTaxable
-    );
-    const nonTaxableMischarges = (summaryData?.miscCharges || []).filter(
-      (charge) => !charge.isTaxable
-    );
+    const taxableMischarges = (summaryData?.miscCharges || [])
+      .sort((chg1, chg2) => chg1.id - chg2.id)
+      .filter((charge) => charge.isTaxable);
+    const nonTaxableMischarges = (summaryData?.miscCharges || [])
+      .sort((chg1, chg2) => chg1.id - chg2.id)
+      .filter((charge) => !charge.isTaxable);
     const taxes = summaryData?.taxes || [];
 
     if (module === "agreements" || module === "reservations") {
