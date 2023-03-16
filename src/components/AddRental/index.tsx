@@ -166,6 +166,13 @@ const AddRentalParentForm = ({
     }));
   }, []);
 
+  const handleSetSelectedMiscCharges = useCallback(
+    (charges: CalculateRentalSummaryMiscChargeType[]) => {
+      setSelectedMiscCharges(charges);
+    },
+    []
+  );
+
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
@@ -227,7 +234,8 @@ const AddRentalParentForm = ({
                 ? { vehicleTypeId: agreementVehicleInformation.vehicleTypeId }
                 : undefined
             }
-            misCharges={[]}
+            misCharges={selectedMiscCharges}
+            onSelectedMiscCharges={handleSetSelectedMiscCharges}
             onCompleted={() => {
               setCreationStageComplete((prev) => ({
                 ...prev,
@@ -364,6 +372,8 @@ const AddRentalParentForm = ({
     agreementRentalInformation,
     referenceId,
     agreementVehicleInformation,
+    selectedMiscCharges,
+    handleSetSelectedMiscCharges,
     selectedRateName,
     handleSetSelectedRateName,
     selectedRate,

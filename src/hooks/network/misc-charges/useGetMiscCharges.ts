@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { fetchMiscCharges } from "../../../api/miscCharges";
 
-export function useGetMisCharges(params: {
+export function useGetMiscCharges(params: {
   enabled?: boolean;
   filters?: Omit<
     Parameters<typeof fetchMiscCharges>[0],
