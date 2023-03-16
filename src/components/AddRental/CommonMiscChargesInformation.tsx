@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 
 import { type StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
@@ -125,6 +125,22 @@ function MiscChargeItem(props: {
   const { t } = useTranslation();
 
   const { charge, isSelected, selectedCharge, onSave, dates, onRemove } = props;
+
+  const startDate = useMemo(
+    () =>
+      selectedCharge?.startDate
+        ? new Date(Date.parse(selectedCharge?.startDate))
+        : dates.startDate,
+    [dates.startDate, selectedCharge?.startDate]
+  );
+  const endDate = useMemo(
+    () =>
+      selectedCharge?.endDate
+        ? new Date(Date.parse(selectedCharge?.endDate))
+        : dates.endDate,
+    [dates.endDate, selectedCharge?.endDate]
+  );
+
   const [qty, setQty] = useState(
     isSelected && selectedCharge ? selectedCharge.quantity : 1
   );
@@ -168,8 +184,8 @@ function MiscChargeItem(props: {
         id: charge.Id,
         locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
         quantity: qtyToSave,
-        startDate: dates.startDate.toISOString(),
-        endDate: dates.endDate.toISOString(),
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
         optionId: saveOptionId,
         isSelected: true,
         value: savePrice,
@@ -177,7 +193,7 @@ function MiscChargeItem(props: {
         isTaxable: charge.IsTaxable ?? false,
       });
     },
-    [charge, dates, onSave]
+    [charge, startDate, endDate, onSave]
   );
 
   const handleRemove = () => {
@@ -210,6 +226,7 @@ function MiscChargeItem(props: {
           }}
           disabled={!charge.IsOptional}
           id={`${charge.Id}-${charge.Name}-parent`}
+          className="rounded-full text-teal-500 focus:outline-teal-500 disabled:text-slate-400"
         />
       </div>
       <label
@@ -220,7 +237,7 @@ function MiscChargeItem(props: {
       </label>
       <div
         className={classNames(
-          "col-span-12 flex items-center gap-2 px-4 md:col-span-3",
+          "col-span-12 flex cursor-pointer items-center gap-2 px-4 md:col-span-3",
           "justify-start md:justify-end"
         )}
       >
@@ -239,10 +256,10 @@ function MiscChargeItem(props: {
                   });
                 }
               }}
-              className="w-20"
+              className="w-20 rounded border-0 px-2 py-1 outline-none focus:border-0 focus:outline-teal-500 focus:ring-0"
               min={1}
             />
-            <span className="block">X</span>
+            <span className="block">x</span>
           </>
         )}
         <input
@@ -258,7 +275,7 @@ function MiscChargeItem(props: {
               });
             }
           }}
-          className="w-20"
+          className="w-20 rounded border-0 px-2 py-1 outline-none focus:border-0 focus:outline-teal-500 focus:ring-0"
           min={0}
         />
       </div>
@@ -271,14 +288,11 @@ function MiscChargeItem(props: {
       {charge.IsDeductible && charge.Options?.length && (
         <>
           <span className="hidden md:block" />
-          <div className="col-span-12 grid gap-2 md:col-span-11">
+          <div className="col-span-12 grid gap-2 pt-4 md:col-span-11">
             {charge.Options.map((option, idx) => (
               <div
                 key={`${option.miscChargeOptionId}-${idx}`}
-                className={classNames(
-                  "flex items-center gap-2",
-                  option.miscChargeOptionId === optionId ? "text-red-500" : ""
-                )}
+                className={classNames("flex items-center gap-2")}
               >
                 <input
                   type="radio"
@@ -296,10 +310,16 @@ function MiscChargeItem(props: {
                     });
                   }}
                   disabled={!isSelected}
+                  className="bg-gray-50 p-0.5 text-teal-500 focus:outline-teal-500 disabled:bg-gray-200"
                 />
                 <div className="w-full">
                   <label
-                    className="block w-full"
+                    className={classNames(
+                      "block w-full cursor-pointer"
+                      // option.miscChargeOptionId === optionId
+                      //   ? "text-teal-600"
+                      //   : ""
+                    )}
                     htmlFor={`${charge.Id}-${option.miscChargeOptionId}`}
                   >
                     {t("intlCurrency", {
