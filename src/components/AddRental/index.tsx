@@ -27,10 +27,12 @@ import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetV
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOptimalRateForRental";
 import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
+import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/usePostCalculateRentalSummaryAmounts";
 
 import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import {
+  checkinAgreementByIdRoute,
   editAgreementByIdRoute,
   viewAgreementByIdRoute,
 } from "../../routes/agreements/agreementIdPath";
@@ -46,7 +48,7 @@ import { sortObject } from "../../utils/sortObject";
 import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
 import { type RentalRateParsed } from "../../utils/schemas/rate";
 import { type ReservationDataParsed } from "../../utils/schemas/reservation";
-import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/usePostCalculateRentalSummaryAmounts";
+import { type CalculateRentalSummaryMiscChargeType } from "../../types/CalculateRentalSummaryAmounts";
 
 export type TRentalCompleteStage = {
   rental: boolean;
@@ -70,6 +72,7 @@ interface TAddRentalParentFormProps {
   referenceNumber?: string;
   summaryData?: TRentalRatesSummarySchema;
   reservationData?: ReservationDataParsed;
+  isCheckin?: boolean;
 }
 
 function DummyComponent(data: any) {
@@ -89,6 +92,7 @@ const AddRentalParentForm = ({
   referenceNumber,
   summaryData,
   reservationData,
+  isCheckin = false,
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
 
@@ -114,6 +118,9 @@ const AddRentalParentForm = ({
     useState<CommonCustomerInformationSchemaParsed | null>(null);
 
   const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
+  const [selectedMiscCharges, setSelectedMiscCharges] = useState<
+    CalculateRentalSummaryMiscChargeType[]
+  >([]);
 
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
     [string, RentalRateParsed | null]
@@ -371,6 +378,9 @@ const AddRentalParentForm = ({
     agreementId:
       module === "agreement" && isEdit && referenceId ? referenceId : 0,
     onSuccess: (data) => {
+      const originalStartDate = parseISO(data.checkoutDate);
+      const originalEndDate = parseISO(data.checkinDate);
+
       if (!agreementRentalInformation) {
         setAgreementRentalInformation({
           agreementNumber: data.agreementNumber ?? "",
@@ -378,8 +388,8 @@ const AddRentalParentForm = ({
           destination: data.destination ?? "",
           checkoutLocation: data.checkoutLocation,
           checkinLocation: data.checkinLocation,
-          checkoutDate: parseISO(data.checkoutDate),
-          checkinDate: parseISO(data.checkinDate),
+          checkoutDate: originalStartDate,
+          checkinDate: originalEndDate,
         });
         setCreationStageComplete((prev) => ({
           ...prev,
@@ -436,6 +446,24 @@ const AddRentalParentForm = ({
           setSelectedRateName(existingRateName ?? "");
         }
       }
+
+      const filledMiscCharges: CalculateRentalSummaryMiscChargeType[] = (
+        data.mischargeList || []
+      ).map((charge) => ({
+        id: charge.miscChargeId ?? 0,
+        locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
+        quantity: charge?.quantity ?? 0,
+        startDate: charge?.startDate ?? originalStartDate.toISOString(),
+        endDate: charge?.endDate ?? originalEndDate.toISOString(),
+        optionId: charge?.optionId ?? 0,
+        isSelected: charge?.isSelected ?? false,
+        value: charge?.value ?? 0,
+        unit: charge?.unit ?? 0,
+        isTaxable: charge?.isTaxable ?? false,
+      }));
+      setSelectedMiscCharges(filledMiscCharges);
+      setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
+
       if (selectedTaxIds.length === 0) {
         const list = data.taxList.filter((tax) => tax.taxId !== null);
         const taxIds = [...list.map((tax) => tax.taxId)].filter(
@@ -577,12 +605,12 @@ const AddRentalParentForm = ({
   // fetch a calculated rental summary
   const calculatedSummaryData = usePostCalculateRentalSummaryAmounts({
     input: {
-      isCheckin: false,
+      isCheckin: isCheckin,
       startDate: agreementRentalInformation?.checkoutDate || new Date(),
       endDate: agreementRentalInformation?.checkoutDate || new Date(),
       checkoutLocationId: agreementRentalInformation?.checkoutLocation || 0,
       checkinLocationId: agreementRentalInformation?.checkinLocation || 0,
-      miscCharges: [],
+      miscCharges: selectedMiscCharges,
       rate: selectedRate!,
       vehicleTypeId: agreementVehicleInformation?.vehicleTypeId || 0,
       taxIds: selectedTaxIds,
@@ -661,14 +689,25 @@ const AddRentalParentForm = ({
                         className="h-4 w-4 flex-shrink-0 text-gray-500"
                         aria-hidden="true"
                       />
-                      <Link
-                        to={editAgreementByIdRoute.fullPath}
-                        className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                        search={() => ({ stage })}
-                        params={{ agreementId: String(referenceId) }}
-                      >
-                        Edit Agreement
-                      </Link>
+                      {isCheckin ? (
+                        <Link
+                          to={checkinAgreementByIdRoute.fullPath}
+                          className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                          search={() => ({ stage })}
+                          params={{ agreementId: String(referenceId) }}
+                        >
+                          Check-in Agreement
+                        </Link>
+                      ) : (
+                        <Link
+                          to={editAgreementByIdRoute.fullPath}
+                          className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
+                          search={() => ({ stage })}
+                          params={{ agreementId: String(referenceId) }}
+                        >
+                          Edit Agreement
+                        </Link>
+                      )}
                     </>
                   )}
                   {!isEdit && module === "reservation" && (

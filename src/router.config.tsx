@@ -24,6 +24,7 @@ import {
   agreementPathIdRoute,
   viewAgreementByIdRoute,
   editAgreementByIdRoute,
+  checkinAgreementByIdRoute,
 } from "./routes/agreements/agreementIdPath";
 
 // /customers
@@ -67,6 +68,7 @@ const routeTree = rootRoute.addChildren([
       // /agreements/:agreementId
       viewAgreementByIdRoute, // /agreements/:agreementId/
       editAgreementByIdRoute, // /agreements/:agreementId/edit
+      checkinAgreementByIdRoute, // /agreements/:agreementId/check-in
     ]),
   ]),
   customersRoute.addChildren([

@@ -23,8 +23,9 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import { Button, LinkButton } from "../../components/Form";
 
 import {
-  editAgreementByIdRoute,
   viewAgreementByIdRoute,
+  editAgreementByIdRoute,
+  checkinAgreementByIdRoute,
 } from "../../routes/agreements/agreementIdPath";
 
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
@@ -155,15 +156,27 @@ function AgreementViewPage() {
                   </Link>
                 </div>
                 <div className="flex flex-col gap-3 md:flex-row">
-                  <LinkButton
-                    to={editAgreementByIdRoute.fullPath}
-                    search={() => ({ stage: "rental-information" })}
-                    params={{ agreementId: String(agreementId) }}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <PencilIconFilled className="h-3 w-3" />
-                    Edit
-                  </LinkButton>
+                  {isCheckedIn ? (
+                    <LinkButton
+                      to={checkinAgreementByIdRoute.fullPath}
+                      search={() => ({ stage: "rental-information" })}
+                      params={{ agreementId: String(agreementId) }}
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <PencilIconFilled className="h-3 w-3" />
+                      Edit
+                    </LinkButton>
+                  ) : (
+                    <LinkButton
+                      to={editAgreementByIdRoute.fullPath}
+                      search={() => ({ stage: "rental-information" })}
+                      params={{ agreementId: String(agreementId) }}
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <PencilIconFilled className="h-3 w-3" />
+                      Edit
+                    </LinkButton>
+                  )}
                   {!isCheckedIn && (
                     <Button
                       type="button"
