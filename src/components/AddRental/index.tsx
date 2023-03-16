@@ -97,6 +97,7 @@ const AddRentalParentForm = ({
   isCheckin = false,
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
+  const [hasEdited, setHasEdited] = useState(false);
 
   const [creationStagesComplete, setCreationStageComplete] =
     useState<TRentalCompleteStage>({
@@ -201,6 +202,7 @@ const AddRentalParentForm = ({
                   ...prev,
                   miscCharges: true,
                 }));
+                setHasEdited(true);
                 handleStageTabClick(others);
               }}
             >
@@ -209,7 +211,7 @@ const AddRentalParentForm = ({
           </div>
         ),
       };
-      const ratesAndTaxes = {
+      const ratesAndCharges = {
         // 4
         id: "rates-and-charges",
         label: "Rates & Charges",
@@ -244,6 +246,7 @@ const AddRentalParentForm = ({
                 ...prev,
                 rates: true,
               }));
+              setHasEdited(true);
               handleStageTabClick(chargesAndPayments);
             }}
             rateName={selectedRateName}
@@ -268,7 +271,8 @@ const AddRentalParentForm = ({
                 ...prev,
                 customer: true,
               }));
-              handleStageTabClick(ratesAndTaxes);
+              setHasEdited(true);
+              handleStageTabClick(ratesAndCharges);
             }}
           />
         ),
@@ -288,6 +292,7 @@ const AddRentalParentForm = ({
                 ...prev,
                 vehicle: true,
               }));
+              setHasEdited(true);
               handleStageTabClick(customerInformation);
             }}
           />
@@ -302,11 +307,32 @@ const AddRentalParentForm = ({
             isEdit={isEdit}
             initialData={agreementRentalInformation ?? undefined}
             onCompleted={(data) => {
-              setAgreementRentalInformation(data);
+              setAgreementRentalInformation((prevRentalData) => {
+                // if checkout location id not the same, reset vehicle, taxes, and misc charges
+                if (
+                  prevRentalData &&
+                  data &&
+                  prevRentalData.checkoutLocation !== data.checkoutLocation
+                ) {
+                  setCreationStageComplete((prev) => ({
+                    ...prev,
+                    miscCharges: false,
+                    rates: false,
+                    vehicle: false,
+                    taxes: false,
+                  }));
+                  setAgreementVehicleInformation(null);
+                  setRateDetails(["", null]);
+                  setSelectedMiscCharges([]);
+                  setSelectedTaxIds([]);
+                }
+                return data;
+              });
               setCreationStageComplete((prev) => ({
                 ...prev,
                 rental: true,
               }));
+              setHasEdited(true);
               handleStageTabClick(vehicleInformation);
             }}
           />
@@ -315,7 +341,7 @@ const AddRentalParentForm = ({
       tabs.push(rentalInformation);
       tabs.push(vehicleInformation);
       tabs.push(customerInformation);
-      tabs.push(ratesAndTaxes);
+      tabs.push(ratesAndCharges);
       tabs.push(chargesAndPayments);
       tabs.push(others);
     }
@@ -494,7 +520,7 @@ const AddRentalParentForm = ({
 
   // fetching the optimal rate name for new rentals
   const agreementConditionsForOptimalRateFetch =
-    isEdit === false &&
+    creationStagesComplete.rates === false &&
     selectedRateName === "" &&
     Boolean(agreementVehicleInformation?.vehicleTypeId) &&
     Boolean(agreementRentalInformation?.checkoutLocation);
@@ -598,15 +624,13 @@ const AddRentalParentForm = ({
   });
 
   // fetching the data before page navigation only for rentals in edit mode
+  const agreementConditionsForFetchingVehicles =
+    Boolean(agreementRentalInformation) && Boolean(agreementVehicleInformation);
   useGetVehiclesList({
     page: 1,
     pageSize: 20,
     enabled:
-      isEdit &&
-      ((module === "agreement" &&
-        Boolean(agreementVehicleInformation) &&
-        Boolean(agreementRentalInformation)) ||
-        (module === "reservation" && Date.now() < 0)), // reservation for now should return false
+      module === "agreement" ? agreementConditionsForFetchingVehicles : false,
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       CurrentLocationId: agreementRentalInformation?.checkoutLocation ?? 0,
@@ -615,7 +639,7 @@ const AddRentalParentForm = ({
 
   // fetching the mandatory misc. charges
   const miscChargesAgreementReady =
-    selectedMiscCharges.length === 0 &&
+    creationStagesComplete.miscCharges === false &&
     Boolean(agreementRentalInformation) &&
     Boolean(agreementVehicleInformation) &&
     isEdit === false;
@@ -658,7 +682,7 @@ const AddRentalParentForm = ({
 
   // fetch taxes for the rental
   const taxesAgreementReady =
-    selectedTaxIds.length === 0 &&
+    creationStagesComplete.taxes === false &&
     Boolean(agreementRentalInformation) &&
     isEdit === false;
   const taxesReservationReady = false;
@@ -928,11 +952,16 @@ const AddRentalParentForm = ({
                 }
                 currency={clientProfile.data?.currency || undefined}
                 summaryData={
-                  isEdit && !calculatedSummaryData.data
-                    ? summaryData
+                  // isEdit && !calculatedSummaryData.data
+                  //   ? summaryData
+                  //   : calculatedSummaryData.data
+                  //   ? calculatedSummaryData.data
+                  //   : undefined
+                  isEdit && hasEdited
+                    ? calculatedSummaryData.data
                     : calculatedSummaryData.data
                     ? calculatedSummaryData.data
-                    : undefined
+                    : summaryData ?? undefined
                 }
               />
             </div>
