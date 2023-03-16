@@ -66,7 +66,7 @@ const CheckinAgreementPage = () => {
 
   useDocumentTitle(
     titleMaker(
-      `Edit - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
+      `Check-in - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
     )
   );
   return (
