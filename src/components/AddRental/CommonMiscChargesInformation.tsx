@@ -1,10 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
 
 import { type StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
 import { Button } from "../Form";
 import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCharges";
 import { type MiscChargeListItem } from "../../utils/schemas/misCharges";
+import { useTranslation } from "react-i18next";
 
 interface CommonMiscChargesInformationProps {
   module: StepRatesAndChargesInformationProps["module"];
@@ -18,6 +19,7 @@ interface CommonMiscChargesInformationProps {
   isSupportingInfoAvailable: boolean;
 
   onNavigateNext: () => void;
+  currency?: string;
 }
 
 const CommonMiscChargesInformation = (
@@ -31,6 +33,7 @@ const CommonMiscChargesInformation = (
     vehicleInformation,
     isSupportingInfoAvailable,
   } = props;
+
   const [charges, setCharges] =
     useState<StepRatesAndChargesInformationProps["misCharges"]>(
       selectedMisCharges
@@ -74,7 +77,7 @@ const CommonMiscChargesInformation = (
       {!isSupportingInfoAvailable && (
         <span>Please fill out the previous steps</span>
       )}
-      <div className="grid gap-2">
+      <div className="grid grid-cols-1 gap-2">
         {(miscCharges.data || []).map((charge, idx) => (
           <MiscChargeItem
             key={`${charge.Id}-${idx}-${charge.Name}`}
@@ -117,7 +120,10 @@ function MiscChargeItem(props: {
   ) => void;
   onRemove: (chargeId: number) => void;
   dates: { startDate: Date; endDate: Date };
+  currency?: string;
 }) {
+  const { t } = useTranslation();
+
   const { charge, isSelected, selectedCharge, onSave, dates, onRemove } = props;
   const [qty, setQty] = useState(
     isSelected && selectedCharge ? selectedCharge.quantity : 1
@@ -181,9 +187,15 @@ function MiscChargeItem(props: {
     setQty(1);
   };
 
+  useEffect(() => {
+    if (!isSelected && charge.IsOptional === false) {
+      save({ optionIdToSave: 0, priceToSave: charge.Total ?? 0, qtyToSave: 1 });
+    }
+  }, [charge.IsOptional, charge.Total, isSelected, save]);
+
   return (
-    <div className="grid grid-cols-4 items-center md:w-11/12 md:grid-cols-12">
-      <div className="col-span-1 md:col-span-1">
+    <div className="grid grid-cols-12 items-center rounded bg-slate-100 p-1 md:w-11/12 md:p-2 md:pl-6">
+      <div className="col-span-1">
         <input
           type="checkbox"
           checked={isSelected}
@@ -196,13 +208,20 @@ function MiscChargeItem(props: {
                 })
               : handleRemove();
           }}
+          disabled={!charge.IsOptional}
+          id={`${charge.Id}-${charge.Name}-parent`}
         />
       </div>
-      <div className="col-span-3 md:col-span-8">{charge.Name}</div>
+      <label
+        htmlFor={`${charge.Id}-${charge.Name}-parent`}
+        className="col-span-11 md:col-span-8"
+      >
+        {charge.Name}
+      </label>
       <div
         className={classNames(
-          "col-span-4 flex items-center px-4 md:col-span-3",
-          charge.IsQuantity ? "justify-between" : "justify-end"
+          "col-span-12 flex items-center gap-2 px-4 md:col-span-3",
+          "justify-start md:justify-end"
         )}
       >
         {charge.IsQuantity && (
@@ -221,6 +240,7 @@ function MiscChargeItem(props: {
                 }
               }}
               className="w-20"
+              min={1}
             />
             <span className="block">X</span>
           </>
@@ -239,12 +259,19 @@ function MiscChargeItem(props: {
             }
           }}
           className="w-20"
+          min={0}
         />
       </div>
+      {charge.CalculationType?.toLowerCase() === "range" && (
+        <div className="col-span-12 flex items-center justify-start md:justify-end">
+          {dates.startDate.toISOString().substring(0, 10)}&nbsp;-&nbsp;
+          {dates.endDate.toISOString().substring(0, 10)}
+        </div>
+      )}
       {charge.IsDeductible && charge.Options?.length && (
         <>
           <span className="hidden md:block" />
-          <div className="col-span-4 grid md:col-span-11">
+          <div className="col-span-12 grid gap-2 md:col-span-11">
             {charge.Options.map((option, idx) => (
               <div
                 key={`${option.miscChargeOptionId}-${idx}`}
@@ -270,9 +297,16 @@ function MiscChargeItem(props: {
                   }}
                   disabled={!isSelected}
                 />
-                <div>
-                  <label htmlFor={`${charge.Id}-${option.miscChargeOptionId}`}>
-                    {option.name}
+                <div className="w-full">
+                  <label
+                    className="block w-full"
+                    htmlFor={`${charge.Id}-${option.miscChargeOptionId}`}
+                  >
+                    {t("intlCurrency", {
+                      currency: props.currency,
+                      value: Number(option.value),
+                    })}
+                    {option.name && <>&nbsp;-&nbsp;{option.name}</>}
                   </label>
                 </div>
               </div>

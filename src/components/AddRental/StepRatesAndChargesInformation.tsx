@@ -3,7 +3,7 @@ import { Transition } from "@headlessui/react";
 import classNames from "classnames";
 
 import CommonRatesInformation from "./CommonRatesInformation";
-import CommonMiscChargesInformation from "./CommonMisChargesInformation";
+import CommonMiscChargesInformation from "./CommonMiscChargesInformation";
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
 import { type RentalRateParsed } from "../../utils/schemas/rate";
@@ -37,6 +37,7 @@ export interface StepRatesAndChargesInformationProps {
   ) => void;
 
   onCompleted: () => void;
+  currency?: string;
 }
 
 const StepRatesAndChargesInformation = (
@@ -127,6 +128,7 @@ const StepRatesAndChargesInformation = (
               Boolean(props.rentalInformation) &&
               Boolean(props.vehicleInformation)
             }
+            currency={props.currency}
           />
         </Transition>
       </InformationBlockCardWithChildren>

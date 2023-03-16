@@ -119,7 +119,7 @@ i18n
         }
 
         if (i18nFormat === "currency") {
-          const { currency, value: numberValue = 0 } = options as any;
+          const { currency = "USD", value: numberValue = 0 } = options as any;
 
           if (currency !== "" && currency) {
             return new Intl.NumberFormat(lng, {

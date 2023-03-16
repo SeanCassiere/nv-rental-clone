@@ -247,6 +247,7 @@ const AddRentalParentForm = ({
             onSelectRateName={handleSetSelectedRateName}
             rate={selectedRate}
             onSelectedRate={handleSetSelectedRate}
+            currency={clientProfile.data?.currency || undefined}
           />
         ),
       };
@@ -378,6 +379,7 @@ const AddRentalParentForm = ({
     handleSetSelectedRateName,
     selectedRate,
     handleSetSelectedRate,
+    clientProfile.data?.currency,
     commonCustomerInformation,
     handleStageTabClick,
     reservationData,
