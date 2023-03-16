@@ -29,6 +29,7 @@ import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOpti
 import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
 import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/usePostCalculateRentalSummaryAmounts";
 import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCharges";
+import { useGetTaxes } from "../../hooks/network/taxes/useGetTaxes";
 
 import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
@@ -105,7 +106,7 @@ const AddRentalParentForm = ({
       vehicle: false,
       rates: false,
       taxes: false,
-      miscCharges: true,
+      miscCharges: false,
       payments: true,
       others: true,
     });
@@ -652,6 +653,28 @@ const AddRentalParentForm = ({
         }));
       });
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
+    },
+  });
+
+  // fetch taxes for the rental
+  const taxesAgreementReady =
+    selectedTaxIds.length === 0 &&
+    Boolean(agreementRentalInformation) &&
+    isEdit === false;
+  const taxesReservationReady = false;
+  useGetTaxes({
+    filters: {
+      LocationId:
+        module === "agreement"
+          ? agreementRentalInformation?.checkoutLocation ?? 0
+          : 0,
+    },
+    enabled:
+      module === "agreement" ? taxesAgreementReady : taxesReservationReady,
+    onSuccess: (data) => {
+      const selectedTaxes = (data || []).filter((tax) => !tax.isOptional);
+      setSelectedTaxIds(selectedTaxes.map((tax) => tax.id));
+      setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
     },
   });
 
