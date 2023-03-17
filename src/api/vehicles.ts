@@ -66,7 +66,7 @@ export const fetchVehicleStatusesList = async (opts: CommonAuthParams) => {
 
 export const fetchVehicleFuelLevelsList = async (opts: CommonAuthParams) => {
   return await callV3Api(
-    makeUrl(`/v3/vehicles/fuelLevels`, {
+    makeUrl(`/v3/vehicles/fuellevels`, {
       clientId: opts.clientId,
       userId: opts.userId,
     }),

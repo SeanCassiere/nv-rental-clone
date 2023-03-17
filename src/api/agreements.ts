@@ -79,7 +79,7 @@ export const fetchNewAgreementNo = async (
   opts: CommonAuthParams & { agreementType: string }
 ) => {
   return await callV3Api(
-    makeUrl(`/v3/agreements/generateAgreementNo`, {
+    makeUrl(`/v3/agreements/generateagreementno`, {
       clientId: opts.clientId,
       userId: opts.userId,
       agreementType: opts.agreementType,

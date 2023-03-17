@@ -8,7 +8,7 @@ export const fetchExchangesForAgreement = async (
   } & CommonAuthParams
 ) => {
   return await callV3Api(
-    makeUrl(`/v3/vehicleExchange`, {
+    makeUrl(`/v3/vehicleexchange`, {
       clientId: opts.clientId,
       userId: opts.userId,
       agreementId: opts.agreementId,

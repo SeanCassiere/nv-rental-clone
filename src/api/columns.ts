@@ -39,7 +39,7 @@ export const fetchModuleColumns = async (
   const { module } = getModuleApiName(opts.module);
 
   return await callV3Api(
-    makeUrl(`/v3/clients/columnHeaderInformation`, {
+    makeUrl(`/v3/clients/columnheaderinformation`, {
       clientId: opts.clientId,
       userId: opts.userId,
       module,
@@ -69,7 +69,7 @@ export const saveModuleColumns = async (
     orderdHeaderSettingIDList: opts.orderHeaderSettingIDList,
   };
 
-  return await callV3Api(makeUrl("/v3/clients/columnHeaderInformation", {}), {
+  return await callV3Api(makeUrl("/v3/clients/columnheaderinformation", {}), {
     method: "POST",
     body: JSON.stringify(body),
     headers: {

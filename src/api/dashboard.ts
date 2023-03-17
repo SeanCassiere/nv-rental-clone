@@ -128,7 +128,7 @@ export const fetchVehicleStatusCounts = async (
   }
 ) => {
   return await callV3Api(
-    makeUrl(`/v3/statistics/vehicleStatusCounts`, {
+    makeUrl(`/v3/statistics/vehiclestatuscounts`, {
       clientId: opts.clientId,
       userId: opts.userId,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),

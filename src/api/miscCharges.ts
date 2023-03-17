@@ -40,7 +40,7 @@ export async function fetchMiscCharges(
     userId,
   };
 
-  return await callV3Api(makeUrl(`/v3/miscCharges`, search), {
+  return await callV3Api(makeUrl(`/v3/misccharges`, search), {
     headers: { Authorization: `Bearer ${accessToken}` },
   }).then((res) => {
     if (Array.isArray(res.data)) {

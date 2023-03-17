@@ -62,7 +62,7 @@ export async function fetchRentalRateTypesForRental(
 ) {
   const { clientId, userId, accessToken, ...rest } = opts;
   return await callV3Api(
-    makeUrl("/v3/rateTypes", { clientId, userId, ...rest }),
+    makeUrl("/v3/ratetypes", { clientId, userId, ...rest }),
     {
       headers: { Authorization: `Bearer ${accessToken}` },
     }
@@ -80,7 +80,7 @@ export async function fetchOptimalRateForRental(
   const { accessToken, userId, clientId, CheckoutDate, CheckinDate, ...rest } =
     opts;
   return await callV3Api(
-    makeUrl("/v3/rates/ratesName/optimal", {
+    makeUrl("/v3/rates/ratesname/optimal", {
       clientId,
       // userId,
       CheckoutDate:
