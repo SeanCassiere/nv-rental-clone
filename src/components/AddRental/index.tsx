@@ -936,7 +936,9 @@ const AddRentalParentForm = ({
               </div>
             }
             subtitleText={
-              module === "agreement" && isEdit
+              module === "agreement" && isEdit && isCheckin
+                ? "Check-in the rental contract."
+                : module === "agreement" && isEdit && !isCheckin
                 ? "Edit the rental contract."
                 : module === "agreement" && !isEdit
                 ? "Create a new rental contract."
