@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 
 import { type StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
 import { Button } from "../Form";
 import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCharges";
+
+import { localDateTimeToQueryYearMonthDay } from "../../utils/date";
 import { type MiscChargeListItem } from "../../utils/schemas/misCharges";
-import { useTranslation } from "react-i18next";
 
 interface CommonMiscChargesInformationProps {
   module: StepRatesAndChargesInformationProps["module"];
@@ -129,14 +131,15 @@ function MiscChargeItem(props: {
   const startDate = useMemo(
     () =>
       selectedCharge?.startDate
-        ? new Date(Date.parse(selectedCharge?.startDate))
+        ? new Date(selectedCharge?.startDate)
         : dates.startDate,
     [dates.startDate, selectedCharge?.startDate]
   );
+
   const endDate = useMemo(
     () =>
       selectedCharge?.endDate
-        ? new Date(Date.parse(selectedCharge?.endDate))
+        ? new Date(selectedCharge?.endDate)
         : dates.endDate,
     [dates.endDate, selectedCharge?.endDate]
   );
@@ -184,8 +187,8 @@ function MiscChargeItem(props: {
         id: charge.Id,
         locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
         quantity: qtyToSave,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
+        startDate: localDateTimeToQueryYearMonthDay(startDate),
+        endDate: localDateTimeToQueryYearMonthDay(endDate),
         optionId: saveOptionId,
         isSelected: true,
         value: savePrice,
@@ -226,7 +229,7 @@ function MiscChargeItem(props: {
           }}
           disabled={!charge.IsOptional}
           id={`${charge.Id}-${charge.Name}-parent`}
-          className="rounded-full text-teal-500 focus:outline-teal-500 disabled:text-slate-400"
+          className="rounded text-teal-500 focus:outline-teal-500 disabled:text-slate-400"
         />
       </div>
       <label
@@ -310,15 +313,13 @@ function MiscChargeItem(props: {
                     });
                   }}
                   disabled={!isSelected}
-                  className="bg-gray-50 p-0.5 text-teal-500 focus:outline-teal-500 disabled:bg-gray-200"
+                  className="bg-gray-50 p-0.5 text-teal-500 focus:outline-teal-500 disabled:cursor-not-allowed disabled:bg-gray-100"
                 />
                 <div className="w-full">
                   <label
                     className={classNames(
-                      "block w-full cursor-pointer"
-                      // option.miscChargeOptionId === optionId
-                      //   ? "text-teal-600"
-                      //   : ""
+                      "block w-full",
+                      !isSelected ? "cursor-not-allowed" : "cursor-pointer"
                     )}
                     htmlFor={`${charge.Id}-${option.miscChargeOptionId}`}
                   >
