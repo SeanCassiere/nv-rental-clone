@@ -229,7 +229,7 @@ function MiscChargeItem(props: {
           }}
           disabled={!charge.IsOptional}
           id={`${charge.Id}-${charge.Name}-parent`}
-          className="rounded-full text-teal-500 focus:outline-teal-500 disabled:text-slate-400"
+          className="rounded text-teal-500 focus:outline-teal-500 disabled:text-slate-400"
         />
       </div>
       <label
@@ -313,15 +313,13 @@ function MiscChargeItem(props: {
                     });
                   }}
                   disabled={!isSelected}
-                  className="bg-gray-50 p-0.5 text-teal-500 focus:outline-teal-500 disabled:bg-gray-200"
+                  className="bg-gray-50 p-0.5 text-teal-500 focus:outline-teal-500 disabled:cursor-not-allowed disabled:bg-gray-100"
                 />
                 <div className="w-full">
                   <label
                     className={classNames(
-                      "block w-full cursor-pointer"
-                      // option.miscChargeOptionId === optionId
-                      //   ? "text-teal-600"
-                      //   : ""
+                      "block w-full",
+                      !isSelected ? "cursor-not-allowed" : "cursor-pointer"
                     )}
                     htmlFor={`${charge.Id}-${option.miscChargeOptionId}`}
                   >
