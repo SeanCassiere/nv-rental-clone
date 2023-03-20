@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { Link, type LinkPropsOptions } from "@tanstack/react-router";
 
 const buttonStyles = cva(
-  "flex justify-center h-max rounded border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm",
+  "flex justify-center h-max rounded border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2",
   {
     variants: {
       color: {
@@ -41,7 +41,7 @@ const buttonStyles = cva(
         color: "slate",
         disabled: true,
         className:
-          "disabled:bg-slate-300 disabled:text-slate-700 disabled:text-slate-200 disabled:opacity-75 disabled:shadow-none",
+          "disabled:bg-slate-300 disabled:text-slate-200 disabled:opacity-75 disabled:shadow-none",
       },
       {
         color: "dark-gray",
