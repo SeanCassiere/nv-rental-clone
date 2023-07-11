@@ -16,7 +16,7 @@ const ReservationStatusPill = (props: { status: string }) => {
         props.status === "Quote" && "bg-stone-500",
         props.status === "New" && "bg-indigo-500",
         // if not in supportedList
-        !supportedList.includes(props.status) && "bg-slate-900"
+        !supportedList.includes(props.status) && "bg-slate-900",
       )}
     >
       {statusName}

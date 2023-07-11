@@ -54,7 +54,7 @@ function AgreementsSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size]
+    [pageNumber, size],
   );
 
   const agreementsData = useGetAgreementsList({
@@ -102,9 +102,9 @@ function AgreementsSearchPage() {
 
             return value;
           },
-        })
+        }),
       ),
-    [columnsData.data, t]
+    [columnsData.data, t],
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
@@ -116,7 +116,7 @@ function AgreementsSearchPage() {
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -127,7 +127,7 @@ function AgreementsSearchPage() {
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   useDocumentTitle(titleMaker("Agreements"));
@@ -136,7 +136,7 @@ function AgreementsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4 pt-1.5">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -160,7 +160,7 @@ function AgreementsSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}

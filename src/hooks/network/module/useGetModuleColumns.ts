@@ -49,7 +49,7 @@ export function useGetModuleColumns({
 }
 
 export async function fetchModuleColumnsModded(
-  params: Parameters<typeof fetchModuleColumns>[0]
+  params: Parameters<typeof fetchModuleColumns>[0],
 ) {
   return await fetchModuleColumns({
     clientId: params.clientId || "",
@@ -61,8 +61,8 @@ export async function fetchModuleColumnsModded(
     .then((data) => mutateColumnAccessors(params.module, data))
     .then((cols) =>
       cols.sort(
-        (col1, col2) => col1.columnHeaderSettingID - col2.columnHeaderSettingID // sort by columnHeaderSettingID
-      )
+        (col1, col2) => col1.columnHeaderSettingID - col2.columnHeaderSettingID, // sort by columnHeaderSettingID
+      ),
     )
     .catch((e) => {
       console.error(e);
@@ -100,13 +100,13 @@ const customerColumnHeaderMap: ColumMap = {
 
 export function mutateColumnAccessors(
   type: AppPrimaryModuleType,
-  data: TColumnListItemParsed[]
+  data: TColumnListItemParsed[],
 ) {
   switch (type) {
     case "reservations":
       const reservationColumnData = settingStartingColumn(
         data,
-        "ReservationNumber"
+        "ReservationNumber",
       );
 
       return reservationColumnData.map((column) => {
@@ -124,7 +124,7 @@ export function mutateColumnAccessors(
     case "agreements":
       const agreementColumnData = settingStartingColumn(
         data,
-        "AgreementNumber"
+        "AgreementNumber",
       );
       return agreementColumnData.map((column) => {
         if (column.columnHeader in agreementColumnHeaderMap) {
@@ -411,7 +411,7 @@ export function makeInitialColumnAccessors(module: AppPrimaryModuleType) {
 
 function settingStartingColumn(
   columns: TColumnListItemParsed[],
-  startingColumnHeader: string
+  startingColumnHeader: string,
 ) {
   let columnData = columns;
   const numberActive = columns.filter((col) => col.isSelected).length;

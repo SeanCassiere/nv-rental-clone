@@ -94,7 +94,7 @@ const ModuleNotesTabContent = ({
               }
               return value;
             },
-          })
+          }),
         );
       });
     };

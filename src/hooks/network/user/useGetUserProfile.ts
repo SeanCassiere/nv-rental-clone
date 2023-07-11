@@ -38,13 +38,13 @@ export function useGetUserProfile() {
           clientId,
           userId,
           USER_STORAGE_KEYS.dateFormat,
-          data?.overrideDateFormat || dfnsDateFormat
+          data?.overrideDateFormat || dfnsDateFormat,
         );
         setLocalStorageForUser(
           clientId,
           userId,
           USER_STORAGE_KEYS.timeFormat,
-          data?.overrideTimeFormat || dfnsTimeFormat
+          data?.overrideTimeFormat || dfnsTimeFormat,
         );
       }
     },

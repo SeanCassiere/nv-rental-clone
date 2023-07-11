@@ -47,7 +47,7 @@ function VehiclesSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size]
+    [pageNumber, size],
   );
 
   const vehiclesData = useGetVehiclesList({
@@ -90,9 +90,9 @@ function VehiclesSearchPage() {
 
             return value;
           },
-        })
+        }),
       ),
-    [columnsData.data]
+    [columnsData.data],
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "vehicles" });
@@ -104,7 +104,7 @@ function VehiclesSearchPage() {
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -115,7 +115,7 @@ function VehiclesSearchPage() {
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   useDocumentTitle(titleMaker("Fleet"));
@@ -124,7 +124,7 @@ function VehiclesSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-4 pb-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4 py-4">
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
@@ -135,7 +135,7 @@ function VehiclesSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}

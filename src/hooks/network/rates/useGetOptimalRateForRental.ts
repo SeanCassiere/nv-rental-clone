@@ -10,7 +10,7 @@ export function useGetOptimalRateForRental(opts: {
     "userId" | "clientId" | "accessToken"
   >;
   onSuccess?: (
-    data: Awaited<ReturnType<typeof fetchOptimalRateForRental>>
+    data: Awaited<ReturnType<typeof fetchOptimalRateForRental>>,
   ) => void;
 }) {
   const auth = useAuth();

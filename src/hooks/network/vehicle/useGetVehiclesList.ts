@@ -36,7 +36,7 @@ export function useGetVehiclesList(params: {
 }
 
 export async function fetchVehiclesListModded(
-  params: Parameters<typeof fetchVehiclesList>[0]
+  params: Parameters<typeof fetchVehiclesList>[0],
 ) {
   return await fetchVehiclesList({
     clientId: params.clientId || "",
@@ -49,14 +49,14 @@ export async function fetchVehiclesListModded(
       ...("StartDate" in params.filters
         ? {
             StartDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-              params.filters.StartDate
+              params.filters.StartDate,
             ),
           }
         : {}),
       ...("EndDate" in params.filters
         ? {
             EndDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-              params.filters.EndDate
+              params.filters.EndDate,
             ),
           }
         : {}),

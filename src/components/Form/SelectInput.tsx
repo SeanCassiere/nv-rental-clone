@@ -58,13 +58,13 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                     "relative cursor-default rounded border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm",
                     error
                       ? "border-red-300 text-red-500 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-                      : undefined
+                      : undefined,
                   )}
                 >
                   <span
                     className={cn(
                       "block max-w-[17rem] truncate md:max-w-full",
-                      disabled ? "text-slate-500" : ""
+                      disabled ? "text-slate-500" : "",
                     )}
                   >
                     {typeof value?.value === "undefined" && placeHolderSchema
@@ -76,7 +76,7 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                       className={cn(
                         "h-5 w-5",
                         disabled ? "text-slate-500" : "text-gray-400",
-                        error ? "text-red-500" : undefined
+                        error ? "text-red-500" : undefined,
                       )}
                       aria-hidden="true"
                     />
@@ -104,16 +104,14 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                       className={({ active }) =>
                         cn(
                           active ? "bg-teal-600 text-white" : "text-gray-900",
-                          "relative cursor-default select-none py-2 pl-3 pr-9"
+                          "relative cursor-default select-none py-2 pl-3 pr-9",
                         )
                       }
                       value={person}
                     >
                       {({ selected, active }) => (
                         <>
-                          <span
-                            className={cn("block truncate font-normal")}
-                          >
+                          <span className={cn("block truncate font-normal")}>
                             {person.label}
                           </span>
 
@@ -121,7 +119,7 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                             <span
                               className={cn(
                                 active ? "text-white" : "text-teal-600",
-                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                "absolute inset-y-0 right-0 flex items-center pr-4",
                               )}
                             >
                               <CheckIconOutline

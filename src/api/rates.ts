@@ -17,7 +17,7 @@ export async function fetchRentalRates(
     RateName?: string;
     AgreementId?: string;
     AgreementTypeName?: string;
-  }
+  },
 ) {
   const {
     clientId,
@@ -47,7 +47,7 @@ export async function fetchRentalRates(
     }),
     {
       headers: { Authorization: `Bearer ${accessToken}` },
-    }
+    },
   ).then((res) => {
     if (Array.isArray(res.data)) {
       return res.data.map((rate) => RentalRateSchema.passthrough().parse(rate));
@@ -58,14 +58,14 @@ export async function fetchRentalRates(
 }
 
 export async function fetchRentalRateTypesForRental(
-  opts: CommonAuthParams & { LocationId: string; VehicleTypeId: string }
+  opts: CommonAuthParams & { LocationId: string; VehicleTypeId: string },
 ) {
   const { clientId, userId, accessToken, ...rest } = opts;
   return await callV3Api(
     makeUrl("/v3/ratetypes", { clientId, userId, ...rest }),
     {
       headers: { Authorization: `Bearer ${accessToken}` },
-    }
+    },
   ).then((res) => RentalRateTypeListSchema.parse(res.data));
 }
 
@@ -75,7 +75,7 @@ export async function fetchOptimalRateForRental(
     LocationId: string;
     CheckoutDate: Date;
     CheckinDate: Date;
-  }
+  },
 ) {
   const { accessToken, userId, clientId, CheckoutDate, CheckinDate, ...rest } =
     opts;
@@ -88,6 +88,6 @@ export async function fetchOptimalRateForRental(
       CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(CheckinDate),
       ...rest,
     }),
-    { headers: { Authorization: `Bearer ${accessToken}` } }
+    { headers: { Authorization: `Bearer ${accessToken}` } },
   ).then((res) => OptimalRateSchema.parse(res.data));
 }

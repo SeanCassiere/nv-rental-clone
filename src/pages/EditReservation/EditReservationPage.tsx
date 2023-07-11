@@ -1,10 +1,5 @@
 import { useCallback } from "react";
-import {
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/router";
+import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -49,7 +44,7 @@ const EditReservationPage = () => {
         params: { reservationId },
       });
     },
-    [reservationId, navigate]
+    [reservationId, navigate],
   );
 
   const handleAgreementSaveComplete = useCallback(() => {
@@ -62,14 +57,14 @@ const EditReservationPage = () => {
 
   const handleCancelEditReservation = useCallback(() => {
     router.navigate({
-      to: '../'
+      to: "../",
     });
   }, [router]);
 
   useDocumentTitle(
     titleMaker(
-      `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`
-    )
+      `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`,
+    ),
   );
   return (
     <Protector>

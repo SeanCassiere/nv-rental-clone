@@ -33,7 +33,7 @@ export function useGetCustomersList(params: {
 }
 
 export async function fetchCustomersListModded(
-  params: Parameters<typeof fetchCustomersList>[0]
+  params: Parameters<typeof fetchCustomersList>[0],
 ) {
   return await fetchCustomersList({
     clientId: params.clientId || "",

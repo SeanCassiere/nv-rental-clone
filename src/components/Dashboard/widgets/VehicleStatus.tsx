@@ -34,13 +34,17 @@ const VehicleStatusWidget = ({
             key={`status-${status.name}`}
             className="block"
             to="/fleet"
-            search={() => ({
-              filters: {
-                Active: true,
-                VehicleStatus: getStatusIdByName(status.name).toString(),
-                ...(vehicleTypeId > 0 ? { VehicleTypeId: vehicleTypeId } : {}),
-              },
-            }) as any}
+            search={() =>
+              ({
+                filters: {
+                  Active: true,
+                  VehicleStatus: getStatusIdByName(status.name).toString(),
+                  ...(vehicleTypeId > 0
+                    ? { VehicleTypeId: vehicleTypeId }
+                    : {}),
+                },
+              }) as any
+            }
           >
             {status.name}
             &nbsp;-&nbsp;

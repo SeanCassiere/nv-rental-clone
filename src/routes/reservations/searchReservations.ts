@@ -44,7 +44,7 @@ export const searchReservationsRoute = new Route({
                 module: "reservations",
               }),
             initialData: [],
-          })
+          }),
         );
       }
 
@@ -67,12 +67,14 @@ export const searchReservationsRoute = new Route({
                 filters: searchFilters,
                 clientDate: new Date(),
               }),
-          })
+          }),
         );
       }
       await Promise.all(promises);
     }
     return {};
   },
-  component: lazy(() => import("../../pages/ReservationsSearch/ReservationsSearchPage")),
+  component: lazy(
+    () => import("../../pages/ReservationsSearch/ReservationsSearchPage"),
+  ),
 });

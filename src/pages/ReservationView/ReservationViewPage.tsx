@@ -34,10 +34,10 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Reservation/ReservationSummaryTab")
+  () => import("../../components/Reservation/ReservationSummaryTab"),
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
 );
 
 function ReservationViewPage() {
@@ -105,15 +105,15 @@ function ReservationViewPage() {
   useDocumentTitle(
     titleMaker(
       (reservation.data?.reservationview.reservationNumber || "Loading") +
-        " - Reservations"
-    )
+        " - Reservations",
+    ),
   );
 
   return (
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -169,7 +169,7 @@ function ReservationViewPage() {
           </div>
         </div>
 
-        <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
+        <div className="mx-auto px-4 md:grid-cols-12">
           <ModuleTabs
             tabConfig={tabsConfig}
             startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}

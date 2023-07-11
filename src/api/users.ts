@@ -10,6 +10,6 @@ export const fetchUserProfile = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) => res.data);
 };

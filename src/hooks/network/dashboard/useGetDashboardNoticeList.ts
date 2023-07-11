@@ -37,7 +37,7 @@ export async function fetchDashboardNoticeListModded({
       const local = getLocalStorageForUser(
         navotar_clientid,
         navotar_userid,
-        USER_STORAGE_KEYS.dismissedNotices
+        USER_STORAGE_KEYS.dismissedNotices,
       );
       const dismissedNoticeIds: string[] = local ? JSON.parse(local) : [];
 

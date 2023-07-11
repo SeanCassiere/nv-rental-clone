@@ -14,7 +14,7 @@ export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "/",
   component: lazy(
-    () => import("../../pages/CustomerSearch/CustomerSearchPage")
+    () => import("../../pages/CustomerSearch/CustomerSearchPage"),
   ),
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
@@ -46,7 +46,7 @@ export const searchCustomersRoute = new Route({
                 module: "customers",
               }),
             initialData: [],
-          })
+          }),
         );
       }
 
@@ -68,7 +68,7 @@ export const searchCustomersRoute = new Route({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
-          })
+          }),
         );
       }
 

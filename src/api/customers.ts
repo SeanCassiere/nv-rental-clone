@@ -9,7 +9,7 @@ export const fetchCustomersList = async (
     page?: number;
     pageSize?: number;
     filters: any;
-  } & CommonAuthParams
+  } & CommonAuthParams,
 ) => {
   return await callV3Api(
     makeUrl(`/v3/customers`, {
@@ -23,12 +23,12 @@ export const fetchCustomersList = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   );
 };
 
 export const fetchCustomerData = async (
-  opts: { customerId: string | number } & CommonAuthParams
+  opts: { customerId: string | number } & CommonAuthParams,
 ) => {
   return await callV3Api(
     makeUrl(`/v3/customers/${opts.customerId}`, {
@@ -39,7 +39,7 @@ export const fetchCustomerData = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) => CustomerDataSchema.parse(res.data));
 };
 
@@ -53,6 +53,6 @@ export const fetchCustomerTypesList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) => CustomerTypeArraySchema.parse(res.data));
 };

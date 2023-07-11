@@ -25,7 +25,7 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
     const local = getLocalStorageForUser(
       auth.user?.profile.navotar_clientid,
       auth.user?.profile.navotar_userid,
-      USER_STORAGE_KEYS.dismissedNotices
+      USER_STORAGE_KEYS.dismissedNotices,
     );
     const data: string[] = local ? JSON.parse(local) : [];
 
@@ -35,7 +35,7 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
       auth.user?.profile.navotar_clientid,
       auth.user?.profile.navotar_userid,
       "dismissed-notices",
-      JSON.stringify(data)
+      JSON.stringify(data),
     );
   };
 
@@ -61,7 +61,7 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
             <a
               href={notice.link || "#"}
               className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-semibold text-teal-600 shadow-sm hover:bg-teal-50"
-              target={notice.link?.startsWith("http") ? "_blank" : '_self'}
+              target={notice.link?.startsWith("http") ? "_blank" : "_self"}
               rel="noopener noreferrer"
             >
               {notice.actionText}
@@ -71,14 +71,14 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
             className={cn(
               notice.ignoreDismiss
                 ? "sm:hidden"
-                : "order-2 flex-shrink-0 sm:order-3 sm:ml-3"
+                : "order-2 flex-shrink-0 sm:order-3 sm:ml-3",
             )}
           >
             <button
               type="button"
               className={cn(
                 "-mr-1 flex rounded-md p-2 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2",
-                notice.ignoreDismiss ? "opacity-0" : ""
+                notice.ignoreDismiss ? "opacity-0" : "",
               )}
               onClick={notice.ignoreDismiss ? undefined : onDismiss}
             >

@@ -11,6 +11,7 @@ import { UI_APPLICATION_NAME } from "../utils/constants";
 import { useGetDashboardNoticeList } from "../hooks/network/dashboard/useGetDashboardNoticeList";
 import DashboardBannerNotices from "./Dashboard/DashboardBannerNotices";
 import { cn } from "@/utils";
+import { HeaderUserNav } from "./header-user-nav";
 
 const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
@@ -101,8 +102,8 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
             ))}
           </div>
         )}
-        <div className="mx-auto max-w-[1620px]">
-          <div className="flex items-center px-4 pb-4 pt-6 md:pt-8">
+        <div className="mx-auto">
+          <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to={indexRoute.to}>
                 <img
@@ -121,9 +122,11 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
                 {UI_APPLICATION_NAME}
               </Link>
             </div>
-            <div className="flex flex-none items-center gap-x-2">Details</div>
+            <div className="flex flex-none items-center gap-x-2">
+              <HeaderUserNav />
+            </div>
           </div>
-          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 sm:space-x-0">
+          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 md:px-10 sm:space-x-0">
             {navigation.map((navItem) => (
               <Link
                 key={`nav_${navItem.name}`}
@@ -132,7 +135,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
                 className={cn(
                   navItem.current
                     ? "text-primary whitespace-nowrap border-b border-slate-800 pb-4 pt-3 font-semibold leading-none transition sm:px-4"
-                    : "text-primary whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-gray-300 dark:hover:border-gray-600 sm:px-4"
+                    : "text-primary whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-gray-300 dark:hover:border-gray-600 sm:px-4",
                 )}
                 {...navItem.props}
               >
@@ -142,21 +145,11 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
           </nav>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-[1620px] flex-1">{children}</main>
+      <main className="mx-auto w-full flex-1 max-w-[1700px] px-2 md:px-10">
+        {children}
+      </main>
     </div>
   );
 };
 
 export default AppHeaderLayout;
-
-/**
- * <img
-    className="h-8 w-8 rounded-full"
-    src={
-      userProfile.data?.userName
-        ? `https://avatars.dicebear.com/api/miniavs/${userProfile.data.userName}.svg?mood[]=happy`
-        : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-    }
-    alt="User profile picture"
-  />
- */

@@ -110,12 +110,12 @@ const CommonCustomerInformation = ({
           setValue(
             "licenseExpiryDate",
             customer.LicenseExpiryDate ?? null,
-            valOpts
+            valOpts,
           );
           setValue(
             "licenseIssueDate",
             customer.LicenseIssueDate ?? null,
-            valOpts
+            valOpts,
           );
           setValue("licenseNumber", customer.LicenseNumber ?? null, valOpts);
           setValue("bPhone", customer.bPhone ?? "", valOpts);

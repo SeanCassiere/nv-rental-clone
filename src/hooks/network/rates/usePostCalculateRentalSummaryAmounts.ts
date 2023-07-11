@@ -10,7 +10,7 @@ export function usePostCalculateRentalSummaryAmounts(opts: {
   >;
   enabled?: boolean;
   onSuccess?: (
-    data: Awaited<ReturnType<typeof postCalculateRentalSummaryAmounts>>
+    data: Awaited<ReturnType<typeof postCalculateRentalSummaryAmounts>>,
   ) => void;
 }) {
   const { enabled = true } = opts;

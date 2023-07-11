@@ -5,7 +5,7 @@ import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 export const fetchExchangesForAgreement = async (
   opts: {
     agreementId: string;
-  } & CommonAuthParams
+  } & CommonAuthParams,
 ) => {
   return await callV3Api(
     makeUrl(`/v3/vehicleexchange`, {
@@ -17,8 +17,8 @@ export const fetchExchangesForAgreement = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) =>
-    validateApiResWithZodSchema(VehicleExchangeItemListSchema, res)
+    validateApiResWithZodSchema(VehicleExchangeItemListSchema, res),
   );
 };

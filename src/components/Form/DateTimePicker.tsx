@@ -91,7 +91,7 @@ export const DateTimePicker = forwardRef<any, DateTimePickerProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 const CustomTimeInput = (props: {

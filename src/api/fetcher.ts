@@ -23,7 +23,7 @@ export function makeInitialApiData<T>(initialData: T) {
 
 export function makeUrl(
   endpoint: string,
-  params: Record<string, string | number | null | any[] | undefined>
+  params: Record<string, string | number | null | any[] | undefined>,
 ) {
   const queryParams = new URLSearchParams();
 

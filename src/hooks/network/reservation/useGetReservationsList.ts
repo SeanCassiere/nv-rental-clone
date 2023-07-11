@@ -34,7 +34,7 @@ export function useGetReservationsList(params: {
 }
 
 export async function fetchReservationsListModded(
-  params: Parameters<typeof fetchReservationsList>[0]
+  params: Parameters<typeof fetchReservationsList>[0],
 ) {
   return await fetchReservationsList({
     clientId: params.clientId || "",
@@ -50,7 +50,7 @@ export async function fetchReservationsListModded(
       return { ...res, data: [] };
     })
     .then((res) =>
-      validateApiResWithZodSchema(ReservationListItemListSchema, res)
+      validateApiResWithZodSchema(ReservationListItemListSchema, res),
     )
     .catch((e) => {
       console.error(e);

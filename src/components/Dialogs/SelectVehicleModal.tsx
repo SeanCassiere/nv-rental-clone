@@ -41,7 +41,7 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
         { accessor: "VehicleType", label: "Type" },
         { accessor: "Color", label: "Color" },
       ] as const,
-    []
+    [],
   );
 
   const vehicleListData = useGetVehiclesList({
@@ -77,7 +77,7 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
             }
             return item.getValue();
           },
-        })
+        }),
       );
     });
     return columns;

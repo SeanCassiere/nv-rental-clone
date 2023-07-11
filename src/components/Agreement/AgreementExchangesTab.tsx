@@ -78,7 +78,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
               }
               return value;
             },
-          })
+          }),
         );
       });
     };

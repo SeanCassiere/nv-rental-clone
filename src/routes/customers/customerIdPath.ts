@@ -30,7 +30,7 @@ export const customerPathIdRoute = new Route({
                 accessToken: auth.access_token,
                 customerId,
               }),
-          })
+          }),
         );
       }
 
@@ -48,7 +48,7 @@ export const customerPathIdRoute = new Route({
               });
             },
             retry: 0,
-          })
+          }),
         );
       }
 

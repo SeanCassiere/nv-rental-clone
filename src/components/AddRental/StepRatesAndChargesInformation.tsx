@@ -33,7 +33,7 @@ export interface StepRatesAndChargesInformationProps {
   onSelectedRate: (rate: RentalRateParsed) => void;
   misCharges: CalculateRentalSummaryMiscChargeType[];
   onSelectedMiscCharges: (
-    charges: CalculateRentalSummaryMiscChargeType[]
+    charges: CalculateRentalSummaryMiscChargeType[],
   ) => void;
 
   onCompleted: () => void;
@@ -41,7 +41,7 @@ export interface StepRatesAndChargesInformationProps {
 }
 
 const StepRatesAndChargesInformation = (
-  props: StepRatesAndChargesInformationProps
+  props: StepRatesAndChargesInformationProps,
 ) => {
   const [step, setStep] = useState(0);
 

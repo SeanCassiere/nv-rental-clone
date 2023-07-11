@@ -25,7 +25,7 @@ const AddAgreementPage = () => {
         search: () => ({ stage: destination.id }),
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const handleAgreementSaveComplete = useCallback(
@@ -36,7 +36,7 @@ const AddAgreementPage = () => {
         search: () => ({ tab: "summary" }),
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const handleCancelAddAgreement = useCallback(() => {

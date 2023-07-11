@@ -39,7 +39,7 @@ function IndexPage() {
         replace: true,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const widgetList = useGetDashboardWidgetList();
@@ -70,7 +70,7 @@ function IndexPage() {
     (widgets: DashboardWidgetItemParsed[]) => {
       saveDashboardWidgetsMutation.mutate({ widgets });
     },
-    [saveDashboardWidgetsMutation]
+    [saveDashboardWidgetsMutation],
   );
 
   useDocumentTitle(titleMaker("Dashboard"));
@@ -83,7 +83,7 @@ function IndexPage() {
         onWidgetSave={handleWidgetSortingEnd}
       />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4 pt-4">
           <div className="pb-4">
             <CommonHeader
               titleContent={
@@ -114,7 +114,7 @@ function IndexPage() {
                     <button
                       className={cn(
                         "ml-2 text-slate-500 sm:pt-0",
-                        isWidgetsLocked ? "" : "pl-0.5"
+                        isWidgetsLocked ? "" : "pl-0.5",
                       )}
                       onClick={() => setIsWidgetsLocked((prev) => !prev)}
                     >

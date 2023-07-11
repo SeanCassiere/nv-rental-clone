@@ -144,7 +144,7 @@ const AddRentalParentForm = ({
     cb:
       | RentalRateParsed
       | null
-      | ((prev: RentalRateParsed | null) => RentalRateParsed | null)
+      | ((prev: RentalRateParsed | null) => RentalRateParsed | null),
   ) => {
     if (typeof cb === "function") {
       setRateDetails((prev) => {
@@ -175,7 +175,7 @@ const AddRentalParentForm = ({
       setSelectedMiscCharges(charges);
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
-    []
+    [],
   );
 
   const clientProfile = useGetClientProfile();
@@ -528,7 +528,7 @@ const AddRentalParentForm = ({
       if (selectedTaxIds.length === 0) {
         const list = data.taxList.filter((tax) => tax.taxId !== null);
         const taxIds = [...list.map((tax) => tax.taxId)].filter(
-          (taxId) => typeof taxId === "number" && taxId !== null
+          (taxId) => typeof taxId === "number" && taxId !== null,
         ) as number[];
         setSelectedTaxIds(taxIds);
         setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
@@ -592,7 +592,7 @@ const AddRentalParentForm = ({
         : reservationConditionsForFetchingRates,
     filters: {
       LocationId: Number(
-        agreementRentalInformation?.checkoutLocation
+        agreementRentalInformation?.checkoutLocation,
       ).toString(),
       RateName: selectedRateName,
       CheckoutDate:
@@ -675,7 +675,7 @@ const AddRentalParentForm = ({
         : miscChargesReservationReady,
     onSuccess: (data) => {
       const mandatoryCharges = (data || []).filter(
-        (charge) => charge.IsOptional === false
+        (charge) => charge.IsOptional === false,
       );
       setSelectedMiscCharges((existing) => {
         if (existing.length > 0) {
@@ -763,7 +763,7 @@ const AddRentalParentForm = ({
   return (
     <>
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -910,7 +910,7 @@ const AddRentalParentForm = ({
                       className="flex items-center justify-center gap-2"
                       disabled={
                         !Object.values(creationStagesComplete).every(
-                          (obj) => obj === true
+                          (obj) => obj === true,
                         )
                       }
                     >
@@ -953,7 +953,7 @@ const AddRentalParentForm = ({
           />
         </div>
 
-        <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
+        <div className="mx-auto px-4 md:grid-cols-12">
           <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
             <div className="flex flex-col gap-4 lg:col-span-8">
               <ModuleTabs

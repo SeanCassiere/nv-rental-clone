@@ -50,7 +50,7 @@ export const makeSummaryDataStyles = (
     | "redHighlight"
     | "primaryBlockHighlight"
     | "biggerText"
-  >
+  >,
 ) => {
   return cn(
     "text-base font-semibold",
@@ -63,7 +63,7 @@ export const makeSummaryDataStyles = (
     data.primaryTextHighlight && !data.primaryBlockHighlight
       ? "text-teal-400"
       : "",
-    data.biggerText ? "text-lg" : "text-base"
+    data.biggerText ? "text-lg" : "text-base",
   );
 };
 
@@ -77,14 +77,14 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
   } = data;
 
   const [showDropdownContent, setShowDropdownContent] = useState(
-    isDropdownContentInitiallyShown
+    isDropdownContentInitiallyShown,
   );
 
   return (
     <div
       className={cn(
         "flex flex-col",
-        data.primaryBlockHighlight ? "" : "py-2 px-4"
+        data.primaryBlockHighlight ? "" : "py-2 px-4",
       )}
     >
       <div
@@ -93,14 +93,14 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
           !data.primaryTextHighlight && data.primaryBlockHighlight
             ? "bg-teal-400 text-white"
             : "",
-          data.primaryBlockHighlight ? "py-2 px-4" : ""
+          data.primaryBlockHighlight ? "py-2 px-4" : "",
         )}
       >
         <span
           className={cn(
             "flex-shrink break-all font-semibold md:max-w-none",
             !data.primaryBlockHighlight ? "text-gray-700" : "",
-            data.biggerText ? "text-lg" : "text-base"
+            data.biggerText ? "text-lg" : "text-base",
           )}
         >
           {data.label}
@@ -137,7 +137,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
       </div>
       <Transition
         show={Boolean(
-          hasDropdownContent && showDropdownContent && dropdownContent
+          hasDropdownContent && showDropdownContent && dropdownContent,
         )}
         className="grid origin-top-left gap-1 pt-1 md:pl-6"
         enter="transition-all duration-75"

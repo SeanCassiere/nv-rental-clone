@@ -12,5 +12,5 @@ if (!documentElement) {
 ReactDOM.createRoot(documentElement).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

@@ -34,7 +34,7 @@ const SelectCustomerModal = (props: SelectVehicleModalProps) => {
         { accessor: "City", label: "City" },
         { accessor: "ZipCode", label: "Zip" },
       ] as const,
-    []
+    [],
   );
 
   const customerListData = useGetCustomersList({
@@ -69,7 +69,7 @@ const SelectCustomerModal = (props: SelectVehicleModalProps) => {
             }
             return item.getValue();
           },
-        })
+        }),
       );
     });
     return columns;

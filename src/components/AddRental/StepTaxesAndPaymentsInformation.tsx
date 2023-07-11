@@ -29,7 +29,7 @@ interface StepTaxesAndPaymentsInformationProps {
 }
 
 const StepTaxesAndPaymentsInformation = (
-  props: StepTaxesAndPaymentsInformationProps
+  props: StepTaxesAndPaymentsInformationProps,
 ) => {
   const [step, setStep] = useState(0);
 
@@ -187,7 +187,7 @@ const CommonTaxesInformation = (props: CommonTaxesInformationProps) => {
                     "",
                     mandatoryTaxes.includes(tax.id)
                       ? "cursor-not-allowed"
-                      : "cursor-pointer"
+                      : "cursor-pointer",
                   )}
                 >
                   {tax.name}

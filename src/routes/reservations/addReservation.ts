@@ -14,6 +14,6 @@ export const addReservationRoute = new Route({
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
   component: lazy(
-    () => import("../../pages/AddReservation/AddReservationPage")
+    () => import("../../pages/AddReservation/AddReservationPage"),
   ),
 });

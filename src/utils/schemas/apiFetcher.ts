@@ -12,7 +12,7 @@ const ApiResponseMetaSchema = z.object({
 
 export function validateApiResWithZodSchema<TItemSchema extends z.ZodSchema>(
   schema: TItemSchema,
-  response: any
+  response: any,
 ) {
   const ApiResponseWithDataSchema = ApiResponseMetaSchema.extend({
     data: schema,

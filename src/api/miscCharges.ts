@@ -9,7 +9,7 @@ export async function fetchMiscCharges(
     VehicleTypeId?: string | number;
     CheckoutDate?: Date;
     CheckinDate?: Date;
-  }
+  },
 ) {
   const {
     accessToken,
@@ -45,7 +45,7 @@ export async function fetchMiscCharges(
   }).then((res) => {
     if (Array.isArray(res.data)) {
       return (res.data || []).map((item) =>
-        MiscChargeListItemSchema.passthrough().parse(item)
+        MiscChargeListItemSchema.passthrough().parse(item),
       );
     }
     return [];

@@ -99,7 +99,7 @@ export const MultiSelectInput = forwardRef<any, MultiSelectInputProps>(
                         className={({ active }) =>
                           cn(
                             active ? "bg-teal-600 text-white" : "text-gray-900",
-                            "relative cursor-default select-none py-2 pl-3 pr-9"
+                            "relative cursor-default select-none py-2 pl-3 pr-9",
                           )
                         }
                         value={option.value}
@@ -123,7 +123,7 @@ export const MultiSelectInput = forwardRef<any, MultiSelectInputProps>(
                               />
                               <span
                                 className={cn(
-                                  "ml-3 block truncate font-normal"
+                                  "ml-3 block truncate font-normal",
                                 )}
                               >
                                 {option.label}
@@ -145,5 +145,5 @@ export const MultiSelectInput = forwardRef<any, MultiSelectInputProps>(
         </Listbox>
       </div>
     );
-  }
+  },
 );

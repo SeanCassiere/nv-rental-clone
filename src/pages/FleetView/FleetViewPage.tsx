@@ -30,17 +30,17 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Vehicle/VehicleSummaryTab")
+  () => import("../../components/Vehicle/VehicleSummaryTab"),
 );
 const VehicleReservationsTab = lazy(
-  () => import("../../components/Vehicle/VehicleReservationsTab")
+  () => import("../../components/Vehicle/VehicleReservationsTab"),
 );
 const VehicleAgreementsTab = lazy(
-  () => import("../../components/Vehicle/VehicleAgreementsTab")
+  () => import("../../components/Vehicle/VehicleAgreementsTab"),
 );
 
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
 );
 
 function VehicleViewPage() {
@@ -116,14 +116,14 @@ function VehicleViewPage() {
   }, [vehicleId, vehicle.data]);
 
   useDocumentTitle(
-    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
+    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet"),
   );
 
   return (
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -170,7 +170,7 @@ function VehicleViewPage() {
           </div>
         </div>
 
-        <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
+        <div className="mx-auto px-4 md:grid-cols-12">
           <ModuleTabs
             tabConfig={tabsConfig}
             startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}

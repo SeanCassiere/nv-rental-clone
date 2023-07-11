@@ -48,11 +48,11 @@ const VehicleModuleStatBlock = ({
           <span
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
-              getTextColorForStatus(getStatusById(vehicle?.vehicle.statusId))
+              getTextColorForStatus(getStatusById(vehicle?.vehicle.statusId)),
             )}
           >
             {getVehicleStatusNameFromRaw(
-              getStatusById(vehicle?.vehicle.statusId)
+              getStatusById(vehicle?.vehicle.statusId),
             )}
           </span>
         }
@@ -111,7 +111,7 @@ const VehicleModuleStatBlock = ({
           <span
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
-              vehicle?.vehicle.active ? "text-slate-600" : "text-red-500"
+              vehicle?.vehicle.active ? "text-slate-600" : "text-red-500",
             )}
           >
             {vehicle?.vehicle.active ? "Active" : "Inactive"}

@@ -6,7 +6,7 @@ import { cn } from "@/utils";
 export function getSelectedOptionForSelectInput(
   options: TSelectInputOption[],
   value: string | number,
-  key: keyof TSelectInputOption = "value"
+  key: keyof TSelectInputOption = "value",
 ) {
   return options.find((option) => `${option[key]}` === `${value}`);
 }
@@ -69,12 +69,12 @@ export const NativeSelectInput = forwardRef<any, NativeSelectProps>(
                 error
                   ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
                   : "focus:border-teal-500 focus:ring-teal-500",
-                className
+                className,
               )}
               value={value?.value ?? ""}
               onChange={(evt) => {
                 const schema = props.options.find(
-                  (option) => option.value === evt.target.value
+                  (option) => option.value === evt.target.value,
                 );
                 if (schema) {
                   onSelect(schema);
@@ -106,5 +106,5 @@ export const NativeSelectInput = forwardRef<any, NativeSelectProps>(
         </div>
       </>
     );
-  }
+  },
 );

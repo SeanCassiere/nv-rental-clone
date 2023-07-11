@@ -49,7 +49,7 @@ const AgreementModuleStatBlock = ({
           <span
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
-              getTextColorForStatus(agreement?.agreementStatusName ?? "")
+              getTextColorForStatus(agreement?.agreementStatusName ?? ""),
             )}
           >
             {agreement?.agreementStatusName

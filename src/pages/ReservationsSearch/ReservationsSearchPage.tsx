@@ -40,7 +40,6 @@ import { ReservationDateTimeColumns } from "../../utils/columns";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
@@ -55,7 +54,7 @@ function ReservationsSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size]
+    [pageNumber, size],
   );
 
   const reservationsData = useGetReservationsList({
@@ -103,9 +102,9 @@ function ReservationsSearchPage() {
 
             return value;
           },
-        })
+        }),
       ),
-    [columnsData.data, t]
+    [columnsData.data, t],
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "reservations" });
@@ -117,7 +116,7 @@ function ReservationsSearchPage() {
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -128,7 +127,7 @@ function ReservationsSearchPage() {
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   useDocumentTitle(titleMaker("Reservations"));
@@ -137,7 +136,7 @@ function ReservationsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4 pt-1.5">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -161,7 +160,7 @@ function ReservationsSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}

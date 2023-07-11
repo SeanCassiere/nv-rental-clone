@@ -43,7 +43,7 @@ export const searchFleetRoute = new Route({
                 module: "vehicles",
               }),
             initialData: [],
-          })
+          }),
         );
       }
 
@@ -65,7 +65,7 @@ export const searchFleetRoute = new Route({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
-          })
+          }),
         );
       }
 

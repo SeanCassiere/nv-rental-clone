@@ -91,7 +91,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
 
             return value;
           },
-        })
+        }),
       );
     });
 

@@ -4,7 +4,7 @@ import { type TReservationSearchQuery } from "./schemas/reservation";
 import { type TVehicleSearchQuery } from "./schemas/vehicle";
 
 export function normalizeAgreementListSearchParams(
-  search: TAgreementSearchQuery
+  search: TAgreementSearchQuery,
 ) {
   const { page, size, filters } = search;
 
@@ -34,7 +34,7 @@ export function normalizeAgreementListSearchParams(
 }
 
 export function normalizeCustomerListSearchParams(
-  search: TCustomerSearchQuery
+  search: TCustomerSearchQuery,
 ) {
   const { page, size, filters } = search;
 
@@ -50,7 +50,7 @@ export function normalizeCustomerListSearchParams(
 }
 
 export function normalizeReservationListSearchParams(
-  search: TReservationSearchQuery
+  search: TReservationSearchQuery,
 ) {
   const { page, size, filters } = search;
 

@@ -21,12 +21,12 @@ export const ReservationFiltersSchema = z
       const createdDateFromParsed = parse(
         CreatedDateFrom,
         "yyyy-MM-dd",
-        new Date()
+        new Date(),
       );
       const createdDateToParsed = parse(
         CreatedDateTo,
         "yyyy-MM-dd",
-        new Date()
+        new Date(),
       );
       if (isBefore(createdDateToParsed, createdDateFromParsed)) {
         ctx.addIssue({

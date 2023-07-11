@@ -69,13 +69,13 @@ i18n
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format"
+              "date-format",
             ) || dfnsDateFormat;
           const timeFormat =
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "time-format"
+              "time-format",
             ) || dfnsTimeFormat;
           const dfnsDateFormatWithTime = `${dateFormat} ${timeFormat}`;
 
@@ -107,7 +107,7 @@ i18n
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format"
+              "date-format",
             ) || dfnsDateFormat;
           try {
             return dateFnsFormat(new Date(value), dateFormat, {
