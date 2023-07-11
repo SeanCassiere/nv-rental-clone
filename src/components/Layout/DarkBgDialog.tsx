@@ -66,7 +66,7 @@ const DarkBgDialog = (props: DarkBgDialogProps) => {
                     "md:max-w-4xl": sizing === "4xl",
                     "md:max-w-5xl": sizing === "5xl",
                   },
-                  "w-full rounded bg-white p-4"
+                  "w-full rounded bg-white p-4",
                 )}
               >
                 <Dialog.Title className="flex w-full items-center justify-between">

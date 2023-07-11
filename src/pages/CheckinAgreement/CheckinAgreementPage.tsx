@@ -1,10 +1,5 @@
 import { useCallback } from "react";
-import {
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/router";
+import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -47,7 +42,7 @@ const CheckinAgreementPage = () => {
         params: { agreementId },
       });
     },
-    [agreementId, navigate]
+    [agreementId, navigate],
   );
 
   const handleAgreementSaveComplete = useCallback(() => {
@@ -66,8 +61,10 @@ const CheckinAgreementPage = () => {
 
   useDocumentTitle(
     titleMaker(
-      `Check-in - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
-    )
+      `Check-in - ${
+        summaryData.data?.agreementNumber || "Loading"
+      } - Agreement`,
+    ),
   );
   return (
     <Protector>

@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -10,10 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuItem,
-  DropdownMenuGroup
-} from '@/components/ui/dropdown-menu';
-import { useGetUserProfile } from '@/hooks/network/user/useGetUserProfile';
-import { useAuth } from 'react-oidc-context';
+  DropdownMenuGroup,
+} from "@/components/ui/dropdown-menu";
+import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
+import { useAuth } from "react-oidc-context";
 
 // function to get the AvatarFallback text for a person's name
 function getAvatarFallbackText(name: string) {
@@ -28,14 +28,17 @@ export const HeaderUserNav = () => {
   const auth = useAuth();
 
   const userQuery = useGetUserProfile();
-  const fullName = `${userQuery.data?.firstName} ${userQuery.data?.lastName}`
+  const fullName = `${userQuery.data?.firstName} ${userQuery.data?.lastName}`;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={`https://avatars.dicebear.com/api/miniavs/${userQuery.data?.userName}.svg?mood[]=happy`} alt={fullName} />
+            <AvatarImage
+              src={`https://avatars.dicebear.com/api/miniavs/${userQuery.data?.userName}.svg?mood[]=happy`}
+              alt={fullName}
+            />
             <AvatarFallback>{getAvatarFallbackText(fullName)}</AvatarFallback>
           </Avatar>
         </Button>
@@ -43,7 +46,9 @@ export const HeaderUserNav = () => {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{userQuery.data?.userName}</p>
+            <p className="text-sm font-medium leading-none">
+              {userQuery.data?.userName}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
               {userQuery.data?.email}
             </p>
@@ -66,13 +71,15 @@ export const HeaderUserNav = () => {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {
-          auth.signoutRedirect();
-        }}>
+        <DropdownMenuItem
+          onClick={() => {
+            auth.signoutRedirect();
+          }}
+        >
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};

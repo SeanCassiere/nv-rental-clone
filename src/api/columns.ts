@@ -34,7 +34,7 @@ function getModuleApiName(module: AppPrimaryModuleType) {
 export const fetchModuleColumns = async (
   opts: {
     module: "reservations" | "agreements" | "customers" | "vehicles";
-  } & CommonAuthParams
+  } & CommonAuthParams,
 ) => {
   const { module } = getModuleApiName(opts.module);
 
@@ -48,7 +48,7 @@ export const fetchModuleColumns = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) => res.data);
 };
 
@@ -57,7 +57,7 @@ export const saveModuleColumns = async (
     module: AppPrimaryModuleType;
     headerSettingIDList: string;
     orderHeaderSettingIDList: string;
-  } & CommonAuthParams
+  } & CommonAuthParams,
 ) => {
   const { moduleId, capitalModule } = getModuleApiName(opts.module);
   const body = {

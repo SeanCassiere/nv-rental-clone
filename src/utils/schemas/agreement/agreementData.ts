@@ -276,7 +276,7 @@ export const AgreementDataSchema = z.object({
       expiryDatestr: z.string().nullable(),
       taxSelectedStatus: z.any(),
       glCode: z.string().nullable(),
-    })
+    }),
   ),
 
   driverList: z.array(
@@ -327,7 +327,7 @@ export const AgreementDataSchema = z.object({
       referenceId: z.coerce.string().nullable(),
       countryName: z.string().nullable(),
       signatureDate: z.string().nullable(),
-    })
+    }),
   ),
 
   customerEmail: z.string().nullable(),
@@ -456,7 +456,7 @@ export const AgreementDataSchema = z.object({
         equipmentReturnDateStr: z.string().nullable(),
         equipmentTypeName: z.string().nullable(),
         isDelete: z.boolean(),
-      })
+      }),
     )
     .nullable(),
 
@@ -485,7 +485,7 @@ export const AgreementDataSchema = z.object({
         milesAllowedDiscountValue: z.number().nullable(),
         minimnumTotal: z.number().nullable(),
         discountTotal: z.number().nullable(),
-      })
+      }),
     )
     .nullable(),
 
@@ -542,7 +542,7 @@ export const AgreementDataSchema = z.object({
       isActive: z.boolean(),
       billingBy: z.string().nullable(),
       billingOwnerId: z.number().nullable(),
-    })
+    }),
   ),
 
   creditCards: z.array(
@@ -565,7 +565,7 @@ export const AgreementDataSchema = z.object({
       month: z.number(),
       isTokenized: z.boolean().nullable(),
       customerID: z.number().nullable(),
-    })
+    }),
   ),
 
   agreementAttribute: z.array(
@@ -579,7 +579,7 @@ export const AgreementDataSchema = z.object({
       keyValue: z.string().nullable(),
       type: z.string(), // Textbox, DateTime Picker, Textox-Number
       displayName: z.string().nullable(),
-    })
+    }),
   ),
 
   referralDetails: z.any(),
@@ -608,7 +608,7 @@ export const AgreementDataSchema = z.object({
         vehicleType: z.coerce.string().nullable(),
         unit: z.coerce.string().nullable(),
         locationID: z.coerce.string().nullable(),
-      })
+      }),
     )
     .nullable(),
 

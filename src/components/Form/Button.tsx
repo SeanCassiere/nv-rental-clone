@@ -60,7 +60,7 @@ const buttonStyles = cva(
       fullWidth: false,
       disabled: false,
     },
-  }
+  },
 );
 
 interface CustomButtonProps
@@ -87,16 +87,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         disabled={disabled}
-        className={cn(
-          buttonStyles({ fullWidth, disabled, color }),
-          className
-        )}
+        className={cn(buttonStyles({ fullWidth, disabled, color }), className)}
         {...otherProps}
       >
         {children}
       </button>
     );
-  }
+  },
 );
 
 type CustomLinkButtonProps = LinkPropsOptions & {
@@ -114,10 +111,7 @@ export const LinkButton = forwardRef<
     <Link
       ref={ref}
       {...otherProps}
-      className={cn(
-        buttonStyles({ fullWidth, disabled, color }),
-        className
-      )}
+      className={cn(buttonStyles({ fullWidth, disabled, color }), className)}
       disabled={disabled}
     >
       {children}

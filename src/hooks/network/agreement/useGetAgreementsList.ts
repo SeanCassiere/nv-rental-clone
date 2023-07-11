@@ -33,7 +33,7 @@ export function useGetAgreementsList(params: {
 }
 
 export async function fetchAgreementsListModded(
-  params: Parameters<typeof fetchAgreementsList>[0]
+  params: Parameters<typeof fetchAgreementsList>[0],
 ) {
   return await fetchAgreementsList({
     clientId: params.clientId || "",
@@ -49,7 +49,7 @@ export async function fetchAgreementsListModded(
       return { ...res, data: [] };
     })
     .then((res) =>
-      validateApiResWithZodSchema(AgreementListItemListSchema, res)
+      validateApiResWithZodSchema(AgreementListItemListSchema, res),
     )
     .catch((e) => {
       console.error(e);

@@ -11,7 +11,7 @@ export const fetchRentalRateSummaryAmounts = async (
   opts: {
     module: "reservations" | "agreements";
     referenceId: string;
-  } & CommonAuthParams
+  } & CommonAuthParams,
 ) => {
   const agreementUrl = makeUrl(`/v3/agreements/${opts.referenceId}/summary`, {
     clientId: opts.clientId,
@@ -22,7 +22,7 @@ export const fetchRentalRateSummaryAmounts = async (
     {
       clientId: opts.clientId,
       userId: opts.userId,
-    }
+    },
   );
 
   return await callV3Api(
@@ -31,12 +31,12 @@ export const fetchRentalRateSummaryAmounts = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) => RentalRatesSummarySchema.parse(res.data));
 };
 
 export const fetchCustomerSummaryAmounts = async (
-  opts: { customerId: string | number } & CommonAuthParams
+  opts: { customerId: string | number } & CommonAuthParams,
 ) => {
   return await callV3Api(
     makeUrl(`/v3/customers/${opts.customerId}/summary`, {
@@ -47,12 +47,12 @@ export const fetchCustomerSummaryAmounts = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) => CustomerSummarySchema.parse(res.data));
 };
 
 export const fetchVehicleSummaryAmounts = async (
-  opts: { vehicleId: string | number; clientDate: Date } & CommonAuthParams
+  opts: { vehicleId: string | number; clientDate: Date } & CommonAuthParams,
 ) => {
   return await callV3Api(
     makeUrl(`/v3/vehicles/${opts.vehicleId}/summary`, {
@@ -64,12 +64,12 @@ export const fetchVehicleSummaryAmounts = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    }
+    },
   ).then((res) => VehicleSummarySchema.parse(res.data));
 };
 
 export async function postCalculateRentalSummaryAmounts(
-  opts: CommonAuthParams & CalculateRentalSummaryAmountsInput
+  opts: CommonAuthParams & CalculateRentalSummaryAmountsInput,
 ) {
   const { accessToken, clientId, userId, ...inputs } = opts;
   const { startDate, endDate, checkoutLocationId, checkinLocationId, rate } =

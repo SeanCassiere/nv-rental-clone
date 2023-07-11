@@ -25,7 +25,7 @@ interface CommonMiscChargesInformationProps {
 }
 
 const CommonMiscChargesInformation = (
-  props: CommonMiscChargesInformationProps
+  props: CommonMiscChargesInformationProps,
 ) => {
   const {
     onNavigateNext,
@@ -38,7 +38,7 @@ const CommonMiscChargesInformation = (
 
   const [charges, setCharges] =
     useState<StepRatesAndChargesInformationProps["misCharges"]>(
-      selectedMisCharges
+      selectedMisCharges,
     );
 
   const selectedChargeIds = charges.map((charge) => `${charge.id}`);
@@ -58,11 +58,11 @@ const CommonMiscChargesInformation = (
   });
 
   const handleAddMiscCharge = (
-    charge: StepRatesAndChargesInformationProps["misCharges"][number]
+    charge: StepRatesAndChargesInformationProps["misCharges"][number],
   ) => {
     setCharges((previousCharges) => {
       const chargesWithoutSameId = previousCharges.filter(
-        (prevCharge) => prevCharge.id !== charge.id
+        (prevCharge) => prevCharge.id !== charge.id,
       );
       return [...chargesWithoutSameId, charge];
     });
@@ -118,7 +118,7 @@ function MiscChargeItem(props: {
   isSelected: boolean;
   selectedCharge?: StepRatesAndChargesInformationProps["misCharges"][number];
   onSave: (
-    charge: StepRatesAndChargesInformationProps["misCharges"][number]
+    charge: StepRatesAndChargesInformationProps["misCharges"][number],
   ) => void;
   onRemove: (chargeId: number) => void;
   dates: { startDate: Date; endDate: Date };
@@ -133,7 +133,7 @@ function MiscChargeItem(props: {
       selectedCharge?.startDate
         ? new Date(selectedCharge?.startDate)
         : dates.startDate,
-    [dates.startDate, selectedCharge?.startDate]
+    [dates.startDate, selectedCharge?.startDate],
   );
 
   const endDate = useMemo(
@@ -141,17 +141,17 @@ function MiscChargeItem(props: {
       selectedCharge?.endDate
         ? new Date(selectedCharge?.endDate)
         : dates.endDate,
-    [dates.endDate, selectedCharge?.endDate]
+    [dates.endDate, selectedCharge?.endDate],
   );
 
   const [qty, setQty] = useState(
-    isSelected && selectedCharge ? selectedCharge.quantity : 1
+    isSelected && selectedCharge ? selectedCharge.quantity : 1,
   );
   const [price, setPrice] = useState(
-    isSelected && selectedCharge ? selectedCharge.value : charge.Total ?? 0
+    isSelected && selectedCharge ? selectedCharge.value : charge.Total ?? 0,
   );
   const [optionId, setOptionId] = useState(
-    isSelected && selectedCharge ? selectedCharge.optionId : 0
+    isSelected && selectedCharge ? selectedCharge.optionId : 0,
   );
 
   const save = useCallback(
@@ -196,7 +196,7 @@ function MiscChargeItem(props: {
         isTaxable: charge.IsTaxable ?? false,
       });
     },
-    [charge, startDate, endDate, onSave]
+    [charge, startDate, endDate, onSave],
   );
 
   const handleRemove = () => {
@@ -241,7 +241,7 @@ function MiscChargeItem(props: {
       <div
         className={cn(
           "col-span-12 flex cursor-pointer items-center gap-2 px-4 md:col-span-3",
-          "justify-start md:justify-end"
+          "justify-start md:justify-end",
         )}
       >
         {charge.IsQuantity && (
@@ -319,7 +319,7 @@ function MiscChargeItem(props: {
                   <label
                     className={cn(
                       "block w-full",
-                      !isSelected ? "cursor-not-allowed" : "cursor-pointer"
+                      !isSelected ? "cursor-not-allowed" : "cursor-pointer",
                     )}
                     htmlFor={`${charge.Id}-${option.miscChargeOptionId}`}
                   >

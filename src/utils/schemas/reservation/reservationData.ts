@@ -166,7 +166,7 @@ export const ReservationDataSchema = z.object({
       expiryDatestr: z.string().nullable(),
       taxSelectedStatus: z.any(),
       glCode: z.string().nullable(),
-    })
+    }),
   ),
 
   rateList: z.array(RentalRateListItemSchema),
@@ -222,7 +222,7 @@ export const ReservationDataSchema = z.object({
       id: z.coerce.string().nullable(),
       card_details: z.any(),
       paymentFor: z.coerce.string().nullable(),
-    })
+    }),
   ),
   //   {
   //     agreementNo: null,
@@ -303,7 +303,7 @@ export const ReservationDataSchema = z.object({
       isActive: z.boolean(),
       billingBy: z.string().nullable(),
       billingOwnerId: z.number().nullable(),
-    })
+    }),
   ),
   mileageCharges: z.array(z.any()),
 

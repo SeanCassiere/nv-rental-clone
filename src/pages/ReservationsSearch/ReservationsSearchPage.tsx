@@ -40,7 +40,6 @@ import { ReservationDateTimeColumns } from "../../utils/columns";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
@@ -55,7 +54,7 @@ function ReservationsSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size]
+    [pageNumber, size],
   );
 
   const reservationsData = useGetReservationsList({
@@ -103,9 +102,9 @@ function ReservationsSearchPage() {
 
             return value;
           },
-        })
+        }),
       ),
-    [columnsData.data, t]
+    [columnsData.data, t],
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "reservations" });
@@ -117,7 +116,7 @@ function ReservationsSearchPage() {
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -128,7 +127,7 @@ function ReservationsSearchPage() {
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   useDocumentTitle(titleMaker("Reservations"));

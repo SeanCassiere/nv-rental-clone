@@ -43,7 +43,7 @@ const DashboardWidgetPickerModal = ({
   const [isModalClosingLocked, setModalClosingLocked] = useState(false);
 
   const [widgetsLocal, setWidgetsLocal] = useState<DashboardWidgetItemParsed[]>(
-    []
+    [],
   );
 
   const handleClosingOfModal = () => {
@@ -78,7 +78,7 @@ const DashboardWidgetPickerModal = ({
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = (evt: DragEndEvent) => {
@@ -94,7 +94,7 @@ const DashboardWidgetPickerModal = ({
     const newWidgetIdOrder = arrayMove(
       widgetIdsList,
       widgetIdsList.indexOf(String(draggingId)),
-      widgetIdsList.indexOf(String(overId))
+      widgetIdsList.indexOf(String(overId)),
     );
 
     const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
@@ -188,7 +188,7 @@ const WidgetOption = ({
       <div
         className={cn(
           "my-0.5 flex items-center justify-between rounded border border-white px-2 focus-within:border-slate-300",
-          isDragging ? "bg-slate-50" : "bg-white"
+          isDragging ? "bg-slate-50" : "bg-white",
         )}
       >
         <div className={cn("flex items-center gap-3")}>

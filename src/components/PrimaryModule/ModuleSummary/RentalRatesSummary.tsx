@@ -13,7 +13,7 @@ import {
 function makeChargeItemText(
   charge: TRentalRatesSummarySchema["miscCharges"][number],
   t: TFunction,
-  currency?: string
+  currency?: string,
 ) {
   const name = charge.name;
   const type = charge.calculationType.toLowerCase();
@@ -126,7 +126,7 @@ export const RentalRatesSummary = ({
             currency,
           }),
           primaryTextHighlight: Boolean(
-            summaryData?.totalMiscChargesNonTaxable
+            summaryData?.totalMiscChargesNonTaxable,
           ),
           hasDropdownContent: Boolean(nonTaxableMischarges.length > 0),
           dropdownContent: nonTaxableMischarges.map((charge) => (
@@ -190,7 +190,7 @@ export const RentalRatesSummary = ({
             currency,
           }),
           primaryTextHighlight: Boolean(
-            summaryData?.promotionDiscountOnSubTotal
+            summaryData?.promotionDiscountOnSubTotal,
           ),
           shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
         },
@@ -348,7 +348,7 @@ export const RentalRatesSummary = ({
             currency,
           }),
           primaryTextHighlight: Boolean(
-            summaryData?.totalMiscChargesNonTaxable
+            summaryData?.totalMiscChargesNonTaxable,
           ),
           hasDropdownContent: Boolean(nonTaxableMischarges.length > 0),
           dropdownContent: nonTaxableMischarges.map((charge) => (
@@ -413,7 +413,7 @@ export const RentalRatesSummary = ({
             currency,
           }),
           primaryTextHighlight: Boolean(
-            summaryData?.promotionDiscountOnSubTotal
+            summaryData?.promotionDiscountOnSubTotal,
           ),
           shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
         },
@@ -563,7 +563,7 @@ export const RentalRatesSummary = ({
             currency,
           }),
           primaryTextHighlight: Boolean(
-            summaryData?.totalMiscChargesNonTaxable
+            summaryData?.totalMiscChargesNonTaxable,
           ),
         },
         {
@@ -618,7 +618,7 @@ export const RentalRatesSummary = ({
             currency,
           }),
           primaryTextHighlight: Boolean(
-            summaryData?.promotionDiscountOnSubTotal
+            summaryData?.promotionDiscountOnSubTotal,
           ),
           shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
         },

@@ -22,7 +22,7 @@ const AgreementStatusPill = (props: { status: string }) => {
         props.status === "Pending_Deposit" && "bg-stone-500",
         props.status === "Pending_Payment" && "bg-indigo-500",
         // if not in supportedList
-        !supportedList.includes(props.status.trim()) && "bg-slate-900"
+        !supportedList.includes(props.status.trim()) && "bg-slate-900",
       )}
     >
       {statusName}

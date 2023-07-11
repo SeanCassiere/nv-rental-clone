@@ -6,7 +6,7 @@ import { dashboardQKeys } from "../../../utils/query-key";
 
 export function useGetDashboardWidgetList(params?: {
   onSuccess?: (
-    data: Awaited<ReturnType<typeof fetchDashboardWidgetList>>
+    data: Awaited<ReturnType<typeof fetchDashboardWidgetList>>,
   ) => void;
 }) {
   const { onSuccess } = params || {};

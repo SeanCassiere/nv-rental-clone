@@ -31,7 +31,7 @@ export const fleetPathIdRoute = new Route({
                 vehicleId,
                 clientDate: new Date(),
               }),
-          })
+          }),
         );
       }
 
@@ -50,7 +50,7 @@ export const fleetPathIdRoute = new Route({
               });
             },
             retry: 0,
-          })
+          }),
         );
       }
 

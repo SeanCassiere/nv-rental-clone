@@ -7,7 +7,7 @@ export const fetchNotesForModule = async (
   opts: {
     referenceId: string;
     module: AppPrimaryModuleType;
-  } & Omit<CommonAuthParams, "userId">
+  } & Omit<CommonAuthParams, "userId">,
 ) => {
   let url: URL;
   const authParams = { clientId: opts.clientId };

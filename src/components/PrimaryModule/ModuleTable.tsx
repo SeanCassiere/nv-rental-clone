@@ -88,7 +88,7 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
           isDragging ? "bg-slate-200" : "bg-slate-100 text-gray-700",
           isDisabled
             ? "cursor-pointer text-gray-800 hover:cursor-not-allowed"
-            : "cursor-grab"
+            : "cursor-grab",
         )}
         {...listeners}
         {...attributes}
@@ -125,15 +125,15 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
-    columns.map((col) => col.id!)
+    columns.map((col) => col.id!),
   );
   const [columnVisibility, setColumnVisibility] = useState(
     props.rawColumnsData
       .sort(sortColOrderByOrderIndex)
       .reduce(
         (acc, col) => ({ ...acc, [col.columnHeader]: col.isSelected }),
-        {}
-      )
+        {},
+      ),
   );
 
   const table = useReactTable({
@@ -168,7 +168,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDndDragEnd = (evt: DragEndEvent) => {
@@ -179,14 +179,14 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     const newOrder = arrayMove(
       columnOrder,
       columnOrder.indexOf(draggingId as string),
-      columnOrder.indexOf(overId as string)
+      columnOrder.indexOf(overId as string),
     );
     table.setColumnOrder(newOrder);
   };
 
   const getColumnDescription = (headerName: string) => {
     const find = props.rawColumnsData.find(
-      (col) => col.columnHeader === headerName
+      (col) => col.columnHeader === headerName,
     );
     const description = find ? find.columnHeaderDescription : "Not found";
     return description;
@@ -197,9 +197,9 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       getPaginationWithDoubleEllipsis(
         props.pagination.pageIndex + 1,
         props.totalPages,
-        7
+        7,
       ),
-    [props.pagination.pageIndex, props.totalPages]
+    [props.pagination.pageIndex, props.totalPages],
   );
 
   return (
@@ -252,12 +252,12 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                         key={cell.id}
                         className={cn(
                           "whitespace-nowrap py-4 text-base font-normal text-slate-700",
-                          cellIdx === 0 ? "px-4 sm:pl-6" : "px-4"
+                          cellIdx === 0 ? "px-4 sm:pl-6" : "px-4",
                         )}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}
@@ -418,7 +418,7 @@ const DesktopPaginationBtn = (
   props: DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
-  > & { current?: boolean }
+  > & { current?: boolean },
 ) => {
   const { children, current, className, ...otherProps } = props;
   return (
@@ -430,7 +430,7 @@ const DesktopPaginationBtn = (
           ? "z-10 border-teal-500 bg-teal-50 text-teal-600"
           : "border-slate-300 bg-white text-slate-500",
         "disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300",
-        className
+        className,
       )}
       {...(current ? { "aria-current": "page", current: `${current}` } : {})}
     >

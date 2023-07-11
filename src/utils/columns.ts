@@ -4,7 +4,6 @@ export const ReservationDateTimeColumns = [
   "EndDate",
 ];
 
-
 export const AgreementDateTimeColumns = [
   "CreatedDate",
   "CheckoutDate",

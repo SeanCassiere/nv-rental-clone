@@ -35,13 +35,13 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Agreement/AgreementSummaryTab")
+  () => import("../../components/Agreement/AgreementSummaryTab"),
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
 );
 const AgreementExchangesTab = lazy(
-  () => import("../../components/Agreement/AgreementExchangesTab")
+  () => import("../../components/Agreement/AgreementExchangesTab"),
 );
 
 function AgreementViewPage() {
@@ -122,7 +122,9 @@ function AgreementViewPage() {
   const isCheckedIn = agreement.data?.returnDate ? true : false;
 
   useDocumentTitle(
-    titleMaker((agreement.data?.agreementNumber || "Loading") + " - Agreements")
+    titleMaker(
+      (agreement.data?.agreementNumber || "Loading") + " - Agreements",
+    ),
   );
 
   return (

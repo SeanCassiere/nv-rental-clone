@@ -42,7 +42,7 @@ const AgreementVehicleInformationTab = ({
 }) => {
   const checkoutLocation = useMemo(
     () => rentalInformation?.checkoutLocation || 0,
-    [rentalInformation?.checkoutLocation]
+    [rentalInformation?.checkoutLocation],
   );
 
   const [showFleetPicker, setShowFleetPicker] = useState(false);
@@ -185,7 +185,7 @@ const AgreementVehicleInformationTab = ({
                 options={vehicleTypeOptions}
                 value={getSelectedOptionForSelectInput(
                   vehicleTypeOptions,
-                  getValues("vehicleTypeId")
+                  getValues("vehicleTypeId"),
                 )}
                 onSelect={(value) => {
                   if (value !== null) {
@@ -209,7 +209,7 @@ const AgreementVehicleInformationTab = ({
                 options={vehicleOptions}
                 value={getSelectedOptionForSelectInput(
                   vehicleOptions,
-                  getValues("vehicleId")
+                  getValues("vehicleId"),
                 )}
                 onSelect={(value) => {
                   if (value !== null) {
@@ -217,7 +217,7 @@ const AgreementVehicleInformationTab = ({
                       shouldValidate: true,
                     });
                     const vehicle = vehicleListData.data?.data.find(
-                      (v) => v.VehicleId === parseInt(value.value ?? "0")
+                      (v) => v.VehicleId === parseInt(value.value ?? "0"),
                     );
                     if (vehicle) {
                       setValue("fuelOut", vehicle.FuelLevel ?? "", {
@@ -241,7 +241,7 @@ const AgreementVehicleInformationTab = ({
                 options={fuelOptions}
                 value={getSelectedOptionForSelectInput(
                   fuelOptions,
-                  getValues("fuelOut")
+                  getValues("fuelOut"),
                 )}
                 onSelect={(value) => {
                   if (value !== null) {

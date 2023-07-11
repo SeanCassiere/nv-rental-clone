@@ -13,7 +13,7 @@ const VehicleStatusPill = (props: { status: string }) => {
         props.status === "Available" && "bg-green-500",
         props.status === "OnRent" && "bg-orange-500",
         // if not in supportedList
-        !supportedList.includes(props.status) && "bg-slate-900"
+        !supportedList.includes(props.status) && "bg-slate-900",
       )}
     >
       {statusName}

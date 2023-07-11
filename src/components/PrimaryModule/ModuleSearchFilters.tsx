@@ -47,7 +47,7 @@ function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {
 
 function makeBackToArray<T extends KeyValueObject>(
   data: any,
-  originalData: any
+  originalData: any,
 ) {
   const parsed = [...Object.entries(data)].reduce((prev, [key, value]) => {
     let useableValue = value;
@@ -126,7 +126,7 @@ interface ModuleSearchFiltersProps<T extends KeyValueObject> {
 }
 
 function ModuleSearchFilters<T extends KeyValueObject>(
-  props: ModuleSearchFiltersProps<T>
+  props: ModuleSearchFiltersProps<T>,
 ) {
   const [values, setValues] = useState(props.initialValues);
   return (
@@ -184,7 +184,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
             // uses a string array
             if (evt.target?.multiple === true) {
               const options = [...evt.target.selectedOptions].map(
-                (el) => el.value
+                (el) => el.value,
               );
 
               if (options.includes("undefined")) {
@@ -295,7 +295,7 @@ const RenderInput = <T extends KeyValueObject>({
         const sendItems: TSelectInputOption[] = [];
         value.forEach((item) => {
           const found = blueprint.options.find(
-            (option) => option.value === item
+            (option) => option.value === item,
           );
           if (found) {
             sendItems.push(found);
@@ -307,7 +307,7 @@ const RenderInput = <T extends KeyValueObject>({
     };
     const getPlaceholder = () => {
       const find = blueprint.options.find(
-        (el) => typeof el.value === "undefined"
+        (el) => typeof el.value === "undefined",
       );
       if (find) {
         return find;
@@ -322,7 +322,7 @@ const RenderInput = <T extends KeyValueObject>({
         values={getValues()}
         onSelect={(selectValues) => {
           const allUndefined = selectValues.filter(
-            (item) => item.value === undefined
+            (item) => item.value === undefined,
           );
           const allIsSelectAll = allUndefined.filter((e) => e.isSelectAll);
 

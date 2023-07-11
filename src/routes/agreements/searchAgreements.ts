@@ -46,7 +46,7 @@ export const searchAgreementsRoute = new Route({
                 module: "agreements",
               }),
             initialData: [],
-          })
+          }),
         );
       }
 
@@ -69,7 +69,7 @@ export const searchAgreementsRoute = new Route({
                 currentDate: new Date(),
                 filters: searchFilters,
               }),
-          })
+          }),
         );
       }
 
@@ -78,6 +78,6 @@ export const searchAgreementsRoute = new Route({
     return {};
   },
   component: lazy(
-    () => import("../../pages/AgreementsSearch/AgreementsSearchPage")
+    () => import("../../pages/AgreementsSearch/AgreementsSearchPage"),
   ),
 });

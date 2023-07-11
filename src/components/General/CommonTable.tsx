@@ -30,7 +30,7 @@ interface TCommonTableProps<T> {
 const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
   const hasPagination = props.hasPagination ?? false;
   const [internalPagination, setInternalPagination] = useState<PaginationState>(
-    { pageIndex: 0, pageSize: 10 }
+    { pageIndex: 0, pageSize: 10 },
   );
 
   const totalPages =
@@ -68,7 +68,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
       return getPaginationWithDoubleEllipsis(
         paginationState.pageIndex + 1,
         totalPages ?? 0,
-        7
+        7,
       );
     }
     return [];
@@ -78,7 +78,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
     <div
       className={cn(
         "relative w-full overflow-hidden overflow-y-auto rounded border border-slate-200",
-        props.stickyHeader ? "mr-2 max-h-[650px]" : ""
+        props.stickyHeader ? "mr-2 max-h-[650px]" : "",
       )}
     >
       {/* <div className="overflow-x-auto"> */}
@@ -88,7 +88,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
             "bg-slate-100",
             props.stickyHeader
               ? "sticky top-0 z-10 border-b border-slate-200"
-              : ""
+              : "",
           )}
         >
           {table.getHeaderGroups().map((headerGroup) => (
@@ -100,14 +100,14 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                   colSpan={header.colSpan}
                   className={cn(
                     header.index === 0 ? "sm:pl-6" : "",
-                    "px-4 py-5 text-left text-base font-semibold text-gray-700"
+                    "px-4 py-5 text-left text-base font-semibold text-gray-700",
                   )}
                 >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </th>
               ))}
@@ -123,7 +123,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                     key={cell.id}
                     className={cn(
                       cellIdx === 0 ? "sm:pl-6" : "",
-                      "whitespace-nowrap px-4 py-3 text-base font-normal text-slate-700"
+                      "whitespace-nowrap px-4 py-3 text-base font-normal text-slate-700",
                     )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -210,7 +210,7 @@ const DesktopPaginationBtn = (
   props: DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
-  > & { current?: boolean }
+  > & { current?: boolean },
 ) => {
   const { children, current, className, ...otherProps } = props;
   return (
@@ -222,7 +222,7 @@ const DesktopPaginationBtn = (
           ? "z-10 border-teal-500 bg-teal-50 text-teal-600"
           : "border-slate-300 bg-white text-slate-500",
         "disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300",
-        className
+        className,
       )}
       {...(current ? { "aria-current": "page", current: `${current}` } : {})}
     >

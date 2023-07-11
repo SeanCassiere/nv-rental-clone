@@ -17,7 +17,7 @@ const CommonHeader = ({
     <div
       className={cn(
         "pb-4",
-        includeBottomBorder ? "border-b border-slate-100" : ""
+        includeBottomBorder ? "border-b border-slate-100" : "",
       )}
     >
       <div className="sm:flex sm:items-center sm:justify-between">

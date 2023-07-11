@@ -26,7 +26,7 @@ const AddReservationPage = () => {
         search: () => ({ stage: destination.id }),
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const handleReservationSaveComplete = useCallback(
@@ -37,12 +37,12 @@ const AddReservationPage = () => {
         search: () => ({ tab: "summary" }),
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const handleCancelAddReservation = useCallback(() => {
     router.navigate({
-      to: '../',
+      to: "../",
     });
   }, [router]);
 

@@ -34,10 +34,10 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Reservation/ReservationSummaryTab")
+  () => import("../../components/Reservation/ReservationSummaryTab"),
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
 );
 
 function ReservationViewPage() {
@@ -105,8 +105,8 @@ function ReservationViewPage() {
   useDocumentTitle(
     titleMaker(
       (reservation.data?.reservationview.reservationNumber || "Loading") +
-        " - Reservations"
-    )
+        " - Reservations",
+    ),
   );
 
   return (

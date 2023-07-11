@@ -20,7 +20,7 @@ export function useSaveDashboardWidgetList() {
           clientId: auth.user?.profile.navotar_clientid || "",
           userId: auth.user?.profile.navotar_userid || "",
           accessToken: auth.user?.access_token || "",
-        })
+        }),
       );
       await Promise.all(savePromises);
     },

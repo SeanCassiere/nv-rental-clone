@@ -31,7 +31,7 @@ export const reservationPathIdRoute = new Route({
                 module: "reservations",
                 referenceId: reservationId,
               }),
-          })
+          }),
         );
       }
 
@@ -49,7 +49,7 @@ export const reservationPathIdRoute = new Route({
               });
             },
             retry: 0,
-          })
+          }),
         );
       }
 
@@ -76,7 +76,7 @@ export const viewReservationByIdRoute = new Route({
       .parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
   component: lazy(
-    () => import("../../pages/ReservationView/ReservationViewPage")
+    () => import("../../pages/ReservationView/ReservationViewPage"),
   ),
 });
 
@@ -91,6 +91,6 @@ export const editReservationByIdRoute = new Route({
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
   component: lazy(
-    () => import("../../pages/EditReservation/EditReservationPage")
+    () => import("../../pages/EditReservation/EditReservationPage"),
   ),
 });

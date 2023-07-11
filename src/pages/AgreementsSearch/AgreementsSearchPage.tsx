@@ -54,7 +54,7 @@ function AgreementsSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size]
+    [pageNumber, size],
   );
 
   const agreementsData = useGetAgreementsList({
@@ -102,9 +102,9 @@ function AgreementsSearchPage() {
 
             return value;
           },
-        })
+        }),
       ),
-    [columnsData.data, t]
+    [columnsData.data, t],
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
@@ -116,7 +116,7 @@ function AgreementsSearchPage() {
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -127,7 +127,7 @@ function AgreementsSearchPage() {
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   useDocumentTitle(titleMaker("Agreements"));

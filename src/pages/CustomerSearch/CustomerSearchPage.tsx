@@ -49,7 +49,7 @@ function CustomerSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size]
+    [pageNumber, size],
   );
 
   const customersData = useGetCustomersList({
@@ -94,9 +94,9 @@ function CustomerSearchPage() {
 
             return value;
           },
-        })
+        }),
       ),
-    [columnsData.data, t]
+    [columnsData.data, t],
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "customers" });
@@ -108,7 +108,7 @@ function CustomerSearchPage() {
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -119,7 +119,7 @@ function CustomerSearchPage() {
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation],
   );
 
   useDocumentTitle(titleMaker("Customers"));

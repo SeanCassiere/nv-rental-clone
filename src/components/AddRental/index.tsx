@@ -144,7 +144,7 @@ const AddRentalParentForm = ({
     cb:
       | RentalRateParsed
       | null
-      | ((prev: RentalRateParsed | null) => RentalRateParsed | null)
+      | ((prev: RentalRateParsed | null) => RentalRateParsed | null),
   ) => {
     if (typeof cb === "function") {
       setRateDetails((prev) => {
@@ -175,7 +175,7 @@ const AddRentalParentForm = ({
       setSelectedMiscCharges(charges);
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
-    []
+    [],
   );
 
   const clientProfile = useGetClientProfile();
@@ -528,7 +528,7 @@ const AddRentalParentForm = ({
       if (selectedTaxIds.length === 0) {
         const list = data.taxList.filter((tax) => tax.taxId !== null);
         const taxIds = [...list.map((tax) => tax.taxId)].filter(
-          (taxId) => typeof taxId === "number" && taxId !== null
+          (taxId) => typeof taxId === "number" && taxId !== null,
         ) as number[];
         setSelectedTaxIds(taxIds);
         setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
@@ -592,7 +592,7 @@ const AddRentalParentForm = ({
         : reservationConditionsForFetchingRates,
     filters: {
       LocationId: Number(
-        agreementRentalInformation?.checkoutLocation
+        agreementRentalInformation?.checkoutLocation,
       ).toString(),
       RateName: selectedRateName,
       CheckoutDate:
@@ -675,7 +675,7 @@ const AddRentalParentForm = ({
         : miscChargesReservationReady,
     onSuccess: (data) => {
       const mandatoryCharges = (data || []).filter(
-        (charge) => charge.IsOptional === false
+        (charge) => charge.IsOptional === false,
       );
       setSelectedMiscCharges((existing) => {
         if (existing.length > 0) {
@@ -910,7 +910,7 @@ const AddRentalParentForm = ({
                       className="flex items-center justify-center gap-2"
                       disabled={
                         !Object.values(creationStagesComplete).every(
-                          (obj) => obj === true
+                          (obj) => obj === true,
                         )
                       }
                     >

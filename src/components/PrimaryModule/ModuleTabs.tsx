@@ -35,7 +35,7 @@ export const ModuleTabs = (props: {
       <Tab.Group selectedIndex={index} onChange={handleChangeIndex}>
         <Tab.List
           className={cn(
-            "mt-2 mb-2.5 flex w-max max-w-full gap-1 overflow-x-auto rounded py-1.5"
+            "mt-2 mb-2.5 flex w-max max-w-full gap-1 overflow-x-auto rounded py-1.5",
           )}
         >
           {props.tabConfig.map((item) => (
@@ -46,7 +46,7 @@ export const ModuleTabs = (props: {
                     selected
                       ? "bg-slate-100 text-slate-600 hover:shadow-sm"
                       : "text-slate-500 hover:bg-slate-100 hover:text-slate-700",
-                    "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-semibold outline-none transition-all duration-200 ease-in-out focus:outline-none focus:ring focus:ring-inset focus:ring-slate-200"
+                    "inline-block min-w-[100px] shrink-0 rounded px-3 py-2 text-sm font-semibold outline-none transition-all duration-200 ease-in-out focus:outline-none focus:ring focus:ring-inset focus:ring-slate-200",
                   )}
                 >
                   {item.label}

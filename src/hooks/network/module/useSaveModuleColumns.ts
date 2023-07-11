@@ -35,7 +35,7 @@ export function useSaveModuleColumns({
       if (accessorKeys.length > 0) {
         accessorKeys.forEach((accessorKey) => {
           const column = allColumns.find(
-            (column) => column.columnHeader === accessorKey
+            (column) => column.columnHeader === accessorKey,
           );
           if (column) {
             columnsMovedToTheFront.push(column.columnHeaderSettingID);

@@ -22,7 +22,7 @@ const InformationBlock = (props: TInformationBlockProps) => {
           hidden: isHiddenOnMobile,
           grid: !isHiddenOnMobile,
         },
-        "gap-0.5 border-b border-b-slate-200 px-4 pb-2 sm:grid"
+        "gap-0.5 border-b border-b-slate-200 px-4 pb-2 sm:grid",
       )}
     >
       <span className="select-none truncate text-base font-semibold text-slate-800">
@@ -76,7 +76,7 @@ export const InformationBlockCardWithChildren = (
   props: Omit<
     TInformationBlockCardProps & { children: ReactNode },
     "numberPerBlock" | "blocks"
-  > & { renderEndIcon?: ReactNode }
+  > & { renderEndIcon?: ReactNode },
 ) => {
   return (
     <div className="rounded border border-slate-200 bg-slate-50">

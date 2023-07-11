@@ -29,10 +29,10 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Customer/CustomerSummaryTab")
+  () => import("../../components/Customer/CustomerSummaryTab"),
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent")
+  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
 );
 
 function CustomerViewPage() {
@@ -93,8 +93,8 @@ function CustomerViewPage() {
     titleMaker(
       (customer.data?.firstName && customer.data?.lastName
         ? customer.data?.firstName + " " + customer.data?.lastName
-        : "Loading") + " - Customers"
-    )
+        : "Loading") + " - Customers",
+    ),
   );
 
   return (

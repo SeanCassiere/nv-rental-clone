@@ -43,13 +43,13 @@ const ReservationModuleStatBlock = ({
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
               getTextColorForStatus(
-                reservation?.reservationview.reservationStatusName ?? ""
-              )
+                reservation?.reservationview.reservationStatusName ?? "",
+              ),
             )}
           >
             {reservation?.reservationview.reservationStatusName
               ? getReservationStatusNameFromRaw(
-                  reservation?.reservationview.reservationStatusName
+                  reservation?.reservationview.reservationStatusName,
                 )
               : "-"}
           </span>

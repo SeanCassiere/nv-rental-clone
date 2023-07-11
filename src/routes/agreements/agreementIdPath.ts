@@ -31,7 +31,7 @@ export const agreementPathIdRoute = new Route({
                 module: "agreements",
                 referenceId: agreementId,
               }),
-          })
+          }),
         );
       }
 
@@ -49,7 +49,7 @@ export const agreementPathIdRoute = new Route({
               });
             },
             retry: 0,
-          })
+          }),
         );
       }
 
@@ -102,6 +102,6 @@ export const checkinAgreementByIdRoute = new Route({
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
   component: lazy(
-    () => import("../../pages/CheckinAgreement/CheckinAgreementPage")
+    () => import("../../pages/CheckinAgreement/CheckinAgreementPage"),
   ),
 });

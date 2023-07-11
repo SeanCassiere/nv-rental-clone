@@ -46,7 +46,7 @@ const storedInternalSearches: {
 ];
 
 export async function fetchGlobalSearchList(
-  opts: CommonAuthParams & { currentDate: Date; searchTerm: string }
+  opts: CommonAuthParams & { currentDate: Date; searchTerm: string },
 ): Promise<GlobalSearchReturnType> {
   const { clientId, userId, accessToken, currentDate, searchTerm } = opts;
 
@@ -104,7 +104,7 @@ export async function fetchGlobalSearchList(
             displayText,
             fullDisplayText: `Customers > ${displayText}`,
           };
-        }
+        },
       );
       returnableResults = [...returnableResults, ...customerResults];
 
@@ -119,7 +119,7 @@ export async function fetchGlobalSearchList(
             displayText,
             fullDisplayText: `Vehicles > ${displayText}`,
           };
-        }
+        },
       );
       returnableResults = [...returnableResults, ...vehicleResults];
 
@@ -132,7 +132,7 @@ export async function fetchGlobalSearchList(
               String(res.FirstName + " " + res.LastName).trim() +
               " - " +
               String(res.VehicleType) +
-              (res.LicenseNo ? " - " + String(res.LicenseNo) : "")
+              (res.LicenseNo ? " - " + String(res.LicenseNo) : ""),
           ).trim();
           return {
             type: "network",
@@ -141,7 +141,7 @@ export async function fetchGlobalSearchList(
             displayText,
             fullDisplayText: `Reservations > ${displayText}`,
           };
-        }
+        },
       );
       returnableResults = [...returnableResults, ...reservationResults];
 
@@ -155,7 +155,7 @@ export async function fetchGlobalSearchList(
               " - " +
               String(agreement.VehicleType) +
               " - " +
-              String(agreement.LicenseNo)
+              String(agreement.LicenseNo),
           ).trim();
           return {
             type: "network",
@@ -164,7 +164,7 @@ export async function fetchGlobalSearchList(
             displayText,
             fullDisplayText: `Agreements > ${displayText}`,
           };
-        }
+        },
       );
       returnableResults = [...returnableResults, ...agreementResults];
 
