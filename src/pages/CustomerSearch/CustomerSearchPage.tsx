@@ -130,25 +130,12 @@ function CustomerSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4 pt-4 pb-4 sm:px-6 md:px-8">
           <CommonHeader
             titleContent={
-              <div className="flex justify-between">
-                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                  Customers
-                </h1>
-                <div>
-                  <LinkButton
-                    color="teal"
-                    to={addCustomerRoute.fullPath}
-                    search={() => ({})}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <PlusIconFilled className="h-4 w-4" />
-                    New Customer
-                  </LinkButton>
-                </div>
-              </div>
+              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                Customers
+              </h1>
             }
             subtitleText="Search through your registered customers and view details."
             includeBottomBorder
