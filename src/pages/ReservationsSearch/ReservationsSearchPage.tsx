@@ -147,7 +147,7 @@ function ReservationsSearchPage() {
                 <div>
                   <LinkButton
                     color="teal"
-                    to={addReservationRoute.fullPath}
+                    to={addReservationRoute.to}
                     search={() => ({ stage: "rental-information" })}
                     className="flex items-center justify-center gap-2"
                   >

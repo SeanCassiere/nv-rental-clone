@@ -146,7 +146,7 @@ function AgreementsSearchPage() {
                 <div>
                   <LinkButton
                     color="teal"
-                    to={addAgreementRoute.fullPath}
+                    to={addAgreementRoute.to}
                     search={() => ({ stage: "rental-information" })}
                     className="flex items-center justify-center gap-2"
                   >

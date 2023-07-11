@@ -152,7 +152,7 @@ function VehicleViewPage() {
                 </div>
                 <div className="flex flex-col gap-3 md:flex-row">
                   <LinkButton
-                    to={editFleetByIdRoute.fullPath}
+                    to={editFleetByIdRoute.to}
                     search={() => ({})}
                     params={{ vehicleId: String(vehicleId) }}
                     className="flex items-center justify-center gap-2"

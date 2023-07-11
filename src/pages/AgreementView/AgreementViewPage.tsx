@@ -158,7 +158,7 @@ function AgreementViewPage() {
                 <div className="flex flex-col gap-3 md:flex-row">
                   {isCheckedIn ? (
                     <LinkButton
-                      to={checkinAgreementByIdRoute.fullPath}
+                      to={checkinAgreementByIdRoute.to}
                       search={() => ({ stage: "rental-information" })}
                       params={{ agreementId: String(agreementId) }}
                       className="flex items-center justify-center gap-2"
@@ -168,7 +168,7 @@ function AgreementViewPage() {
                     </LinkButton>
                   ) : (
                     <LinkButton
-                      to={editAgreementByIdRoute.fullPath}
+                      to={editAgreementByIdRoute.to}
                       search={() => ({ stage: "rental-information" })}
                       params={{ agreementId: String(agreementId) }}
                       className="flex items-center justify-center gap-2"
@@ -179,7 +179,7 @@ function AgreementViewPage() {
                   )}
                   {!isCheckedIn && (
                     <LinkButton
-                      to={checkinAgreementByIdRoute.fullPath}
+                      to={checkinAgreementByIdRoute.to}
                       search={() => ({ stage: "rental-information" })}
                       params={{ agreementId: String(agreementId) }}
                       className="flex items-center justify-center gap-2"

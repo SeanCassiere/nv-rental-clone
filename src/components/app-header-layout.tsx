@@ -19,7 +19,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
   const routerStore = router.__store.state;
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
     const matching: string[] = [
-      ...routerStore.currentMatches.map((mat) => mat.route.fullPath),
+      ...routerStore.currentMatches.map((mat) => mat.route.to),
     ];
 
     // because this comes out like ['/','/customers','/customers/$customerId'] or ['/','/']
@@ -104,7 +104,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="mx-auto max-w-[1620px]">
           <div className="flex items-center px-4 pb-4 pt-6 md:pt-8">
             <div className="mr-2 md:ml-2">
-              <Link to={indexRoute.fullPath}>
+              <Link to={indexRoute.to}>
                 <img
                   className="h-10 w-10 rounded-full p-1"
                   src="/android-chrome-192x192.png"
@@ -115,7 +115,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
             <div className="flex flex-grow items-center">
               <Link
-                to={indexRoute.fullPath}
+                to={indexRoute.to}
                 className="text-primary hidden items-center rounded p-1 text-lg font-medium leading-3 transition sm:flex"
               >
                 {UI_APPLICATION_NAME}
