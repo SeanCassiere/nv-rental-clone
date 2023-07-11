@@ -59,12 +59,10 @@ const EditAgreementPage = () => {
   }, [agreementId, navigate]);
 
   const handleCancelEditAgreement = useCallback(() => {
-    // navigate({
-    //   to: "../",
-    //   search: undefined,
-    //   params: undefined
-    // });
-  }, [navigate]);
+    router.navigate({
+      to: "../",
+    });
+  }, [router]);
 
   useDocumentTitle(
     titleMaker(

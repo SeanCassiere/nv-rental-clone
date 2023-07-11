@@ -20,7 +20,6 @@ import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
 } from "../../routes/reservations/reservationIdPath";
-import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 
 const EditReservationPage = () => {
   const navigate = useNavigate({ from: editReservationByIdRoute.id });
@@ -62,11 +61,10 @@ const EditReservationPage = () => {
   }, [reservationId, navigate]);
 
   const handleCancelEditReservation = useCallback(() => {
-    // navigate({
-    //   to: searchReservationsRoute.to,
-    //   search: () => ({})
-    // });
-  }, [navigate]);
+    router.navigate({
+      to: '../'
+    });
+  }, [router]);
 
   useDocumentTitle(
     titleMaker(
