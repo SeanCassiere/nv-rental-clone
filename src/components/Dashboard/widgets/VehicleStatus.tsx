@@ -1,6 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 
-import { searchFleetRoute } from "../../../routes/fleet/searchFleet";
 import { useGetDashboardVehicleStatusCounts } from "../../../hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "../../../hooks/network/vehicle/useGetVehicleStatusList";
 import type { StringNumberIdType } from "../../../utils/query-key";
@@ -34,14 +33,14 @@ const VehicleStatusWidget = ({
           <Link
             key={`status-${status.name}`}
             className="block"
-            to={searchFleetRoute.fullPath}
+            to="/fleet"
             search={() => ({
               filters: {
                 Active: true,
                 VehicleStatus: getStatusIdByName(status.name).toString(),
                 ...(vehicleTypeId > 0 ? { VehicleTypeId: vehicleTypeId } : {}),
               },
-            })}
+            }) as any}
           >
             {status.name}
             &nbsp;-&nbsp;

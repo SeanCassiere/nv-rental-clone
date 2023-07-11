@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 import parseISO from "date-fns/parseISO";
 
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
@@ -771,7 +771,7 @@ const AddRentalParentForm = ({
                   {!isEdit && module === "agreement" && (
                     <>
                       <Link
-                        to={searchAgreementsRoute.fullPath}
+                        to={searchAgreementsRoute.fullPath as any}
                         className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         Agreements
@@ -792,7 +792,7 @@ const AddRentalParentForm = ({
                   {isEdit && module === "agreement" && (
                     <>
                       <Link
-                        to={searchAgreementsRoute.fullPath}
+                        to={searchAgreementsRoute.fullPath as any}
                         className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         Agreements
@@ -802,7 +802,7 @@ const AddRentalParentForm = ({
                         aria-hidden="true"
                       />
                       <Link
-                        to={viewAgreementByIdRoute.fullPath}
+                        to={viewAgreementByIdRoute.fullPath as any}
                         params={{ agreementId: String(referenceId) }}
                         className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
@@ -836,7 +836,7 @@ const AddRentalParentForm = ({
                   {!isEdit && module === "reservation" && (
                     <>
                       <Link
-                        to={searchReservationsRoute.fullPath}
+                        to={searchReservationsRoute.fullPath as any}
                         className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         Reservations
@@ -857,7 +857,7 @@ const AddRentalParentForm = ({
                   {isEdit && module === "reservation" && (
                     <>
                       <Link
-                        to={searchReservationsRoute.fullPath}
+                        to={searchReservationsRoute.fullPath as any}
                         className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >
                         Reservations
@@ -867,7 +867,7 @@ const AddRentalParentForm = ({
                         aria-hidden="true"
                       />
                       <Link
-                        to={viewReservationByIdRoute.fullPath}
+                        to={viewReservationByIdRoute.fullPath as any}
                         params={{ reservationId: String(referenceId) }}
                         className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
                       >

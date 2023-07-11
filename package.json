@@ -25,6 +25,7 @@
     "@tanstack/react-router-devtools": "^0.0.1-beta.83",
     "@tanstack/react-table": "^8.7.9",
     "@tanstack/router": "^0.0.1-beta.104",
+    "@tanstack/router-devtools": "^0.0.1-beta.104",
     "class-variance-authority": "^0.6.1",
     "classnames": "^2.3.2",
     "date-fns": "^2.30.0",

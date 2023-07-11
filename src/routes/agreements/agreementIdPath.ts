@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { agreementsRoute } from ".";
@@ -12,7 +12,7 @@ import { agreementQKeys } from "../../utils/query-key";
 export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "$agreementId",
-  onLoad: async ({ params: { agreementId } }) => {
+  loader: async ({ params: { agreementId } }) => {
     const auth = getAuthToken();
 
     if (auth) {

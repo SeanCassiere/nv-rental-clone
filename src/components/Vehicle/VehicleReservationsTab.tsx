@@ -14,9 +14,9 @@ import { type TReservationListItemParsed } from "../../utils/schemas/reservation
 import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
-import { ReservationDateTimeColumns } from "../../pages/ReservationsSearch/ReservationsSearchPage";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import ReservationStatusPill from "../Reservation/ReservationStatusPill";
+import { ReservationDateTimeColumns } from "../../utils/columns";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;

@@ -36,14 +36,10 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
+import { ReservationDateTimeColumns } from "../../utils/columns";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-export const ReservationDateTimeColumns = [
-  "CreatedDate",
-  "StartDate",
-  "EndDate",
-];
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();

@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { reservationsRoute } from ".";
@@ -12,7 +12,7 @@ import { reservationQKeys } from "../../utils/query-key";
 export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "$reservationId",
-  onLoad: async ({ params: { reservationId } }) => {
+  loader: async ({ params: { reservationId } }) => {
     const auth = getAuthToken();
 
     if (auth) {

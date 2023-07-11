@@ -36,14 +36,9 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
+import { AgreementDateTimeColumns } from "../../utils/columns";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
-
-export const AgreementDateTimeColumns = [
-  "CreatedDate",
-  "CheckoutDate",
-  "CheckinDate",
-];
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();

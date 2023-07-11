@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/router";
 import { useAuth } from "react-oidc-context";
 import classNames from "classnames";
 
@@ -115,7 +115,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
             {navigation.map((navItem) => (
               <Link
                 key={`nav_${navItem.name}`}
-                to={navItem.href}
+                to={navItem.href as any}
                 preload="intent"
                 className={classNames(
                   navItem.current
