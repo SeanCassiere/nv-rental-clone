@@ -11,6 +11,7 @@ import { UI_APPLICATION_NAME } from "../utils/constants";
 import { useGetDashboardNoticeList } from "../hooks/network/dashboard/useGetDashboardNoticeList";
 import DashboardBannerNotices from "./Dashboard/DashboardBannerNotices";
 import { cn } from "@/utils";
+import { HeaderUserNav } from "./header-user-nav";
 
 const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
@@ -121,7 +122,9 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
                 {UI_APPLICATION_NAME}
               </Link>
             </div>
-            <div className="flex flex-none items-center gap-x-2">Details</div>
+            <div className="flex flex-none items-center gap-x-2">
+              <HeaderUserNav />
+            </div>
           </div>
           <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 md:px-10 sm:space-x-0">
             {navigation.map((navItem) => (
