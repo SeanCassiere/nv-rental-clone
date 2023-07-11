@@ -95,7 +95,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex h-screen flex-col">
       <header className="relative z-40 border-b">
         {noticeList.data.length > 0 && (
-          <div className="grid gap-1">
+          <div className="grid divide-y divide-teal-600">
             {noticeList.data.map((notice) => (
               <DashboardBannerNotices notice={notice} key={notice.id} />
             ))}

@@ -8,5 +8,15 @@
     "endDate": null,
     "link": "/agreements",
     "ignoreDismiss": false
+  },
+  {
+    "id": "a7560b90-b721-41b0-998c-e2645d320c2a",
+    "titleText": "Car sharing is now available!",
+    "titleTextShort": "Car sharing is available!",
+    "actionText": "Learn more",
+    "startDate": "2023-04-11T22:45:37.013Z",
+    "endDate": null,
+    "link": "https://google.com",
+    "ignoreDismiss": false
   }
 ]

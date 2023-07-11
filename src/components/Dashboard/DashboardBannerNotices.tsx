@@ -61,6 +61,8 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
             <a
               href={notice.link || "#"}
               className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-semibold text-teal-600 shadow-sm hover:bg-teal-50"
+              target={notice.link?.startsWith("http") ? "_blank" : '_self'}
+              rel="noopener noreferrer"
             >
               {notice.actionText}
             </a>
