@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 
 import { rootRoute } from "./__root";
 import { queryClient as qc } from "../App";
@@ -12,7 +12,7 @@ export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
-  onLoad: async () => {
+  loader: async () => {
     const auth = getAuthToken();
     if (auth) {
       const promises = [];

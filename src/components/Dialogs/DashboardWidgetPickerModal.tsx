@@ -18,7 +18,6 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import classNames from "classnames";
 
 import { Bars3Outline, EyeOutline, EyeSlashOutline } from "../icons";
 import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
@@ -28,6 +27,7 @@ import {
   sortWidgetsByUserPositionFn,
 } from "../Dashboard/DashboardDndWidgetGrid";
 import DarkBgDialog from "../Layout/DarkBgDialog";
+import { cn } from "@/utils";
 
 import { type DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 
@@ -186,12 +186,12 @@ const WidgetOption = ({
       }}
     >
       <div
-        className={classNames(
+        className={cn(
           "my-0.5 flex items-center justify-between rounded border border-white px-2 focus-within:border-slate-300",
           isDragging ? "bg-slate-50" : "bg-white"
         )}
       >
-        <div className={classNames("flex items-center gap-3")}>
+        <div className={cn("flex items-center gap-3")}>
           <button
             ref={setActivatorNodeRef}
             className="cursor-grab"

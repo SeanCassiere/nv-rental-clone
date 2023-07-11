@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 
 import { reservationsRoute } from ".";
 import { queryClient } from "../../App";
@@ -14,17 +14,14 @@ import { ReservationSearchQuerySchema } from "../../utils/schemas/reservation";
 export const searchReservationsRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "/",
-  component: lazy(
-    () => import("../../pages/ReservationsSearch/ReservationsSearchPage")
-  ),
-  validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
+  validateSearch: ReservationSearchQuerySchema,
   preSearchFilters: [
     () => ({
       page: 1,
       size: 10,
     }),
   ],
-  onLoad: async ({ search }) => {
+  loader: async ({ search }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } =
@@ -77,4 +74,5 @@ export const searchReservationsRoute = new Route({
     }
     return {};
   },
+  component: lazy(() => import("../../pages/ReservationsSearch/ReservationsSearchPage")),
 });

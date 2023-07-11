@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
-import classNames from "classnames";
 
 import CommonRatesInformation from "./CommonRatesInformation";
 import CommonMiscChargesInformation from "./CommonMiscChargesInformation";
@@ -8,6 +7,7 @@ import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInforma
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
 import { type RentalRateParsed } from "../../utils/schemas/rate";
 import { type CalculateRentalSummaryMiscChargeType } from "../../types/CalculateRentalSummaryAmounts";
+import { cn } from "@/utils";
 
 export interface StepRatesAndChargesInformationProps {
   module: "agreements" | "reservations";
@@ -63,7 +63,7 @@ const StepRatesAndChargesInformation = (
         renderEndIcon={
           <button className="px-2 py-1" onClick={() => setStep(0)}>
             <ChevronDownOutline
-              className={classNames("h-4 w-4", step === 0 ? "rotate-180" : "")}
+              className={cn("h-4 w-4", step === 0 ? "rotate-180" : "")}
             />
           </button>
         }
@@ -102,7 +102,7 @@ const StepRatesAndChargesInformation = (
         renderEndIcon={
           <button className="px-2 py-1" onClick={() => setStep(1)}>
             <ChevronDownOutline
-              className={classNames("h-4 w-4", step === 1 ? "rotate-180" : "")}
+              className={cn("h-4 w-4", step === 1 ? "rotate-180" : "")}
             />
           </button>
         }

@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 
 import { fleetRoute } from ".";
 import { queryClient } from "../../App";
@@ -14,14 +14,14 @@ import { VehicleSearchQuerySchema } from "../../utils/schemas/vehicle";
 export const searchFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "/",
-  validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
+  validateSearch: VehicleSearchQuerySchema,
   preSearchFilters: [
     () => ({
       page: 1,
       size: 10,
     }),
   ],
-  onLoad: async ({ search }) => {
+  loader: async ({ search }) => {
     const auth = getAuthToken();
     const { pageNumber, size, searchFilters } =
       normalizeVehicleListSearchParams(search);

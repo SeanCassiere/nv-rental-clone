@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import classNames from "classnames";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/router";
 
 import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
@@ -21,6 +20,7 @@ import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import type { StringNumberIdType } from "../../utils/query-key";
+import { cn } from "@/utils";
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
@@ -112,7 +112,7 @@ function IndexPage() {
                       <SettingsCogOutline className="h-5 w-5 sm:h-4 sm:w-4" />
                     </button>
                     <button
-                      className={classNames(
+                      className={cn(
                         "ml-2 text-slate-500 sm:pt-0",
                         isWidgetsLocked ? "" : "pl-0.5"
                       )}

@@ -1,4 +1,3 @@
-import classNames from "classnames";
 
 import {
   type IconProps,
@@ -12,13 +11,14 @@ import {
   Link,
   type MakeLinkOptions,
   type RegisteredRoutesInfo,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
 import type { TDashboardStats } from "../../utils/schemas/dashboard";
 
 import { indexRoute } from "../../routes";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import { cn } from "@/utils";
 
 const DashboardStatsBlock = ({
   statistics,
@@ -33,7 +33,7 @@ const DashboardStatsBlock = ({
           icon={CreditCardOutline}
           value={Number(statistics.todaysReservationCount).toString()}
           linkProps={{
-            to: searchReservationsRoute.fullPath,
+            to: searchReservationsRoute.to,
             search: () => ({
               page: 1,
               size: 10,
@@ -53,7 +53,7 @@ const DashboardStatsBlock = ({
           icon={ArrowDownRightOutline}
           value={Number(statistics.todaysArrivalsCount).toString()}
           linkProps={{
-            to: searchAgreementsRoute.fullPath,
+            to: searchAgreementsRoute.to,
             search: () => ({
               page: 1,
               size: 10,
@@ -73,7 +73,7 @@ const DashboardStatsBlock = ({
           icon={TruckOutline}
           value={Number(statistics.openAgreement).toString()}
           linkProps={{
-            to: searchAgreementsRoute.fullPath,
+            to: searchAgreementsRoute.to,
             search: () => ({
               page: 1,
               size: 10,
@@ -89,7 +89,7 @@ const DashboardStatsBlock = ({
           icon={CreditCardOutline}
           value={Number(statistics.overDues).toString()}
           linkProps={{
-            to: searchAgreementsRoute.fullPath,
+            to: searchAgreementsRoute.to,
             search: () => ({
               page: 1,
               size: 10,
@@ -105,7 +105,7 @@ const DashboardStatsBlock = ({
           icon={BankNotesOutline}
           value={Number(statistics.pendingPayment).toString()}
           linkProps={{
-            to: searchAgreementsRoute.fullPath,
+            to: searchAgreementsRoute.to,
             search: () => ({
               page: 1,
               size: 10,
@@ -143,7 +143,7 @@ const StatBlock = ({
   return (
     <Link {...(linkProps as any)}>
       <div
-        className={classNames(
+        className={cn(
           "group grid cursor-pointer grid-cols-7 overflow-hidden rounded border border-slate-200 bg-slate-50 px-4 py-4 transition-all duration-150 ease-in hover:bg-slate-100"
         )}
       >
@@ -155,7 +155,7 @@ const StatBlock = ({
         </div>
         <div className="col-span-5">
           <div
-            className={classNames(
+            className={cn(
               "text-5xl font-semibold transition-all duration-200 ease-in group-hover:text-teal-500",
               value !== "0" ? "text-slate-800" : "text-slate-700"
             )}

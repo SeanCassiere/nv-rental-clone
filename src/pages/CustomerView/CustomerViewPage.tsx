@@ -5,7 +5,7 @@ import {
   useParams,
   useRouter,
   useSearch,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 
 import Protector from "../../components/Protector";
 import { ChevronRightOutline, PencilIconFilled } from "../../components/icons";
@@ -77,7 +77,7 @@ function CustomerViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewCustomerByIdRoute.fullPath,
+      to: viewCustomerByIdRoute.to,
       search: (others) => ({ ...others, tab: newTab.id }),
       params: { customerId },
       replace: true,
@@ -120,7 +120,7 @@ function CustomerViewPage() {
                     aria-hidden="true"
                   />
                   <Link
-                    to={viewCustomerByIdRoute.fullPath}
+                    to={viewCustomerByIdRoute.to}
                     search={(current) => ({ tab: current?.tab || "summary" })}
                     params={{ customerId }}
                     className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
@@ -131,7 +131,7 @@ function CustomerViewPage() {
                 </div>
                 <div className="flex flex-col gap-3 md:flex-row">
                   <LinkButton
-                    to={editCustomerByIdRoute.fullPath}
+                    to={editCustomerByIdRoute.to}
                     search={() => ({})}
                     params={{ customerId: String(customerId) }}
                     className="flex items-center justify-center gap-2"

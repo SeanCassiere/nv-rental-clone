@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
 
@@ -9,6 +8,7 @@ import {
   setLocalStorageForUser,
 } from "../../utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "../../utils/constants";
+import { cn } from "@/utils";
 
 const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
   const auth = useAuth();
@@ -61,12 +61,14 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
             <a
               href={notice.link || "#"}
               className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-semibold text-teal-600 shadow-sm hover:bg-teal-50"
+              target={notice.link?.startsWith("http") ? "_blank" : '_self'}
+              rel="noopener noreferrer"
             >
               {notice.actionText}
             </a>
           </div>
           <div
-            className={classNames(
+            className={cn(
               notice.ignoreDismiss
                 ? "sm:hidden"
                 : "order-2 flex-shrink-0 sm:order-3 sm:ml-3"
@@ -74,7 +76,7 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
           >
             <button
               type="button"
-              className={classNames(
+              className={cn(
                 "-mr-1 flex rounded-md p-2 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2",
                 notice.ignoreDismiss ? "opacity-0" : ""
               )}

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 import parseISO from "date-fns/parseISO";
 
@@ -58,7 +58,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
                 return (
                   <Link
-                    to={viewFleetByIdRoute.fullPath}
+                    to={viewFleetByIdRoute.to}
                     params={{ vehicleId: `${vehicleId}` }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"

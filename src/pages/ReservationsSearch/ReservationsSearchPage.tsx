@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
@@ -36,14 +36,10 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
+import { ReservationDateTimeColumns } from "../../utils/columns";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-export const ReservationDateTimeColumns = [
-  "CreatedDate",
-  "StartDate",
-  "EndDate",
-];
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
@@ -87,7 +83,7 @@ function ReservationsSearchPage() {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewReservationByIdRoute.fullPath}
+                  to={viewReservationByIdRoute.to}
                   params={{ reservationId: String(reservationId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -151,7 +147,7 @@ function ReservationsSearchPage() {
                 <div>
                   <LinkButton
                     color="teal"
-                    to={addReservationRoute.fullPath}
+                    to={addReservationRoute.to}
                     search={() => ({ stage: "rental-information" })}
                     className="flex items-center justify-center gap-2"
                   >
@@ -173,7 +169,7 @@ function ReservationsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: searchReservationsRoute.fullPath,
+                  to: searchReservationsRoute.to,
                   params: {},
                   search: () => ({
                     page: 1,
@@ -184,7 +180,7 @@ function ReservationsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: searchReservationsRoute.fullPath,
+                  to: searchReservationsRoute.to,
                   params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
@@ -345,7 +341,7 @@ function ReservationsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: searchReservationsRoute.fullPath,
+                    to: searchReservationsRoute.to,
                     params: {},
                     search: (current) => ({
                       ...current,

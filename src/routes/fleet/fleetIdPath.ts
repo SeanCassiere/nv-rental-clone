@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { fleetRoute } from ".";
@@ -12,7 +12,7 @@ import { fleetQKeys } from "../../utils/query-key";
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
-  onLoad: async ({ params: { vehicleId } }) => {
+  loader: async ({ params: { vehicleId } }) => {
     const auth = getAuthToken();
 
     if (auth) {

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
 import CommonTable from "../General/CommonTable";
@@ -13,10 +13,10 @@ import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColu
 import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { AgreementDateTimeColumns } from "../../pages/AgreementsSearch/AgreementsSearchPage";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import { AgreementDateTimeColumns } from "../../utils/columns";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -71,7 +71,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
                 .AgreementId;
               return (
                 <Link
-                  to={viewAgreementByIdRoute.fullPath}
+                  to={viewAgreementByIdRoute.to}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -124,8 +124,8 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
             Showing a maximum of {pageSize} records.
           </p>
           <Link
-            to={searchAgreementsRoute.fullPath}
-            search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
+            to={searchAgreementsRoute.to}
+            search={() => ({ filters: { VehicleNo: props.vehicleNo } }) as any}
             className="text-slate-600 underline hover:text-slate-800"
           >
             Need more? Click here to search for agreements.

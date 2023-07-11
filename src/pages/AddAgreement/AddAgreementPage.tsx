@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -13,6 +13,7 @@ import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath"
 
 const AddAgreementPage = () => {
   const navigate = useNavigate({ from: addAgreementRoute.id });
+  const router = useRouter();
 
   const { stage = "rental-information" } = useSearch({
     from: addAgreementRoute.id,
@@ -30,7 +31,7 @@ const AddAgreementPage = () => {
   const handleAgreementSaveComplete = useCallback(
     (agreementId: number) => {
       navigate({
-        to: viewAgreementByIdRoute.fullPath,
+        to: viewAgreementByIdRoute.to,
         params: { agreementId: String(agreementId) },
         search: () => ({ tab: "summary" }),
       });
@@ -39,10 +40,10 @@ const AddAgreementPage = () => {
   );
 
   const handleCancelAddAgreement = useCallback(() => {
-    navigate({
+    router.navigate({
       to: "..",
     });
-  }, [navigate]);
+  }, [router]);
 
   useDocumentTitle(titleMaker("New - Agreement"));
   return (

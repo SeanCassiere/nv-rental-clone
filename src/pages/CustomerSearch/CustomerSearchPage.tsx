@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
@@ -14,12 +14,10 @@ import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilt
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { PlusIconFilled, UsersSolid } from "../../components/icons";
-import { LinkButton } from "../../components/Form";
+import { UsersSolid } from "../../components/icons";
 
 import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
 import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
-import { addCustomerRoute } from "../../routes/customers/addCustomer";
 
 import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -79,7 +77,7 @@ function CustomerSearchPage() {
                 .CustomerId;
               return (
                 <Link
-                  to={viewCustomerByIdRoute.fullPath}
+                  to={viewCustomerByIdRoute.to}
                   params={{ customerId: String(customerId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -149,7 +147,7 @@ function CustomerSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: searchCustomersRoute.fullPath,
+                  to: searchCustomersRoute.to,
                   params: {},
                   search: (current) => ({
                     ...current,
@@ -161,7 +159,7 @@ function CustomerSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: searchCustomersRoute.fullPath,
+                  to: searchCustomersRoute.to,
                   params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
@@ -236,7 +234,7 @@ function CustomerSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: searchCustomersRoute.fullPath,
+                    to: searchCustomersRoute.to,
                     params: {},
                     search: (current) => ({
                       ...current,

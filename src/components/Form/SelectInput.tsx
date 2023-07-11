@@ -1,7 +1,8 @@
 import { useId, Fragment, forwardRef } from "react";
 import { Transition, Listbox } from "@headlessui/react";
-import classNames from "classnames";
 import { CheckIconOutline, ChevronUpDownSolid } from "../icons";
+
+import { cn } from "@/utils";
 
 export type TSelectInputOption = {
   label: string;
@@ -53,7 +54,7 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
             <div className="relative mt-1">
               <Listbox.Button className="relative w-full">
                 <div
-                  className={classNames(
+                  className={cn(
                     "relative cursor-default rounded border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 sm:text-sm",
                     error
                       ? "border-red-300 text-red-500 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
@@ -61,7 +62,7 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                   )}
                 >
                   <span
-                    className={classNames(
+                    className={cn(
                       "block max-w-[17rem] truncate md:max-w-full",
                       disabled ? "text-slate-500" : ""
                     )}
@@ -72,7 +73,7 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                   </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownSolid
-                      className={classNames(
+                      className={cn(
                         "h-5 w-5",
                         disabled ? "text-slate-500" : "text-gray-400",
                         error ? "text-red-500" : undefined
@@ -101,7 +102,7 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                       disabled={disabled}
                       key={`${person.value}.${idx}`}
                       className={({ active }) =>
-                        classNames(
+                        cn(
                           active ? "bg-teal-600 text-white" : "text-gray-900",
                           "relative cursor-default select-none py-2 pl-3 pr-9"
                         )
@@ -111,14 +112,14 @@ export const SelectInput = forwardRef<any, SelectProps>((props, ref) => {
                       {({ selected, active }) => (
                         <>
                           <span
-                            className={classNames("block truncate font-normal")}
+                            className={cn("block truncate font-normal")}
                           >
                             {person.label}
                           </span>
 
                           {selected ? (
                             <span
-                              className={classNames(
+                              className={cn(
                                 active ? "text-white" : "text-teal-600",
                                 "absolute inset-y-0 right-0 flex items-center pr-4"
                               )}

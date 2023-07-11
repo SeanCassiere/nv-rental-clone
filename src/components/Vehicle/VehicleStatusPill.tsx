@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@/utils";
 import { getVehicleStatusNameFromRaw } from "../PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
 
 const supportedList = ["Available", "OnRent"];
@@ -8,7 +8,7 @@ const VehicleStatusPill = (props: { status: string }) => {
 
   return (
     <span
-      className={classNames(
+      className={cn(
         "select-none rounded-full px-2.5 py-1.5 text-sm text-white",
         props.status === "Available" && "bg-green-500",
         props.status === "OnRent" && "bg-orange-500",

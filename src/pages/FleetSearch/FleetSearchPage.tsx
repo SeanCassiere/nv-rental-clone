@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useSearch, useNavigate } from "@tanstack/react-router";
+import { Link, useSearch, useNavigate } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
@@ -74,7 +74,7 @@ function VehiclesSearchPage() {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewFleetByIdRoute.fullPath}
+                  to={viewFleetByIdRoute.to}
                   params={{ vehicleId: String(vehicleId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -143,7 +143,7 @@ function VehiclesSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: searchFleetRoute.fullPath,
+                  to: searchFleetRoute.to,
                   params: {},
                   search: (current) => ({
                     ...current,
@@ -155,7 +155,7 @@ function VehiclesSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: searchFleetRoute.fullPath,
+                  to: searchFleetRoute.to,
                   params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
@@ -288,7 +288,7 @@ function VehiclesSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: searchFleetRoute.fullPath,
+                    to: searchFleetRoute.to,
                     params: {},
                     search: (current) => ({
                       ...current,

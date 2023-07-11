@@ -16,7 +16,6 @@ import {
   type ColumnDef,
   type PaginationState,
 } from "@tanstack/react-table";
-import classNames from "classnames";
 import {
   DndContext,
   useSensors,
@@ -46,6 +45,7 @@ import {
 import { type TColumnListItemParsed } from "../../utils/schemas/column";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { getPaginationWithDoubleEllipsis } from "../../utils/pagination";
+import { cn } from "@/utils";
 
 interface DraggableColumnHeaderProps {
   header: Header<any, unknown>;
@@ -74,12 +74,12 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
       ref={isDisabled ? undefined : setNodeRef}
       colSpan={header.colSpan}
       scope="col"
-      className={classNames("text-base font-semibold")}
+      className={cn("text-base font-semibold")}
       style={{ transform: CSS.Translate.toString(transform), transition }}
     >
       <button
         ref={setActivatorNodeRef}
-        className={classNames(
+        className={cn(
           header.index === 0 ? "px-4 sm:pl-6" : "px-4",
           "h-full w-full py-3 text-left",
           (isDragging && isDisabled) || (isDragging && over?.disabled)
@@ -250,7 +250,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                     {row.getVisibleCells().map((cell, cellIdx) => (
                       <td
                         key={cell.id}
-                        className={classNames(
+                        className={cn(
                           "whitespace-nowrap py-4 text-base font-normal text-slate-700",
                           cellIdx === 0 ? "px-4 sm:pl-6" : "px-4"
                         )}
@@ -424,7 +424,7 @@ const DesktopPaginationBtn = (
   return (
     <button
       {...otherProps}
-      className={classNames(
+      className={cn(
         "relative inline-flex items-center border px-4 py-2 text-sm font-medium hover:bg-slate-50 focus:z-20",
         current
           ? "z-10 border-teal-500 bg-teal-50 text-teal-600"

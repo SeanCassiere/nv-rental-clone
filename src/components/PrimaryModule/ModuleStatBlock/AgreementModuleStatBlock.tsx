@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import classNames from "classnames";
 
+import { cn } from "@/utils";
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type AgreementDataParsed } from "../../../utils/schemas/agreement";
 
@@ -47,7 +47,7 @@ const AgreementModuleStatBlock = ({
         header="Status"
         stat={
           <span
-            className={classNames(
+            className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
               getTextColorForStatus(agreement?.agreementStatusName ?? "")
             )}

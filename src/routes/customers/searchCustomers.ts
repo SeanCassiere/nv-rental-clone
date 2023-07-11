@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 
 import { customersRoute } from ".";
 import { queryClient as qc } from "../../App";
@@ -23,7 +23,7 @@ export const searchCustomersRoute = new Route({
       size: 10,
     }),
   ],
-  onLoad: async ({ search }) => {
+  loader: async ({ search }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } =

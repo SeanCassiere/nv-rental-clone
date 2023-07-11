@@ -1,5 +1,5 @@
-import { Outlet, RootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Outlet, RootRoute } from "@tanstack/router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import AppHeaderLayout from "../components/app-header-layout";
 import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "../utils/constants";

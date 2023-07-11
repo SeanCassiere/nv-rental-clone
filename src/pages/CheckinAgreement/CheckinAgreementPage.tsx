@@ -4,7 +4,7 @@ import {
   useParams,
   useRouter,
   useSearch,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -52,17 +52,17 @@ const CheckinAgreementPage = () => {
 
   const handleAgreementSaveComplete = useCallback(() => {
     navigate({
-      to: viewAgreementByIdRoute.fullPath,
+      to: viewAgreementByIdRoute.to,
       params: { agreementId },
       search: () => ({ tab: "summary" }),
     });
   }, [agreementId, navigate]);
 
   const handleCancelEditAgreement = useCallback(() => {
-    navigate({
-      to: "..",
+    router.navigate({
+      to: "../",
     });
-  }, [navigate]);
+  }, [router]);
 
   useDocumentTitle(
     titleMaker(

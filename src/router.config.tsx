@@ -1,8 +1,8 @@
 import {
-  ReactRouter,
+  Router,
   parseSearchWith,
   stringifySearchWith,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 import JSURL from "jsurl2";
 
 import { rootRoute } from "./routes/__root";
@@ -100,7 +100,7 @@ const routeTree = rootRoute.addChildren([
   ]),
 ]);
 
-export const router = new ReactRouter({
+export const router = new Router({
   routeTree,
   parseSearch: parseSearchWith((value) => JSURL.parse(value)),
   stringifySearch: stringifySearchWith((value) => JSURL.stringify(value)),
@@ -116,7 +116,7 @@ export const router = new ReactRouter({
   defaultPreload: "intent",
 });
 
-declare module "@tanstack/react-router" {
+declare module "@tanstack/router" {
   interface Register {
     router: typeof router;
   }

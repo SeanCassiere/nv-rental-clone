@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import classNames from "classnames";
 
 import type { StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
 import {
@@ -14,6 +13,7 @@ import {
   RentalRateSchema,
   type RentalRateParsed,
 } from "../../utils/schemas/rate";
+import { cn } from "@/utils";
 
 interface CommonRatesInformationProps {
   module: StepRatesAndChargesInformationProps["module"];
@@ -175,7 +175,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
   return (
     <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
       <div className="flex flex-col gap-4">
-        <div className={classNames(normalContainerClassnames)}>
+        <div className={cn(normalContainerClassnames)}>
           <div>Hourly</div>
           <div className="col-span-2 flex w-full items-center justify-end gap-4">
             <div>
@@ -183,7 +183,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={1}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("hourlyQty", optsAsNum)}
               />
@@ -194,14 +194,14 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("hourlyRate", optsAsNum)}
               />
             </div>
           </div>
         </div>
-        <div className={classNames(normalContainerClassnames)}>
+        <div className={cn(normalContainerClassnames)}>
           <div>Half daily</div>
           <div className="col-span-2 flex w-full items-center justify-end gap-4">
             <div>
@@ -209,7 +209,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={1}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("halfDayQty", optsAsNum)}
               />
@@ -220,14 +220,14 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("halfDayRate", optsAsNum)}
               />
             </div>
           </div>
         </div>
-        <div className={classNames(normalContainerClassnames)}>
+        <div className={cn(normalContainerClassnames)}>
           <div>Daily</div>
           <div className="col-span-2 flex w-full items-center justify-end gap-4">
             <div>
@@ -235,7 +235,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={1}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("dailyQty", optsAsNum)}
               />
@@ -246,7 +246,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("dailyRate", optsAsNum)}
               />
@@ -255,7 +255,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <div className={classNames(normalContainerClassnames)}>
+        <div className={cn(normalContainerClassnames)}>
           <div>Weekly</div>
           <div className="col-span-2 flex w-full items-center justify-end gap-4">
             <div>
@@ -263,7 +263,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={1}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("weeklyQty", optsAsNum)}
               />
@@ -274,14 +274,14 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("weeklyRate", optsAsNum)}
               />
             </div>
           </div>
         </div>
-        <div className={classNames(normalContainerClassnames)}>
+        <div className={cn(normalContainerClassnames)}>
           <div>Monthly</div>
           <div className="col-span-2 flex w-full items-center justify-end gap-4">
             <div>
@@ -289,7 +289,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={1}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("monthlyQty", optsAsNum)}
               />
@@ -300,14 +300,14 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("monthlyRate", optsAsNum)}
               />
             </div>
           </div>
         </div>
-        <div className={classNames(normalContainerClassnames)}>
+        <div className={cn(normalContainerClassnames)}>
           <div>Weekend daily</div>
           <div className="col-span-2 flex w-full items-center justify-end gap-4">
             <div>
@@ -315,7 +315,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={1}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("weekendDailyQty", optsAsNum)}
               />
@@ -326,7 +326,7 @@ function NormalRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("weekendDayRate", optsAsNum)}
               />
@@ -337,40 +337,40 @@ function NormalRatesForm(props: CommonRatesFormProps) {
       {/* Extra stuff */}
       <div className="col-span-1 grid w-full grid-cols-1 gap-4 md:col-span-2 md:w-4/5 md:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <div className={classNames(extraContainerClassnames)}>
+          <div className={cn(extraContainerClassnames)}>
             <div>Daily miles allowed</div>
             <div>
               <input
                 type="number"
                 min={0}
                 step={0.25}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("dailyKMorMileageAllowed", optsAsNum)}
               />
             </div>
           </div>
-          <div className={classNames(extraContainerClassnames)}>
+          <div className={cn(extraContainerClassnames)}>
             <div>Weekly miles allowed</div>
             <div>
               <input
                 type="number"
                 min={0}
                 step={0.25}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("weeklyKMorMileageAllowed", optsAsNum)}
               />
             </div>
           </div>
-          <div className={classNames(extraContainerClassnames)}>
+          <div className={cn(extraContainerClassnames)}>
             <div>Monthly miles allowed</div>
             <div>
               <input
                 type="number"
                 min={0}
                 step={0.25}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("monthlyKMorMileageAllowed", optsAsNum)}
               />
@@ -378,27 +378,27 @@ function NormalRatesForm(props: CommonRatesFormProps) {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <div className={classNames(extraContainerClassnames)}>
+          <div className={cn(extraContainerClassnames)}>
             <div>Fuel charge</div>
             <div>
               <input
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("fuelCharge", optsAsNum)}
               />
             </div>
           </div>
-          <div className={classNames(extraContainerClassnames)}>
+          <div className={cn(extraContainerClassnames)}>
             <div>Miles charge</div>
             <div>
               <input
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("kMorMileageCharge", optsAsNum)}
               />
@@ -415,7 +415,7 @@ function DayRatesForm(props: CommonRatesFormProps) {
   return (
     <div className="mt-4 grid w-full grid-cols-1 gap-4 md:w-1/2">
       <div>
-        <div className={classNames(normalContainerClassnames)}>
+        <div className={cn(normalContainerClassnames)}>
           <div>Daily</div>
           <div className="col-span-2 flex w-full items-center justify-end gap-4">
             <div>
@@ -423,7 +423,7 @@ function DayRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={1}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("dailyQty", optsAsNum)}
               />
@@ -434,7 +434,7 @@ function DayRatesForm(props: CommonRatesFormProps) {
                 type="number"
                 min={0}
                 step={0.01}
-                className={classNames("w-[100px]", numberInputClassnames)}
+                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
                 {...register("dailyRate", optsAsNum)}
               />
@@ -442,40 +442,40 @@ function DayRatesForm(props: CommonRatesFormProps) {
           </div>
         </div>
       </div>
-      <div className={classNames(extraContainerClassnames)}>
+      <div className={cn(extraContainerClassnames)}>
         <div>Daily miles allowed</div>
         <div>
           <input
             type="number"
             min={0}
             step={0.25}
-            className={classNames("w-[100px]", numberInputClassnames)}
+            className={cn("w-[100px]", numberInputClassnames)}
             autoComplete="off"
             {...register("dailyKMorMileageAllowed", optsAsNum)}
           />
         </div>
       </div>
-      <div className={classNames(extraContainerClassnames)}>
+      <div className={cn(extraContainerClassnames)}>
         <div>Fuel charge</div>
         <div>
           <input
             type="number"
             min={0}
             step={0.01}
-            className={classNames("w-[100px]", numberInputClassnames)}
+            className={cn("w-[100px]", numberInputClassnames)}
             autoComplete="off"
             {...register("fuelCharge", optsAsNum)}
           />
         </div>
       </div>
-      <div className={classNames(extraContainerClassnames)}>
+      <div className={cn(extraContainerClassnames)}>
         <div>Miles charge</div>
         <div>
           <input
             type="number"
             min={0}
             step={0.01}
-            className={classNames("w-[100px]", numberInputClassnames)}
+            className={cn("w-[100px]", numberInputClassnames)}
             autoComplete="off"
             {...register("kMorMileageCharge", optsAsNum)}
           />
@@ -489,7 +489,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
   const { registerFn: register } = props;
   return (
     <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div className={classNames(weekDayContainerClassnames)}>
+      <div className={cn(weekDayContainerClassnames)}>
         <div>Monday</div>
         <div className="col-span-2 flex w-full items-center justify-end gap-4">
           <div>
@@ -497,7 +497,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={1}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("monCount", optsAsNum)}
             />
@@ -508,14 +508,14 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("monRate", optsAsNum)}
             />
           </div>
         </div>
       </div>
-      <div className={classNames(weekDayContainerClassnames)}>
+      <div className={cn(weekDayContainerClassnames)}>
         <div>Tuesday</div>
         <div className="col-span-2 flex w-full items-center justify-end gap-4">
           <div>
@@ -523,7 +523,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={1}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("tuesCount", optsAsNum)}
             />
@@ -534,14 +534,14 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("tuesRate", optsAsNum)}
             />
           </div>
         </div>
       </div>
-      <div className={classNames(weekDayContainerClassnames)}>
+      <div className={cn(weekDayContainerClassnames)}>
         <div>Wednesday</div>
         <div className="col-span-2 flex w-full items-center justify-end gap-4">
           <div>
@@ -549,7 +549,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={1}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("wedCount", optsAsNum)}
             />
@@ -560,14 +560,14 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("wedRate", optsAsNum)}
             />
           </div>
         </div>
       </div>
-      <div className={classNames(weekDayContainerClassnames)}>
+      <div className={cn(weekDayContainerClassnames)}>
         <div>Thursday</div>
         <div className="col-span-2 flex w-full items-center justify-end gap-4">
           <div>
@@ -575,7 +575,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={1}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("thursCount", optsAsNum)}
             />
@@ -586,14 +586,14 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("thursRate", optsAsNum)}
             />
           </div>
         </div>
       </div>
-      <div className={classNames(weekDayContainerClassnames)}>
+      <div className={cn(weekDayContainerClassnames)}>
         <div>Friday</div>
         <div className="col-span-2 flex w-full items-center justify-end gap-4">
           <div>
@@ -601,7 +601,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={1}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("friCount", optsAsNum)}
             />
@@ -612,14 +612,14 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("friRate", optsAsNum)}
             />
           </div>
         </div>
       </div>
-      <div className={classNames(weekDayContainerClassnames)}>
+      <div className={cn(weekDayContainerClassnames)}>
         <div>Saturday</div>
         <div className="col-span-2 flex w-full items-center justify-end gap-4">
           <div>
@@ -627,7 +627,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={1}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("satCount", optsAsNum)}
             />
@@ -638,14 +638,14 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("satRate", optsAsNum)}
             />
           </div>
         </div>
       </div>
-      <div className={classNames(weekDayContainerClassnames)}>
+      <div className={cn(weekDayContainerClassnames)}>
         <div>Sunday</div>
         <div className="col-span-2 flex w-full items-center justify-end gap-4">
           <div>
@@ -653,7 +653,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={1}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("sunCount", optsAsNum)}
             />
@@ -664,7 +664,7 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("sunRate", optsAsNum)}
             />
@@ -673,40 +673,40 @@ function WeekDayRatesForm(props: CommonRatesFormProps) {
       </div>
       <div className="hidden md:col-span-1 md:block">{/* empty */}</div>
       <div className="col-span-1 flex flex-col gap-4">
-        <div className={classNames(extraContainerClassnames)}>
+        <div className={cn(extraContainerClassnames)}>
           <div>Daily miles allowed</div>
           <div>
             <input
               type="number"
               min={0}
               step={0.25}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("dailyKMorMileageAllowed", optsAsNum)}
             />
           </div>
         </div>
-        <div className={classNames(extraContainerClassnames)}>
+        <div className={cn(extraContainerClassnames)}>
           <div>Fuel charge</div>
           <div>
             <input
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("fuelCharge", optsAsNum)}
             />
           </div>
         </div>
-        <div className={classNames(extraContainerClassnames)}>
+        <div className={cn(extraContainerClassnames)}>
           <div>Miles charge</div>
           <div>
             <input
               type="number"
               min={0}
               step={0.01}
-              className={classNames("w-[100px]", numberInputClassnames)}
+              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
               {...register("kMorMileageCharge", optsAsNum)}
             />

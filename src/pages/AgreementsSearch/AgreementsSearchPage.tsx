@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
@@ -36,14 +36,9 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
+import { AgreementDateTimeColumns } from "../../utils/columns";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
-
-export const AgreementDateTimeColumns = [
-  "CreatedDate",
-  "CheckoutDate",
-  "CheckinDate",
-];
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
@@ -88,7 +83,7 @@ function AgreementsSearchPage() {
                 .AgreementId;
               return (
                 <Link
-                  to={viewAgreementByIdRoute.fullPath}
+                  to={viewAgreementByIdRoute.to}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -151,7 +146,7 @@ function AgreementsSearchPage() {
                 <div>
                   <LinkButton
                     color="teal"
-                    to={addAgreementRoute.fullPath}
+                    to={addAgreementRoute.to}
                     search={() => ({ stage: "rental-information" })}
                     className="flex items-center justify-center gap-2"
                   >
@@ -173,7 +168,7 @@ function AgreementsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: searchAgreementsRoute.fullPath,
+                  to: searchAgreementsRoute.to,
                   params: {},
                   search: () => ({
                     page: 1,
@@ -184,7 +179,7 @@ function AgreementsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: searchAgreementsRoute.fullPath,
+                  to: searchAgreementsRoute.to,
                   params: {},
                   search: () => ({
                     page: 1,
@@ -377,7 +372,7 @@ function AgreementsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: searchAgreementsRoute.fullPath,
+                    to: searchAgreementsRoute.to,
                     params: {},
                     search: (current) => ({
                       ...current,

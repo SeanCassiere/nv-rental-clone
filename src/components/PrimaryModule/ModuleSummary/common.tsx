@@ -1,13 +1,14 @@
 import { useState, type ReactNode } from "react";
-import classNames from "classnames";
 import {
   type MakeLinkOptions,
   type RegisteredRoutesInfo,
   Link,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 import { Transition } from "@headlessui/react";
 
+import { cn } from "@/utils";
 import { ChevronDownOutline, ChevronRightOutline } from "../../icons";
+
 export const SummaryHeader = ({
   title,
   icon,
@@ -51,7 +52,7 @@ export const makeSummaryDataStyles = (
     | "biggerText"
   >
 ) => {
-  return classNames(
+  return cn(
     "text-base font-semibold",
     !data.primaryTextHighlight &&
       !data.redHighlight &&
@@ -81,13 +82,13 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
 
   return (
     <div
-      className={classNames(
+      className={cn(
         "flex flex-col",
         data.primaryBlockHighlight ? "" : "py-2 px-4"
       )}
     >
       <div
-        className={classNames(
+        className={cn(
           "flex items-start justify-between gap-4",
           !data.primaryTextHighlight && data.primaryBlockHighlight
             ? "bg-teal-400 text-white"
@@ -96,7 +97,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
         )}
       >
         <span
-          className={classNames(
+          className={cn(
             "flex-shrink break-all font-semibold md:max-w-none",
             !data.primaryBlockHighlight ? "text-gray-700" : "",
             data.biggerText ? "text-lg" : "text-base"

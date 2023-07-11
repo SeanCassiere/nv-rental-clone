@@ -1,8 +1,9 @@
 import { useId, Fragment, forwardRef } from "react";
 import { Transition, Listbox } from "@headlessui/react";
-import classNames from "classnames";
 import { type TSelectInputOption } from ".";
 import { ChevronUpDownSolid } from "../icons";
+
+import { cn } from "@/utils";
 
 interface TMultiSelectInputOption extends TSelectInputOption {
   isSelectAll?: boolean;
@@ -96,7 +97,7 @@ export const MultiSelectInput = forwardRef<any, MultiSelectInputProps>(
                       <Listbox.Option
                         key={`${id}-${option.label}`}
                         className={({ active }) =>
-                          classNames(
+                          cn(
                             active ? "bg-teal-600 text-white" : "text-gray-900",
                             "relative cursor-default select-none py-2 pl-3 pr-9"
                           )
@@ -121,7 +122,7 @@ export const MultiSelectInput = forwardRef<any, MultiSelectInputProps>(
                                 readOnly
                               />
                               <span
-                                className={classNames(
+                                className={cn(
                                   "ml-3 block truncate font-normal"
                                 )}
                               >

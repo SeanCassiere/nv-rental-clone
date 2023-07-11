@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
-import classNames from "classnames";
+
+import { cn } from "@/utils";
 
 const CommonHeader = ({
   subtitleText,
@@ -14,7 +15,7 @@ const CommonHeader = ({
 }) => {
   return (
     <div
-      className={classNames(
+      className={cn(
         "pb-4",
         includeBottomBorder ? "border-b border-slate-100" : ""
       )}

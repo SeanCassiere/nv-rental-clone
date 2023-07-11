@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import { type ReactNode } from "react";
+
+import { cn } from "@/utils";
 
 export type TAnyCustomerValueType = string | number | null;
 export const EMPTY_KEY = "-";
@@ -16,7 +17,7 @@ const InformationBlock = (props: TInformationBlockProps) => {
   const { isHiddenOnMobile } = props;
   return (
     <div
-      className={classNames(
+      className={cn(
         {
           hidden: isHiddenOnMobile,
           grid: !isHiddenOnMobile,
@@ -54,7 +55,7 @@ export const InformationBlockCard = (props: TInformationBlockCardProps) => {
         </span>
       </div>
       <div
-        className={classNames("grid grid-cols-1 gap-y-4 pt-3 sm:grid-cols-2", {
+        className={cn("grid grid-cols-1 gap-y-4 pt-3 sm:grid-cols-2", {
           "lg:grid-cols-3": props.numberPerBlock === 3,
           "lg:grid-cols-4": props.numberPerBlock === 4,
         })}

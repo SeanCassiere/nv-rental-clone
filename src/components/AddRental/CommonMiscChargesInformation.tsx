@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import classNames from "classnames";
 
 import { type StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
 import { Button } from "../Form";
@@ -8,6 +7,7 @@ import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCh
 
 import { localDateTimeToQueryYearMonthDay } from "../../utils/date";
 import { type MiscChargeListItem } from "../../utils/schemas/misCharges";
+import { cn } from "@/utils";
 
 interface CommonMiscChargesInformationProps {
   module: StepRatesAndChargesInformationProps["module"];
@@ -239,7 +239,7 @@ function MiscChargeItem(props: {
         {charge.Name}
       </label>
       <div
-        className={classNames(
+        className={cn(
           "col-span-12 flex cursor-pointer items-center gap-2 px-4 md:col-span-3",
           "justify-start md:justify-end"
         )}
@@ -295,7 +295,7 @@ function MiscChargeItem(props: {
             {charge.Options.map((option, idx) => (
               <div
                 key={`${option.miscChargeOptionId}-${idx}`}
-                className={classNames("flex items-center gap-2")}
+                className={cn("flex items-center gap-2")}
               >
                 <input
                   type="radio"
@@ -317,7 +317,7 @@ function MiscChargeItem(props: {
                 />
                 <div className="w-full">
                   <label
-                    className={classNames(
+                    className={cn(
                       "block w-full",
                       !isSelected ? "cursor-not-allowed" : "cursor-pointer"
                     )}

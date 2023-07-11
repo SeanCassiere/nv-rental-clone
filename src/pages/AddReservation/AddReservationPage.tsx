@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
 import { useCallback } from "react";
 import AddRentalParentForm from "../../components/AddRental";
@@ -14,6 +14,8 @@ import { titleMaker } from "../../utils/title-maker";
 
 const AddReservationPage = () => {
   const navigate = useNavigate({ from: addReservationRoute.id });
+  const router = useRouter();
+
   const { stage = "rental-information" } = useSearch({
     from: addReservationRoute.id,
   });
@@ -30,7 +32,7 @@ const AddReservationPage = () => {
   const handleReservationSaveComplete = useCallback(
     (reservationId: number) => {
       navigate({
-        to: viewReservationByIdRoute.fullPath,
+        to: viewReservationByIdRoute.to,
         params: { reservationId: String(reservationId) },
         search: () => ({ tab: "summary" }),
       });
@@ -39,10 +41,10 @@ const AddReservationPage = () => {
   );
 
   const handleCancelAddReservation = useCallback(() => {
-    navigate({
-      to: "..",
+    router.navigate({
+      to: '../',
     });
-  }, [navigate]);
+  }, [router]);
 
   useDocumentTitle(titleMaker("New - Reservation"));
   return (

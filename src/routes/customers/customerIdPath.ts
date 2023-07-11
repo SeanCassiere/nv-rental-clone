@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/react-router";
+import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { customersRoute } from ".";
@@ -12,7 +12,7 @@ import { customerQKeys } from "../../utils/query-key";
 export const customerPathIdRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "$customerId",
-  onLoad: async ({ params: { customerId } }) => {
+  loader: async ({ params: { customerId } }) => {
     const auth = getAuthToken();
 
     if (auth) {
