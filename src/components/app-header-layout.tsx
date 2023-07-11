@@ -62,7 +62,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
       props: {},
     },
     {
-      name: "Rentals",
+      name: "Agreements",
       href: searchAgreementsRoute.fullPath,
       current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {},
