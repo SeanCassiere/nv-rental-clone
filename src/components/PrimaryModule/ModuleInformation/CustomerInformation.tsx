@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -61,7 +61,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
           heading: "Full name",
           value: (
             <Link
-              to={viewCustomerByIdRoute.fullPath}
+              to={viewCustomerByIdRoute.to}
               params={{ customerId: String(data.customerId) }}
               search={() => ({ tab: "summary" })}
               className="font-semibold text-slate-800 hover:text-slate-600"

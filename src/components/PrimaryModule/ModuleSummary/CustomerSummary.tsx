@@ -32,7 +32,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.openedReservation),
       type: Boolean(summaryData?.openedReservation) ? "link" : "text",
       linkProps: {
-        to: searchReservationsRoute.fullPath,
+        to: searchReservationsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["2"],
@@ -47,7 +47,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.confirmedReservation),
       type: Boolean(summaryData?.confirmedReservation) ? "link" : "text",
       linkProps: {
-        to: searchReservationsRoute.fullPath,
+        to: searchReservationsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["3"],
@@ -62,7 +62,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.noShowReservation),
       type: Boolean(summaryData?.noShowReservation) ? "link" : "text",
       linkProps: {
-        to: searchReservationsRoute.fullPath,
+        to: searchReservationsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["4"],
@@ -77,7 +77,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.cancelledReservation),
       type: Boolean(summaryData?.cancelledReservation) ? "link" : "text",
       linkProps: {
-        to: searchReservationsRoute.fullPath,
+        to: searchReservationsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["5"],
@@ -92,7 +92,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.openedAgreements),
       type: Boolean(summaryData?.openedAgreements) ? "link" : "text",
       linkProps: {
-        to: searchAgreementsRoute.fullPath,
+        to: searchAgreementsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["2"],
@@ -108,7 +108,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.closedAgreements),
       type: Boolean(summaryData?.closedAgreements) ? "link" : "text",
       linkProps: {
-        to: searchAgreementsRoute.fullPath,
+        to: searchAgreementsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["3"],
@@ -129,7 +129,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.pendingPayments),
       type: Boolean(summaryData?.pendingPayments) ? "link" : "text",
       linkProps: {
-        to: searchAgreementsRoute.fullPath,
+        to: searchAgreementsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["5"],
@@ -145,7 +145,7 @@ export const CustomerSummary = ({
       primaryTextHighlight: Boolean(summaryData?.pendingDeposit),
       type: Boolean(summaryData?.pendingDeposit) ? "link" : "text",
       linkProps: {
-        to: searchAgreementsRoute.fullPath,
+        to: searchAgreementsRoute.to,
         search: () => ({
           filters: {
             Statuses: ["7"],

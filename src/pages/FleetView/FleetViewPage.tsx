@@ -5,7 +5,7 @@ import {
   useParams,
   useSearch,
   Link,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 
 import Protector from "../../components/Protector";
 import { ChevronRightOutline, PencilIconFilled } from "../../components/icons";
@@ -59,7 +59,7 @@ function VehicleViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewFleetByIdRoute.fullPath,
+      to: viewFleetByIdRoute.to,
       search: (others) => ({ ...others, tab: newTab.id }),
       params: { vehicleId },
       replace: true,
@@ -142,7 +142,7 @@ function VehicleViewPage() {
                     aria-hidden="true"
                   />
                   <Link
-                    to={viewFleetByIdRoute.fullPath}
+                    to={viewFleetByIdRoute.to}
                     search={(current) => ({ tab: current?.tab || "summary" })}
                     params={{ vehicleId }}
                     className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

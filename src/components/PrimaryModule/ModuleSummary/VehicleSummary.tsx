@@ -87,8 +87,8 @@ export const VehicleSummary = ({
       type: summaryData?.totalNoOfReservation ? "link" : "text",
       amount: summaryData?.totalNoOfReservation,
       linkProps: {
-        to: viewFleetByIdRoute.fullPath,
-        search: (current) => ({
+        to: viewFleetByIdRoute.to,
+        search: () => ({
           tab: "reservations",
         }),
         params: { vehicleId: vehicleId },
@@ -112,7 +112,7 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: viewReservationByIdRoute.fullPath,
+        to: viewReservationByIdRoute.to,
         params: { reservationId: `${summaryData?.currentReservation}` },
         preload: "intent",
       },
@@ -124,7 +124,7 @@ export const VehicleSummary = ({
       type: summaryData?.futureNoOfReservation ? "link" : "text",
       amount: summaryData?.futureNoOfReservation,
       linkProps: {
-        to: searchReservationsRoute.fullPath,
+        to: searchReservationsRoute.to,
         search: () => ({
           filters: {
             VehicleNo: vehicleNo ?? "",
@@ -141,7 +141,7 @@ export const VehicleSummary = ({
       type: summaryData?.totalNoOfAgreement ? "link" : "text",
       amount: summaryData?.totalNoOfAgreement,
       linkProps: {
-        to: viewFleetByIdRoute.fullPath,
+        to: viewFleetByIdRoute.to,
         search: () => ({
           tab: "agreements",
         }),
@@ -166,7 +166,7 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: viewAgreementByIdRoute.fullPath,
+        to: viewAgreementByIdRoute.to,
         params: { agreementId: `${summaryData?.currentAgreement}` },
         preload: "intent",
       },
@@ -207,7 +207,7 @@ export const VehicleSummary = ({
         ? summaryData?.pendingPayment
         : "None",
       linkProps: {
-        to: searchAgreementsRoute.fullPath,
+        to: searchAgreementsRoute.to,
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
         }),

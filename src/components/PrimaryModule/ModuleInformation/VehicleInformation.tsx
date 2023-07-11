@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 
 import {
   InformationBlockCard,
@@ -64,7 +64,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
           heading: "Vehicle no.",
           value: (
             <Link
-              to={viewFleetByIdRoute.fullPath}
+              to={viewFleetByIdRoute.to}
               params={{ vehicleId: String(data.vehicleId) }}
               search={() => ({ tab: "summary" })}
               className="font-semibold text-slate-800 hover:text-slate-600"

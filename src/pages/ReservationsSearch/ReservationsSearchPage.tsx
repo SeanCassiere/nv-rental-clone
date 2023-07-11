@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
@@ -83,7 +83,7 @@ function ReservationsSearchPage() {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewReservationByIdRoute.fullPath}
+                  to={viewReservationByIdRoute.to}
                   params={{ reservationId: String(reservationId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -169,7 +169,7 @@ function ReservationsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: searchReservationsRoute.fullPath,
+                  to: searchReservationsRoute.to,
                   params: {},
                   search: () => ({
                     page: 1,
@@ -180,7 +180,7 @@ function ReservationsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: searchReservationsRoute.fullPath,
+                  to: searchReservationsRoute.to,
                   params: {},
                   search: () => ({ page: 1, size: 10, filters: undefined }),
                 });
@@ -341,7 +341,7 @@ function ReservationsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: searchReservationsRoute.fullPath,
+                    to: searchReservationsRoute.to,
                     params: {},
                     search: (current) => ({
                       ...current,

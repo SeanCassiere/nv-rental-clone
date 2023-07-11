@@ -5,7 +5,7 @@ import {
   useParams,
   useRouter,
   useSearch,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 
 import Protector from "../../components/Protector";
 import {
@@ -104,7 +104,7 @@ function AgreementViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewAgreementByIdRoute.fullPath,
+      to: viewAgreementByIdRoute.to,
       search: (others) => ({ ...others, tab: newTab.id }),
       params: { agreementId },
       replace: true,
@@ -147,7 +147,7 @@ function AgreementViewPage() {
                     aria-hidden="true"
                   />
                   <Link
-                    to={viewAgreementByIdRoute.fullPath}
+                    to={viewAgreementByIdRoute.to}
                     search={(current) => ({ tab: current?.tab || "summary" })}
                     params={{ agreementId }}
                     className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"

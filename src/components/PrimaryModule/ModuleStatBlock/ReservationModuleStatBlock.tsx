@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 import classNames from "classnames";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
@@ -133,7 +133,7 @@ const ReservationModuleStatBlock = ({
             header="Agreement no."
             stat={
               <Link
-                to={viewAgreementByIdRoute.fullPath}
+                to={viewAgreementByIdRoute.to}
                 params={{
                   agreementId: String(reservation.reservationview.agreementId),
                 }}

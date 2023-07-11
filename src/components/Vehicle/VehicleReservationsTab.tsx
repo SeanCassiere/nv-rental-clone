@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
 import CommonTable from "../General/CommonTable";
@@ -71,7 +71,7 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <Link
-                  to={viewReservationByIdRoute.fullPath}
+                  to={viewReservationByIdRoute.to}
                   params={{ reservationId: String(reservationId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -122,8 +122,8 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
             Showing a maximum of {pageSize} records.
           </p>
           <Link
-            to={searchReservationsRoute.fullPath}
-            search={() => ({ filters: { VehicleNo: props.vehicleNo } })}
+            to={searchReservationsRoute.to}
+            search={() => ({ filters: { VehicleNo: props.vehicleNo } }) as any}
             className="text-slate-600 underline hover:text-slate-800"
           >
             Need more? Click here to search for reservations.

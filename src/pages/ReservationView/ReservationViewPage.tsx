@@ -5,7 +5,7 @@ import {
   useParams,
   useSearch,
   Link,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 
 import Protector from "../../components/Protector";
 import {
@@ -90,7 +90,7 @@ function ReservationViewPage() {
 
   const onTabClick = (newTab: ModuleTabConfigItem) => {
     navigate({
-      to: viewReservationByIdRoute.fullPath,
+      to: viewReservationByIdRoute.to,
       search: (others) => ({ ...others, tab: newTab.id }),
       params: { reservationId },
       replace: true,
@@ -132,7 +132,7 @@ function ReservationViewPage() {
                     aria-hidden="true"
                   />
                   <Link
-                    to={viewReservationByIdRoute.fullPath}
+                    to={viewReservationByIdRoute.to}
                     search={(current) => ({ tab: current?.tab || "summary" })}
                     params={{ reservationId }}
                     className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
@@ -142,7 +142,7 @@ function ReservationViewPage() {
                 </div>
                 <div className="flex flex-col gap-3 md:flex-row">
                   <LinkButton
-                    to={editReservationByIdRoute.fullPath}
+                    to={editReservationByIdRoute.to}
                     search={() => ({})}
                     params={{ reservationId: String(reservationId) }}
                     className="flex items-center justify-center gap-2"

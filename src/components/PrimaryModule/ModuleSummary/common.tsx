@@ -4,7 +4,7 @@ import {
   type MakeLinkOptions,
   type RegisteredRoutesInfo,
   Link,
-} from "@tanstack/react-router";
+} from "@tanstack/router";
 import { Transition } from "@headlessui/react";
 
 import { ChevronDownOutline, ChevronRightOutline } from "../../icons";

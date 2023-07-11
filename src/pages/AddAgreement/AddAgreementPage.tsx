@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
@@ -30,7 +30,7 @@ const AddAgreementPage = () => {
   const handleAgreementSaveComplete = useCallback(
     (agreementId: number) => {
       navigate({
-        to: viewAgreementByIdRoute.fullPath,
+        to: viewAgreementByIdRoute.to,
         params: { agreementId: String(agreementId) },
         search: () => ({ tab: "summary" }),
       });
@@ -39,9 +39,9 @@ const AddAgreementPage = () => {
   );
 
   const handleCancelAddAgreement = useCallback(() => {
-    navigate({
-      to: "..",
-    });
+    // navigate({
+    //   to: "..",
+    // });
   }, [navigate]);
 
   useDocumentTitle(titleMaker("New - Agreement"));

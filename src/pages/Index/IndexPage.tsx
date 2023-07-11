@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import classNames from "classnames";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/router";
 
 import Protector from "../../components/Protector";
 import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";

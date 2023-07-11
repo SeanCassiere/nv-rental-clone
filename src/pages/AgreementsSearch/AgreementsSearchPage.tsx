@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
@@ -83,7 +83,7 @@ function AgreementsSearchPage() {
                 .AgreementId;
               return (
                 <Link
-                  to={viewAgreementByIdRoute.fullPath}
+                  to={viewAgreementByIdRoute.to}
                   params={{ agreementId: String(agreementId) }}
                   search={() => ({ tab: "summary" })}
                   className="font-semibold text-slate-800"
@@ -168,7 +168,7 @@ function AgreementsSearchPage() {
               initialValues={searchFilters}
               onSubmit={async (formValues) => {
                 navigate({
-                  to: searchAgreementsRoute.fullPath,
+                  to: searchAgreementsRoute.to,
                   params: {},
                   search: () => ({
                     page: 1,
@@ -179,7 +179,7 @@ function AgreementsSearchPage() {
               }}
               onReset={async () => {
                 navigate({
-                  to: searchAgreementsRoute.fullPath,
+                  to: searchAgreementsRoute.to,
                   params: {},
                   search: () => ({
                     page: 1,
@@ -372,7 +372,7 @@ function AgreementsSearchPage() {
                 }
                 onPaginationChange={(newPaginationState) => {
                   navigate({
-                    to: searchAgreementsRoute.fullPath,
+                    to: searchAgreementsRoute.to,
                     params: {},
                     search: (current) => ({
                       ...current,

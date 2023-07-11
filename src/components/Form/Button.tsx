@@ -1,7 +1,7 @@
 import { forwardRef, type ReactNode } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import classNames from "classnames";
-import { Link, type LinkPropsOptions } from "@tanstack/react-router";
+import { Link, type LinkPropsOptions } from "@tanstack/router";
 
 const buttonStyles = cva(
   "flex justify-center h-max rounded border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2",
