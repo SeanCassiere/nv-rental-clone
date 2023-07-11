@@ -1,5 +1,4 @@
-import classNames from "classnames";
-
+import { cn } from "@/utils";
 import { getAgreementStatusNameFromRaw } from "../PrimaryModule/ModuleStatBlock/AgreementModuleStatBlock";
 
 const supportedList = [
@@ -15,7 +14,7 @@ const AgreementStatusPill = (props: { status: string }) => {
 
   return (
     <span
-      className={classNames(
+      className={cn(
         "select-none rounded-full px-2.5 py-1.5 text-sm text-white",
         props.status === "Open" && "bg-green-500",
         props.status.trim() === "Closed" && "bg-red-500",

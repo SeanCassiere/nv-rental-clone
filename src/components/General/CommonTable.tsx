@@ -11,9 +11,10 @@ import {
   type ColumnDef,
   type PaginationState,
 } from "@tanstack/react-table";
-import classNames from "classnames";
-import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
+
 import { getPaginationWithDoubleEllipsis } from "../../utils/pagination";
+import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
+import { cn } from "@/utils";
 
 interface TCommonTableProps<T> {
   data: T[];
@@ -75,7 +76,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
 
   return (
     <div
-      className={classNames(
+      className={cn(
         "relative w-full overflow-hidden overflow-y-auto rounded border border-slate-200",
         props.stickyHeader ? "mr-2 max-h-[650px]" : ""
       )}
@@ -83,7 +84,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
       {/* <div className="overflow-x-auto"> */}
       <table className="min-w-full table-auto divide-y divide-slate-200 overflow-x-auto bg-slate-50">
         <thead
-          className={classNames(
+          className={cn(
             "bg-slate-100",
             props.stickyHeader
               ? "sticky top-0 z-10 border-b border-slate-200"
@@ -97,7 +98,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                   key={header.id}
                   scope="col"
                   colSpan={header.colSpan}
-                  className={classNames(
+                  className={cn(
                     header.index === 0 ? "sm:pl-6" : "",
                     "px-4 py-5 text-left text-base font-semibold text-gray-700"
                   )}
@@ -120,7 +121,7 @@ const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                 {row.getVisibleCells().map((cell, cellIdx) => (
                   <td
                     key={cell.id}
-                    className={classNames(
+                    className={cn(
                       cellIdx === 0 ? "sm:pl-6" : "",
                       "whitespace-nowrap px-4 py-3 text-base font-normal text-slate-700"
                     )}
@@ -215,7 +216,7 @@ const DesktopPaginationBtn = (
   return (
     <button
       {...otherProps}
-      className={classNames(
+      className={cn(
         "relative inline-flex items-center border px-4 py-2 text-sm font-medium hover:bg-slate-50 focus:z-20",
         current
           ? "z-10 border-teal-500 bg-teal-50 text-teal-600"

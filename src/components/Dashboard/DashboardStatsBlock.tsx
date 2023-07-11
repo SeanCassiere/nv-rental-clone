@@ -1,4 +1,3 @@
-import classNames from "classnames";
 
 import {
   type IconProps,
@@ -19,6 +18,7 @@ import type { TDashboardStats } from "../../utils/schemas/dashboard";
 import { indexRoute } from "../../routes";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import { cn } from "@/utils";
 
 const DashboardStatsBlock = ({
   statistics,
@@ -143,7 +143,7 @@ const StatBlock = ({
   return (
     <Link {...(linkProps as any)}>
       <div
-        className={classNames(
+        className={cn(
           "group grid cursor-pointer grid-cols-7 overflow-hidden rounded border border-slate-200 bg-slate-50 px-4 py-4 transition-all duration-150 ease-in hover:bg-slate-100"
         )}
       >
@@ -155,7 +155,7 @@ const StatBlock = ({
         </div>
         <div className="col-span-5">
           <div
-            className={classNames(
+            className={cn(
               "text-5xl font-semibold transition-all duration-200 ease-in group-hover:text-teal-500",
               value !== "0" ? "text-slate-800" : "text-slate-700"
             )}

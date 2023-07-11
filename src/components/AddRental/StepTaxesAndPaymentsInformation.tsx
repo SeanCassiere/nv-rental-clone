@@ -1,10 +1,11 @@
-import { Transition } from "@headlessui/react";
-import classNames from "classnames";
 import { useState } from "react";
+import { Transition } from "@headlessui/react";
+
 import { useGetTaxes } from "../../hooks/network/taxes/useGetTaxes";
 import { Button } from "../Form";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
 import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
+import { cn } from "@/utils";
 
 interface StepTaxesAndPaymentsInformationProps {
   module: "agreements" | "reservations";
@@ -50,7 +51,7 @@ const StepTaxesAndPaymentsInformation = (
         renderEndIcon={
           <button className="px-2 py-1" onClick={() => setStep(0)}>
             <ChevronDownOutline
-              className={classNames("h-4 w-4", step === 0 ? "rotate-180" : "")}
+              className={cn("h-4 w-4", step === 0 ? "rotate-180" : "")}
             />
           </button>
         }
@@ -83,7 +84,7 @@ const StepTaxesAndPaymentsInformation = (
         renderEndIcon={
           <button className="px-2 py-1" onClick={() => setStep(1)}>
             <ChevronDownOutline
-              className={classNames("h-4 w-4", step === 1 ? "rotate-180" : "")}
+              className={cn("h-4 w-4", step === 1 ? "rotate-180" : "")}
             />
           </button>
         }
@@ -182,7 +183,7 @@ const CommonTaxesInformation = (props: CommonTaxesInformationProps) => {
                 />
                 <label
                   htmlFor={`${tax.id}-${idx}-${tax.name}`}
-                  className={classNames(
+                  className={cn(
                     "",
                     mandatoryTaxes.includes(tax.id)
                       ? "cursor-not-allowed"

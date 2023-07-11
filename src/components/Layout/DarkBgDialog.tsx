@@ -1,8 +1,8 @@
 import { Fragment, type ReactNode } from "react";
 import { Transition, Dialog } from "@headlessui/react";
-import classNames from "classnames";
 
 import { XMarkOutline } from "../icons";
+import { cn } from "@/utils";
 
 interface DarkBgDialogProps {
   title: ReactNode;
@@ -53,7 +53,7 @@ const DarkBgDialog = (props: DarkBgDialogProps) => {
           <div className="fixed inset-0 z-10 flex w-full items-center justify-center">
             <Dialog.Panel className="mx-1 md:mx-4">
               <div
-                className={classNames(
+                className={cn(
                   "max-w-sm",
                   {
                     "md:max-w-xs": sizing === "xs",

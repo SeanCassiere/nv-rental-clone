@@ -1,5 +1,4 @@
-import classNames from "classnames";
-
+import { cn } from "@/utils";
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type VehicleDataParsed } from "../../../utils/schemas/vehicle";
 import { useGetVehicleStatusList } from "../../../hooks/network/vehicle/useGetVehicleStatusList";
@@ -47,7 +46,7 @@ const VehicleModuleStatBlock = ({
         header="Fleet status"
         stat={
           <span
-            className={classNames(
+            className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
               getTextColorForStatus(getStatusById(vehicle?.vehicle.statusId))
             )}
@@ -110,7 +109,7 @@ const VehicleModuleStatBlock = ({
         header="State"
         stat={
           <span
-            className={classNames(
+            className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
               vehicle?.vehicle.active ? "text-slate-600" : "text-red-500"
             )}

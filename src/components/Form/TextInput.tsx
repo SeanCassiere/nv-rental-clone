@@ -1,6 +1,7 @@
 import { useId, forwardRef, type ReactNode } from "react";
-import classNames from "classnames";
 import { ExclamationCircleIconOutline } from "../icons";
+
+import { cn } from "@/utils";
 
 interface TextInputProps
   extends React.DetailedHTMLProps<
@@ -42,7 +43,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             <input
               type={type ?? "text"}
               id={id}
-              className={classNames(
+              className={cn(
                 "block w-full rounded border-gray-300 read-only:cursor-not-allowed focus:outline-none disabled:cursor-not-allowed sm:text-sm",
                 error
                   ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"

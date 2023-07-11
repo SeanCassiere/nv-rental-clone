@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/router";
-import classNames from "classnames";
 
+import { cn } from "@/utils";
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type ReservationDataParsed } from "../../../utils/schemas/reservation";
 import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPath";
@@ -40,7 +40,7 @@ const ReservationModuleStatBlock = ({
         header="Status"
         stat={
           <span
-            className={classNames(
+            className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
               getTextColorForStatus(
                 reservation?.reservationview.reservationStatusName ?? ""

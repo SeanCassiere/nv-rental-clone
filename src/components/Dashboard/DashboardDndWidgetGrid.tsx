@@ -1,5 +1,4 @@
 import { useState, useCallback, Suspense, lazy } from "react";
-import classNames from "classnames";
 import {
   type DragEndEvent,
   DndContext,
@@ -19,6 +18,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
 import { type StringNumberIdType } from "../../utils/query-key";
+import { cn } from "@/utils";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
 
@@ -194,7 +194,7 @@ function WidgetSizingContainer({
   return (
     <li
       ref={setNodeRef}
-      className={classNames(
+      className={cn(
         "col-span-1",
         widget.widgetScale === 1 ? "md:col-span-1" : "",
         widget.widgetScale === 2 ? "md:col-span-2" : "",
@@ -213,7 +213,7 @@ function WidgetSizingContainer({
     >
       <div
         ref={setActivatorNodeRef}
-        className={classNames(
+        className={cn(
           "h-full w-full rounded border border-slate-200 text-slate-600",
           !isDragging ? "transition-all duration-200 ease-in" : "",
           { "cursor-move": !isDisabled, "cursor-default": isDisabled },

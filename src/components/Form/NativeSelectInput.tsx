@@ -1,6 +1,7 @@
-import classNames from "classnames";
 import { forwardRef, useId } from "react";
 import { type TSelectInputOption } from "./SelectInput";
+
+import { cn } from "@/utils";
 
 export function getSelectedOptionForSelectInput(
   options: TSelectInputOption[],
@@ -63,7 +64,7 @@ export const NativeSelectInput = forwardRef<any, NativeSelectProps>(
           <div className="relative mt-1 rounded shadow-sm">
             <select
               id={id}
-              className={classNames(
+              className={cn(
                 "block w-full rounded border-gray-300 focus:outline-none disabled:cursor-not-allowed sm:text-sm",
                 error
                   ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"

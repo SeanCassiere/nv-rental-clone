@@ -1,6 +1,7 @@
 import { type ReactNode, Suspense, Fragment } from "react";
 import { Tab } from "@headlessui/react";
-import classNames from "classnames";
+
+import { cn } from "@/utils";
 
 export type ModuleTabConfigItem = {
   id: string;
@@ -33,7 +34,7 @@ export const ModuleTabs = (props: {
     <div className="w-full">
       <Tab.Group selectedIndex={index} onChange={handleChangeIndex}>
         <Tab.List
-          className={classNames(
+          className={cn(
             "mt-2 mb-2.5 flex w-max max-w-full gap-1 overflow-x-auto rounded py-1.5"
           )}
         >
@@ -41,7 +42,7 @@ export const ModuleTabs = (props: {
             <Tab key={`tab-header-${item.id}`} as={Fragment}>
               {({ selected }) => (
                 <button
-                  className={classNames(
+                  className={cn(
                     selected
                       ? "bg-slate-100 text-slate-600 hover:shadow-sm"
                       : "text-slate-500 hover:bg-slate-100 hover:text-slate-700",
@@ -54,7 +55,7 @@ export const ModuleTabs = (props: {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className={classNames("w-full")}>
+        <Tab.Panels className={cn("w-full")}>
           {props.tabConfig.map((item) => (
             <Tab.Panel
               key={`tab-panel-${item.id}`}

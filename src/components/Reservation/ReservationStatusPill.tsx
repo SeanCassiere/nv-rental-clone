@@ -1,5 +1,4 @@
-import classNames from "classnames";
-
+import { cn } from "@/utils";
 import { getReservationStatusNameFromRaw } from "../PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
 
 const supportedList = ["Open", "CheckOut", "Canceled", "Quote", "New"];
@@ -9,7 +8,7 @@ const ReservationStatusPill = (props: { status: string }) => {
 
   return (
     <span
-      className={classNames(
+      className={cn(
         "select-none rounded-full px-2.5 py-1.5 text-sm text-white",
         props.status === "Open" && "bg-green-500",
         props.status.trim() === "Canceled" && "bg-red-500",

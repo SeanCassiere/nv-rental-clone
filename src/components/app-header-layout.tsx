@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useRouter } from "@tanstack/router";
 import { useAuth } from "react-oidc-context";
-import classNames from "classnames";
 
 import { indexRoute } from "../routes";
 import { searchCustomersRoute } from "../routes/customers/searchCustomers";
@@ -11,6 +10,7 @@ import { searchAgreementsRoute } from "../routes/agreements/searchAgreements";
 import { UI_APPLICATION_NAME } from "../utils/constants";
 import { useGetDashboardNoticeList } from "../hooks/network/dashboard/useGetDashboardNoticeList";
 import DashboardBannerNotices from "./Dashboard/DashboardBannerNotices";
+import { cn } from "@/utils";
 
 const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
@@ -129,7 +129,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
                 key={`nav_${navItem.name}`}
                 to={navItem.href as any}
                 preload="intent"
-                className={classNames(
+                className={cn(
                   navItem.current
                     ? "text-primary whitespace-nowrap border-b border-slate-800 pb-4 pt-3 font-semibold leading-none transition sm:px-4"
                     : "text-primary whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-gray-300 dark:hover:border-gray-600 sm:px-4"
