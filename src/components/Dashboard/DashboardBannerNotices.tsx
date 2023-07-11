@@ -43,7 +43,7 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
 
   return (
     <div className="bg-teal-500">
-      <div className="mx-auto py-3 px-3 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1620px] px-4 py-4">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex w-0 flex-1 items-center">
             <span className="flex rounded-lg bg-teal-600 p-2">

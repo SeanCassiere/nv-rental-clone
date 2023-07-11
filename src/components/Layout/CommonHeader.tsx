@@ -40,7 +40,7 @@ const CommonHeader = ({
         )}
       </div>
       {subtitleText && (
-        <p className="mt-2 max-w-4xl select-none text-sm text-slate-600">
+        <p className="mt-2 max-w-4xl select-none text-slate-600">
           {subtitleText}
         </p>
       )}
