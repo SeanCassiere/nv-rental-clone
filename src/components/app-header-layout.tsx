@@ -39,32 +39,44 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
   const navigation = [
     {
       name: "Dashboard",
-      href: indexRoute.fullPath,
+      href: indexRoute.to,
       current: matches(["/"], "="),
       props: {},
     },
     {
       name: "Fleet",
-      href: searchFleetRoute.fullPath,
+      href: searchFleetRoute.to,
       current: matches(["/fleet", "/fleet/$vehicleId"]),
       props: {},
     },
     {
       name: "Customers",
-      href: searchCustomersRoute.fullPath,
+      href: searchCustomersRoute.to,
       current: matches(["/customers", "/customers/$customerId"]),
       props: {},
     },
     {
       name: "Reservations",
-      href: searchReservationsRoute.fullPath,
+      href: searchReservationsRoute.to,
       current: matches(["/reservations", "/reservations/$reservationId"]),
       props: {},
     },
     {
       name: "Agreements",
-      href: searchAgreementsRoute.fullPath,
+      href: searchAgreementsRoute.to,
       current: matches(["/agreements", "/agreements/$agreementId"]),
+      props: {},
+    },
+    {
+      name: "Reports",
+      href: searchAgreementsRoute.to,
+      current: matches(["/reports", "/reports/$reportId"]),
+      props: {},
+    },
+    {
+      name: "Settings",
+      href: searchAgreementsRoute.to,
+      current: matches(["/settings", "/settings/$location"]),
       props: {},
     },
   ];
