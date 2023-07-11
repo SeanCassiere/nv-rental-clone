@@ -94,8 +94,8 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="mr-2 md:ml-2">
               <Link to={indexRoute.fullPath}>
                 <img
-                  className="h-8 w-8 rounded-full bg-black p-1"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                  className="h-10 w-10 rounded-full p-1"
+                  src="/android-chrome-192x192.png"
                   alt={UI_APPLICATION_NAME}
                   style={{ imageRendering: "crisp-edges" }}
                 />
