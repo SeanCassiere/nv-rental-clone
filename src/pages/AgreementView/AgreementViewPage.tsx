@@ -128,7 +128,7 @@ function AgreementViewPage() {
   return (
     <Protector>
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -209,7 +209,7 @@ function AgreementViewPage() {
           </div>
         </div>
 
-        <div className="mx-auto px-4 sm:px-6 md:grid-cols-12 md:px-8">
+        <div className="mx-auto px-4 md:grid-cols-12">
           <ModuleTabs
             tabConfig={tabsConfig}
             startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}

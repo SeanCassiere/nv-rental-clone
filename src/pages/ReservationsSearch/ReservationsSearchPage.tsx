@@ -137,7 +137,7 @@ function ReservationsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-1.5 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4 pt-1.5">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -161,7 +161,7 @@ function ReservationsSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}

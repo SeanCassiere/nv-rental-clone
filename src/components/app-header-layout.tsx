@@ -101,8 +101,8 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
             ))}
           </div>
         )}
-        <div className="mx-auto max-w-[1620px]">
-          <div className="flex items-center px-4 pb-4 pt-6 md:pt-8">
+        <div className="mx-auto">
+          <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to={indexRoute.to}>
                 <img
@@ -123,7 +123,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
             <div className="flex flex-none items-center gap-x-2">Details</div>
           </div>
-          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 sm:space-x-0">
+          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 md:px-10 sm:space-x-0">
             {navigation.map((navItem) => (
               <Link
                 key={`nav_${navItem.name}`}
@@ -142,7 +142,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
           </nav>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-[1620px] flex-1">{children}</main>
+      <main className="mx-auto w-full flex-1 max-w-[1700px] px-2 md:px-10">{children}</main>
     </div>
   );
 };

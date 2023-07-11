@@ -128,7 +128,7 @@ function CustomerSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-4 pb-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4 py-4">
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
@@ -139,7 +139,7 @@ function CustomerSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-full px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
