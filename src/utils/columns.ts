@@ -8,4 +8,5 @@ export const AgreementDateTimeColumns = [
   "CreatedDate",
   "CheckoutDate",
   "CheckinDate",
+  "ReturnDate",
 ];

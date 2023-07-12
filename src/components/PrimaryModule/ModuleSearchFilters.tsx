@@ -6,10 +6,12 @@ import {
   TextInput,
   MultiSelectInput,
   SelectInput,
-  Button,
   DatePicker,
   type TSelectInputOption,
 } from "../Form";
+
+import { Button } from "@/components/ui/button";
+
 type KeyValueObject = { [key: string]: any };
 
 function makeJsonSafe<T extends KeyValueObject>(data: T, originalData: any) {
@@ -220,7 +222,7 @@ function ModuleSearchFilters<T extends KeyValueObject>(
         />
       ))}
       <Button type="submit">Submit</Button>
-      <Button type="reset" color="slate">
+      <Button type="reset" variant="secondary">
         Clear
       </Button>
     </form>
