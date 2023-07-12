@@ -26,10 +26,10 @@ const config: AuthProviderNoUserManagerProps = {
   monitorSession: true,
   onSigninCallback: async () => {
     const redirectUri = window.localStorage.getItem(LS_OIDC_REDIRECT_URI_KEY);
-    if (redirectUri && redirectUri !== "") {
+    if (redirectUri && redirectUri !== "" && redirectUri !== "/") {
       window.location.replace(redirectUri);
     } else {
-      window.location.replace("/");
+      window.history.replaceState({}, document.title, "/")
     }
   },
 };
