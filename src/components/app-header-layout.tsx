@@ -132,11 +132,15 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
                 key={`nav_${navItem.name}`}
                 to={navItem.href as any}
                 preload="intent"
+                // className='text-primary whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-gray-300 dark:hover:border-gray-600 sm:px-4'
                 className={cn(
                   navItem.current
                     ? "text-primary whitespace-nowrap border-b border-slate-800 pb-4 pt-3 font-semibold leading-none transition sm:px-4"
                     : "text-primary whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-gray-300 dark:hover:border-gray-600 sm:px-4",
                 )}
+                // activeProps={{
+                //   className: "text-primary whitespace-nowrap border-b border-slate-800 pb-4 pt-3 font-semibold leading-none transition sm:px-4"
+                // }}
                 {...navItem.props}
               >
                 {navItem.name}

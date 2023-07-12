@@ -19,22 +19,14 @@ export const queryClient = new QueryClient({
 
 const App = () => {
   return (
-    <Suspense fallback={<p>root suspense loading...</p>}>
+    <OidcAuthProvider>
       <QueryClientProvider client={queryClient}>
-        <OidcAuthProvider>
-          <SubApp />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </OidcAuthProvider>
+        <Suspense fallback={<p>root suspense loading...</p>}>
+          <RouterProvider router={router} defaultPreload="intent" />
+        </Suspense>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
-    </Suspense>
-  );
-};
-
-const SubApp = () => {
-  return (
-    <>
-      <RouterProvider router={router} defaultPreload="intent" />
-    </>
+    </OidcAuthProvider>
   );
 };
 
