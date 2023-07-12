@@ -1,6 +1,7 @@
 import { Router, parseSearchWith, stringifySearchWith } from "@tanstack/router";
 import JSURL from "jsurl2";
 
+import LoadingPlaceholder from "./pages/loading-placeholder";
 import { rootRoute } from "./routes/__root";
 
 // /
@@ -10,7 +11,7 @@ import { indexRoute } from "./routes";
 import { loggedOutRoute } from "./routes/logged-out";
 
 // /oidc-callback
-import { oidcCallbackRoute } from '@/routes/oidcCallback'
+import { oidcCallbackRoute } from '@/routes/oidc-callback'
 
 // /styles
 import { stylingRoute } from "./routes/styles";
@@ -108,11 +109,7 @@ export const router = new Router({
   // stringifySearch: stringifySearchWith((value) =>
   //   encodeToBinary(JSON.stringify(value))
   // ),
-  defaultPendingComponent: () => (
-    <div className="flex h-[calc(100vh-4rem)] w-full items-center justify-center text-3xl">
-      <div>Code-split loading...</div>
-    </div>
-  ),
+  defaultPendingComponent: LoadingPlaceholder,
   defaultPreload: "intent",
 });
 

@@ -2,14 +2,17 @@ import React from "react";
 import { Link, useRouter } from "@tanstack/router";
 import { useAuth } from "react-oidc-context";
 
-import { indexRoute } from "../../routes";
-import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
-import { searchFleetRoute } from "../../routes/fleet/searchFleet";
-import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
-import { UI_APPLICATION_NAME } from "../../utils/constants";
-import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
+import LoadingPlaceholder from "@/pages/loading-placeholder";
+import { indexRoute } from "@/routes";
+import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
+import { searchFleetRoute } from "@/routes/fleet/searchFleet";
+import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
+
+import { useGetDashboardNoticeList } from "@/hooks/network/dashboard/useGetDashboardNoticeList";
 import { cn } from "@/utils";
+import { UI_APPLICATION_NAME } from "@/utils/constants";
+
 import { BannerNotice } from "./banner-notice";
 import { UserNavigationDropdown } from "./user-navigation-dropdown";
 
@@ -84,8 +87,9 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
 
   const noticeList = useGetDashboardNoticeList();
 
+  // this will be the loading placeholder that'll take up the entire page height
   if (auth.isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingPlaceholder />;
   }
 
   if (!auth.isLoading && !auth.isAuthenticated) {
