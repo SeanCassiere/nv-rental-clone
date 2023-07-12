@@ -37,8 +37,16 @@ import { ReservationFiltersSchema } from "../../utils/schemas/reservation";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { titleMaker } from "../../utils/title-maker";
 import { ReservationDateTimeColumns } from "../../utils/columns";
+import { cn } from "@/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
+
+function ColumnWrap({ children }: { children: React.ReactNode }) {
+  return <div className="min-w-[80px]">{children}</div>;
+}
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
@@ -75,33 +83,53 @@ function ReservationsSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          header: ({ column: columnChild }) => (
+            <DataTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (column.columnHeader === "ReservationNumber") {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
-                <Link
-                  to={viewReservationByIdRoute.to}
-                  params={{ reservationId: String(reservationId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value}
-                </Link>
+                <ColumnWrap>
+                  <Link
+                    to={viewReservationByIdRoute.to}
+                    params={{ reservationId: String(reservationId) }}
+                    search={() => ({ tab: "summary" })}
+                    className={cn(
+                      buttonVariants({ variant: "link", size: "sm" }),
+                      "p-0",
+                    )}
+                    preload="intent"
+                  >
+                    {value}
+                  </Link>
+                </ColumnWrap>
               );
             }
             if (column.columnHeader === "ReservationStatusName") {
-              return <ReservationStatusPill status={value} />;
+              return (
+                <ColumnWrap>
+                  <Badge variant="outline">{value}</Badge>
+                </ColumnWrap>
+              );
             }
 
             if (ReservationDateTimeColumns.includes(column.columnHeader)) {
-              return t("intlDateTime", { value: new Date(value) });
+              return (
+                <ColumnWrap>
+                  {t("intlDateTime", { value: new Date(value) })}
+                </ColumnWrap>
+              );
             }
 
-            return value;
+            return <ColumnWrap>{value}</ColumnWrap>;
           },
+          enableHiding: false,
+          enableSorting: false,
         }),
       ),
     [columnsData.data, t],
@@ -160,7 +188,7 @@ function ReservationsSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
@@ -310,49 +338,35 @@ function ReservationsSearchPage() {
             />
           </div>
 
-          {reservationsData.data?.isRequestMade ===
-          false ? null : reservationsData.data?.data.length === 0 ? (
-            <CommonEmptyStateContent
-              title="No reservations"
-              subtitle="You don't have any reservations to show here."
-              icon={<BookFilled className="mx-auto h-12 w-12 text-slate-400" />}
+          <div>
+            <ModuleTable
+              data={reservationsData.data?.data || []}
+              columns={columnDefs}
+              onColumnOrderChange={handleSaveColumnsOrder}
+              lockedColumns={["ReservationNumber"]}
+              rawColumnsData={columnsData?.data || []}
+              showColumnPicker
+              onColumnVisibilityChange={handleSaveColumnVisibility}
+              pagination={pagination}
+              totalPages={
+                reservationsData.data?.totalRecords
+                  ? Math.ceil(reservationsData.data?.totalRecords / size) ?? -1
+                  : 0
+              }
+              onPaginationChange={(newPaginationState) => {
+                navigate({
+                  to: searchReservationsRoute.to,
+                  params: {},
+                  search: (current) => ({
+                    ...current,
+                    page: newPaginationState.pageIndex + 1,
+                    size: newPaginationState.pageSize,
+                    filters: searchFilters,
+                  }),
+                });
+              }}
             />
-          ) : (
-            <div>
-              <ModuleTable
-                data={reservationsData.data?.data || []}
-                columns={columnDefs}
-                noRows={
-                  reservationsData.isLoading === false &&
-                  reservationsData.data?.data.length === 0
-                }
-                onColumnOrderChange={handleSaveColumnsOrder}
-                lockedColumns={["ReservationNumber"]}
-                rawColumnsData={columnsData?.data || []}
-                showColumnPicker
-                onColumnVisibilityChange={handleSaveColumnVisibility}
-                pagination={pagination}
-                totalPages={
-                  reservationsData.data?.totalRecords
-                    ? Math.ceil(reservationsData.data?.totalRecords / size) ??
-                      -1
-                    : 0
-                }
-                onPaginationChange={(newPaginationState) => {
-                  navigate({
-                    to: searchReservationsRoute.to,
-                    params: {},
-                    search: (current) => ({
-                      ...current,
-                      page: newPaginationState.pageIndex + 1,
-                      size: newPaginationState.pageSize,
-                      filters: searchFilters,
-                    }),
-                  });
-                }}
-              />
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </Protector>

@@ -32,8 +32,16 @@ import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
 import { titleMaker } from "../../utils/title-maker";
 import VehicleStatusPill from "../../components/Vehicle/VehicleStatusPill";
+import { cn } from "@/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
+
+function ColumnWrap({ children }: { children: React.ReactNode }) {
+  return <div className="min-w-[80px]">{children}</div>;
+}
 
 function VehiclesSearchPage() {
   const navigate = useNavigate({ from: searchFleetRoute.id });
@@ -67,29 +75,45 @@ function VehiclesSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          header: ({ column: columnChild }) => (
+            <DataTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (column.columnHeader === "VehicleNo") {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
-                <Link
-                  to={viewFleetByIdRoute.to}
-                  params={{ vehicleId: String(vehicleId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value}
-                </Link>
+                <ColumnWrap>
+                  <Link
+                    to={viewFleetByIdRoute.to}
+                    params={{ vehicleId: String(vehicleId) }}
+                    search={() => ({ tab: "summary" })}
+                    className={cn(
+                      buttonVariants({ variant: "link", size: "sm" }),
+                      "p-0",
+                    )}
+                    preload="intent"
+                  >
+                    {value}
+                  </Link>
+                </ColumnWrap>
               );
             }
             if (column.columnHeader === "VehicleStatus") {
-              return <VehicleStatusPill status={value} />;
+              return (
+                <ColumnWrap>
+                  <Badge variant="outline">{value}</Badge>
+                </ColumnWrap>
+              );
             }
 
-            return value;
+            return <ColumnWrap>{value}</ColumnWrap>;
           },
+          enableHiding: false,
+          enableSorting: false,
         }),
       ),
     [columnsData.data],
@@ -135,7 +159,7 @@ function VehiclesSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
@@ -271,10 +295,6 @@ function VehiclesSearchPage() {
               <ModuleTable
                 data={vehiclesData.data?.data || []}
                 columns={columnDefs}
-                noRows={
-                  vehiclesData.isLoading === false &&
-                  vehiclesData.data?.data.length === 0
-                }
                 onColumnOrderChange={handleSaveColumnsOrder}
                 lockedColumns={["VehicleNo"]}
                 rawColumnsData={columnsData?.data || []}

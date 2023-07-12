@@ -30,10 +30,17 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
 import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
+import { cn } from "@/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
 const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
+
+function ColumnWrap({ children }: { children: React.ReactNode }) {
+  return <div className="min-w-[80px]">{children}</div>;
+}
 
 function CustomerSearchPage() {
   const { t } = useTranslation();
@@ -66,7 +73,12 @@ function CustomerSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          header: ({ column: columnChild }) => (
+            <DataTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (
@@ -76,24 +88,35 @@ function CustomerSearchPage() {
               const customerId = item.table.getRow(item.row.id).original
                 .CustomerId;
               return (
-                <Link
-                  to={viewCustomerByIdRoute.to}
-                  params={{ customerId: String(customerId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value}
-                </Link>
+                <ColumnWrap>
+                  <Link
+                    to={viewCustomerByIdRoute.to}
+                    params={{ customerId: String(customerId) }}
+                    search={() => ({ tab: "summary" })}
+                    className={cn(
+                      buttonVariants({ variant: "link", size: "sm" }),
+                      "p-0",
+                    )}
+                    preload="intent"
+                  >
+                    {value}
+                  </Link>
+                </ColumnWrap>
               );
             }
 
             if (DateColumns.includes(column.columnHeader)) {
-              return t("intlDate", { value: new Date(value) });
+              return (
+                <ColumnWrap>
+                  {t("intlDate", { value: new Date(value) })}
+                </ColumnWrap>
+              );
             }
 
-            return value;
+            return <ColumnWrap>{value}</ColumnWrap>;
           },
+          enableHiding: false,
+          enableSorting: false,
         }),
       ),
     [columnsData.data, t],
@@ -139,7 +162,7 @@ function CustomerSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
@@ -205,48 +228,35 @@ function CustomerSearchPage() {
             />
           </div>
 
-          {customersData.data?.isRequestMade === false ? null : customersData
-              .data?.data.length === 0 ? (
-            <CommonEmptyStateContent
-              title="No customers"
-              subtitle="You don't have any customers to show here."
-              icon={<UsersSolid className="mx-auto h-12 w-12 text-slate-400" />}
+          <div>
+            <ModuleTable
+              data={customersData.data?.data || []}
+              columns={columnDefs}
+              onColumnOrderChange={handleSaveColumnsOrder}
+              lockedColumns={["FirstName"]}
+              rawColumnsData={columnsData?.data || []}
+              showColumnPicker
+              onColumnVisibilityChange={handleSaveColumnVisibility}
+              pagination={pagination}
+              totalPages={
+                customersData.data?.totalRecords
+                  ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
+                  : 0
+              }
+              onPaginationChange={(newPaginationState) => {
+                navigate({
+                  to: searchCustomersRoute.to,
+                  params: {},
+                  search: (current) => ({
+                    ...current,
+                    page: newPaginationState.pageIndex + 1,
+                    size: newPaginationState.pageSize,
+                    filters: searchFilters,
+                  }),
+                });
+              }}
             />
-          ) : (
-            <div>
-              <ModuleTable
-                data={customersData.data?.data || []}
-                columns={columnDefs}
-                noRows={
-                  customersData.isLoading === false &&
-                  customersData.data?.data.length === 0
-                }
-                onColumnOrderChange={handleSaveColumnsOrder}
-                lockedColumns={["FirstName"]}
-                rawColumnsData={columnsData?.data || []}
-                showColumnPicker
-                onColumnVisibilityChange={handleSaveColumnVisibility}
-                pagination={pagination}
-                totalPages={
-                  customersData.data?.totalRecords
-                    ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
-                    : 0
-                }
-                onPaginationChange={(newPaginationState) => {
-                  navigate({
-                    to: searchCustomersRoute.to,
-                    params: {},
-                    search: (current) => ({
-                      ...current,
-                      page: newPaginationState.pageIndex + 1,
-                      size: newPaginationState.pageSize,
-                      filters: searchFilters,
-                    }),
-                  });
-                }}
-              />
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </Protector>

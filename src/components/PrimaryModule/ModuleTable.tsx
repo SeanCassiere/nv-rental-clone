@@ -10,7 +10,7 @@ import {
   getCoreRowModel,
   useReactTable,
   flexRender,
-  type Table,
+  type Table as TableType,
   type Header,
   type ColumnOrderState,
   type ColumnDef,
@@ -47,6 +47,16 @@ import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { getPaginationWithDoubleEllipsis } from "../../utils/pagination";
 import { cn } from "@/utils";
 
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableHead,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
+
 interface DraggableColumnHeaderProps {
   header: Header<any, unknown>;
   isLocked: boolean;
@@ -70,24 +80,22 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
   });
 
   return (
-    <th
+    <TableHead
       ref={isDisabled ? undefined : setNodeRef}
       colSpan={header.colSpan}
       scope="col"
-      className={cn("text-base font-semibold")}
+      className={cn("font-semibold")}
       style={{ transform: CSS.Translate.toString(transform), transition }}
     >
       <button
         ref={setActivatorNodeRef}
         className={cn(
-          header.index === 0 ? "px-4 sm:pl-6" : "px-4",
-          "h-full w-full py-3 text-left",
+          "text-left p-0 m-0",
           (isDragging && isDisabled) || (isDragging && over?.disabled)
             ? "cursor-no-drop"
             : "",
-          isDragging ? "bg-slate-200" : "bg-slate-100 text-gray-700",
           isDisabled
-            ? "cursor-pointer text-gray-800 hover:cursor-not-allowed"
+            ? "cursor-pointer hover:cursor-not-allowed"
             : "cursor-grab",
         )}
         {...listeners}
@@ -97,7 +105,7 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
           ? null
           : flexRender(header.column.columnDef.header, header.getContext())}
       </button>
-    </th>
+    </TableHead>
   );
 };
 
@@ -107,7 +115,6 @@ interface ModuleTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
   rawColumnsData: TColumnListItemParsed[];
-  noRows: boolean;
   onColumnOrderChange?: (accessorKeys: string[]) => void;
   lockedColumns?: (keyof T)[];
   showColumnPicker?: boolean;
@@ -203,8 +210,9 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   );
 
   return (
-    <div className="overflow-hidden rounded border border-slate-200">
-      {showExtraActions && (
+    <>
+      <div className="overflow-hidden rounded border">
+        {/* {showExtraActions && (
         <div className="flex w-[100%] items-center justify-end bg-slate-100 px-4 pt-3 pb-1.5">
           {props.showColumnPicker && (
             <ColumnPickerPopover
@@ -216,122 +224,127 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
             />
           )}
         </div>
-      )}
-      <div className="overflow-x-auto">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragEnd={handleDndDragEnd}
-          modifiers={[restrictToHorizontalAxis]}
-        >
-          <table className="min-w-full table-auto divide-y divide-slate-200 bg-slate-50">
-            <thead className="bg-slate-100">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  <SortableContext
-                    items={columnOrder}
-                    strategy={horizontalListSortingStrategy}
-                  >
-                    {headerGroup.headers.map((header) => (
-                      <DraggableColumnHeader
-                        key={header.id}
-                        header={header}
-                        isLocked={lockedColumns.includes(header.id)}
-                      />
-                    ))}
-                  </SortableContext>
-                </tr>
-              ))}
-            </thead>
-            <tbody className="divide-y divide-slate-200 bg-slate-50">
-              {props.noRows === false &&
-                table.getRowModel().rows.map((row) => (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell, cellIdx) => (
-                      <td
-                        key={cell.id}
-                        className={cn(
-                          "whitespace-nowrap py-4 text-base font-normal text-slate-700",
-                          cellIdx === 0 ? "px-4 sm:pl-6" : "px-4",
-                        )}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    ))}
-                  </tr>
+      )} */}
+        <div className="overflow-x-auto">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragEnd={handleDndDragEnd}
+            modifiers={[restrictToHorizontalAxis]}
+          >
+            <Table className="table-auto">
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    <SortableContext
+                      items={columnOrder}
+                      strategy={horizontalListSortingStrategy}
+                    >
+                      {headerGroup.headers.map((header) => (
+                        <DraggableColumnHeader
+                          key={header.id}
+                          header={header}
+                          isLocked={lockedColumns.includes(header.id)}
+                        />
+                      ))}
+                    </SortableContext>
+                    {/* {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </TableHead>
+                    );
+                  })} */}
+                  </TableRow>
                 ))}
-              {props.noRows && (
-                <tr>
-                  <td
-                    colSpan={table.getAllColumns().length}
-                    className="whitespace-nowrap px-4 py-4 text-center text-base text-slate-700"
-                  >
-                    No data
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </DndContext>
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </DndContext>
+        </div>
+        {/* pagination */}
       </div>
-      {/* pagination */}
-      <div className="flex flex-1 justify-between bg-slate-50 px-2 py-2.5 sm:hidden">
-        <button
-          className="relative inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300"
+      <div className="flex flex-1 justify-between px-2 py-2.5 sm:hidden">
+        <Button
+          variant="outline"
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.previousPage()}
         >
           Previous
-        </button>
-        <button
-          className="relative ml-3 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300"
+        </Button>
+        <Button
+          variant="outline"
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
         >
           Next
-        </button>
+        </Button>
       </div>
-      <div className="hidden border-t border-slate-200 bg-slate-50 sm:flex sm:flex-1 sm:items-center sm:justify-between sm:px-4 sm:py-3.5">
-        <div>
-          <nav
-            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-            aria-label="Pagination"
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between sm:py-3.5">
+        <nav className="isolate inline-flex space-x-1" aria-label="Pagination">
+          <DesktopPaginationBtn
+            className="rounded-l px-2"
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
           >
+            <span className="sr-only">Previous</span>
+            <ChevronLeftOutline className="h-4 w-4" aria-hidden="true" />
+          </DesktopPaginationBtn>
+          {pageNumbers.map((pageNum, idx) => (
             <DesktopPaginationBtn
-              className="rounded-l px-2"
-              disabled={!table.getCanPreviousPage()}
-              onClick={() => table.previousPage()}
+              key={`module-table-pagination-button-${pageNum}-${idx}`}
+              disabled={isNaN(pageNum)}
+              onClick={() => {
+                !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
+              }}
+              current={Boolean(props.pagination.pageIndex + 1 === pageNum)}
             >
-              <span className="sr-only">Previous</span>
-              <ChevronLeftOutline className="h-5 w-5" aria-hidden="true" />
+              {!isNaN(pageNum) ? pageNum : "..."}
             </DesktopPaginationBtn>
-            {pageNumbers.map((pageNum, idx) => (
-              <DesktopPaginationBtn
-                key={`module-table-pagination-button-${pageNum}-${idx}`}
-                disabled={isNaN(pageNum)}
-                onClick={() => {
-                  !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
-                }}
-                current={Boolean(props.pagination.pageIndex + 1 === pageNum)}
-              >
-                {!isNaN(pageNum) ? pageNum : "..."}
-              </DesktopPaginationBtn>
-            ))}
-            <DesktopPaginationBtn
-              className="rounded-r px-2"
-              disabled={!table.getCanNextPage()}
-              onClick={() => table.nextPage()}
-            >
-              <span className="sr-only">Next</span>
-              <ChevronRightOutline className="h-5 w-5" aria-hidden="true" />
-            </DesktopPaginationBtn>
-          </nav>
-        </div>
+          ))}
+          <DesktopPaginationBtn
+            className="rounded-r px-2"
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+          >
+            <span className="sr-only">Next</span>
+            <ChevronRightOutline className="h-4 w-4" aria-hidden="true" />
+          </DesktopPaginationBtn>
+        </nav>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -344,7 +357,7 @@ const ColumnPickerPopover = <T extends any>({
   columnVisibility,
   lockedColumns = [],
 }: {
-  table: Table<T>;
+  table: TableType<T>;
   getColumnDescriptionFn: (headerName: string) => string | null;
   onColumnVisibilityChange?: ModuleTableProps<T>["onColumnVisibilityChange"];
   columnVisibility: ColumnVisibilityGraph;
@@ -420,21 +433,17 @@ const DesktopPaginationBtn = (
     HTMLButtonElement
   > & { current?: boolean },
 ) => {
-  const { children, current, className, ...otherProps } = props;
+  const { children, current, className, onClick, disabled } = props;
   return (
-    <button
-      {...otherProps}
-      className={cn(
-        "relative inline-flex items-center border px-4 py-2 text-sm font-medium hover:bg-slate-50 focus:z-20",
-        current
-          ? "z-10 border-teal-500 bg-teal-50 text-teal-600"
-          : "border-slate-300 bg-white text-slate-500",
-        "disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-50 disabled:text-slate-300",
-        className,
-      )}
+    <Button
+      variant={current ? "default" : "outline"}
+      size="sm"
+      onClick={onClick}
+      disabled={disabled}
+      className="[font-variant-numeric:tabular-nums]"
       {...(current ? { "aria-current": "page", current: `${current}` } : {})}
     >
       {children}
-    </button>
+    </Button>
   );
 };

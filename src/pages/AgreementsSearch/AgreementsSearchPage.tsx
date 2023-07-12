@@ -37,8 +37,16 @@ import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
 import { AgreementDateTimeColumns } from "../../utils/columns";
+import { DataTableColumnHeader } from "@/components/ui/data-table";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/utils";
+import { Badge } from "@/components/ui/badge";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
+
+function ColumnWrap({ children }: { children: React.ReactNode }) {
+  return <div className="min-w-[80px]">{children}</div>;
+}
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
@@ -75,33 +83,48 @@ function AgreementsSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          header: ({ column: columnChild }) => (
+            <DataTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (column.columnHeader === "AgreementNumber") {
               const agreementId = item.table.getRow(item.row.id).original
                 .AgreementId;
               return (
-                <Link
-                  to={viewAgreementByIdRoute.to}
-                  params={{ agreementId: String(agreementId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value}
-                </Link>
+                <ColumnWrap>
+                  <Link
+                    to={viewAgreementByIdRoute.to}
+                    params={{ agreementId: String(agreementId) }}
+                    search={() => ({ tab: "summary" })}
+                    className={cn(
+                      buttonVariants({ variant: "link", size: "sm" }),
+                      "p-0",
+                    )}
+                    preload="intent"
+                  >
+                    {value}
+                  </Link>
+                </ColumnWrap>
               );
             }
             if (column.columnHeader === "AgreementStatusName") {
-              return <AgreementStatusPill status={value} />;
+              return <Badge variant="outline">{value}</Badge>;
             }
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-              return t("intlDateTime", { value: new Date(value) });
+              return (
+                <ColumnWrap>
+                  {t("intlDateTime", { value: new Date(value) })}
+                </ColumnWrap>
+              );
             }
-
-            return value;
+            return <ColumnWrap>{value}</ColumnWrap>;
           },
+          enableSorting: false,
+          enableHiding: false,
         }),
       ),
     [columnsData.data, t],
@@ -160,7 +183,7 @@ function AgreementsSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
@@ -341,7 +364,44 @@ function AgreementsSearchPage() {
             />
           </div>
 
-          {agreementsData.data?.isRequestMade === false ? null : agreementsData
+          <div>
+            <ModuleTable
+              data={agreementsData.data?.data || []}
+              columns={columnDefs}
+              onColumnOrderChange={handleSaveColumnsOrder}
+              lockedColumns={["AgreementNumber"]}
+              rawColumnsData={columnsData?.data || []}
+              showColumnPicker
+              onColumnVisibilityChange={handleSaveColumnVisibility}
+              pagination={pagination}
+              totalPages={
+                agreementsData.data?.totalRecords
+                  ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
+                  : 0
+              }
+              onPaginationChange={(newPaginationState) => {
+                navigate({
+                  to: searchAgreementsRoute.to,
+                  params: {},
+                  search: (current) => {
+                    return {
+                      ...current,
+                      page: newPaginationState.pageIndex + 1,
+                      size: newPaginationState.pageSize,
+                      filters: searchFilters,
+                    };
+                  },
+                  // search: (current) => ({
+                  //   ...current,
+                  //   page: newPaginationState.pageIndex + 1,
+                  //   size: newPaginationState.pageSize,
+                  //   filters: searchFilters,
+                  // }),
+                });
+              }}
+            />
+          </div>
+          {/* {agreementsData.data?.isRequestMade === false ? null : agreementsData
               .data?.data.length === 0 ? (
             <CommonEmptyStateContent
               title="No agreements"
@@ -355,10 +415,6 @@ function AgreementsSearchPage() {
               <ModuleTable
                 data={agreementsData.data?.data || []}
                 columns={columnDefs}
-                noRows={
-                  agreementsData.isLoading === false &&
-                  agreementsData.data?.data.length === 0
-                }
                 onColumnOrderChange={handleSaveColumnsOrder}
                 lockedColumns={["AgreementNumber"]}
                 rawColumnsData={columnsData?.data || []}
@@ -384,7 +440,7 @@ function AgreementsSearchPage() {
                 }}
               />
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </Protector>
