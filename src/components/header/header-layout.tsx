@@ -2,18 +2,18 @@ import React from "react";
 import { Link, useRouter } from "@tanstack/router";
 import { useAuth } from "react-oidc-context";
 
-import { indexRoute } from "../routes";
-import { searchCustomersRoute } from "../routes/customers/searchCustomers";
-import { searchFleetRoute } from "../routes/fleet/searchFleet";
-import { searchReservationsRoute } from "../routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "../routes/agreements/searchAgreements";
-import { UI_APPLICATION_NAME } from "../utils/constants";
-import { useGetDashboardNoticeList } from "../hooks/network/dashboard/useGetDashboardNoticeList";
-import DashboardBannerNotices from "./Dashboard/DashboardBannerNotices";
+import { indexRoute } from "../../routes";
+import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
+import { searchFleetRoute } from "../../routes/fleet/searchFleet";
+import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
+import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import { UI_APPLICATION_NAME } from "../../utils/constants";
+import { useGetDashboardNoticeList } from "../../hooks/network/dashboard/useGetDashboardNoticeList";
 import { cn } from "@/utils";
-import { HeaderUserNav } from "./header-user-nav";
+import { BannerNotice } from "./banner-notice";
+import { UserNavigationDropdown } from "./user-navigation-dropdown";
 
-const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
+export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
   const router = useRouter();
 
@@ -98,7 +98,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
         {noticeList.data.length > 0 && (
           <div className="grid divide-y divide-teal-600">
             {noticeList.data.map((notice) => (
-              <DashboardBannerNotices notice={notice} key={notice.id} />
+              <BannerNotice notice={notice} key={notice.id} />
             ))}
           </div>
         )}
@@ -123,7 +123,7 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             </div>
             <div className="flex flex-none items-center gap-x-2">
-              <HeaderUserNav />
+              <UserNavigationDropdown />
             </div>
           </div>
           <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 md:px-10 sm:space-x-0">
@@ -151,5 +151,3 @@ const AppHeaderLayout = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
-
-export default AppHeaderLayout;

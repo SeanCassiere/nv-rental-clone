@@ -10,7 +10,7 @@ import {
 import { USER_STORAGE_KEYS } from "../../utils/constants";
 import { cn } from "@/utils";
 
-const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
+export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
   const auth = useAuth();
   const [show, setShow] = useState(true);
 
@@ -91,5 +91,3 @@ const DashboardBannerNotices = ({ notice }: { notice: TDashboardNotice }) => {
     </div>
   );
 };
-
-export default DashboardBannerNotices;

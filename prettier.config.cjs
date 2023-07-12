@@ -1,6 +1,12 @@
 /** @type {import("prettier").Config} */
-module.exports = {
-  tailwindConfig: "./styles/tailwind.config.cjs",
-  tailwindFunctions: ["clsx", "cn"],
+const config = {
+  // trailingComma: "all",
+  // tabWidth: 2,
+  // semi: true,
+  // singleQuote: false,
   plugins: [require("prettier-plugin-tailwindcss")],
-};
+  tailwindConfig: "./tailwind.config.cjs",
+  tailwindFunctions: ["clsx", "cn", "cva", "twMerge"],
+}
+
+module.exports = config;
