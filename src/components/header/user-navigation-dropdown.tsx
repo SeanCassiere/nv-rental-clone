@@ -27,6 +27,7 @@ import {
 
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
+import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
 
 function getAvatarFallbackText(name: string) {
   const nameParts = name.split(" ");
@@ -41,6 +42,16 @@ export const UserNavigationDropdown = () => {
 
   const userQuery = useGetUserProfile();
   const fullName = `${userQuery.data?.firstName} ${userQuery.data?.lastName}`;
+
+  const handleLogout = () => {
+    const client_id = auth.user?.profile.navotar_clientid;
+    const user_id = auth.user?.profile.navotar_userid;
+    if (client_id && user_id) {
+      removeAllLocalStorageKeysForUser(client_id, user_id);
+    }
+
+    auth.signoutRedirect()
+  }
 
   return (
     <AlertDialog>
@@ -101,7 +112,7 @@ export const UserNavigationDropdown = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => auth.signoutRedirect()}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleLogout}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
