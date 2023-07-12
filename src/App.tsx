@@ -19,14 +19,14 @@ export const queryClient = new QueryClient({
 
 const App = () => {
   return (
-    <OidcAuthProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <OidcAuthProvider>
         <Suspense fallback={<p>root suspense loading...</p>}>
           <RouterProvider router={router} defaultPreload="intent" />
         </Suspense>
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </OidcAuthProvider>
+      </OidcAuthProvider>
+    </QueryClientProvider>
   );
 };
 
