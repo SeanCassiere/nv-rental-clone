@@ -59,8 +59,8 @@ import {
 const routeTree = rootRoute.addChildren([
   indexRoute, // /
   loggedOutRoute, // /logged-out
-  ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
   oidcCallbackRoute, // /oidc-callback
+  ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
   agreementsRoute.addChildren([
     searchAgreementsRoute, // /agreements
     addAgreementRoute, // /agreements/new
