@@ -763,7 +763,7 @@ const AddRentalParentForm = ({
   return (
     <>
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -953,7 +953,7 @@ const AddRentalParentForm = ({
           />
         </div>
 
-        <div className="mx-auto px-4 md:grid-cols-12">
+        <div className="mx-auto px-2 sm:px-4 md:grid-cols-12">
           <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
             <div className="flex flex-col gap-4 lg:col-span-8">
               <ModuleTabs

@@ -148,7 +148,7 @@ function VehiclesSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 py-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4 py-4">
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">

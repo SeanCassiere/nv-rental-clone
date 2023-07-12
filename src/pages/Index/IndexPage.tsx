@@ -83,7 +83,7 @@ function IndexPage() {
         onWidgetSave={handleWidgetSortingEnd}
       />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4 pt-4">
           <div className="pb-4">
             <CommonHeader
               titleContent={
