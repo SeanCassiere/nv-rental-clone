@@ -4,16 +4,16 @@ import {
 } from "react-oidc-context";
 
 import {
-  LS_OIDC_REDIRECT_URI_KEY,
   OIDC_AUTHORITY,
   OIDC_CLIENT_ID,
   OIDC_REDIRECT_URI,
   OIDC_POST_LOGOUT_REDIRECT_URI,
   OIDC_SILENT_REDIRECT_URI,
-} from "../utils/constants";
+} from "@/utils/constants";
 
 const config: AuthProviderNoUserManagerProps = {
   authority: OIDC_AUTHORITY,
+  metadataUrl: `${OIDC_AUTHORITY}/.well-known/openid-configuration`,
   client_id: OIDC_CLIENT_ID,
   redirect_uri: OIDC_REDIRECT_URI,
   post_logout_redirect_uri: OIDC_POST_LOGOUT_REDIRECT_URI,
@@ -24,14 +24,6 @@ const config: AuthProviderNoUserManagerProps = {
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
-  onSigninCallback: async () => {
-    const redirectUri = window.localStorage.getItem(LS_OIDC_REDIRECT_URI_KEY);
-    if (redirectUri && redirectUri !== "" && redirectUri !== "/") {
-      window.location.replace(redirectUri);
-    } else {
-      window.history.replaceState({}, document.title, "/")
-    }
-  },
 };
 
 export const OidcAuthProvider = ({

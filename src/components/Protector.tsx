@@ -1,64 +1,47 @@
 import { useEffect } from "react";
-import { useAuth, hasAuthParams } from "react-oidc-context";
+import { useAuth } from "react-oidc-context";
+import { useRouter } from "@tanstack/router";
 
-import { LS_OIDC_REDIRECT_URI_KEY } from "../utils/constants";
+import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
 function Protector({ children }: { children: React.ReactNode }) {
   const auth = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    if (
-      !hasAuthParams() &&
-      !auth.isAuthenticated &&
-      !auth.activeNavigator &&
-      !auth.isLoading
-    ) {
-      const redirectUri = window.location.pathname + window.location.search;
-      window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
-      auth.signinRedirect();
-    }
-  }, [
-    auth.isAuthenticated,
-    auth.activeNavigator,
-    auth.isLoading,
-    auth.signinRedirect,
-    auth,
-  ]);
+    if (auth.isAuthenticated || router.history.location.pathname.startsWith("/oidc-callback")) return;
+
+    const redirection = router.history.location.pathname + router.history.location.search;
+    const shouldUseRedirection = !redirection.includes("/oidc-callback");
+    
+    router.navigate({ to: '/oidc-callback', search: () => {
+      return {
+        redirect: shouldUseRedirection ? redirection : '/'
+      }
+    }});
+  },[auth.isAuthenticated, router])
 
   useEffect(() => {
     return auth.events.addAccessTokenExpiring(() => {
+      const redirectUri = router.history.location.pathname + router.history.location.search;
+      window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
       auth.signinSilent();
     });
-  }, [auth, auth.events, auth.signinSilent]);
+  }, [auth, auth.events, auth.signinSilent, router.history.location.pathname, router.history.location.search]);
 
   useEffect(() => {
     return auth.events.addAccessTokenExpired(() => {
+      const redirectUri = router.history.location.pathname + router.history.location.search;
+      window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
       auth.signinSilent();
     });
-  }, [auth, auth.events, auth.signinSilent]);
+  }, [auth, auth.events, auth.signinSilent, router.history.location.pathname, router.history.location.search]);
 
-  switch (auth.activeNavigator) {
-    case "signinSilent":
-      return <div>Signing you in...</div>;
-    case "signoutRedirect":
-      return <div>Signing you out...</div>;
-  }
-
-  if (auth.isLoading) {
-    return <div>Auth is loading...</div>;
-  }
-
-  if (auth.error) {
-    auth.clearStaleState();
-  }
-
-  const isAuthenticated = auth.isAuthenticated;
-
-  return isAuthenticated ? (
-    <>{children}</>
-  ) : (
-    <div>Protector auth loading...</div>
-  );
+  return (
+    <>
+      {children}
+    </>
+  )
 }
 
 export default Protector;

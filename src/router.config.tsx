@@ -9,6 +9,9 @@ import { indexRoute } from "./routes";
 // /logged-out
 import { loggedOutRoute } from "./routes/logged-out";
 
+// /oidc-callback
+import { oidcCallbackRoute } from '@/routes/oidcCallback'
+
 // /styles
 import { stylingRoute } from "./routes/styles";
 
@@ -56,6 +59,7 @@ import {
 const routeTree = rootRoute.addChildren([
   indexRoute, // /
   loggedOutRoute, // /logged-out
+  oidcCallbackRoute, // /oidc-callback
   ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
   agreementsRoute.addChildren([
     searchAgreementsRoute, // /agreements
