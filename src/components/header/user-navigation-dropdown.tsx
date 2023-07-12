@@ -24,7 +24,7 @@ function getAvatarFallbackText(name: string) {
   return `${nameParts[0]?.charAt(0)}${nameParts[1]?.charAt(0)}`;
 }
 
-export const HeaderUserNav = () => {
+export const UserNavigationDropdown = () => {
   const auth = useAuth();
 
   const userQuery = useGetUserProfile();
