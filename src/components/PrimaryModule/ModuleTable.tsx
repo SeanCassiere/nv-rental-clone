@@ -116,16 +116,16 @@ export function ModuleTableColumnHeader<TData, TValue>({
             {column.getCanSort() ? (
               <>
                 {column.getIsSorted() === "desc" ? (
-                  <SortDesc className="ml-2 h-4 w-4" />
+                  <SortDesc className="ml-2 h-3 w-3" />
                 ) : column.getIsSorted() === "asc" ? (
-                  <SortAsc className="ml-2 h-4 w-4" />
+                  <SortAsc className="ml-2 h-3 w-3" />
                 ) : (
-                  <ChevronsDownUp className="ml-2 h-4 w-4" />
+                  <ChevronsDownUp className="ml-2 h-3 w-3" />
                 )}
               </>
             ) : (
               <>
-                <ChevronsDownUp className="ml-2 h-4 w-4" />
+                <ChevronsDownUp className="ml-2 h-3 w-3" />
               </>
             )}
           </Button>
