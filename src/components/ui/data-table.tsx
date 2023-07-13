@@ -298,7 +298,7 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex flex-col justify-between sm:flex-row sm:items-center">
       <div className="flex flex-1 items-center space-x-2">
-        <div>something</div>
+        <div>TODO: implement the dynamic search filters</div>
         {/* <Input
           placeholder="Filter tasks..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
