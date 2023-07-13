@@ -166,7 +166,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                   size="sm"
                   onClick={() => table.previousPage()}
                   disabled={!table.getCanPreviousPage()}
-                  className="rounded-l px-2 [font-variant-numeric:tabular-nums]"
+                  className="rounded-l px-2 tabular-nums"
                 >
                   <span className="sr-only">Previous</span>
                   <ChevronLeftOutline className="h-4 w-4" aria-hidden="true" />
@@ -184,7 +184,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                         !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
                       }}
                       disabled={isNaN(pageNum)}
-                      className="[font-variant-numeric:tabular-nums]"
+                      className="tabular-nums"
                       {...(current
                         ? { "aria-current": "page", current: `${current}` }
                         : {})}
@@ -198,7 +198,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                   size="sm"
                   onClick={() => table.nextPage()}
                   disabled={!table.getCanNextPage()}
-                  className="rounded-r px-2 [font-variant-numeric:tabular-nums]"
+                  className="rounded-r px-2 tabular-nums"
                 >
                   <span className="sr-only">Next</span>
                   <ChevronRightOutline className="h-4 w-4" aria-hidden="true" />
