@@ -343,7 +343,6 @@ function ReservationsSearchPage() {
               data={reservationsData.data?.data || []}
               columns={columnDefs}
               onColumnOrderChange={handleSaveColumnsOrder}
-              lockedColumns={["ReservationNumber"]}
               rawColumnsData={columnsData?.data || []}
               onColumnVisibilityChange={handleSaveColumnVisibility}
               totalPages={

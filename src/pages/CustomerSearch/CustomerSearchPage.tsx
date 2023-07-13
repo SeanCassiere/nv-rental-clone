@@ -233,7 +233,6 @@ function CustomerSearchPage() {
               data={customersData.data?.data || []}
               columns={columnDefs}
               onColumnOrderChange={handleSaveColumnsOrder}
-              lockedColumns={["FirstName"]}
               rawColumnsData={columnsData?.data || []}
               onColumnVisibilityChange={handleSaveColumnVisibility}
               totalPages={

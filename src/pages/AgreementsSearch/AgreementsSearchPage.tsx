@@ -373,7 +373,6 @@ function AgreementsSearchPage() {
               data={agreementsData.data?.data || []}
               columns={columnDefs}
               onColumnOrderChange={handleSaveColumnsOrder}
-              lockedColumns={["AgreementNumber"]}
               rawColumnsData={columnsData?.data || []}
               onColumnVisibilityChange={handleSaveColumnVisibility}
               totalPages={

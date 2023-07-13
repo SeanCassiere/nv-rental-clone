@@ -284,7 +284,6 @@ function VehiclesSearchPage() {
             data={vehiclesData.data?.data || []}
             columns={columnDefs}
             onColumnOrderChange={handleSaveColumnsOrder}
-            lockedColumns={["VehicleNo"]}
             rawColumnsData={columnsData?.data || []}
             onColumnVisibilityChange={handleSaveColumnVisibility}
             totalPages={

@@ -61,113 +61,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableToolbar } from "@/components/ui/data-table";
 
-interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>;
-  title: string;
-}
-
-export function ModuleTableColumnHeader<TData, TValue>({
-  column,
-  title,
-  className,
-}: DataTableColumnHeaderProps<TData, TValue>) {
-  const disabled = !column.getCanHide();
-
-  const {
-    attributes,
-    listeners,
-    transform,
-    transition,
-    setNodeRef,
-    setActivatorNodeRef,
-  } = useSortable({
-    id: column.id,
-    disabled,
-  });
-
-  if (!column.getCanSort() && !column.getCanHide()) {
-    return (
-      <div
-        className={cn(
-          "flex items-center space-x-0.5 whitespace-nowrap text-left",
-          className
-        )}
-      >
-        {title}
-      </div>
-    );
-  }
-
-  return (
-    <div
-      ref={!disabled ? setNodeRef : undefined}
-      className={cn("flex items-center space-x-0.5", className)}
-      style={{ transform: CSS.Translate.toString(transform), transition }}
-    >
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="-ml-3 h-8 whitespace-nowrap text-left data-[state=open]:bg-accent"
-          >
-            <span>{title}</span>
-            {column.getCanSort() ? (
-              <>
-                {column.getIsSorted() === "desc" ? (
-                  <SortDesc className="ml-2 h-3 w-3" />
-                ) : column.getIsSorted() === "asc" ? (
-                  <SortAsc className="ml-2 h-3 w-3" />
-                ) : (
-                  <ChevronsDownUp className="ml-2 h-3 w-3" />
-                )}
-              </>
-            ) : (
-              <>
-                <ChevronsDownUp className="ml-2 h-3 w-3" />
-              </>
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          {column.getCanSort() && (
-            <>
-              <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-                <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Asc
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-                <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Desc
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-            </>
-          )}
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Hide
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <Button
-        size="sm"
-        variant="ghost"
-        ref={setActivatorNodeRef}
-        {...listeners}
-        {...attributes}
-      >
-        <GripVertical className="h-3 w-3" />
-      </Button>
-    </div>
-  );
-}
-
 interface ModuleTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
   rawColumnsData: TColumnListItemParsed[];
-  lockedColumns?: (keyof T)[];
 
   onColumnOrderChange?: (updatedValues: ColumnOrderState) => void;
 
@@ -179,8 +76,6 @@ interface ModuleTableProps<T> {
 }
 
 export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
-  const lockedColumns = (props.lockedColumns || []) as string[];
-
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
@@ -411,6 +306,108 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
           </Button>
         </nav>
       </div>
+    </div>
+  );
+}
+
+interface DataTableColumnHeaderProps<TData, TValue>
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>;
+  title: string;
+}
+
+export function ModuleTableColumnHeader<TData, TValue>({
+  column,
+  title,
+  className,
+}: DataTableColumnHeaderProps<TData, TValue>) {
+  const disabled = !column.getCanHide();
+
+  const {
+    attributes,
+    listeners,
+    transform,
+    transition,
+    setNodeRef,
+    setActivatorNodeRef,
+  } = useSortable({
+    id: column.id,
+    disabled,
+  });
+
+  if (!column.getCanSort() && !column.getCanHide()) {
+    return (
+      <div
+        className={cn(
+          "flex items-center space-x-0.5 whitespace-nowrap text-left",
+          className
+        )}
+      >
+        {title}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      ref={!disabled ? setNodeRef : undefined}
+      className={cn("flex items-center space-x-0.5", className)}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+    >
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="-ml-3 h-8 whitespace-nowrap text-left data-[state=open]:bg-accent"
+          >
+            <span>{title}</span>
+            {column.getCanSort() ? (
+              <>
+                {column.getIsSorted() === "desc" ? (
+                  <SortDesc className="ml-2 h-3 w-3" />
+                ) : column.getIsSorted() === "asc" ? (
+                  <SortAsc className="ml-2 h-3 w-3" />
+                ) : (
+                  <ChevronsDownUp className="ml-2 h-3 w-3" />
+                )}
+              </>
+            ) : (
+              <>
+                <ChevronsDownUp className="ml-2 h-3 w-3" />
+              </>
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          {column.getCanSort() && (
+            <>
+              <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+                <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Asc
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+                <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Desc
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+            <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Hide
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Button
+        size="sm"
+        variant="ghost"
+        ref={setActivatorNodeRef}
+        {...listeners}
+        {...attributes}
+      >
+        <GripVertical className="h-3 w-3" />
+      </Button>
     </div>
   );
 }
