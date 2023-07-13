@@ -51,8 +51,12 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>;
+  if (!column.getCanSort() && !column.getCanHide()) {
+    return (
+      <div className={cn("whitespace-nowrap text-left", className)}>
+        {title}
+      </div>
+    );
   }
 
   return (
@@ -62,28 +66,40 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 text-left data-[state=open]:bg-accent"
+            className="-ml-3 h-8 whitespace-nowrap text-left data-[state=open]:bg-accent"
           >
             <span>{title}</span>
-            {column.getIsSorted() === "desc" ? (
-              <SortDesc className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === "asc" ? (
-              <SortAsc className="ml-2 h-4 w-4" />
+            {column.getCanSort() ? (
+              <>
+                {column.getIsSorted() === "desc" ? (
+                  <SortDesc className="ml-2 h-4 w-4" />
+                ) : column.getIsSorted() === "asc" ? (
+                  <SortAsc className="ml-2 h-4 w-4" />
+                ) : (
+                  <CircleDashed className="ml-2 h-4 w-4" />
+                )}
+              </>
             ) : (
-              <CircleDashed className="ml-2 h-4 w-4" />
+              <>
+                <CircleDashed className="ml-2 h-4 w-4" />
+              </>
             )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
+          {column.getCanSort() && (
+            <>
+              <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+                <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Asc
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+                <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Desc
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
             <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Hide
@@ -172,7 +188,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       }
                       const filterValues = Array.from(selectedValues);
                       column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined,
+                        filterValues.length ? filterValues : undefined
                       );
                     }}
                   >
@@ -181,7 +197,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                         isSelected
                           ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible",
+                          : "opacity-50 [&_svg]:invisible"
                       )}
                     >
                       <CheckIcon className={cn("h-4 w-4")} />
@@ -245,7 +261,7 @@ export function DataTableViewOptions<TData>({
           .getAllColumns()
           .filter(
             (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanHide(),
+              typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
             return (

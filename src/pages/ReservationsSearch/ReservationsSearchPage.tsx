@@ -3,19 +3,21 @@ import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
+  type ColumnOrderState,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
-import ModuleTable, {
+import {
+  ModuleTable,
+  ModuleTableColumnHeader,
   ColumnWrap,
-  type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
-import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { BookFilled, PlusIconFilled } from "../../components/icons";
+import { PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
@@ -40,7 +42,6 @@ import { ReservationDateTimeColumns } from "../../utils/columns";
 import { cn } from "@/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -58,7 +59,7 @@ function ReservationsSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size],
+    [pageNumber, size]
   );
 
   const reservationsData = useGetReservationsList({
@@ -80,7 +81,7 @@ function ReservationsSearchPage() {
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
           header: ({ column: columnChild }) => (
-            <DataTableColumnHeader
+            <ModuleTableColumnHeader
               column={columnChild}
               title={column.columnHeaderDescription ?? ""}
             />
@@ -97,7 +98,7 @@ function ReservationsSearchPage() {
                     search={() => ({ tab: "summary" })}
                     className={cn(
                       buttonVariants({ variant: "link", size: "sm" }),
-                      "p-0",
+                      "p-0"
                     )}
                     preload="intent"
                   >
@@ -108,9 +109,9 @@ function ReservationsSearchPage() {
             }
             if (column.columnHeader === "ReservationStatusName") {
               return (
-                <div className="min-w-[80px] px-2">
+                <ColumnWrap>
                   <Badge variant="outline">{value}</Badge>
-                </div>
+                </ColumnWrap>
               );
             }
 
@@ -124,34 +125,34 @@ function ReservationsSearchPage() {
 
             return <ColumnWrap>{value}</ColumnWrap>;
           },
-          enableHiding: false,
+          enableHiding: column.columnHeader !== "ReservationNumber",
           enableSorting: false,
-        }),
+        })
       ),
-    [columnsData.data, t],
+    [columnsData.data, t]
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "reservations" });
 
   const handleSaveColumnsOrder = useCallback(
-    (newColumnOrder: string[]) => {
+    (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         allColumns: columnsData.data,
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   const handleSaveColumnVisibility = useCallback(
-    (graph: ColumnVisibilityGraph) => {
+    (graph: VisibilityState) => {
       const newColumnsData = columnsData.data.map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   useDocumentTitle(titleMaker("Reservations"));
@@ -160,7 +161,7 @@ function ReservationsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 sm:px-4 pt-1.5">
+        <div className="mx-auto max-w-full px-2 pt-1.5 sm:px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -341,14 +342,13 @@ function ReservationsSearchPage() {
               onColumnOrderChange={handleSaveColumnsOrder}
               lockedColumns={["ReservationNumber"]}
               rawColumnsData={columnsData?.data || []}
-              showColumnPicker
               onColumnVisibilityChange={handleSaveColumnVisibility}
-              pagination={pagination}
               totalPages={
                 reservationsData.data?.totalRecords
                   ? Math.ceil(reservationsData.data?.totalRecords / size) ?? -1
                   : 0
               }
+              pagination={pagination}
               onPaginationChange={(newPaginationState) => {
                 navigate({
                   to: searchReservationsRoute.to,
@@ -361,6 +361,7 @@ function ReservationsSearchPage() {
                   }),
                 });
               }}
+              showColumnPicker
             />
           </div>
         </div>

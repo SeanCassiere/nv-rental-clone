@@ -3,19 +3,20 @@ import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
+  type VisibilityState,
+  type ColumnOrderState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
-import ModuleTable, {
+import {
+  ModuleTable,
+  ModuleTableColumnHeader,
   ColumnWrap,
-  type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
-import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { UsersSolid } from "../../components/icons";
 
 import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
 import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
@@ -33,7 +34,6 @@ import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-
 import { titleMaker } from "../../utils/title-maker";
 import { cn } from "@/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -53,7 +53,7 @@ function CustomerSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size],
+    [pageNumber, size]
   );
 
   const customersData = useGetCustomersList({
@@ -71,7 +71,7 @@ function CustomerSearchPage() {
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
           header: ({ column: columnChild }) => (
-            <DataTableColumnHeader
+            <ModuleTableColumnHeader
               column={columnChild}
               title={column.columnHeaderDescription ?? ""}
             />
@@ -92,7 +92,7 @@ function CustomerSearchPage() {
                     search={() => ({ tab: "summary" })}
                     className={cn(
                       buttonVariants({ variant: "link", size: "sm" }),
-                      "p-0",
+                      "p-0"
                     )}
                     preload="intent"
                   >
@@ -112,34 +112,34 @@ function CustomerSearchPage() {
 
             return <ColumnWrap>{value}</ColumnWrap>;
           },
-          enableHiding: false,
+          enableHiding: column.columnHeader !== "FirstName",
           enableSorting: false,
-        }),
+        })
       ),
-    [columnsData.data, t],
+    [columnsData.data, t]
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "customers" });
 
   const handleSaveColumnsOrder = useCallback(
-    (newColumnOrder: string[]) => {
+    (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         allColumns: columnsData.data,
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   const handleSaveColumnVisibility = useCallback(
-    (graph: ColumnVisibilityGraph) => {
+    (graph: VisibilityState) => {
       const newColumnsData = columnsData.data.map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   useDocumentTitle(titleMaker("Customers"));
@@ -148,7 +148,7 @@ function CustomerSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 sm:px-4 py-4">
+        <div className="mx-auto max-w-full px-2 py-4 sm:px-4">
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
@@ -232,14 +232,13 @@ function CustomerSearchPage() {
               onColumnOrderChange={handleSaveColumnsOrder}
               lockedColumns={["FirstName"]}
               rawColumnsData={columnsData?.data || []}
-              showColumnPicker
               onColumnVisibilityChange={handleSaveColumnVisibility}
-              pagination={pagination}
               totalPages={
                 customersData.data?.totalRecords
                   ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
                   : 0
               }
+              pagination={pagination}
               onPaginationChange={(newPaginationState) => {
                 navigate({
                   to: searchCustomersRoute.to,
@@ -252,6 +251,7 @@ function CustomerSearchPage() {
                   }),
                 });
               }}
+              showColumnPicker
             />
           </div>
         </div>

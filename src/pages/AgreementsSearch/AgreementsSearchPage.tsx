@@ -2,21 +2,23 @@ import { useCallback, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
+  type ColumnOrderState,
   type PaginationState,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
-import ModuleTable, {
+import {
+  ModuleTable,
+  ModuleTableColumnHeader,
   ColumnWrap,
-  type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
-import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { DocumentTextSolid, PlusIconFilled } from "../../components/icons";
+import { PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
@@ -37,7 +39,6 @@ import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
 import { AgreementDateTimeColumns } from "../../utils/columns";
-import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/utils";
 import { Badge } from "@/components/ui/badge";
@@ -58,7 +59,7 @@ function AgreementsSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size],
+    [pageNumber, size]
   );
 
   const agreementsData = useGetAgreementsList({
@@ -79,8 +80,8 @@ function AgreementsSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: ({ column: columnChild }) => (
-            <DataTableColumnHeader
+          header: ({ column: columnChild, header }) => (
+            <ModuleTableColumnHeader
               column={columnChild}
               title={column.columnHeaderDescription ?? ""}
             />
@@ -98,7 +99,7 @@ function AgreementsSearchPage() {
                     search={() => ({ tab: "summary" })}
                     className={cn(
                       buttonVariants({ variant: "link", size: "sm" }),
-                      "p-0",
+                      "p-0"
                     )}
                     preload="intent"
                   >
@@ -109,9 +110,9 @@ function AgreementsSearchPage() {
             }
             if (column.columnHeader === "AgreementStatusName") {
               return (
-                <div className="min-w-[80px] px-2">
+                <ColumnWrap>
                   <Badge variant="outline">{String(value)}</Badge>
-                </div>
+                </ColumnWrap>
               );
             }
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
@@ -124,33 +125,33 @@ function AgreementsSearchPage() {
             return <ColumnWrap>{value}</ColumnWrap>;
           },
           enableSorting: false,
-          enableHiding: false,
-        }),
+          enableHiding: column.columnHeader !== "AgreementNumber",
+        })
       ),
-    [columnsData.data, t],
+    [columnsData.data, t]
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
 
   const handleSaveColumnsOrder = useCallback(
-    (newColumnOrder: string[]) => {
+    (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         allColumns: columnsData.data,
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   const handleSaveColumnVisibility = useCallback(
-    (graph: ColumnVisibilityGraph) => {
+    (graph: VisibilityState) => {
       const newColumnsData = columnsData.data.map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   useDocumentTitle(titleMaker("Agreements"));
@@ -159,7 +160,7 @@ function AgreementsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 sm:px-4 pt-1.5">
+        <div className="mx-auto max-w-full px-2 pt-1.5 sm:px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -371,76 +372,28 @@ function AgreementsSearchPage() {
               onColumnOrderChange={handleSaveColumnsOrder}
               lockedColumns={["AgreementNumber"]}
               rawColumnsData={columnsData?.data || []}
-              showColumnPicker
               onColumnVisibilityChange={handleSaveColumnVisibility}
-              pagination={pagination}
               totalPages={
                 agreementsData.data?.totalRecords
                   ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
                   : 0
               }
+              pagination={pagination}
               onPaginationChange={(newPaginationState) => {
                 navigate({
                   to: searchAgreementsRoute.to,
                   params: {},
-                  search: (current) => {
-                    return {
-                      ...current,
-                      page: newPaginationState.pageIndex + 1,
-                      size: newPaginationState.pageSize,
-                      filters: searchFilters,
-                    };
-                  },
-                  // search: (current) => ({
-                  //   ...current,
-                  //   page: newPaginationState.pageIndex + 1,
-                  //   size: newPaginationState.pageSize,
-                  //   filters: searchFilters,
-                  // }),
+                  search: (current) => ({
+                    ...current,
+                    page: newPaginationState.pageIndex + 1,
+                    size: newPaginationState.pageSize,
+                    filters: searchFilters,
+                  }),
                 });
               }}
+              showColumnPicker
             />
           </div>
-          {/* {agreementsData.data?.isRequestMade === false ? null : agreementsData
-              .data?.data.length === 0 ? (
-            <CommonEmptyStateContent
-              title="No agreements"
-              subtitle="You don't have any rental agreements to show here."
-              icon={
-                <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
-              }
-            />
-          ) : (
-            <div>
-              <ModuleTable
-                data={agreementsData.data?.data || []}
-                columns={columnDefs}
-                onColumnOrderChange={handleSaveColumnsOrder}
-                lockedColumns={["AgreementNumber"]}
-                rawColumnsData={columnsData?.data || []}
-                showColumnPicker
-                onColumnVisibilityChange={handleSaveColumnVisibility}
-                pagination={pagination}
-                totalPages={
-                  agreementsData.data?.totalRecords
-                    ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
-                    : 0
-                }
-                onPaginationChange={(newPaginationState) => {
-                  navigate({
-                    to: searchAgreementsRoute.to,
-                    params: {},
-                    search: (current) => ({
-                      ...current,
-                      page: newPaginationState.pageIndex + 1,
-                      size: newPaginationState.pageSize,
-                      filters: searchFilters,
-                    }),
-                  });
-                }}
-              />
-            </div>
-          )} */}
         </div>
       </div>
     </Protector>

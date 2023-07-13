@@ -10,11 +10,12 @@ import {
   getCoreRowModel,
   useReactTable,
   flexRender,
-  type Table as TableType,
-  type Header,
+  type Table as TanstackTableType,
   type ColumnOrderState,
   type ColumnDef,
   type PaginationState,
+  type VisibilityState,
+  type Column,
 } from "@tanstack/react-table";
 import {
   DndContext,
@@ -35,6 +36,13 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
+import {
+  SortAsc,
+  SortDesc,
+  EyeOff,
+  CircleDashed,
+  GripVertical,
+} from "lucide-react";
 
 import {
   ChevronLeftOutline,
@@ -56,78 +64,134 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-interface DraggableColumnHeaderProps {
-  header: Header<any, unknown>;
-  isLocked: boolean;
+interface DataTableColumnHeaderProps<TData, TValue>
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>;
+  title: string;
 }
-const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
-  const { header, isLocked } = props;
-  const isDisabled = header.index === 0 || isLocked;
+
+export function ModuleTableColumnHeader<TData, TValue>({
+  column,
+  title,
+  className,
+}: DataTableColumnHeaderProps<TData, TValue>) {
+  const disabled = !column.getCanHide();
 
   const {
     attributes,
     listeners,
     transform,
-    isDragging,
     transition,
-    over,
     setNodeRef,
     setActivatorNodeRef,
   } = useSortable({
-    id: header.id,
-    disabled: isDisabled,
+    id: column.id,
+    disabled,
   });
 
+  if (!column.getCanSort() && !column.getCanHide()) {
+    return (
+      <div
+        className={cn(
+          "flex items-center space-x-0.5 whitespace-nowrap text-left",
+          className
+        )}
+      >
+        {title}
+      </div>
+    );
+  }
+
   return (
-    <TableHead
-      ref={isDisabled ? undefined : setNodeRef}
-      colSpan={header.colSpan}
-      scope="col"
-      className={cn("font-semibold")}
+    <div
+      ref={!disabled ? setNodeRef : undefined}
+      className={cn("flex items-center space-x-0.5", className)}
       style={{ transform: CSS.Translate.toString(transform), transition }}
     >
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="-ml-3 h-8 whitespace-nowrap text-left data-[state=open]:bg-accent"
+          >
+            <span>{title}</span>
+            {column.getCanSort() ? (
+              <>
+                {column.getIsSorted() === "desc" ? (
+                  <SortDesc className="ml-2 h-4 w-4" />
+                ) : column.getIsSorted() === "asc" ? (
+                  <SortAsc className="ml-2 h-4 w-4" />
+                ) : (
+                  <CircleDashed className="ml-2 h-4 w-4" />
+                )}
+              </>
+            ) : (
+              <>
+                <CircleDashed className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          {column.getCanSort() && (
+            <>
+              <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+                <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Asc
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+                <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Desc
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+            <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Hide
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <Button
+        size="sm"
         variant="ghost"
         ref={setActivatorNodeRef}
-        className={cn(
-          "my-4 text-left",
-          (isDragging && isDisabled) || (isDragging && over?.disabled)
-            ? "cursor-no-drop"
-            : "",
-          isDisabled ? "cursor-pointer hover:cursor-not-allowed" : "cursor-grab"
-        )}
         {...listeners}
         {...attributes}
       >
-        {header.isPlaceholder
-          ? null
-          : flexRender(header.column.columnDef.header, header.getContext())}
+        <GripVertical className="h-3 w-3" />
       </Button>
-    </TableHead>
+    </div>
   );
-};
-
-export function ColumnWrap({ children }: { children: React.ReactNode }) {
-  return <div className="min-w-[80px] pl-4">{children}</div>;
 }
-
-export type ColumnVisibilityGraph = { [columnHeader: string]: boolean };
 
 interface ModuleTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
   rawColumnsData: TColumnListItemParsed[];
-  onColumnOrderChange?: (accessorKeys: string[]) => void;
   lockedColumns?: (keyof T)[];
-  showColumnPicker?: boolean;
-  onColumnVisibilityChange?: (visibilityGraph: ColumnVisibilityGraph) => void;
+
+  onColumnOrderChange?: (updatedValues: ColumnOrderState) => void;
+
+  onColumnVisibilityChange?: (visibilityGraph: VisibilityState) => void;
+
   pagination: PaginationState;
-  totalPages: number;
   onPaginationChange: (pagination: PaginationState) => void;
+  totalPages: number;
+
+  showColumnPicker?: boolean;
 }
 
-const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
+export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
   const lockedColumns = (props.lockedColumns || []) as string[];
 
   const showExtraActions = props.showColumnPicker;
@@ -137,7 +201,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
     columns.map((col) => col.id!)
   );
-  const [columnVisibility, setColumnVisibility] = useState(
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     props.rawColumnsData
       .sort(sortColOrderByOrderIndex)
       .reduce(
@@ -156,20 +220,23 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       columnVisibility,
       pagination: props.pagination,
     },
-    onColumnOrderChange: (order) => {
-      setColumnOrder(order);
-      if (props.onColumnOrderChange) {
-        props.onColumnOrderChange(order as any);
-      }
-    },
-    onColumnVisibilityChange: (changesFunc) => {
-      setColumnVisibility(changesFunc);
-    },
     getCoreRowModel: getCoreRowModel(),
-    onPaginationChange: (paginationUpdaterFunction) => {
-      // @ts-expect-error
-      const newPagination = paginationUpdaterFunction(props.pagination!);
-      props.onPaginationChange(newPagination);
+    onColumnOrderChange: (updater) => {
+      const newColumnOrdering =
+        typeof updater === "function" ? updater(columnOrder) : updater;
+      setColumnOrder(newColumnOrdering);
+      props?.onColumnOrderChange?.(newColumnOrdering);
+    },
+    onColumnVisibilityChange: (updater) => {
+      const newColumnVisibility =
+        typeof updater === "function" ? updater(columnVisibility) : updater;
+      setColumnVisibility(newColumnVisibility);
+      props?.onColumnVisibilityChange?.(newColumnVisibility);
+    },
+    onPaginationChange: (updater) => {
+      const newPagination =
+        typeof updater === "function" ? updater(props.pagination) : updater;
+      props?.onPaginationChange?.(newPagination);
     },
   });
 
@@ -192,14 +259,6 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       columnOrder.indexOf(overId as string)
     );
     table.setColumnOrder(newOrder);
-  };
-
-  const getColumnDescription = (headerName: string) => {
-    const find = props.rawColumnsData.find(
-      (col) => col.columnHeader === headerName
-    );
-    const description = find ? find.columnHeaderDescription : "Not found";
-    return description;
   };
 
   const pageNumbers = useMemo(
@@ -244,6 +303,25 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                       strategy={horizontalListSortingStrategy}
                     >
                       {headerGroup.headers.map((header) => (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      ))}
+                    </SortableContext>
+                  </TableRow>
+                ))}
+                {/* {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    <SortableContext
+                      items={columnOrder}
+                      strategy={horizontalListSortingStrategy}
+                    >
+                      {headerGroup.headers.map((header) => (
                         <DraggableColumnHeader
                           key={header.id}
                           header={header}
@@ -252,7 +330,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                       ))}
                     </SortableContext>
                   </TableRow>
-                ))}
+                ))} */}
               </TableHeader>
               <TableBody>
                 {table.getRowModel().rows?.length ? (
@@ -337,7 +415,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       </div>
     </>
   );
-};
+}
 
 export default ModuleTable;
 
@@ -348,10 +426,10 @@ const ColumnPickerPopover = <T extends any>({
   columnVisibility,
   lockedColumns = [],
 }: {
-  table: TableType<T>;
+  table: TanstackTableType<T>;
   getColumnDescriptionFn: (headerName: string) => string | null;
   onColumnVisibilityChange?: ModuleTableProps<T>["onColumnVisibilityChange"];
-  columnVisibility: ColumnVisibilityGraph;
+  columnVisibility: VisibilityState;
   lockedColumns?: string[];
 }) => {
   const [hasVisibilityChanges, setHasVisibilityChanges] = useState(false);
@@ -438,3 +516,7 @@ export const DesktopPaginationBtn = (
     </Button>
   );
 };
+
+export function ColumnWrap({ children }: { children: React.ReactNode }) {
+  return <div className="flex min-w-[80px] justify-start">{children}</div>;
+}
