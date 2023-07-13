@@ -153,21 +153,13 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        customSearchFilters={
+          <div className="text-sm">Custom search filters to be put here</div>
+        }
+      />
       <div className="overflow-hidden rounded border">
-        {/* {showExtraActions && (
-        <div className="flex w-[100%] items-center justify-end bg-slate-100 px-4 pt-3 pb-1.5">
-          {props.showColumnPicker && (
-            <ColumnPickerPopover
-              table={table}
-              getColumnDescriptionFn={getColumnDescription}
-              columnVisibility={columnVisibility}
-              lockedColumns={lockedColumns}
-              onColumnVisibilityChange={props.onColumnVisibilityChange}
-            />
-          )}
-        </div>
-      )} */}
         <div className="overflow-x-auto bg-background">
           <DndContext
             sensors={sensors}

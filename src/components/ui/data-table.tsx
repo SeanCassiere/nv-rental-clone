@@ -288,20 +288,25 @@ export function DataTableViewOptions<TData>({
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  customSearchFilters?: React.ReactNode;
 }
 
 export function DataTableToolbar<TData>({
   table,
+  customSearchFilters = undefined,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <div className="flex flex-col justify-between sm:flex-row sm:items-center">
-      <div className="flex flex-1 items-center space-x-2">
-        <div className="text-sm text-primary/80">
-          TODO: implement a more modern search filter toolbar
-        </div>
-        {/* <Input
+    <div className="flex flex-col justify-between space-y-2 sm:flex-row sm:items-center">
+      {typeof customSearchFilters !== "undefined" ? (
+        <>{customSearchFilters}</>
+      ) : (
+        <div className="flex flex-1 items-center space-x-2">
+          <div className="text-sm text-primary/80">
+            TODO: implement a more modern search filter toolbar
+          </div>
+          {/* <Input
           placeholder="Filter tasks..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
@@ -309,31 +314,32 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         /> */}
-        {table.getColumn("VehicleStatus") && (
+          {/* {table.getColumn("VehicleStatus") && (
           <DataTableFacetedFilter
             column={table.getColumn("VehicleStatus")}
             title="Status"
             options={[]}
           />
-        )}
-        {/* {table.getColumn("priority") && (
+        )} */}
+          {/* {table.getColumn("priority") && (
           <DataTableFacetedFilter
             column={table.getColumn("priority")}
             title="Priority"
             options={[]}
           />
         )} */}
-        {isFiltered && (
-          <Button
-            variant="ghost"
-            onClick={() => table.resetColumnFilters()}
-            className="h-8 px-2 lg:px-3"
-          >
-            Reset
-            <Cross2Icon className="ml-2 h-4 w-4" />
-          </Button>
-        )}
-      </div>
+          {isFiltered && (
+            <Button
+              variant="ghost"
+              onClick={() => table.resetColumnFilters()}
+              className="h-8 px-2 lg:px-3"
+            >
+              Reset
+              <Cross2Icon className="ml-2 h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      )}
       <DataTableViewOptions table={table} />
     </div>
   );
