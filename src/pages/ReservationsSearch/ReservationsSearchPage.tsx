@@ -364,7 +364,6 @@ function ReservationsSearchPage() {
                   }),
                 });
               }}
-              showColumnPicker
             />
           </div>
         </div>

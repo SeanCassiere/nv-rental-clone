@@ -254,7 +254,6 @@ function CustomerSearchPage() {
                   }),
                 });
               }}
-              showColumnPicker
             />
           </div>
         </div>

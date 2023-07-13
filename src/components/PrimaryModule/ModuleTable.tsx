@@ -176,14 +176,10 @@ interface ModuleTableProps<T> {
   pagination: PaginationState;
   onPaginationChange: (pagination: PaginationState) => void;
   totalPages: number;
-
-  showColumnPicker?: boolean;
 }
 
 export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
   const lockedColumns = (props.lockedColumns || []) as string[];
-
-  const showExtraActions = props.showColumnPicker;
 
   const [columns] = useState([...props.columns]);
 

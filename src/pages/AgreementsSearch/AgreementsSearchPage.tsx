@@ -394,7 +394,6 @@ function AgreementsSearchPage() {
                   }),
                 });
               }}
-              showColumnPicker
             />
           </div>
         </div>

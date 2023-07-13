@@ -305,7 +305,6 @@ function VehiclesSearchPage() {
                 }),
               });
             }}
-            showColumnPicker
           />
         </div>
       </div>
