@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
 import ModuleTable, {
+  ColumnWrap,
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
@@ -37,10 +38,6 @@ import { DataTableColumnHeader } from "@/components/ui/data-table";
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
 const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
-
-function ColumnWrap({ children }: { children: React.ReactNode }) {
-  return <div className="min-w-[80px]">{children}</div>;
-}
 
 function CustomerSearchPage() {
   const { t } = useTranslation();
@@ -107,9 +104,9 @@ function CustomerSearchPage() {
 
             if (DateColumns.includes(column.columnHeader)) {
               return (
-                <ColumnWrap>
+                <div className="min-w-[80px] px-2">
                   {t("intlDate", { value: new Date(value) })}
-                </ColumnWrap>
+                </div>
               );
             }
 

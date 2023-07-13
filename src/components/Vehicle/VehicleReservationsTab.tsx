@@ -15,8 +15,8 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import ReservationStatusPill from "../Reservation/ReservationStatusPill";
 import { ReservationDateTimeColumns } from "../../utils/columns";
+import { Badge } from '@/components/ui/badge'
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -82,7 +82,7 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
               );
             }
             if (column.columnHeader === "ReservationStatusName") {
-              return <ReservationStatusPill status={String(value)} />;
+              return <Badge variant="outline">{String(value)}</Badge>
             }
 
             if (ReservationDateTimeColumns.includes(column.columnHeader)) {

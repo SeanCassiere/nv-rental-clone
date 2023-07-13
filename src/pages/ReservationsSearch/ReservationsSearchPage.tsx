@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
 import ModuleTable, {
+  ColumnWrap,
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
@@ -16,7 +17,6 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
 import { BookFilled, PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
-import ReservationStatusPill from "../../components/Reservation/ReservationStatusPill";
 
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
@@ -43,10 +43,6 @@ import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
-
-function ColumnWrap({ children }: { children: React.ReactNode }) {
-  return <div className="min-w-[80px]">{children}</div>;
-}
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
@@ -112,9 +108,9 @@ function ReservationsSearchPage() {
             }
             if (column.columnHeader === "ReservationStatusName") {
               return (
-                <ColumnWrap>
+                <div className="min-w-[80px] px-2">
                   <Badge variant="outline">{value}</Badge>
-                </ColumnWrap>
+                </div>
               );
             }
 

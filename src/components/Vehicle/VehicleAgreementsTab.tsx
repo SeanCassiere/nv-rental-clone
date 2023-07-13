@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import CommonTable from "../General/CommonTable";
 import { DocumentTextSolid } from "../icons";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
-import AgreementStatusPill from "../Agreement/AgreementStatusPill";
 
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
 
@@ -17,6 +16,7 @@ import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreem
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import { AgreementDateTimeColumns } from "../../utils/columns";
+import { Badge } from "../ui/badge";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -82,7 +82,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
               );
             }
             if (column.columnHeader === "AgreementStatusName") {
-              return <AgreementStatusPill status={String(value)} />;
+              return <Badge variant="outline">{String(value)}</Badge>;
             }
 
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {

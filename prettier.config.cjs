@@ -4,7 +4,7 @@ const config = {
   tabWidth: 2,
   semi: true,
   singleQuote: false,
-  plugins: [require("prettier-plugin-tailwindcss")],
+  plugins: [require.resolve("prettier-plugin-tailwindcss")],
   tailwindConfig: "./tailwind.config.cjs",
   tailwindFunctions: ["clsx", "cn", "cva", "twMerge"],
 };

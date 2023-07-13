@@ -21,13 +21,6 @@ const getTextColorForStatus = (status: string) => {
   }
   return "text-slate-600";
 };
-export const getAgreementStatusNameFromRaw = (status: string) => {
-  const name = status.trim();
-  if (name === "Closed") return "Closed";
-  if (name === "Pending_Deposit") return "Pending Payment";
-  if (name === "Pending_Payment") return "Pending Deposit";
-  return name;
-};
 
 const AgreementModuleStatBlock = ({
   agreement,
@@ -53,7 +46,7 @@ const AgreementModuleStatBlock = ({
             )}
           >
             {agreement?.agreementStatusName
-              ? getAgreementStatusNameFromRaw(agreement?.agreementStatusName)
+              ? String(agreement?.agreementStatusName)
               : "-"}
           </span>
         }

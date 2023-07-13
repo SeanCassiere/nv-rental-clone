@@ -7,6 +7,7 @@ import {
 
 import Protector from "../../components/Protector";
 import ModuleTable, {
+  ColumnWrap,
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
@@ -31,17 +32,12 @@ import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-p
 import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
 import { titleMaker } from "../../utils/title-maker";
-import VehicleStatusPill from "../../components/Vehicle/VehicleStatusPill";
 import { cn } from "@/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
-
-function ColumnWrap({ children }: { children: React.ReactNode }) {
-  return <div className="min-w-[80px]">{children}</div>;
-}
 
 function VehiclesSearchPage() {
   const navigate = useNavigate({ from: searchFleetRoute.id });
@@ -104,9 +100,9 @@ function VehiclesSearchPage() {
             }
             if (column.columnHeader === "VehicleStatus") {
               return (
-                <ColumnWrap>
+                <div className="min-w-[80px] px-2">
                   <Badge variant="outline">{value}</Badge>
-                </ColumnWrap>
+                </div>
               );
             }
 

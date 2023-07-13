@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
 import ModuleTable, {
+  ColumnWrap,
   type ColumnVisibilityGraph,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
@@ -17,7 +18,6 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
 import { DocumentTextSolid, PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
-import AgreementStatusPill from "../../components/Agreement/AgreementStatusPill";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
@@ -43,10 +43,6 @@ import { cn } from "@/utils";
 import { Badge } from "@/components/ui/badge";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
-
-function ColumnWrap({ children }: { children: React.ReactNode }) {
-  return <div className="min-w-[80px]">{children}</div>;
-}
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
@@ -112,7 +108,11 @@ function AgreementsSearchPage() {
               );
             }
             if (column.columnHeader === "AgreementStatusName") {
-              return <Badge variant="outline">{value}</Badge>;
+              return (
+                <div className="min-w-[80px] px-2">
+                  <Badge variant="outline">{String(value)}</Badge>
+                </div>
+              );
             }
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
               return (

@@ -87,16 +87,15 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
       className={cn("font-semibold")}
       style={{ transform: CSS.Translate.toString(transform), transition }}
     >
-      <button
+      <Button
+        variant="ghost"
         ref={setActivatorNodeRef}
         className={cn(
-          "text-left p-0 m-0",
+          "my-4 text-left",
           (isDragging && isDisabled) || (isDragging && over?.disabled)
             ? "cursor-no-drop"
             : "",
-          isDisabled
-            ? "cursor-pointer hover:cursor-not-allowed"
-            : "cursor-grab",
+          isDisabled ? "cursor-pointer hover:cursor-not-allowed" : "cursor-grab"
         )}
         {...listeners}
         {...attributes}
@@ -104,10 +103,14 @@ const DraggableColumnHeader = (props: DraggableColumnHeaderProps) => {
         {header.isPlaceholder
           ? null
           : flexRender(header.column.columnDef.header, header.getContext())}
-      </button>
+      </Button>
     </TableHead>
   );
 };
+
+export function ColumnWrap({ children }: { children: React.ReactNode }) {
+  return <div className="min-w-[80px] pl-4">{children}</div>;
+}
 
 export type ColumnVisibilityGraph = { [columnHeader: string]: boolean };
 
@@ -132,15 +135,15 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
-    columns.map((col) => col.id!),
+    columns.map((col) => col.id!)
   );
   const [columnVisibility, setColumnVisibility] = useState(
     props.rawColumnsData
       .sort(sortColOrderByOrderIndex)
       .reduce(
         (acc, col) => ({ ...acc, [col.columnHeader]: col.isSelected }),
-        {},
-      ),
+        {}
+      )
   );
 
   const table = useReactTable({
@@ -175,7 +178,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   const handleDndDragEnd = (evt: DragEndEvent) => {
@@ -186,14 +189,14 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
     const newOrder = arrayMove(
       columnOrder,
       columnOrder.indexOf(draggingId as string),
-      columnOrder.indexOf(overId as string),
+      columnOrder.indexOf(overId as string)
     );
     table.setColumnOrder(newOrder);
   };
 
   const getColumnDescription = (headerName: string) => {
     const find = props.rawColumnsData.find(
-      (col) => col.columnHeader === headerName,
+      (col) => col.columnHeader === headerName
     );
     const description = find ? find.columnHeaderDescription : "Not found";
     return description;
@@ -204,9 +207,9 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
       getPaginationWithDoubleEllipsis(
         props.pagination.pageIndex + 1,
         props.totalPages,
-        7,
+        7
       ),
-    [props.pagination.pageIndex, props.totalPages],
+    [props.pagination.pageIndex, props.totalPages]
   );
 
   return (
@@ -225,7 +228,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
           )}
         </div>
       )} */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto bg-background">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCorners}
@@ -248,18 +251,6 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                         />
                       ))}
                     </SortableContext>
-                    {/* {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
-                      </TableHead>
-                    );
-                  })} */}
                   </TableRow>
                 ))}
               </TableHeader>
@@ -274,7 +265,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                         <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext(),
+                            cell.getContext()
                           )}
                         </TableCell>
                       ))}
@@ -399,7 +390,7 @@ const ColumnPickerPopover = <T extends any>({
             <button
               key={`select-column-${column.id}`}
               disabled={lockedColumns.includes(column.id)}
-              className="flex cursor-pointer items-center gap-4 py-2 px-4 hover:bg-slate-50"
+              className="flex cursor-pointer items-center gap-4 px-4 py-2 hover:bg-slate-50"
             >
               <input
                 type="checkbox"
@@ -431,7 +422,7 @@ const DesktopPaginationBtn = (
   props: DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
-  > & { current?: boolean },
+  > & { current?: boolean }
 ) => {
   const { children, current, className, onClick, disabled } = props;
   return (
