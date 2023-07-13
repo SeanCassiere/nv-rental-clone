@@ -5,7 +5,7 @@ const ColumnListItemSchema = z.object({
   typeName: z.string().nullable(),
   columnHeaderDescription: z.string().nullable(),
   searchText: z.string(),
-  isSelected: z.coerce.boolean(),
+  isSelected: z.preprocess(val => typeof val === 'string' ? val === 'true' : val, z.boolean()),
   columnHeaderSettingID: z.number(),
   columnIndex: z.number(),
   orderIndex: z.number(),
