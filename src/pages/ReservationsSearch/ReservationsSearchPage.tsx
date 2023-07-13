@@ -12,7 +12,7 @@ import Protector from "../../components/Protector";
 import {
   ModuleTable,
   ModuleTableColumnHeader,
-  ColumnWrap,
+  ModuleTableCellWrap,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
@@ -91,7 +91,7 @@ function ReservationsSearchPage() {
             if (column.columnHeader === "ReservationNumber") {
               const reservationId = item.table.getRow(item.row.id).original.id;
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   <Link
                     to={viewReservationByIdRoute.to}
                     params={{ reservationId: String(reservationId) }}
@@ -104,26 +104,26 @@ function ReservationsSearchPage() {
                   >
                     {value}
                   </Link>
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
             if (column.columnHeader === "ReservationStatusName") {
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   <Badge variant="outline">{value}</Badge>
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
 
             if (ReservationDateTimeColumns.includes(column.columnHeader)) {
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   {t("intlDateTime", { value: new Date(value) })}
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
 
-            return <ColumnWrap>{value}</ColumnWrap>;
+            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
           },
           enableHiding: column.columnHeader !== "ReservationNumber",
           enableSorting: false,

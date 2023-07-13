@@ -12,7 +12,7 @@ import Protector from "../../components/Protector";
 import {
   ModuleTable,
   ModuleTableColumnHeader,
-  ColumnWrap,
+  ModuleTableCellWrap,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
@@ -85,7 +85,7 @@ function CustomerSearchPage() {
               const customerId = item.table.getRow(item.row.id).original
                 .CustomerId;
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   <Link
                     to={viewCustomerByIdRoute.to}
                     params={{ customerId: String(customerId) }}
@@ -98,7 +98,7 @@ function CustomerSearchPage() {
                   >
                     {value}
                   </Link>
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
 
@@ -110,7 +110,7 @@ function CustomerSearchPage() {
               );
             }
 
-            return <ColumnWrap>{value}</ColumnWrap>;
+            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
           },
           enableHiding: column.columnHeader !== "FirstName",
           enableSorting: false,

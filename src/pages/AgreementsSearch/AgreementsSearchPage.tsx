@@ -12,7 +12,7 @@ import Protector from "../../components/Protector";
 import {
   ModuleTable,
   ModuleTableColumnHeader,
-  ColumnWrap,
+  ModuleTableCellWrap,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
@@ -92,7 +92,7 @@ function AgreementsSearchPage() {
               const agreementId = item.table.getRow(item.row.id).original
                 .AgreementId;
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   <Link
                     to={viewAgreementByIdRoute.to}
                     params={{ agreementId: String(agreementId) }}
@@ -105,24 +105,24 @@ function AgreementsSearchPage() {
                   >
                     {value}
                   </Link>
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
             if (column.columnHeader === "AgreementStatusName") {
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   <Badge variant="outline">{String(value)}</Badge>
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   {t("intlDateTime", { value: new Date(value) })}
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
-            return <ColumnWrap>{value}</ColumnWrap>;
+            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
           },
           enableSorting: false,
           enableHiding: column.columnHeader !== "AgreementNumber",

@@ -1,16 +1,8 @@
-import {
-  useMemo,
-  useState,
-  type ButtonHTMLAttributes,
-  type DetailedHTMLProps,
-} from "react";
-import { usePopper } from "react-popper";
-import { Popover } from "@headlessui/react";
+import { useMemo, useState } from "react";
 import {
   getCoreRowModel,
   useReactTable,
   flexRender,
-  type Table as TanstackTableType,
   type ColumnOrderState,
   type ColumnDef,
   type PaginationState,
@@ -40,15 +32,11 @@ import {
   SortAsc,
   SortDesc,
   EyeOff,
-  CircleDashed,
   GripVertical,
+  ChevronsDownUp,
 } from "lucide-react";
 
-import {
-  ChevronLeftOutline,
-  ChevronRightOutline,
-  EyeSlashOutline,
-} from "../icons";
+import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
 
 import { type TColumnListItemParsed } from "../../utils/schemas/column";
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
@@ -71,6 +59,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataTableToolbar } from "@/components/ui/data-table";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -131,12 +120,12 @@ export function ModuleTableColumnHeader<TData, TValue>({
                 ) : column.getIsSorted() === "asc" ? (
                   <SortAsc className="ml-2 h-4 w-4" />
                 ) : (
-                  <CircleDashed className="ml-2 h-4 w-4" />
+                  <ChevronsDownUp className="ml-2 h-4 w-4" />
                 )}
               </>
             ) : (
               <>
-                <CircleDashed className="ml-2 h-4 w-4" />
+                <ChevronsDownUp className="ml-2 h-4 w-4" />
               </>
             )}
           </Button>
@@ -272,7 +261,8 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
   );
 
   return (
-    <>
+    <div className="space-y-4">
+      <DataTableToolbar table={table} />
       <div className="overflow-hidden rounded border">
         {/* {showExtraActions && (
         <div className="flex w-[100%] items-center justify-end bg-slate-100 px-4 pt-3 pb-1.5">
@@ -365,7 +355,7 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
         </div>
         {/* pagination */}
       </div>
-      <div className="flex flex-1 justify-between px-2 py-2.5 sm:hidden">
+      <div className="flex flex-1 justify-between px-2 sm:hidden">
         <Button
           variant="outline"
           disabled={!table.getCanPreviousPage()}
@@ -381,142 +371,58 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
           Next
         </Button>
       </div>
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between sm:py-3.5">
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <nav className="isolate inline-flex space-x-1" aria-label="Pagination">
-          <DesktopPaginationBtn
-            className="rounded-l px-2"
-            disabled={!table.getCanPreviousPage()}
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="rounded-l px-2 [font-variant-numeric:tabular-nums]"
           >
             <span className="sr-only">Previous</span>
             <ChevronLeftOutline className="h-4 w-4" aria-hidden="true" />
-          </DesktopPaginationBtn>
-          {pageNumbers.map((pageNum, idx) => (
-            <DesktopPaginationBtn
-              key={`module-table-pagination-button-${pageNum}-${idx}`}
-              disabled={isNaN(pageNum)}
-              onClick={() => {
-                !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
-              }}
-              current={Boolean(props.pagination.pageIndex + 1 === pageNum)}
-            >
-              {!isNaN(pageNum) ? pageNum : "..."}
-            </DesktopPaginationBtn>
-          ))}
-          <DesktopPaginationBtn
-            className="rounded-r px-2"
-            disabled={!table.getCanNextPage()}
+          </Button>
+          {pageNumbers.map((pageNum, idx) => {
+            const current = Boolean(props.pagination.pageIndex + 1 === pageNum);
+            return (
+              <Button
+                key={`module-table-pagination-button-${pageNum}-${idx}`}
+                variant={current ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
+                }}
+                disabled={isNaN(pageNum)}
+                className="[font-variant-numeric:tabular-nums]"
+                {...(current
+                  ? { "aria-current": "page", current: `${current}` }
+                  : {})}
+              >
+                {!isNaN(pageNum) ? pageNum : "..."}
+              </Button>
+            );
+          })}
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="rounded-r px-2 [font-variant-numeric:tabular-nums]"
           >
             <span className="sr-only">Next</span>
             <ChevronRightOutline className="h-4 w-4" aria-hidden="true" />
-          </DesktopPaginationBtn>
+          </Button>
         </nav>
       </div>
-    </>
+    </div>
   );
 }
 
-export default ModuleTable;
-
-const ColumnPickerPopover = <T extends any>({
-  table,
-  getColumnDescriptionFn: getColumnDescription,
-  onColumnVisibilityChange,
-  columnVisibility,
-  lockedColumns = [],
+export function ModuleTableCellWrap({
+  children,
 }: {
-  table: TanstackTableType<T>;
-  getColumnDescriptionFn: (headerName: string) => string | null;
-  onColumnVisibilityChange?: ModuleTableProps<T>["onColumnVisibilityChange"];
-  columnVisibility: VisibilityState;
-  lockedColumns?: string[];
-}) => {
-  const [hasVisibilityChanges, setHasVisibilityChanges] = useState(false);
-
-  const [popperButtonEl, setPopperButtonEl] = useState<any>();
-  const [popperPanelEl, setPopperPanelEl] = useState<any>();
-  const { styles, attributes } = usePopper(popperButtonEl, popperPanelEl, {
-    placement: "bottom-end",
-    strategy: "absolute",
-    modifiers: [{ name: "offset", options: { offset: [0, 8] } }],
-  });
-
-  return (
-    <Popover>
-      <Popover.Button
-        ref={setPopperButtonEl}
-        className="rounded-full bg-slate-200 p-2 text-xs text-slate-700 shadow-sm transition-all duration-150 hover:bg-teal-500"
-      >
-        <EyeSlashOutline className="h-5 w-5" />
-      </Popover.Button>
-      <Popover.Panel
-        ref={setPopperPanelEl}
-        onBlur={() => {
-          if (!hasVisibilityChanges) return;
-          setHasVisibilityChanges(false);
-          if (onColumnVisibilityChange) {
-            onColumnVisibilityChange?.(columnVisibility);
-          }
-        }}
-        className="max-h-96 w-72 overflow-y-auto bg-white py-2 shadow md:max-h-80 md:w-64"
-        style={styles.popper}
-        {...attributes.popper}
-      >
-        <div className="grid">
-          {table.getAllLeafColumns().map((column) => (
-            <button
-              key={`select-column-${column.id}`}
-              disabled={lockedColumns.includes(column.id)}
-              className="flex cursor-pointer items-center gap-4 px-4 py-2 hover:bg-slate-50"
-            >
-              <input
-                type="checkbox"
-                checked={column.getIsVisible()}
-                onChange={(evt) => {
-                  setHasVisibilityChanges(true);
-                  column.getToggleVisibilityHandler()(evt);
-                }}
-                id={`html-for-${column.id}`}
-                name={`html-for-${column.id}`}
-                className="rounded-full text-teal-500 focus:ring-teal-500 disabled:text-slate-400"
-                disabled={lockedColumns.includes(column.id)}
-              />
-              <label
-                className="flex w-full grow cursor-pointer select-none justify-start text-slate-600"
-                htmlFor={`html-for-${column.id}`}
-              >
-                {getColumnDescription(column.id)}
-              </label>
-            </button>
-          ))}
-        </div>
-      </Popover.Panel>
-    </Popover>
-  );
-};
-
-export const DesktopPaginationBtn = (
-  props: DetailedHTMLProps<
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  > & { current?: boolean }
-) => {
-  const { children, current, onClick, disabled } = props;
-  return (
-    <Button
-      variant={current ? "default" : "outline"}
-      size="sm"
-      onClick={onClick}
-      disabled={disabled}
-      className="[font-variant-numeric:tabular-nums]"
-      {...(current ? { "aria-current": "page", current: `${current}` } : {})}
-    >
-      {children}
-    </Button>
-  );
-};
-
-export function ColumnWrap({ children }: { children: React.ReactNode }) {
+  children: React.ReactNode;
+}) {
   return <div className="flex min-w-[80px] justify-start">{children}</div>;
 }

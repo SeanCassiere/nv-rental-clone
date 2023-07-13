@@ -11,7 +11,7 @@ import Protector from "../../components/Protector";
 import {
   ModuleTable,
   ModuleTableColumnHeader,
-  ColumnWrap,
+  ModuleTableCellWrap,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
@@ -82,7 +82,7 @@ function VehiclesSearchPage() {
             if (column.columnHeader === "VehicleNo") {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   <Link
                     to={viewFleetByIdRoute.to}
                     params={{ vehicleId: String(vehicleId) }}
@@ -95,18 +95,18 @@ function VehiclesSearchPage() {
                   >
                     {value}
                   </Link>
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
             if (column.columnHeader === "VehicleStatus") {
               return (
-                <ColumnWrap>
+                <ModuleTableCellWrap>
                   <Badge variant="outline">{value}</Badge>
-                </ColumnWrap>
+                </ModuleTableCellWrap>
               );
             }
 
-            return <ColumnWrap>{value}</ColumnWrap>;
+            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
           },
           enableHiding: column.columnHeader !== "VehicleNo",
           enableSorting: false,

@@ -17,7 +17,6 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { DesktopPaginationBtn } from "@/components/PrimaryModule/ModuleTable";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils";
 
@@ -162,34 +161,48 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                 className="isolate inline-flex space-x-1 rounded-md"
                 aria-label="Pagination"
               >
-                <DesktopPaginationBtn
-                  className="rounded-l px-2"
-                  disabled={!table.getCanPreviousPage()}
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                  className="rounded-l px-2 [font-variant-numeric:tabular-nums]"
                 >
                   <span className="sr-only">Previous</span>
                   <ChevronLeftOutline className="h-4 w-4" aria-hidden="true" />
-                </DesktopPaginationBtn>
-                {pageNumbers.map((pageNum, idx) => (
-                  <DesktopPaginationBtn
-                    key={`common-table-pagination-button-${pageNum}-${idx}`}
-                    disabled={isNaN(pageNum)}
-                    onClick={() => {
-                      !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
-                    }}
-                    current={Boolean(paginationState.pageIndex + 1 === pageNum)}
-                  >
-                    {!isNaN(pageNum) ? pageNum : "..."}
-                  </DesktopPaginationBtn>
-                ))}
-                <DesktopPaginationBtn
-                  className="rounded-r px-2"
-                  disabled={!table.getCanNextPage()}
+                </Button>
+                {pageNumbers.map((pageNum, idx) => {
+                  const current = Boolean(
+                    paginationState.pageIndex + 1 === pageNum
+                  );
+                  return (
+                    <Button
+                      key={`common-table-pagination-button-${pageNum}-${idx}`}
+                      variant={current ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        !isNaN(pageNum) && table.setPageIndex(pageNum - 1);
+                      }}
+                      disabled={isNaN(pageNum)}
+                      className="[font-variant-numeric:tabular-nums]"
+                      {...(current
+                        ? { "aria-current": "page", current: `${current}` }
+                        : {})}
+                    >
+                      {!isNaN(pageNum) ? pageNum : "..."}
+                    </Button>
+                  );
+                })}
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                  className="rounded-r px-2 [font-variant-numeric:tabular-nums]"
                 >
                   <span className="sr-only">Next</span>
                   <ChevronRightOutline className="h-4 w-4" aria-hidden="true" />
-                </DesktopPaginationBtn>
+                </Button>
               </nav>
             </div>
           </div>
