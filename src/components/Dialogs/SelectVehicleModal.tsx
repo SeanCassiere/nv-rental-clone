@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import DarkBgDialog from "../Layout/DarkBgDialog";
-import CommonTable from "../common/common-table";
+import { CommonTable } from "../common/common-table";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { type TVehicleListItemParsed } from "../../utils/schemas/vehicle";
