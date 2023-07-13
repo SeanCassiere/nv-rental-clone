@@ -262,7 +262,7 @@ const ModuleTable = <T extends any>(props: ModuleTableProps<T>) => {
                       data-state={row.getIsSelected() && "selected"}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
+                        <TableCell className="whitespace-nowrap" key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -418,13 +418,13 @@ const ColumnPickerPopover = <T extends any>({
   );
 };
 
-const DesktopPaginationBtn = (
+export const DesktopPaginationBtn = (
   props: DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > & { current?: boolean }
 ) => {
-  const { children, current, className, onClick, disabled } = props;
+  const { children, current, onClick, disabled } = props;
   return (
     <Button
       variant={current ? "default" : "outline"}

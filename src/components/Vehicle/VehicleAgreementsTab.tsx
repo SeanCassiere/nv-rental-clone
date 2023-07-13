@@ -3,7 +3,7 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
-import CommonTable from "../General/CommonTable";
+import { CommonTable } from "../common/common-table";
 import { DocumentTextSolid } from "../icons";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
 
@@ -16,7 +16,8 @@ import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreem
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import { AgreementDateTimeColumns } from "../../utils/columns";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
+import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -63,7 +64,12 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
       columns.push(
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          header: ({ column: columnChild }) => (
+            <DataTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (column.columnHeader === "AgreementNumber") {
@@ -91,7 +97,9 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
 
             return value;
           },
-        }),
+          enableHiding: false,
+          enableSorting: false,
+        })
       );
     });
 
@@ -102,20 +110,7 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.data?.isRequestMade === false ? null : dataList.data?.data
-          .length === 0 ? (
-        <CommonEmptyStateContent
-          title="No agreements"
-          subtitle="You don't have any rental agreements for this vehicle."
-          icon={
-            <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
-          }
-        />
-      ) : (
-        <div>
-          <CommonTable data={dataList.data?.data || []} columns={columnDefs} />
-        </div>
-      )}
+      <CommonTable data={dataList.data?.data || []} columns={columnDefs} />
 
       {dataList.data?.isRequestMade === false ? null : dataList.data?.data
           .length === 0 ? null : (
