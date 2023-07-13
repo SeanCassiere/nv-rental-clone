@@ -3,7 +3,7 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import parseISO from "date-fns/parseISO";
 
-import CommonTable from "../../General/CommonTable";
+import { CommonTable } from "../../common/common-table";
 import { DocumentTextSolid } from "../../icons";
 import CommonEmptyStateContent from "../../Layout/CommonEmptyStateContent";
 
@@ -94,7 +94,7 @@ const ModuleNotesTabContent = ({
               }
               return value;
             },
-          }),
+          })
         );
       });
     };

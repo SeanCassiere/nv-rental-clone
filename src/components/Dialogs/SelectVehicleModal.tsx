@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import DarkBgDialog from "../Layout/DarkBgDialog";
-import CommonTable from "../General/CommonTable";
+import { CommonTable } from "../common/common-table";
 
 import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
 import { type TVehicleListItemParsed } from "../../utils/schemas/vehicle";
@@ -41,7 +41,7 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
         { accessor: "VehicleType", label: "Type" },
         { accessor: "Color", label: "Color" },
       ] as const,
-    [],
+    []
   );
 
   const vehicleListData = useGetVehiclesList({
@@ -77,7 +77,7 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
             }
             return item.getValue();
           },
-        }),
+        })
       );
     });
     return columns;

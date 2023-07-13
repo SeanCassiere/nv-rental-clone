@@ -2,22 +2,24 @@ import { useCallback, useMemo } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
+  type ColumnOrderState,
   type PaginationState,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
-import ModuleTable, {
-  type ColumnVisibilityGraph,
+import {
+  ModuleTable,
+  ModuleTableColumnHeader,
+  ModuleTableCellWrap,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
-import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { DocumentTextSolid, PlusIconFilled } from "../../components/icons";
+import { PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
-import AgreementStatusPill from "../../components/Agreement/AgreementStatusPill";
 
 import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
@@ -37,6 +39,9 @@ import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
 import { titleMaker } from "../../utils/title-maker";
 import { AgreementDateTimeColumns } from "../../utils/columns";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/utils";
+import { Badge } from "@/components/ui/badge";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -54,7 +59,7 @@ function AgreementsSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size],
+    [pageNumber, size]
   );
 
   const agreementsData = useGetAgreementsList({
@@ -75,59 +80,81 @@ function AgreementsSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          meta: {
+            columnName: column.columnHeaderDescription ?? undefined,
+          },
+          header: ({ column: columnChild }) => (
+            <ModuleTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (column.columnHeader === "AgreementNumber") {
               const agreementId = item.table.getRow(item.row.id).original
                 .AgreementId;
               return (
-                <Link
-                  to={viewAgreementByIdRoute.to}
-                  params={{ agreementId: String(agreementId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value}
-                </Link>
+                <ModuleTableCellWrap>
+                  <Link
+                    to={viewAgreementByIdRoute.to}
+                    params={{ agreementId: String(agreementId) }}
+                    search={() => ({ tab: "summary" })}
+                    className={cn(
+                      buttonVariants({ variant: "link", size: "sm" }),
+                      "p-0"
+                    )}
+                    preload="intent"
+                  >
+                    {value}
+                  </Link>
+                </ModuleTableCellWrap>
               );
             }
             if (column.columnHeader === "AgreementStatusName") {
-              return <AgreementStatusPill status={value} />;
+              return (
+                <ModuleTableCellWrap>
+                  <Badge variant="outline">{String(value)}</Badge>
+                </ModuleTableCellWrap>
+              );
             }
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-              return t("intlDateTime", { value: new Date(value) });
+              return (
+                <ModuleTableCellWrap>
+                  {t("intlDateTime", { value: new Date(value) })}
+                </ModuleTableCellWrap>
+              );
             }
-
-            return value;
+            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
           },
-        }),
+          enableSorting: false,
+          enableHiding: column.columnHeader !== "AgreementNumber",
+        })
       ),
-    [columnsData.data, t],
+    [columnsData.data, t]
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
 
   const handleSaveColumnsOrder = useCallback(
-    (newColumnOrder: string[]) => {
+    (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         allColumns: columnsData.data,
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   const handleSaveColumnVisibility = useCallback(
-    (graph: ColumnVisibilityGraph) => {
+    (graph: VisibilityState) => {
       const newColumnsData = columnsData.data.map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   useDocumentTitle(titleMaker("Agreements"));
@@ -136,7 +163,7 @@ function AgreementsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 pt-1.5">
+        <div className="mx-auto max-w-full px-2 pt-1.5 sm:px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -160,7 +187,7 @@ function AgreementsSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
@@ -341,50 +368,33 @@ function AgreementsSearchPage() {
             />
           </div>
 
-          {agreementsData.data?.isRequestMade === false ? null : agreementsData
-              .data?.data.length === 0 ? (
-            <CommonEmptyStateContent
-              title="No agreements"
-              subtitle="You don't have any rental agreements to show here."
-              icon={
-                <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
+          <div>
+            <ModuleTable
+              data={agreementsData.data?.data || []}
+              columns={columnDefs}
+              onColumnOrderChange={handleSaveColumnsOrder}
+              rawColumnsData={columnsData?.data || []}
+              onColumnVisibilityChange={handleSaveColumnVisibility}
+              totalPages={
+                agreementsData.data?.totalRecords
+                  ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
+                  : 0
               }
+              pagination={pagination}
+              onPaginationChange={(newPaginationState) => {
+                navigate({
+                  to: searchAgreementsRoute.to,
+                  params: {},
+                  search: (current) => ({
+                    ...current,
+                    page: newPaginationState.pageIndex + 1,
+                    size: newPaginationState.pageSize,
+                    filters: searchFilters,
+                  }),
+                });
+              }}
             />
-          ) : (
-            <div>
-              <ModuleTable
-                data={agreementsData.data?.data || []}
-                columns={columnDefs}
-                noRows={
-                  agreementsData.isLoading === false &&
-                  agreementsData.data?.data.length === 0
-                }
-                onColumnOrderChange={handleSaveColumnsOrder}
-                lockedColumns={["AgreementNumber"]}
-                rawColumnsData={columnsData?.data || []}
-                showColumnPicker
-                onColumnVisibilityChange={handleSaveColumnVisibility}
-                pagination={pagination}
-                totalPages={
-                  agreementsData.data?.totalRecords
-                    ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
-                    : 0
-                }
-                onPaginationChange={(newPaginationState) => {
-                  navigate({
-                    to: searchAgreementsRoute.to,
-                    params: {},
-                    search: (current) => ({
-                      ...current,
-                      page: newPaginationState.pageIndex + 1,
-                      size: newPaginationState.pageSize,
-                      filters: searchFilters,
-                    }),
-                  });
-                }}
-              />
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </Protector>

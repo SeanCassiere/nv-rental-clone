@@ -3,9 +3,8 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
-import CommonTable from "../General/CommonTable";
+import { CommonTable } from "../common/common-table";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
-import { BookFilled } from "../icons";
 
 import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
@@ -15,8 +14,9 @@ import { normalizeReservationListSearchParams } from "../../utils/normalize-sear
 import { sortColOrderByOrderIndex } from "../../utils/ordering";
 import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import ReservationStatusPill from "../Reservation/ReservationStatusPill";
 import { ReservationDateTimeColumns } from "../../utils/columns";
+import { Badge } from "@/components/ui/badge";
+import { DataTableColumnHeader } from "@/components/ui/data-table";
 
 interface VehicleReservationsTabProps {
   vehicleId: string;
@@ -64,7 +64,12 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
       columns.push(
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          header: ({ column: columnChild }) => (
+            <DataTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (column.columnHeader === "ReservationNumber") {
@@ -82,7 +87,7 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
               );
             }
             if (column.columnHeader === "ReservationStatusName") {
-              return <ReservationStatusPill status={String(value)} />;
+              return <Badge variant="outline">{String(value)}</Badge>;
             }
 
             if (ReservationDateTimeColumns.includes(column.columnHeader)) {
@@ -91,7 +96,9 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
 
             return value;
           },
-        }),
+          enableHiding: false,
+          enableSorting: false,
+        })
       );
     });
 
@@ -102,18 +109,7 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.data?.isRequestMade === false ? null : dataList.data?.data
-          .length === 0 ? (
-        <CommonEmptyStateContent
-          title="No reservations"
-          subtitle="You don't have any reservations for this vehicle."
-          icon={<BookFilled className="mx-auto h-12 w-12 text-slate-400" />}
-        />
-      ) : (
-        <div>
-          <CommonTable data={dataList.data?.data || []} columns={columnDefs} />
-        </div>
-      )}
+      <CommonTable data={dataList.data?.data || []} columns={columnDefs} />
 
       {dataList.data?.isRequestMade === false ? null : dataList.data?.data
           .length === 0 ? null : (

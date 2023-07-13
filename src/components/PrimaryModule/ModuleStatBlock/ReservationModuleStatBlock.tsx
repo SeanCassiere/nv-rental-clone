@@ -17,12 +17,6 @@ const getTextColorForStatus = (status: string) => {
   }
   return "text-slate-600";
 };
-export const getReservationStatusNameFromRaw = (status: string) => {
-  const name = status.trim();
-  if (name === "Canceled") return "Cancelled";
-  if (name === "CheckOut") return "Checked Out";
-  return status;
-};
 
 const ReservationModuleStatBlock = ({
   reservation,
@@ -43,14 +37,12 @@ const ReservationModuleStatBlock = ({
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
               getTextColorForStatus(
-                reservation?.reservationview.reservationStatusName ?? "",
-              ),
+                reservation?.reservationview.reservationStatusName ?? ""
+              )
             )}
           >
             {reservation?.reservationview.reservationStatusName
-              ? getReservationStatusNameFromRaw(
-                  reservation?.reservationview.reservationStatusName,
-                )
+              ? String(reservation?.reservationview.reservationStatusName)
               : "-"}
           </span>
         }

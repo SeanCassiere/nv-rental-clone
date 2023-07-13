@@ -3,17 +3,19 @@ import { Link, useSearch, useNavigate } from "@tanstack/router";
 import {
   createColumnHelper,
   type PaginationState,
+  type VisibilityState,
+  type ColumnOrderState,
 } from "@tanstack/react-table";
 
 import Protector from "../../components/Protector";
-import ModuleTable, {
-  type ColumnVisibilityGraph,
+import {
+  ModuleTable,
+  ModuleTableColumnHeader,
+  ModuleTableCellWrap,
 } from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
-import CommonEmptyStateContent from "../../components/Layout/CommonEmptyStateContent";
-import { TruckFilled } from "../../components/icons";
 
 import { searchFleetRoute } from "../../routes/fleet/searchFleet";
 import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
@@ -31,7 +33,9 @@ import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-p
 import type { TVehicleListItemParsed } from "../../utils/schemas/vehicle";
 import { VehicleFiltersSchema } from "../../utils/schemas/vehicle";
 import { titleMaker } from "../../utils/title-maker";
-import VehicleStatusPill from "../../components/Vehicle/VehicleStatusPill";
+import { cn } from "@/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -47,7 +51,7 @@ function VehiclesSearchPage() {
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
     }),
-    [pageNumber, size],
+    [pageNumber, size]
   );
 
   const vehiclesData = useGetVehiclesList({
@@ -67,55 +71,74 @@ function VehiclesSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: () => column.columnHeaderDescription,
+          meta: {
+            columnName: column.columnHeaderDescription ?? undefined,
+          },
+          header: ({ column: columnChild }) => (
+            <ModuleTableColumnHeader
+              column={columnChild}
+              title={column.columnHeaderDescription ?? ""}
+            />
+          ),
           cell: (item) => {
             const value = item.getValue();
             if (column.columnHeader === "VehicleNo") {
               const vehicleId = item.table.getRow(item.row.id).original.id;
               return (
-                <Link
-                  to={viewFleetByIdRoute.to}
-                  params={{ vehicleId: String(vehicleId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value}
-                </Link>
+                <ModuleTableCellWrap>
+                  <Link
+                    to={viewFleetByIdRoute.to}
+                    params={{ vehicleId: String(vehicleId) }}
+                    search={() => ({ tab: "summary" })}
+                    className={cn(
+                      buttonVariants({ variant: "link", size: "sm" }),
+                      "p-0"
+                    )}
+                    preload="intent"
+                  >
+                    {value}
+                  </Link>
+                </ModuleTableCellWrap>
               );
             }
             if (column.columnHeader === "VehicleStatus") {
-              return <VehicleStatusPill status={value} />;
+              return (
+                <ModuleTableCellWrap>
+                  <Badge variant="outline">{value}</Badge>
+                </ModuleTableCellWrap>
+              );
             }
 
-            return value;
+            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
           },
-        }),
+          enableHiding: column.columnHeader !== "VehicleNo",
+          enableSorting: false,
+        })
       ),
-    [columnsData.data],
+    [columnsData.data]
   );
 
   const saveColumnsMutation = useSaveModuleColumns({ module: "vehicles" });
 
   const handleSaveColumnsOrder = useCallback(
-    (newColumnOrder: string[]) => {
+    (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         allColumns: columnsData.data,
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   const handleSaveColumnVisibility = useCallback(
-    (graph: ColumnVisibilityGraph) => {
+    (graph: VisibilityState) => {
       const newColumnsData = columnsData.data.map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
       saveColumnsMutation.mutate({ allColumns: newColumnsData });
     },
-    [columnsData.data, saveColumnsMutation],
+    [columnsData.data, saveColumnsMutation]
   );
 
   useDocumentTitle(titleMaker("Fleet"));
@@ -124,7 +147,7 @@ function VehiclesSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4 py-4">
+        <div className="mx-auto max-w-full px-2 py-4 sm:px-4">
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
@@ -135,7 +158,7 @@ function VehiclesSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
@@ -257,50 +280,31 @@ function VehiclesSearchPage() {
             />
           </div>
 
-          {vehiclesData.data?.isRequestMade === false ? null : vehiclesData.data
-              ?.data.length === 0 ? (
-            <CommonEmptyStateContent
-              title="No vehicles"
-              subtitle="You don't have any vehicles to be shown here."
-              icon={
-                <TruckFilled className="mx-auto h-12 w-12 text-slate-400" />
-              }
-            />
-          ) : (
-            <div>
-              <ModuleTable
-                data={vehiclesData.data?.data || []}
-                columns={columnDefs}
-                noRows={
-                  vehiclesData.isLoading === false &&
-                  vehiclesData.data?.data.length === 0
-                }
-                onColumnOrderChange={handleSaveColumnsOrder}
-                lockedColumns={["VehicleNo"]}
-                rawColumnsData={columnsData?.data || []}
-                showColumnPicker
-                onColumnVisibilityChange={handleSaveColumnVisibility}
-                pagination={pagination}
-                totalPages={
-                  vehiclesData.data?.totalRecords
-                    ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
-                    : 0
-                }
-                onPaginationChange={(newPaginationState) => {
-                  navigate({
-                    to: searchFleetRoute.to,
-                    params: {},
-                    search: (current) => ({
-                      ...current,
-                      page: newPaginationState.pageIndex + 1,
-                      size: newPaginationState.pageSize,
-                      filters: searchFilters,
-                    }),
-                  });
-                }}
-              />
-            </div>
-          )}
+          <ModuleTable
+            data={vehiclesData.data?.data || []}
+            columns={columnDefs}
+            onColumnOrderChange={handleSaveColumnsOrder}
+            rawColumnsData={columnsData?.data || []}
+            onColumnVisibilityChange={handleSaveColumnVisibility}
+            totalPages={
+              vehiclesData.data?.totalRecords
+                ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
+                : 0
+            }
+            pagination={pagination}
+            onPaginationChange={(newPaginationState) => {
+              navigate({
+                to: searchFleetRoute.to,
+                params: {},
+                search: (current) => ({
+                  ...current,
+                  page: newPaginationState.pageIndex + 1,
+                  size: newPaginationState.pageSize,
+                  filters: searchFilters,
+                }),
+              });
+            }}
+          />
         </div>
       </div>
     </Protector>

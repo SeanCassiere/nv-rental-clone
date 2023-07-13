@@ -149,7 +149,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
           </nav>
         </div>
       </header>
-      <main className="mx-auto w-full flex-1 max-w-[1700px] px-2 md:px-10">
+      <main className="mx-auto w-full flex-1 max-w-[1700px] px-1 md:px-10">
         {children}
       </main>
     </div>

@@ -101,7 +101,7 @@ function CustomerViewPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-4">
+        <div className="mx-auto max-w-full px-2 sm:px-4">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
@@ -149,7 +149,7 @@ function CustomerViewPage() {
           </div>
         </div>
 
-        <div className="mx-auto px-4 md:grid-cols-12">
+        <div className="mx-auto px-2 sm:px-4 md:grid-cols-12">
           <ModuleTabs
             tabConfig={tabsConfig}
             startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
