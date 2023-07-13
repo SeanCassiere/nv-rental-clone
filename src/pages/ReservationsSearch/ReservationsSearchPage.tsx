@@ -80,6 +80,9 @@ function ReservationsSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
+          meta: {
+            columnName: column.columnHeaderDescription ?? undefined,
+          },
           header: ({ column: columnChild }) => (
             <ModuleTableColumnHeader
               column={columnChild}

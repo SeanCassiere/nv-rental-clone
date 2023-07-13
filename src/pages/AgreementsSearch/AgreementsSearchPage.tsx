@@ -80,7 +80,10 @@ function AgreementsSearchPage() {
       columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
-          header: ({ column: columnChild, header }) => (
+          meta: {
+            columnName: column.columnHeaderDescription ?? undefined,
+          },
+          header: ({ column: columnChild }) => (
             <ModuleTableColumnHeader
               column={columnChild}
               title={column.columnHeaderDescription ?? ""}
