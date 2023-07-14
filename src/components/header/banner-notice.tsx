@@ -44,20 +44,26 @@ export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
   return (
     <div className="bg-teal-500">
       <div className="mx-auto max-w-[1620px] px-4 py-4">
-        <div className="flex flex-wrap items-center justify-between">
-          <div className="flex w-0 flex-1 items-center">
+        <div className="flex flex-wrap items-start justify-between gap-2 sm:items-center">
+          <div className="flex w-0 flex-1 items-start sm:items-center">
             <span className="flex rounded-lg bg-teal-600 p-2">
               <MegaPhoneOutline
                 className="h-6 w-6 text-white"
                 aria-hidden="true"
               />
             </span>
-            <p className="ml-3 truncate font-semibold text-white">
+            <p className="ml-3 font-semibold text-white">
               <span className="md:hidden">{notice.titleTextShort}</span>
               <span className="hidden md:inline">{notice.titleText}</span>
             </p>
           </div>
-          <div className="order-3 mt-2 w-full flex-shrink-0 sm:order-2 sm:mt-0 sm:w-auto">
+
+          <div
+            className={cn(
+              "order-3 mt-2 w-full flex-shrink-0 sm:order-2 sm:mt-0 sm:w-auto sm:pl-4",
+              !notice.link ? "hidden" : ""
+            )}
+          >
             <a
               href={notice.link || "#"}
               className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-semibold text-teal-600 shadow-sm hover:bg-teal-50"
@@ -67,10 +73,11 @@ export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
               {notice.actionText}
             </a>
           </div>
+
           <div
             className={cn(
               notice.ignoreDismiss
-                ? "sm:hidden"
+                ? "hidden"
                 : "order-2 flex-shrink-0 sm:order-3 sm:ml-3"
             )}
           >
