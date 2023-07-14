@@ -173,11 +173,9 @@ function AgreementsSearchPage() {
         <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
           <CommonHeader
             titleContent={
-              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
-                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                  Agreements
-                </h1>
-              </div>
+              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+                Agreements
+              </h1>
             }
             subtitleText="Search through your rental agreements and view details."
           />
@@ -186,7 +184,7 @@ function AgreementsSearchPage() {
             search={() => ({ stage: "rental-information" })}
             className={cn(buttonVariants({ size: "sm" }))}
           >
-            <PlusIconFilled className="h-4 w-4" />
+            <PlusIconFilled className="mr-2 h-4 w-4" />
             New Agreement
           </Link>
         </div>
