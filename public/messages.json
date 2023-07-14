@@ -3,11 +3,22 @@
     "messageId": 98234180,
     "clientId": 10000,
     "clientName": "NEW WORLD ORDER",
+    "title": "GeneriCon 2023 Link",
+    "description": "Join us in Denver from June 7 – 9 to see what’s coming next →",
+    "sentDate": "2023-02-14T00:00:00",
+    "expiryDate": "2023-11-30T00:00:00",
+    "active": true,
+    "link": "https://google.com"
+  },
+  {
+    "messageId": 98234181,
+    "clientId": 10000,
+    "clientName": "NEW WORLD ORDER",
     "title": "GeneriCon 2023",
     "description": "Join us in Denver from June 7 – 9 to see what’s coming next →",
     "sentDate": "2023-02-14T00:00:00",
     "expiryDate": "2023-11-30T00:00:00",
     "active": true,
-    "link": "https://rentallsoftware.com"
+    "link": null
   }
 ]

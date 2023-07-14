@@ -5,6 +5,7 @@ import { fetchDashboardMessagesList } from "@/api/dashboard";
 import { dashboardQKeys } from "@/utils/query-key";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { tryParseJson } from "@/utils/parse";
 
 export function useGetDashboardMessages() {
   const auth = useAuth();
@@ -24,15 +25,6 @@ export function useGetDashboardMessages() {
   return query;
 }
 
-function tryParseJson<TData>(json: string | null, defaultData: TData): TData {
-  if (!json) return defaultData;
-  try {
-    return JSON.parse(json);
-  } catch (e) {
-    return defaultData;
-  }
-}
-
 export async function fetchDashboardMessagesListModded(
   opts: Parameters<typeof fetchDashboardMessagesList>[0]
 ) {
@@ -41,13 +33,13 @@ export async function fetchDashboardMessagesListModded(
       const local = getLocalStorageForUser(
         opts.clientId,
         opts.userId,
-        USER_STORAGE_KEYS.dismissedNotices
+        USER_STORAGE_KEYS.dismissedMessages
       );
-      const dismissedNoticeIds = tryParseJson<string[]>(local, []);
+      const dismissedMessageIds = tryParseJson<string[]>(local, []);
 
-      const notices = res.filter((notice) => {
-        if (!dismissedNoticeIds.includes(notice.messageId)) {
-          return notice;
+      const notices = res.filter((msg) => {
+        if (!dismissedMessageIds.includes(msg.messageId)) {
+          return msg;
         }
         return false;
       });

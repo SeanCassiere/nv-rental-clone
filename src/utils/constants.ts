@@ -4,6 +4,7 @@ export const USER_STORAGE_KEYS = {
   dateFormat: "date-format",
   timeFormat: "time-format",
   dismissedNotices: "dismissed-notices",
+  dismissedMessages: "dismissed-messages",
 } as const;
 
 export const OIDC_AUTHORITY =

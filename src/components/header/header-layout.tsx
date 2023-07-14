@@ -102,13 +102,13 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen flex-col">
       <header className="relative z-40 border-b">
-        {/* {noticeList.data.length > 0 && (
+        {messagesList.data.length > 0 && (
           <div className="grid divide-y divide-teal-600">
-            {noticeList.data.map((notice) => (
-              <BannerNotice notice={notice} key={notice.id} />
+            {messagesList.data.map((notice) => (
+              <BannerNotice message={notice} key={`msg_${notice.messageId}`} />
             ))}
           </div>
-        )} */}
+        )}
         <div className="mx-auto">
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
