@@ -8,11 +8,8 @@ import {
   getSelectedOptionForSelectInput,
   Button,
 } from "../Form";
-import { useGetRentalRateTypesForRentals } from "../../hooks/network/rates/useGetRentalRateTypesForRental";
-import {
-  RentalRateSchema,
-  type RentalRateParsed,
-} from "../../utils/schemas/rate";
+import { useGetRentalRateTypesForRentals } from "@/hooks/network/rates/useGetRentalRateTypesForRental";
+import { RentalRateSchema, type RentalRateParsed } from "@/schemas/rate";
 import { cn } from "@/utils";
 
 interface CommonRatesInformationProps {

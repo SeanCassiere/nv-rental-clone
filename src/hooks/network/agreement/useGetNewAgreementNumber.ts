@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchNewAgreementNo } from "../../../api/agreements";
-import { agreementQKeys } from "../../../utils/query-key";
-import { type GenerateAgreementNoDataParsed } from "../../../utils/schemas/agreement";
+import { fetchNewAgreementNo } from "@/api/agreements";
+import { agreementQKeys } from "@/utils/query-key";
+import { type GenerateAgreementNoDataParsed } from "@/schemas/agreement";
 
 export function useGetNewAgreementNumber(params: {
   agreementType: string;

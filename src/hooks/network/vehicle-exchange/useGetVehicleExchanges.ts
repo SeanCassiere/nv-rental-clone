@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { makeInitialApiData } from "../../../api/fetcher";
 
-import { fetchExchangesForAgreement } from "../../../api/vehicleExchanges";
-import { agreementQKeys } from "../../../utils/query-key";
+import { makeInitialApiData } from "@/api/fetcher";
+import { fetchExchangesForAgreement } from "@/api/vehicleExchanges";
+import { agreementQKeys } from "@/utils/query-key";
 
 export function useGetVehicleExchanges(params: {
   agreementId: string | number;

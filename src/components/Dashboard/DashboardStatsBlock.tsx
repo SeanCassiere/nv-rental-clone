@@ -12,7 +12,7 @@ import {
   type RegisteredRoutesInfo,
 } from "@tanstack/router";
 import { localDateToQueryYearMonthDay } from "../../utils/date";
-import type { TDashboardStats } from "../../utils/schemas/dashboard";
+import type { TDashboardStats } from "../../schemas/dashboard";
 
 import { indexRoute } from "../../routes";
 import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
@@ -143,7 +143,7 @@ const StatBlock = ({
     <Link {...(linkProps as any)}>
       <div
         className={cn(
-          "group grid cursor-pointer grid-cols-7 overflow-hidden rounded border border-slate-200 bg-slate-50 px-4 py-4 transition-all duration-150 ease-in hover:bg-slate-100",
+          "group grid cursor-pointer grid-cols-7 overflow-hidden rounded border border-slate-200 bg-slate-50 px-4 py-4 transition-all duration-150 ease-in hover:bg-slate-100"
         )}
       >
         <div className="col-span-2">
@@ -156,7 +156,7 @@ const StatBlock = ({
           <div
             className={cn(
               "text-5xl font-semibold transition-all duration-200 ease-in group-hover:text-teal-500",
-              value !== "0" ? "text-slate-800" : "text-slate-700",
+              value !== "0" ? "text-slate-800" : "text-slate-700"
             )}
           >
             {value}

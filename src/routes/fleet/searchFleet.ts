@@ -3,13 +3,13 @@ import { lazy, Route } from "@tanstack/router";
 import { fleetRoute } from ".";
 import { queryClient } from "../../App";
 
-import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
-import { fetchVehiclesListModded } from "../../hooks/network/vehicle/useGetVehiclesList";
+import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
+import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
-import { getAuthToken } from "../../utils/authLocal";
-import { normalizeVehicleListSearchParams } from "../../utils/normalize-search-params";
-import { fleetQKeys } from "../../utils/query-key";
-import { VehicleSearchQuerySchema } from "../../utils/schemas/vehicle";
+import { getAuthToken } from "@/utils/authLocal";
+import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
+import { fleetQKeys } from "@/utils/query-key";
+import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
 export const searchFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
@@ -43,7 +43,7 @@ export const searchFleetRoute = new Route({
                 module: "vehicles",
               }),
             initialData: [],
-          }),
+          })
         );
       }
 
@@ -65,7 +65,7 @@ export const searchFleetRoute = new Route({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
-          }),
+          })
         );
       }
 

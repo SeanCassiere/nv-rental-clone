@@ -12,10 +12,11 @@ import {
   getSelectedOptionForSelectInput,
 } from "../Form";
 import { type AgreementRentalInformationSchemaParsed } from "./AgreementRentalInformationTab";
-import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
-import { useGetVehicleFuelLevelList } from "../../hooks/network/vehicle/useGetVehicleFuelLevelList";
 import SelectVehicleModal from "../Dialogs/SelectVehicleModal";
+
+import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { useGetVehicleFuelLevelList } from "@/hooks/network/vehicle/useGetVehicleFuelLevelList";
 
 function AgreementVehicleInformationSchema() {
   return z.object({

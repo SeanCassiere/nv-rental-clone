@@ -5,8 +5,8 @@ import CommonRatesInformation from "./CommonRatesInformation";
 import CommonMiscChargesInformation from "./CommonMiscChargesInformation";
 import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
-import { type RentalRateParsed } from "../../utils/schemas/rate";
-import { type CalculateRentalSummaryMiscChargeType } from "../../types/CalculateRentalSummaryAmounts";
+import { type RentalRateParsed } from "@/schemas/rate";
+import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 import { cn } from "@/utils";
 
 export interface StepRatesAndChargesInformationProps {

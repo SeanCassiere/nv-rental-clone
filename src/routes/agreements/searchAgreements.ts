@@ -2,13 +2,13 @@ import { lazy, Route } from "@tanstack/router";
 
 import { agreementsRoute } from ".";
 import { queryClient as qc } from "../../App";
-import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
-import { fetchAgreementsListModded } from "../../hooks/network/agreement/useGetAgreementsList";
+import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
+import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 
-import { getAuthToken } from "../../utils/authLocal";
-import { agreementQKeys } from "../../utils/query-key";
-import { AgreementSearchQuerySchema } from "../../utils/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
+import { getAuthToken } from "@/utils/authLocal";
+import { agreementQKeys } from "@/utils/query-key";
+import { AgreementSearchQuerySchema } from "@/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 
 export const searchAgreementsRoute = new Route({
   getParentRoute: () => agreementsRoute,
@@ -46,7 +46,7 @@ export const searchAgreementsRoute = new Route({
                 module: "agreements",
               }),
             initialData: [],
-          }),
+          })
         );
       }
 
@@ -69,7 +69,7 @@ export const searchAgreementsRoute = new Route({
                 currentDate: new Date(),
                 filters: searchFilters,
               }),
-          }),
+          })
         );
       }
 
@@ -78,6 +78,6 @@ export const searchAgreementsRoute = new Route({
     return {};
   },
   component: lazy(
-    () => import("../../pages/AgreementsSearch/AgreementsSearchPage"),
+    () => import("../../pages/AgreementsSearch/AgreementsSearchPage")
   ),
 });

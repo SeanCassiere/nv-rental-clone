@@ -2,20 +2,20 @@ import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import {
   type TDashboardNotice,
   VehicleStatusCountListSchema,
-} from "../utils/schemas/dashboard";
+} from "@/schemas/dashboard";
 import {
   DashboardWidgetItemListSchema,
   DashboardStatsSchema,
   type DashboardWidgetItemParsed,
-} from "../utils/schemas/dashboard";
-import { localDateToQueryYearMonthDay } from "../utils/date";
-import { type StringNumberIdType } from "../utils/query-key";
+} from "@/schemas/dashboard";
+import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { type StringNumberIdType } from "@/utils/query-key";
 
 export const fetchDashboardStats = async (
   opts: {
     locationId: StringNumberIdType[];
     clientDate: Date;
-  } & CommonAuthParams,
+  } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/statistics`, {
@@ -33,7 +33,7 @@ export const fetchDashboardStats = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => DashboardStatsSchema.parse(res.data));
 };
 
@@ -82,7 +82,7 @@ export const fetchDashboardNoticeList = async () => {
       }
 
       return null;
-    },
+    }
   );
   return mapped.filter((notice) => notice !== null) as any[];
 };
@@ -97,12 +97,12 @@ export const fetchDashboardWidgetList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => DashboardWidgetItemListSchema.parse(res.data));
 };
 
 export const saveDashboardWidgetItem = async (
-  opts: { widget: DashboardWidgetItemParsed } & CommonAuthParams,
+  opts: { widget: DashboardWidgetItemParsed } & CommonAuthParams
 ) => {
   const body = {
     ...opts.widget,
@@ -125,7 +125,7 @@ export const fetchVehicleStatusCounts = async (
     locationIds: StringNumberIdType[];
     vehicleType: string | number;
     clientDate: Date;
-  },
+  }
 ) => {
   return await callV3Api(
     makeUrl(`/v3/statistics/vehiclestatuscounts`, {
@@ -149,6 +149,6 @@ export const fetchVehicleStatusCounts = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => VehicleStatusCountListSchema.parse(res.data));
 };

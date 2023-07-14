@@ -44,7 +44,7 @@ import {
 
 import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
 
-import { type TColumnListItemParsed } from "@/utils/schemas/column";
+import { type TColumnListItemParsed } from "@/schemas/column";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
 import { cn } from "@/utils";

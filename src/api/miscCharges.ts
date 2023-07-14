@@ -1,5 +1,5 @@
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "../utils/date";
-import { MiscChargeListItemSchema } from "../utils/schemas/misCharges";
+import { MiscChargeListItemSchema } from "@/schemas/misCharges";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { callV3Api, type CommonAuthParams, makeUrl } from "./fetcher";
 
 export async function fetchMiscCharges(
@@ -9,7 +9,7 @@ export async function fetchMiscCharges(
     VehicleTypeId?: string | number;
     CheckoutDate?: Date;
     CheckinDate?: Date;
-  },
+  }
 ) {
   const {
     accessToken,
@@ -45,7 +45,7 @@ export async function fetchMiscCharges(
   }).then((res) => {
     if (Array.isArray(res.data)) {
       return (res.data || []).map((item) =>
-        MiscChargeListItemSchema.passthrough().parse(item),
+        MiscChargeListItemSchema.passthrough().parse(item)
       );
     }
     return [];

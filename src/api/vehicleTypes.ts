@@ -1,6 +1,6 @@
 import { callV3Api, type CommonAuthParams, makeUrl } from "./fetcher";
-import { VehicleTypeSchemaArray } from "../utils/schemas/vehicleType";
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "../utils/date";
+import { VehicleTypeSchemaArray } from "@/schemas/vehicleType";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 
 export type VehicleTypesListExtraOpts = {
   StartDate?: Date;
@@ -11,7 +11,7 @@ export type VehicleTypesListExtraOpts = {
 };
 
 export const fetchVehicleTypesList = async (
-  opts: CommonAuthParams & VehicleTypesListExtraOpts,
+  opts: CommonAuthParams & VehicleTypesListExtraOpts
 ) => {
   return await callV3Api(
     makeUrl(`/v3/vehicletypes`, {
@@ -20,14 +20,14 @@ export const fetchVehicleTypesList = async (
       ...(typeof opts.StartDate !== "undefined"
         ? {
             StartDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-              opts.StartDate,
+              opts.StartDate
             ),
           }
         : {}),
       ...(typeof opts.EndDate !== "undefined"
         ? {
             EndDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-              opts.EndDate,
+              opts.EndDate
             ),
           }
         : {}),
@@ -45,6 +45,6 @@ export const fetchVehicleTypesList = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => VehicleTypeSchemaArray.parse(res.data));
 };

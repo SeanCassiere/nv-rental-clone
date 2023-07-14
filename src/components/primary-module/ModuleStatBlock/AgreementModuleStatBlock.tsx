@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import { cn } from "@/utils";
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
-import { type AgreementDataParsed } from "../../../utils/schemas/agreement";
+import { type AgreementDataParsed } from "../../../schemas/agreement";
 
 const supportedList = [
   "Open",
@@ -42,7 +42,7 @@ const AgreementModuleStatBlock = ({
           <span
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
-              getTextColorForStatus(agreement?.agreementStatusName ?? ""),
+              getTextColorForStatus(agreement?.agreementStatusName ?? "")
             )}
           >
             {agreement?.agreementStatusName

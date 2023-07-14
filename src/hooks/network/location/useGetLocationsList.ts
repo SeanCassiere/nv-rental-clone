@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { makeInitialApiData } from "../../../api/fetcher";
 
-import { fetchLocationsList } from "../../../api/locations";
-import { locationQKeys } from "../../../utils/query-key";
+import { makeInitialApiData } from "@/api/fetcher";
+import { fetchLocationsList } from "@/api/locations";
+import { locationQKeys } from "@/utils/query-key";
 
 export function useGetLocationsList(params: { locationIsActive: boolean }) {
   const auth = useAuth();

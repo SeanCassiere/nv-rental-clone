@@ -35,7 +35,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { type TAgreementListItemParsed } from "@/utils/schemas/agreement";
+import { type TAgreementListItemParsed } from "@/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import { titleMaker } from "@/utils/title-maker";
 import { AgreementDateTimeColumns } from "@/utils/columns";

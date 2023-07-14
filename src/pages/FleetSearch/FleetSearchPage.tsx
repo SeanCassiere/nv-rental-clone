@@ -34,7 +34,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/utils";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
-import type { TVehicleListItemParsed } from "@/utils/schemas/vehicle";
+import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();

@@ -1,18 +1,18 @@
 import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
-import AddRentalParentForm from "../../components/AddRental";
-import Protector from "../../components/Protector";
+import AddRentalParentForm from "@/components/AddRental";
+import Protector from "@/components/Protector";
 import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 
-import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
-import { checkinAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { checkinAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
+import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
-import { titleMaker } from "../../utils/title-maker";
+import { titleMaker } from "@/utils/title-maker";
 
 const CheckinAgreementPage = () => {
   const navigate = useNavigate({ from: checkinAgreementByIdRoute.id });

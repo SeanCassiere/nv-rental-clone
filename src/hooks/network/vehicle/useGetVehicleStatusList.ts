@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchVehicleStatusesList } from "../../../api/vehicles";
-import { fleetQKeys } from "../../../utils/query-key";
+
+import { fetchVehicleStatusesList } from "@/api/vehicles";
+import { fleetQKeys } from "@/utils/query-key";
 
 export function useGetVehicleStatusList() {
   const auth = useAuth();

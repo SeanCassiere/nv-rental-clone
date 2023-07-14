@@ -1,4 +1,4 @@
-import { ClientProfileSchema } from "../utils/schemas/client";
+import { ClientProfileSchema } from "@/schemas/client";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchClientProfile = async (opts: CommonAuthParams) => {

@@ -7,32 +7,32 @@ import {
   useSearch,
 } from "@tanstack/router";
 
-import Protector from "../../components/Protector";
+import Protector from "@/components/Protector";
 import {
   ArrowDownLeftOutline,
   ChevronRightOutline,
   PencilIconFilled,
   PrintIconFilled,
-} from "../../components/icons";
+} from "@/components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
 import AgreementModuleStatBlock from "@/components/primary-module/ModuleStatBlock/AgreementModuleStatBlock";
-import CommonHeader from "../../components/Layout/CommonHeader";
-import { Button, LinkButton } from "../../components/Form";
+import CommonHeader from "@/components/Layout/CommonHeader";
+import { Button, LinkButton } from "@/components/Form";
 
 import {
   viewAgreementByIdRoute,
   editAgreementByIdRoute,
   checkinAgreementByIdRoute,
-} from "../../routes/agreements/agreementIdPath";
+} from "@/routes/agreements/agreementIdPath";
 
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import { titleMaker } from "../../utils/title-maker";
+import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
+import { titleMaker } from "@/utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")

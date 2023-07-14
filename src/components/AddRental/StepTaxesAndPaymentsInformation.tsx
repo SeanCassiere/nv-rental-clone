@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
 
-import { useGetTaxes } from "../../hooks/network/taxes/useGetTaxes";
+import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { Button } from "../Form";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
 import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";

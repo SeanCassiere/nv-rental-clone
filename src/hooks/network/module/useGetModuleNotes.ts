@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { makeInitialApiData } from "../../../api/fetcher";
-import { fetchNotesForModule } from "../../../api/notes";
 
-import { type AppPrimaryModuleType } from "../../../types/General";
+import { fetchNotesForModule } from "@/api/notes";
+import { makeInitialApiData } from "@/api/fetcher";
+import { type AppPrimaryModuleType } from "@/types/General";
 import { allModulesKeySelector } from "./useGetModuleColumns";
 
 export function useGetModuleNotes({

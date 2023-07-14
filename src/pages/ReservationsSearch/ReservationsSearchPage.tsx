@@ -36,7 +36,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 import { cn } from "@/utils";
-import { type TReservationListItemParsed } from "@/utils/schemas/reservation";
+import { type TReservationListItemParsed } from "@/schemas/reservation";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { titleMaker } from "@/utils/title-maker";
 import { ReservationDateTimeColumns } from "@/utils/columns";

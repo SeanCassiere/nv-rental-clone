@@ -7,15 +7,15 @@ import { CommonTable } from "../common/common-table";
 import { DocumentTextSolid } from "../icons";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
 
-import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 
-import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
-import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
-import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
-import { AgreementDateTimeColumns } from "../../utils/columns";
+import { type TAgreementListItemParsed } from "@/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
+import { AgreementDateTimeColumns } from "@/utils/columns";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 

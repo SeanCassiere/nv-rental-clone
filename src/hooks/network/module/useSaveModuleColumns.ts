@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { saveModuleColumns } from "../../../api/columns";
 import { allModulesKeySelector } from "./useGetModuleColumns";
-import type { AppPrimaryModuleType } from "../../../types/General";
-import { type TColumnListItemParsed } from "../../../utils/schemas/column";
+import { saveModuleColumns } from "@/api/columns";
+import type { AppPrimaryModuleType } from "@/types/General";
+import type { TColumnListItemParsed } from "@/schemas/column";
 
 export function useSaveModuleColumns({
   module,
@@ -35,7 +35,7 @@ export function useSaveModuleColumns({
       if (accessorKeys.length > 0) {
         accessorKeys.forEach((accessorKey) => {
           const column = allColumns.find(
-            (column) => column.columnHeader === accessorKey,
+            (column) => column.columnHeader === accessorKey
           );
           if (column) {
             columnsMovedToTheFront.push(column.columnHeaderSettingID);

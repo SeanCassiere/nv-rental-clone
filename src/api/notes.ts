@@ -1,13 +1,13 @@
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
-import { type AppPrimaryModuleType } from "../types/General";
-import { NotesDataListSchema } from "../utils/schemas/note";
-import { validateApiResWithZodSchema } from "../utils/schemas/apiFetcher";
+import type { AppPrimaryModuleType } from "@/types/General";
+import { NotesDataListSchema } from "@/schemas/note";
+import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
 
 export const fetchNotesForModule = async (
   opts: {
     referenceId: string;
     module: AppPrimaryModuleType;
-  } & Omit<CommonAuthParams, "userId">,
+  } & Omit<CommonAuthParams, "userId">
 ) => {
   let url: URL;
   const authParams = { clientId: opts.clientId };

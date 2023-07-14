@@ -8,9 +8,9 @@ import { CommonTable } from "../common/common-table";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
 import { DocumentTextSolid } from "../icons";
 
-import { type TVehicleExchangeListItemParsed } from "../../utils/schemas/vehicleExchange";
-import { useGetVehicleExchanges } from "../../hooks/network/vehicle-exchange/useGetVehicleExchanges";
-import { viewFleetByIdRoute } from "../../routes/fleet/fleetIdPath";
+import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
+import { useGetVehicleExchanges } from "@/hooks/network/vehicle-exchange/useGetVehicleExchanges";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
 type TVehicleExchangeKeyHelp = {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "react-oidc-context";
 
 import { MegaPhoneOutline, XMarkOutline } from "../icons";
-import type { TDashboardNotice } from "../../utils/schemas/dashboard";
+import type { TDashboardNotice } from "../../schemas/dashboard";
 import {
   getLocalStorageForUser,
   setLocalStorageForUser,
@@ -25,7 +25,7 @@ export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
     const local = getLocalStorageForUser(
       auth.user?.profile.navotar_clientid,
       auth.user?.profile.navotar_userid,
-      USER_STORAGE_KEYS.dismissedNotices,
+      USER_STORAGE_KEYS.dismissedNotices
     );
     const data: string[] = local ? JSON.parse(local) : [];
 
@@ -35,7 +35,7 @@ export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
       auth.user?.profile.navotar_clientid,
       auth.user?.profile.navotar_userid,
       "dismissed-notices",
-      JSON.stringify(data),
+      JSON.stringify(data)
     );
   };
 
@@ -71,14 +71,14 @@ export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
             className={cn(
               notice.ignoreDismiss
                 ? "sm:hidden"
-                : "order-2 flex-shrink-0 sm:order-3 sm:ml-3",
+                : "order-2 flex-shrink-0 sm:order-3 sm:ml-3"
             )}
           >
             <button
               type="button"
               className={cn(
                 "-mr-1 flex rounded-md p-2 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2",
-                notice.ignoreDismiss ? "opacity-0" : "",
+                notice.ignoreDismiss ? "opacity-0" : ""
               )}
               onClick={notice.ignoreDismiss ? undefined : onDismiss}
             >

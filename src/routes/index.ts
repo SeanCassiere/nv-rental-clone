@@ -2,11 +2,11 @@ import { lazy, Route } from "@tanstack/router";
 
 import { rootRoute } from "./__root";
 import { queryClient as qc } from "../App";
-import { fetchDashboardWidgetList } from "../api/dashboard";
-import { fetchDashboardNoticeListModded } from "../hooks/network/dashboard/useGetDashboardNoticeList";
-import { getAuthToken } from "../utils/authLocal";
-import { dashboardQKeys } from "../utils/query-key";
-import { DashboardSearchQuerySchema } from "../utils/schemas/dashboard";
+import { fetchDashboardWidgetList } from "@/api/dashboard";
+import { fetchDashboardNoticeListModded } from "@/hooks/network/dashboard/useGetDashboardNoticeList";
+import { getAuthToken } from "@/utils/authLocal";
+import { dashboardQKeys } from "@/utils/query-key";
+import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -29,7 +29,7 @@ export const indexRoute = new Route({
                 userId: auth.profile.navotar_userid,
               }),
             initialData: [],
-          }),
+          })
         );
       }
 
@@ -47,7 +47,7 @@ export const indexRoute = new Route({
                 accessToken: auth.access_token,
               }),
             initialData: [],
-          }),
+          })
         );
       }
 

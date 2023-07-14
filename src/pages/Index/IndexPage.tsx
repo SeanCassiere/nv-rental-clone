@@ -1,26 +1,29 @@
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/router";
 
-import Protector from "../../components/Protector";
-import DashboardStatsBlock from "../../components/Dashboard/DashboardStatsBlock";
-import DashboardDndWidgetGrid from "../../components/Dashboard/DashboardDndWidgetGrid";
-import CommonHeader from "../../components/Layout/CommonHeader";
+import Protector from "@/components/Protector";
+import DashboardStatsBlock from "@/components/Dashboard/DashboardStatsBlock";
+import DashboardDndWidgetGrid from "@/components/Dashboard/DashboardDndWidgetGrid";
+import CommonHeader from "@/components/Layout/CommonHeader";
 import {
   LockClosedOutline,
   LockOpenOutline,
   SettingsCogOutline,
-} from "../../components/icons";
-import DashboardWidgetPickerModal from "../../components/Dialogs/DashboardWidgetPickerModal";
+} from "@/components/icons";
+import DashboardWidgetPickerModal from "@/components/Dialogs/DashboardWidgetPickerModal";
 
-import { indexRoute } from "../../routes";
-import { useGetDashboardStats } from "../../hooks/network/dashboard/useGetDashboardStats";
-import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
-import { useSaveDashboardWidgetList } from "../../hooks/network/dashboard/useSaveDashboardWidgetList";
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
-import { titleMaker } from "../../utils/title-maker";
-import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
-import type { StringNumberIdType } from "../../utils/query-key";
+import { indexRoute } from "@/routes";
+
+import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
+import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
+import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+
+import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
+
 import { cn } from "@/utils";
+import type { StringNumberIdType } from "@/utils/query-key";
+import { titleMaker } from "@/utils/title-maker";
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
@@ -39,7 +42,7 @@ function IndexPage() {
         replace: true,
       });
     },
-    [navigate],
+    [navigate]
   );
 
   const widgetList = useGetDashboardWidgetList();
@@ -70,7 +73,7 @@ function IndexPage() {
     (widgets: DashboardWidgetItemParsed[]) => {
       saveDashboardWidgetsMutation.mutate({ widgets });
     },
-    [saveDashboardWidgetsMutation],
+    [saveDashboardWidgetsMutation]
   );
 
   useDocumentTitle(titleMaker("Dashboard"));
@@ -83,7 +86,7 @@ function IndexPage() {
         onWidgetSave={handleWidgetSortingEnd}
       />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 sm:px-4 pt-4">
+        <div className="mx-auto max-w-full px-2 pt-4 sm:px-4">
           <div className="pb-4">
             <CommonHeader
               titleContent={
@@ -114,7 +117,7 @@ function IndexPage() {
                     <button
                       className={cn(
                         "ml-2 text-slate-500 sm:pt-0",
-                        isWidgetsLocked ? "" : "pl-0.5",
+                        isWidgetsLocked ? "" : "pl-0.5"
                       )}
                       onClick={() => setIsWidgetsLocked((prev) => !prev)}
                     >

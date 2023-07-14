@@ -3,8 +3,8 @@ import { useAuth } from "react-oidc-context";
 import {
   fetchVehicleTypesList,
   type VehicleTypesListExtraOpts,
-} from "../../../api/vehicleTypes";
-import { vehicleTypeQKeys } from "../../../utils/query-key";
+} from "@/api/vehicleTypes";
+import { vehicleTypeQKeys } from "@/utils/query-key";
 
 export function useGetVehicleTypesList(params?: VehicleTypesListExtraOpts) {
   const otherSearch: VehicleTypesListExtraOpts = {

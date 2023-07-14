@@ -22,36 +22,36 @@ import CommonCustomerInformation, {
 import StepRatesAndChargesInformation from "./StepRatesAndChargesInformation";
 import StepTaxesAndPaymentsInformation from "./StepTaxesAndPaymentsInformation";
 
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
-import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOptimalRateForRental";
-import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
-import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCharges";
-import { useGetTaxes } from "../../hooks/network/taxes/useGetTaxes";
+import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
+import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
+import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
+import { usePostCalculateRentalSummaryAmounts } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
+import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
+import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 
-import { addAgreementRoute } from "../../routes/agreements/addAgreement";
-import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import { addAgreementRoute } from "@/routes/agreements/addAgreement";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 import {
   checkinAgreementByIdRoute,
   editAgreementByIdRoute,
   viewAgreementByIdRoute,
-} from "../../routes/agreements/agreementIdPath";
-import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import { addReservationRoute } from "../../routes/reservations/addReservation";
+} from "@/routes/agreements/agreementIdPath";
+import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
+import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
+import { addReservationRoute } from "@/routes/reservations/addReservation";
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
-} from "../../routes/reservations/reservationIdPath";
+} from "@/routes/reservations/reservationIdPath";
 
-import { sortObject } from "../../utils/sortObject";
-import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
-import { type RentalRateParsed } from "../../utils/schemas/rate";
-import { type ReservationDataParsed } from "../../utils/schemas/reservation";
-import { type CalculateRentalSummaryMiscChargeType } from "../../types/CalculateRentalSummaryAmounts";
+import { sortObject } from "@/utils/sortObject";
+import { type TRentalRatesSummarySchema } from "@/schemas/summary";
+import { type RentalRateParsed } from "@/schemas/rate";
+import { type ReservationDataParsed } from "@/schemas/reservation";
+import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 
 export type TRentalCompleteStage = {
   rental: boolean;

@@ -7,11 +7,11 @@ import {
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
 
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
-import { useGetVehicleSummary } from "../../hooks/network/vehicle/useGetVehicleSummary";
-import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
+import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
+import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
+import { useGetVehicleSummary } from "@/hooks/network/vehicle/useGetVehicleSummary";
+import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
 
 type VehicleSummaryTabProps = {

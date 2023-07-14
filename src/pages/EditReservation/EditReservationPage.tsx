@@ -1,20 +1,20 @@
 import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
-import AddRentalParentForm from "../../components/AddRental";
-import Protector from "../../components/Protector";
+import AddRentalParentForm from "@/components/AddRental";
+import Protector from "@/components/Protector";
 import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
-import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
+import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
-import { titleMaker } from "../../utils/title-maker";
+import { titleMaker } from "@/utils/title-maker";
 
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
-} from "../../routes/reservations/reservationIdPath";
+} from "@/routes/reservations/reservationIdPath";
 
 const EditReservationPage = () => {
   const navigate = useNavigate({ from: editReservationByIdRoute.id });

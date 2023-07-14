@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/router";
 
-import { useGetDashboardVehicleStatusCounts } from "../../../hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
-import { useGetVehicleStatusList } from "../../../hooks/network/vehicle/useGetVehicleStatusList";
-import type { StringNumberIdType } from "../../../utils/query-key";
+import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
+import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
+import type { StringNumberIdType } from "@/utils/query-key";
 
 const VehicleStatusWidget = ({
   currentLocations,

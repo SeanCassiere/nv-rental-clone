@@ -16,7 +16,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import type { DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+import type { DashboardWidgetItemParsed } from "../../schemas/dashboard";
 import { type StringNumberIdType } from "../../utils/query-key";
 import { cn } from "@/utils";
 
@@ -34,7 +34,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
 
   // used purely to reliably let the animation functions run
   const [localWidgets, setLocalWidgets] = useState(
-    [...widgetList].sort(sortWidgetsByUserPositionFn),
+    [...widgetList].sort(sortWidgetsByUserPositionFn)
   );
   const widgetIdsList = localWidgets
     .filter((widget) => widget.isDeleted === false)
@@ -52,7 +52,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
       const newWidgetIdOrder = arrayMove(
         widgetIdsList,
         widgetIdsList.indexOf(String(draggingId)),
-        widgetIdsList.indexOf(String(overId)),
+        widgetIdsList.indexOf(String(overId))
       );
       const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
         widgets: widgetList,
@@ -62,12 +62,12 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
       setLocalWidgets(reorderedWidgetsList);
       onWidgetSortingEnd(reorderedWidgetsList);
     },
-    [widgetList, onWidgetSortingEnd, widgetIdsList],
+    [widgetList, onWidgetSortingEnd, widgetIdsList]
   );
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
+    useSensor(TouchSensor, {})
   );
 
   return (
@@ -123,7 +123,7 @@ export function reorderBasedOnWidgetIdPositions({
 
   orderedWidgetIds.forEach((widgetId, index) => {
     const widget = copiedWidgetsWithoutDeleted.find(
-      (widget) => widget.widgetID === widgetId,
+      (widget) => widget.widgetID === widgetId
     );
     if (widget) {
       widget.widgetUserPosition = index + 1;
@@ -143,7 +143,7 @@ export function reorderBasedOnWidgetIdPositions({
   // remove duplicates based on the widgetID
   const withOutDuplicates = returnableWidgets.filter(
     (thing, index, self) =>
-      index === self.findIndex((t) => t.widgetID === thing.widgetID),
+      index === self.findIndex((t) => t.widgetID === thing.widgetID)
   );
 
   return withOutDuplicates.sort(sortWidgetsByUserPositionFn);
@@ -151,14 +151,14 @@ export function reorderBasedOnWidgetIdPositions({
 
 export function sortWidgetsByUserPositionFn(
   widgetA: DashboardWidgetItemParsed,
-  widgetB: DashboardWidgetItemParsed,
+  widgetB: DashboardWidgetItemParsed
 ) {
   return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
 }
 
 function renderWidgetView(
   widget: DashboardWidgetItemParsed,
-  { locations }: { locations: StringNumberIdType[] },
+  { locations }: { locations: StringNumberIdType[] }
 ) {
   const widgetId = widget.widgetID;
   switch (widgetId) {
@@ -207,7 +207,7 @@ function WidgetSizingContainer({
         widget.widgetScale === 9 ? "md:col-span-9" : "",
         widget.widgetScale === 10 ? "md:col-span-10" : "",
         widget.widgetScale === 11 ? "md:col-span-11" : "",
-        widget.widgetScale === 12 ? "md:col-span-12" : "",
+        widget.widgetScale === 12 ? "md:col-span-12" : ""
       )}
       style={{ transform: CSS.Transform.toString(transform), transition }}
     >
@@ -217,7 +217,7 @@ function WidgetSizingContainer({
           "h-full w-full rounded border border-slate-200 text-slate-600",
           !isDragging ? "transition-all duration-200 ease-in" : "",
           { "cursor-move": !isDisabled, "cursor-default": isDisabled },
-          isDisabled ? "bg-slate-50" : "bg-slate-100",
+          isDisabled ? "bg-slate-50" : "bg-slate-100"
         )}
         {...listeners}
         {...attributes}

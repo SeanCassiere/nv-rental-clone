@@ -1,11 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchVehicleStatusCounts } from "../../../api/dashboard";
-import {
-  dashboardQKeys,
-  type StringNumberIdType,
-} from "../../../utils/query-key";
+import { fetchVehicleStatusCounts } from "@/api/dashboard";
+import { dashboardQKeys, type StringNumberIdType } from "@/utils/query-key";
 
 export function useGetDashboardVehicleStatusCounts({
   locationIds,

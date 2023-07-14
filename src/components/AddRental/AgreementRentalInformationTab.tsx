@@ -17,9 +17,9 @@ import {
 } from "../Form";
 import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
 
-import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
-import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
-import { useGetNewAgreementNumber } from "../../hooks/network/agreement/useGetNewAgreementNumber";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
+import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
 
 const AgreementRentalInformationSchema = z
   .object({

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchTaxesList } from "../../../api/taxes";
+
+import { fetchTaxesList } from "@/api/taxes";
 
 export function useGetTaxes(params: {
   enabled?: boolean;

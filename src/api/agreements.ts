@@ -3,7 +3,7 @@ import {
   AgreementStatusListSchema,
   AgreementTypeArraySchema,
   GenerateAgreementNumberSchema,
-} from "../utils/schemas/agreement";
+} from "@/schemas/agreement";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchAgreementsList = async (
@@ -12,7 +12,7 @@ export const fetchAgreementsList = async (
     pageSize?: number;
     currentDate: Date;
     filters: any;
-  } & CommonAuthParams,
+  } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/agreements`, {
@@ -27,12 +27,12 @@ export const fetchAgreementsList = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   );
 };
 
 export const fetchAgreementData = async (
-  opts: { agreementId: string | number } & CommonAuthParams,
+  opts: { agreementId: string | number } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/agreements/${opts.agreementId}`, {
@@ -43,7 +43,7 @@ export const fetchAgreementData = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => AgreementDataSchema.parse(res.data));
 };
 
@@ -57,7 +57,7 @@ export const fetchAgreementStatusesList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => AgreementStatusListSchema.parse(res.data));
 };
 
@@ -71,12 +71,12 @@ export const fetchAgreementTypesList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => AgreementTypeArraySchema.parse(res.data));
 };
 
 export const fetchNewAgreementNo = async (
-  opts: CommonAuthParams & { agreementType: string },
+  opts: CommonAuthParams & { agreementType: string }
 ) => {
   return await callV3Api(
     makeUrl(`/v3/agreements/generateagreementno`, {
@@ -88,6 +88,6 @@ export const fetchNewAgreementNo = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => GenerateAgreementNumberSchema.parse(res.data));
 };

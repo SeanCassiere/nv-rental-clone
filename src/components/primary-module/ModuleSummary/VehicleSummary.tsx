@@ -3,7 +3,7 @@ import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPa
 
 import { viewReservationByIdRoute } from "../../../routes/reservations/reservationIdPath";
 import { viewFleetByIdRoute } from "../../../routes/fleet/fleetIdPath";
-import { type TVehicleSummarySchema } from "../../../utils/schemas/summary/vehicleSummary";
+import { type TVehicleSummarySchema } from "../../../schemas/summary/vehicleSummary";
 import { CurrencyDollarSolid } from "../../icons";
 import {
   SummaryHeader,

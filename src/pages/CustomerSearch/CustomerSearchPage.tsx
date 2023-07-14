@@ -31,7 +31,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { cn } from "@/utils";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import type { TCustomerListItemParsed } from "@/utils/schemas/customer";
+import type { TCustomerListItemParsed } from "@/schemas/customer";
 import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { titleMaker } from "@/utils/title-maker";
 

@@ -3,7 +3,7 @@ import { Link } from "@tanstack/router";
 
 import { cn } from "@/utils";
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
-import { type ReservationDataParsed } from "../../../utils/schemas/reservation";
+import { type ReservationDataParsed } from "../../../schemas/reservation";
 import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPath";
 
 const supportedList = ["Open", "CheckOut", "Canceled", "Quote", "New"];
