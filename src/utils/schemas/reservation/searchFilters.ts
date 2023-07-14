@@ -15,18 +15,19 @@ export const ReservationFiltersSchema = z
     CheckoutLocationId: z.coerce.string().optional(),
     CheckinLocationId: z.coerce.string().optional(),
     ReservationTypes: z.coerce.string().optional(),
+    Keyword: z.coerce.string().optional(),
   })
   .superRefine(({ CreatedDateFrom, CreatedDateTo }, ctx) => {
     if (CreatedDateFrom && CreatedDateTo) {
       const createdDateFromParsed = parse(
         CreatedDateFrom,
         "yyyy-MM-dd",
-        new Date(),
+        new Date()
       );
       const createdDateToParsed = parse(
         CreatedDateTo,
         "yyyy-MM-dd",
-        new Date(),
+        new Date()
       );
       if (isBefore(createdDateToParsed, createdDateFromParsed)) {
         ctx.addIssue({
