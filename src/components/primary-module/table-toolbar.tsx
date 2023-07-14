@@ -1,21 +1,42 @@
 import React from "react";
 import { XIcon } from "lucide-react";
-import { type Table } from "@tanstack/react-table";
+import { type Table, type ColumnFiltersState } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 
 import { DataTableViewOptions } from "@/components/ui/data-table";
+import {
+  PrimaryModuleTableFacetedFilter,
+  type FacetedFilterType,
+  type FilterOption,
+} from "./table-filter";
 
-export interface PrimaryModuleTableToolbarProps<TData> {
+export interface PrimaryModuleTableToolbarProps<
+  TData,
+  TColumnFilters extends ColumnFiltersState,
+> {
   table: Table<TData>;
   onClearFilters: () => void;
+  filterableColumns?: {
+    id: TColumnFilters[number]["id"];
+    title: string;
+    type: FacetedFilterType;
+    options: FilterOption[];
+  }[];
 }
 
-export function PrimaryModuleTableToolbar<TData>({
+export function PrimaryModuleTableToolbar<
+  TData,
+  TColumnFilters extends ColumnFiltersState,
+>({
   table,
   onClearFilters,
-}: PrimaryModuleTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
+  filterableColumns = [],
+}: PrimaryModuleTableToolbarProps<TData, TColumnFilters>) {
+  const tableColumnFilters = table.getState().columnFilters;
+  console.log("tableColumnFilters", tableColumnFilters);
+  const isFiltered = tableColumnFilters.length > 0;
+  // console.log("filterableColumns", filterableColumns);
 
   return (
     <div className="flex flex-col justify-between space-y-2 sm:flex-row sm:items-center">
@@ -36,6 +57,22 @@ export function PrimaryModuleTableToolbar<TData>({
             options={[]}
           />
         )} */}
+        {filterableColumns.length &&
+          filterableColumns.map(
+            (column) =>
+              tableColumnFilters.find(
+                (tableColumnFilter) => tableColumnFilter.id === column.id
+              ) && (
+                <PrimaryModuleTableFacetedFilter
+                  key={`faceted_filter_${column.id}`}
+                  table={table}
+                  id={column.id}
+                  title={column.type}
+                  type={column.type}
+                  options={column.options}
+                />
+              )
+          )}
         {isFiltered && (
           <Button
             variant="ghost"

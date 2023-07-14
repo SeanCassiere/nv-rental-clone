@@ -69,10 +69,18 @@ import {
   PrimaryModuleTableToolbar,
   type PrimaryModuleTableToolbarProps,
 } from "@/components/primary-module/table-toolbar";
+import {
+  type FacetedFilterType,
+  type FilterOption,
+} from "@/components/primary-module/table-filter";
 
-interface PrimaryModuleTableProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
+interface PrimaryModuleTableProps<
+  TData,
+  TValue,
+  TColumnFilters extends ColumnFiltersState,
+> {
+  data: TData[];
+  columns: ColumnDef<TData, TValue>[];
   rawColumnsData: TColumnListItemParsed[];
 
   onColumnOrderChange?: (updatedValues: ColumnOrderState) => void;
@@ -84,16 +92,32 @@ interface PrimaryModuleTableProps<T> {
   totalPages: number;
 
   filters: {
-    columnFilters: ColumnFiltersState;
+    columnFilters: TColumnFilters;
     setColumnFilters: OnChangeFn<ColumnFiltersState>;
-    onClearFilters: PrimaryModuleTableToolbarProps<any>["onClearFilters"];
+    onClearFilters: PrimaryModuleTableToolbarProps<
+      TData,
+      TColumnFilters
+    >["onClearFilters"];
+    filterableColumns?: {
+      id: TColumnFilters[number]["id"];
+      title: string;
+      type: FacetedFilterType;
+      options: FilterOption[];
+    }[];
   };
 }
 
-export function PrimaryModuleTable<T extends any>(
-  props: PrimaryModuleTableProps<T>
-) {
-  const { columnFilters, setColumnFilters, onClearFilters } = props.filters;
+export function PrimaryModuleTable<
+  TData,
+  TValue,
+  TColumnFilters extends ColumnFiltersState,
+>(props: PrimaryModuleTableProps<TData, TValue, TColumnFilters>) {
+  const {
+    columnFilters,
+    setColumnFilters,
+    onClearFilters,
+    filterableColumns = [],
+  } = props.filters;
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
@@ -183,6 +207,7 @@ export function PrimaryModuleTable<T extends any>(
       <PrimaryModuleTableToolbar
         table={table}
         onClearFilters={onClearFilters}
+        filterableColumns={filterableColumns}
       />
       <div className="overflow-hidden rounded border">
         <div className="overflow-x-auto bg-background">
@@ -235,7 +260,10 @@ export function PrimaryModuleTable<T extends any>(
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 text-center"
+                      className={cn(
+                        "h-24 px-4",
+                        columns.length > 5 ? "text-left" : "text-center"
+                      )}
                     >
                       No results.
                     </TableCell>

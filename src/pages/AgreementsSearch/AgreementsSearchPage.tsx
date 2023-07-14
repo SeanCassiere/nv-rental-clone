@@ -62,6 +62,7 @@ function AgreementsSearchPage() {
       [] as ColumnFiltersState
     );
   });
+  console.log("grandparent state", columnFilters);
 
   const pagination: PaginationState = useMemo(
     () => ({
@@ -417,6 +418,20 @@ function AgreementsSearchPage() {
                     }),
                   });
                 },
+                filterableColumns: [
+                  {
+                    id: "PickupLocationId",
+                    title: "Checkout location",
+                    type: "select",
+                    options: [],
+                  },
+                  {
+                    id: "ReturnLocationId",
+                    title: "Checkin location",
+                    type: "text",
+                    options: [],
+                  },
+                ],
               }}
             />
           </div>
