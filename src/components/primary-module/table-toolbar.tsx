@@ -53,15 +53,6 @@ export function PrimaryModuleTableToolbar<TData>({
   return (
     <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
       <div className="flex flex-1 flex-wrap items-start justify-start gap-2">
-        {/* {isSingleSearchableColumn && searchableColumns[0] && (
-          <div className="w-full">
-            <PrimaryModuleTableFacetedFilter
-              table={table}
-              data={searchableColumns[0]}
-            />
-          </div>
-        )} */}
-
         {filterableColumns.length &&
           filterableColumns.map((column) => (
             <PrimaryModuleTableFacetedFilter
