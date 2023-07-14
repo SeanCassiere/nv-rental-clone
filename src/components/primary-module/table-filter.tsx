@@ -4,6 +4,7 @@ import { PlusCircle, CheckIcon, XIcon } from "lucide-react";
 import { type Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverTrigger,
@@ -21,6 +22,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Calendar } from "@/components/ui/calendar";
+
 import { cn } from "@/utils";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 
@@ -34,21 +36,29 @@ export type PrimaryModuleTableFacetedFilterItem = {
   id: string;
   title: string;
 } & (
-  | { type: "text"; options?: never; defaultValue?: string | undefined }
+  | {
+      type: "text";
+      options?: never;
+      defaultValue?: string | undefined;
+      size?: "large" | "normal";
+    }
   | {
       type: "select";
       options: FilterOption[];
       defaultValue?: string | undefined;
+      size?: never;
     }
   | {
       type: "multi-select";
       options: FilterOption[];
       defaultValue?: string[] | undefined;
+      size?: never;
     }
   | {
       type: "date";
       options?: never;
       defaultValue?: string | undefined;
+      size?: never;
     }
 );
 
@@ -59,7 +69,7 @@ interface PrimaryModuleTableFacetedFilterProps<TData, TValue> {
 
 export function PrimaryModuleTableFacetedFilter<TData, TValue>({
   table,
-  data: { id, title, type, options = [] },
+  data: { id, title, type, options = [], size = "normal" },
 }: PrimaryModuleTableFacetedFilterProps<TData, TValue>) {
   const clearFilterText = "Clear filter";
 
@@ -93,6 +103,20 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
       return newFiltersList;
     });
   };
+
+  if (type === "text" && size === "large") {
+    return (
+      <Input
+        placeholder={`${title}...`}
+        value={typeof baseState?.value === "string" ? baseState.value : ""}
+        onChange={(event) => {
+          const writeValue = event.target.value.trim();
+          handleSaveValue(writeValue !== "" ? writeValue : undefined);
+        }}
+        className="h-8 w-[150px] lg:w-[250px]"
+      />
+    );
+  }
 
   return (
     <div className="flex items-center">
@@ -170,6 +194,21 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                     className="rounded-sm px-1 font-normal"
                   >
                     {t("intlDate", { value: baseState?.value })}
+                  </Badge>
+                </>
+              )}
+            {type === "text" &&
+              baseState?.value !== "" &&
+              baseState?.value !== undefined && (
+                <>
+                  <Separator orientation="vertical" className="mx-2 h-4" />
+                  <Badge
+                    variant="secondary"
+                    className="rounded-sm px-1 font-normal"
+                  >
+                    {typeof baseState?.value === "string"
+                      ? baseState?.value
+                      : null}
                   </Badge>
                 </>
               )}
@@ -287,9 +326,23 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
               initialFocus
             />
           )}
+          {type === "text" && (
+            <div className="px-2 py-3">
+              <Input
+                placeholder={title}
+                value={
+                  typeof baseState?.value === "string" ? baseState.value : ""
+                }
+                onChange={(event) => {
+                  const writeValue = event.target.value.trim();
+                  handleSaveValue(writeValue !== "" ? writeValue : undefined);
+                }}
+              />
+            </div>
+          )}
         </PopoverContent>
       </Popover>
-      {type === "date" &&
+      {(type === "date" || type === "text") &&
         baseState?.value !== "" &&
         baseState?.value !== undefined && (
           <>

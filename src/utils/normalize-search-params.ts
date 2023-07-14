@@ -26,6 +26,7 @@ export function normalizeAgreementListSearchParams(
     PickupLocationId: filters?.PickupLocationId || undefined,
     ReturnLocationId: filters?.ReturnLocationId || undefined,
     AgreementTypes: filters?.AgreementTypes || undefined,
+    Keyword: filters?.Keyword || undefined,
   };
 
   const pageNumber = page || 1;

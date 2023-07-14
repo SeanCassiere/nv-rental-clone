@@ -249,6 +249,12 @@ function AgreementsSearchPage() {
               },
               filterableColumns: [
                 {
+                  id: "Keyword",
+                  title: "Search",
+                  type: "text",
+                  size: "large",
+                },
+                {
                   id: "Statuses",
                   title: "Status",
                   type: "multi-select",
@@ -304,6 +310,12 @@ function AgreementsSearchPage() {
                     value: `${item.VehicleTypeId}`,
                     label: item.VehicleTypeName,
                   })),
+                },
+                {
+                  id: "VehicleNo",
+                  title: "Vehicle no.",
+                  type: "text",
+                  size: "normal",
                 },
                 {
                   id: "IsSearchOverdues",
