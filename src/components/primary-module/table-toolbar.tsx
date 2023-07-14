@@ -1,5 +1,5 @@
 import React from "react";
-import { XIcon } from "lucide-react";
+import { XIcon, SearchIcon } from "lucide-react";
 import { type Table, type ColumnFiltersState } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ export function PrimaryModuleTableToolbar<TData>({
 
   return (
     <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-      <div className="flex flex-1 flex-wrap items-start justify-start gap-2 sm:space-x-2">
+      <div className="flex flex-1 flex-wrap items-start justify-start gap-2">
         {filterableColumns.length &&
           filterableColumns.map((column) => (
             <PrimaryModuleTableFacetedFilter
@@ -57,12 +57,13 @@ export function PrimaryModuleTableToolbar<TData>({
             />
           ))}
 
-        <div className="flex justify-start gap-2">
+        <div className="inline-flex justify-start">
           <Button
             size="sm"
             onClick={onSearchWithFilters}
             className="h-8 px-2 lg:px-3"
           >
+            <SearchIcon className="mr-2 h-3 w-3" />
             Search
           </Button>
 
@@ -73,8 +74,8 @@ export function PrimaryModuleTableToolbar<TData>({
               onClick={handleReset}
               className="h-8 px-2 lg:px-3"
             >
+              <XIcon className="mr-2 h-3 w-3" />
               Clear
-              <XIcon className="ml-2 h-3 w-3" />
             </Button>
           )}
         </div>

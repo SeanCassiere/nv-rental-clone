@@ -9,18 +9,15 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import Protector from "../../components/Protector";
-import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
-import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
-import ScrollToTop from "../../components/ScrollToTop";
-import CommonHeader from "../../components/Layout/CommonHeader";
-import { PlusIconFilled } from "../../components/icons";
-import { LinkButton } from "../../components/Form";
+import Protector from "@/components/Protector";
+import CommonHeader from "@/components/Layout/CommonHeader";
+import { PlusIconFilled } from "@/components/icons";
 
 import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 import { addAgreementRoute } from "@/routes/agreements/addAgreement";
 
+import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
@@ -37,7 +34,6 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-import { AgreementFiltersSchema } from "@/utils/schemas/agreement";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { type TAgreementListItemParsed } from "@/utils/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
@@ -173,7 +169,6 @@ function AgreementsSearchPage() {
 
   return (
     <Protector>
-      <ScrollToTop />
       <div className="py-6">
         <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
           <CommonHeader
@@ -197,185 +192,6 @@ function AgreementsSearchPage() {
         </div>
         <Separator className="sm:mx-5" />
         <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
-          {/* <div className="my-2 py-4">
-            <ModuleSearchFilters
-              key={`module-filters-${JSON.stringify(searchFilters).length}`}
-              validationSchema={AgreementFiltersSchema}
-              initialValues={searchFilters}
-              onSubmit={async (formValues) => {
-                navigate({
-                  to: searchAgreementsRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: 1,
-                    size: 10,
-                    filters: { ...formValues },
-                  }),
-                });
-              }}
-              onReset={async () => {
-                navigate({
-                  to: searchAgreementsRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: 1,
-                    size: 10,
-                    filters: undefined,
-                  }),
-                });
-              }}
-              searchFiltersBlueprint={[
-                {
-                  queryKey: "Statuses",
-                  type: "multiple-dropdown",
-                  required: false,
-                  accessor: "Statuses",
-                  label: "Status",
-                  options: [
-                    {
-                      value: undefined,
-                      label: "All",
-                      isPlaceholder: true,
-                      isSelectAll: true,
-                    },
-                    ...agreementStatusList.data.map((item) => ({
-                      value: `${item.id}`,
-                      label: item.name,
-                      isPlaceholder: false,
-                      isSelectAll: false,
-                    })),
-                  ],
-                },
-                {
-                  queryKey: "AgreementTypes",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "AgreementTypes",
-                  label: "Type",
-                  options: [
-                    { value: undefined, label: "All", isPlaceholder: true },
-                    ...agreementTypesList.data.map((item) => ({
-                      value: `${item.typeName}`,
-                      label: item.typeName,
-                    })),
-                  ],
-                },
-                {
-                  queryKey: "StartDate",
-                  type: "date",
-                  required: false,
-                  accessor: "StartDate",
-                  label: "Start date",
-                },
-                {
-                  queryKey: "EndDate",
-                  type: "date",
-                  required: false,
-                  accessor: "EndDate",
-                  label: "End date",
-                },
-                {
-                  queryKey: "CustomerId",
-                  type: "hidden",
-                  required: false,
-                  accessor: "CustomerId",
-                  label: "CustomerId",
-                },
-                {
-                  queryKey: "PickupLocationId",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "PickupLocationId",
-                  label: "Checkout location",
-                  options: [
-                    { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.data.map((item) => ({
-                      value: `${item.locationId}`,
-                      label: `${item.locationName}`,
-                    })),
-                  ],
-                },
-                {
-                  queryKey: "ReturnLocationId",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "ReturnLocationId",
-                  label: "Checkin location",
-                  options: [
-                    { value: undefined, label: "All", isPlaceholder: true },
-                    ...locationsList.data.data.map((item) => ({
-                      value: `${item.locationId}`,
-                      label: `${item.locationName}`,
-                    })),
-                  ],
-                },
-                {
-                  queryKey: "VehicleTypeId",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "VehicleTypeId",
-                  label: "Vehicle type",
-                  options: [
-                    { value: undefined, label: "All", isPlaceholder: true },
-                    ...vehicleTypesList.data.map((item) => ({
-                      value: `${item.VehicleTypeId}`,
-                      label: item.VehicleTypeName,
-                    })),
-                  ],
-                },
-                {
-                  queryKey: "VehicleNo",
-                  type: "text",
-                  required: false,
-                  accessor: "VehicleNo",
-                  label: "Vehicle no.",
-                },
-                {
-                  queryKey: "VehicleId",
-                  type: "hidden",
-                  required: false,
-                  accessor: "VehicleId",
-                  label: "VehicleId",
-                },
-                {
-                  queryKey: "IsSearchOverdues",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "IsSearchOverdues",
-                  label: "Search overdues?",
-                  options: [
-                    { value: "true", label: "true", isPlaceholder: true },
-                    { value: "false", label: "false" },
-                  ],
-                },
-                {
-                  queryKey: "SortBy",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "SortBy",
-                  label: "Sort by",
-                  options: [
-                    {
-                      value: "CreatedDate",
-                      label: "Created date",
-                      isPlaceholder: true,
-                    },
-                  ],
-                },
-                {
-                  queryKey: "SortDirection",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "SortDirection",
-                  label: "Sort direction",
-                  options: [
-                    { value: "ASC", label: "ASC" },
-                    { value: "DESC", label: "DESC", isPlaceholder: true },
-                  ],
-                },
-              ]}
-            />
-          </div> */}
           <PrimaryModuleTable
             data={agreementsData.data?.data || []}
             columns={columnDefs}
@@ -453,6 +269,16 @@ function AgreementsSearchPage() {
                   defaultValue: [],
                 },
                 {
+                  id: "StartDate",
+                  title: "Start date",
+                  type: "date",
+                },
+                {
+                  id: "EndDate",
+                  title: "End date",
+                  type: "date",
+                },
+                {
                   id: "PickupLocationId",
                   title: "Checkout location",
                   type: "select",
@@ -492,7 +318,6 @@ function AgreementsSearchPage() {
               ],
             }}
           />
-          S
         </div>
       </div>
     </Protector>
