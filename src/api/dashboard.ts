@@ -1,11 +1,12 @@
+import { isBefore, isAfter } from "date-fns";
+
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import {
-  type TDashboardNotice,
-  VehicleStatusCountListSchema,
-} from "@/schemas/dashboard";
-import {
-  DashboardWidgetItemListSchema,
   DashboardStatsSchema,
+  VehicleStatusCountListSchema,
+  DashboardWidgetItemListSchema,
+  ServerMessageListSchema,
+  type TDashboardNotice,
   type DashboardWidgetItemParsed,
 } from "@/schemas/dashboard";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
@@ -85,6 +86,56 @@ export const fetchDashboardNoticeList = async () => {
     }
   );
   return mapped.filter((notice) => notice !== null) as any[];
+};
+
+export const fetchDashboardMessagesList = async (opts: CommonAuthParams) => {
+  const localMessagesPromise = fetch("/messages.json")
+    .then((res) => res.json())
+    .then(ServerMessageListSchema.parse)
+    .catch(() => []);
+  const serverMessagesPromise = fetch("data:application/json;base64,W10=")
+    .then((res) => res.json())
+    .then(ServerMessageListSchema.parse)
+    .catch(() => []); // TODO: implement. currently returns empty array
+
+  const [localMessages, serverMessages] = await Promise.all([
+    localMessagesPromise,
+    serverMessagesPromise,
+  ]);
+
+  const allMessages = [...localMessages, ...serverMessages];
+
+  const currentDate = new Date();
+  const sortedMessages = allMessages.filter((message) => {
+    if (!message.active) return false;
+
+    const startDate = message.sentDate
+      ? new Date(message.sentDate)
+      : new Date("1970-01-01");
+    const endDate = message.expiryDate ? new Date(message.expiryDate) : null;
+
+    // if start date is in the future, don't show
+    if (isAfter(startDate, currentDate)) return false;
+
+    // if end date is in the past, don't show
+    if (endDate && isBefore(endDate, currentDate)) return false;
+
+    // if start date is in the past and end date is in the future, show
+    if (
+      isBefore(startDate, currentDate) &&
+      endDate &&
+      isAfter(endDate, currentDate)
+    ) {
+      return true;
+    }
+
+    // if start date is in the past and no end date, show
+    if (isBefore(startDate, currentDate) && !endDate) return true;
+
+    return false;
+  });
+
+  return sortedMessages;
 };
 
 export const fetchDashboardWidgetList = async (opts: CommonAuthParams) => {

@@ -9,7 +9,7 @@ import { searchFleetRoute } from "@/routes/fleet/searchFleet";
 import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
 import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 
-import { useGetDashboardNoticeList } from "@/hooks/network/dashboard/useGetDashboardNoticeList";
+import { useGetDashboardMessages } from "@/hooks/network/dashboard/useGetDashboardMessages";
 import { cn } from "@/utils";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 
@@ -85,7 +85,10 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
     },
   ];
 
-  const noticeList = useGetDashboardNoticeList();
+  const messagesList = useGetDashboardMessages();
+  if (messagesList.status === "success") {
+    console.log(messagesList.data);
+  }
 
   // this will be the loading placeholder that'll take up the entire page height
   if (auth.isLoading) {
@@ -99,13 +102,13 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen flex-col">
       <header className="relative z-40 border-b">
-        {noticeList.data.length > 0 && (
+        {/* {noticeList.data.length > 0 && (
           <div className="grid divide-y divide-teal-600">
             {noticeList.data.map((notice) => (
               <BannerNotice notice={notice} key={notice.id} />
             ))}
           </div>
-        )}
+        )} */}
         <div className="mx-auto">
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
@@ -121,7 +124,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex flex-grow items-center">
               <Link
                 to={indexRoute.to}
-                className="text-primary hidden items-center rounded p-1 text-lg font-medium leading-3 transition sm:flex"
+                className="hidden items-center rounded p-1 text-lg font-medium leading-3 text-primary transition sm:flex"
               >
                 {UI_APPLICATION_NAME}
               </Link>
@@ -130,7 +133,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
               <UserNavigationDropdown />
             </div>
           </div>
-          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 md:px-10 sm:space-x-0">
+          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 sm:space-x-0 md:px-10">
             {navigation.map((navItem) => (
               <Link
                 key={`nav_${navItem.name}`}
@@ -138,8 +141,8 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
                 preload="intent"
                 className={cn(
                   navItem.current
-                    ? "text-primary whitespace-nowrap border-b border-slate-800 pb-4 pt-3 font-semibold leading-none transition sm:px-4"
-                    : "text-primary whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-gray-300 dark:hover:border-gray-600 sm:px-4",
+                    ? "whitespace-nowrap border-b border-slate-800 pb-4 pt-3 font-semibold leading-none text-primary transition sm:px-4"
+                    : "whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none text-primary transition hover:border-gray-300 dark:hover:border-gray-600 sm:px-4"
                 )}
                 {...navItem.props}
               >
@@ -149,7 +152,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
           </nav>
         </div>
       </header>
-      <main className="mx-auto w-full flex-1 max-w-[1700px] px-1 md:px-10">
+      <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
         {children}
       </main>
     </div>
