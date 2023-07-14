@@ -9,11 +9,6 @@ import {
 import { useTranslation } from "react-i18next";
 
 import Protector from "../../components/Protector";
-import {
-  ModuleTable,
-  ModuleTableColumnHeader,
-  ModuleTableCellWrap,
-} from "../../components/PrimaryModule/ModuleTable";
 import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
 import { useGetAgreementsList } from "../../hooks/network/agreement/useGetAgreementsList";
 import ScrollToTop from "../../components/ScrollToTop";
@@ -21,27 +16,33 @@ import CommonHeader from "../../components/Layout/CommonHeader";
 import { PlusIconFilled } from "../../components/icons";
 import { LinkButton } from "../../components/Form";
 
-import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
-import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
-import { addAgreementRoute } from "../../routes/agreements/addAgreement";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
+import { addAgreementRoute } from "@/routes/agreements/addAgreement";
 
-import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
-import { useGetAgreementStatusList } from "../../hooks/network/agreement/useGetAgreementStatusList";
-import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
-import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
+import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { AgreementFiltersSchema } from "../../utils/schemas/agreement";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { type TAgreementListItemParsed } from "../../utils/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "../../utils/normalize-search-params";
-import { titleMaker } from "../../utils/title-maker";
-import { AgreementDateTimeColumns } from "../../utils/columns";
+import {
+  PrimaryModuleTable,
+  PrimaryModuleTableColumnHeader,
+  PrimaryModuleTableCellWrap,
+} from "@/components/primary-module/table";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/utils";
 import { Badge } from "@/components/ui/badge";
+
+import { AgreementFiltersSchema } from "@/utils/schemas/agreement";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { type TAgreementListItemParsed } from "@/utils/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { titleMaker } from "@/utils/title-maker";
+import { AgreementDateTimeColumns } from "@/utils/columns";
+import { cn } from "@/utils";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -84,7 +85,7 @@ function AgreementsSearchPage() {
             columnName: column.columnHeaderDescription ?? undefined,
           },
           header: ({ column: columnChild }) => (
-            <ModuleTableColumnHeader
+            <PrimaryModuleTableColumnHeader
               column={columnChild}
               title={column.columnHeaderDescription ?? ""}
             />
@@ -95,7 +96,7 @@ function AgreementsSearchPage() {
               const agreementId = item.table.getRow(item.row.id).original
                 .AgreementId;
               return (
-                <ModuleTableCellWrap>
+                <PrimaryModuleTableCellWrap>
                   <Link
                     to={viewAgreementByIdRoute.to}
                     params={{ agreementId: String(agreementId) }}
@@ -108,24 +109,26 @@ function AgreementsSearchPage() {
                   >
                     {value}
                   </Link>
-                </ModuleTableCellWrap>
+                </PrimaryModuleTableCellWrap>
               );
             }
             if (column.columnHeader === "AgreementStatusName") {
               return (
-                <ModuleTableCellWrap>
+                <PrimaryModuleTableCellWrap>
                   <Badge variant="outline">{String(value)}</Badge>
-                </ModuleTableCellWrap>
+                </PrimaryModuleTableCellWrap>
               );
             }
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
               return (
-                <ModuleTableCellWrap>
+                <PrimaryModuleTableCellWrap>
                   {t("intlDateTime", { value: new Date(value) })}
-                </ModuleTableCellWrap>
+                </PrimaryModuleTableCellWrap>
               );
             }
-            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
+            return (
+              <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
+            );
           },
           enableSorting: false,
           enableHiding: column.columnHeader !== "AgreementNumber",
@@ -170,7 +173,7 @@ function AgreementsSearchPage() {
                 <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
                   Agreements
                 </h1>
-                <div>
+                {/* <div>
                   <LinkButton
                     color="teal"
                     to={addAgreementRoute.to}
@@ -180,15 +183,15 @@ function AgreementsSearchPage() {
                     <PlusIconFilled className="h-4 w-4" />
                     New Agreement
                   </LinkButton>
-                </div>
+                </div> */}
               </div>
             }
             subtitleText="Search through your rental agreements and view details."
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-2 sm:px-4">
-          <div className="my-2 py-4">
+        <div className="mx-auto my-4 max-w-full px-2 sm:my-2 sm:px-4">
+          {/* <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
               validationSchema={AgreementFiltersSchema}
@@ -366,10 +369,10 @@ function AgreementsSearchPage() {
                 },
               ]}
             />
-          </div>
+          </div> */}
 
           <div>
-            <ModuleTable
+            <PrimaryModuleTable
               data={agreementsData.data?.data || []}
               columns={columnDefs}
               onColumnOrderChange={handleSaveColumnsOrder}
