@@ -259,8 +259,8 @@ function CustomerSearchPage() {
                   title: "Is active?",
                   type: "select",
                   options: [
-                    { value: "true", label: "true" },
-                    { value: "false", label: "false" },
+                    { value: "true", label: "Yes" },
+                    { value: "false", label: "No" },
                   ],
                   defaultValue: "true",
                 },
