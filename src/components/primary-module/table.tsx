@@ -65,10 +65,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  PrimaryModuleTableToolbar,
-  type PrimaryModuleTableToolbarProps,
-} from "@/components/primary-module/table-toolbar";
+import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
 import {
   type FacetedFilterType,
   type FilterOption,
@@ -94,10 +91,8 @@ interface PrimaryModuleTableProps<
   filters: {
     columnFilters: TColumnFilters;
     setColumnFilters: OnChangeFn<ColumnFiltersState>;
-    onClearFilters: PrimaryModuleTableToolbarProps<
-      TData,
-      TColumnFilters
-    >["onClearFilters"];
+    onClearFilters: () => void;
+    onSearchWithFilters: () => void;
     filterableColumns?: {
       id: TColumnFilters[number]["id"];
       title: string;
@@ -115,8 +110,9 @@ export function PrimaryModuleTable<
   const {
     columnFilters,
     setColumnFilters,
-    onClearFilters,
     filterableColumns = [],
+    onClearFilters,
+    onSearchWithFilters,
   } = props.filters;
   const [columns] = useState([...props.columns]);
 
@@ -206,8 +202,9 @@ export function PrimaryModuleTable<
     <div className="space-y-4">
       <PrimaryModuleTableToolbar
         table={table}
-        onClearFilters={onClearFilters}
         filterableColumns={filterableColumns}
+        onClearFilters={onClearFilters}
+        onSearchWithFilters={onSearchWithFilters}
       />
       <div className="overflow-hidden rounded border">
         <div className="overflow-x-auto bg-background">

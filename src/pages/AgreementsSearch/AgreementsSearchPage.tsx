@@ -62,7 +62,6 @@ function AgreementsSearchPage() {
       [] as ColumnFiltersState
     );
   });
-  console.log("grandparent state", columnFilters);
 
   const pagination: PaginationState = useMemo(
     () => ({
@@ -415,6 +414,25 @@ function AgreementsSearchPage() {
                     search: () => ({
                       page: pagination.pageIndex + 1,
                       size: pagination.pageSize,
+                    }),
+                  });
+                },
+                onSearchWithFilters: () => {
+                  const filters = columnFilters.reduce(
+                    (prev, current) => ({
+                      ...prev,
+                      [current.id]: current.value,
+                    }),
+                    {}
+                  );
+                  console.log("filters to search", filters);
+                  navigate({
+                    to: searchAgreementsRoute.to,
+                    params: {},
+                    search: () => ({
+                      page: pagination.pageIndex + 1,
+                      size: pagination.pageSize,
+                      filters,
                     }),
                   });
                 },

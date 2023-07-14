@@ -16,6 +16,7 @@ export interface PrimaryModuleTableToolbarProps<
 > {
   table: Table<TData>;
   onClearFilters: () => void;
+  onSearchWithFilters: () => void;
   filterableColumns?: {
     id: TColumnFilters[number]["id"];
     title: string;
@@ -29,8 +30,9 @@ export function PrimaryModuleTableToolbar<
   TColumnFilters extends ColumnFiltersState,
 >({
   table,
-  onClearFilters,
   filterableColumns = [],
+  onClearFilters,
+  onSearchWithFilters,
 }: PrimaryModuleTableToolbarProps<TData, TColumnFilters>) {
   const tableColumnFilters = table.getState().columnFilters;
   const isFiltered = tableColumnFilters.length > 0;
@@ -49,6 +51,13 @@ export function PrimaryModuleTableToolbar<
               options={column.options}
             />
           ))}
+        <Button
+          size="sm"
+          onClick={onSearchWithFilters}
+          className="h-8 px-2 lg:px-3"
+        >
+          Search
+        </Button>
         {isFiltered && (
           <Button
             variant="ghost"
