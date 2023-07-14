@@ -27,31 +27,42 @@ export type FilterOption = {
   icon?: React.ComponentType<{ className?: string }>;
 };
 
-export type FacetedFilterType = "select" | "text";
-export type FacetedFilterData = string | string[] | undefined;
+export type PrimaryModuleTableFacetedFilterItem = {
+  id: string;
+  title: string;
+} & (
+  | { type: "text"; options?: never; defaultValue?: string | undefined }
+  | {
+      type: "select";
+      options: FilterOption[];
+      defaultValue?: string | undefined;
+    }
+  | {
+      type: "multi-select";
+      options: FilterOption[];
+      defaultValue?: string[] | undefined;
+    }
+);
 
 interface PrimaryModuleTableFacetedFilterProps<TData, TValue> {
   table: Table<TData>;
-  id: string;
-  title: string;
-  type: FacetedFilterType;
-  options: FilterOption[];
+  data: PrimaryModuleTableFacetedFilterItem;
 }
 
 export function PrimaryModuleTableFacetedFilter<TData, TValue>({
   table,
-  id,
-  title,
-  type,
-  options,
+  data: { id, title, type, options = [] },
 }: PrimaryModuleTableFacetedFilterProps<TData, TValue>) {
-  const filterState = table
+  const clearFilterText = "Clear filter";
+
+  const baseState = table
     .getState()
     .columnFilters.find((item) => item.id === id);
 
-  // if (id === "PickupLocationId") {
-  //   console.log("PickupLocationId.filterState", filterState);
-  // }
+  const arrayState =
+    baseState && Array.isArray(baseState?.value)
+      ? baseState.value.map((e) => String(e))
+      : [];
 
   const handleSaveValue = (updateValue: string | string[] | undefined) => {
     table.setColumnFilters((prev) => {
@@ -68,8 +79,8 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
           <PlusCircle className="mr-2 h-3 w-3" />
           {title}
           {type === "select" &&
-            filterState?.value !== "" &&
-            filterState?.value !== undefined && (
+            baseState?.value !== "" &&
+            baseState?.value !== undefined && (
               <>
                 <Separator orientation="vertical" className="mx-2 h-4" />
                 <Badge
@@ -77,12 +88,47 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                   className="rounded-sm px-1 font-normal"
                 >
                   {
-                    options.find((item) => item.value === filterState?.value)
+                    options.find((item) => item.value === baseState?.value)
                       ?.label
                   }
                 </Badge>
               </>
             )}
+          {type === "multi-select" && arrayState.length > 0 && (
+            <>
+              <Separator orientation="vertical" className="mx-2 h-4" />
+              <Badge
+                variant="secondary"
+                className="rounded-sm px-1 font-normal lg:hidden"
+              >
+                {arrayState.length}
+              </Badge>
+              <div className="hidden space-x-1 lg:flex">
+                {arrayState.length > 2 ? (
+                  <>
+                    <Badge
+                      variant="secondary"
+                      className="rounded-sm px-1 font-normal"
+                    >
+                      {arrayState.length} selected
+                    </Badge>
+                  </>
+                ) : (
+                  <>
+                    {arrayState.map((item, idx) => (
+                      <Badge
+                        key={`${id}_${item}_${idx}`}
+                        variant="secondary"
+                        className="rounded-sm px-1 font-normal"
+                      >
+                        {options.find((i) => i.value === item)?.label}
+                      </Badge>
+                    ))}
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" align="start">
@@ -93,7 +139,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
               <CommandEmpty>No results found</CommandEmpty>
               <CommandGroup>
                 {options.map((option, index) => {
-                  const isSelected = filterState?.value === option.value;
+                  const isSelected = baseState?.value === option.value;
                   return (
                     <CommandItem
                       key={`col-${id}-select-${index}`}
@@ -124,7 +170,57 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                   }}
                   className="justify-center"
                 >
-                  Clear filter
+                  {clearFilterText}
+                </CommandItem>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        )}
+        {type === "multi-select" && (
+          <Command>
+            <CommandInput className="h-8" placeholder={title} />
+            <CommandList>
+              <CommandEmpty>No results found</CommandEmpty>
+              <CommandGroup>
+                {options.map((option, index) => {
+                  const isSelected = arrayState.includes(option.value);
+                  return (
+                    <CommandItem
+                      key={`col-${id}-multi-select-${index}`}
+                      onSelect={() => {
+                        if (isSelected) {
+                          handleSaveValue(
+                            arrayState.filter((item) => item !== option.value)
+                          );
+                        } else {
+                          handleSaveValue([...arrayState, option.value]);
+                        }
+                      }}
+                    >
+                      <div
+                        className={cn(
+                          "mr-2 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                          isSelected
+                            ? "bg-primary text-primary-foreground"
+                            : "opacity-50 [&_svg]:invisible"
+                        )}
+                      >
+                        <CheckIcon className={cn("h-4 w-4")} />
+                      </div>
+                      <span>{option.label}</span>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+              <CommandSeparator />
+              <CommandGroup>
+                <CommandItem
+                  onSelect={() => {
+                    handleSaveValue([]);
+                  }}
+                  className="justify-center"
+                >
+                  {clearFilterText}
                 </CommandItem>
               </CommandGroup>
             </CommandList>

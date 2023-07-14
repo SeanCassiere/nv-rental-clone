@@ -66,11 +66,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
-import {
-  type FilterOption,
-  type FacetedFilterType,
-  type FacetedFilterData,
-} from "@/components/primary-module/table-filter";
+import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 
 interface PrimaryModuleTableProps<
   TData,
@@ -94,13 +90,7 @@ interface PrimaryModuleTableProps<
     setColumnFilters: OnChangeFn<ColumnFiltersState>;
     onClearFilters: () => void;
     onSearchWithFilters: () => void;
-    filterableColumns?: {
-      id: TColumnFilters[number]["id"];
-      title: string;
-      type: FacetedFilterType;
-      options: FilterOption[];
-      defaultValue?: FacetedFilterData;
-    }[];
+    filterableColumns?: PrimaryModuleTableFacetedFilterItem[];
   };
 }
 

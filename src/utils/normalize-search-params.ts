@@ -14,7 +14,7 @@ export function normalizeAgreementListSearchParams(
     IsSearchOverdues:
       typeof filters?.IsSearchOverdues !== "undefined"
         ? filters?.IsSearchOverdues
-        : false,
+        : "false",
     StartDate: filters?.StartDate || undefined,
     EndDate: filters?.EndDate || undefined,
     SortBy: filters?.SortBy || "CreatedDate",

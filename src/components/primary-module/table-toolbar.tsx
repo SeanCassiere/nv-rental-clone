@@ -6,36 +6,22 @@ import { Button } from "@/components/ui/button";
 import { DataTableViewOptions } from "@/components/ui/data-table";
 import {
   PrimaryModuleTableFacetedFilter,
-  type FilterOption,
-  type FacetedFilterType,
-  type FacetedFilterData,
+  type PrimaryModuleTableFacetedFilterItem,
 } from "@/components/primary-module/table-filter";
 
-export interface PrimaryModuleTableToolbarProps<
-  TData,
-  TColumnFilters extends ColumnFiltersState,
-> {
+export interface PrimaryModuleTableToolbarProps<TData> {
   table: Table<TData>;
   onClearFilters: () => void;
   onSearchWithFilters: () => void;
-  filterableColumns?: {
-    id: TColumnFilters[number]["id"];
-    title: string;
-    type: FacetedFilterType;
-    options: FilterOption[];
-    defaultValue?: FacetedFilterData;
-  }[];
+  filterableColumns?: PrimaryModuleTableFacetedFilterItem[];
 }
 
-export function PrimaryModuleTableToolbar<
-  TData,
-  TColumnFilters extends ColumnFiltersState,
->({
+export function PrimaryModuleTableToolbar<TData>({
   table,
   filterableColumns = [],
   onClearFilters: callClearFiltersFn,
   onSearchWithFilters,
-}: PrimaryModuleTableToolbarProps<TData, TColumnFilters>) {
+}: PrimaryModuleTableToolbarProps<TData>) {
   const tableColumnFilters = table.getState().columnFilters;
   const isFiltered = tableColumnFilters.length > 0;
 
@@ -67,10 +53,7 @@ export function PrimaryModuleTableToolbar<
             <PrimaryModuleTableFacetedFilter
               key={`faceted_filter_${column.id}`}
               table={table}
-              id={column.id}
-              title={column.title}
-              type={column.type}
-              options={column.options}
+              data={column}
             />
           ))}
 

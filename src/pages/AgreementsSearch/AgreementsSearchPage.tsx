@@ -198,7 +198,7 @@ function AgreementsSearchPage() {
             includeBottomBorder
           />
         </div>
-        <div className="mx-auto my-4 max-w-full px-2 sm:my-2 sm:px-4">
+        <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
           {/* <div className="my-2 py-4">
             <ModuleSearchFilters
               key={`module-filters-${JSON.stringify(searchFilters).length}`}
@@ -379,99 +379,123 @@ function AgreementsSearchPage() {
             />
           </div> */}
 
-          <div>
-            <PrimaryModuleTable
-              data={agreementsData.data?.data || []}
-              columns={columnDefs}
-              onColumnOrderChange={handleSaveColumnsOrder}
-              rawColumnsData={columnsData?.data || []}
-              onColumnVisibilityChange={handleSaveColumnVisibility}
-              totalPages={
-                agreementsData.data?.totalRecords
-                  ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
-                  : 0
-              }
-              pagination={pagination}
-              onPaginationChange={(newPaginationState) => {
+          <PrimaryModuleTable
+            data={agreementsData.data?.data || []}
+            columns={columnDefs}
+            onColumnOrderChange={handleSaveColumnsOrder}
+            rawColumnsData={columnsData?.data || []}
+            onColumnVisibilityChange={handleSaveColumnVisibility}
+            totalPages={
+              agreementsData.data?.totalRecords
+                ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
+                : 0
+            }
+            pagination={pagination}
+            onPaginationChange={(newPaginationState) => {
+              navigate({
+                to: searchAgreementsRoute.to,
+                params: {},
+                search: (current) => ({
+                  ...current,
+                  page: newPaginationState.pageIndex + 1,
+                  size: newPaginationState.pageSize,
+                  filters: searchFilters,
+                }),
+              });
+            }}
+            filters={{
+              columnFilters,
+              setColumnFilters,
+              onClearFilters: () => {
                 navigate({
                   to: searchAgreementsRoute.to,
                   params: {},
-                  search: (current) => ({
-                    ...current,
-                    page: newPaginationState.pageIndex + 1,
-                    size: newPaginationState.pageSize,
-                    filters: searchFilters,
+                  search: () => ({
+                    page: 1,
+                    size: pagination.pageSize,
+                    filters: {},
                   }),
                 });
-              }}
-              filters={{
-                columnFilters,
-                setColumnFilters,
-                onClearFilters: () => {
-                  navigate({
-                    to: searchAgreementsRoute.to,
-                    params: {},
-                    search: () => ({
-                      page: 1,
-                      size: pagination.pageSize,
-                      filters: {},
-                    }),
-                  });
+              },
+              onSearchWithFilters: () => {
+                const filters = columnFilters.reduce(
+                  (prev, current) => ({
+                    ...prev,
+                    [current.id]: current.value,
+                  }),
+                  {}
+                );
+                navigate({
+                  to: searchAgreementsRoute.to,
+                  params: {},
+                  search: () => ({
+                    page: pagination.pageIndex + 1,
+                    size: pagination.pageSize,
+                    filters,
+                  }),
+                });
+              },
+              filterableColumns: [
+                {
+                  id: "Statuses",
+                  title: "Status",
+                  type: "multi-select",
+                  options: agreementStatusList.data.map((item) => ({
+                    value: `${item.id}`,
+                    label: item.name,
+                  })),
+                  defaultValue: [],
                 },
-                onSearchWithFilters: () => {
-                  const filters = columnFilters.reduce(
-                    (prev, current) => ({
-                      ...prev,
-                      [current.id]: current.value,
-                    }),
-                    {}
-                  );
-                  console.log("filters to search", filters);
-                  navigate({
-                    to: searchAgreementsRoute.to,
-                    params: {},
-                    search: () => ({
-                      page: pagination.pageIndex + 1,
-                      size: pagination.pageSize,
-                      filters,
-                    }),
-                  });
+                {
+                  id: "AgreementTypes",
+                  title: "Type",
+                  type: "multi-select",
+                  options: agreementTypesList.data.map((item) => ({
+                    value: `${item.typeName}`,
+                    label: item.typeName,
+                  })),
+                  defaultValue: [],
                 },
-                filterableColumns: [
-                  {
-                    id: "AgreementStatusName",
-                    title: "Status",
-                    type: "select",
-                    options: agreementStatusList.data.map((item) => ({
-                      value: `${item.id}`,
-                      label: item.name,
-                    })),
-                    defaultValue: undefined,
-                  },
-                  {
-                    id: "PickupLocationId",
-                    title: "Checkout location",
-                    type: "select",
-                    options: locationsList.data.data.map((item) => ({
-                      value: `${item.locationId}`,
-                      label: `${item.locationName}`,
-                    })),
-                    defaultValue: undefined,
-                  },
-                  {
-                    id: "ReturnLocationId",
-                    title: "Checkin location",
-                    type: "select",
-                    options: locationsList.data.data.map((item) => ({
-                      value: `${item.locationId}`,
-                      label: `${item.locationName}`,
-                    })),
-                    defaultValue: undefined,
-                  },
-                ],
-              }}
-            />
-          </div>
+                {
+                  id: "PickupLocationId",
+                  title: "Checkout location",
+                  type: "select",
+                  options: locationsList.data.data.map((item) => ({
+                    value: `${item.locationId}`,
+                    label: `${item.locationName}`,
+                  })),
+                },
+                {
+                  id: "ReturnLocationId",
+                  title: "Checkin location",
+                  type: "select",
+                  options: locationsList.data.data.map((item) => ({
+                    value: `${item.locationId}`,
+                    label: `${item.locationName}`,
+                  })),
+                },
+                {
+                  id: "VehicleTypeId",
+                  title: "Vehicle type",
+                  type: "select",
+                  options: vehicleTypesList.data.map((item) => ({
+                    value: `${item.VehicleTypeId}`,
+                    label: item.VehicleTypeName,
+                  })),
+                },
+                {
+                  id: "IsSearchOverdues",
+                  title: "Search overdues?",
+                  type: "select",
+                  options: [
+                    { value: "true", label: "true" },
+                    { value: "false", label: "false" },
+                  ],
+                  defaultValue: "false",
+                },
+              ],
+            }}
+          />
         </div>
       </div>
     </Protector>
