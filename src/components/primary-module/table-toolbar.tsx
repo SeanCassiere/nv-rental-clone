@@ -57,7 +57,7 @@ export function PrimaryModuleTableToolbar<TData>({
             />
           ))}
 
-        <div className="inline-flex justify-start">
+        <div className="inline-flex justify-start gap-2">
           <Button
             size="sm"
             onClick={onSearchWithFilters}

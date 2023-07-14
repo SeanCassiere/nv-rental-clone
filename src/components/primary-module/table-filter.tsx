@@ -113,7 +113,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
           const writeValue = event.target.value.trim();
           handleSaveValue(writeValue !== "" ? writeValue : undefined);
         }}
-        className="h-8 w-[150px] lg:w-[250px]"
+        className="h-8 w-full md:w-[250px]"
       />
     );
   }
@@ -126,7 +126,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
             variant="outline"
             size="sm"
             className={cn(
-              "h-8 border-dashed",
+              "h-8 whitespace-nowrap border-dashed",
               type === "date" && baseState?.value ? "border-r-0" : ""
             )}
           >
@@ -204,11 +204,13 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                   <Separator orientation="vertical" className="mx-2 h-4" />
                   <Badge
                     variant="secondary"
-                    className="rounded-sm px-1 font-normal"
+                    className="max-w-[180px] rounded-sm px-1 font-normal"
                   >
-                    {typeof baseState?.value === "string"
-                      ? baseState?.value
-                      : null}
+                    <span className="truncate">
+                      {typeof baseState?.value === "string"
+                        ? baseState?.value
+                        : null}
+                    </span>
                   </Badge>
                 </>
               )}
