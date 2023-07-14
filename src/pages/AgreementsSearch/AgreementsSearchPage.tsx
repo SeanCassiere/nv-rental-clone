@@ -1,10 +1,11 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type ColumnOrderState,
   type PaginationState,
   type VisibilityState,
+  type ColumnFiltersState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -54,6 +55,13 @@ function AgreementsSearchPage() {
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeAgreementListSearchParams(search);
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() => {
+    return Object.entries(searchFilters).reduce(
+      (prev, [key, value]) => [...prev, { id: key, value }],
+      [] as ColumnFiltersState
+    );
+  });
 
   const pagination: PaginationState = useMemo(
     () => ({
@@ -395,6 +403,10 @@ function AgreementsSearchPage() {
                     filters: searchFilters,
                   }),
                 });
+              }}
+              filters={{
+                columnFilters,
+                setColumnFilters,
               }}
             />
           </div>

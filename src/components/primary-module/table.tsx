@@ -1,13 +1,19 @@
 import { useMemo, useState } from "react";
 import {
-  getCoreRowModel,
-  useReactTable,
   flexRender,
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   type ColumnOrderState,
   type ColumnDef,
   type PaginationState,
   type VisibilityState,
   type Column,
+  type ColumnFiltersState,
+  type OnChangeFn,
 } from "@tanstack/react-table";
 import {
   DndContext,
@@ -73,11 +79,17 @@ interface PrimaryModuleTableProps<T> {
   pagination: PaginationState;
   onPaginationChange: (pagination: PaginationState) => void;
   totalPages: number;
+
+  filters: {
+    columnFilters: ColumnFiltersState;
+    setColumnFilters: OnChangeFn<ColumnFiltersState>;
+  };
 }
 
 export function PrimaryModuleTable<T extends any>(
   props: PrimaryModuleTableProps<T>
 ) {
+  const { columnFilters, setColumnFilters } = props.filters;
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
@@ -101,8 +113,17 @@ export function PrimaryModuleTable<T extends any>(
       columnOrder,
       columnVisibility,
       pagination: props.pagination,
+      columnFilters,
     },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+
+    manualFiltering: true,
+    onColumnFiltersChange: setColumnFilters,
+
     onColumnOrderChange: (updater) => {
       const newColumnOrdering =
         typeof updater === "function" ? updater(columnOrder) : updater;
@@ -190,22 +211,6 @@ export function PrimaryModuleTable<T extends any>(
                     </SortableContext>
                   </TableRow>
                 ))}
-                {/* {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    <SortableContext
-                      items={columnOrder}
-                      strategy={horizontalListSortingStrategy}
-                    >
-                      {headerGroup.headers.map((header) => (
-                        <DraggableColumnHeader
-                          key={header.id}
-                          header={header}
-                          isLocked={lockedColumns.includes(header.id)}
-                        />
-                      ))}
-                    </SortableContext>
-                  </TableRow>
-                ))} */}
               </TableHeader>
               <TableBody>
                 {table.getRowModel().rows?.length ? (
