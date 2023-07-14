@@ -25,6 +25,11 @@ export function PrimaryModuleTableToolbar<TData>({
   const tableColumnFilters = table.getState().columnFilters;
   const isFiltered = tableColumnFilters.length > 0;
 
+  const searchableColumns = filterableColumns.filter(
+    (t) => t.type === "text" && t.size === "large"
+  );
+  const isSingleSearchableColumn = searchableColumns.length === 1;
+
   const handleReset = () => {
     const f = table.getState().columnFilters;
     const newState = f.reduce((prev, current) => {
@@ -48,12 +53,22 @@ export function PrimaryModuleTableToolbar<TData>({
   return (
     <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
       <div className="flex flex-1 flex-wrap items-start justify-start gap-2">
+        {/* {isSingleSearchableColumn && searchableColumns[0] && (
+          <div className="w-full">
+            <PrimaryModuleTableFacetedFilter
+              table={table}
+              data={searchableColumns[0]}
+            />
+          </div>
+        )} */}
+
         {filterableColumns.length &&
           filterableColumns.map((column) => (
             <PrimaryModuleTableFacetedFilter
               key={`faceted_filter_${column.id}`}
               table={table}
               data={column}
+              isLargeSearchFullWidth={isSingleSearchableColumn}
             />
           ))}
 
