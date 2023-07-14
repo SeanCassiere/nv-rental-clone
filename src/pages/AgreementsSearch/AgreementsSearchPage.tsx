@@ -317,7 +317,7 @@ function AgreementsSearchPage() {
                 },
                 {
                   id: "IsSearchOverdues",
-                  title: "Search overdues?",
+                  title: "Only overdues?",
                   type: "select",
                   options: [
                     { value: "true", label: "Yes" },
