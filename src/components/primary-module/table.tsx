@@ -65,7 +65,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DataTableToolbar } from "@/components/ui/data-table";
+import {
+  PrimaryModuleTableToolbar,
+  type PrimaryModuleTableToolbarProps,
+} from "@/components/primary-module/table-toolbar";
 
 interface PrimaryModuleTableProps<T> {
   data: T[];
@@ -83,13 +86,14 @@ interface PrimaryModuleTableProps<T> {
   filters: {
     columnFilters: ColumnFiltersState;
     setColumnFilters: OnChangeFn<ColumnFiltersState>;
+    onClearFilters: PrimaryModuleTableToolbarProps<any>["onClearFilters"];
   };
 }
 
 export function PrimaryModuleTable<T extends any>(
   props: PrimaryModuleTableProps<T>
 ) {
-  const { columnFilters, setColumnFilters } = props.filters;
+  const { columnFilters, setColumnFilters, onClearFilters } = props.filters;
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
@@ -176,11 +180,9 @@ export function PrimaryModuleTable<T extends any>(
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar
+      <PrimaryModuleTableToolbar
         table={table}
-        customSearchFilters={
-          <div className="text-sm">Custom search filters to be put here</div>
-        }
+        onClearFilters={onClearFilters}
       />
       <div className="overflow-hidden rounded border">
         <div className="overflow-x-auto bg-background">

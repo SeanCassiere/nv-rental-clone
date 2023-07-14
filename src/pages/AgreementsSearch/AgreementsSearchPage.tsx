@@ -407,6 +407,16 @@ function AgreementsSearchPage() {
               filters={{
                 columnFilters,
                 setColumnFilters,
+                onClearFilters: () => {
+                  navigate({
+                    to: searchAgreementsRoute.to,
+                    params: {},
+                    search: () => ({
+                      page: pagination.pageIndex + 1,
+                      size: pagination.pageSize,
+                    }),
+                  });
+                },
               }}
             />
           </div>
