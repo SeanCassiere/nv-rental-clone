@@ -93,10 +93,22 @@ export const fetchDashboardMessagesList = async (opts: CommonAuthParams) => {
     .then((res) => res.json())
     .then(ServerMessageListSchema.parse)
     .catch(() => []);
-  const serverMessagesPromise = fetch("data:application/json;base64,W10=")
-    .then((res) => res.json())
-    .then(ServerMessageListSchema.parse)
-    .catch(() => []); // TODO: implement. currently returns empty array
+  // const serverMessagesPromise = fetch("data:application/json;base64,W10=")
+  //   .then((res) => res.json())
+  //   .then(ServerMessageListSchema.parse)
+  //   .catch(() => []);
+  const serverMessagesPromise = callV3Api(
+    makeUrl("/v3/messages", {
+      clientId: opts.clientId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  )
+    .then((res) => ServerMessageListSchema.parse(res.data))
+    .catch(() => []);
 
   const [localMessages, serverMessages] = await Promise.all([
     localMessagesPromise,
