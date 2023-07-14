@@ -57,25 +57,27 @@ export function PrimaryModuleTableToolbar<TData>({
             />
           ))}
 
-        <Button
-          size="sm"
-          onClick={onSearchWithFilters}
-          className="h-8 px-2 lg:px-3"
-        >
-          Search
-        </Button>
-
-        {isFiltered && (
+        <div className="flex justify-start gap-2">
           <Button
-            variant="ghost"
             size="sm"
-            onClick={handleReset}
+            onClick={onSearchWithFilters}
             className="h-8 px-2 lg:px-3"
           >
-            Clear
-            <XIcon className="ml-2 h-3 w-3" />
+            Search
           </Button>
-        )}
+
+          {isFiltered && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleReset}
+              className="h-8 px-2 lg:px-3"
+            >
+              Clear
+              <XIcon className="ml-2 h-3 w-3" />
+            </Button>
+          )}
+        </div>
       </div>
       <DataTableViewOptions table={table} />
     </div>

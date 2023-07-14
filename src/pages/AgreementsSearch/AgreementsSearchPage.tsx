@@ -44,6 +44,7 @@ import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-par
 import { titleMaker } from "@/utils/title-maker";
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { cn } from "@/utils";
+import { Separator } from "@/components/ui/separator";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -174,30 +175,27 @@ function AgreementsSearchPage() {
     <Protector>
       <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pt-1.5 sm:px-4">
+        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
           <CommonHeader
             titleContent={
               <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
                 <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
                   Agreements
                 </h1>
-                {/* <div>
-                  <LinkButton
-                    color="teal"
-                    to={addAgreementRoute.to}
-                    search={() => ({ stage: "rental-information" })}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <PlusIconFilled className="h-4 w-4" />
-                    New Agreement
-                  </LinkButton>
-                </div> */}
               </div>
             }
             subtitleText="Search through your rental agreements and view details."
-            includeBottomBorder
           />
+          <Link
+            to={addAgreementRoute.to}
+            search={() => ({ stage: "rental-information" })}
+            className={cn(buttonVariants({ size: "sm" }))}
+          >
+            <PlusIconFilled className="h-4 w-4" />
+            New Agreement
+          </Link>
         </div>
+        <Separator className="sm:mx-5" />
         <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
           {/* <div className="my-2 py-4">
             <ModuleSearchFilters
@@ -378,7 +376,6 @@ function AgreementsSearchPage() {
               ]}
             />
           </div> */}
-
           <PrimaryModuleTable
             data={agreementsData.data?.data || []}
             columns={columnDefs}
@@ -413,7 +410,6 @@ function AgreementsSearchPage() {
                   search: () => ({
                     page: 1,
                     size: pagination.pageSize,
-                    filters: {},
                   }),
                 });
               },
@@ -496,6 +492,7 @@ function AgreementsSearchPage() {
               ],
             }}
           />
+          S
         </div>
       </div>
     </Protector>
