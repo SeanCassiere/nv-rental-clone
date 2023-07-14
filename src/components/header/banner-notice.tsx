@@ -12,12 +12,16 @@ import { tryParseJson } from "@/utils/parse";
 
 const MessageText = ({ message }: { message: ServerMessage }) => (
   <>
-    <strong className="font-semibold text-white">{message.title}</strong>
+    <strong className="font-semibold text-white">
+      {message.title}
+      {message.description && (
+        <DotIcon className="mb-1 hidden h-3 w-3 sm:mx-0.5 sm:inline sm:h-5 sm:w-5" />
+      )}
+    </strong>
     {message.description && (
-      <>
-        <DotIcon className="mx-0.5 mb-1 hidden h-3 w-3 sm:inline sm:h-5 sm:w-5" />
-        <span>{message.description}</span>
-      </>
+      <span className="group-hover:underline group-hover:underline-offset-4">
+        {message.description}
+      </span>
     )}
   </>
 );
@@ -59,14 +63,14 @@ export const BannerNotice = ({ message }: { message: ServerMessage }) => {
         {message.link ? (
           <a
             href={message.link}
-            className="flex flex-1 flex-wrap items-center text-base leading-normal text-white/95"
+            className="[text-wrap=balance] group flex flex-1 flex-col flex-wrap items-start text-base leading-normal  text-white/95 sm:flex-row sm:items-center"
             target={message.link.startsWith("http") ? "_blank" : "_self"}
             rel="noopener noreferrer"
           >
             <MessageText message={message} />
           </a>
         ) : (
-          <p className="flex flex-1 flex-wrap items-center text-base leading-normal text-white/95">
+          <p className="flex flex-1 flex-col flex-wrap items-start text-base leading-normal text-white/95 sm:flex-row sm:items-center">
             <MessageText message={message} />
           </p>
         )}
