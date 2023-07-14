@@ -102,7 +102,6 @@ export const dashboardQKeys = {
   rootKey: "dashboard",
   widgets: () => [dashboardQKeys.rootKey, "widgets"],
   stats: () => [dashboardQKeys.rootKey, "statistics"],
-  notices: () => [dashboardQKeys.rootKey, "notices"],
   messages: () => [dashboardQKeys.rootKey, "messages"],
   vehicleStatusCounts: ({
     locationId,

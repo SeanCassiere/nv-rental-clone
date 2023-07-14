@@ -37,14 +37,14 @@ export async function fetchDashboardMessagesListModded(
       );
       const dismissedMessageIds = tryParseJson<string[]>(local, []);
 
-      const notices = res.filter((msg) => {
+      const messages = res.filter((msg) => {
         if (!dismissedMessageIds.includes(msg.messageId)) {
           return msg;
         }
         return false;
       });
 
-      return notices;
+      return messages;
     })
     .catch((e) => {
       console.error(e);
