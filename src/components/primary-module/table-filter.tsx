@@ -320,7 +320,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
               selected={
                 baseState?.value && typeof baseState.value === "string"
                   ? new Date(baseState.value)
-                  : new Date()
+                  : undefined
               }
               onSelect={(day) => {
                 handleSaveValue(day, "date");
