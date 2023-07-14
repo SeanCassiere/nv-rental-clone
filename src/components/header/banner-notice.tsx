@@ -15,7 +15,7 @@ const MessageText = ({ message }: { message: ServerMessage }) => (
     <strong className="font-semibold text-white">{message.title}</strong>
     {message.description && (
       <>
-        <DotIcon className="mx-0.5 mb-1 inline h-3 w-3 sm:h-5 sm:w-5" />
+        <DotIcon className="mx-0.5 mb-1 hidden h-3 w-3 sm:inline sm:h-5 sm:w-5" />
         <span>{message.description}</span>
       </>
     )}
@@ -59,14 +59,14 @@ export const BannerNotice = ({ message }: { message: ServerMessage }) => {
         {message.link ? (
           <a
             href={message.link}
-            className="flex flex-1 flex-wrap items-center text-sm leading-normal text-white/95"
+            className="flex flex-1 flex-wrap items-center text-base leading-normal text-white/95"
             target={message.link.startsWith("http") ? "_blank" : "_self"}
             rel="noopener noreferrer"
           >
             <MessageText message={message} />
           </a>
         ) : (
-          <p className="flex flex-1 flex-wrap items-center text-sm leading-normal text-white/95">
+          <p className="flex flex-1 flex-wrap items-center text-base leading-normal text-white/95">
             <MessageText message={message} />
           </p>
         )}

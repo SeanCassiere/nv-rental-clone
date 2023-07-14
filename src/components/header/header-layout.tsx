@@ -86,9 +86,6 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   ];
 
   const messagesList = useGetDashboardMessages();
-  if (messagesList.status === "success") {
-    console.log(messagesList.data);
-  }
 
   // this will be the loading placeholder that'll take up the entire page height
   if (auth.isLoading) {
