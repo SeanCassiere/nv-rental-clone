@@ -320,8 +320,8 @@ function AgreementsSearchPage() {
                   title: "Search overdues?",
                   type: "select",
                   options: [
-                    { value: "true", label: "true" },
-                    { value: "false", label: "false" },
+                    { value: "true", label: "Yes" },
+                    { value: "false", label: "No" },
                   ],
                   defaultValue: "false",
                 },
