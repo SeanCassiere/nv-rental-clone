@@ -293,7 +293,7 @@ function ReservationsSearchPage() {
                   type: "date",
                 },
                 {
-                  id: "PickupLocationId",
+                  id: "CheckoutLocationId",
                   title: "Checkout location",
                   type: "select",
                   options: locationsList.data.data.map((item) => ({
@@ -302,7 +302,7 @@ function ReservationsSearchPage() {
                   })),
                 },
                 {
-                  id: "ReturnLocationId",
+                  id: "CheckinLocationId",
                   title: "Checkin location",
                   type: "select",
                   options: locationsList.data.data.map((item) => ({
