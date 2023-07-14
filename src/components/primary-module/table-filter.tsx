@@ -65,11 +65,13 @@ export type PrimaryModuleTableFacetedFilterItem = {
 interface PrimaryModuleTableFacetedFilterProps<TData, TValue> {
   table: Table<TData>;
   data: PrimaryModuleTableFacetedFilterItem;
+  isLargeSearchFullWidth?: boolean;
 }
 
 export function PrimaryModuleTableFacetedFilter<TData, TValue>({
   table,
   data: { id, title, type, options = [], size = "normal" },
+  isLargeSearchFullWidth = false,
 }: PrimaryModuleTableFacetedFilterProps<TData, TValue>) {
   const clearFilterText = "Clear filter";
 
@@ -106,15 +108,17 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
 
   if (type === "text" && size === "large") {
     return (
-      <Input
-        placeholder={`${title}...`}
-        value={typeof baseState?.value === "string" ? baseState.value : ""}
-        onChange={(event) => {
-          const writeValue = event.target.value.trim();
-          handleSaveValue(writeValue !== "" ? writeValue : undefined);
-        }}
-        className="h-8 w-full md:w-[250px]"
-      />
+      <div className={cn(isLargeSearchFullWidth ? "w-full" : "")}>
+        <Input
+          placeholder={`${title}...`}
+          value={typeof baseState?.value === "string" ? baseState.value : ""}
+          onChange={(event) => {
+            const writeValue = event.target.value.trim();
+            handleSaveValue(writeValue !== "" ? writeValue : undefined);
+          }}
+          className="h-8 w-full md:w-[250px]"
+        />
+      </div>
     );
   }
 

@@ -317,11 +317,11 @@ function AgreementsSearchPage() {
                 },
                 {
                   id: "IsSearchOverdues",
-                  title: "Search overdues?",
+                  title: "Only overdues?",
                   type: "select",
                   options: [
-                    { value: "true", label: "true" },
-                    { value: "false", label: "false" },
+                    { value: "true", label: "Yes" },
+                    { value: "false", label: "No" },
                   ],
                   defaultValue: "false",
                 },

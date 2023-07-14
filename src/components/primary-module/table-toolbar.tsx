@@ -25,6 +25,11 @@ export function PrimaryModuleTableToolbar<TData>({
   const tableColumnFilters = table.getState().columnFilters;
   const isFiltered = tableColumnFilters.length > 0;
 
+  const searchableColumns = filterableColumns.filter(
+    (t) => t.type === "text" && t.size === "large"
+  );
+  const isSingleSearchableColumn = searchableColumns.length === 1;
+
   const handleReset = () => {
     const f = table.getState().columnFilters;
     const newState = f.reduce((prev, current) => {
@@ -54,6 +59,7 @@ export function PrimaryModuleTableToolbar<TData>({
               key={`faceted_filter_${column.id}`}
               table={table}
               data={column}
+              isLargeSearchFullWidth={isSingleSearchableColumn}
             />
           ))}
 
