@@ -60,8 +60,8 @@ export function PrimaryModuleTableToolbar<
   };
 
   return (
-    <div className="flex flex-col justify-between space-y-2 sm:flex-row sm:items-center">
-      <div className="flex flex-1 items-center space-x-2">
+    <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+      <div className="flex flex-1 flex-wrap items-start justify-start gap-2 sm:space-x-2">
         {filterableColumns.length &&
           filterableColumns.map((column) => (
             <PrimaryModuleTableFacetedFilter
@@ -73,6 +73,7 @@ export function PrimaryModuleTableToolbar<
               options={column.options}
             />
           ))}
+
         <Button
           size="sm"
           onClick={onSearchWithFilters}
@@ -80,6 +81,7 @@ export function PrimaryModuleTableToolbar<
         >
           Search
         </Button>
+
         {isFiltered && (
           <Button
             variant="ghost"
