@@ -1,7 +1,15 @@
 import { z } from "zod";
 
 export const VehicleFiltersSchema = z.object({
-  Active: z.coerce.boolean().default(true).optional(),
+  Active: z
+    .preprocess(
+      (val) =>
+        val === "true" || val === "1" || val === true || val === 1
+          ? "true"
+          : "false",
+      z.string()
+    )
+    .optional(),
   SortDirection: z.string().optional(),
   VehicleNo: z.coerce.string().optional(),
   VehicleId: z.string().optional(),

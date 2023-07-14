@@ -79,7 +79,7 @@ export function normalizeVehicleListSearchParams(search: TVehicleSearchQuery) {
   const { page, size, filters } = search;
 
   const searchFilters = {
-    Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
+    Active: typeof filters?.Active !== "undefined" ? filters?.Active : "true",
     SortDirection: filters?.SortDirection || "DESC",
     VehicleNo: filters?.VehicleNo || undefined,
     VehicleId: filters?.VehicleId || undefined,
