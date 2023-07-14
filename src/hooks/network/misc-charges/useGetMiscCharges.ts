@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchMiscCharges } from "../../../api/miscCharges";
+
+import { fetchMiscCharges } from "@/api/miscCharges";
 
 export function useGetMiscCharges(params: {
   enabled?: boolean;

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchRentalRates } from "../../../api/rates";
+import { fetchRentalRates } from "@/api/rates";
 
 export function useGetRentalRates(opts?: {
   enabled?: boolean;

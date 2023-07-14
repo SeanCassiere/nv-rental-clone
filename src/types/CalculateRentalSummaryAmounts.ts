@@ -1,4 +1,4 @@
-import type { RentalRateParsed } from "../utils/schemas/rate";
+import type { RentalRateParsed } from "../schemas/rate";
 
 export type CalculateRentalSummaryAmountsInput = {
   startDate: Date;

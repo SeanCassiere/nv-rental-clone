@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 
-import { fetchUserProfile } from "../../../api/users";
-import { userQKeys } from "../../../utils/query-key";
-import { UserProfileSchema } from "../../../utils/schemas/user";
-import { dfnsDateFormat, dfnsTimeFormat } from "../../../i18n.config";
-import { setLocalStorageForUser } from "../../../utils/user-local-storage";
-import { USER_STORAGE_KEYS } from "../../../utils/constants";
+import { fetchUserProfile } from "@/api/users";
+import { UserProfileSchema } from "@/schemas/user";
+import { dfnsDateFormat, dfnsTimeFormat } from "@/i18n.config";
+import { userQKeys } from "@/utils/query-key";
+import { setLocalStorageForUser } from "@/utils/user-local-storage";
+import { USER_STORAGE_KEYS } from "@/utils/constants";
 
 export function useGetUserProfile() {
   const { i18n } = useTranslation();
@@ -38,13 +38,13 @@ export function useGetUserProfile() {
           clientId,
           userId,
           USER_STORAGE_KEYS.dateFormat,
-          data?.overrideDateFormat || dfnsDateFormat,
+          data?.overrideDateFormat || dfnsDateFormat
         );
         setLocalStorageForUser(
           clientId,
           userId,
           USER_STORAGE_KEYS.timeFormat,
-          data?.overrideTimeFormat || dfnsTimeFormat,
+          data?.overrideTimeFormat || dfnsTimeFormat
         );
       }
     },

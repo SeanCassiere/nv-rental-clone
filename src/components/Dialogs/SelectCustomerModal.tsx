@@ -4,8 +4,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 import DarkBgDialog from "../Layout/DarkBgDialog";
 import { CommonTable } from "../common/common-table";
 
-import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
-import { type TCustomerListItemParsed } from "../../utils/schemas/customer";
+import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
+import { type TCustomerListItemParsed } from "@/schemas/customer";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 

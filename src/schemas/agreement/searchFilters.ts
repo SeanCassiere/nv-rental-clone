@@ -5,7 +5,15 @@ export const AgreementFiltersSchema = z
   .object({
     AgreementStatusName: z.string().optional(),
     Statuses: z.array(z.string()).optional(),
-    IsSearchOverdues: z.coerce.boolean().optional(),
+    IsSearchOverdues: z
+      .preprocess(
+        (val) =>
+          val === "true" || val === "1" || val === true || val === 1
+            ? "true"
+            : "false",
+        z.string()
+      )
+      .optional(),
     StartDate: z.string().optional(),
     EndDate: z.string().optional(),
     SortBy: z.string().optional(),
@@ -17,6 +25,7 @@ export const AgreementFiltersSchema = z
     PickupLocationId: z.coerce.string().optional(),
     ReturnLocationId: z.coerce.string().optional(),
     AgreementTypes: z.coerce.string().optional(),
+    Keyword: z.coerce.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
     if (StartDate && EndDate) {

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { postCalculateRentalSummaryAmounts } from "../../../api/summary";
+import { postCalculateRentalSummaryAmounts } from "@/api/summary";
 
 export function usePostCalculateRentalSummaryAmounts(opts: {
   input: Omit<
@@ -10,7 +10,7 @@ export function usePostCalculateRentalSummaryAmounts(opts: {
   >;
   enabled?: boolean;
   onSuccess?: (
-    data: Awaited<ReturnType<typeof postCalculateRentalSummaryAmounts>>,
+    data: Awaited<ReturnType<typeof postCalculateRentalSummaryAmounts>>
   ) => void;
 }) {
   const { enabled = true } = opts;

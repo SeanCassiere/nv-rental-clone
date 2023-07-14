@@ -1,9 +1,9 @@
-import { localDateToQueryYearMonthDay } from "../utils/date";
-import { AgreementStatusListSchema } from "../utils/schemas/agreement";
+import { AgreementStatusListSchema } from "@/schemas/agreement";
 import {
   ReservationDataSchema,
   ReservationTypeArraySchema,
-} from "../utils/schemas/reservation";
+} from "@/schemas/reservation";
+import { localDateToQueryYearMonthDay } from "@/utils/date";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchReservationsList = async (
@@ -12,7 +12,7 @@ export const fetchReservationsList = async (
     pageSize?: number;
     clientDate: Date;
     filters: any;
-  } & CommonAuthParams,
+  } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/reservations`, {
@@ -27,14 +27,14 @@ export const fetchReservationsList = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   );
 };
 
 export const fetchReservationData = async (
   opts: {
     reservationId: string | number;
-  } & CommonAuthParams,
+  } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/reservations/${opts.reservationId}`, {
@@ -45,7 +45,7 @@ export const fetchReservationData = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => ReservationDataSchema.parse(res.data));
 };
 
@@ -59,7 +59,7 @@ export const fetchReservationStatusesList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => AgreementStatusListSchema.parse(res.data));
 };
 
@@ -73,6 +73,6 @@ export const fetchReservationTypesList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => ReservationTypeArraySchema.parse(res.data));
 };

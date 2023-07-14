@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import { type TCustomerSummarySchema } from "../../../utils/schemas/summary/customerSummary";
+import { type TCustomerSummarySchema } from "../../../schemas/summary/customerSummary";
 import { CurrencyDollarSolid } from "../../icons";
 import {
   SummaryHeader,

@@ -1,13 +1,19 @@
 import { useMemo, useState } from "react";
 import {
-  getCoreRowModel,
-  useReactTable,
   flexRender,
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   type ColumnOrderState,
   type ColumnDef,
   type PaginationState,
   type VisibilityState,
   type Column,
+  type ColumnFiltersState,
+  type OnChangeFn,
 } from "@tanstack/react-table";
 import {
   DndContext,
@@ -38,9 +44,9 @@ import {
 
 import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
 
-import { type TColumnListItemParsed } from "../../utils/schemas/column";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { getPaginationWithDoubleEllipsis } from "../../utils/pagination";
+import { type TColumnListItemParsed } from "@/schemas/column";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
 import { cn } from "@/utils";
 
 import { Button } from "@/components/ui/button";
@@ -59,11 +65,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DataTableToolbar } from "@/components/ui/data-table";
+import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
+import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 
-interface ModuleTableProps<T> {
-  data: T[];
-  columns: ColumnDef<T>[];
+interface PrimaryModuleTableProps<
+  TData,
+  TValue,
+  TColumnFilters extends ColumnFiltersState,
+> {
+  data: TData[];
+  columns: ColumnDef<TData, TValue>[];
   rawColumnsData: TColumnListItemParsed[];
 
   onColumnOrderChange?: (updatedValues: ColumnOrderState) => void;
@@ -73,9 +84,28 @@ interface ModuleTableProps<T> {
   pagination: PaginationState;
   onPaginationChange: (pagination: PaginationState) => void;
   totalPages: number;
+
+  filters: {
+    columnFilters: TColumnFilters;
+    setColumnFilters: OnChangeFn<ColumnFiltersState>;
+    onClearFilters: () => void;
+    onSearchWithFilters: () => void;
+    filterableColumns?: PrimaryModuleTableFacetedFilterItem[];
+  };
 }
 
-export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
+export function PrimaryModuleTable<
+  TData,
+  TValue,
+  TColumnFilters extends ColumnFiltersState,
+>(props: PrimaryModuleTableProps<TData, TValue, TColumnFilters>) {
+  const {
+    columnFilters,
+    setColumnFilters,
+    filterableColumns = [],
+    onClearFilters,
+    onSearchWithFilters,
+  } = props.filters;
   const [columns] = useState([...props.columns]);
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
@@ -99,8 +129,17 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
       columnOrder,
       columnVisibility,
       pagination: props.pagination,
+      columnFilters,
     },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+
+    manualFiltering: true,
+    onColumnFiltersChange: setColumnFilters,
+
     onColumnOrderChange: (updater) => {
       const newColumnOrdering =
         typeof updater === "function" ? updater(columnOrder) : updater;
@@ -153,11 +192,12 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar
+      <PrimaryModuleTableToolbar
+        // key={`toolbar_${JSON.stringify(columnFilters)}`}
         table={table}
-        customSearchFilters={
-          <div className="text-sm">Custom search filters to be put here</div>
-        }
+        filterableColumns={filterableColumns}
+        onClearFilters={onClearFilters}
+        onSearchWithFilters={onSearchWithFilters}
       />
       <div className="overflow-hidden rounded border">
         <div className="overflow-x-auto bg-background">
@@ -188,22 +228,6 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
                     </SortableContext>
                   </TableRow>
                 ))}
-                {/* {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    <SortableContext
-                      items={columnOrder}
-                      strategy={horizontalListSortingStrategy}
-                    >
-                      {headerGroup.headers.map((header) => (
-                        <DraggableColumnHeader
-                          key={header.id}
-                          header={header}
-                          isLocked={lockedColumns.includes(header.id)}
-                        />
-                      ))}
-                    </SortableContext>
-                  </TableRow>
-                ))} */}
               </TableHeader>
               <TableBody>
                 {table.getRowModel().rows?.length ? (
@@ -226,7 +250,10 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 text-center"
+                      className={cn(
+                        "h-24 px-4",
+                        columns.length > 5 ? "text-left" : "text-center"
+                      )}
                     >
                       No results.
                     </TableCell>
@@ -302,17 +329,17 @@ export function ModuleTable<T extends any>(props: ModuleTableProps<T>) {
   );
 }
 
-interface DataTableColumnHeaderProps<TData, TValue>
+interface PrimaryModuleTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: string;
 }
 
-export function ModuleTableColumnHeader<TData, TValue>({
+export function PrimaryModuleTableColumnHeader<TData, TValue>({
   column,
   title,
   className,
-}: DataTableColumnHeaderProps<TData, TValue>) {
+}: PrimaryModuleTableColumnHeaderProps<TData, TValue>) {
   const disabled = !column.getCanHide();
 
   const {
@@ -404,7 +431,7 @@ export function ModuleTableColumnHeader<TData, TValue>({
   );
 }
 
-export function ModuleTableCellWrap({
+export function PrimaryModuleTableCellWrap({
   children,
 }: {
   children: React.ReactNode;

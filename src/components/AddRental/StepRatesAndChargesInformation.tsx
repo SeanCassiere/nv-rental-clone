@@ -3,10 +3,10 @@ import { Transition } from "@headlessui/react";
 
 import CommonRatesInformation from "./CommonRatesInformation";
 import CommonMiscChargesInformation from "./CommonMiscChargesInformation";
-import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
+import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
-import { type RentalRateParsed } from "../../utils/schemas/rate";
-import { type CalculateRentalSummaryMiscChargeType } from "../../types/CalculateRentalSummaryAmounts";
+import { type RentalRateParsed } from "@/schemas/rate";
+import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 import { cn } from "@/utils";
 
 export interface StepRatesAndChargesInformationProps {
@@ -33,7 +33,7 @@ export interface StepRatesAndChargesInformationProps {
   onSelectedRate: (rate: RentalRateParsed) => void;
   misCharges: CalculateRentalSummaryMiscChargeType[];
   onSelectedMiscCharges: (
-    charges: CalculateRentalSummaryMiscChargeType[],
+    charges: CalculateRentalSummaryMiscChargeType[]
   ) => void;
 
   onCompleted: () => void;
@@ -41,7 +41,7 @@ export interface StepRatesAndChargesInformationProps {
 }
 
 const StepRatesAndChargesInformation = (
-  props: StepRatesAndChargesInformationProps,
+  props: StepRatesAndChargesInformationProps
 ) => {
   const [step, setStep] = useState(0);
 

@@ -1,18 +1,18 @@
 import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
-import AddRentalParentForm from "../../components/AddRental";
-import Protector from "../../components/Protector";
-import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+import AddRentalParentForm from "@/components/AddRental";
+import Protector from "@/components/Protector";
+import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 
-import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
-import { editAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { editAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
+import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
-import { titleMaker } from "../../utils/title-maker";
+import { titleMaker } from "@/utils/title-maker";
 
 const EditAgreementPage = () => {
   const navigate = useNavigate({ from: editAgreementByIdRoute.id });
@@ -42,7 +42,7 @@ const EditAgreementPage = () => {
         params: { agreementId },
       });
     },
-    [agreementId, navigate],
+    [agreementId, navigate]
   );
 
   const handleAgreementSaveComplete = useCallback(() => {
@@ -61,8 +61,8 @@ const EditAgreementPage = () => {
 
   useDocumentTitle(
     titleMaker(
-      `Edit - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`,
-    ),
+      `Edit - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
+    )
   );
   return (
     <Protector>

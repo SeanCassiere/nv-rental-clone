@@ -8,7 +8,7 @@ import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { addAgreementRoute } from "../../routes/agreements/addAgreement";
 
 import { titleMaker } from "../../utils/title-maker";
-import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 
 const AddAgreementPage = () => {
@@ -25,7 +25,7 @@ const AddAgreementPage = () => {
         search: () => ({ stage: destination.id }),
       });
     },
-    [navigate],
+    [navigate]
   );
 
   const handleAgreementSaveComplete = useCallback(
@@ -36,7 +36,7 @@ const AddAgreementPage = () => {
         search: () => ({ tab: "summary" }),
       });
     },
-    [navigate],
+    [navigate]
   );
 
   const handleCancelAddAgreement = useCallback(() => {

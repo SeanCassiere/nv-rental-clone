@@ -1,10 +1,10 @@
-import { type TAgreementSearchQuery } from "./schemas/agreement";
-import { type TCustomerSearchQuery } from "./schemas/customer";
-import { type TReservationSearchQuery } from "./schemas/reservation";
-import { type TVehicleSearchQuery } from "./schemas/vehicle";
+import { type TAgreementSearchQuery } from "../schemas/agreement";
+import { type TCustomerSearchQuery } from "../schemas/customer";
+import { type TReservationSearchQuery } from "../schemas/reservation";
+import { type TVehicleSearchQuery } from "../schemas/vehicle";
 
 export function normalizeAgreementListSearchParams(
-  search: TAgreementSearchQuery,
+  search: TAgreementSearchQuery
 ) {
   const { page, size, filters } = search;
 
@@ -14,7 +14,7 @@ export function normalizeAgreementListSearchParams(
     IsSearchOverdues:
       typeof filters?.IsSearchOverdues !== "undefined"
         ? filters?.IsSearchOverdues
-        : false,
+        : "false",
     StartDate: filters?.StartDate || undefined,
     EndDate: filters?.EndDate || undefined,
     SortBy: filters?.SortBy || "CreatedDate",
@@ -26,6 +26,7 @@ export function normalizeAgreementListSearchParams(
     PickupLocationId: filters?.PickupLocationId || undefined,
     ReturnLocationId: filters?.ReturnLocationId || undefined,
     AgreementTypes: filters?.AgreementTypes || undefined,
+    Keyword: filters?.Keyword || undefined,
   };
 
   const pageNumber = page || 1;
@@ -34,14 +35,17 @@ export function normalizeAgreementListSearchParams(
 }
 
 export function normalizeCustomerListSearchParams(
-  search: TCustomerSearchQuery,
+  search: TCustomerSearchQuery
 ) {
   const { page, size, filters } = search;
 
   const searchFilters = {
-    Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
+    Active: typeof filters?.Active !== "undefined" ? filters?.Active : "true",
     SortDirection: filters?.SortDirection || "ASC",
-    CustomerTypes: filters?.CustomerTypes || undefined,
+    CustomerTypes: filters?.CustomerTypes || [],
+    Keyword: filters?.Keyword || undefined,
+    DateOfbirth: filters?.DateOfbirth || undefined,
+    Phone: filters?.Phone || undefined,
   };
 
   const pageNumber = page || 1;
@@ -50,7 +54,7 @@ export function normalizeCustomerListSearchParams(
 }
 
 export function normalizeReservationListSearchParams(
-  search: TReservationSearchQuery,
+  search: TReservationSearchQuery
 ) {
   const { page, size, filters } = search;
 
@@ -66,6 +70,7 @@ export function normalizeReservationListSearchParams(
     CheckoutLocationId: filters?.CheckoutLocationId || undefined,
     CheckinLocationId: filters?.CheckinLocationId || undefined,
     ReservationTypes: filters?.ReservationTypes || undefined,
+    Keyword: filters?.Keyword || undefined,
   };
 
   const pageNumber = page || 1;
@@ -77,7 +82,7 @@ export function normalizeVehicleListSearchParams(search: TVehicleSearchQuery) {
   const { page, size, filters } = search;
 
   const searchFilters = {
-    Active: typeof filters?.Active !== "undefined" ? filters?.Active : true,
+    Active: typeof filters?.Active !== "undefined" ? filters?.Active : "true",
     SortDirection: filters?.SortDirection || "DESC",
     VehicleNo: filters?.VehicleNo || undefined,
     VehicleId: filters?.VehicleId || undefined,

@@ -2,7 +2,7 @@ import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
 import { useCallback } from "react";
 import AddRentalParentForm from "../../components/AddRental";
-import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 import Protector from "../../components/Protector";
 
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
@@ -26,7 +26,7 @@ const AddReservationPage = () => {
         search: () => ({ stage: destination.id }),
       });
     },
-    [navigate],
+    [navigate]
   );
 
   const handleReservationSaveComplete = useCallback(
@@ -37,7 +37,7 @@ const AddReservationPage = () => {
         search: () => ({ tab: "summary" }),
       });
     },
-    [navigate],
+    [navigate]
   );
 
   const handleCancelAddReservation = useCallback(() => {

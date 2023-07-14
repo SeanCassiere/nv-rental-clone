@@ -7,9 +7,9 @@ import { CommonTable } from "../../common/common-table";
 import { DocumentTextSolid } from "../../icons";
 import CommonEmptyStateContent from "../../Layout/CommonEmptyStateContent";
 
-import { useGetModuleNotes } from "../../../hooks/network/module/useGetModuleNotes";
-import { type TNoteDataParsed } from "../../../utils/schemas/note";
-import { type AppPrimaryModuleType } from "../../../types/General";
+import { useGetModuleNotes } from "@/hooks/network/module/useGetModuleNotes";
+import { type TNoteDataParsed } from "@/schemas/note";
+import { type AppPrimaryModuleType } from "@/types/General";
 
 const columnHelper = createColumnHelper<TNoteDataParsed>();
 

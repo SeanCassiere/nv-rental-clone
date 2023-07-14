@@ -4,12 +4,12 @@ import parseISO from "date-fns/parseISO";
 
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
 import CommonHeader from "../Layout/CommonHeader";
-import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
+import { RentalRatesSummary } from "@/components/primary-module/ModuleSummary/RentalRatesSummary";
 import { Button } from "../Form";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
-} from "../PrimaryModule/ModuleTabs";
+} from "@/components/primary-module/ModuleTabs";
 import AgreementRentalInformationTab, {
   type AgreementRentalInformationSchemaParsed,
 } from "./AgreementRentalInformationTab";
@@ -22,36 +22,36 @@ import CommonCustomerInformation, {
 import StepRatesAndChargesInformation from "./StepRatesAndChargesInformation";
 import StepTaxesAndPaymentsInformation from "./StepTaxesAndPaymentsInformation";
 
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
-import { useGetOptimalRateForRental } from "../../hooks/network/rates/useGetOptimalRateForRental";
-import { useGetRentalRates } from "../../hooks/network/rates/useGetRentalRates";
-import { usePostCalculateRentalSummaryAmounts } from "../../hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-import { useGetMiscCharges } from "../../hooks/network/misc-charges/useGetMiscCharges";
-import { useGetTaxes } from "../../hooks/network/taxes/useGetTaxes";
+import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
+import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
+import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
+import { usePostCalculateRentalSummaryAmounts } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
+import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
+import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 
-import { addAgreementRoute } from "../../routes/agreements/addAgreement";
-import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
+import { addAgreementRoute } from "@/routes/agreements/addAgreement";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 import {
   checkinAgreementByIdRoute,
   editAgreementByIdRoute,
   viewAgreementByIdRoute,
-} from "../../routes/agreements/agreementIdPath";
-import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import { addReservationRoute } from "../../routes/reservations/addReservation";
+} from "@/routes/agreements/agreementIdPath";
+import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
+import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
+import { addReservationRoute } from "@/routes/reservations/addReservation";
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
-} from "../../routes/reservations/reservationIdPath";
+} from "@/routes/reservations/reservationIdPath";
 
-import { sortObject } from "../../utils/sortObject";
-import { type TRentalRatesSummarySchema } from "../../utils/schemas/summary";
-import { type RentalRateParsed } from "../../utils/schemas/rate";
-import { type ReservationDataParsed } from "../../utils/schemas/reservation";
-import { type CalculateRentalSummaryMiscChargeType } from "../../types/CalculateRentalSummaryAmounts";
+import { sortObject } from "@/utils/sortObject";
+import { type TRentalRatesSummarySchema } from "@/schemas/summary";
+import { type RentalRateParsed } from "@/schemas/rate";
+import { type ReservationDataParsed } from "@/schemas/reservation";
+import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 
 export type TRentalCompleteStage = {
   rental: boolean;
@@ -144,7 +144,7 @@ const AddRentalParentForm = ({
     cb:
       | RentalRateParsed
       | null
-      | ((prev: RentalRateParsed | null) => RentalRateParsed | null),
+      | ((prev: RentalRateParsed | null) => RentalRateParsed | null)
   ) => {
     if (typeof cb === "function") {
       setRateDetails((prev) => {
@@ -175,7 +175,7 @@ const AddRentalParentForm = ({
       setSelectedMiscCharges(charges);
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
-    [],
+    []
   );
 
   const clientProfile = useGetClientProfile();
@@ -528,7 +528,7 @@ const AddRentalParentForm = ({
       if (selectedTaxIds.length === 0) {
         const list = data.taxList.filter((tax) => tax.taxId !== null);
         const taxIds = [...list.map((tax) => tax.taxId)].filter(
-          (taxId) => typeof taxId === "number" && taxId !== null,
+          (taxId) => typeof taxId === "number" && taxId !== null
         ) as number[];
         setSelectedTaxIds(taxIds);
         setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
@@ -592,7 +592,7 @@ const AddRentalParentForm = ({
         : reservationConditionsForFetchingRates,
     filters: {
       LocationId: Number(
-        agreementRentalInformation?.checkoutLocation,
+        agreementRentalInformation?.checkoutLocation
       ).toString(),
       RateName: selectedRateName,
       CheckoutDate:
@@ -675,7 +675,7 @@ const AddRentalParentForm = ({
         : miscChargesReservationReady,
     onSuccess: (data) => {
       const mandatoryCharges = (data || []).filter(
-        (charge) => charge.IsOptional === false,
+        (charge) => charge.IsOptional === false
       );
       setSelectedMiscCharges((existing) => {
         if (existing.length > 0) {
@@ -910,7 +910,7 @@ const AddRentalParentForm = ({
                       className="flex items-center justify-center gap-2"
                       disabled={
                         !Object.values(creationStagesComplete).every(
-                          (obj) => obj === true,
+                          (obj) => obj === true
                         )
                       }
                     >

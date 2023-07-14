@@ -4,8 +4,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 import DarkBgDialog from "../Layout/DarkBgDialog";
 import { CommonTable } from "../common/common-table";
 
-import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
-import { type TVehicleListItemParsed } from "../../utils/schemas/vehicle";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { type TVehicleListItemParsed } from "@/schemas/vehicle";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 

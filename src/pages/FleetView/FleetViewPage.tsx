@@ -7,40 +7,40 @@ import {
   Link,
 } from "@tanstack/router";
 
-import Protector from "../../components/Protector";
-import { ChevronRightOutline, PencilIconFilled } from "../../components/icons";
+import Protector from "@/components/Protector";
+import { ChevronRightOutline, PencilIconFilled } from "@/components/icons";
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
-} from "../../components/PrimaryModule/ModuleTabs";
-import ScrollToTop from "../../components/ScrollToTop";
-import VehicleModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
-import CommonHeader from "../../components/Layout/CommonHeader";
-import { LinkButton } from "../../components/Form";
+} from "@/components/primary-module/ModuleTabs";
+import ScrollToTop from "@/components/ScrollToTop";
+import VehicleModuleStatBlock from "@/components/primary-module/ModuleStatBlock/VehicleModuleStatBlock";
+import CommonHeader from "@/components/Layout/CommonHeader";
+import { LinkButton } from "@/components/Form";
 
 import {
   editFleetByIdRoute,
   viewFleetByIdRoute,
-} from "../../routes/fleet/fleetIdPath";
+} from "@/routes/fleet/fleetIdPath";
 
-import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
+import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import { titleMaker } from "../../utils/title-maker";
+import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
+import { titleMaker } from "@/utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Vehicle/VehicleSummaryTab"),
+  () => import("../../components/Vehicle/VehicleSummaryTab")
 );
 const VehicleReservationsTab = lazy(
-  () => import("../../components/Vehicle/VehicleReservationsTab"),
+  () => import("../../components/Vehicle/VehicleReservationsTab")
 );
 const VehicleAgreementsTab = lazy(
-  () => import("../../components/Vehicle/VehicleAgreementsTab"),
+  () => import("../../components/Vehicle/VehicleAgreementsTab")
 );
 
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
+  () => import("../../components/primary-module/ModuleNotesTabContent")
 );
 
 function VehicleViewPage() {
@@ -116,7 +116,7 @@ function VehicleViewPage() {
   }, [vehicleId, vehicle.data]);
 
   useDocumentTitle(
-    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet"),
+    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
   );
 
   return (

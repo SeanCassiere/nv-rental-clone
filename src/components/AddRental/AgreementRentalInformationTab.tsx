@@ -15,11 +15,11 @@ import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,
 } from "../Form";
-import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
+import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
 
-import { useGetLocationsList } from "../../hooks/network/location/useGetLocationsList";
-import { useGetAgreementTypesList } from "../../hooks/network/agreement/useGetAgreementTypes";
-import { useGetNewAgreementNumber } from "../../hooks/network/agreement/useGetNewAgreementNumber";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
+import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
 
 const AgreementRentalInformationSchema = z
   .object({
@@ -165,7 +165,7 @@ const AgreementRentalInformationTab = ({
               value={getSelectedOptionForSelectInput(
                 agreementTypeOptions,
                 getValues("agreementType"),
-                "label",
+                "label"
               )}
               onSelect={(value) => {
                 if (value !== null && value.value !== "") {
@@ -202,7 +202,7 @@ const AgreementRentalInformationTab = ({
 
                   const differenceInSecondsBetweenDates = differenceInSeconds(
                     previousCheckinDate,
-                    previousCheckoutDate,
+                    previousCheckoutDate
                   );
                   const newCheckinDate = add(new Date(date), {
                     seconds: differenceInSecondsBetweenDates,
@@ -226,7 +226,7 @@ const AgreementRentalInformationTab = ({
               options={locationOptions}
               value={getSelectedOptionForSelectInput(
                 locationOptions,
-                getValues("checkoutLocation"),
+                getValues("checkoutLocation")
               )}
               onSelect={(value) => {
                 if (value !== null && value.value !== "") {
@@ -261,7 +261,7 @@ const AgreementRentalInformationTab = ({
               options={locationOptions}
               value={getSelectedOptionForSelectInput(
                 locationOptions,
-                getValues("checkinLocation"),
+                getValues("checkinLocation")
               )}
               onSelect={(value) => {
                 if (value !== null && value.value !== "") {

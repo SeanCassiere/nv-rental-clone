@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchCustomersList } from "../../../api/customers";
-import { CustomerListItemListSchema } from "../../../utils/schemas/customer";
-import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
-import { customerQKeys } from "../../../utils/query-key";
+import { fetchCustomersList } from "@/api/customers";
+import { CustomerListItemListSchema } from "@/schemas/customer";
+import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
+import { customerQKeys } from "@/utils/query-key";
 
 export function useGetCustomersList(params: {
   page: number;
@@ -33,7 +33,7 @@ export function useGetCustomersList(params: {
 }
 
 export async function fetchCustomersListModded(
-  params: Parameters<typeof fetchCustomersList>[0],
+  params: Parameters<typeof fetchCustomersList>[0]
 ) {
   return await fetchCustomersList({
     clientId: params.clientId || "",

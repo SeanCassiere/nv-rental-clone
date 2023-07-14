@@ -20,7 +20,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import { Bars3Outline, EyeOutline, EyeSlashOutline } from "../icons";
-import { useGetDashboardWidgetList } from "../../hooks/network/dashboard/useGetDashboardWidgetList";
+import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 import { Button } from "../Form";
 import {
   reorderBasedOnWidgetIdPositions,
@@ -29,7 +29,7 @@ import {
 import DarkBgDialog from "../Layout/DarkBgDialog";
 import { cn } from "@/utils";
 
-import { type DashboardWidgetItemParsed } from "../../utils/schemas/dashboard";
+import { type DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 const DashboardWidgetPickerModal = ({
   show = false,
@@ -43,7 +43,7 @@ const DashboardWidgetPickerModal = ({
   const [isModalClosingLocked, setModalClosingLocked] = useState(false);
 
   const [widgetsLocal, setWidgetsLocal] = useState<DashboardWidgetItemParsed[]>(
-    [],
+    []
   );
 
   const handleClosingOfModal = () => {
@@ -78,7 +78,7 @@ const DashboardWidgetPickerModal = ({
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   const handleDragEnd = (evt: DragEndEvent) => {
@@ -94,7 +94,7 @@ const DashboardWidgetPickerModal = ({
     const newWidgetIdOrder = arrayMove(
       widgetIdsList,
       widgetIdsList.indexOf(String(draggingId)),
-      widgetIdsList.indexOf(String(overId)),
+      widgetIdsList.indexOf(String(overId))
     );
 
     const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
@@ -188,7 +188,7 @@ const WidgetOption = ({
       <div
         className={cn(
           "my-0.5 flex items-center justify-between rounded border border-white px-2 focus-within:border-slate-300",
-          isDragging ? "bg-slate-50" : "bg-white",
+          isDragging ? "bg-slate-50" : "bg-white"
         )}
       >
         <div className={cn("flex items-center gap-3")}>

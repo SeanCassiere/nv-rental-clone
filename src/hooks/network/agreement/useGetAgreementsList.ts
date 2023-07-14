@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchAgreementsList } from "../../../api/agreements";
-import { AgreementListItemListSchema } from "../../../utils/schemas/agreement";
-import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
-import { agreementQKeys } from "../../../utils/query-key";
+
+import { fetchAgreementsList } from "@/api/agreements";
+import { AgreementListItemListSchema } from "@/schemas/agreement";
+import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
+import { agreementQKeys } from "@/utils/query-key";
 
 export function useGetAgreementsList(params: {
   page: number;
@@ -33,7 +34,7 @@ export function useGetAgreementsList(params: {
 }
 
 export async function fetchAgreementsListModded(
-  params: Parameters<typeof fetchAgreementsList>[0],
+  params: Parameters<typeof fetchAgreementsList>[0]
 ) {
   return await fetchAgreementsList({
     clientId: params.clientId || "",
@@ -49,7 +50,7 @@ export async function fetchAgreementsListModded(
       return { ...res, data: [] };
     })
     .then((res) =>
-      validateApiResWithZodSchema(AgreementListItemListSchema, res),
+      validateApiResWithZodSchema(AgreementListItemListSchema, res)
     )
     .catch((e) => {
       console.error(e);

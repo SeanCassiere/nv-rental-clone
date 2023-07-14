@@ -2,19 +2,19 @@ import { lazy, Route } from "@tanstack/router";
 
 import { customersRoute } from ".";
 import { queryClient as qc } from "../../App";
-import { fetchCustomersListModded } from "../../hooks/network/customer/useGetCustomersList";
-import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
+import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
+import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
-import { getAuthToken } from "../../utils/authLocal";
-import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
-import { customerQKeys } from "../../utils/query-key";
-import { CustomerSearchQuerySchema } from "../../utils/schemas/customer";
+import { getAuthToken } from "@/utils/authLocal";
+import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
+import { customerQKeys } from "@/utils/query-key";
+import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
 export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "/",
   component: lazy(
-    () => import("../../pages/CustomerSearch/CustomerSearchPage"),
+    () => import("../../pages/CustomerSearch/CustomerSearchPage")
   ),
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
@@ -46,7 +46,7 @@ export const searchCustomersRoute = new Route({
                 module: "customers",
               }),
             initialData: [],
-          }),
+          })
         );
       }
 
@@ -68,7 +68,7 @@ export const searchCustomersRoute = new Route({
                 accessToken: auth.access_token,
                 filters: searchFilters,
               }),
-          }),
+          })
         );
       }
 

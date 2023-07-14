@@ -7,37 +7,37 @@ import {
   Link,
 } from "@tanstack/router";
 
-import Protector from "../../components/Protector";
+import Protector from "@/components/Protector";
 import {
   ChevronRightOutline,
   PencilIconFilled,
   PrintIconFilled,
-} from "../../components/icons";
+} from "@/components/icons";
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
-} from "../../components/PrimaryModule/ModuleTabs";
-import ScrollToTop from "../../components/ScrollToTop";
-import CommonHeader from "../../components/Layout/CommonHeader";
-import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
-import { Button, LinkButton } from "../../components/Form";
+} from "@/components/primary-module/ModuleTabs";
+import ScrollToTop from "@/components/ScrollToTop";
+import CommonHeader from "@/components/Layout/CommonHeader";
+import ReservationModuleStatBlock from "@/components/primary-module/ModuleStatBlock/ReservationModuleStatBlock";
+import { Button, LinkButton } from "@/components/Form";
 
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
-} from "../../routes/reservations/reservationIdPath";
+} from "@/routes/reservations/reservationIdPath";
 
-import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
+import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import { titleMaker } from "../../utils/title-maker";
+import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
+import { titleMaker } from "@/utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Reservation/ReservationSummaryTab"),
+  () => import("../../components/Reservation/ReservationSummaryTab")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
+  () => import("../../components/primary-module/ModuleNotesTabContent")
 );
 
 function ReservationViewPage() {
@@ -105,8 +105,8 @@ function ReservationViewPage() {
   useDocumentTitle(
     titleMaker(
       (reservation.data?.reservationview.reservationNumber || "Loading") +
-        " - Reservations",
-    ),
+        " - Reservations"
+    )
   );
 
   return (

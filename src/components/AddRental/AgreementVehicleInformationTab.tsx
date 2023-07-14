@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
+import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
 import { DocumentTextSolid } from "../icons";
 import {
   Button,
@@ -12,10 +12,11 @@ import {
   getSelectedOptionForSelectInput,
 } from "../Form";
 import { type AgreementRentalInformationSchemaParsed } from "./AgreementRentalInformationTab";
-import { useGetVehicleTypesList } from "../../hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "../../hooks/network/vehicle/useGetVehiclesList";
-import { useGetVehicleFuelLevelList } from "../../hooks/network/vehicle/useGetVehicleFuelLevelList";
 import SelectVehicleModal from "../Dialogs/SelectVehicleModal";
+
+import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { useGetVehicleFuelLevelList } from "@/hooks/network/vehicle/useGetVehicleFuelLevelList";
 
 function AgreementVehicleInformationSchema() {
   return z.object({
@@ -42,7 +43,7 @@ const AgreementVehicleInformationTab = ({
 }) => {
   const checkoutLocation = useMemo(
     () => rentalInformation?.checkoutLocation || 0,
-    [rentalInformation?.checkoutLocation],
+    [rentalInformation?.checkoutLocation]
   );
 
   const [showFleetPicker, setShowFleetPicker] = useState(false);
@@ -185,7 +186,7 @@ const AgreementVehicleInformationTab = ({
                 options={vehicleTypeOptions}
                 value={getSelectedOptionForSelectInput(
                   vehicleTypeOptions,
-                  getValues("vehicleTypeId"),
+                  getValues("vehicleTypeId")
                 )}
                 onSelect={(value) => {
                   if (value !== null) {
@@ -209,7 +210,7 @@ const AgreementVehicleInformationTab = ({
                 options={vehicleOptions}
                 value={getSelectedOptionForSelectInput(
                   vehicleOptions,
-                  getValues("vehicleId"),
+                  getValues("vehicleId")
                 )}
                 onSelect={(value) => {
                   if (value !== null) {
@@ -217,7 +218,7 @@ const AgreementVehicleInformationTab = ({
                       shouldValidate: true,
                     });
                     const vehicle = vehicleListData.data?.data.find(
-                      (v) => v.VehicleId === parseInt(value.value ?? "0"),
+                      (v) => v.VehicleId === parseInt(value.value ?? "0")
                     );
                     if (vehicle) {
                       setValue("fuelOut", vehicle.FuelLevel ?? "", {
@@ -241,7 +242,7 @@ const AgreementVehicleInformationTab = ({
                 options={fuelOptions}
                 value={getSelectedOptionForSelectInput(
                   fuelOptions,
-                  getValues("fuelOut"),
+                  getValues("fuelOut")
                 )}
                 onSelect={(value) => {
                   if (value !== null) {

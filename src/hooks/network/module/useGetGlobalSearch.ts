@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchGlobalSearchList } from "../../../api/search";
+import { fetchGlobalSearchList } from "@/api/search";
 
 export function useGetGlobalSearch(params: {
   searchTerm: string;

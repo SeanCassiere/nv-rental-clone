@@ -1,18 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
 
-import CustomerInformation from "../PrimaryModule/ModuleInformation/CustomerInformation";
-import { VehicleSummary } from "../PrimaryModule/ModuleSummary/VehicleSummary";
+import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
+import { VehicleSummary } from "@/components/primary-module/ModuleSummary/VehicleSummary";
 import {
-  type ModuleTabConfigItem,
   ModuleTabs,
-} from "../PrimaryModule/ModuleTabs";
+  type ModuleTabConfigItem,
+} from "@/components/primary-module/ModuleTabs";
 
-import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
-import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
-import { useGetVehicleData } from "../../hooks/network/vehicle/useGetVehicleData";
-import { useGetVehicleSummary } from "../../hooks/network/vehicle/useGetVehicleSummary";
-import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
-import VehicleInformation from "../PrimaryModule/ModuleInformation/VehicleInformation";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
+import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
+import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
+import { useGetVehicleSummary } from "@/hooks/network/vehicle/useGetVehicleSummary";
+import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
+import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
 
 type VehicleSummaryTabProps = {
   vehicleId: string;

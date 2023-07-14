@@ -3,13 +3,13 @@ import { lazy, Route } from "@tanstack/router";
 import { reservationsRoute } from ".";
 import { queryClient } from "../../App";
 
-import { fetchModuleColumnsModded } from "../../hooks/network/module/useGetModuleColumns";
-import { fetchReservationsListModded } from "../../hooks/network/reservation/useGetReservationsList";
+import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
+import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 
-import { getAuthToken } from "../../utils/authLocal";
-import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
-import { reservationQKeys } from "../../utils/query-key";
-import { ReservationSearchQuerySchema } from "../../utils/schemas/reservation";
+import { getAuthToken } from "@/utils/authLocal";
+import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
+import { reservationQKeys } from "@/utils/query-key";
+import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 
 export const searchReservationsRoute = new Route({
   getParentRoute: () => reservationsRoute,
@@ -44,7 +44,7 @@ export const searchReservationsRoute = new Route({
                 module: "reservations",
               }),
             initialData: [],
-          }),
+          })
         );
       }
 
@@ -67,7 +67,7 @@ export const searchReservationsRoute = new Route({
                 filters: searchFilters,
                 clientDate: new Date(),
               }),
-          }),
+          })
         );
       }
       await Promise.all(promises);
@@ -75,6 +75,6 @@ export const searchReservationsRoute = new Route({
     return {};
   },
   component: lazy(
-    () => import("../../pages/ReservationsSearch/ReservationsSearchPage"),
+    () => import("../../pages/ReservationsSearch/ReservationsSearchPage")
   ),
 });

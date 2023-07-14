@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
-import { fetchAgreementTypesList } from "../../../api/agreements";
-import { agreementQKeys } from "../../../utils/query-key";
+
+import { fetchAgreementTypesList } from "@/api/agreements";
+import { agreementQKeys } from "@/utils/query-key";
 
 export function useGetAgreementTypesList() {
   const auth = useAuth();

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchReservationsList } from "../../../api/reservations";
-import { ReservationListItemListSchema } from "../../../utils/schemas/reservation";
-import { validateApiResWithZodSchema } from "../../../utils/schemas/apiFetcher";
-import { reservationQKeys } from "../../../utils/query-key";
+import { fetchReservationsList } from "@/api/reservations";
+import { ReservationListItemListSchema } from "@/schemas/reservation";
+import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
+import { reservationQKeys } from "@/utils/query-key";
 
 export function useGetReservationsList(params: {
   page: number;
@@ -34,7 +34,7 @@ export function useGetReservationsList(params: {
 }
 
 export async function fetchReservationsListModded(
-  params: Parameters<typeof fetchReservationsList>[0],
+  params: Parameters<typeof fetchReservationsList>[0]
 ) {
   return await fetchReservationsList({
     clientId: params.clientId || "",
@@ -50,7 +50,7 @@ export async function fetchReservationsListModded(
       return { ...res, data: [] };
     })
     .then((res) =>
-      validateApiResWithZodSchema(ReservationListItemListSchema, res),
+      validateApiResWithZodSchema(ReservationListItemListSchema, res)
     )
     .catch((e) => {
       console.error(e);

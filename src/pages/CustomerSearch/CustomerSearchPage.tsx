@@ -1,39 +1,39 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
+  type ColumnOrderState,
   type PaginationState,
   type VisibilityState,
-  type ColumnOrderState,
+  type ColumnFiltersState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import Protector from "../../components/Protector";
+import Protector from "@/components/Protector";
+import CommonHeader from "@/components/Layout/CommonHeader";
+
+import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
+import { viewCustomerByIdRoute } from "@/routes/customers/customerIdPath";
+
+import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomerTypes";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+
 import {
-  ModuleTable,
-  ModuleTableColumnHeader,
-  ModuleTableCellWrap,
-} from "../../components/PrimaryModule/ModuleTable";
-import ModuleSearchFilters from "../../components/PrimaryModule/ModuleSearchFilters";
-import ScrollToTop from "../../components/ScrollToTop";
-import CommonHeader from "../../components/Layout/CommonHeader";
-
-import { searchCustomersRoute } from "../../routes/customers/searchCustomers";
-import { viewCustomerByIdRoute } from "../../routes/customers/customerIdPath";
-
-import { useGetCustomersList } from "../../hooks/network/customer/useGetCustomersList";
-import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
-import { useSaveModuleColumns } from "../../hooks/network/module/useSaveModuleColumns";
-import { useGetCustomerTypesList } from "../../hooks/network/customer/useGetCustomerTypes";
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
-
-import { CustomerFiltersSchema } from "../../utils/schemas/customer";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import type { TCustomerListItemParsed } from "../../utils/schemas/customer";
-import { normalizeCustomerListSearchParams } from "../../utils/normalize-search-params";
-import { titleMaker } from "../../utils/title-maker";
-import { cn } from "@/utils";
+  PrimaryModuleTable,
+  PrimaryModuleTableColumnHeader,
+  PrimaryModuleTableCellWrap,
+} from "@/components/primary-module/table";
 import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+
+import { cn } from "@/utils";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import type { TCustomerListItemParsed } from "@/schemas/customer";
+import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
+import { titleMaker } from "@/utils/title-maker";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -47,6 +47,13 @@ function CustomerSearchPage() {
   const search = useSearch({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } =
     normalizeCustomerListSearchParams(search);
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
+    Object.entries(searchFilters).reduce(
+      (prev, [key, value]) => [...prev, { id: key, value }],
+      [] as ColumnFiltersState
+    )
+  );
 
   const pagination: PaginationState = useMemo(
     () => ({
@@ -74,7 +81,7 @@ function CustomerSearchPage() {
             columnName: column.columnHeaderDescription ?? undefined,
           },
           header: ({ column: columnChild }) => (
-            <ModuleTableColumnHeader
+            <PrimaryModuleTableColumnHeader
               column={columnChild}
               title={column.columnHeaderDescription ?? ""}
             />
@@ -88,7 +95,7 @@ function CustomerSearchPage() {
               const customerId = item.table.getRow(item.row.id).original
                 .CustomerId;
               return (
-                <ModuleTableCellWrap>
+                <PrimaryModuleTableCellWrap>
                   <Link
                     to={viewCustomerByIdRoute.to}
                     params={{ customerId: String(customerId) }}
@@ -101,19 +108,21 @@ function CustomerSearchPage() {
                   >
                     {value}
                   </Link>
-                </ModuleTableCellWrap>
+                </PrimaryModuleTableCellWrap>
               );
             }
 
             if (DateColumns.includes(column.columnHeader)) {
               return (
-                <div className="min-w-[80px] px-2">
+                <PrimaryModuleTableCellWrap>
                   {t("intlDate", { value: new Date(value) })}
-                </div>
+                </PrimaryModuleTableCellWrap>
               );
             }
 
-            return <ModuleTableCellWrap>{value}</ModuleTableCellWrap>;
+            return (
+              <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
+            );
           },
           enableHiding: column.columnHeader !== "FirstName",
           enableSorting: false,
@@ -149,9 +158,8 @@ function CustomerSearchPage() {
 
   return (
     <Protector>
-      <ScrollToTop />
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 py-4 sm:px-4">
+        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
@@ -159,102 +167,106 @@ function CustomerSearchPage() {
               </h1>
             }
             subtitleText="Search through your registered customers and view details."
-            includeBottomBorder
           />
         </div>
-        <div className="mx-auto max-w-full px-2 sm:px-4">
-          <div className="my-2 py-4">
-            <ModuleSearchFilters
-              key={`module-filters-${JSON.stringify(searchFilters).length}`}
-              validationSchema={CustomerFiltersSchema}
-              initialValues={searchFilters}
-              onSubmit={async (formValues) => {
+        <Separator className="sm:mx-5" />
+        <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
+          <PrimaryModuleTable
+            data={customersData.data?.data || []}
+            columns={columnDefs}
+            onColumnOrderChange={handleSaveColumnsOrder}
+            rawColumnsData={columnsData?.data || []}
+            onColumnVisibilityChange={handleSaveColumnVisibility}
+            totalPages={
+              customersData.data?.totalRecords
+                ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
+                : 0
+            }
+            pagination={pagination}
+            onPaginationChange={(newPaginationState) => {
+              navigate({
+                to: searchCustomersRoute.to,
+                params: {},
+                search: (current) => ({
+                  ...current,
+                  page: newPaginationState.pageIndex + 1,
+                  size: newPaginationState.pageSize,
+                  filters: searchFilters,
+                }),
+              });
+            }}
+            filters={{
+              columnFilters,
+              setColumnFilters,
+              onClearFilters: () => {
                 navigate({
                   to: searchCustomersRoute.to,
                   params: {},
-                  search: (current) => ({
-                    ...current,
+                  search: () => ({
                     page: 1,
-                    size: 10,
-                    filters: { ...formValues },
+                    size: pagination.pageSize,
                   }),
                 });
-              }}
-              onReset={async () => {
+              },
+              onSearchWithFilters: () => {
+                const filters = columnFilters.reduce(
+                  (prev, current) => ({
+                    ...prev,
+                    [current.id]: current.value,
+                  }),
+                  {}
+                );
                 navigate({
                   to: searchCustomersRoute.to,
                   params: {},
-                  search: () => ({ page: 1, size: 10, filters: undefined }),
+                  search: () => ({
+                    page: pagination.pageIndex + 1,
+                    size: pagination.pageSize,
+                    filters,
+                  }),
                 });
-              }}
-              searchFiltersBlueprint={[
+              },
+              filterableColumns: [
                 {
-                  queryKey: "CustomerTypes",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "CustomerTypes",
-                  label: "Type",
-                  options: [
-                    { value: undefined, label: "All", isPlaceholder: true },
-                    ...customerTypesList.data.map((item) => ({
-                      value: `${item.typeName}`,
-                      label: item.typeName,
-                    })),
-                  ],
+                  id: "Keyword",
+                  title: "Search",
+                  type: "text",
+                  size: "large",
                 },
                 {
-                  queryKey: "Active",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "Active",
-                  label: "Active",
+                  id: "CustomerTypes",
+                  title: "Type",
+                  type: "multi-select",
+                  options: customerTypesList.data.map((item) => ({
+                    value: `${item.typeName}`,
+                    label: item.typeName,
+                  })),
+                  defaultValue: [],
+                },
+                {
+                  id: "DateOfbirth",
+                  title: "DOB",
+                  type: "date",
+                },
+                {
+                  id: "Phone",
+                  title: "Phone",
+                  type: "text",
+                  size: "normal",
+                },
+                {
+                  id: "Active",
+                  title: "Is active?",
+                  type: "select",
                   options: [
-                    { value: "true", label: "true", isPlaceholder: true },
+                    { value: "true", label: "true" },
                     { value: "false", label: "false" },
                   ],
+                  defaultValue: "true",
                 },
-                {
-                  queryKey: "SortDirection",
-                  type: "single-dropdown",
-                  required: false,
-                  accessor: "SortDirection",
-                  label: "Sort direction",
-                  options: [
-                    { value: "ASC", label: "ASC", isPlaceholder: true },
-                    { value: "DESC", label: "DESC" },
-                  ],
-                },
-              ]}
-            />
-          </div>
-
-          <div>
-            <ModuleTable
-              data={customersData.data?.data || []}
-              columns={columnDefs}
-              onColumnOrderChange={handleSaveColumnsOrder}
-              rawColumnsData={columnsData?.data || []}
-              onColumnVisibilityChange={handleSaveColumnVisibility}
-              totalPages={
-                customersData.data?.totalRecords
-                  ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
-                  : 0
-              }
-              pagination={pagination}
-              onPaginationChange={(newPaginationState) => {
-                navigate({
-                  to: searchCustomersRoute.to,
-                  params: {},
-                  search: (current) => ({
-                    ...current,
-                    page: newPaginationState.pageIndex + 1,
-                    size: newPaginationState.pageSize,
-                    filters: searchFilters,
-                  }),
-                });
-              }}
-            />
-          </div>
+              ],
+            }}
+          />
         </div>
       </div>
     </Protector>

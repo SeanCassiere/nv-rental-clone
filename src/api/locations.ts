@@ -1,9 +1,9 @@
 import { callV3Api, type CommonAuthParams, makeUrl } from "./fetcher";
-import { LocationSchemaArray } from "../utils/schemas/location";
-import { validateApiResWithZodSchema } from "../utils/schemas/apiFetcher";
+import { LocationSchemaArray } from "@/schemas/location";
+import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
 
 export const fetchLocationsList = async (
-  opts: CommonAuthParams & { withActive: boolean },
+  opts: CommonAuthParams & { withActive: boolean }
 ) => {
   return await callV3Api(
     makeUrl(`/v3/locations`, {
@@ -15,6 +15,6 @@ export const fetchLocationsList = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => validateApiResWithZodSchema(LocationSchemaArray, res));
 };

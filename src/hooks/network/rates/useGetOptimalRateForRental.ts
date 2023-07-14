@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchOptimalRateForRental } from "../../../api/rates";
+import { fetchOptimalRateForRental } from "@/api/rates";
 
 export function useGetOptimalRateForRental(opts: {
   enabled?: boolean;
@@ -10,7 +10,7 @@ export function useGetOptimalRateForRental(opts: {
     "userId" | "clientId" | "accessToken"
   >;
   onSuccess?: (
-    data: Awaited<ReturnType<typeof fetchOptimalRateForRental>>,
+    data: Awaited<ReturnType<typeof fetchOptimalRateForRental>>
   ) => void;
 }) {
   const auth = useAuth();

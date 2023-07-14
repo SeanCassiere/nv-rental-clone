@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchAgreementData } from "../../../api/agreements";
-import { agreementQKeys } from "../../../utils/query-key";
+import { fetchAgreementData } from "@/api/agreements";
+import { agreementQKeys } from "@/utils/query-key";
 
 export function useGetAgreementData(params: {
   agreementId: string | number;

@@ -1,9 +1,6 @@
-import { localDateTimeToQueryYearMonthDay } from "../utils/date";
-import { AgreementStatusListSchema } from "../utils/schemas/agreement";
-import {
-  VehicleDataSchema,
-  VehicleLevelListSchema,
-} from "../utils/schemas/vehicle";
+import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
+import { AgreementStatusListSchema } from "@/schemas/agreement";
+import { VehicleDataSchema, VehicleLevelListSchema } from "@/schemas/vehicle";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchVehiclesList = async (
@@ -11,7 +8,7 @@ export const fetchVehiclesList = async (
     page?: number;
     pageSize?: number;
     filters: any;
-  } & CommonAuthParams,
+  } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/vehicles`, {
@@ -25,7 +22,7 @@ export const fetchVehiclesList = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   );
 };
 
@@ -33,7 +30,7 @@ export const fetchVehicleData = async (
   opts: {
     vehicleId: string | number;
     clientTime: Date;
-  } & CommonAuthParams,
+  } & CommonAuthParams
 ) => {
   return await callV3Api(
     makeUrl(`/v3/vehicles/${opts.vehicleId}`, {
@@ -46,7 +43,7 @@ export const fetchVehicleData = async (
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => VehicleDataSchema.parse(res.data));
 };
 
@@ -60,7 +57,7 @@ export const fetchVehicleStatusesList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => AgreementStatusListSchema.parse(res.data));
 };
 
@@ -74,6 +71,6 @@ export const fetchVehicleFuelLevelsList = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
+    }
   ).then((res) => VehicleLevelListSchema.parse(res.data));
 };

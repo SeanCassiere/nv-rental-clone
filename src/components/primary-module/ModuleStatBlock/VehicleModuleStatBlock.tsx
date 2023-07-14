@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
-import { type VehicleDataParsed } from "../../../utils/schemas/vehicle";
-import { useGetVehicleStatusList } from "../../../hooks/network/vehicle/useGetVehicleStatusList";
+import { type VehicleDataParsed } from "@/schemas/vehicle";
+import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
 const supportedList = ["Available", "OnRent"];
 const getTextColorForStatus = (status: string) => {
@@ -48,11 +48,11 @@ const VehicleModuleStatBlock = ({
           <span
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
-              getTextColorForStatus(getStatusById(vehicle?.vehicle.statusId)),
+              getTextColorForStatus(getStatusById(vehicle?.vehicle.statusId))
             )}
           >
             {getVehicleStatusNameFromRaw(
-              getStatusById(vehicle?.vehicle.statusId),
+              getStatusById(vehicle?.vehicle.statusId)
             )}
           </span>
         }
@@ -111,7 +111,7 @@ const VehicleModuleStatBlock = ({
           <span
             className={cn(
               "select-none text-xl font-semibold xl:text-2xl",
-              vehicle?.vehicle.active ? "text-slate-600" : "text-red-500",
+              vehicle?.vehicle.active ? "text-slate-600" : "text-red-500"
             )}
           >
             {vehicle?.vehicle.active ? "Active" : "Inactive"}

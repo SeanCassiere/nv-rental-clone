@@ -6,15 +6,15 @@ import { useTranslation } from "react-i18next";
 import { CommonTable } from "../common/common-table";
 import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
 
-import { useGetReservationsList } from "../../hooks/network/reservation/useGetReservationsList";
-import { useGetModuleColumns } from "../../hooks/network/module/useGetModuleColumns";
+import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 
-import { type TReservationListItemParsed } from "../../utils/schemas/reservation";
-import { normalizeReservationListSearchParams } from "../../utils/normalize-search-params";
-import { sortColOrderByOrderIndex } from "../../utils/ordering";
-import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
-import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import { ReservationDateTimeColumns } from "../../utils/columns";
+import { type TReservationListItemParsed } from "@/schemas/reservation";
+import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservationIdPath";
+import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
+import { ReservationDateTimeColumns } from "@/utils/columns";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 
