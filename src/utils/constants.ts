@@ -3,7 +3,7 @@ export const LS_OIDC_REDIRECT_URI_KEY = "oidc:redirect_uri" as const;
 export const USER_STORAGE_KEYS = {
   dateFormat: "date-format",
   timeFormat: "time-format",
-  dismissedNotices: "dismissed-notices",
+  dismissedMessages: "dismissed-messages",
 } as const;
 
 export const OIDC_AUTHORITY =

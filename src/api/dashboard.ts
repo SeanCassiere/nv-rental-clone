@@ -1,11 +1,11 @@
+import { isBefore, isAfter } from "date-fns";
+
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import {
-  type TDashboardNotice,
-  VehicleStatusCountListSchema,
-} from "@/schemas/dashboard";
-import {
-  DashboardWidgetItemListSchema,
   DashboardStatsSchema,
+  VehicleStatusCountListSchema,
+  DashboardWidgetItemListSchema,
+  ServerMessageListSchema,
   type DashboardWidgetItemParsed,
 } from "@/schemas/dashboard";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
@@ -37,54 +37,66 @@ export const fetchDashboardStats = async (
   ).then((res) => DashboardStatsSchema.parse(res.data));
 };
 
-export const fetchDashboardNoticeList = async () => {
-  const currentDate = new Date();
-  const data = await fetch("/notices.json")
+export const fetchDashboardMessagesList = async (opts: CommonAuthParams) => {
+  const localMessagesPromise = fetch("/messages.json")
     .then((res) => res.json())
+    .then(ServerMessageListSchema.parse)
+    .catch(() => []);
+  // const serverMessagesPromise = fetch("data:application/json;base64,W10=")
+  //   .then((res) => res.json())
+  //   .then(ServerMessageListSchema.parse)
+  //   .catch(() => []);
+  const serverMessagesPromise = callV3Api(
+    makeUrl("/v3/messages", {
+      clientId: opts.clientId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  )
+    .then((res) => ServerMessageListSchema.parse(res.data))
     .catch(() => []);
 
-  const mapped: (TDashboardNotice | null)[] = data.map(
-    (notice: TDashboardNotice) => {
-      const startDate = notice.startDate ? new Date(notice.startDate) : null;
-      const endDate = notice.endDate ? new Date(notice.endDate) : null;
+  const [localMessages, serverMessages] = await Promise.all([
+    localMessagesPromise,
+    serverMessagesPromise,
+  ]);
 
-      // if start date is in the future, don't show
-      if (startDate && startDate > currentDate) {
-        return null;
-      }
-      // if end date is in the past, don't show
-      if (endDate && endDate < currentDate) {
-        return null;
-      }
+  const allMessages = [...localMessages, ...serverMessages];
 
-      // if start date is in the past and end date is in the future, show
-      if (
-        startDate &&
-        endDate &&
-        startDate < currentDate &&
-        endDate > currentDate
-      ) {
-        return notice;
-      }
+  const currentDate = new Date();
+  const sortedMessages = allMessages.filter((message) => {
+    if (!message.active) return false;
 
-      // if start date is in the past and no end date, show
-      if (startDate && !endDate && startDate < currentDate) {
-        return notice;
-      }
-      // if end date is in the future and no start date, show
-      if (endDate && !startDate && endDate > currentDate) {
-        return notice;
-      }
+    const startDate = message.sentDate
+      ? new Date(message.sentDate)
+      : new Date("1970-01-01");
+    const endDate = message.expiryDate ? new Date(message.expiryDate) : null;
 
-      // if no start or end date, show
-      if (!startDate && !endDate) {
-        return notice;
-      }
+    // if start date is in the future, don't show
+    if (isAfter(startDate, currentDate)) return false;
 
-      return null;
+    // if end date is in the past, don't show
+    if (endDate && isBefore(endDate, currentDate)) return false;
+
+    // if start date is in the past and end date is in the future, show
+    if (
+      isBefore(startDate, currentDate) &&
+      endDate &&
+      isAfter(endDate, currentDate)
+    ) {
+      return true;
     }
-  );
-  return mapped.filter((notice) => notice !== null) as any[];
+
+    // if start date is in the past and no end date, show
+    if (isBefore(startDate, currentDate) && !endDate) return true;
+
+    return false;
+  });
+
+  return sortedMessages;
 };
 
 export const fetchDashboardWidgetList = async (opts: CommonAuthParams) => {

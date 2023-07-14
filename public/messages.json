@@ -1,0 +1,24 @@
+[
+  {
+    "messageId": 98234180,
+    "clientId": 10000,
+    "clientName": null,
+    "title": "Redesign of Ping",
+    "description": "We are redesigning Ping. Please check the new design and let us know your feedback.",
+    "sentDate": "2023-02-14T00:00:00",
+    "expiryDate": "2023-11-30T00:00:00",
+    "active": true,
+    "link": "https://rentall-clone.pingstash.com"
+  },
+  {
+    "messageId": 98234181,
+    "clientId": 10000,
+    "clientName": null,
+    "title": "Maintenance Notice",
+    "description": "Ping maintenance is scheduled on 14th Feb 2023. Please expect some downtime during this period.",
+    "sentDate": "2023-02-14T00:00:00",
+    "expiryDate": "2023-11-30T00:00:00",
+    "active": true,
+    "link": null
+  }
+]

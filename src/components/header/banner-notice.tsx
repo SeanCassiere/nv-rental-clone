@@ -1,16 +1,32 @@
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { DotIcon, XIcon } from "lucide-react";
 
-import { MegaPhoneOutline, XMarkOutline } from "../icons";
-import type { TDashboardNotice } from "../../schemas/dashboard";
+import type { ServerMessage } from "@/schemas/dashboard";
 import {
   getLocalStorageForUser,
   setLocalStorageForUser,
-} from "../../utils/user-local-storage";
-import { USER_STORAGE_KEYS } from "../../utils/constants";
-import { cn } from "@/utils";
+} from "@/utils/user-local-storage";
+import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { tryParseJson } from "@/utils/parse";
 
-export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
+const MessageText = ({ message }: { message: ServerMessage }) => (
+  <>
+    <strong className="font-semibold text-white">
+      {message.title}
+      {message.description && (
+        <DotIcon className="mb-1 hidden h-3 w-3 sm:mx-0.5 sm:inline sm:h-5 sm:w-5" />
+      )}
+    </strong>
+    {message.description && (
+      <span className="group-hover:underline group-hover:underline-offset-4">
+        {message.description}
+      </span>
+    )}
+  </>
+);
+
+export const BannerNotice = ({ message }: { message: ServerMessage }) => {
   const auth = useAuth();
   const [show, setShow] = useState(true);
 
@@ -25,16 +41,16 @@ export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
     const local = getLocalStorageForUser(
       auth.user?.profile.navotar_clientid,
       auth.user?.profile.navotar_userid,
-      USER_STORAGE_KEYS.dismissedNotices
+      USER_STORAGE_KEYS.dismissedMessages
     );
-    const data: string[] = local ? JSON.parse(local) : [];
+    const data = tryParseJson<string[]>(local, []);
 
-    data.push(notice.id);
+    data.push(message.messageId);
 
     setLocalStorageForUser(
       auth.user?.profile.navotar_clientid,
       auth.user?.profile.navotar_userid,
-      "dismissed-notices",
+      USER_STORAGE_KEYS.dismissedMessages,
       JSON.stringify(data)
     );
   };
@@ -43,49 +59,28 @@ export const BannerNotice = ({ notice }: { notice: TDashboardNotice }) => {
 
   return (
     <div className="bg-teal-500">
-      <div className="mx-auto max-w-[1620px] px-4 py-4">
-        <div className="flex flex-wrap items-center justify-between">
-          <div className="flex w-0 flex-1 items-center">
-            <span className="flex rounded-lg bg-teal-600 p-2">
-              <MegaPhoneOutline
-                className="h-6 w-6 text-white"
-                aria-hidden="true"
-              />
-            </span>
-            <p className="ml-3 truncate font-semibold text-white">
-              <span className="md:hidden">{notice.titleTextShort}</span>
-              <span className="hidden md:inline">{notice.titleText}</span>
-            </p>
-          </div>
-          <div className="order-3 mt-2 w-full flex-shrink-0 sm:order-2 sm:mt-0 sm:w-auto">
-            <a
-              href={notice.link || "#"}
-              className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-semibold text-teal-600 shadow-sm hover:bg-teal-50"
-              target={notice.link?.startsWith("http") ? "_blank" : "_self"}
-              rel="noopener noreferrer"
-            >
-              {notice.actionText}
-            </a>
-          </div>
-          <div
-            className={cn(
-              notice.ignoreDismiss
-                ? "sm:hidden"
-                : "order-2 flex-shrink-0 sm:order-3 sm:ml-3"
-            )}
+      <div className="mx-auto flex w-full max-w-[1620px] flex-1 items-center gap-6 px-3.5 pb-2.5 pt-3">
+        {message.link ? (
+          <a
+            href={message.link}
+            className="[text-wrap=balance] group flex flex-1 flex-col flex-wrap items-start text-base leading-normal  text-white/95 sm:flex-row sm:items-center"
+            target={message.link.startsWith("http") ? "_blank" : "_self"}
+            rel="noopener noreferrer"
           >
-            <button
-              type="button"
-              className={cn(
-                "-mr-1 flex rounded-md p-2 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2",
-                notice.ignoreDismiss ? "opacity-0" : ""
-              )}
-              onClick={notice.ignoreDismiss ? undefined : onDismiss}
-            >
-              <span className="sr-only">Dismiss</span>
-              <XMarkOutline className="h-6 w-6 text-white" aria-hidden="true" />
-            </button>
-          </div>
+            <MessageText message={message} />
+          </a>
+        ) : (
+          <p className="flex flex-1 flex-col flex-wrap items-start text-base leading-normal text-white/95 sm:flex-row sm:items-center">
+            <MessageText message={message} />
+          </p>
+        )}
+        <div className="flex justify-end">
+          <button
+            className="p-3 text-white hover:text-white/70"
+            onClick={onDismiss}
+          >
+            <XIcon className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </div>
