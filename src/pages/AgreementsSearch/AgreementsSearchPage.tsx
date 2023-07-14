@@ -56,12 +56,12 @@ function AgreementsSearchPage() {
   const { searchFilters, pageNumber, size } =
     normalizeAgreementListSearchParams(search);
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() => {
-    return Object.entries(searchFilters).reduce(
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
+    Object.entries(searchFilters).reduce(
       (prev, [key, value]) => [...prev, { id: key, value }],
       [] as ColumnFiltersState
-    );
-  });
+    )
+  );
 
   const pagination: PaginationState = useMemo(
     () => ({
@@ -412,8 +412,9 @@ function AgreementsSearchPage() {
                     to: searchAgreementsRoute.to,
                     params: {},
                     search: () => ({
-                      page: pagination.pageIndex + 1,
+                      page: 1,
                       size: pagination.pageSize,
+                      filters: {},
                     }),
                   });
                 },
@@ -445,6 +446,7 @@ function AgreementsSearchPage() {
                       value: `${item.id}`,
                       label: item.name,
                     })),
+                    defaultValue: undefined,
                   },
                   {
                     id: "PickupLocationId",
@@ -454,6 +456,7 @@ function AgreementsSearchPage() {
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
+                    defaultValue: undefined,
                   },
                   {
                     id: "ReturnLocationId",
@@ -463,6 +466,7 @@ function AgreementsSearchPage() {
                       value: `${item.locationId}`,
                       label: `${item.locationName}`,
                     })),
+                    defaultValue: undefined,
                   },
                 ],
               }}

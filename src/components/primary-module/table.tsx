@@ -67,8 +67,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
 import {
-  type FacetedFilterType,
   type FilterOption,
+  type FacetedFilterType,
+  type FacetedFilterData,
 } from "@/components/primary-module/table-filter";
 
 interface PrimaryModuleTableProps<
@@ -98,6 +99,7 @@ interface PrimaryModuleTableProps<
       title: string;
       type: FacetedFilterType;
       options: FilterOption[];
+      defaultValue?: FacetedFilterData;
     }[];
   };
 }
@@ -201,6 +203,7 @@ export function PrimaryModuleTable<
   return (
     <div className="space-y-4">
       <PrimaryModuleTableToolbar
+        // key={`toolbar_${JSON.stringify(columnFilters)}`}
         table={table}
         filterableColumns={filterableColumns}
         onClearFilters={onClearFilters}

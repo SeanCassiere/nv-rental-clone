@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { DataTableViewOptions } from "@/components/ui/data-table";
 import {
   PrimaryModuleTableFacetedFilter,
-  type FacetedFilterType,
   type FilterOption,
+  type FacetedFilterType,
+  type FacetedFilterData,
 } from "@/components/primary-module/table-filter";
 
 export interface PrimaryModuleTableToolbarProps<
@@ -22,6 +23,7 @@ export interface PrimaryModuleTableToolbarProps<
     title: string;
     type: FacetedFilterType;
     options: FilterOption[];
+    defaultValue?: FacetedFilterData;
   }[];
 }
 
@@ -31,11 +33,31 @@ export function PrimaryModuleTableToolbar<
 >({
   table,
   filterableColumns = [],
-  onClearFilters,
+  onClearFilters: callClearFiltersFn,
   onSearchWithFilters,
 }: PrimaryModuleTableToolbarProps<TData, TColumnFilters>) {
   const tableColumnFilters = table.getState().columnFilters;
   const isFiltered = tableColumnFilters.length > 0;
+
+  const handleReset = () => {
+    const f = table.getState().columnFilters;
+    const newState = f.reduce((prev, current) => {
+      const currentInFilterable = filterableColumns.find(
+        (i) => i.id === current.id
+      );
+
+      if (currentInFilterable) {
+        current.value = currentInFilterable?.defaultValue || undefined;
+      }
+
+      prev.push(current);
+      return prev;
+    }, [] as ColumnFiltersState);
+
+    table.setColumnFilters(newState);
+
+    callClearFiltersFn();
+  };
 
   return (
     <div className="flex flex-col justify-between space-y-2 sm:flex-row sm:items-center">
@@ -62,7 +84,7 @@ export function PrimaryModuleTableToolbar<
           <Button
             variant="ghost"
             size="sm"
-            onClick={onClearFilters}
+            onClick={handleReset}
             className="h-8 px-2 lg:px-3"
           >
             Clear

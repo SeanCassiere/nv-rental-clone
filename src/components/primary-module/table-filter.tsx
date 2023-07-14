@@ -28,6 +28,7 @@ export type FilterOption = {
 };
 
 export type FacetedFilterType = "select" | "text";
+export type FacetedFilterData = string | string[] | undefined;
 
 interface PrimaryModuleTableFacetedFilterProps<TData, TValue> {
   table: Table<TData>;
@@ -47,6 +48,10 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
   const filterState = table
     .getState()
     .columnFilters.find((item) => item.id === id);
+
+  // if (id === "PickupLocationId") {
+  //   console.log("PickupLocationId.filterState", filterState);
+  // }
 
   const handleSaveValue = (updateValue: string | string[] | undefined) => {
     table.setColumnFilters((prev) => {
