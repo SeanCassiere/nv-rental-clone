@@ -1,4 +1,4 @@
-import { CustomerSummary } from "../PrimaryModule/ModuleSummary/CustomerSummary";
+import { CustomerSummary } from "@/components/primary-module/ModuleSummary/CustomerSummary";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetCustomerData } from "../../hooks/network/customer/useGetCustomerData";
 import { useGetCustomerSummary } from "../../hooks/network/customer/useGetCustomerSummary";

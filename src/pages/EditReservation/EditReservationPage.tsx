@@ -3,7 +3,7 @@ import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
-import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
@@ -44,7 +44,7 @@ const EditReservationPage = () => {
         params: { reservationId },
       });
     },
-    [reservationId, navigate],
+    [reservationId, navigate]
   );
 
   const handleAgreementSaveComplete = useCallback(() => {
@@ -63,8 +63,8 @@ const EditReservationPage = () => {
 
   useDocumentTitle(
     titleMaker(
-      `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`,
-    ),
+      `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`
+    )
   );
   return (
     <Protector>

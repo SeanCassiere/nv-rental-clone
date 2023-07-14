@@ -1,11 +1,11 @@
-import CustomerInformation from "../PrimaryModule/ModuleInformation/CustomerInformation";
-import RentalInformation from "../PrimaryModule/ModuleInformation/RentalInformation";
-import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
+import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
+import RentalInformation from "../primary-module/ModuleInformation/RentalInformation";
+import { RentalRatesSummary } from "@/components/primary-module/ModuleSummary/RentalRatesSummary";
 
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
 import { useGetReservationData } from "../../hooks/network/reservation/useGetReservationData";
-import VehicleInformation from "../PrimaryModule/ModuleInformation/VehicleInformation";
+import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
 
 type ReservationSummaryTabProps = {
   reservationId: string;

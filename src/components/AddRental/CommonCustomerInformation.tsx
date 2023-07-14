@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { InformationBlockCardWithChildren } from "../PrimaryModule/ModuleInformation/common";
+import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
 import { DocumentTextSolid } from "../icons";
 import { Button, DatePicker, TextInput } from "../Form";
 import SelectCustomerModal from "../Dialogs/SelectCustomerModal";
@@ -110,12 +110,12 @@ const CommonCustomerInformation = ({
           setValue(
             "licenseExpiryDate",
             customer.LicenseExpiryDate ?? null,
-            valOpts,
+            valOpts
           );
           setValue(
             "licenseIssueDate",
             customer.LicenseIssueDate ?? null,
-            valOpts,
+            valOpts
           );
           setValue("licenseNumber", customer.LicenseNumber ?? null, valOpts);
           setValue("bPhone", customer.bPhone ?? "", valOpts);

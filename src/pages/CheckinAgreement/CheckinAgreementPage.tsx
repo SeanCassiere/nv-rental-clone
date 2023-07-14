@@ -3,7 +3,7 @@ import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
-import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 
@@ -42,7 +42,7 @@ const CheckinAgreementPage = () => {
         params: { agreementId },
       });
     },
-    [agreementId, navigate],
+    [agreementId, navigate]
   );
 
   const handleAgreementSaveComplete = useCallback(() => {
@@ -61,10 +61,8 @@ const CheckinAgreementPage = () => {
 
   useDocumentTitle(
     titleMaker(
-      `Check-in - ${
-        summaryData.data?.agreementNumber || "Loading"
-      } - Agreement`,
-    ),
+      `Check-in - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
+    )
   );
   return (
     <Protector>

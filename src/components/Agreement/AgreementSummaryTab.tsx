@@ -1,17 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
 
-import CustomerInformation from "../PrimaryModule/ModuleInformation/CustomerInformation";
-import RentalInformation from "../PrimaryModule/ModuleInformation/RentalInformation";
-import { RentalRatesSummary } from "../PrimaryModule/ModuleSummary/RentalRatesSummary";
+import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
+import RentalInformation from "../primary-module/ModuleInformation/RentalInformation";
+import { RentalRatesSummary } from "@/components/primary-module/ModuleSummary/RentalRatesSummary";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
-} from "../PrimaryModule/ModuleTabs";
+} from "@/components/primary-module/ModuleTabs";
 
 import { useGetAgreementData } from "../../hooks/network/agreement/useGetAgreementData";
 import { useGetClientProfile } from "../../hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "../../hooks/network/module/useGetModuleRentalRatesSummary";
-import VehicleInformation from "../PrimaryModule/ModuleInformation/VehicleInformation";
+import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
 import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 
 type AgreementSummaryTabProps = {

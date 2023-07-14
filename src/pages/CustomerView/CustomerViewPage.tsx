@@ -12,7 +12,7 @@ import { ChevronRightOutline, PencilIconFilled } from "../../components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
-} from "../../components/PrimaryModule/ModuleTabs";
+} from "@/components/primary-module/ModuleTabs";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import { LinkButton } from "../../components/Form";
@@ -29,10 +29,10 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Customer/CustomerSummaryTab"),
+  () => import("../../components/Customer/CustomerSummaryTab")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
+  () => import("../../components/primary-module/ModuleNotesTabContent")
 );
 
 function CustomerViewPage() {
@@ -93,8 +93,8 @@ function CustomerViewPage() {
     titleMaker(
       (customer.data?.firstName && customer.data?.lastName
         ? customer.data?.firstName + " " + customer.data?.lastName
-        : "Loading") + " - Customers",
-    ),
+        : "Loading") + " - Customers"
+    )
   );
 
   return (

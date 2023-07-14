@@ -12,9 +12,9 @@ import { ChevronRightOutline, PencilIconFilled } from "../../components/icons";
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
-} from "../../components/PrimaryModule/ModuleTabs";
+} from "@/components/primary-module/ModuleTabs";
 import ScrollToTop from "../../components/ScrollToTop";
-import VehicleModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/VehicleModuleStatBlock";
+import VehicleModuleStatBlock from "@/components/primary-module/ModuleStatBlock/VehicleModuleStatBlock";
 import CommonHeader from "../../components/Layout/CommonHeader";
 import { LinkButton } from "../../components/Form";
 
@@ -30,17 +30,17 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Vehicle/VehicleSummaryTab"),
+  () => import("../../components/Vehicle/VehicleSummaryTab")
 );
 const VehicleReservationsTab = lazy(
-  () => import("../../components/Vehicle/VehicleReservationsTab"),
+  () => import("../../components/Vehicle/VehicleReservationsTab")
 );
 const VehicleAgreementsTab = lazy(
-  () => import("../../components/Vehicle/VehicleAgreementsTab"),
+  () => import("../../components/Vehicle/VehicleAgreementsTab")
 );
 
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
+  () => import("../../components/primary-module/ModuleNotesTabContent")
 );
 
 function VehicleViewPage() {
@@ -116,7 +116,7 @@ function VehicleViewPage() {
   }, [vehicleId, vehicle.data]);
 
   useDocumentTitle(
-    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet"),
+    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
   );
 
   return (

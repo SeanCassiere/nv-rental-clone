@@ -3,7 +3,7 @@ import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "../../components/AddRental";
 import Protector from "../../components/Protector";
-import { type ModuleTabConfigItem } from "../../components/PrimaryModule/ModuleTabs";
+import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 
 import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
 
@@ -42,7 +42,7 @@ const EditAgreementPage = () => {
         params: { agreementId },
       });
     },
-    [agreementId, navigate],
+    [agreementId, navigate]
   );
 
   const handleAgreementSaveComplete = useCallback(() => {
@@ -61,8 +61,8 @@ const EditAgreementPage = () => {
 
   useDocumentTitle(
     titleMaker(
-      `Edit - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`,
-    ),
+      `Edit - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
+    )
   );
   return (
     <Protector>

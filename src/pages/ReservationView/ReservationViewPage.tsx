@@ -16,10 +16,10 @@ import {
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
-} from "../../components/PrimaryModule/ModuleTabs";
+} from "@/components/primary-module/ModuleTabs";
 import ScrollToTop from "../../components/ScrollToTop";
 import CommonHeader from "../../components/Layout/CommonHeader";
-import ReservationModuleStatBlock from "../../components/PrimaryModule/ModuleStatBlock/ReservationModuleStatBlock";
+import ReservationModuleStatBlock from "@/components/primary-module/ModuleStatBlock/ReservationModuleStatBlock";
 import { Button, LinkButton } from "../../components/Form";
 
 import {
@@ -34,10 +34,10 @@ import { getStartingIndexFromTabName } from "../../utils/moduleTabs";
 import { titleMaker } from "../../utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Reservation/ReservationSummaryTab"),
+  () => import("../../components/Reservation/ReservationSummaryTab")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/PrimaryModule/ModuleNotesTabContent"),
+  () => import("../../components/primary-module/ModuleNotesTabContent")
 );
 
 function ReservationViewPage() {
@@ -105,8 +105,8 @@ function ReservationViewPage() {
   useDocumentTitle(
     titleMaker(
       (reservation.data?.reservationview.reservationNumber || "Loading") +
-        " - Reservations",
-    ),
+        " - Reservations"
+    )
   );
 
   return (
