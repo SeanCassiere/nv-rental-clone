@@ -3,13 +3,12 @@ import { XIcon } from "lucide-react";
 import { type Table, type ColumnFiltersState } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-
 import { DataTableViewOptions } from "@/components/ui/data-table";
 import {
   PrimaryModuleTableFacetedFilter,
   type FacetedFilterType,
   type FilterOption,
-} from "./table-filter";
+} from "@/components/primary-module/table-filter";
 
 export interface PrimaryModuleTableToolbarProps<
   TData,
@@ -34,48 +33,26 @@ export function PrimaryModuleTableToolbar<
   filterableColumns = [],
 }: PrimaryModuleTableToolbarProps<TData, TColumnFilters>) {
   const tableColumnFilters = table.getState().columnFilters;
-  console.log("tableColumnFilters", tableColumnFilters);
   const isFiltered = tableColumnFilters.length > 0;
-  // console.log("filterableColumns", filterableColumns);
 
   return (
     <div className="flex flex-col justify-between space-y-2 sm:flex-row sm:items-center">
       <div className="flex flex-1 items-center space-x-2">
-        {/* <Input
-          placeholder="Filter tasks..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="h-8 w-[150px] lg:w-[250px]"
-        /> */}
-
-        {/* {table.getColumn("priority") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("priority")}
-            title="Priority"
-            options={[]}
-          />
-        )} */}
         {filterableColumns.length &&
-          filterableColumns.map(
-            (column) =>
-              tableColumnFilters.find(
-                (tableColumnFilter) => tableColumnFilter.id === column.id
-              ) && (
-                <PrimaryModuleTableFacetedFilter
-                  key={`faceted_filter_${column.id}`}
-                  table={table}
-                  id={column.id}
-                  title={column.type}
-                  type={column.type}
-                  options={column.options}
-                />
-              )
-          )}
+          filterableColumns.map((column) => (
+            <PrimaryModuleTableFacetedFilter
+              key={`faceted_filter_${column.id}`}
+              table={table}
+              id={column.id}
+              title={column.title}
+              type={column.type}
+              options={column.options}
+            />
+          ))}
         {isFiltered && (
           <Button
             variant="ghost"
+            size="sm"
             onClick={onClearFilters}
             className="h-8 px-2 lg:px-3"
           >

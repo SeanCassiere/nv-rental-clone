@@ -420,16 +420,31 @@ function AgreementsSearchPage() {
                 },
                 filterableColumns: [
                   {
+                    id: "AgreementStatusName",
+                    title: "Status",
+                    type: "select",
+                    options: agreementStatusList.data.map((item) => ({
+                      value: `${item.id}`,
+                      label: item.name,
+                    })),
+                  },
+                  {
                     id: "PickupLocationId",
                     title: "Checkout location",
                     type: "select",
-                    options: [],
+                    options: locationsList.data.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
                   },
                   {
                     id: "ReturnLocationId",
                     title: "Checkin location",
-                    type: "text",
-                    options: [],
+                    type: "select",
+                    options: locationsList.data.data.map((item) => ({
+                      value: `${item.locationId}`,
+                      label: `${item.locationName}`,
+                    })),
                   },
                 ],
               }}
