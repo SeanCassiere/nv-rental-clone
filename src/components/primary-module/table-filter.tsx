@@ -70,7 +70,7 @@ interface PrimaryModuleTableFacetedFilterProps<TData, TValue> {
 
 export function PrimaryModuleTableFacetedFilter<TData, TValue>({
   table,
-  data: { id, title, type, options = [], size = "normal" },
+  data: { id, title, type, options = [], size = "normal", defaultValue },
   isLargeSearchFullWidth = false,
 }: PrimaryModuleTableFacetedFilterProps<TData, TValue>) {
   const clearFilterText = "Clear filter";
@@ -258,7 +258,11 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                 <CommandGroup>
                   <CommandItem
                     onSelect={() => {
-                      handleSaveValue(undefined);
+                      if (defaultValue) {
+                        handleSaveValue(defaultValue);
+                      } else {
+                        handleSaveValue(undefined);
+                      }
                     }}
                     className="justify-center"
                   >
@@ -308,7 +312,11 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                 <CommandGroup>
                   <CommandItem
                     onSelect={() => {
-                      handleSaveValue([]);
+                      if (defaultValue) {
+                        handleSaveValue(defaultValue);
+                      } else {
+                        handleSaveValue([]);
+                      }
                     }}
                     className="justify-center"
                   >
