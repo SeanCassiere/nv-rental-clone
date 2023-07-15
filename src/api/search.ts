@@ -6,59 +6,26 @@ import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesL
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 
-type NetworkSearchResultItem = {
-  type: "network";
+import type { TAgreementListItemParsed } from "@/schemas/agreement/searchResults";
+import type { TReservationListItemParsed } from "@/schemas/reservation/searchResults";
+import type { TVehicleListItemParsed } from "@/schemas/vehicle/searchResults";
+import type { TCustomerListItemParsed } from "@/schemas/customer/searchResults";
+
+export type GlobalSearchReturnType = {
   module: AppPrimaryModuleType;
   referenceId: string;
   displayText: string;
   fullDisplayText: string;
-};
-
-type DestinationTypes =
-  | "search-customers"
-  | "search-vehicles"
-  | "search-fleet"
-  | "search-reservations"
-  | "search-agreements"
-  | "dashboard";
-
-type InternalAppSearchResultItem = {
-  type: "internal";
-  destination: DestinationTypes;
-};
-
-export type GlobalSearchReturnType = (
-  | NetworkSearchResultItem
-  | InternalAppSearchResultItem
-)[];
-
-const storedInternalSearches: {
-  searchText: string;
-  destination: DestinationTypes;
-}[] = [
-  { searchText: "dashboard", destination: "dashboard" },
-  { searchText: "home", destination: "dashboard" },
-  { searchText: "customers", destination: "search-customers" },
-  { searchText: "vehicles", destination: "search-vehicles" },
-  { searchText: "fleet", destination: "search-fleet" },
-  { searchText: "reservations", destination: "search-reservations" },
-  { searchText: "agreements", destination: "search-agreements" },
-];
+}[];
 
 export async function fetchGlobalSearchList(
   opts: CommonAuthParams & { currentDate: Date; searchTerm: string }
 ): Promise<GlobalSearchReturnType> {
   const { clientId, userId, accessToken, currentDate, searchTerm } = opts;
 
-  const internalSearches: InternalAppSearchResultItem[] = [];
-
-  storedInternalSearches.forEach((item) => {
-    if (item.searchText.toLowerCase().includes(searchTerm.toLowerCase().trim()))
-      internalSearches.push({
-        type: "internal",
-        destination: item.destination,
-      });
-  });
+  if (!searchTerm) {
+    return [];
+  }
 
   const apiCalls = [
     fetchCustomersListModded({
@@ -66,39 +33,45 @@ export async function fetchGlobalSearchList(
       userId,
       accessToken,
       filters: { Keyword: searchTerm },
-    }),
+    }).catch(() => ({ data: [] as TCustomerListItemParsed[] })),
     fetchVehiclesListModded({
       clientId,
       userId,
       accessToken,
       filters: { LicenseNo: searchTerm },
-    }),
+    }).catch(() => ({ data: [] as TVehicleListItemParsed[] })),
     fetchReservationsListModded({
       clientId,
       userId,
       accessToken,
       filters: { Keyword: searchTerm, Statuses: [2, 6, 7] },
       clientDate: currentDate,
-    }),
+    }).catch(() => ({ data: [] as TReservationListItemParsed[] })),
     fetchAgreementsListModded({
       clientId,
       userId,
       accessToken,
       filters: { Keyword: searchTerm, Statuses: [2, 5, 7] },
       currentDate,
-    }),
+    }).catch(() => ({ data: [] as TAgreementListItemParsed[] })),
   ] as const;
 
   return await Promise.all(apiCalls)
     .then((results) => {
       let returnableResults: GlobalSearchReturnType = [];
 
-      const customers = results[0].data;
-      const customerResults: NetworkSearchResultItem[] = customers.map(
+      const [
+        customersPromise,
+        vehiclesPromise,
+        reservationsPromise,
+        agreementsPromise,
+      ] = results;
+
+      const customers = customersPromise.data;
+      const customerResults: GlobalSearchReturnType = customers.map(
         (customer) => {
           const displayText = `${customer.FullName}`;
           return {
-            type: "network",
             module: "customers",
             referenceId: `${customer.id}`,
             displayText,
@@ -108,23 +81,20 @@ export async function fetchGlobalSearchList(
       );
       returnableResults = [...returnableResults, ...customerResults];
 
-      const vehicles = results[1].data;
-      const vehicleResults: NetworkSearchResultItem[] = vehicles.map(
-        (vehicle) => {
-          const displayText = `${vehicle.LicenseNo} ${vehicle.Year} ${vehicle.VehicleMakeName} ${vehicle.ModelName}`;
-          return {
-            type: "network",
-            module: "vehicles",
-            referenceId: `${vehicle.id}`,
-            displayText,
-            fullDisplayText: `Vehicles > ${displayText}`,
-          };
-        }
-      );
+      const vehicles = vehiclesPromise.data;
+      const vehicleResults: GlobalSearchReturnType = vehicles.map((vehicle) => {
+        const displayText = `${vehicle.LicenseNo} ${vehicle.Year} ${vehicle.VehicleMakeName} ${vehicle.ModelName}`;
+        return {
+          module: "vehicles",
+          referenceId: `${vehicle.id}`,
+          displayText,
+          fullDisplayText: `Vehicles > ${displayText}`,
+        };
+      });
       returnableResults = [...returnableResults, ...vehicleResults];
 
-      const reservations = results[2].data;
-      const reservationResults: NetworkSearchResultItem[] = reservations.map(
+      const reservations = reservationsPromise.data;
+      const reservationResults: GlobalSearchReturnType = reservations.map(
         (res) => {
           const displayText = String(
             res.ReservationNumber +
@@ -135,7 +105,6 @@ export async function fetchGlobalSearchList(
               (res.LicenseNo ? " - " + String(res.LicenseNo) : "")
           ).trim();
           return {
-            type: "network",
             module: "reservations",
             referenceId: `${res.id}`,
             displayText,
@@ -145,8 +114,8 @@ export async function fetchGlobalSearchList(
       );
       returnableResults = [...returnableResults, ...reservationResults];
 
-      const agreements = results[3].data;
-      const agreementResults: NetworkSearchResultItem[] = agreements.map(
+      const agreements = agreementsPromise.data;
+      const agreementResults: GlobalSearchReturnType = agreements.map(
         (agreement) => {
           const displayText = String(
             agreement.AgreementNumber +
@@ -158,7 +127,6 @@ export async function fetchGlobalSearchList(
               String(agreement.LicenseNo)
           ).trim();
           return {
-            type: "network",
             module: "agreements",
             referenceId: `${agreement.id}`,
             displayText,
@@ -168,10 +136,10 @@ export async function fetchGlobalSearchList(
       );
       returnableResults = [...returnableResults, ...agreementResults];
 
-      return [...internalSearches, ...returnableResults];
+      return returnableResults;
     })
     .catch((e) => {
       console.error("global search error: ", e);
-      return [...internalSearches];
+      return [];
     });
 }
