@@ -9,6 +9,8 @@ import {
   BarChart4Icon,
   CalendarIcon,
   FileSignatureIcon,
+  User2Icon,
+  LayoutDashboardIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,7 @@ import {
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { indexRoute } from "@/routes/index";
 import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
 import { searchFleetRoute } from "@/routes/fleet/searchFleet";
 import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
@@ -219,6 +222,18 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
+                    to: indexRoute.to,
+                  })
+                );
+              }}
+            >
+              <LayoutDashboardIcon className="mr-2 h-4 w-4 text-primary/70" />
+              Dashboard
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                run(() =>
+                  navigate({
                     to: searchAgreementsRoute.to,
                     search: () => ({ page: 1, size: 10 }),
                   })
@@ -229,7 +244,20 @@ export const CommandMenu = () => {
               Reports
             </CommandItem>
           </CommandGroup>
-          <CommandGroup heading="System">
+          <CommandGroup heading="Settings">
+            <CommandItem
+              onSelect={() => {
+                run(() =>
+                  navigate({
+                    to: searchAgreementsRoute.to,
+                    search: () => ({ page: 1, size: 10 }),
+                  })
+                );
+              }}
+            >
+              <User2Icon className="mr-2 h-4 w-4 text-primary/70" />
+              Profile
+            </CommandItem>
             <CommandItem
               onSelect={() => {
                 run(() =>
