@@ -3,11 +3,8 @@ import { useAuth } from "react-oidc-context";
 
 import { fetchGlobalSearchList } from "@/api/search";
 
-export function useGetGlobalSearch(params: {
-  searchTerm: string;
-  onSuccess?: (data: Awaited<ReturnType<typeof fetchGlobalSearchList>>) => void;
-}) {
-  const { searchTerm, onSuccess } = params;
+export function useGetGlobalSearch(params: { searchTerm: string }) {
+  const { searchTerm } = params;
 
   const auth = useAuth();
 
@@ -21,10 +18,6 @@ export function useGetGlobalSearch(params: {
         currentDate: new Date(),
         searchTerm,
       });
-    },
-    enabled: searchTerm.length > 0,
-    onSuccess: (data) => {
-      onSuccess?.(data);
     },
   });
   return query;
