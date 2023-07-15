@@ -15,6 +15,7 @@ import { UI_APPLICATION_NAME } from "@/utils/constants";
 
 import { BannerNotice } from "./banner-notice";
 import { UserNavigationDropdown } from "./user-navigation-dropdown";
+import { CommandMenu } from "./command-menu";
 
 export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
@@ -127,6 +128,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             </div>
             <div className="flex flex-none items-center gap-x-2">
+              <CommandMenu />
               <UserNavigationDropdown />
             </div>
           </div>

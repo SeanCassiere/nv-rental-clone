@@ -14,7 +14,7 @@ const Command = React.forwardRef<
     ref={ref}
     className={cn(
       "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
-      className,
+      className
     )}
     {...props}
   />
@@ -44,8 +44,8 @@ const CommandInput = React.forwardRef<
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
-        className,
+        "flex h-11 w-full rounded-md border-0 bg-transparent py-3 text-sm outline-none ring-0 placeholder:text-muted-foreground focus-within:border-0 focus-within:outline-none focus-within:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
+        className
       )}
       {...props}
     />
@@ -88,7 +88,7 @@ const CommandGroup = React.forwardRef<
     ref={ref}
     className={cn(
       "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
-      className,
+      className
     )}
     {...props}
   />
@@ -116,7 +116,7 @@ const CommandItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className,
+      className
     )}
     {...props}
   />
@@ -132,13 +132,18 @@ const CommandShortcut = ({
     <span
       className={cn(
         "ml-auto text-xs tracking-widest text-muted-foreground",
-        className,
+        className
       )}
       {...props}
     />
   );
 };
 CommandShortcut.displayName = "CommandShortcut";
+
+const CommandLoading = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Loading>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Loading>
+>(({ ...props }, ref) => <CommandPrimitive.Loading ref={ref} {...props} />);
 
 export {
   Command,
@@ -150,4 +155,5 @@ export {
   CommandItem,
   CommandShortcut,
   CommandSeparator,
+  CommandLoading,
 };
