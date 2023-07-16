@@ -23,7 +23,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/utils";
 import { Skeleton } from "../ui/skeleton";
 
-const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
+const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
 const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));
 
 interface DashboardDndWidgetGridProps {
