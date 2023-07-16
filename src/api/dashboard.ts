@@ -7,6 +7,7 @@ import {
   DashboardWidgetItemListSchema,
   ServerMessageListSchema,
   type DashboardWidgetItemParsed,
+  SalesStatusParse,
 } from "@/schemas/dashboard";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 
@@ -161,4 +162,28 @@ export const fetchVehicleStatusCounts = async (
       },
     }
   ).then((res) => VehicleStatusCountListSchema.parse(res.data));
+};
+
+export const fetchSalesStatus = async (
+  opts: { locations: string[]; clientDate: Date } & CommonAuthParams
+) => {
+  return await callV3Api(
+    makeUrl("/v3/statistics/sales", {
+      clientId: opts.clientId,
+      userId: opts.userId,
+      clientDate: localDateToQueryYearMonthDay(opts.clientDate),
+      ...(opts.locations.length === 0
+        ? {
+            locationId: "0",
+          }
+        : {
+            MultipleLocation: opts.locations,
+          }),
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => SalesStatusParse.parse(res.data));
 };

@@ -21,8 +21,10 @@ import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { cn } from "@/utils";
+import { Skeleton } from "../ui/skeleton";
 
-const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
+const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
+const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));
 
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
@@ -73,7 +75,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   );
 
   return (
-    <ul className="grid min-h-[500px] w-full grid-cols-1 gap-4 transition-all md:grid-cols-12">
+    <ul className="grid min-h-[500px] w-full grid-cols-1 gap-4 overflow-x-clip transition-all md:grid-cols-12">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -165,7 +167,9 @@ function renderWidgetView(
   const widgetId = widget.widgetID;
   switch (widgetId) {
     case "VehicleStatus":
-      return <VehicleStatusWidget currentLocations={locations} />;
+      return <VehicleStatusWidget locations={locations} />;
+    case "SalesStatus":
+      return <SalesStatusWidget locations={locations} />;
     default:
       return (
         <>
@@ -234,12 +238,16 @@ function WidgetSizingContainer({
         {...listeners}
         {...attributes}
       >
-        <Suspense fallback={"..."}>
+        <Suspense fallback={<WidgetSkeleton />}>
           {renderWidgetView(widget, { locations: currentLocations })}
         </Suspense>
       </Card>
     </li>
   );
+}
+
+export function WidgetSkeleton() {
+  return <Skeleton className="h-full min-h-[250px] w-full rounded-sm" />;
 }
 
 export default DashboardDndWidgetGrid;

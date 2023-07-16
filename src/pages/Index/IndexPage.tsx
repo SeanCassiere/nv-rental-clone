@@ -158,7 +158,7 @@ function IndexPage() {
           </Button>
         </div>
         <DashboardDndWidgetGrid
-          key={widgetIds.join(",")}
+          // key={widgetIds.join(",")}
           widgets={widgets}
           selectedLocationIds={currentLocationIds}
           onWidgetSortingEnd={handleWidgetSortingEnd}
