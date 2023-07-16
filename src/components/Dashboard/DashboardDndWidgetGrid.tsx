@@ -167,7 +167,7 @@ function renderWidgetView(
   const widgetId = widget.widgetID;
   switch (widgetId) {
     case "VehicleStatus":
-      return <VehicleStatusWidget currentLocations={locations} />;
+      return <VehicleStatusWidget locations={locations} />;
     case "SalesStatus":
       return <SalesStatusWidget locations={locations} />;
     default:

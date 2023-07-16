@@ -30,7 +30,6 @@ export function useGetDashboardVehicleStatusCounts({
       });
     },
     enabled: auth.isAuthenticated,
-    initialData: [],
   });
   return query;
 }
