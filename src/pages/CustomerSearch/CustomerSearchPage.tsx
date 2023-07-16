@@ -169,7 +169,7 @@ function CustomerSearchPage() {
           </h1>
         </div>
         <p className={cn("text-base text-primary/80")}>
-          Search through your registered customers and view details.
+          Search through your customers and view details.
         </p>
         <Separator className="mt-3.5" />
       </section>
