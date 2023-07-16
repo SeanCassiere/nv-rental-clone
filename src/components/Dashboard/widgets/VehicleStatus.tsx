@@ -2,17 +2,16 @@ import { Link } from "@tanstack/router";
 
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
-import type { StringNumberIdType } from "@/utils/query-key";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const VehicleStatusWidget = ({
-  currentLocations,
+  currentLocations: locations,
 }: {
-  currentLocations: StringNumberIdType[];
+  currentLocations: string[];
 }) => {
   const vehicleTypeId = 0;
   const statusCounts = useGetDashboardVehicleStatusCounts({
-    locationIds: currentLocations,
+    locationIds: locations,
     vehicleType: vehicleTypeId,
     clientDate: new Date(),
   });

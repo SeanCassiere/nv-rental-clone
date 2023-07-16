@@ -21,13 +21,12 @@ import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { cn } from "@/utils";
-import { type StringNumberIdType } from "@/utils/query-key";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
 
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
-  selectedLocationIds: StringNumberIdType[];
+  selectedLocationIds: string[];
   onWidgetSortingEnd: (widgets: DashboardWidgetItemParsed[]) => void;
   isLocked: boolean;
 }
@@ -161,7 +160,7 @@ export function sortWidgetsByUserPositionFn(
 
 function renderWidgetView(
   widget: DashboardWidgetItemParsed,
-  { locations }: { locations: StringNumberIdType[] }
+  { locations }: { locations: string[] }
 ) {
   const widgetId = widget.widgetID;
   switch (widgetId) {
@@ -190,7 +189,7 @@ function WidgetSizingContainer({
 }: {
   widget: DashboardWidgetItemParsed;
   isDisabled: boolean;
-  currentLocations: StringNumberIdType[];
+  currentLocations: string[];
 }) {
   const {
     listeners,
