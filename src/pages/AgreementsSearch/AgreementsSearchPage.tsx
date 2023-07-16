@@ -193,25 +193,6 @@ function AgreementsSearchPage() {
           </section>
           <Separator className="mt-3.5" />
         </div>
-        {/* <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
-          <CommonHeader
-            titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Agreements
-              </h1>
-            }
-            subtitleText="Search through your rental agreements and view details."
-          />
-          <Link
-            to={addAgreementRoute.to}
-            search={() => ({ stage: "rental-information" })}
-            className={cn(buttonVariants({ size: "sm" }))}
-          >
-            <PlusIconFilled className="mr-2 h-4 w-4" />
-            New Agreement
-          </Link>
-        </div>
-        <Separator className="sm:mx-5" /> */}
         <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
           <PrimaryModuleTable
             data={agreementsData.data?.data || []}
