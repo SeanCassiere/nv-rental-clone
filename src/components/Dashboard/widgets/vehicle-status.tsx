@@ -89,7 +89,6 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
                   marginRight: "2%",
                 }}
                 formatter={(value, entry) => {
-                  console.log("entry", entry);
                   return (
                     <Link
                       className="mb-1 inline-block text-primary"
