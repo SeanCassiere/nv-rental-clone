@@ -49,7 +49,7 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
   return (
     <>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">Vehicle Status</CardTitle>
+        <CardTitle className="text-base font-medium">Fleet status</CardTitle>
       </CardHeader>
       <CardContent>
         {statusCounts.status === "loading" ? (
