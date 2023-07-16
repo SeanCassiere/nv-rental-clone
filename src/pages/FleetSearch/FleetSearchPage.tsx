@@ -155,17 +155,19 @@ function VehiclesSearchPage() {
   return (
     <Protector>
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
-          <CommonHeader
-            titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
+        <div className="mx-auto max-w-full px-2 pt-1.5 sm:mx-4 sm:px-1">
+          <section className={cn("flex flex-col")}>
+            <div className={cn("flex min-h-[2.5rem] justify-between")}>
+              <h1 className="text-2xl font-semibold leading-6 text-primary">
                 Fleet
               </h1>
-            }
-            subtitleText="Search through your fleet and view details."
-          />
+            </div>
+            <p className={cn("text-base text-primary/80")}>
+              Search through your fleet and view details.
+            </p>
+          </section>
+          <Separator className="mt-3.5" />
         </div>
-        <Separator className="sm:mx-5" />
         <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
           <PrimaryModuleTable
             data={vehiclesData.data?.data || []}
