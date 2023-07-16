@@ -21,7 +21,7 @@ export const fetchDashboardStats = async (
       clientId: opts.clientId,
       userId: opts.userId,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
-      ...(opts.locationId.length
+      ...(opts.locationId.length === 0
         ? {
             locationId: "0",
           }
@@ -144,7 +144,7 @@ export const fetchVehicleStatusCounts = async (
       clientId: opts.clientId,
       userId: opts.userId,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
-      ...(opts.locationIds.length
+      ...(opts.locationIds.length == 0
         ? {
             locationId: "0",
           }
