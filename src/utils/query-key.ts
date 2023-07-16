@@ -102,6 +102,11 @@ export const dashboardQKeys = {
   widgets: () => [dashboardQKeys.rootKey, "widgets"],
   stats: () => [dashboardQKeys.rootKey, "statistics"],
   messages: () => [dashboardQKeys.rootKey, "messages"],
+  salesStatus: ({ locations }: { locations: string[] }) => [
+    dashboardQKeys.rootKey,
+    "sales-status",
+    `locations-[${locations.join(",")}]`,
+  ],
   vehicleStatusCounts: ({
     locationId,
     vehicleType,
