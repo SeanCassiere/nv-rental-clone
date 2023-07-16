@@ -58,31 +58,29 @@ export const BannerNotice = ({ message }: { message: ServerMessage }) => {
   if (!show) return null;
 
   return (
-    <div className="bg-teal-500">
-      <div className="mx-auto flex w-full max-w-[1620px] flex-1 items-center gap-6 px-3.5 pb-2.5 pt-3">
-        {message.link ? (
-          <a
-            href={message.link}
-            className="[text-wrap=balance] group flex flex-1 flex-col flex-wrap items-start text-base leading-normal  text-white/95 sm:flex-row sm:items-center"
-            target={message.link.startsWith("http") ? "_blank" : "_self"}
-            rel="noopener noreferrer"
-          >
-            <MessageText message={message} />
-          </a>
-        ) : (
-          <p className="flex flex-1 flex-col flex-wrap items-start text-base leading-normal text-white/95 sm:flex-row sm:items-center">
-            <MessageText message={message} />
-          </p>
-        )}
-        <div className="flex justify-end">
-          <button
-            className="p-3 text-white hover:text-white/70"
-            onClick={onDismiss}
-          >
-            <XIcon className="h-4 w-4" />
-          </button>
-        </div>
+    <article className="mx-auto flex w-full max-w-[1700px] flex-1 items-center gap-6 pb-2.5 pl-3.5 pr-1 pt-3 md:px-16">
+      {message.link ? (
+        <a
+          href={message.link}
+          className="[text-wrap=balance] group flex flex-1 flex-col flex-wrap items-start text-base leading-normal  text-white/95 sm:flex-row sm:items-center"
+          target={message.link.startsWith("http") ? "_blank" : "_self"}
+          rel="noopener noreferrer"
+        >
+          <MessageText message={message} />
+        </a>
+      ) : (
+        <p className="flex flex-1 flex-col flex-wrap items-start text-base leading-normal text-white/95 sm:flex-row sm:items-center">
+          <MessageText message={message} />
+        </p>
+      )}
+      <div className="flex justify-end">
+        <button
+          className="p-3 text-white hover:text-white/70"
+          onClick={onDismiss}
+        >
+          <XIcon className="h-4 w-4" />
+        </button>
       </div>
-    </div>
+    </article>
   );
 };
