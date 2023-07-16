@@ -50,6 +50,7 @@
     "react-i18next": "^12.2.0",
     "react-oidc-context": "^2.2.2",
     "react-popper": "^2.3.0",
+    "recharts": "^2.7.2",
     "tailwind-merge": "^1.13.2",
     "zod": "^3.21.4"
   },
