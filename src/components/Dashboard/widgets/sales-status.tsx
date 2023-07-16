@@ -14,8 +14,16 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetSalesStatus } from "@/hooks/network/dashboard/useGetSalesStatus";
 
 import { WidgetSkeleton } from "../DashboardDndWidgetGrid";
+import { useTranslation } from "react-i18next";
 
-const SalesStatus = ({ locations }: { locations: string[] }) => {
+const SalesStatus = ({
+  locations,
+  currency = "USD",
+}: {
+  locations: string[];
+  currency: string;
+}) => {
+  const { t } = useTranslation();
   const sales = useGetSalesStatus({ locations, clientDate: new Date() });
 
   return (
@@ -47,7 +55,11 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
               </defs>
               <XAxis dataKey="monthName" stroke="#475569" />
               <YAxis />
-              <Tooltip />
+              <Tooltip
+                formatter={(value) =>
+                  t("intlCurrency", { currency, value: Number(value) })
+                }
+              />
               <CartesianGrid vertical={false} stroke="#e2e8f0" />
               <Area
                 name="Previous year"
@@ -92,4 +104,4 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
   );
 };
 
-export default SalesStatus;
+export default React.memo(SalesStatus);

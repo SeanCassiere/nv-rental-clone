@@ -19,9 +19,10 @@ import { CSS } from "@dnd-kit/utilities";
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { cn } from "@/utils";
-import { Skeleton } from "../ui/skeleton";
+import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
 const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));
@@ -35,6 +36,8 @@ interface DashboardDndWidgetGridProps {
 const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   const { widgets: widgetList = [], onWidgetSortingEnd } = props;
   const isDisabled = props.isLocked;
+
+  const clientProfile = useGetClientProfile();
 
   // used purely to reliably let the animation functions run
   const [localWidgets, setLocalWidgets] = useState(
@@ -95,6 +98,11 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
                 key={`widget-${widget.widgetID}`}
                 isDisabled={isDisabled}
                 currentLocations={props.selectedLocationIds}
+                currency={
+                  clientProfile.status === "success"
+                    ? clientProfile.data.currency ?? "USD"
+                    : "USD"
+                }
               />
             ))}
         </SortableContext>
@@ -162,14 +170,14 @@ export function sortWidgetsByUserPositionFn(
 
 function renderWidgetView(
   widget: DashboardWidgetItemParsed,
-  { locations }: { locations: string[] }
+  { locations, currency }: { locations: string[]; currency: string }
 ) {
   const widgetId = widget.widgetID;
   switch (widgetId) {
     case "VehicleStatus":
       return <VehicleStatusWidget locations={locations} />;
     case "SalesStatus":
-      return <SalesStatusWidget locations={locations} />;
+      return <SalesStatusWidget locations={locations} currency={currency} />;
     default:
       return (
         <>
@@ -190,10 +198,12 @@ function WidgetSizingContainer({
   widget,
   isDisabled,
   currentLocations,
+  currency,
 }: {
   widget: DashboardWidgetItemParsed;
   isDisabled: boolean;
   currentLocations: string[];
+  currency: string;
 }) {
   const {
     listeners,
@@ -239,7 +249,7 @@ function WidgetSizingContainer({
         {...attributes}
       >
         <Suspense fallback={<WidgetSkeleton />}>
-          {renderWidgetView(widget, { locations: currentLocations })}
+          {renderWidgetView(widget, { locations: currentLocations, currency })}
         </Suspense>
       </Card>
     </li>
