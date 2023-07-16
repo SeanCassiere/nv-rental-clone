@@ -98,7 +98,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="flex h-screen flex-col">
+    <>
       <header className="relative z-40 border-b">
         {messagesList.data.length > 0 && (
           <div className="grid divide-y divide-teal-600">
@@ -154,6 +154,6 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
         {children}
       </main>
-    </div>
+    </>
   );
 };
