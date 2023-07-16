@@ -144,7 +144,7 @@ function RenderActiveShape(props: any) {
         textAnchor="middle"
         style={{
           fontSize: 18,
-          fill: "#08134A",
+          fill: "var(--primary)",
           fontWeight: 600,
         }}
       >
@@ -155,7 +155,7 @@ function RenderActiveShape(props: any) {
         y={cy - 20}
         dy={8}
         textAnchor="middle"
-        style={{ fontSize: 28, fill: "#08134A" }}
+        style={{ fontSize: 28, fill: "var(--primary)" }}
       >
         {payload.total}
       </text>
