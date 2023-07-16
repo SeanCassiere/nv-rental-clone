@@ -21,12 +21,13 @@ export const fetchDashboardStats = async (
       clientId: opts.clientId,
       userId: opts.userId,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
-      ...(opts.locationId.length === 1
-        ? { locationId: opts.locationId[0] || "0" }
-        : {}),
-      ...(opts.locationId.length > 1
-        ? { MultipleLocation: opts.locationId }
-        : {}),
+      ...(opts.locationId.length
+        ? {
+            locationId: "0",
+          }
+        : {
+            MultipleLocation: opts.locationId,
+          }),
     }),
     {
       headers: {
@@ -143,13 +144,13 @@ export const fetchVehicleStatusCounts = async (
       clientId: opts.clientId,
       userId: opts.userId,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
-      ...(opts.locationIds && !opts.locationIds.includes("0")
+      ...(opts.locationIds.length
         ? {
-            ...(opts.locationIds.length === 1
-              ? { locationId: opts.locationIds[0] }
-              : { multipleLocation: opts.locationIds }),
+            locationId: "0",
           }
-        : {}),
+        : {
+            MultipleLocation: opts.locationIds,
+          }),
       ...(opts.vehicleType && opts.vehicleType !== 0 && opts.vehicleType !== "0"
         ? { vehicleType: opts.vehicleType }
         : {}),

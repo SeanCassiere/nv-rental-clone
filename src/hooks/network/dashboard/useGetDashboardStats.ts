@@ -5,7 +5,7 @@ import { fetchDashboardStats } from "@/api/dashboard";
 import { dashboardQKeys } from "@/utils/query-key";
 
 export function useGetDashboardStats({
-  locationIds: locationId,
+  locationIds,
   clientDate,
 }: {
   locationIds: string[];
@@ -19,7 +19,7 @@ export function useGetDashboardStats({
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
-        locationId: [...locationId],
+        locationId: locationIds,
         clientDate,
       });
     },

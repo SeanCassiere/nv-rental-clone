@@ -8,6 +8,16 @@ import DashboardDndWidgetGrid from "@/components/Dashboard/DashboardDndWidgetGri
 import DashboardWidgetPickerModal from "@/components/Dialogs/DashboardWidgetPickerModal";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Popover } from "@/components/ui/popover";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+} from "@/components/ui/command";
 
 import { indexRoute } from "@/routes";
 
@@ -20,16 +30,19 @@ import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
   const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
 
-  const [currentLocationIds] = useState<string[]>(["0"]);
+  const [currentLocationIds, setCurrentLocationIds] = useState<string[]>([]);
 
   const { "show-widget-picker": showWidgetPickerModal = false } = useSearch({
     from: indexRoute.id,
   });
+
+  const locations = useGetLocationsList({ locationIsActive: true });
 
   const handleSetShowWidgetPickerModal = useCallback(
     (show: boolean) => {
