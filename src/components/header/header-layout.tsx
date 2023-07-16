@@ -99,7 +99,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <header className="relative z-40 border-b">
+      <header className="relative border-b">
         {messagesList.data.length > 0 && (
           <section className="grid w-full divide-y divide-teal-600 bg-teal-500">
             {messagesList.data.map((notice) => (
