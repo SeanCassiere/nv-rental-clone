@@ -107,7 +107,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
             ))}
           </div>
         )}
-        <div className="mx-auto">
+        <div className="mx-auto w-full max-w-[1700px] px-1 md:px-5">
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to={indexRoute.to}>
