@@ -156,8 +156,10 @@ function VehiclesSearchPage() {
     <Protector>
       <div className="py-6">
         <div className="mx-auto max-w-full px-2 pt-1.5 sm:mx-4 sm:px-1">
-          <section className={cn("flex flex-col")}>
-            <div className={cn("flex min-h-[2.5rem] justify-between")}>
+          <section className={cn("flex flex-col gap-2")}>
+            <div
+              className={cn("flex min-h-[2.5rem] items-center justify-between")}
+            >
               <h1 className="text-2xl font-semibold leading-6 text-primary">
                 Fleet
               </h1>
