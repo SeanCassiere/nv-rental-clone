@@ -19,14 +19,13 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import { cn } from "@/utils";
-import type { StringNumberIdType } from "@/utils/query-key";
 import { titleMaker } from "@/utils/title-maker";
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
   const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
 
-  const [currentLocationIds] = useState<StringNumberIdType[]>(["0"]);
+  const [currentLocationIds] = useState<string[]>(["0"]);
 
   const { "show-widget-picker": showWidgetPickerModal = false } = useSearch({
     from: indexRoute.id,
@@ -60,7 +59,7 @@ function IndexPage() {
   }, [widgetList.data]);
 
   const statistics = useGetDashboardStats({
-    locationId: currentLocationIds,
+    locationIds: currentLocationIds,
     clientDate: new Date(),
   });
 

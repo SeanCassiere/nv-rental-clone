@@ -9,11 +9,10 @@ import {
   type DashboardWidgetItemParsed,
 } from "@/schemas/dashboard";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
-import { type StringNumberIdType } from "@/utils/query-key";
 
 export const fetchDashboardStats = async (
   opts: {
-    locationId: StringNumberIdType[];
+    locationId: string[];
     clientDate: Date;
   } & CommonAuthParams
 ) => {
@@ -22,8 +21,8 @@ export const fetchDashboardStats = async (
       clientId: opts.clientId,
       userId: opts.userId,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
-      ...(opts.locationId.length === 1 && opts.locationId.includes(0)
-        ? { locationId: opts.locationId[0] || 0 }
+      ...(opts.locationId.length === 1
+        ? { locationId: opts.locationId[0] || "0" }
         : {}),
       ...(opts.locationId.length > 1
         ? { MultipleLocation: opts.locationId }
@@ -134,7 +133,7 @@ export const saveDashboardWidgetItem = async (
 
 export const fetchVehicleStatusCounts = async (
   opts: CommonAuthParams & {
-    locationIds: StringNumberIdType[];
+    locationIds: string[];
     vehicleType: string | number;
     clientDate: Date;
   }
@@ -144,9 +143,7 @@ export const fetchVehicleStatusCounts = async (
       clientId: opts.clientId,
       userId: opts.userId,
       clientDate: localDateToQueryYearMonthDay(opts.clientDate),
-      ...(opts.locationIds &&
-      !opts.locationIds.includes(0) &&
-      !opts.locationIds.includes("0")
+      ...(opts.locationIds && !opts.locationIds.includes("0")
         ? {
             ...(opts.locationIds.length === 1
               ? { locationId: opts.locationIds[0] }
