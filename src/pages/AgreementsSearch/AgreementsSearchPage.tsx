@@ -170,7 +170,30 @@ function AgreementsSearchPage() {
   return (
     <Protector>
       <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
+        <div className="mx-auto max-w-full px-2 pt-1.5 sm:mx-4 sm:px-1">
+          <section className={cn("flex flex-col gap-2")}>
+            <div
+              className={cn("flex min-h-[2.5rem] items-center justify-between")}
+            >
+              <h1 className="text-2xl font-semibold leading-6 text-primary">
+                Agreements
+              </h1>
+              <Link
+                to={addAgreementRoute.to}
+                search={() => ({ stage: "rental-information" })}
+                className={cn(buttonVariants({ size: "sm" }))}
+              >
+                <PlusIconFilled className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline-block">New Agreement</span>
+              </Link>
+            </div>
+            <p className={cn("text-base text-primary/80")}>
+              Search through your rental agreements and view details.
+            </p>
+          </section>
+          <Separator className="mt-3.5" />
+        </div>
+        {/* <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
           <CommonHeader
             titleContent={
               <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
@@ -188,7 +211,7 @@ function AgreementsSearchPage() {
             New Agreement
           </Link>
         </div>
-        <Separator className="sm:mx-5" />
+        <Separator className="sm:mx-5" /> */}
         <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
           <PrimaryModuleTable
             data={agreementsData.data?.data || []}
