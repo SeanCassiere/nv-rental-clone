@@ -98,16 +98,19 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="flex h-screen flex-col">
-      <header className="relative z-40 border-b">
+    <>
+      <header className="relative border-b">
         {messagesList.data.length > 0 && (
-          <div className="grid divide-y divide-teal-600">
+          <section className="grid w-full divide-y divide-teal-600 bg-teal-500">
             {messagesList.data.map((notice) => (
-              <BannerNotice message={notice} key={`msg_${notice.messageId}`} />
+              <BannerNotice
+                message={notice}
+                key={`banner_notice_${notice.messageId}`}
+              />
             ))}
-          </div>
+          </section>
         )}
-        <div className="mx-auto">
+        <div className="mx-auto max-w-[1700px] px-1 md:px-5">
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to={indexRoute.to}>
@@ -154,6 +157,6 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
         {children}
       </main>
-    </div>
+    </>
   );
 };

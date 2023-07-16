@@ -16,9 +16,12 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import type { DashboardWidgetItemParsed } from "../../schemas/dashboard";
-import { type StringNumberIdType } from "../../utils/query-key";
+import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { cn } from "@/utils";
+import { type StringNumberIdType } from "@/utils/query-key";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/VehicleStatus"));
 
@@ -165,7 +168,18 @@ function renderWidgetView(
     case "VehicleStatus":
       return <VehicleStatusWidget currentLocations={locations} />;
     default:
-      return <div>Widget "{widgetId}" not found</div>;
+      return (
+        <>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">
+              Widget "{widgetId}" not found
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="">No content</p>
+          </CardContent>
+        </>
+      );
   }
 }
 
@@ -211,13 +225,12 @@ function WidgetSizingContainer({
       )}
       style={{ transform: CSS.Transform.toString(transform), transition }}
     >
-      <div
+      <Card
         ref={setActivatorNodeRef}
         className={cn(
-          "h-full w-full rounded border border-slate-200 text-slate-600",
+          "h-full",
           !isDragging ? "transition-all duration-200 ease-in" : "",
-          { "cursor-move": !isDisabled, "cursor-default": isDisabled },
-          isDisabled ? "bg-slate-50" : "bg-slate-100"
+          { "cursor-move": !isDisabled, "cursor-default": isDisabled }
         )}
         {...listeners}
         {...attributes}
@@ -225,7 +238,7 @@ function WidgetSizingContainer({
         <Suspense fallback={"..."}>
           {renderWidgetView(widget, { locations: currentLocations })}
         </Suspense>
-      </div>
+      </Card>
     </li>
   );
 }

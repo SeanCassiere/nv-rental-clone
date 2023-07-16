@@ -158,117 +158,119 @@ function CustomerSearchPage() {
 
   return (
     <Protector>
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
-          <CommonHeader
-            titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Customers
-              </h1>
-            }
-            subtitleText="Search through your registered customers and view details."
-          />
+      <section
+        className={cn(
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
+          <h1 className="text-2xl font-semibold leading-6 text-primary">
+            Customers
+          </h1>
         </div>
-        <Separator className="sm:mx-5" />
-        <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
-          <PrimaryModuleTable
-            data={customersData.data?.data || []}
-            columns={columnDefs}
-            onColumnOrderChange={handleSaveColumnsOrder}
-            rawColumnsData={columnsData?.data || []}
-            onColumnVisibilityChange={handleSaveColumnVisibility}
-            totalPages={
-              customersData.data?.totalRecords
-                ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
-                : 0
-            }
-            pagination={pagination}
-            onPaginationChange={(newPaginationState) => {
+        <p className={cn("text-base text-primary/80")}>
+          Search through your customers and view details.
+        </p>
+        <Separator className="mt-3.5" />
+      </section>
+      <section className="mx-auto mb-6 mt-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
+        <PrimaryModuleTable
+          data={customersData.data?.data || []}
+          columns={columnDefs}
+          onColumnOrderChange={handleSaveColumnsOrder}
+          rawColumnsData={columnsData?.data || []}
+          onColumnVisibilityChange={handleSaveColumnVisibility}
+          totalPages={
+            customersData.data?.totalRecords
+              ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
+              : 0
+          }
+          pagination={pagination}
+          onPaginationChange={(newPaginationState) => {
+            navigate({
+              to: searchCustomersRoute.to,
+              params: {},
+              search: (current) => ({
+                ...current,
+                page: newPaginationState.pageIndex + 1,
+                size: newPaginationState.pageSize,
+                filters: searchFilters,
+              }),
+            });
+          }}
+          filters={{
+            columnFilters,
+            setColumnFilters,
+            onClearFilters: () => {
               navigate({
                 to: searchCustomersRoute.to,
                 params: {},
-                search: (current) => ({
-                  ...current,
-                  page: newPaginationState.pageIndex + 1,
-                  size: newPaginationState.pageSize,
-                  filters: searchFilters,
+                search: () => ({
+                  page: 1,
+                  size: pagination.pageSize,
                 }),
               });
-            }}
-            filters={{
-              columnFilters,
-              setColumnFilters,
-              onClearFilters: () => {
-                navigate({
-                  to: searchCustomersRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: 1,
-                    size: pagination.pageSize,
-                  }),
-                });
+            },
+            onSearchWithFilters: () => {
+              const filters = columnFilters.reduce(
+                (prev, current) => ({
+                  ...prev,
+                  [current.id]: current.value,
+                }),
+                {}
+              );
+              navigate({
+                to: searchCustomersRoute.to,
+                params: {},
+                search: () => ({
+                  page: pagination.pageIndex + 1,
+                  size: pagination.pageSize,
+                  filters,
+                }),
+              });
+            },
+            filterableColumns: [
+              {
+                id: "Keyword",
+                title: "Search",
+                type: "text",
+                size: "large",
               },
-              onSearchWithFilters: () => {
-                const filters = columnFilters.reduce(
-                  (prev, current) => ({
-                    ...prev,
-                    [current.id]: current.value,
-                  }),
-                  {}
-                );
-                navigate({
-                  to: searchCustomersRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: pagination.pageIndex + 1,
-                    size: pagination.pageSize,
-                    filters,
-                  }),
-                });
+              {
+                id: "CustomerTypes",
+                title: "Type",
+                type: "multi-select",
+                options: customerTypesList.data.map((item) => ({
+                  value: `${item.typeName}`,
+                  label: item.typeName,
+                })),
+                defaultValue: [],
               },
-              filterableColumns: [
-                {
-                  id: "Keyword",
-                  title: "Search",
-                  type: "text",
-                  size: "large",
-                },
-                {
-                  id: "CustomerTypes",
-                  title: "Type",
-                  type: "multi-select",
-                  options: customerTypesList.data.map((item) => ({
-                    value: `${item.typeName}`,
-                    label: item.typeName,
-                  })),
-                  defaultValue: [],
-                },
-                {
-                  id: "DateOfbirth",
-                  title: "DOB",
-                  type: "date",
-                },
-                {
-                  id: "Phone",
-                  title: "Phone",
-                  type: "text",
-                  size: "normal",
-                },
-                {
-                  id: "Active",
-                  title: "Is active?",
-                  type: "select",
-                  options: [
-                    { value: "true", label: "Yes" },
-                    { value: "false", label: "No" },
-                  ],
-                  defaultValue: "true",
-                },
-              ],
-            }}
-          />
-        </div>
-      </div>
+              {
+                id: "DateOfbirth",
+                title: "DOB",
+                type: "date",
+              },
+              {
+                id: "Phone",
+                title: "Phone",
+                type: "text",
+                size: "normal",
+              },
+              {
+                id: "Active",
+                title: "Is active?",
+                type: "select",
+                options: [
+                  { value: "true", label: "Yes" },
+                  { value: "false", label: "No" },
+                ],
+                defaultValue: "true",
+              },
+            ],
+          }}
+        />
+      </section>
     </Protector>
   );
 }

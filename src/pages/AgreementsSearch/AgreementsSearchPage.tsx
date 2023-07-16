@@ -169,167 +169,169 @@ function AgreementsSearchPage() {
 
   return (
     <Protector>
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
-          <CommonHeader
-            titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Agreements
-              </h1>
-            }
-            subtitleText="Search through your rental agreements and view details."
-          />
+      <section
+        className={cn(
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
+          <h1 className="text-2xl font-semibold leading-6 text-primary">
+            Agreements
+          </h1>
           <Link
             to={addAgreementRoute.to}
             search={() => ({ stage: "rental-information" })}
             className={cn(buttonVariants({ size: "sm" }))}
           >
-            <PlusIconFilled className="mr-2 h-4 w-4" />
-            New Agreement
+            <PlusIconFilled className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline-block">New Agreement</span>
           </Link>
         </div>
-        <Separator className="sm:mx-5" />
-        <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
-          <PrimaryModuleTable
-            data={agreementsData.data?.data || []}
-            columns={columnDefs}
-            onColumnOrderChange={handleSaveColumnsOrder}
-            rawColumnsData={columnsData?.data || []}
-            onColumnVisibilityChange={handleSaveColumnVisibility}
-            totalPages={
-              agreementsData.data?.totalRecords
-                ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
-                : 0
-            }
-            pagination={pagination}
-            onPaginationChange={(newPaginationState) => {
+        <p className={cn("text-base text-primary/80")}>
+          Search through your rentals and view details.
+        </p>
+        <Separator className="mt-3.5" />
+      </section>
+      <section className="mx-auto mb-6 mt-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
+        <PrimaryModuleTable
+          data={agreementsData.data?.data || []}
+          columns={columnDefs}
+          onColumnOrderChange={handleSaveColumnsOrder}
+          rawColumnsData={columnsData?.data || []}
+          onColumnVisibilityChange={handleSaveColumnVisibility}
+          totalPages={
+            agreementsData.data?.totalRecords
+              ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
+              : 0
+          }
+          pagination={pagination}
+          onPaginationChange={(newPaginationState) => {
+            navigate({
+              to: searchAgreementsRoute.to,
+              params: {},
+              search: (current) => ({
+                ...current,
+                page: newPaginationState.pageIndex + 1,
+                size: newPaginationState.pageSize,
+                filters: searchFilters,
+              }),
+            });
+          }}
+          filters={{
+            columnFilters,
+            setColumnFilters,
+            onClearFilters: () => {
               navigate({
                 to: searchAgreementsRoute.to,
                 params: {},
-                search: (current) => ({
-                  ...current,
-                  page: newPaginationState.pageIndex + 1,
-                  size: newPaginationState.pageSize,
-                  filters: searchFilters,
+                search: () => ({
+                  page: 1,
+                  size: pagination.pageSize,
                 }),
               });
-            }}
-            filters={{
-              columnFilters,
-              setColumnFilters,
-              onClearFilters: () => {
-                navigate({
-                  to: searchAgreementsRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: 1,
-                    size: pagination.pageSize,
-                  }),
-                });
+            },
+            onSearchWithFilters: () => {
+              const filters = columnFilters.reduce(
+                (prev, current) => ({
+                  ...prev,
+                  [current.id]: current.value,
+                }),
+                {}
+              );
+              navigate({
+                to: searchAgreementsRoute.to,
+                params: {},
+                search: () => ({
+                  page: pagination.pageIndex + 1,
+                  size: pagination.pageSize,
+                  filters,
+                }),
+              });
+            },
+            filterableColumns: [
+              {
+                id: "Keyword",
+                title: "Search",
+                type: "text",
+                size: "large",
               },
-              onSearchWithFilters: () => {
-                const filters = columnFilters.reduce(
-                  (prev, current) => ({
-                    ...prev,
-                    [current.id]: current.value,
-                  }),
-                  {}
-                );
-                navigate({
-                  to: searchAgreementsRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: pagination.pageIndex + 1,
-                    size: pagination.pageSize,
-                    filters,
-                  }),
-                });
+              {
+                id: "Statuses",
+                title: "Status",
+                type: "multi-select",
+                options: agreementStatusList.data.map((item) => ({
+                  value: `${item.id}`,
+                  label: item.name,
+                })),
+                defaultValue: [],
               },
-              filterableColumns: [
-                {
-                  id: "Keyword",
-                  title: "Search",
-                  type: "text",
-                  size: "large",
-                },
-                {
-                  id: "Statuses",
-                  title: "Status",
-                  type: "multi-select",
-                  options: agreementStatusList.data.map((item) => ({
-                    value: `${item.id}`,
-                    label: item.name,
-                  })),
-                  defaultValue: [],
-                },
-                {
-                  id: "AgreementTypes",
-                  title: "Type",
-                  type: "multi-select",
-                  options: agreementTypesList.data.map((item) => ({
-                    value: `${item.typeName}`,
-                    label: item.typeName,
-                  })),
-                  defaultValue: [],
-                },
-                {
-                  id: "StartDate",
-                  title: "Start date",
-                  type: "date",
-                },
-                {
-                  id: "EndDate",
-                  title: "End date",
-                  type: "date",
-                },
-                {
-                  id: "PickupLocationId",
-                  title: "Checkout location",
-                  type: "select",
-                  options: locationsList.data.data.map((item) => ({
-                    value: `${item.locationId}`,
-                    label: `${item.locationName}`,
-                  })),
-                },
-                {
-                  id: "ReturnLocationId",
-                  title: "Checkin location",
-                  type: "select",
-                  options: locationsList.data.data.map((item) => ({
-                    value: `${item.locationId}`,
-                    label: `${item.locationName}`,
-                  })),
-                },
-                {
-                  id: "VehicleTypeId",
-                  title: "Vehicle type",
-                  type: "select",
-                  options: vehicleTypesList.data.map((item) => ({
-                    value: `${item.VehicleTypeId}`,
-                    label: item.VehicleTypeName,
-                  })),
-                },
-                {
-                  id: "VehicleNo",
-                  title: "Vehicle no.",
-                  type: "text",
-                  size: "normal",
-                },
-                {
-                  id: "IsSearchOverdues",
-                  title: "Only overdues?",
-                  type: "select",
-                  options: [
-                    { value: "true", label: "Yes" },
-                    { value: "false", label: "No" },
-                  ],
-                  defaultValue: "false",
-                },
-              ],
-            }}
-          />
-        </div>
-      </div>
+              {
+                id: "AgreementTypes",
+                title: "Type",
+                type: "multi-select",
+                options: agreementTypesList.data.map((item) => ({
+                  value: `${item.typeName}`,
+                  label: item.typeName,
+                })),
+                defaultValue: [],
+              },
+              {
+                id: "StartDate",
+                title: "Start date",
+                type: "date",
+              },
+              {
+                id: "EndDate",
+                title: "End date",
+                type: "date",
+              },
+              {
+                id: "PickupLocationId",
+                title: "Checkout location",
+                type: "select",
+                options: locationsList.data.data.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "ReturnLocationId",
+                title: "Checkin location",
+                type: "select",
+                options: locationsList.data.data.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "VehicleTypeId",
+                title: "Vehicle type",
+                type: "select",
+                options: vehicleTypesList.data.map((item) => ({
+                  value: `${item.VehicleTypeId}`,
+                  label: item.VehicleTypeName,
+                })),
+              },
+              {
+                id: "VehicleNo",
+                title: "Vehicle no.",
+                type: "text",
+                size: "normal",
+              },
+              {
+                id: "IsSearchOverdues",
+                title: "Only overdues?",
+                type: "select",
+                options: [
+                  { value: "true", label: "Yes" },
+                  { value: "false", label: "No" },
+                ],
+                defaultValue: "false",
+              },
+            ],
+          }}
+        />
+      </section>
     </Protector>
   );
 }

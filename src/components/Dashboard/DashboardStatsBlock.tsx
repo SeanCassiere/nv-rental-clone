@@ -11,13 +11,14 @@ import {
   type MakeLinkOptions,
   type RegisteredRoutesInfo,
 } from "@tanstack/router";
-import { localDateToQueryYearMonthDay } from "../../utils/date";
-import type { TDashboardStats } from "../../schemas/dashboard";
+import { localDateToQueryYearMonthDay } from "@/utils/date";
+import type { TDashboardStats } from "@/schemas/dashboard";
 
-import { indexRoute } from "../../routes";
-import { searchReservationsRoute } from "../../routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "../../routes/agreements/searchAgreements";
-import { cn } from "@/utils";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
+import { indexRoute } from "@/routes";
+import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 
 const DashboardStatsBlock = ({
   statistics,
@@ -25,7 +26,7 @@ const DashboardStatsBlock = ({
   statistics: TDashboardStats;
 }) => {
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
+    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
       <li>
         <StatBlock
           title="Reservation"
@@ -140,33 +141,21 @@ const StatBlock = ({
   linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
 }) => {
   return (
-    <Link {...(linkProps as any)}>
-      <div
-        className={cn(
-          "group grid cursor-pointer grid-cols-7 overflow-hidden rounded border border-slate-200 bg-slate-50 px-4 py-4 transition-all duration-150 ease-in hover:bg-slate-100"
-        )}
-      >
-        <div className="col-span-2">
-          <div className="inline-block p-4">
-            <Icon className="h-6 w-6 text-slate-500 transition-all duration-200 ease-in hover:bg-slate-100 group-hover:text-teal-500" />
-            <span className="sr-only">{title} icon</span>
-          </div>
-        </div>
-        <div className="col-span-5">
-          <div
-            className={cn(
-              "text-5xl font-semibold transition-all duration-200 ease-in group-hover:text-teal-500",
-              value !== "0" ? "text-slate-800" : "text-slate-700"
-            )}
-          >
-            {value}
-          </div>
-          <div className="truncate text-sm font-medium text-slate-500 transition-all duration-200 ease-in group-hover:text-teal-500">
-            {title}
-          </div>
-        </div>
-      </div>
-    </Link>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <Icon className="h-3.5 w-3.5 text-muted-foreground sm:h-4 sm:w-4" />
+        <span className="sr-only">{title} icon</span>
+      </CardHeader>
+      <CardContent>
+        <Link
+          className="block text-2xl font-bold tabular-nums underline-offset-4 focus-within:underline hover:underline"
+          {...(linkProps as any)}
+        >
+          {value}
+        </Link>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -1,16 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/router";
+import { LockIcon, UnlockIcon, SettingsIcon } from "lucide-react";
 
 import Protector from "@/components/Protector";
 import DashboardStatsBlock from "@/components/Dashboard/DashboardStatsBlock";
 import DashboardDndWidgetGrid from "@/components/Dashboard/DashboardDndWidgetGrid";
-import CommonHeader from "@/components/Layout/CommonHeader";
-import {
-  LockClosedOutline,
-  LockOpenOutline,
-  SettingsCogOutline,
-} from "@/components/icons";
 import DashboardWidgetPickerModal from "@/components/Dialogs/DashboardWidgetPickerModal";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 import { indexRoute } from "@/routes";
 
@@ -85,67 +82,55 @@ function IndexPage() {
         onModalStateChange={handleSetShowWidgetPickerModal}
         onWidgetSave={handleWidgetSortingEnd}
       />
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pt-4 sm:px-4">
-          <div className="pb-4">
-            <CommonHeader
-              titleContent={
-                <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                  Overview
-                </h1>
-              }
-              subtitleText="Jump into what's going on with your fleet."
-              includeBottomBorder
-            />
-          </div>
-          <DashboardStatsBlock statistics={statistics.data} />
-
-          <div className="pt-8">
-            <CommonHeader
-              titleContent={
-                <h2 className="select-none text-xl font-semibold leading-6 text-gray-700">
-                  Widgets
-                  <span className="ml-4 inline-block sm:ml-5">
-                    <button
-                      className="pt-2 text-slate-500 sm:pt-0"
-                      onClick={() => {
-                        handleSetShowWidgetPickerModal(true);
-                      }}
-                    >
-                      <SettingsCogOutline className="h-5 w-5 sm:h-4 sm:w-4" />
-                    </button>
-                    <button
-                      className={cn(
-                        "ml-2 text-slate-500 sm:pt-0",
-                        isWidgetsLocked ? "" : "pl-0.5"
-                      )}
-                      onClick={() => setIsWidgetsLocked((prev) => !prev)}
-                    >
-                      {isWidgetsLocked ? (
-                        <LockClosedOutline className="h-5 w-5 sm:h-4 sm:w-4" />
-                      ) : (
-                        <LockOpenOutline className="h-5 w-5 sm:h-4 sm:w-4" />
-                      )}
-                    </button>
-                  </span>
-                </h2>
-              }
-              subtitleText="My list of personalized widgets."
-              includeBottomBorder
-            />
-          </div>
-
-          <div className="mt-4">
-            <DashboardDndWidgetGrid
-              key={widgetIds.join(",")}
-              widgets={widgets}
-              selectedLocationIds={currentLocationIds}
-              onWidgetSortingEnd={handleWidgetSortingEnd}
-              isLocked={isWidgetsLocked}
-            />
-          </div>
+      <section
+        className={cn(
+          "mx-auto my-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
+          <h1 className="text-2xl font-semibold leading-6 text-primary">
+            Dashboard
+          </h1>
         </div>
-      </div>
+        <p className={cn("text-base text-primary/80")}>
+          Jump into what's going on with your fleet.
+        </p>
+        <Separator className="mb-4 mt-3.5" />
+        <DashboardStatsBlock statistics={statistics.data} />
+        <div className="mb-2 mt-3.5 flex space-x-2">
+          <Button
+            size="sm"
+            variant={isWidgetsLocked ? "outline" : "secondary"}
+            onClick={() => setIsWidgetsLocked((prev) => !prev)}
+          >
+            {isWidgetsLocked ? (
+              <LockIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+            ) : (
+              <UnlockIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+            )}
+            <span className="sr-only">
+              {isWidgetsLocked ? "Locked widgets" : "Unlocked widgets"}
+            </span>
+          </Button>
+
+          <Button
+            size="sm"
+            variant={!showWidgetPickerModal ? "outline" : "secondary"}
+            onClick={() => {
+              handleSetShowWidgetPickerModal(true);
+            }}
+          >
+            <SettingsIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+          </Button>
+        </div>
+        <DashboardDndWidgetGrid
+          key={widgetIds.join(",")}
+          widgets={widgets}
+          selectedLocationIds={currentLocationIds}
+          onWidgetSortingEnd={handleWidgetSortingEnd}
+          isLocked={isWidgetsLocked}
+        />
+      </section>
     </Protector>
   );
 }

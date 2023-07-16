@@ -154,132 +154,134 @@ function VehiclesSearchPage() {
 
   return (
     <Protector>
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
-          <CommonHeader
-            titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Fleet
-              </h1>
-            }
-            subtitleText="Search through your fleet and view details."
-          />
+      <section
+        className={cn(
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
+          <h1 className="text-2xl font-semibold leading-6 text-primary">
+            Fleet
+          </h1>
         </div>
-        <Separator className="sm:mx-5" />
-        <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
-          <PrimaryModuleTable
-            data={vehiclesData.data?.data || []}
-            columns={columnDefs}
-            onColumnOrderChange={handleSaveColumnsOrder}
-            rawColumnsData={columnsData?.data || []}
-            onColumnVisibilityChange={handleSaveColumnVisibility}
-            totalPages={
-              vehiclesData.data?.totalRecords
-                ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
-                : 0
-            }
-            pagination={pagination}
-            onPaginationChange={(newPaginationState) => {
+        <p className={cn("text-base text-primary/80")}>
+          Search through your fleet and view details.
+        </p>
+        <Separator className="mt-3.5" />
+      </section>
+      <section className="mx-auto mb-6 mt-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
+        <PrimaryModuleTable
+          data={vehiclesData.data?.data || []}
+          columns={columnDefs}
+          onColumnOrderChange={handleSaveColumnsOrder}
+          rawColumnsData={columnsData?.data || []}
+          onColumnVisibilityChange={handleSaveColumnVisibility}
+          totalPages={
+            vehiclesData.data?.totalRecords
+              ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
+              : 0
+          }
+          pagination={pagination}
+          onPaginationChange={(newPaginationState) => {
+            navigate({
+              to: searchFleetRoute.to,
+              params: {},
+              search: (current) => ({
+                ...current,
+                page: newPaginationState.pageIndex + 1,
+                size: newPaginationState.pageSize,
+                filters: searchFilters,
+              }),
+            });
+          }}
+          filters={{
+            columnFilters,
+            setColumnFilters,
+            onClearFilters: () => {
               navigate({
                 to: searchFleetRoute.to,
                 params: {},
-                search: (current) => ({
-                  ...current,
-                  page: newPaginationState.pageIndex + 1,
-                  size: newPaginationState.pageSize,
-                  filters: searchFilters,
+                search: () => ({
+                  page: 1,
+                  size: pagination.pageSize,
                 }),
               });
-            }}
-            filters={{
-              columnFilters,
-              setColumnFilters,
-              onClearFilters: () => {
-                navigate({
-                  to: searchFleetRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: 1,
-                    size: pagination.pageSize,
-                  }),
-                });
+            },
+            onSearchWithFilters: () => {
+              const filters = columnFilters.reduce(
+                (prev, current) => ({
+                  ...prev,
+                  [current.id]: current.value,
+                }),
+                {}
+              );
+              navigate({
+                to: searchFleetRoute.to,
+                params: {},
+                search: () => ({
+                  page: pagination.pageIndex + 1,
+                  size: pagination.pageSize,
+                  filters,
+                }),
+              });
+            },
+            filterableColumns: [
+              {
+                id: "VehicleStatus",
+                title: "Status",
+                type: "select",
+                options: vehicleStatusList.data.map((item) => ({
+                  value: `${item.id}`,
+                  label: item.name,
+                })),
               },
-              onSearchWithFilters: () => {
-                const filters = columnFilters.reduce(
-                  (prev, current) => ({
-                    ...prev,
-                    [current.id]: current.value,
-                  }),
-                  {}
-                );
-                navigate({
-                  to: searchFleetRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: pagination.pageIndex + 1,
-                    size: pagination.pageSize,
-                    filters,
-                  }),
-                });
+              {
+                id: "VehicleTypeId",
+                title: "Type",
+                type: "select",
+                options: vehicleTypesList.data.map((item) => ({
+                  value: `${item.VehicleTypeId}`,
+                  label: item.VehicleTypeName,
+                })),
               },
-              filterableColumns: [
-                {
-                  id: "VehicleStatus",
-                  title: "Status",
-                  type: "select",
-                  options: vehicleStatusList.data.map((item) => ({
-                    value: `${item.id}`,
-                    label: item.name,
-                  })),
-                },
-                {
-                  id: "VehicleTypeId",
-                  title: "Type",
-                  type: "select",
-                  options: vehicleTypesList.data.map((item) => ({
-                    value: `${item.VehicleTypeId}`,
-                    label: item.VehicleTypeName,
-                  })),
-                },
-                {
-                  id: "VehicleNo",
-                  title: "Vehicle no.",
-                  type: "text",
-                  size: "normal",
-                },
-                {
-                  id: "OwningLocationId",
-                  title: "Owning location",
-                  type: "select",
-                  options: locationsList.data.data.map((item) => ({
-                    value: `${item.locationId}`,
-                    label: `${item.locationName}`,
-                  })),
-                },
-                {
-                  id: "CurrentLocationId",
-                  title: "Current location",
-                  type: "select",
-                  options: locationsList.data.data.map((item) => ({
-                    value: `${item.locationId}`,
-                    label: `${item.locationName}`,
-                  })),
-                },
-                {
-                  id: "Active",
-                  title: "Is active?",
-                  type: "select",
-                  options: [
-                    { value: "true", label: "Yes" },
-                    { value: "false", label: "No" },
-                  ],
-                  defaultValue: "true",
-                },
-              ],
-            }}
-          />
-        </div>
-      </div>
+              {
+                id: "VehicleNo",
+                title: "Vehicle no.",
+                type: "text",
+                size: "normal",
+              },
+              {
+                id: "OwningLocationId",
+                title: "Owning location",
+                type: "select",
+                options: locationsList.data.data.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "CurrentLocationId",
+                title: "Current location",
+                type: "select",
+                options: locationsList.data.data.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "Active",
+                title: "Is active?",
+                type: "select",
+                options: [
+                  { value: "true", label: "Yes" },
+                  { value: "false", label: "No" },
+                ],
+                defaultValue: "true",
+              },
+            ],
+          }}
+        />
+      </section>
     </Protector>
   );
 }

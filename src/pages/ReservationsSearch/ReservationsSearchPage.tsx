@@ -170,151 +170,153 @@ function ReservationsSearchPage() {
 
   return (
     <Protector>
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 pb-4 pt-1.5 sm:mx-4 sm:px-1">
-          <CommonHeader
-            titleContent={
-              <h1 className="select-none text-2xl font-semibold leading-6 text-gray-700">
-                Reservations
-              </h1>
-            }
-            subtitleText="Search through your rental reservations and view details."
-          />
+      <section
+        className={cn(
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
+          <h1 className="text-2xl font-semibold leading-6 text-primary">
+            Reservations
+          </h1>
           <Link
             to={addReservationRoute.to}
             search={() => ({ stage: "rental-information" })}
             className={cn(buttonVariants({ size: "sm" }))}
           >
-            <PlusIconFilled className="mr-2 h-4 w-4" />
-            New Reservation
+            <PlusIconFilled className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline-block">New Reservation</span>
           </Link>
         </div>
-        <Separator className="sm:mx-5" />
-        <div className="mx-auto my-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
-          <PrimaryModuleTable
-            data={reservationsData.data?.data || []}
-            columns={columnDefs}
-            onColumnOrderChange={handleSaveColumnsOrder}
-            rawColumnsData={columnsData?.data || []}
-            onColumnVisibilityChange={handleSaveColumnVisibility}
-            totalPages={
-              reservationsData.data?.totalRecords
-                ? Math.ceil(reservationsData.data?.totalRecords / size) ?? -1
-                : 0
-            }
-            pagination={pagination}
-            onPaginationChange={(newPaginationState) => {
+        <p className={cn("text-base text-primary/80")}>
+          Search through your bookings and view details.
+        </p>
+        <Separator className="mt-3.5" />
+      </section>
+      <section className="mx-auto mb-6 mt-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
+        <PrimaryModuleTable
+          data={reservationsData.data?.data || []}
+          columns={columnDefs}
+          onColumnOrderChange={handleSaveColumnsOrder}
+          rawColumnsData={columnsData?.data || []}
+          onColumnVisibilityChange={handleSaveColumnVisibility}
+          totalPages={
+            reservationsData.data?.totalRecords
+              ? Math.ceil(reservationsData.data?.totalRecords / size) ?? -1
+              : 0
+          }
+          pagination={pagination}
+          onPaginationChange={(newPaginationState) => {
+            navigate({
+              to: searchReservationsRoute.to,
+              params: {},
+              search: (current) => ({
+                ...current,
+                page: newPaginationState.pageIndex + 1,
+                size: newPaginationState.pageSize,
+                filters: searchFilters,
+              }),
+            });
+          }}
+          filters={{
+            columnFilters,
+            setColumnFilters,
+            onClearFilters: () => {
               navigate({
                 to: searchReservationsRoute.to,
                 params: {},
-                search: (current) => ({
-                  ...current,
-                  page: newPaginationState.pageIndex + 1,
-                  size: newPaginationState.pageSize,
-                  filters: searchFilters,
+                search: () => ({
+                  page: 1,
+                  size: pagination.pageSize,
                 }),
               });
-            }}
-            filters={{
-              columnFilters,
-              setColumnFilters,
-              onClearFilters: () => {
-                navigate({
-                  to: searchReservationsRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: 1,
-                    size: pagination.pageSize,
-                  }),
-                });
+            },
+            onSearchWithFilters: () => {
+              const filters = columnFilters.reduce(
+                (prev, current) => ({
+                  ...prev,
+                  [current.id]: current.value,
+                }),
+                {}
+              );
+              navigate({
+                to: searchReservationsRoute.to,
+                params: {},
+                search: () => ({
+                  page: pagination.pageIndex + 1,
+                  size: pagination.pageSize,
+                  filters,
+                }),
+              });
+            },
+            filterableColumns: [
+              {
+                id: "Keyword",
+                title: "Search",
+                type: "text",
+                size: "large",
               },
-              onSearchWithFilters: () => {
-                const filters = columnFilters.reduce(
-                  (prev, current) => ({
-                    ...prev,
-                    [current.id]: current.value,
-                  }),
-                  {}
-                );
-                navigate({
-                  to: searchReservationsRoute.to,
-                  params: {},
-                  search: () => ({
-                    page: pagination.pageIndex + 1,
-                    size: pagination.pageSize,
-                    filters,
-                  }),
-                });
+              {
+                id: "Statuses",
+                title: "Status",
+                type: "multi-select",
+                options: reservationStatusList.data.map((item) => ({
+                  value: `${item.id}`,
+                  label: item.name,
+                })),
+                defaultValue: [],
               },
-              filterableColumns: [
-                {
-                  id: "Keyword",
-                  title: "Search",
-                  type: "text",
-                  size: "large",
-                },
-                {
-                  id: "Statuses",
-                  title: "Status",
-                  type: "multi-select",
-                  options: reservationStatusList.data.map((item) => ({
-                    value: `${item.id}`,
-                    label: item.name,
-                  })),
-                  defaultValue: [],
-                },
-                {
-                  id: "ReservationTypes",
-                  title: "Type",
-                  type: "multi-select",
-                  options: reservationTypesList.data.map((item) => ({
-                    value: `${item.typeName}`,
-                    label: item.typeName,
-                  })),
-                  defaultValue: [],
-                },
-                {
-                  id: "VehicleTypeId",
-                  title: "Vehicle type",
-                  type: "select",
-                  options: vehicleTypesList.data.map((item) => ({
-                    value: `${item.VehicleTypeId}`,
-                    label: item.VehicleTypeName,
-                  })),
-                },
-                {
-                  id: "CreatedDateFrom",
-                  title: "Start date",
-                  type: "date",
-                },
-                {
-                  id: "CreatedDateTo",
-                  title: "End date",
-                  type: "date",
-                },
-                {
-                  id: "CheckoutLocationId",
-                  title: "Checkout location",
-                  type: "select",
-                  options: locationsList.data.data.map((item) => ({
-                    value: `${item.locationId}`,
-                    label: `${item.locationName}`,
-                  })),
-                },
-                {
-                  id: "CheckinLocationId",
-                  title: "Checkin location",
-                  type: "select",
-                  options: locationsList.data.data.map((item) => ({
-                    value: `${item.locationId}`,
-                    label: `${item.locationName}`,
-                  })),
-                },
-              ],
-            }}
-          />
-        </div>
-      </div>
+              {
+                id: "ReservationTypes",
+                title: "Type",
+                type: "multi-select",
+                options: reservationTypesList.data.map((item) => ({
+                  value: `${item.typeName}`,
+                  label: item.typeName,
+                })),
+                defaultValue: [],
+              },
+              {
+                id: "VehicleTypeId",
+                title: "Vehicle type",
+                type: "select",
+                options: vehicleTypesList.data.map((item) => ({
+                  value: `${item.VehicleTypeId}`,
+                  label: item.VehicleTypeName,
+                })),
+              },
+              {
+                id: "CreatedDateFrom",
+                title: "Start date",
+                type: "date",
+              },
+              {
+                id: "CreatedDateTo",
+                title: "End date",
+                type: "date",
+              },
+              {
+                id: "CheckoutLocationId",
+                title: "Checkout location",
+                type: "select",
+                options: locationsList.data.data.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "CheckinLocationId",
+                title: "Checkin location",
+                type: "select",
+                options: locationsList.data.data.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+            ],
+          }}
+        />
+      </section>
     </Protector>
   );
 }
