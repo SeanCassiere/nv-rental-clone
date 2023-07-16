@@ -75,7 +75,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   );
 
   return (
-    <ul className="grid min-h-[500px] w-full grid-cols-1 gap-4 transition-all md:grid-cols-12">
+    <ul className="grid min-h-[500px] w-full grid-cols-1 gap-4 overflow-x-clip transition-all md:grid-cols-12">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
