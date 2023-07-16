@@ -1,19 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/router";
-import { LockIcon, UnlockIcon } from "lucide-react";
+import { LockIcon, UnlockIcon, SettingsIcon } from "lucide-react";
 
 import Protector from "@/components/Protector";
 import DashboardStatsBlock from "@/components/Dashboard/DashboardStatsBlock";
 import DashboardDndWidgetGrid from "@/components/Dashboard/DashboardDndWidgetGrid";
-import CommonHeader from "@/components/Layout/CommonHeader";
+import DashboardWidgetPickerModal from "@/components/Dialogs/DashboardWidgetPickerModal";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import {
-  LockClosedOutline,
-  LockOpenOutline,
-  SettingsCogOutline,
-} from "@/components/icons";
-import DashboardWidgetPickerModal from "@/components/Dialogs/DashboardWidgetPickerModal";
 
 import { indexRoute } from "@/routes";
 
@@ -127,7 +121,7 @@ function IndexPage() {
               handleSetShowWidgetPickerModal(true);
             }}
           >
-            <SettingsCogOutline className="h-5 w-5 sm:h-4 sm:w-4" />
+            <SettingsIcon className="h-5 w-5 sm:h-4 sm:w-4" />
           </Button>
         </div>
         <DashboardDndWidgetGrid
