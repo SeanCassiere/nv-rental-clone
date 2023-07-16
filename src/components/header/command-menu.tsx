@@ -83,7 +83,7 @@ export const CommandMenu = () => {
         <span className="hidden lg:inline-flex">Search application...</span>
         <span className="inline-flex lg:hidden">Search...</span>
         <kbd className="pointer-events-none absolute right-1.5 top-[0.55rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-          <span className="text-xs">{IsMacLike ? "⌘" : "Ctrl"}</span>K
+          <span className="text-xs">{IsMacLike ? "⌘" : "Ctrl"}</span>+ K
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
@@ -94,10 +94,12 @@ export const CommandMenu = () => {
         />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+
           <CommandGroup
             heading={
-              search.data && search.data.length > 0
-                ? "System results"
+              search.data &&
+              search.data.filter((i) => i.module === "vehicles").length > 0
+                ? "Fleet results"
                 : undefined
             }
           >
@@ -106,12 +108,18 @@ export const CommandMenu = () => {
                 <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
               </CommandLoading>
             )}
-            {[...(search.data ? search.data : [])].map((item, idx) => (
-              <CommandItem
-                key={`${item.fullDisplayText}_${idx}`}
-                value={item.fullDisplayText}
-                onSelect={() => {
-                  if (item.module === "vehicles") {
+            {[
+              ...(search.data &&
+              search.data.filter((i) => i.module === "vehicles").length > 0
+                ? search.data
+                : []),
+            ]
+              .filter((i) => i.module === "vehicles")
+              .map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
                     run(() =>
                       navigate({
                         to: viewFleetByIdRoute.to,
@@ -119,8 +127,39 @@ export const CommandMenu = () => {
                         search: () => ({ tab: "summary" }),
                       })
                     );
-                  }
-                  if (item.module === "customers") {
+                  }}
+                >
+                  <CarIcon className="mr-2 h-4 w-4 text-primary/70" />
+                  {item.displayText}
+                </CommandItem>
+              ))}
+          </CommandGroup>
+
+          <CommandGroup
+            heading={
+              search.data &&
+              search.data.filter((i) => i.module === "customers").length > 0
+                ? "Customer results"
+                : undefined
+            }
+          >
+            {search.isLoading && (
+              <CommandLoading>
+                <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
+              </CommandLoading>
+            )}
+            {[
+              ...(search.data &&
+              search.data.filter((i) => i.module === "customers").length > 0
+                ? search.data
+                : []),
+            ]
+              .filter((i) => i.module === "customers")
+              .map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
                     run(() =>
                       navigate({
                         to: viewCustomerByIdRoute.to,
@@ -128,8 +167,39 @@ export const CommandMenu = () => {
                         search: () => ({ tab: "summary" }),
                       })
                     );
-                  }
-                  if (item.module === "reservations") {
+                  }}
+                >
+                  <Users2Icon className="mr-2 h-4 w-4 text-primary/70" />
+                  {item.displayText}
+                </CommandItem>
+              ))}
+          </CommandGroup>
+
+          <CommandGroup
+            heading={
+              search.data &&
+              search.data.filter((i) => i.module === "reservations").length > 0
+                ? "Reservation results"
+                : undefined
+            }
+          >
+            {search.isLoading && (
+              <CommandLoading>
+                <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
+              </CommandLoading>
+            )}
+            {[
+              ...(search.data &&
+              search.data.filter((i) => i.module === "reservations").length > 0
+                ? search.data
+                : []),
+            ]
+              .filter((i) => i.module === "reservations")
+              .map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
                     run(() =>
                       navigate({
                         to: viewReservationByIdRoute.to,
@@ -137,8 +207,39 @@ export const CommandMenu = () => {
                         search: () => ({ tab: "summary" }),
                       })
                     );
-                  }
-                  if (item.module === "agreements") {
+                  }}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4 text-primary/70" />
+                  {item.displayText}
+                </CommandItem>
+              ))}
+          </CommandGroup>
+
+          <CommandGroup
+            heading={
+              search.data &&
+              search.data.filter((i) => i.module === "agreements").length > 0
+                ? "Agreement results"
+                : undefined
+            }
+          >
+            {search.isLoading && (
+              <CommandLoading>
+                <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
+              </CommandLoading>
+            )}
+            {[
+              ...(search.data &&
+              search.data.filter((i) => i.module === "agreements").length > 0
+                ? search.data
+                : []),
+            ]
+              .filter((i) => i.module === "agreements")
+              .map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
                     run(() =>
                       navigate({
                         to: viewAgreementByIdRoute.to,
@@ -146,26 +247,15 @@ export const CommandMenu = () => {
                         search: () => ({ tab: "summary" }),
                       })
                     );
-                  }
-                }}
-              >
-                {item.module === "customers" && (
-                  <Users2Icon className="mr-2 h-4 w-4 text-primary/70" />
-                )}
-                {item.module === "vehicles" && (
-                  <CarIcon className="mr-2 h-4 w-4 text-primary/70" />
-                )}
-                {item.module === "reservations" && (
-                  <CalendarIcon className="mr-2 h-4 w-4 text-primary/70" />
-                )}
-                {item.module === "agreements" && (
+                  }}
+                >
                   <FileSignatureIcon className="mr-2 h-4 w-4 text-primary/70" />
-                )}
-                {item.displayText}
-              </CommandItem>
-            ))}
+                  {item.displayText}
+                </CommandItem>
+              ))}
           </CommandGroup>
-          <CommandGroup heading="Navigation">
+
+          <CommandGroup heading="Go to">
             <CommandItem
               onSelect={() => {
                 run(() =>
@@ -244,7 +334,8 @@ export const CommandMenu = () => {
               Reports
             </CommandItem>
           </CommandGroup>
-          <CommandGroup heading="Settings">
+
+          <CommandGroup heading="System">
             <CommandItem
               onSelect={() => {
                 run(() =>
