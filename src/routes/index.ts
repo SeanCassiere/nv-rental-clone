@@ -4,9 +4,12 @@ import { rootRoute } from "./__root";
 import { queryClient as qc } from "../App";
 import { fetchDashboardWidgetList } from "@/api/dashboard";
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
+
 import { getAuthToken } from "@/utils/authLocal";
-import { dashboardQKeys } from "@/utils/query-key";
+import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
+
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
+import { fetchLocationsList } from "@/api/locations";
 
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -35,7 +38,6 @@ export const indexRoute = new Route({
 
       // get widgets
       const widgetsKey = dashboardQKeys.widgets();
-
       if (!qc.getQueryData(widgetsKey)) {
         promises.push(
           qc.prefetchQuery({
@@ -45,6 +47,24 @@ export const indexRoute = new Route({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
+              }),
+            initialData: [],
+          })
+        );
+      }
+
+      // get locations
+      const locationsKey = locationQKeys.all();
+      if (!qc.getQueryData(locationsKey)) {
+        promises.push(
+          qc.prefetchQuery({
+            queryKey: locationsKey,
+            queryFn: async () =>
+              fetchLocationsList({
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                accessToken: auth.access_token,
+                withActive: true,
               }),
             initialData: [],
           })
