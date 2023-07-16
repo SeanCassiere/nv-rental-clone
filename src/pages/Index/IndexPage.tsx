@@ -97,8 +97,7 @@ function IndexPage() {
         </p>
         <Separator className="mb-4 mt-3.5" />
         <DashboardStatsBlock statistics={statistics.data} />
-        <Separator className="mb-4 mt-4" />
-        <div className="mb-2 flex space-x-2">
+        <div className="mb-2 mt-2 flex space-x-2">
           <Button
             size="sm"
             variant={isWidgetsLocked ? "outline" : "secondary"}

@@ -3,6 +3,7 @@ import { Link } from "@tanstack/router";
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 import type { StringNumberIdType } from "@/utils/query-key";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const VehicleStatusWidget = ({
   currentLocations,
@@ -24,11 +25,11 @@ const VehicleStatusWidget = ({
   };
 
   return (
-    <div className="h-full w-full px-4 py-2">
-      <div className="text-base font-semibold text-slate-700">
-        Vehicle Status
-      </div>
-      <div>
+    <>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base font-medium">Vehicle Status</CardTitle>
+      </CardHeader>
+      <CardContent>
         {statusCounts.data.map((status) => (
           <Link
             key={`status-${status.name}`}
@@ -51,8 +52,8 @@ const VehicleStatusWidget = ({
             {status.total.toString()}
           </Link>
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </>
   );
 };
 
