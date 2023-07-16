@@ -188,7 +188,7 @@ function AgreementsSearchPage() {
           </Link>
         </div>
         <p className={cn("text-base text-primary/80")}>
-          Search through your rental agreements and view details.
+          Search through your rentals and view details.
         </p>
         <Separator className="mt-3.5" />
       </section>
