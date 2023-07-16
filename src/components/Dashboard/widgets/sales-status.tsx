@@ -32,8 +32,8 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
             <AreaChart data={sales.data || []}>
               <defs>
                 <linearGradient id="colorThisYear" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ec4899" stopOpacity={0.7} />
-                  <stop offset="95%" stopColor="#ec4899" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#14b8a6" stopOpacity={0.7} />
+                  <stop offset="95%" stopColor="#14b8a6" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient
                   id="colorPreviousYear"
@@ -65,7 +65,7 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
                 dataKey="total"
                 strokeWidth={2}
                 fillOpacity={1}
-                stroke="#db2777"
+                stroke="#0d9488"
                 fill="url(#colorThisYear)"
               />
               <Legend
