@@ -69,6 +69,7 @@ function CustomerSearchPage() {
     filters: searchFilters,
   });
   const customerTypesList = useGetCustomerTypesList();
+  const customerTypes = customerTypesList.data ?? [];
 
   const columnsData = useGetModuleColumns({ module: "customers" });
 
@@ -240,7 +241,7 @@ function CustomerSearchPage() {
                 id: "CustomerTypes",
                 title: "Type",
                 type: "multi-select",
-                options: customerTypesList.data.map((item) => ({
+                options: customerTypes.map((item) => ({
                   value: `${item.typeName}`,
                   label: item.typeName,
                 })),

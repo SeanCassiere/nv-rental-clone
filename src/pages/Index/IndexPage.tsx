@@ -6,7 +6,6 @@ import {
   SettingsIcon,
   PlusCircle,
   CheckIcon,
-  XIcon,
 } from "lucide-react";
 
 import Protector from "@/components/Protector";
@@ -59,7 +58,8 @@ function IndexPage() {
     from: indexRoute.id,
   });
 
-  const locations = useGetLocationsList({ locationIsActive: true });
+  const locationsList = useGetLocationsList({ locationIsActive: true });
+  const locations = locationsList.data?.data ?? [];
 
   const handleSetShowWidgetPickerModal = useCallback(
     (show: boolean) => {
@@ -72,15 +72,7 @@ function IndexPage() {
   );
 
   const widgetList = useGetDashboardWidgetList();
-  const widgetIds = useMemo(() => {
-    if (widgetList.data && Array.isArray(widgetList.data)) {
-      return widgetList.data
 
-        .filter((widget) => widget.isDeleted === false)
-        .map((widget) => widget.widgetID);
-    }
-    return [];
-  }, [widgetList.data]);
   const widgets = useMemo(() => {
     if (widgetList.data && Array.isArray(widgetList.data)) {
       return widgetList.data;
@@ -121,7 +113,7 @@ function IndexPage() {
             Dashboard
           </h1>
           <LocationPicker
-            locations={locations.data.data ?? []}
+            locations={locations}
             selected={currentLocationIds}
             onSelect={setLocations}
           />

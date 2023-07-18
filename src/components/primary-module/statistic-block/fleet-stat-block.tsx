@@ -15,7 +15,9 @@ const FleetStatBlock = ({
   const vehicleStatusList = useGetVehicleStatusList();
 
   const getStatusById = (id?: number) => {
-    const find = vehicleStatusList.data.find((item) => item.id === id);
+    const find = [
+      ...(vehicleStatusList.data ? vehicleStatusList.data : []),
+    ].find((item) => item.id === id);
     if (find) {
       return find.name;
     }

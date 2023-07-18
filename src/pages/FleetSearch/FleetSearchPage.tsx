@@ -9,7 +9,6 @@ import {
 } from "@tanstack/react-table";
 
 import Protector from "@/components/Protector";
-import CommonHeader from "@/components/Layout/CommonHeader";
 
 import { searchFleetRoute } from "@/routes/fleet/searchFleet";
 import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";
@@ -68,8 +67,13 @@ function VehiclesSearchPage() {
   });
 
   const vehicleStatusList = useGetVehicleStatusList();
+  const vehicleStatuses = vehicleStatusList.data ?? [];
+
   const vehicleTypesList = useGetVehicleTypesList();
+  const vehicleTypes = vehicleTypesList.data ?? [];
+
   const locationsList = useGetLocationsList({ locationIsActive: true });
+  const locations = locationsList.data?.data ?? [];
 
   const columnsData = useGetModuleColumns({ module: "vehicles" });
 
@@ -230,7 +234,7 @@ function VehiclesSearchPage() {
                 id: "VehicleStatus",
                 title: "Status",
                 type: "select",
-                options: vehicleStatusList.data.map((item) => ({
+                options: vehicleStatuses.map((item) => ({
                   value: `${item.id}`,
                   label: item.name,
                 })),
@@ -239,7 +243,7 @@ function VehiclesSearchPage() {
                 id: "VehicleTypeId",
                 title: "Type",
                 type: "select",
-                options: vehicleTypesList.data.map((item) => ({
+                options: vehicleTypes.map((item) => ({
                   value: `${item.VehicleTypeId}`,
                   label: item.VehicleTypeName,
                 })),
@@ -254,7 +258,7 @@ function VehiclesSearchPage() {
                 id: "OwningLocationId",
                 title: "Owning location",
                 type: "select",
-                options: locationsList.data.data.map((item) => ({
+                options: locations.map((item) => ({
                   value: `${item.locationId}`,
                   label: `${item.locationName}`,
                 })),
@@ -263,7 +267,7 @@ function VehiclesSearchPage() {
                 id: "CurrentLocationId",
                 title: "Current location",
                 type: "select",
-                options: locationsList.data.data.map((item) => ({
+                options: locations.map((item) => ({
                   value: `${item.locationId}`,
                   label: `${item.locationName}`,
                 })),

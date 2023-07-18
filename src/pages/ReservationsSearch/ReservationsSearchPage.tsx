@@ -10,7 +10,6 @@ import {
 import { useTranslation } from "react-i18next";
 
 import Protector from "@/components/Protector";
-import CommonHeader from "@/components/Layout/CommonHeader";
 import { PlusIconFilled } from "@/components/icons";
 
 import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
@@ -75,9 +74,16 @@ function ReservationsSearchPage() {
   });
 
   const reservationStatusList = useGetReservationStatusList();
+  const reservationStatuses = reservationStatusList.data ?? [];
+
   const vehicleTypesList = useGetVehicleTypesList();
+  const vehicleTypes = vehicleTypesList.data ?? [];
+
   const locationsList = useGetLocationsList({ locationIsActive: true });
+  const locations = locationsList.data?.data ?? [];
+
   const reservationTypesList = useGetReservationTypesList();
+  const reservationTypes = reservationTypesList.data ?? [];
 
   const columnsData = useGetModuleColumns({ module: "reservations" });
 
@@ -260,7 +266,7 @@ function ReservationsSearchPage() {
                 id: "Statuses",
                 title: "Status",
                 type: "multi-select",
-                options: reservationStatusList.data.map((item) => ({
+                options: reservationStatuses.map((item) => ({
                   value: `${item.id}`,
                   label: item.name,
                 })),
@@ -270,7 +276,7 @@ function ReservationsSearchPage() {
                 id: "ReservationTypes",
                 title: "Type",
                 type: "multi-select",
-                options: reservationTypesList.data.map((item) => ({
+                options: reservationTypes.map((item) => ({
                   value: `${item.typeName}`,
                   label: item.typeName,
                 })),
@@ -280,7 +286,7 @@ function ReservationsSearchPage() {
                 id: "VehicleTypeId",
                 title: "Vehicle type",
                 type: "select",
-                options: vehicleTypesList.data.map((item) => ({
+                options: vehicleTypes.map((item) => ({
                   value: `${item.VehicleTypeId}`,
                   label: item.VehicleTypeName,
                 })),
@@ -299,7 +305,7 @@ function ReservationsSearchPage() {
                 id: "CheckoutLocationId",
                 title: "Checkout location",
                 type: "select",
-                options: locationsList.data.data.map((item) => ({
+                options: locations.map((item) => ({
                   value: `${item.locationId}`,
                   label: `${item.locationName}`,
                 })),
@@ -308,7 +314,7 @@ function ReservationsSearchPage() {
                 id: "CheckinLocationId",
                 title: "Checkin location",
                 type: "select",
-                options: locationsList.data.data.map((item) => ({
+                options: locations.map((item) => ({
                   value: `${item.locationId}`,
                   label: `${item.locationName}`,
                 })),

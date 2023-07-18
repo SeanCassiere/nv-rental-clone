@@ -15,7 +15,7 @@ export function useGetReservationTypesList() {
         accessToken: auth.user?.access_token || "",
       }),
     enabled: auth.isAuthenticated,
-    initialData: [],
+    staleTime: 1000 * 60 * 1,
   });
   return query;
 }

@@ -18,7 +18,7 @@ export function useGetClientProfile() {
       });
     },
     enabled: auth.isAuthenticated,
-    staleTime: 1000 * 60 * 1, // 1 minute before the data is considered to be stale
+    staleTime: 1000 * 30, // 30 secs before the data is considered to be stale
   });
   return query;
 }

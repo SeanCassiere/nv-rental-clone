@@ -20,7 +20,7 @@ export function useGetDashboardMessages() {
       });
     },
     enabled: auth.isAuthenticated,
-    initialData: [],
+    staleTime: 1000 * 60 * 1,
   });
   return query;
 }

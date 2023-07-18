@@ -32,7 +32,7 @@ export function useGetVehicleTypesList(params?: VehicleTypesListExtraOpts) {
         ...otherSearch,
       }),
     enabled: auth.isAuthenticated,
-    initialData: [],
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
   return query;
 }

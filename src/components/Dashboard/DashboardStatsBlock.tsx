@@ -23,7 +23,7 @@ import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 const DashboardStatsBlock = ({
   statistics,
 }: {
-  statistics: TDashboardStats;
+  statistics: TDashboardStats | undefined;
 }) => {
   return (
     <ul className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
@@ -31,7 +31,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Reservation"
           icon={CreditCardOutline}
-          value={Number(statistics.todaysReservationCount).toString()}
+          value={Number(statistics?.todaysReservationCount || 0).toString()}
           linkProps={{
             to: searchReservationsRoute.to,
             search: () => ({
@@ -51,7 +51,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Return"
           icon={ArrowDownRightOutline}
-          value={Number(statistics.todaysArrivalsCount).toString()}
+          value={Number(statistics?.todaysArrivalsCount || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
             search: () => ({
@@ -71,7 +71,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="On rent"
           icon={TruckOutline}
-          value={Number(statistics.openAgreement).toString()}
+          value={Number(statistics?.openAgreement || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
             search: () => ({
@@ -87,7 +87,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Overdue"
           icon={CreditCardOutline}
-          value={Number(statistics.overDues).toString()}
+          value={Number(statistics?.overDues || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
             search: () => ({
@@ -103,7 +103,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Pending payment"
           icon={BankNotesOutline}
-          value={Number(statistics.pendingPayment).toString()}
+          value={Number(statistics?.pendingPayment || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
             search: () => ({
@@ -119,7 +119,7 @@ const DashboardStatsBlock = ({
         <StatBlock
           title="Service alert"
           icon={BellIconOutline}
-          value={Number(statistics.serviceAlerts).toString()}
+          value={Number(statistics?.serviceAlerts || 0).toString()}
           linkProps={{
             to: indexRoute.id,
           }}

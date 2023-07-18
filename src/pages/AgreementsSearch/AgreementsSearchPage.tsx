@@ -75,9 +75,16 @@ function AgreementsSearchPage() {
   });
 
   const agreementStatusList = useGetAgreementStatusList();
+  const agreementStatuses = agreementStatusList.data ?? [];
+
   const vehicleTypesList = useGetVehicleTypesList();
+  const vehicleTypes = vehicleTypesList.data ?? [];
+
   const locationsList = useGetLocationsList({ locationIsActive: true });
+  const locations = locationsList.data?.data ?? [];
+
   const agreementTypesList = useGetAgreementTypesList();
+  const agreementTypes = agreementTypesList.data ?? [];
 
   const columnsData = useGetModuleColumns({ module: "agreements" });
 
@@ -259,7 +266,7 @@ function AgreementsSearchPage() {
                 id: "Statuses",
                 title: "Status",
                 type: "multi-select",
-                options: agreementStatusList.data.map((item) => ({
+                options: agreementStatuses.map((item) => ({
                   value: `${item.id}`,
                   label: item.name,
                 })),
@@ -269,7 +276,7 @@ function AgreementsSearchPage() {
                 id: "AgreementTypes",
                 title: "Type",
                 type: "multi-select",
-                options: agreementTypesList.data.map((item) => ({
+                options: agreementTypes.map((item) => ({
                   value: `${item.typeName}`,
                   label: item.typeName,
                 })),
@@ -289,7 +296,7 @@ function AgreementsSearchPage() {
                 id: "PickupLocationId",
                 title: "Checkout location",
                 type: "select",
-                options: locationsList.data.data.map((item) => ({
+                options: locations.map((item) => ({
                   value: `${item.locationId}`,
                   label: `${item.locationName}`,
                 })),
@@ -298,7 +305,7 @@ function AgreementsSearchPage() {
                 id: "ReturnLocationId",
                 title: "Checkin location",
                 type: "select",
-                options: locationsList.data.data.map((item) => ({
+                options: locations.map((item) => ({
                   value: `${item.locationId}`,
                   label: `${item.locationName}`,
                 })),
@@ -307,7 +314,7 @@ function AgreementsSearchPage() {
                 id: "VehicleTypeId",
                 title: "Vehicle type",
                 type: "select",
-                options: vehicleTypesList.data.map((item) => ({
+                options: vehicleTypes.map((item) => ({
                   value: `${item.VehicleTypeId}`,
                   label: item.VehicleTypeName,
                 })),

@@ -24,17 +24,7 @@ export function useGetDashboardStats({
       });
     },
     enabled: auth.isAuthenticated,
-    initialData: {
-      openAgreement: 0,
-      overDues: 0,
-      dueIn: 0,
-      todaysReservationCount: 0,
-      todaysArrivalsCount: 0,
-      serviceAlerts: 0,
-      onHoldAgreements: 0,
-      paymentDelay: 0,
-      pendingPayment: 0,
-    },
+    staleTime: 1000 * 60 * 1,
   });
   return query;
 }

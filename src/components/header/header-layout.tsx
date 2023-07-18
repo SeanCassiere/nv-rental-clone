@@ -87,7 +87,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   ];
 
   const messagesList = useGetDashboardMessages();
-
+  const messages = [...(messagesList.data ? messagesList.data : [])];
   // this will be the loading placeholder that'll take up the entire page height
   if (auth.isLoading) {
     return <LoadingPlaceholder />;
@@ -100,9 +100,9 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <header className="relative border-b">
-        {messagesList.data.length > 0 && (
+        {messages.length > 0 && (
           <section className="grid w-full divide-y divide-teal-600 bg-teal-500">
-            {messagesList.data.map((notice) => (
+            {messages.map((notice) => (
               <BannerNotice
                 message={notice}
                 key={`banner_notice_${notice.messageId}`}
