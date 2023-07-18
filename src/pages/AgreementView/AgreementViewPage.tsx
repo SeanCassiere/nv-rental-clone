@@ -18,7 +18,7 @@ import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
-import AgreementModuleStatBlock from "@/components/primary-module/ModuleStatBlock/AgreementModuleStatBlock";
+import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
 import CommonHeader from "@/components/Layout/CommonHeader";
 import { Button, LinkButton } from "@/components/Form";
 
@@ -202,7 +202,7 @@ function AgreementViewPage() {
             headerActionContent
           />
           <div className="my-4 mt-2 sm:mt-6">
-            <AgreementModuleStatBlock
+            <AgreementStatBlock
               agreement={agreement.data}
               isCheckedIn={isCheckedIn}
             />

@@ -19,7 +19,7 @@ import {
 } from "@/components/primary-module/ModuleTabs";
 import ScrollToTop from "@/components/ScrollToTop";
 import CommonHeader from "@/components/Layout/CommonHeader";
-import ReservationModuleStatBlock from "@/components/primary-module/ModuleStatBlock/ReservationModuleStatBlock";
+import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
 import { Button, LinkButton } from "@/components/Form";
 
 import {
@@ -165,7 +165,7 @@ function ReservationViewPage() {
           />
 
           <div className="my-4 mt-2 sm:mt-6">
-            <ReservationModuleStatBlock reservation={reservation.data} />
+            <ReservationStatBlock reservation={reservation.data} />
           </div>
         </div>
 

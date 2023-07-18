@@ -14,7 +14,7 @@ import {
   ModuleTabs,
 } from "@/components/primary-module/ModuleTabs";
 import ScrollToTop from "@/components/ScrollToTop";
-import VehicleModuleStatBlock from "@/components/primary-module/ModuleStatBlock/VehicleModuleStatBlock";
+import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
 import CommonHeader from "@/components/Layout/CommonHeader";
 import { LinkButton } from "@/components/Form";
 
@@ -166,7 +166,7 @@ function VehicleViewPage() {
             headerActionContent
           />
           <div className="my-4 mt-2 sm:mt-6">
-            <VehicleModuleStatBlock vehicle={vehicle.data} />
+            <FleetStatBlock vehicle={vehicle.data} />
           </div>
         </div>
 
