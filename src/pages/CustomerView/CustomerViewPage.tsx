@@ -13,9 +13,8 @@ import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
-import ScrollToTop from "@/components/ScrollToTop";
-import CommonHeader from "@/components/Layout/CommonHeader";
-import { LinkButton } from "@/components/Form";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import {
   editCustomerByIdRoute,
@@ -27,6 +26,7 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
+import { cn } from "@/utils";
 
 const SummaryTab = lazy(
   () => import("../../components/Customer/CustomerSummaryTab")
@@ -99,64 +99,68 @@ function CustomerViewPage() {
 
   return (
     <Protector>
-      <ScrollToTop />
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 sm:px-4">
-          <CommonHeader
-            titleContent={
-              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
-                <div className="flex items-center gap-2">
-                  <Link
-                    to=".."
-                    className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                    onClick={() => {
-                      router.history.go(-1);
-                    }}
-                  >
-                    Customers
-                  </Link>
-                  <ChevronRightOutline
-                    className="h-4 w-4 flex-shrink-0 text-gray-500"
-                    aria-hidden="true"
-                  />
-                  <Link
-                    to={viewCustomerByIdRoute.to}
-                    search={(current) => ({ tab: current?.tab || "summary" })}
-                    params={{ customerId }}
-                    className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                  >
-                    {customer?.data?.firstName}&nbsp;
-                    {customer?.data?.lastName}
-                  </Link>
-                </div>
-                <div className="flex flex-col gap-3 md:flex-row">
-                  <LinkButton
-                    to={editCustomerByIdRoute.to}
-                    search={() => ({})}
-                    params={{ customerId: String(customerId) }}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <PencilIconFilled className="h-3 w-3" />
-                    Edit
-                  </LinkButton>
-                </div>
-              </div>
-            }
-            headerActionContent
-          />
-          <div className="my-4 mt-2 bg-slate-50 p-4 sm:mt-6">
-            Customer information modes
+      <section
+        className={cn(
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div
+          className={cn(
+            "flex min-h-[2.5rem] flex-col items-center justify-between gap-4 sm:flex-row"
+          )}
+        >
+          <div className="flex w-full items-center justify-start gap-2">
+            <Link
+              className="text-2xl font-semibold leading-6 text-primary"
+              onClick={() => {
+                router.history.go(-1);
+              }}
+            >
+              Customers
+            </Link>
+            <ChevronRightOutline
+              className="h-4 w-4 flex-shrink-0 text-primary"
+              aria-hidden="true"
+            />
+            <Link
+              to={viewCustomerByIdRoute.to}
+              search={(current) => ({ tab: current?.tab || "summary" })}
+              params={{ customerId }}
+              className="max-w-[230px] truncate text-xl font-semibold leading-6 text-primary/80 md:max-w-full"
+            >
+              {customer?.data?.firstName}&nbsp;
+              {customer?.data?.lastName}
+            </Link>
+          </div>
+          <div className="flex w-full gap-2 sm:w-max">
+            <Link
+              to={editCustomerByIdRoute.to}
+              search={() => ({})}
+              params={{ customerId: String(customerId) }}
+              className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+            >
+              <PencilIconFilled className="h-3 w-3 sm:mr-2" />
+              <span className="hidden sm:inline-block">Edit</span>
+            </Link>
           </div>
         </div>
+        <p className={cn("text-base text-primary/80")}>
+          View the details related to this customer.
+        </p>
+        <Separator className="mt-3.5" />
+      </section>
 
-        <div className="mx-auto px-2 sm:px-4 md:grid-cols-12">
-          <ModuleTabs
-            tabConfig={tabsConfig}
-            startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
-            onTabClick={onTabClick}
-          />
-        </div>
-      </div>
+      <section
+        className={cn(
+          "mx-auto my-6 mt-4 flex max-w-full flex-col gap-2 px-2 pb-6 sm:mx-4 sm:px-1"
+        )}
+      >
+        <ModuleTabs
+          tabConfig={tabsConfig}
+          startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
+          onTabClick={onTabClick}
+        />
+      </section>
     </Protector>
   );
 }

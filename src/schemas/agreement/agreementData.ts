@@ -51,6 +51,17 @@ export const AgreementMiscChargeItem = z.object({
   misChargeOptionList: z.array(z.any()).nullable(),
   optionId: z.number().nullable(),
   isBillToInsurance: z.boolean().nullable(),
+
+  minValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  maxValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  hourlyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  hourlyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  dailyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  dailyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  weeklyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  weeklyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  monthlyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  monthlyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
 });
 
 export const AgreementDataSchema = z.object({
@@ -276,7 +287,7 @@ export const AgreementDataSchema = z.object({
       expiryDatestr: z.string().nullable(),
       taxSelectedStatus: z.any(),
       glCode: z.string().nullable(),
-    }),
+    })
   ),
 
   driverList: z.array(
@@ -327,7 +338,7 @@ export const AgreementDataSchema = z.object({
       referenceId: z.coerce.string().nullable(),
       countryName: z.string().nullable(),
       signatureDate: z.string().nullable(),
-    }),
+    })
   ),
 
   customerEmail: z.string().nullable(),
@@ -456,7 +467,7 @@ export const AgreementDataSchema = z.object({
         equipmentReturnDateStr: z.string().nullable(),
         equipmentTypeName: z.string().nullable(),
         isDelete: z.boolean(),
-      }),
+      })
     )
     .nullable(),
 
@@ -485,7 +496,7 @@ export const AgreementDataSchema = z.object({
         milesAllowedDiscountValue: z.number().nullable(),
         minimnumTotal: z.number().nullable(),
         discountTotal: z.number().nullable(),
-      }),
+      })
     )
     .nullable(),
 
@@ -542,7 +553,7 @@ export const AgreementDataSchema = z.object({
       isActive: z.boolean(),
       billingBy: z.string().nullable(),
       billingOwnerId: z.number().nullable(),
-    }),
+    })
   ),
 
   creditCards: z.array(
@@ -565,7 +576,7 @@ export const AgreementDataSchema = z.object({
       month: z.number(),
       isTokenized: z.boolean().nullable(),
       customerID: z.number().nullable(),
-    }),
+    })
   ),
 
   agreementAttribute: z.array(
@@ -579,7 +590,7 @@ export const AgreementDataSchema = z.object({
       keyValue: z.string().nullable(),
       type: z.string(), // Textbox, DateTime Picker, Textox-Number
       displayName: z.string().nullable(),
-    }),
+    })
   ),
 
   referralDetails: z.any(),
@@ -608,7 +619,7 @@ export const AgreementDataSchema = z.object({
         vehicleType: z.coerce.string().nullable(),
         unit: z.coerce.string().nullable(),
         locationID: z.coerce.string().nullable(),
-      }),
+      })
     )
     .nullable(),
 

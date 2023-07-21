@@ -19,8 +19,8 @@ import {
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
-import CommonHeader from "@/components/Layout/CommonHeader";
-import { Button, LinkButton } from "@/components/Form";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import {
   viewAgreementByIdRoute,
@@ -33,6 +33,7 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
+import { cn } from "@/utils";
 
 const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")
@@ -127,96 +128,102 @@ function AgreementViewPage() {
 
   return (
     <Protector>
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 sm:px-4">
-          <CommonHeader
-            titleContent={
-              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
-                <div className="flex items-center gap-2">
-                  <Link
-                    to=".."
-                    className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                    onClick={() => {
-                      router.history.go(-1);
-                    }}
-                  >
-                    Agreements
-                  </Link>
-                  <ChevronRightOutline
-                    className="h-4 w-4 flex-shrink-0 text-gray-500"
-                    aria-hidden="true"
-                  />
-                  <Link
-                    to={viewAgreementByIdRoute.to}
-                    search={(current) => ({ tab: current?.tab || "summary" })}
-                    params={{ agreementId }}
-                    className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                  >
-                    {agreement?.data?.agreementNumber}
-                  </Link>
-                </div>
-                <div className="flex flex-col gap-3 md:flex-row">
-                  {isCheckedIn ? (
-                    <LinkButton
-                      to={checkinAgreementByIdRoute.to}
-                      search={() => ({ stage: "rental-information" })}
-                      params={{ agreementId: String(agreementId) }}
-                      className="flex items-center justify-center gap-2"
-                    >
-                      <PencilIconFilled className="h-3 w-3" />
-                      Edit
-                    </LinkButton>
-                  ) : (
-                    <LinkButton
-                      to={editAgreementByIdRoute.to}
-                      search={() => ({ stage: "rental-information" })}
-                      params={{ agreementId: String(agreementId) }}
-                      className="flex items-center justify-center gap-2"
-                    >
-                      <PencilIconFilled className="h-3 w-3" />
-                      Edit
-                    </LinkButton>
-                  )}
-                  {!isCheckedIn && (
-                    <LinkButton
-                      to={checkinAgreementByIdRoute.to}
-                      search={() => ({ stage: "rental-information" })}
-                      params={{ agreementId: String(agreementId) }}
-                      className="flex items-center justify-center gap-2"
-                    >
-                      <ArrowDownLeftOutline className="h-3.5 w-3.5" />
-                      Checkin
-                    </LinkButton>
-                  )}
-                  <Button
-                    type="button"
-                    color="teal"
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <PrintIconFilled className="h-3 w-3" />
-                    Print
-                  </Button>
-                </div>
-              </div>
-            }
-            headerActionContent
-          />
-          <div className="my-4 mt-2 sm:mt-6">
-            <AgreementStatBlock
-              agreement={agreement.data}
-              isCheckedIn={isCheckedIn}
+      <section
+        className={cn(
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div
+          className={cn(
+            "flex min-h-[2.5rem] flex-col items-center justify-between gap-4 sm:flex-row"
+          )}
+        >
+          <div className="flex w-full items-center justify-start gap-2">
+            <Link
+              className="text-2xl font-semibold leading-6 text-primary"
+              onClick={() => {
+                router.history.go(-1);
+              }}
+            >
+              Agreements
+            </Link>
+            <ChevronRightOutline
+              className="h-4 w-4 flex-shrink-0 text-primary"
+              aria-hidden="true"
             />
+            <Link
+              to={viewAgreementByIdRoute.to}
+              search={(current) => ({ tab: current?.tab || "summary" })}
+              params={{ agreementId }}
+              className="max-w-[230px] truncate text-xl font-semibold leading-6 text-primary/80 md:max-w-full"
+            >
+              {agreement?.data?.agreementNumber}
+            </Link>
+          </div>
+          <div className="flex w-full gap-2 sm:w-max">
+            {isCheckedIn ? (
+              <Link
+                to={checkinAgreementByIdRoute.to}
+                search={() => ({ stage: "rental-information" })}
+                params={{ agreementId: String(agreementId) }}
+                className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+              >
+                <PencilIconFilled className="h-3 w-3  sm:mr-2" />
+                <span className="hidden sm:inline-block">Edit</span>
+              </Link>
+            ) : (
+              <Link
+                to={editAgreementByIdRoute.to}
+                search={() => ({ stage: "rental-information" })}
+                params={{ agreementId: String(agreementId) }}
+                className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+              >
+                <PencilIconFilled className="h-3 w-3  sm:mr-2" />
+                <span className="hidden sm:inline-block">Edit</span>
+              </Link>
+            )}
+            <Button
+              size="sm"
+              type="button"
+              className="flex items-center justify-center gap-2"
+              variant="ghost"
+            >
+              <PrintIconFilled className="h-3 w-3 sm:mr-2" />
+              <span className="hidden sm:inline-block">Print</span>
+            </Button>
+            {!isCheckedIn && (
+              <Link
+                to={checkinAgreementByIdRoute.to}
+                search={() => ({ stage: "rental-information" })}
+                params={{ agreementId: String(agreementId) }}
+                className={cn(buttonVariants({ size: "sm" }))}
+              >
+                <ArrowDownLeftOutline className="h-3.5 w-3.5 sm:mr-2" />
+                <span className="hidden sm:inline-block">Checkin</span>
+              </Link>
+            )}
           </div>
         </div>
-
-        <div className="mx-auto px-2 sm:px-4 md:grid-cols-12">
-          <ModuleTabs
-            tabConfig={tabsConfig}
-            startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
-            onTabClick={onTabClick}
-          />
-        </div>
-      </div>
+        <p className={cn("text-base text-primary/80")}>
+          View the details related to this rental.
+        </p>
+        <Separator className="mb-3.5 mt-3.5" />
+        <AgreementStatBlock
+          agreement={agreement.data}
+          isCheckedIn={isCheckedIn}
+        />
+      </section>
+      <section
+        className={cn(
+          "mx-auto my-6 mt-4 flex max-w-full flex-col gap-2 px-2 pb-6 sm:mx-4 sm:px-1"
+        )}
+      >
+        <ModuleTabs
+          tabConfig={tabsConfig}
+          startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
+          onTabClick={onTabClick}
+        />
+      </section>
     </Protector>
   );
 }

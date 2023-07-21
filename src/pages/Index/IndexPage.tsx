@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 
 import Protector from "@/components/Protector";
-import DashboardStatsBlock from "@/components/Dashboard/DashboardStatsBlock";
-import DashboardDndWidgetGrid from "@/components/Dashboard/DashboardDndWidgetGrid";
-import DashboardWidgetPickerModal from "@/components/Dialogs/DashboardWidgetPickerModal";
+import DashboardStatsBlock from "@/components/Dashboard/stats-block-display";
+import DashboardDndWidgetGrid from "@/components/Dashboard/dnd-widget-display-grid";
+import WidgetPickerContent from "@/components/Dialogs/widget-picker-content";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +28,15 @@ import {
   CommandItem,
   CommandSeparator,
 } from "@/components/ui/command";
+import {
+  Dialog,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogContent,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 import { indexRoute } from "@/routes";
 
@@ -98,11 +107,6 @@ function IndexPage() {
 
   return (
     <Protector>
-      <DashboardWidgetPickerModal
-        show={showWidgetPickerModal}
-        onModalStateChange={handleSetShowWidgetPickerModal}
-        onWidgetSave={handleWidgetSortingEnd}
-      />
       <section
         className={cn(
           "mx-auto my-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -139,15 +143,32 @@ function IndexPage() {
             </span>
           </Button>
 
-          <Button
-            size="sm"
-            variant={!showWidgetPickerModal ? "outline" : "secondary"}
-            onClick={() => {
-              handleSetShowWidgetPickerModal(true);
-            }}
+          <Dialog
+            open={showWidgetPickerModal}
+            onOpenChange={handleSetShowWidgetPickerModal}
           >
-            <SettingsIcon className="h-5 w-5 sm:h-4 sm:w-4" />
-          </Button>
+            <DialogTrigger asChild>
+              <Button
+                size="sm"
+                variant={!showWidgetPickerModal ? "outline" : "secondary"}
+              >
+                <SettingsIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Customize widgets</DialogTitle>
+                <DialogDescription>
+                  Select and order the widgets you want to see on your
+                  dashboard.
+                </DialogDescription>
+              </DialogHeader>
+              <WidgetPickerContent
+                onModalStateChange={handleSetShowWidgetPickerModal}
+                onWidgetSave={handleWidgetSortingEnd}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
         <DashboardDndWidgetGrid
           // key={widgetIds.join(",")}

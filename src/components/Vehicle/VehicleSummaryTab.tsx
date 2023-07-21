@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
-import { VehicleSummary } from "@/components/primary-module/ModuleSummary/VehicleSummary";
+import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,

@@ -14,7 +14,7 @@ const RentalSummaryMiscChargeSchema = z.object({
   startDate: z.string().nullable(),
   endDate: z.string().nullable(),
   quantity: z.number(),
-  units: z.number(),
+  units: z.preprocess((val) => (val === null ? 0 : val), z.number()),
   optionId: z.number().nullable(),
   optionName: z.string().nullable(),
   miscChargeType: z.string().nullable(),

@@ -1,8 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { type TFunction } from "i18next";
 
-import { type TRentalRatesSummarySchema } from "../../../schemas/summary";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 import { CurrencyDollarSolid } from "../../icons";
 import {
   SummaryHeader,
@@ -50,7 +52,7 @@ function makeTaxItemText(tax: TRentalRatesSummarySchema["taxes"][number]) {
   return `${tax.name} ( ${Number(tax.value).toFixed(2)}% )`;
 }
 
-export const RentalRatesSummary = ({
+export const RentalSummary = ({
   module,
   summaryData,
   currency = "",
@@ -113,7 +115,7 @@ export const RentalRatesSummary = ({
           dropdownContent: taxableMischarges.map((charge) => (
             <span
               key={`taxable-charge-${charge.id}`}
-              className="truncate text-base text-gray-500"
+              className="truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -132,7 +134,7 @@ export const RentalRatesSummary = ({
           dropdownContent: nonTaxableMischarges.map((charge) => (
             <span
               key={`non-taxable-charge-${charge.id}`}
-              className="truncate text-base text-gray-500"
+              className="truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -213,7 +215,7 @@ export const RentalRatesSummary = ({
           dropdownContent: taxes.map((tax) => (
             <span
               key={`tax-charge-${tax.taxId}`}
-              className="truncate text-base text-gray-500"
+              className="truncate text-sm  text-primary/70"
             >
               {makeTaxItemText(tax)}
             </span>
@@ -334,7 +336,7 @@ export const RentalRatesSummary = ({
           dropdownContent: taxableMischarges.map((charge) => (
             <span
               key={`taxable-charge-${charge.id}`}
-              className="truncate text-base text-gray-500"
+              className="truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -354,7 +356,7 @@ export const RentalRatesSummary = ({
           dropdownContent: nonTaxableMischarges.map((charge) => (
             <span
               key={`non-taxable-charge-${charge.id}`}
-              className="truncate text-base text-gray-500"
+              className="truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -436,7 +438,7 @@ export const RentalRatesSummary = ({
           dropdownContent: taxes.map((tax) => (
             <span
               key={`tax-charge-${tax.taxId}`}
-              className="truncate text-base text-gray-500"
+              className="truncate text-sm text-primary/70"
             >
               {makeTaxItemText(tax)}
             </span>
@@ -724,17 +726,28 @@ export const RentalRatesSummary = ({
     id: `${module}-summary-${idx}`,
   }));
 
+  const viewableLineItems = lineItems.filter(
+    (item) => item.shown === true || item.shown === undefined
+  );
+
   return (
-    <div className="grid divide-y divide-gray-200 rounded border border-slate-200 bg-slate-50 pb-1 shadow-sm">
+    <Card>
       <SummaryHeader
         title="Summary of charges"
-        icon={<CurrencyDollarSolid className="h-5 w-5 text-gray-700" />}
+        icon={<CurrencyDollarSolid className="h-6 w-6" />}
       />
-      {lineItems
-        .filter((item) => item.shown === true || item.shown === undefined)
-        .map((item) => (
-          <SummaryLineItem key={item.id} data={item} />
-        ))}
-    </div>
+      <CardContent className="px-0 py-0">
+        <ul className="flex flex-col">
+          {viewableLineItems.map((item, idx) => (
+            <Fragment key={item.id}>
+              <li>
+                <SummaryLineItem data={item} />
+                {viewableLineItems.length !== idx + 1 && <Separator />}
+              </li>
+            </Fragment>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
   );
 };

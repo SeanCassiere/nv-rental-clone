@@ -13,7 +13,7 @@ import {
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetSalesStatus } from "@/hooks/network/dashboard/useGetSalesStatus";
 
-import { WidgetSkeleton } from "../DashboardDndWidgetGrid";
+import { WidgetSkeleton } from "../dnd-widget-display-grid";
 import { useTranslation } from "react-i18next";
 
 const SalesStatus = ({

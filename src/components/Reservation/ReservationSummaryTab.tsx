@@ -2,7 +2,7 @@ import CustomerInformation from "../primary-module/ModuleInformation/CustomerInf
 import RentalInformation from "../primary-module/ModuleInformation/RentalInformation";
 import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
 
-import { RentalRatesSummary } from "@/components/primary-module/ModuleSummary/RentalRatesSummary";
+import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 
 import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
@@ -111,7 +111,7 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-4">
-        <RentalRatesSummary
+        <RentalSummary
           module="reservations"
           summaryData={rentalRatesSummary.data}
           currency={clientProfile.data?.currency || undefined}

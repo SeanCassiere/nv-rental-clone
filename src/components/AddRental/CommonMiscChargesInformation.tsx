@@ -194,6 +194,16 @@ function MiscChargeItem(props: {
         value: savePrice,
         unit: 0,
         isTaxable: charge.IsTaxable ?? false,
+        minValue: charge.MinValue ?? 0,
+        maxValue: charge.MaxValue ?? 0,
+        hourlyValue: charge.HourlyValue ?? 0,
+        dailyValue: charge.DailyValue ?? 0,
+        weeklyValue: charge.WeeklyValue ?? 0,
+        monthlyValue: charge.MonthlyValue ?? 0,
+        hourlyQuantity: charge.HourlyQuantity ?? 0,
+        dailyQuantity: charge.DailyQuantity ?? 0,
+        weeklyQuantity: charge.WeeklyQuantity ?? 0,
+        monthlyQuantity: charge.MonthlyQuantity ?? 0,
       });
     },
     [charge, startDate, endDate, onSave]

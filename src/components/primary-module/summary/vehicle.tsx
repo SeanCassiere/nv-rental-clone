@@ -1,17 +1,22 @@
+import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPath";
 
-import { viewReservationByIdRoute } from "../../../routes/reservations/reservationIdPath";
-import { viewFleetByIdRoute } from "../../../routes/fleet/fleetIdPath";
-import { type TVehicleSummarySchema } from "../../../schemas/summary/vehicleSummary";
-import { CurrencyDollarSolid } from "../../icons";
+import { CurrencyDollarSolid } from "@/components/icons";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   SummaryHeader,
   SummaryLineItem,
   type TSummaryLineItemProps,
 } from "./common";
-import { searchReservationsRoute } from "../../../routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "../../../routes/agreements/searchAgreements";
+
+import { type TVehicleSummarySchema } from "@/schemas/summary/vehicleSummary";
+
+import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservationIdPath";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 
 export const VehicleSummary = ({
   summaryData,
@@ -228,17 +233,28 @@ export const VehicleSummary = ({
     id: `customer-summary-${idx}`,
   }));
 
+  const viewableLineItems = defaultLineItemsList.filter(
+    (item) => item.shown === true || item.shown === undefined
+  );
+
   return (
-    <div className="grid divide-y divide-gray-200 rounded border border-slate-200 bg-slate-50 pb-1 shadow-sm">
+    <Card>
       <SummaryHeader
         title="Summary"
-        icon={<CurrencyDollarSolid className="h-5 w-5 text-gray-700" />}
+        icon={<CurrencyDollarSolid className="h-5 w-5" />}
       />
-      {defaultLineItemsList
-        .filter((item) => item.shown === true || item.shown === undefined)
-        .map((item) => (
-          <SummaryLineItem key={item.id} data={item} />
-        ))}
-    </div>
+      <CardContent className="px-0 py-0">
+        <ul className="flex flex-col">
+          {viewableLineItems.map((item, idx) => (
+            <Fragment key={item.id}>
+              <li>
+                <SummaryLineItem data={item} />
+                {viewableLineItems.length !== idx + 1 && <Separator />}
+              </li>
+            </Fragment>
+          ))}
+        </ul>
+      </CardContent>
+    </Card>
   );
 };

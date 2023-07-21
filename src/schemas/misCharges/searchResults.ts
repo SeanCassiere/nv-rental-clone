@@ -32,6 +32,16 @@ export const MiscChargeListItemSchema = z.object({
   LocationTaxIds: z.string().nullable(),
   Options: z.array(MisChargeListItemOptionSchema).nullable(),
   IsBillToInsurance: z.boolean().nullable(),
+  MinValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  MaxValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  HourlyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  HourlyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  DailyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  DailyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  WeeklyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  WeeklyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  MonthlyValue: z.preprocess((val) => (val === null ? 0 : val), z.number()),
+  MonthlyQuantity: z.preprocess((val) => (val === null ? 0 : val), z.number()),
 });
 
 export type MiscChargeListItem = z.infer<typeof MiscChargeListItemSchema>;

@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
 import RentalInformation from "../primary-module/ModuleInformation/RentalInformation";
 import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
-import { RentalRatesSummary } from "@/components/primary-module/ModuleSummary/RentalRatesSummary";
+import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
@@ -161,7 +161,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-4">
-        <RentalRatesSummary
+        <RentalSummary
           module="agreements"
           summaryData={rentalRatesSummary.data}
           currency={clientProfile.data?.currency || undefined}

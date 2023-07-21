@@ -4,7 +4,7 @@ import parseISO from "date-fns/parseISO";
 
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
 import CommonHeader from "../Layout/CommonHeader";
-import { RentalRatesSummary } from "@/components/primary-module/ModuleSummary/RentalRatesSummary";
+import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Button } from "../Form";
 import {
   ModuleTabs,
@@ -520,6 +520,16 @@ const AddRentalParentForm = ({
           value: charge?.value ?? 0,
           unit: charge?.unit ?? 0,
           isTaxable: charge?.isTaxable ?? false,
+          minValue: charge.minValue,
+          maxValue: charge.maxValue,
+          hourlyValue: charge.hourlyValue,
+          hourlyQuantity: charge.hourlyQuantity,
+          dailyValue: charge.dailyValue,
+          dailyQuantity: charge.dailyQuantity,
+          weeklyValue: charge.weeklyValue,
+          weeklyQuantity: charge.weeklyQuantity,
+          monthlyValue: charge.monthlyValue,
+          monthlyQuantity: charge.monthlyQuantity,
         }));
         setSelectedMiscCharges(filledMiscCharges);
       }
@@ -692,6 +702,16 @@ const AddRentalParentForm = ({
           value: charge.Total ?? 0,
           unit: 0,
           isTaxable: charge.IsTaxable ?? false,
+          minValue: charge.MinValue,
+          maxValue: charge.MaxValue,
+          hourlyValue: charge.HourlyValue,
+          hourlyQuantity: charge.HourlyQuantity,
+          dailyValue: charge.DailyValue,
+          dailyQuantity: charge.DailyQuantity,
+          weeklyValue: charge.WeeklyValue,
+          weeklyQuantity: charge.WeeklyQuantity,
+          monthlyValue: charge.MonthlyValue,
+          monthlyQuantity: charge.MonthlyQuantity,
         }));
       });
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
@@ -963,7 +983,7 @@ const AddRentalParentForm = ({
               />
             </div>
             <div className="flex flex-col gap-4 py-4 lg:col-span-4">
-              <RentalRatesSummary
+              <RentalSummary
                 module={
                   module === "agreement"
                     ? "add-edit-agreement"
