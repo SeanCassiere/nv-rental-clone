@@ -19,9 +19,6 @@ import {
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
-import CommonHeader from "@/components/Layout/CommonHeader";
-import { LinkButton } from "@/components/Form";
-import {} from "@/components/ui/tabs";
 import { Button, buttonVariants } from "@/components/ui/button";
 
 import {
@@ -37,6 +34,7 @@ import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 import { Separator } from "@/components/ui/separator";
+import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 
 const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")
@@ -142,7 +140,11 @@ function AgreementViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link className="text-2xl font-semibold leading-6 text-primary">
+            <Link
+              to={searchAgreementsRoute.to}
+              search={() => ({ page: 1, size: 10 })}
+              className="text-2xl font-semibold leading-6 text-primary"
+            >
               Agreements
             </Link>
             <ChevronRightOutline
