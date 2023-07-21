@@ -40,4 +40,14 @@ export type CalculateRentalSummaryMiscChargeType = {
   value: number;
   unit: number;
   isTaxable: boolean;
+  minValue: number;
+  maxValue: number;
+  hourlyValue: number;
+  hourlyQuantity: number;
+  dailyValue: number;
+  dailyQuantity: number;
+  weeklyValue: number;
+  weeklyQuantity: number;
+  monthlyValue: number;
+  monthlyQuantity: number;
 };
