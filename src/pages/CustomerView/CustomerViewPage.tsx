@@ -14,6 +14,7 @@ import {
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
 import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import {
   editCustomerByIdRoute,
@@ -26,8 +27,6 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
-import { Separator } from "@/components/ui/separator";
-import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
 
 const SummaryTab = lazy(
   () => import("../../components/Customer/CustomerSummaryTab")
@@ -112,9 +111,10 @@ function CustomerViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link
-              to={searchCustomersRoute.to}
-              search={() => ({ page: 1, size: 10 })}
               className="text-2xl font-semibold leading-6 text-primary"
+              onClick={() => {
+                router.history.go(-1);
+              }}
             >
               Customers
             </Link>

@@ -14,6 +14,7 @@ import {
   ModuleTabs,
 } from "@/components/primary-module/ModuleTabs";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
+import { buttonVariants } from "@/components/ui/button";
 
 import {
   editFleetByIdRoute,
@@ -27,8 +28,6 @@ import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 import { Separator } from "@/components/ui/separator";
-import { searchFleetRoute } from "@/routes/fleet/searchFleet";
-import { buttonVariants } from "@/components/ui/button";
 
 const SummaryTab = lazy(
   () => import("../../components/Vehicle/VehicleSummaryTab")
@@ -134,9 +133,10 @@ function VehicleViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link
-              to={searchFleetRoute.to}
-              search={() => ({ page: 1, size: 10 })}
               className="text-2xl font-semibold leading-6 text-primary"
+              onClick={() => {
+                router.history.go(-1);
+              }}
             >
               Fleet
             </Link>

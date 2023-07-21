@@ -20,6 +20,7 @@ import {
 } from "@/components/primary-module/ModuleTabs";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import {
   viewAgreementByIdRoute,
@@ -33,8 +34,6 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
-import { Separator } from "@/components/ui/separator";
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
 
 const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")
@@ -141,9 +140,10 @@ function AgreementViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link
-              to={searchAgreementsRoute.to}
-              search={() => ({ page: 1, size: 10 })}
               className="text-2xl font-semibold leading-6 text-primary"
+              onClick={() => {
+                router.history.go(-1);
+              }}
             >
               Agreements
             </Link>
