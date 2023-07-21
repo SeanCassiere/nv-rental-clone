@@ -7,21 +7,27 @@ import { cn } from "@/utils";
 const Accordion = AccordionPrimitive.Root;
 
 const AccordionItem = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
->(({ className, ...props }, ref) => (
+  React.ElementRef<typeof AccordionPrimitive.Item> & { hideBorder?: boolean },
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> & {
+    hideBorder?: boolean;
+  }
+>(({ className, hideBorder = false, ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={cn("border-b", className)}
+    className={cn(!hideBorder ? "border-b" : "", className)}
     {...props}
   />
 ));
 AccordionItem.displayName = "AccordionItem";
 
 const AccordionTrigger = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ElementRef<typeof AccordionPrimitive.Trigger> & {
+    hideChevron?: boolean;
+  },
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
+    hideChevron?: boolean;
+  }
+>(({ className, children, hideChevron = false, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
@@ -32,7 +38,9 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+      {!hideChevron && (
+        <ChevronDown className="ml-1.5 h-4 w-4 shrink-0 transition-transform duration-200" />
+      )}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
