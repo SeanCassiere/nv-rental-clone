@@ -4,7 +4,7 @@ import parseISO from "date-fns/parseISO";
 
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
 import CommonHeader from "../Layout/CommonHeader";
-import { RentalRatesSummary } from "@/components/primary-module/ModuleSummary/RentalRatesSummary";
+import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Button } from "../Form";
 import {
   ModuleTabs,
@@ -963,7 +963,7 @@ const AddRentalParentForm = ({
               />
             </div>
             <div className="flex flex-col gap-4 py-4 lg:col-span-4">
-              <RentalRatesSummary
+              <RentalSummary
                 module={
                   module === "agreement"
                     ? "add-edit-agreement"

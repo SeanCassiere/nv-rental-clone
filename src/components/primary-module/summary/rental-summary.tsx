@@ -50,7 +50,7 @@ function makeTaxItemText(tax: TRentalRatesSummarySchema["taxes"][number]) {
   return `${tax.name} ( ${Number(tax.value).toFixed(2)}% )`;
 }
 
-export const RentalRatesSummary = ({
+export const RentalSummary = ({
   module,
   summaryData,
   currency = "",
