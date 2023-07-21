@@ -109,7 +109,7 @@ function IndexPage() {
     <Protector>
       <section
         className={cn(
-          "mx-auto my-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+          "mx-auto mb-4 mt-6 flex max-w-full flex-col gap-2  px-2 pt-1.5 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4"
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>

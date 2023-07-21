@@ -152,7 +152,7 @@ function CustomerViewPage() {
 
       <section
         className={cn(
-          "mx-auto my-6 mt-4 flex max-w-full flex-col gap-2 px-2 pb-6 sm:mx-4 sm:px-1"
+          "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
         )}
       >
         <ModuleTabs

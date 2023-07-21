@@ -173,7 +173,8 @@ function VehiclesSearchPage() {
         </p>
         <Separator className="mt-3.5" />
       </section>
-      <section className="mx-auto mb-6 mt-4 max-w-full px-2 sm:mb-2 sm:mt-6 sm:px-4">
+
+      <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
           data={vehiclesData.data?.data || []}
           columns={columnDefs}
