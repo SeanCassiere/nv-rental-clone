@@ -19,24 +19,22 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
-import { Bars3Outline, EyeOutline, EyeSlashOutline } from "../icons";
-import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
-import { Button } from "../Form";
+import { DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Bars3Outline, EyeOutline, EyeSlashOutline } from "@/components/icons";
 import {
   reorderBasedOnWidgetIdPositions,
   sortWidgetsByUserPositionFn,
-} from "../Dashboard/DashboardDndWidgetGrid";
-import DarkBgDialog from "../Layout/DarkBgDialog";
+} from "../Dashboard/dnd-widget-display-grid";
+
 import { cn } from "@/utils";
-
 import { type DashboardWidgetItemParsed } from "@/schemas/dashboard";
+import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 
-const DashboardWidgetPickerModal = ({
-  show = false,
+const WidgetPickerContent = ({
   onModalStateChange: setModalOpenState,
   onWidgetSave,
 }: {
-  show: boolean | undefined;
   onModalStateChange: (show: boolean) => void;
   onWidgetSave: (widgets: DashboardWidgetItemParsed[]) => void;
 }) => {
@@ -113,18 +111,8 @@ const DashboardWidgetPickerModal = ({
   }, [widgetsLocal, onWidgetSave, setModalOpenState]);
 
   return (
-    <DarkBgDialog
-      show={show}
-      setShow={setModalOpenState}
-      onClose={handleClosingOfModal}
-      restrictClose={isModalClosingLocked}
-      sizing="md"
-      title={"Customize widgets"}
-      description={
-        "Select and order the widgets you want to see on your dashboard."
-      }
-    >
-      <ul className="my-2 flex h-[360px] flex-col overflow-y-auto border-b border-gray-200 pb-2">
+    <>
+      <ul className="my-2 flex flex-col overflow-y-auto pb-2">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
@@ -147,15 +135,19 @@ const DashboardWidgetPickerModal = ({
           </SortableContext>
         </DndContext>
       </ul>
-      <div className="mt-2 flex gap-2 pt-1">
-        <Button color="teal" onClick={handleWidgetSave} autoFocus>
-          Save
-        </Button>
-        <Button onClick={handleClosingOfModal} disabled={isModalClosingLocked}>
+      <DialogFooter className="mt-2 flex gap-2 pt-1">
+        <Button
+          variant="ghost"
+          onClick={handleClosingOfModal}
+          disabled={isModalClosingLocked}
+        >
           Cancel
         </Button>
-      </div>
-    </DarkBgDialog>
+        <Button onClick={handleWidgetSave} autoFocus>
+          Save
+        </Button>
+      </DialogFooter>
+    </>
   );
 };
 
@@ -187,8 +179,10 @@ const WidgetOption = ({
     >
       <div
         className={cn(
-          "my-0.5 flex items-center justify-between rounded border border-white px-2 focus-within:border-slate-300",
-          isDragging ? "bg-slate-50" : "bg-white"
+          "my-0.5 flex items-center justify-between rounded border px-4 py-2 transition-all",
+          isDragging
+            ? "bg-foreground text-primary-foreground"
+            : "bg-background text-primary"
         )}
       >
         <div className={cn("flex items-center gap-3")}>
@@ -221,4 +215,4 @@ const WidgetOption = ({
   );
 };
 
-export default DashboardWidgetPickerModal;
+export default WidgetPickerContent;

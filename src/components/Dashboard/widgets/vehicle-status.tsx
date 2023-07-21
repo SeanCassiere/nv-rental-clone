@@ -12,7 +12,7 @@ import {
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WidgetSkeleton } from "../DashboardDndWidgetGrid";
+import { WidgetSkeleton } from "../dnd-widget-display-grid";
 import { searchFleetRoute } from "@/routes/fleet/searchFleet";
 
 const PIE_CHART_COLORS = [
