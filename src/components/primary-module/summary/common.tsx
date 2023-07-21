@@ -1,13 +1,18 @@
 import { useState, type ReactNode } from "react";
 import {
+  Link,
   type MakeLinkOptions,
   type RegisteredRoutesInfo,
-  Link,
 } from "@tanstack/router";
-import { Transition } from "@headlessui/react";
 
+import { CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import { cn } from "@/utils";
-import { ChevronDownOutline, ChevronRightOutline } from "../../icons";
 
 export const SummaryHeader = ({
   title,
@@ -17,12 +22,10 @@ export const SummaryHeader = ({
   icon: ReactNode;
 }) => {
   return (
-    <div className="flex select-none items-center gap-4 bg-slate-100 px-4 pt-3 pb-2">
+    <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
+      <CardTitle className="text-xl font-medium">{title}</CardTitle>
       <span>{icon}</span>
-      <span className="truncate text-lg font-medium text-gray-700">
-        {title}
-      </span>
-    </div>
+    </CardHeader>
   );
 };
 
@@ -40,7 +43,6 @@ export type TSummaryLineItemProps = {
   dropdownContent?: ReactNode;
   hasDropdownContent?: boolean;
   isDropdownContentInitiallyShown?: boolean;
-  dropdownContentLabel?: string;
 };
 
 export const makeSummaryDataStyles = (
@@ -50,20 +52,24 @@ export const makeSummaryDataStyles = (
     | "redHighlight"
     | "primaryBlockHighlight"
     | "biggerText"
-  >,
+    | "label"
+  >
 ) => {
+  const colorMode = data.primaryBlockHighlight
+    ? "primary-block-only"
+    : data.redHighlight
+    ? "red-highlight"
+    : data.primaryTextHighlight
+    ? "primary-text-only"
+    : ("" as const);
+
   return cn(
     "text-base font-semibold",
-    !data.primaryTextHighlight &&
-      !data.redHighlight &&
-      !data.primaryBlockHighlight
-      ? "text-gray-700"
-      : "",
-    data.redHighlight ? "text-red-400" : "",
-    data.primaryTextHighlight && !data.primaryBlockHighlight
-      ? "text-teal-400"
-      : "",
     data.biggerText ? "text-lg" : "text-base",
+    colorMode === "" ? "text-primary/70" : "",
+    colorMode === "primary-block-only" ? "text-primary-foreground" : "",
+    colorMode === "primary-text-only" ? "text-primary" : "",
+    colorMode === "red-highlight" ? "text-destructive" : ""
   );
 };
 
@@ -72,83 +78,68 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
     type: lineItemType = "text",
     hasDropdownContent = false,
     isDropdownContentInitiallyShown = false,
-    dropdownContentLabel = "More info",
     dropdownContent,
   } = data;
 
-  const [showDropdownContent, setShowDropdownContent] = useState(
-    isDropdownContentInitiallyShown,
+  const [value, onValueChange] = useState(
+    isDropdownContentInitiallyShown ? "value-1" : undefined
   );
 
   return (
-    <div
-      className={cn(
-        "flex flex-col",
-        data.primaryBlockHighlight ? "" : "py-2 px-4",
-      )}
+    <Accordion
+      type="single"
+      value={value}
+      onValueChange={onValueChange}
+      collapsible
+      className={cn("flex w-full flex-col")}
     >
-      <div
+      <AccordionItem
+        value="value-1"
         className={cn(
-          "flex items-start justify-between gap-4",
+          "px-5",
           !data.primaryTextHighlight && data.primaryBlockHighlight
-            ? "bg-teal-400 text-white"
-            : "",
-          data.primaryBlockHighlight ? "py-2 px-4" : "",
+            ? "bg-primary text-primary-foreground"
+            : ""
         )}
+        hideBorder
       >
-        <span
-          className={cn(
-            "flex-shrink break-all font-semibold md:max-w-none",
-            !data.primaryBlockHighlight ? "text-gray-700" : "",
-            data.biggerText ? "text-lg" : "text-base",
+        <div className="flex items-center justify-between">
+          {hasDropdownContent ? (
+            <AccordionTrigger
+              className={cn(
+                "w-full py-3",
+                data.biggerText ? "text-lg" : "text-base"
+              )}
+            >
+              {data.label}
+            </AccordionTrigger>
+          ) : (
+            <span
+              className={cn(
+                "flex flex-1 items-center justify-between py-3 font-medium transition-all",
+                data.biggerText ? "text-lg" : "text-base"
+              )}
+            >
+              {data.label}
+            </span>
           )}
-        >
-          {data.label}
-          {hasDropdownContent && (
-            <>
-              <br />
-              <button
-                className="flex items-center font-normal text-slate-500"
-                onClick={() => {
-                  setShowDropdownContent((prev) => !prev);
-                }}
-              >
-                {showDropdownContent ? (
-                  <ChevronDownOutline className="h-3 w-3" />
-                ) : (
-                  <ChevronRightOutline className="h-3 w-3" />
-                )}
-                &nbsp;{dropdownContentLabel}
-              </button>
-            </>
+          {lineItemType === "text" && (
+            <span className={makeSummaryDataStyles(data)}>{data.amount}</span>
           )}
-        </span>
-        {lineItemType === "text" && (
-          <span className={makeSummaryDataStyles(data)}>{data.amount}</span>
-        )}
-        {lineItemType === "link" && (
-          <Link
-            {...(data?.linkProps as any)}
-            className={makeSummaryDataStyles(data)}
-          >
-            {data.amount}
-          </Link>
-        )}
-      </div>
-      <Transition
-        show={Boolean(
-          hasDropdownContent && showDropdownContent && dropdownContent,
-        )}
-        className="grid origin-top-left gap-1 pt-1 md:pl-6"
-        enter="transition-all duration-75"
-        enterFrom="opacity-0 scale-0"
-        enterTo="opacity-100 scale-100"
-        leave="transition-all duration-75"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-0"
-      >
-        {dropdownContent}
-      </Transition>
-    </div>
+          {lineItemType === "link" && (
+            <Link
+              {...(data?.linkProps as any)}
+              className={cn(
+                makeSummaryDataStyles(data),
+                "underline underline-offset-4"
+              )}
+            >
+              {data.amount}
+            </Link>
+          )}
+        </div>
+        <AccordionContent>{dropdownContent}</AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
