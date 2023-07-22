@@ -40,11 +40,7 @@ const ReservationStatBlock = ({
       />
       <ModuleStatBlock
         header="Vehicle type"
-        stat={
-          <span className="select-none text-xl font-semibold text-slate-600 xl:text-2xl">
-            {reservation?.reservationview.vehicleType ?? "-"}
-          </span>
-        }
+        stat={reservation?.reservationview.vehicleType ?? "-"}
       />
       <ModuleStatBlock
         header="Checkout date"

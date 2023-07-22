@@ -6,6 +6,16 @@ import {
   useSearch,
   Link,
 } from "@tanstack/router";
+import {
+  MoreVerticalIcon,
+  PencilIcon,
+  PrinterIcon,
+  MailPlusIcon,
+  BanIcon,
+  MoveDownLeftIcon,
+  CopyIcon,
+  ChevronRightIcon,
+} from "lucide-react";
 
 import Protector from "@/components/Protector";
 import {
@@ -20,6 +30,15 @@ import {
 import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
 import { Separator } from "@/components/ui/separator";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   editReservationByIdRoute,
@@ -130,7 +149,7 @@ function ReservationViewPage() {
             >
               Reservations
             </Link>
-            <ChevronRightOutline
+            <ChevronRightIcon
               className="h-4 w-4 flex-shrink-0 text-primary"
               aria-hidden="true"
             />
@@ -138,7 +157,7 @@ function ReservationViewPage() {
               to={viewReservationByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ reservationId }}
-              className="max-w-[230px] truncate text-xl font-semibold leading-6 text-primary/80 md:max-w-full"
+              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
               {reservation?.data?.reservationview?.reservationNumber}
             </Link>
@@ -150,19 +169,41 @@ function ReservationViewPage() {
               params={{ reservationId: String(reservationId) }}
               className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
             >
-              <PencilIconFilled className="h-3 w-3  sm:mr-2" />
-              <span className="hidden sm:inline-block">Edit</span>
+              <PencilIcon className="mr-2 h-4 w-4" />
+              <span className="inline-block">Edit</span>
             </Link>
 
-            <Button
-              size="sm"
-              type="button"
-              className="flex items-center justify-center gap-2"
-              variant="ghost"
-            >
-              <PrintIconFilled className="h-3 w-3 sm:mr-2" />
-              <span className="hidden sm:inline-block">Print</span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="sm"
+                  type="button"
+                  className="flex items-center justify-center gap-2"
+                  variant="ghost"
+                >
+                  <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
+                  <span className="inline-block">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuLabel>More actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <CopyIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Copy and create</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <PrinterIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Print</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MailPlusIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Email</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
