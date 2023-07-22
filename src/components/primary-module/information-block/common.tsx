@@ -1,5 +1,7 @@
 import { type ReactNode } from "react";
 
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
 import { cn } from "@/utils";
 
 export type TAnyCustomerValueType = string | number | null;
@@ -22,13 +24,13 @@ const InformationBlock = (props: TInformationBlockProps) => {
           hidden: isHiddenOnMobile,
           grid: !isHiddenOnMobile,
         },
-        "gap-0.5 border-b border-b-slate-200 px-4 pb-2 sm:grid",
+        "gap-0.5 border-b pb-2 sm:grid"
       )}
     >
-      <span className="select-none truncate text-base font-semibold text-slate-800">
+      <span className="select-none truncate px-1 text-base font-semibold text-primary">
         {props.heading}
       </span>
-      <span className="truncate pt-1.5 pb-2 text-base leading-3 text-slate-700">
+      <span className="truncate px-1 pb-2 pt-1.5 text-base leading-3 text-primary/80">
         {props.isLoading ? EMPTY_KEY : props.value}
       </span>
     </div>
@@ -45,20 +47,17 @@ export interface TInformationBlockCardProps {
 }
 export const InformationBlockCard = (props: TInformationBlockCardProps) => {
   return (
-    <div className="rounded border border-slate-200 bg-slate-50">
-      <div className="flex select-none gap-4 border-b border-b-slate-200 bg-slate-100 px-4 pt-3 pb-2">
-        <span className="flex items-center justify-center text-slate-700">
-          {props.icon}
-        </span>
-        <span className="col-span-11 truncate text-lg font-medium text-gray-700">
-          {props.title}
-        </span>
-      </div>
-      <div
-        className={cn("grid grid-cols-1 gap-y-4 pt-3 sm:grid-cols-2", {
-          "lg:grid-cols-3": props.numberPerBlock === 3,
-          "lg:grid-cols-4": props.numberPerBlock === 4,
-        })}
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
+        <CardTitle className="text-lg font-medium">{props.title}</CardTitle>
+        <span className="text-primary/80">{props.icon}</span>
+      </CardHeader>
+      <CardContent
+        className={cn(
+          "grid grid-cols-1 gap-4 pt-6 sm:grid-cols-2",
+          props.numberPerBlock === 3 ? "lg:grid-cols-3" : "",
+          props.numberPerBlock === 4 ? "lg:grid-cols-4" : ""
+        )}
       >
         {props.blocks.map((block) => (
           <InformationBlock
@@ -67,8 +66,8 @@ export const InformationBlockCard = (props: TInformationBlockCardProps) => {
             isLoading={props.isLoading}
           />
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -76,20 +75,18 @@ export const InformationBlockCardWithChildren = (
   props: Omit<
     TInformationBlockCardProps & { children: ReactNode },
     "numberPerBlock" | "blocks"
-  > & { renderEndIcon?: ReactNode },
+  > & { renderEndIcon?: ReactNode }
 ) => {
   return (
-    <div className="rounded border border-slate-200 bg-slate-50">
-      <div className="flex select-none gap-4 border-b border-b-slate-200 bg-slate-100 px-4 pt-3 pb-2">
-        <span className="flex items-center justify-center text-slate-700">
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
+        <CardTitle className="text-lg font-medium">{props.title}</CardTitle>
+        <span className="flex items-center text-primary/80">
           {props.icon}
+          {props.renderEndIcon && <>{props.renderEndIcon}</>}
         </span>
-        <span className="col-span-11 grow truncate text-lg font-medium text-gray-700">
-          {props.title}
-        </span>
-        {props.renderEndIcon && <>{props.renderEndIcon}</>}
-      </div>
-      {props.children}
-    </div>
+      </CardHeader>
+      <CardContent>{props.children}</CardContent>
+    </Card>
   );
 };

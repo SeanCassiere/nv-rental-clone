@@ -144,7 +144,7 @@ const AgreementRentalInformationTab = ({
         onSubmit={handleSubmit(async (data) => {
           onCompleted(data);
         })}
-        className="flex flex-col gap-4 p-4"
+        className="flex flex-col gap-4 pt-4"
         autoComplete="off"
       >
         <div className="grid gap-4 md:grid-cols-3">

@@ -74,7 +74,7 @@ const CommonMiscChargesInformation = (
   };
 
   return (
-    <div className="mx-4 my-4">
+    <div className="mt-4">
       {miscCharges.isLoading && <span>Loading...</span>}
       {!isSupportingInfoAvailable && (
         <span>Please fill out the previous steps</span>

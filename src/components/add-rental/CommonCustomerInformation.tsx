@@ -136,7 +136,7 @@ const CommonCustomerInformation = ({
         title="Customer information"
         isLoading={false}
       >
-        <div className="mx-4 mt-4 flex">
+        <div className="mt-4 flex">
           <Button
             onClick={() => {
               setShowCustomerPicker(true);
@@ -149,7 +149,7 @@ const CommonCustomerInformation = ({
           onSubmit={handleSubmit(async (data) => {
             onCompleted?.(data);
           })}
-          className="flex flex-col gap-4 p-4"
+          className="flex flex-col gap-4 pt-4"
           autoComplete="off"
         >
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

@@ -91,7 +91,7 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
   };
 
   return (
-    <div className="mx-4 my-4">
+    <div className="mt-4">
       {!isSupportingInfoAvailable && (
         <div className="pb-4 text-red-500">
           Rental and Vehicle information not entered.
@@ -161,7 +161,7 @@ interface CommonRatesFormProps {
 const numberInputClassnames =
   "rounded border-0 px-2 py-1 outline-none focus:border-0 focus:outline-teal-500 focus:ring-0";
 const normalContainerClassnames =
-  "grid grid-cols-3 items-center rounded bg-slate-100 py-2 px-4 text-base";
+  "grid grid-cols-2 sm:grid-cols-3 items-center rounded bg-slate-100 py-2 px-4 text-base";
 const extraContainerClassnames =
   "flex items-center justify-between rounded bg-slate-100 px-4 py-2 text-base";
 const weekDayContainerClassnames =

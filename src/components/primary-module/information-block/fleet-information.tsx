@@ -67,7 +67,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
               to={viewFleetByIdRoute.to}
               params={{ vehicleId: String(data.vehicleId) }}
               search={() => ({ tab: "summary" })}
-              className="font-semibold text-slate-800 hover:text-slate-600"
+              className="underline underline-offset-4 transition-all focus-within:underline-offset-8"
             >
               {data.vehicleNo}
             </Link>

@@ -157,11 +157,11 @@ const AgreementVehicleInformationTab = ({
         isLoading={false}
       >
         {!checkoutLocation && (
-          <div className="px-4 pt-4 text-red-500">
+          <div className="pt-4 text-red-500">
             Checkout location not selected.
           </div>
         )}
-        <div className="mx-4 mt-4 flex">
+        <div className="mt-4 flex">
           <Button
             onClick={() => {
               setShowFleetPicker(true);
@@ -175,7 +175,7 @@ const AgreementVehicleInformationTab = ({
           onSubmit={handleSubmit(async (data) => {
             onCompleted?.(data);
           })}
-          className="flex flex-col gap-4 p-4"
+          className="flex flex-col gap-4 pt-4"
           autoComplete="off"
         >
           <div className="grid gap-4 md:grid-cols-2">
