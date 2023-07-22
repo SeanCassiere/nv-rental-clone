@@ -1,22 +1,24 @@
-import { Suspense, lazy, useMemo } from "react";
+import { lazy, useMemo, Suspense, type ReactNode } from "react";
 import {
-  Link,
   useNavigate,
-  useParams,
   useRouter,
+  useParams,
   useSearch,
+  Link,
 } from "@tanstack/router";
 import {
   MoreVerticalIcon,
   PencilIcon,
+  PrinterIcon,
+  MailPlusIcon,
+  CopyIcon,
   ChevronRightIcon,
-  PowerOffIcon,
-  PowerIcon,
 } from "lucide-react";
 
 import Protector from "@/components/protector-shield";
-import { Button, buttonVariants } from "@/components/ui/button";
+import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
 import { Separator } from "@/components/ui/separator";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,62 +29,69 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import {
-  editCustomerByIdRoute,
-  viewCustomerByIdRoute,
-} from "@/routes/customers/customerIdPath";
-
-import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import LoadingPlaceholder from "@/components/loading-placeholder";
 
-import { titleMaker } from "@/utils/title-maker";
+import {
+  editReservationByIdRoute,
+  viewReservationByIdRoute,
+} from "@/routes/reservations/reservation-id-route";
+
+import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+
 import { cn } from "@/utils";
+import { titleMaker } from "@/utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/primary-module/tabs/customer/summary-content")
+  () => import("../components/primary-module/tabs/reservation/summary-content")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/primary-module/tabs/notes-content")
+  () => import("../components/primary-module/tabs/notes-content")
 );
 
-function CustomerViewPage() {
+function ReservationViewPage() {
   const router = useRouter();
   const params = useParams();
 
   const { tab: tabName = "summary" } = useSearch({
-    from: viewCustomerByIdRoute.id,
+    from: viewReservationByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewCustomerByIdRoute.id });
+  const navigate = useNavigate({ from: viewReservationByIdRoute.id });
 
-  const customerId = params.customerId || "";
+  const reservationId = params.reservationId || "";
 
   const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: React.ReactNode }[] =
-      [];
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
 
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <SummaryTab customerId={customerId} />,
+      component: <SummaryTab reservationId={reservationId} />,
     });
     tabs.push({
       id: "notes",
       label: "Notes",
       component: (
-        <ModuleNotesTabContent module="customers" referenceId={customerId} />
+        <ModuleNotesTabContent
+          module="reservations"
+          referenceId={reservationId}
+        />
       ),
     });
     tabs.push({
-      id: "documents",
-      label: "Documents",
-      component: "Documents Tab",
+      id: "payments",
+      label: "Payments",
+      component: "Payments Tab",
+    });
+    tabs.push({
+      id: "invoices",
+      label: "Invoices",
+      component: "Invoices Tab",
     });
 
     return tabs;
-  }, [customerId]);
+  }, [reservationId]);
 
   const handleFindError = () => {
     router.history.go(-1);
@@ -90,23 +99,22 @@ function CustomerViewPage() {
 
   const onTabClick = (newTabId: string) => {
     navigate({
-      to: viewCustomerByIdRoute.to,
+      to: viewReservationByIdRoute.to,
       search: (others) => ({ ...others, tab: newTabId }),
-      params: { customerId },
+      params: { reservationId },
       replace: true,
     });
   };
 
-  const customer = useGetCustomerData({
-    customerId,
+  const reservation = useGetReservationData({
+    reservationId,
     onError: handleFindError,
   });
 
   useDocumentTitle(
     titleMaker(
-      (customer.data?.firstName && customer.data?.lastName
-        ? customer.data?.firstName + " " + customer.data?.lastName
-        : "Loading") + " - Customers"
+      (reservation.data?.reservationview.reservationNumber || "Loading") +
+        " - Reservations"
     )
   );
 
@@ -129,30 +137,29 @@ function CustomerViewPage() {
                 router.history.go(-1);
               }}
             >
-              Customers
+              Reservations
             </Link>
             <ChevronRightIcon
               className="h-4 w-4 flex-shrink-0 text-primary"
               aria-hidden="true"
             />
             <Link
-              to={viewCustomerByIdRoute.to}
+              to={viewReservationByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
-              params={{ customerId }}
+              params={{ reservationId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
-              {customer?.data?.firstName}&nbsp;
-              {customer?.data?.lastName}
+              {reservation?.data?.reservationview?.reservationNumber}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={editCustomerByIdRoute.to}
-              search={() => ({})}
-              params={{ customerId: String(customerId) }}
+              search={() => ({ stage: "rental-information" })}
+              to={editReservationByIdRoute.to}
+              params={{ reservationId: String(reservationId) }}
               className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
             >
-              <PencilIcon className="h-4 w-4 sm:mr-2" />
+              <PencilIcon className="mr-2 h-4 w-4" />
               <span className="inline-block">Edit</span>
             </Link>
 
@@ -172,31 +179,33 @@ function CustomerViewPage() {
                 <DropdownMenuLabel>More actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  {customer.data?.active ? (
-                    <DropdownMenuItem>
-                      <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
-                      <span>Deactivate</span>
-                    </DropdownMenuItem>
-                  ) : (
-                    <DropdownMenuItem>
-                      <PowerIcon className="mr-2 h-4 w-4 sm:mr-4" />
-                      <span>Activate</span>
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem>
+                    <CopyIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Copy and create</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <PrinterIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Print</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MailPlusIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Email</span>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
-          View the details related to this customer.
+          View the details related to this booking.
         </p>
-        <Separator className="mt-3.5" />
+        <Separator className="mb-3.5 mt-3.5" />
+        <ReservationStatBlock reservation={reservation.data} />
       </section>
 
       <section
         className={cn(
-          "mx-auto mb-4 mt-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:mb-6 sm:px-1"
+          "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
         )}
       >
         <Tabs value={tabName} onValueChange={onTabClick}>
@@ -224,4 +233,4 @@ function CustomerViewPage() {
   );
 }
 
-export default CustomerViewPage;
+export default ReservationViewPage;

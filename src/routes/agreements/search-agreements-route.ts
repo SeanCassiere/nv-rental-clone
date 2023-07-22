@@ -1,20 +1,19 @@
 import { lazy, Route } from "@tanstack/router";
 
-import { fleetRoute } from ".";
-import { queryClient } from "../../app-entry";
-
+import { agreementsRoute } from ".";
+import { queryClient as qc } from "../../app-entry";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
-import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
-import { fleetQKeys } from "@/utils/query-key";
-import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
+import { agreementQKeys } from "@/utils/query-key";
+import { AgreementSearchQuerySchema } from "@/schemas/agreement";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 
-export const searchFleetRoute = new Route({
-  getParentRoute: () => fleetRoute,
+export const searchAgreementsRoute = new Route({
+  getParentRoute: () => agreementsRoute,
   path: "/",
-  validateSearch: VehicleSearchQuerySchema,
+  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
     () => ({
       page: 1,
@@ -23,46 +22,51 @@ export const searchFleetRoute = new Route({
   ],
   loader: async ({ search }) => {
     const auth = getAuthToken();
-    const { pageNumber, size, searchFilters } =
-      normalizeVehicleListSearchParams(search);
+
+    const {
+      searchFilters,
+      pageNumber,
+      size: pageSize,
+    } = normalizeAgreementListSearchParams(search);
 
     if (auth) {
       const promises = [];
 
       // get columns
-      const columnsKey = fleetQKeys.columns();
-      if (!queryClient.getQueryData(columnsKey)) {
+      const columnsKey = agreementQKeys.columns();
+      if (!qc.getQueryData(columnsKey)) {
         promises.push(
-          queryClient.prefetchQuery({
+          qc.prefetchQuery({
             queryKey: columnsKey,
             queryFn: () =>
               fetchModuleColumnsModded({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                module: "vehicles",
+                module: "agreements",
               }),
             initialData: [],
           })
         );
       }
 
-      // get search
-      const searchKey = fleetQKeys.search({
-        pagination: { page: pageNumber, pageSize: size },
+      // get list
+      const searchKey = agreementQKeys.search({
+        pagination: { page: pageNumber, pageSize: pageSize },
         filters: searchFilters,
       });
-      if (!queryClient.getQueryData(searchKey)) {
+      if (!qc.getQueryData(searchKey)) {
         promises.push(
-          queryClient.prefetchQuery({
+          qc.prefetchQuery({
             queryKey: searchKey,
             queryFn: () =>
-              fetchVehiclesListModded({
+              fetchAgreementsListModded({
                 page: pageNumber,
-                pageSize: size,
+                pageSize: pageSize,
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
+                currentDate: new Date(),
                 filters: searchFilters,
               }),
           })
@@ -73,5 +77,5 @@ export const searchFleetRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../../pages/FleetSearch/FleetSearchPage")),
+  component: lazy(() => import("../../pages/search-agreements")),
 });

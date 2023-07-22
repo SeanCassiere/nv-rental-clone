@@ -8,7 +8,7 @@ import {
   EMPTY_KEY,
 } from "./common";
 import { TruckFilled } from "../../icons";
-import { viewFleetByIdRoute } from "../../../routes/fleet/fleetIdPath";
+import { viewFleetByIdRoute } from "../../../routes/fleet/fleet-id-route";
 
 interface TVehicleInformationProps {
   data: {

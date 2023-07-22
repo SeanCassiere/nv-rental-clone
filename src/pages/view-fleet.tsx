@@ -9,15 +9,14 @@ import {
 import {
   MoreVerticalIcon,
   PencilIcon,
-  PrinterIcon,
-  MailPlusIcon,
   CopyIcon,
   ChevronRightIcon,
+  PowerOffIcon,
+  PowerIcon,
 } from "lucide-react";
 
 import Protector from "@/components/protector-shield";
-import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
-import { Separator } from "@/components/ui/separator";
+import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -32,67 +31,46 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import {
-  editReservationByIdRoute,
-  viewReservationByIdRoute,
-} from "@/routes/reservations/reservationIdPath";
+  editFleetByIdRoute,
+  viewFleetByIdRoute,
+} from "@/routes/fleet/fleet-id-route";
 
-import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
+import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
+import { cn } from "@/utils";
+import { Separator } from "@/components/ui/separator";
 
-const SummaryTab = lazy(
+const FleetSummaryTab = lazy(
+  () => import("../components/primary-module/tabs/fleet/summary-content")
+);
+const FleetReservationsTab = lazy(
   () =>
-    import("../../components/primary-module/tabs/reservation/summary-content")
+    import(
+      "../components/primary-module/tabs/fleet/occupied-reservations-content"
+    )
 );
-const ModuleNotesTabContent = lazy(
-  () => import("../../components/primary-module/tabs/notes-content")
+const FleetAgreementsTab = lazy(
+  () =>
+    import(
+      "../components/primary-module/tabs/fleet/occupied-agreements-content"
+    )
 );
 
-function ReservationViewPage() {
+const ModuleNotesTabContent = lazy(
+  () => import("../components/primary-module/tabs/notes-content")
+);
+
+function VehicleViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { tab: tabName = "summary" } = useSearch({
-    from: viewReservationByIdRoute.id,
-  });
+  const { tab: tabName = "" } = useSearch({ from: viewFleetByIdRoute.id });
 
-  const navigate = useNavigate({ from: viewReservationByIdRoute.id });
+  const navigate = useNavigate({ from: viewFleetByIdRoute.id });
 
-  const reservationId = params.reservationId || "";
-
-  const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: ReactNode }[] = [];
-
-    tabs.push({
-      id: "summary",
-      label: "Summary",
-      component: <SummaryTab reservationId={reservationId} />,
-    });
-    tabs.push({
-      id: "notes",
-      label: "Notes",
-      component: (
-        <ModuleNotesTabContent
-          module="reservations"
-          referenceId={reservationId}
-        />
-      ),
-    });
-    tabs.push({
-      id: "payments",
-      label: "Payments",
-      component: "Payments Tab",
-    });
-    tabs.push({
-      id: "invoices",
-      label: "Invoices",
-      component: "Invoices Tab",
-    });
-
-    return tabs;
-  }, [reservationId]);
+  const vehicleId = params.vehicleId || "";
 
   const handleFindError = () => {
     router.history.go(-1);
@@ -100,23 +78,64 @@ function ReservationViewPage() {
 
   const onTabClick = (newTabId: string) => {
     navigate({
-      to: viewReservationByIdRoute.to,
+      to: viewFleetByIdRoute.to,
       search: (others) => ({ ...others, tab: newTabId }),
-      params: { reservationId },
+      params: { vehicleId },
       replace: true,
     });
   };
 
-  const reservation = useGetReservationData({
-    reservationId,
+  const vehicle = useGetVehicleData({
+    vehicleId,
     onError: handleFindError,
   });
 
+  const tabsConfig = useMemo(() => {
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
+
+    tabs.push({
+      id: "summary",
+      label: "Summary",
+      component: <FleetSummaryTab vehicleId={vehicleId} />,
+    });
+    tabs.push({
+      id: "notes",
+      label: "Notes",
+      component: (
+        <ModuleNotesTabContent module="vehicles" referenceId={vehicleId} />
+      ),
+    });
+    tabs.push({
+      id: "documents",
+      label: "Documents",
+      component: "Documents Tab",
+    });
+    tabs.push({
+      id: "reservations",
+      label: "Reservations",
+      component: (
+        <FleetReservationsTab
+          vehicleId={vehicleId}
+          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
+        />
+      ),
+    });
+    tabs.push({
+      id: "agreements",
+      label: "Agreements",
+      component: (
+        <FleetAgreementsTab
+          vehicleId={vehicleId}
+          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
+        />
+      ),
+    });
+
+    return tabs;
+  }, [vehicleId, vehicle.data]);
+
   useDocumentTitle(
-    titleMaker(
-      (reservation.data?.reservationview.reservationNumber || "Loading") +
-        " - Reservations"
-    )
+    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
   );
 
   return (
@@ -138,26 +157,25 @@ function ReservationViewPage() {
                 router.history.go(-1);
               }}
             >
-              Reservations
+              Fleet
             </Link>
             <ChevronRightIcon
               className="h-4 w-4 flex-shrink-0 text-primary"
               aria-hidden="true"
             />
             <Link
-              to={viewReservationByIdRoute.to}
+              to={viewFleetByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
-              params={{ reservationId }}
+              params={{ vehicleId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
-              {reservation?.data?.reservationview?.reservationNumber}
+              {vehicle?.data?.vehicle.vehicleNo}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              search={() => ({ stage: "rental-information" })}
-              to={editReservationByIdRoute.to}
-              params={{ reservationId: String(reservationId) }}
+              to={editFleetByIdRoute.to}
+              params={{ vehicleId: String(vehicleId) }}
               className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
             >
               <PencilIcon className="mr-2 h-4 w-4" />
@@ -184,24 +202,27 @@ function ReservationViewPage() {
                     <CopyIcon className="mr-2 h-4 w-4 sm:mr-4" />
                     <span>Copy and create</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <PrinterIcon className="mr-2 h-4 w-4 sm:mr-4" />
-                    <span>Print</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <MailPlusIcon className="mr-2 h-4 w-4 sm:mr-4" />
-                    <span>Email</span>
-                  </DropdownMenuItem>
+                  {vehicle.data?.vehicle.active ? (
+                    <DropdownMenuItem>
+                      <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Deactivate</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem>
+                      <PowerIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Activate</span>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
-          View the details related to this booking.
+          View the details related to this fleet item.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <ReservationStatBlock reservation={reservation.data} />
+        <FleetStatBlock vehicle={vehicle.data} />
       </section>
 
       <section
@@ -234,4 +255,4 @@ function ReservationViewPage() {
   );
 }
 
-export default ReservationViewPage;
+export default VehicleViewPage;

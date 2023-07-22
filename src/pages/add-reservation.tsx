@@ -6,8 +6,8 @@ import Protector from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { addReservationRoute } from "@/routes/reservations/addReservation";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservationIdPath";
+import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 

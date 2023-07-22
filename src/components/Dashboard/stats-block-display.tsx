@@ -17,8 +17,8 @@ import type { TDashboardStats } from "@/schemas/dashboard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { indexRoute } from "@/routes";
-import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 
 const DashboardStatsBlock = ({
   statistics,

@@ -30,19 +30,19 @@ import { usePostCalculateRentalSummaryAmounts } from "@/hooks/network/rates/useP
 import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 
-import { addAgreementRoute } from "@/routes/agreements/addAgreement";
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
+import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 import {
   checkinAgreementByIdRoute,
   editAgreementByIdRoute,
   viewAgreementByIdRoute,
-} from "@/routes/agreements/agreementIdPath";
-import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
-import { addReservationRoute } from "@/routes/reservations/addReservation";
+} from "@/routes/agreements/agreement-id-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
-} from "@/routes/reservations/reservationIdPath";
+} from "@/routes/reservations/reservation-id-route";
 
 import { sortObject } from "@/utils/sortObject";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";

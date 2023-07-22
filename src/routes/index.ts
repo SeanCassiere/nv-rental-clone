@@ -75,5 +75,5 @@ export const indexRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../pages/Index/IndexPage")),
+  component: lazy(() => import("../pages/dashboard")),
 });

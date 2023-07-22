@@ -13,9 +13,9 @@ import Protector from "@/components/protector-shield";
 import CommonHeader from "@/components/Layout/CommonHeader";
 import { PlusIconFilled } from "@/components/icons";
 
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
-import { addAgreementRoute } from "@/routes/agreements/addAgreement";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
+import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 
 import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";

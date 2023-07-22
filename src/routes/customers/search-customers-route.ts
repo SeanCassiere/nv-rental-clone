@@ -1,20 +1,20 @@
 import { lazy, Route } from "@tanstack/router";
 
-import { reservationsRoute } from ".";
-import { queryClient } from "../../app-entry";
-
+import { customersRoute } from ".";
+import { queryClient as qc } from "../../app-entry";
+import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
-import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
-import { reservationQKeys } from "@/utils/query-key";
-import { ReservationSearchQuerySchema } from "@/schemas/reservation";
+import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
+import { customerQKeys } from "@/utils/query-key";
+import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
-export const searchReservationsRoute = new Route({
-  getParentRoute: () => reservationsRoute,
+export const searchCustomersRoute = new Route({
+  getParentRoute: () => customersRoute,
   path: "/",
-  validateSearch: ReservationSearchQuerySchema,
+  component: lazy(() => import("../../pages/search-customers")),
+  validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
     () => ({
       page: 1,
@@ -25,23 +25,23 @@ export const searchReservationsRoute = new Route({
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } =
-      normalizeReservationListSearchParams(search);
+      normalizeCustomerListSearchParams(search);
 
     if (auth) {
       const promises = [];
 
       // get columns
-      const columnsKey = reservationQKeys.columns();
-      if (!queryClient.getQueryData(columnsKey)) {
+      const columnsKey = customerQKeys.columns();
+      if (!qc.getQueryData(columnsKey)) {
         promises.push(
-          queryClient.prefetchQuery({
+          qc.prefetchQuery({
             queryKey: columnsKey,
             queryFn: () =>
               fetchModuleColumnsModded({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                module: "reservations",
+                module: "customers",
               }),
             initialData: [],
           })
@@ -49,32 +49,29 @@ export const searchReservationsRoute = new Route({
       }
 
       // get search
-      const searchKey = reservationQKeys.search({
+      const searchKey = customerQKeys.search({
         pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
-      if (!queryClient.getQueryData(searchKey)) {
+      if (!qc.getQueryData(searchKey)) {
         promises.push(
-          queryClient.prefetchQuery({
+          qc.prefetchQuery({
             queryKey: searchKey,
             queryFn: () =>
-              fetchReservationsListModded({
+              fetchCustomersListModded({
                 page: pageNumber,
                 pageSize: size,
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
                 filters: searchFilters,
-                clientDate: new Date(),
               }),
           })
         );
       }
+
       await Promise.all(promises);
     }
     return {};
   },
-  component: lazy(
-    () => import("../../pages/ReservationsSearch/ReservationsSearchPage")
-  ),
 });

@@ -1,52 +1,51 @@
 import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
-import { fleetRoute } from ".";
+import { reservationsRoute } from ".";
 import { queryClient as qc } from "../../app-entry";
-import { fetchVehicleSummaryAmounts } from "../../api/summary";
-import { fetchVehicleData } from "../../api/vehicles";
+import { fetchRentalRateSummaryAmounts } from "../../api/summary";
+import { fetchReservationData } from "../../api/reservations";
 
 import { getAuthToken } from "../../utils/authLocal";
-import { fleetQKeys } from "../../utils/query-key";
+import { reservationQKeys } from "../../utils/query-key";
 
-export const fleetPathIdRoute = new Route({
-  getParentRoute: () => fleetRoute,
-  path: "$vehicleId",
-  loader: async ({ params: { vehicleId } }) => {
+export const reservationPathIdRoute = new Route({
+  getParentRoute: () => reservationsRoute,
+  path: "$reservationId",
+  loader: async ({ params: { reservationId } }) => {
     const auth = getAuthToken();
 
     if (auth) {
       const promises = [];
       // get summary
-      const summaryKey = fleetQKeys.summary(vehicleId);
+      const summaryKey = reservationQKeys.summary(reservationId);
       if (!qc.getQueryData(summaryKey)) {
         promises.push(
           qc.prefetchQuery({
             queryKey: summaryKey,
             queryFn: () =>
-              fetchVehicleSummaryAmounts({
+              fetchRentalRateSummaryAmounts({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                vehicleId,
-                clientDate: new Date(),
+                module: "reservations",
+                referenceId: reservationId,
               }),
           })
         );
       }
 
-      const dataKey = fleetQKeys.id(vehicleId);
+      const dataKey = reservationQKeys.id(reservationId);
       if (!qc.getQueryData(dataKey)) {
         promises.push(
           qc.prefetchQuery({
             queryKey: dataKey,
             queryFn: () => {
-              return fetchVehicleData({
+              return fetchReservationData({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                vehicleId,
-                clientTime: new Date(),
+                reservationId,
               });
             },
             retry: 0,
@@ -59,15 +58,15 @@ export const fleetPathIdRoute = new Route({
     return {};
   },
   parseParams: (params) => ({
-    vehicleId: z.string().parse(params.vehicleId),
+    reservationId: z.string().parse(params.reservationId),
   }),
   stringifyParams: (params) => ({
-    vehicleId: `${params.vehicleId}`,
+    reservationId: `${params.reservationId}`,
   }),
 });
 
-export const viewFleetByIdRoute = new Route({
-  getParentRoute: () => fleetPathIdRoute,
+export const viewReservationByIdRoute = new Route({
+  getParentRoute: () => reservationPathIdRoute,
   path: "/",
   validateSearch: (search) =>
     z
@@ -76,12 +75,18 @@ export const viewFleetByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
-
-  component: lazy(() => import("../../pages/FleetView/FleetViewPage")),
+  component: lazy(() => import("../../pages/view-reservation")),
 });
 
-export const editFleetByIdRoute = new Route({
-  getParentRoute: () => fleetPathIdRoute,
+export const editReservationByIdRoute = new Route({
+  getParentRoute: () => reservationPathIdRoute,
   path: "edit",
-  component: () => "Edit Vehicle Route",
+  validateSearch: (search) =>
+    z
+      .object({
+        stage: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ stage: "rental-information" })],
+  component: lazy(() => import("../../pages/edit-reservation")),
 });

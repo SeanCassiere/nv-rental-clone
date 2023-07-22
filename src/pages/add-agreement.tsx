@@ -4,8 +4,8 @@ import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 import AddRentalParentForm from "@/components/add-rental";
 import Protector from "@/components/protector-shield";
 
-import { addAgreementRoute } from "@/routes/agreements/addAgreement";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
+import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 

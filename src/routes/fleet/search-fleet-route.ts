@@ -1,22 +1,20 @@
 import { lazy, Route } from "@tanstack/router";
 
-import { customersRoute } from ".";
-import { queryClient as qc } from "../../app-entry";
-import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
+import { fleetRoute } from ".";
+import { queryClient } from "../../app-entry";
+
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
+import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
-import { customerQKeys } from "@/utils/query-key";
-import { CustomerSearchQuerySchema } from "@/schemas/customer";
+import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
+import { fleetQKeys } from "@/utils/query-key";
+import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
-export const searchCustomersRoute = new Route({
-  getParentRoute: () => customersRoute,
+export const searchFleetRoute = new Route({
+  getParentRoute: () => fleetRoute,
   path: "/",
-  component: lazy(
-    () => import("../../pages/CustomerSearch/CustomerSearchPage")
-  ),
-  validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
+  validateSearch: VehicleSearchQuerySchema,
   preSearchFilters: [
     () => ({
       page: 1,
@@ -25,25 +23,24 @@ export const searchCustomersRoute = new Route({
   ],
   loader: async ({ search }) => {
     const auth = getAuthToken();
-
     const { pageNumber, size, searchFilters } =
-      normalizeCustomerListSearchParams(search);
+      normalizeVehicleListSearchParams(search);
 
     if (auth) {
       const promises = [];
 
       // get columns
-      const columnsKey = customerQKeys.columns();
-      if (!qc.getQueryData(columnsKey)) {
+      const columnsKey = fleetQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: columnsKey,
             queryFn: () =>
               fetchModuleColumnsModded({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                module: "customers",
+                module: "vehicles",
               }),
             initialData: [],
           })
@@ -51,16 +48,16 @@ export const searchCustomersRoute = new Route({
       }
 
       // get search
-      const searchKey = customerQKeys.search({
+      const searchKey = fleetQKeys.search({
         pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
-      if (!qc.getQueryData(searchKey)) {
+      if (!queryClient.getQueryData(searchKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: searchKey,
             queryFn: () =>
-              fetchCustomersListModded({
+              fetchVehiclesListModded({
                 page: pageNumber,
                 pageSize: size,
                 clientId: auth.profile.navotar_clientid,
@@ -76,4 +73,5 @@ export const searchCustomersRoute = new Route({
     }
     return {};
   },
+  component: lazy(() => import("../../pages/search-fleet")),
 });

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useSearch, useNavigate } from "@tanstack/router";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
   type ColumnOrderState,
@@ -7,18 +7,22 @@ import {
   type VisibilityState,
   type ColumnFiltersState,
 } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 
 import Protector from "@/components/protector-shield";
+import { PlusIconFilled } from "@/components/icons";
 
-import { searchFleetRoute } from "@/routes/fleet/searchFleet";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
+import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
 
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
+import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import {
@@ -31,19 +35,22 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 import { cn } from "@/utils";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
-import type { TVehicleListItemParsed } from "@/schemas/vehicle";
+import { type TReservationListItemParsed } from "@/schemas/reservation";
+import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { titleMaker } from "@/utils/title-maker";
+import { ReservationDateTimeColumns } from "@/utils/columns";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
 
-const columnHelper = createColumnHelper<TVehicleListItemParsed>();
+const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-function VehiclesSearchPage() {
-  const navigate = useNavigate({ from: searchFleetRoute.id });
+function ReservationsSearchPage() {
+  const { t } = useTranslation();
 
-  const search = useSearch({ from: searchFleetRoute.id });
+  const navigate = useNavigate({ from: searchReservationsRoute.id });
+
+  const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =
-    normalizeVehicleListSearchParams(search);
+    normalizeReservationListSearchParams(search);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(
@@ -60,14 +67,14 @@ function VehiclesSearchPage() {
     [pageNumber, size]
   );
 
-  const vehiclesData = useGetVehiclesList({
+  const reservationsData = useGetReservationsList({
     page: pageNumber,
     pageSize: size,
     filters: searchFilters,
   });
 
-  const vehicleStatusList = useGetVehicleStatusList();
-  const vehicleStatuses = vehicleStatusList.data ?? [];
+  const reservationStatusList = useGetReservationStatusList();
+  const reservationStatuses = reservationStatusList.data ?? [];
 
   const vehicleTypesList = useGetVehicleTypesList();
   const vehicleTypes = vehicleTypesList.data ?? [];
@@ -75,7 +82,10 @@ function VehiclesSearchPage() {
   const locationsList = useGetLocationsList({ locationIsActive: true });
   const locations = locationsList.data?.data ?? [];
 
-  const columnsData = useGetModuleColumns({ module: "vehicles" });
+  const reservationTypesList = useGetReservationTypesList();
+  const reservationTypes = reservationTypesList.data ?? [];
+
+  const columnsData = useGetModuleColumns({ module: "reservations" });
 
   const columnDefs = useMemo(
     () =>
@@ -93,13 +103,13 @@ function VehiclesSearchPage() {
           ),
           cell: (item) => {
             const value = item.getValue();
-            if (column.columnHeader === "VehicleNo") {
-              const vehicleId = item.table.getRow(item.row.id).original.id;
+            if (column.columnHeader === "ReservationNumber") {
+              const reservationId = item.table.getRow(item.row.id).original.id;
               return (
                 <PrimaryModuleTableCellWrap>
                   <Link
-                    to={viewFleetByIdRoute.to}
-                    params={{ vehicleId: String(vehicleId) }}
+                    to={viewReservationByIdRoute.to}
+                    params={{ reservationId: String(reservationId) }}
                     search={() => ({ tab: "summary" })}
                     className={cn(
                       buttonVariants({ variant: "link", size: "sm" }),
@@ -112,10 +122,18 @@ function VehiclesSearchPage() {
                 </PrimaryModuleTableCellWrap>
               );
             }
-            if (column.columnHeader === "VehicleStatus") {
+            if (column.columnHeader === "ReservationStatusName") {
               return (
                 <PrimaryModuleTableCellWrap>
                   <Badge variant="outline">{value}</Badge>
+                </PrimaryModuleTableCellWrap>
+              );
+            }
+
+            if (ReservationDateTimeColumns.includes(column.columnHeader)) {
+              return (
+                <PrimaryModuleTableCellWrap>
+                  {t("intlDateTime", { value: new Date(value) })}
                 </PrimaryModuleTableCellWrap>
               );
             }
@@ -124,14 +142,14 @@ function VehiclesSearchPage() {
               <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
             );
           },
-          enableHiding: column.columnHeader !== "VehicleNo",
+          enableHiding: column.columnHeader !== "ReservationNumber",
           enableSorting: false,
         })
       ),
-    [columnsData.data]
+    [columnsData.data, t]
   );
 
-  const saveColumnsMutation = useSaveModuleColumns({ module: "vehicles" });
+  const saveColumnsMutation = useSaveModuleColumns({ module: "reservations" });
 
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
@@ -154,7 +172,7 @@ function VehiclesSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
-  useDocumentTitle(titleMaker("Fleet"));
+  useDocumentTitle(titleMaker("Reservations"));
 
   return (
     <Protector>
@@ -165,31 +183,39 @@ function VehiclesSearchPage() {
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
           <h1 className="text-2xl font-semibold leading-6 text-primary">
-            Fleet
+            Reservations
           </h1>
+          <Link
+            to={addReservationRoute.to}
+            search={() => ({ stage: "rental-information" })}
+            className={cn(buttonVariants({ size: "sm" }))}
+          >
+            <PlusIconFilled className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline-block">New Reservation</span>
+          </Link>
         </div>
         <p className={cn("text-base text-primary/80")}>
-          Search through your fleet and view details.
+          Search through your bookings and view details.
         </p>
         <Separator className="mt-3.5" />
       </section>
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={vehiclesData.data?.data || []}
+          data={reservationsData.data?.data || []}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={columnsData?.data || []}
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            vehiclesData.data?.totalRecords
-              ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
+            reservationsData.data?.totalRecords
+              ? Math.ceil(reservationsData.data?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchFleetRoute.to,
+              to: searchReservationsRoute.to,
               params: {},
               search: (current) => ({
                 ...current,
@@ -204,7 +230,7 @@ function VehiclesSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchFleetRoute.to,
+                to: searchReservationsRoute.to,
                 params: {},
                 search: () => ({
                   page: 1,
@@ -221,7 +247,7 @@ function VehiclesSearchPage() {
                 {}
               );
               navigate({
-                to: searchFleetRoute.to,
+                to: searchReservationsRoute.to,
                 params: {},
                 search: () => ({
                   page: pagination.pageIndex + 1,
@@ -232,17 +258,34 @@ function VehiclesSearchPage() {
             },
             filterableColumns: [
               {
-                id: "VehicleStatus",
+                id: "Keyword",
+                title: "Search",
+                type: "text",
+                size: "large",
+              },
+              {
+                id: "Statuses",
                 title: "Status",
-                type: "select",
-                options: vehicleStatuses.map((item) => ({
+                type: "multi-select",
+                options: reservationStatuses.map((item) => ({
                   value: `${item.id}`,
                   label: item.name,
                 })),
+                defaultValue: [],
+              },
+              {
+                id: "ReservationTypes",
+                title: "Type",
+                type: "multi-select",
+                options: reservationTypes.map((item) => ({
+                  value: `${item.typeName}`,
+                  label: item.typeName,
+                })),
+                defaultValue: [],
               },
               {
                 id: "VehicleTypeId",
-                title: "Type",
+                title: "Vehicle type",
                 type: "select",
                 options: vehicleTypes.map((item) => ({
                   value: `${item.VehicleTypeId}`,
@@ -250,14 +293,18 @@ function VehiclesSearchPage() {
                 })),
               },
               {
-                id: "VehicleNo",
-                title: "Vehicle no.",
-                type: "text",
-                size: "normal",
+                id: "CreatedDateFrom",
+                title: "Start date",
+                type: "date",
               },
               {
-                id: "OwningLocationId",
-                title: "Owning location",
+                id: "CreatedDateTo",
+                title: "End date",
+                type: "date",
+              },
+              {
+                id: "CheckoutLocationId",
+                title: "Checkout location",
                 type: "select",
                 options: locations.map((item) => ({
                   value: `${item.locationId}`,
@@ -265,23 +312,13 @@ function VehiclesSearchPage() {
                 })),
               },
               {
-                id: "CurrentLocationId",
-                title: "Current location",
+                id: "CheckinLocationId",
+                title: "Checkin location",
                 type: "select",
                 options: locations.map((item) => ({
                   value: `${item.locationId}`,
                   label: `${item.locationName}`,
                 })),
-              },
-              {
-                id: "Active",
-                title: "Is active?",
-                type: "select",
-                options: [
-                  { value: "true", label: "Yes" },
-                  { value: "false", label: "No" },
-                ],
-                defaultValue: "true",
               },
             ],
           }}
@@ -291,4 +328,4 @@ function VehiclesSearchPage() {
   );
 }
 
-export default VehiclesSearchPage;
+export default ReservationsSearchPage;

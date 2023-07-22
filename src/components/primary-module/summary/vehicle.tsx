@@ -12,11 +12,11 @@ import {
 
 import { type TVehicleSummarySchema } from "@/schemas/summary/vehicleSummary";
 
-import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservationIdPath";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 export const VehicleSummary = ({
   summaryData,

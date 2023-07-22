@@ -7,7 +7,7 @@ import Protector from "@/components/protector-shield";
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
-} from "@/routes/reservations/reservationIdPath";
+} from "@/routes/reservations/reservation-id-route";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";

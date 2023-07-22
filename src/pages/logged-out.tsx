@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/router";
 
-import ScrollToTop from "../../components/scroll-to-top";
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
-import { titleMaker } from "../../utils/title-maker";
+import ScrollToTop from "../components/scroll-to-top";
+import { useDocumentTitle } from "../hooks/internal/useDocumentTitle";
+import { titleMaker } from "../utils/title-maker";
 
 const LoggedOutPage = () => {
   useDocumentTitle(titleMaker("Logged out"));

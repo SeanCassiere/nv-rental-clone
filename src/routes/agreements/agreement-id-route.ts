@@ -1,24 +1,24 @@
 import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
-import { reservationsRoute } from ".";
+import { agreementsRoute } from ".";
 import { queryClient as qc } from "../../app-entry";
 import { fetchRentalRateSummaryAmounts } from "../../api/summary";
-import { fetchReservationData } from "../../api/reservations";
+import { fetchAgreementData } from "../../api/agreements";
 
 import { getAuthToken } from "../../utils/authLocal";
-import { reservationQKeys } from "../../utils/query-key";
+import { agreementQKeys } from "../../utils/query-key";
 
-export const reservationPathIdRoute = new Route({
-  getParentRoute: () => reservationsRoute,
-  path: "$reservationId",
-  loader: async ({ params: { reservationId } }) => {
+export const agreementPathIdRoute = new Route({
+  getParentRoute: () => agreementsRoute,
+  path: "$agreementId",
+  loader: async ({ params: { agreementId } }) => {
     const auth = getAuthToken();
 
     if (auth) {
       const promises = [];
       // get summary
-      const summaryKey = reservationQKeys.summary(reservationId);
+      const summaryKey = agreementQKeys.summary(agreementId);
       if (!qc.getQueryData(summaryKey)) {
         promises.push(
           qc.prefetchQuery({
@@ -28,24 +28,24 @@ export const reservationPathIdRoute = new Route({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                module: "reservations",
-                referenceId: reservationId,
+                module: "agreements",
+                referenceId: agreementId,
               }),
           })
         );
       }
 
-      const dataKey = reservationQKeys.id(reservationId);
+      const dataKey = agreementQKeys.id(agreementId);
       if (!qc.getQueryData(dataKey)) {
         promises.push(
           qc.prefetchQuery({
             queryKey: dataKey,
             queryFn: () => {
-              return fetchReservationData({
+              return fetchAgreementData({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                reservationId,
+                agreementId,
               });
             },
             retry: 0,
@@ -58,15 +58,15 @@ export const reservationPathIdRoute = new Route({
     return {};
   },
   parseParams: (params) => ({
-    reservationId: z.string().parse(params.reservationId),
+    agreementId: z.string().parse(params.agreementId),
   }),
   stringifyParams: (params) => ({
-    reservationId: `${params.reservationId}`,
+    agreementId: `${params.agreementId}`,
   }),
 });
 
-export const viewReservationByIdRoute = new Route({
-  getParentRoute: () => reservationPathIdRoute,
+export const viewAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
   path: "/",
   validateSearch: (search) =>
     z
@@ -75,13 +75,11 @@ export const viewReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ tab: "summary" })],
-  component: lazy(
-    () => import("../../pages/ReservationView/ReservationViewPage")
-  ),
+  component: lazy(() => import("../../pages/view-agreement")),
 });
 
-export const editReservationByIdRoute = new Route({
-  getParentRoute: () => reservationPathIdRoute,
+export const editAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
   path: "edit",
   validateSearch: (search) =>
     z
@@ -90,7 +88,18 @@ export const editReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(
-    () => import("../../pages/EditReservation/EditReservationPage")
-  ),
+  component: lazy(() => import("../../pages/edit-agreement")),
+});
+
+export const checkinAgreementByIdRoute = new Route({
+  getParentRoute: () => agreementPathIdRoute,
+  path: "check-in",
+  validateSearch: (search) =>
+    z
+      .object({
+        stage: z.string().optional(),
+      })
+      .parse(search),
+  preSearchFilters: [() => ({ stage: "rental-information" })],
+  component: lazy(() => import("../../pages/checkin-agreement")),
 });

@@ -3,7 +3,7 @@ import { Link } from "@tanstack/router";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type ReservationDataParsed } from "../../../schemas/reservation";
-import { viewAgreementByIdRoute } from "../../../routes/agreements/agreementIdPath";
+import { viewAgreementByIdRoute } from "../../../routes/agreements/agreement-id-route";
 
 const ReservationStatBlock = ({
   reservation,

@@ -9,7 +9,7 @@ import {
   EMPTY_KEY,
 } from "./common";
 import { UserSolid } from "../../icons";
-import { viewCustomerByIdRoute } from "../../../routes/customers/customerIdPath";
+import { viewCustomerByIdRoute } from "../../../routes/customers/customer-id-route";
 
 interface TCustomerInformationProps {
   data: {

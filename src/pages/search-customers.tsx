@@ -12,8 +12,8 @@ import { useTranslation } from "react-i18next";
 import Protector from "@/components/protector-shield";
 import CommonHeader from "@/components/Layout/CommonHeader";
 
-import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
-import { viewCustomerByIdRoute } from "@/routes/customers/customerIdPath";
+import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
+import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
 
 import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";

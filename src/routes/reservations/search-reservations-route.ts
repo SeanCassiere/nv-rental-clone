@@ -1,19 +1,20 @@
 import { lazy, Route } from "@tanstack/router";
 
-import { agreementsRoute } from ".";
-import { queryClient as qc } from "../../app-entry";
+import { reservationsRoute } from ".";
+import { queryClient } from "../../app-entry";
+
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
-import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
+import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { agreementQKeys } from "@/utils/query-key";
-import { AgreementSearchQuerySchema } from "@/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
+import { reservationQKeys } from "@/utils/query-key";
+import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 
-export const searchAgreementsRoute = new Route({
-  getParentRoute: () => agreementsRoute,
+export const searchReservationsRoute = new Route({
+  getParentRoute: () => reservationsRoute,
   path: "/",
-  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
+  validateSearch: ReservationSearchQuerySchema,
   preSearchFilters: [
     () => ({
       page: 1,
@@ -23,61 +24,55 @@ export const searchAgreementsRoute = new Route({
   loader: async ({ search }) => {
     const auth = getAuthToken();
 
-    const {
-      searchFilters,
-      pageNumber,
-      size: pageSize,
-    } = normalizeAgreementListSearchParams(search);
+    const { pageNumber, size, searchFilters } =
+      normalizeReservationListSearchParams(search);
 
     if (auth) {
       const promises = [];
 
       // get columns
-      const columnsKey = agreementQKeys.columns();
-      if (!qc.getQueryData(columnsKey)) {
+      const columnsKey = reservationQKeys.columns();
+      if (!queryClient.getQueryData(columnsKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: columnsKey,
             queryFn: () =>
               fetchModuleColumnsModded({
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                module: "agreements",
+                module: "reservations",
               }),
             initialData: [],
           })
         );
       }
 
-      // get list
-      const searchKey = agreementQKeys.search({
-        pagination: { page: pageNumber, pageSize: pageSize },
+      // get search
+      const searchKey = reservationQKeys.search({
+        pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
-      if (!qc.getQueryData(searchKey)) {
+      if (!queryClient.getQueryData(searchKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: searchKey,
             queryFn: () =>
-              fetchAgreementsListModded({
+              fetchReservationsListModded({
                 page: pageNumber,
-                pageSize: pageSize,
+                pageSize: size,
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
-                currentDate: new Date(),
                 filters: searchFilters,
+                clientDate: new Date(),
               }),
           })
         );
       }
-
       await Promise.all(promises);
     }
     return {};
   },
-  component: lazy(
-    () => import("../../pages/AgreementsSearch/AgreementsSearchPage")
-  ),
+  component: lazy(() => import("../../pages/search-reservations")),
 });

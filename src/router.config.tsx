@@ -18,44 +18,44 @@ import { stylingRoute } from "./routes/styles";
 
 // /agreements
 import { agreementsRoute } from "./routes/agreements";
-import { searchAgreementsRoute } from "./routes/agreements/searchAgreements";
-import { addAgreementRoute } from "./routes/agreements/addAgreement";
+import { searchAgreementsRoute } from "./routes/agreements/search-agreements-route";
+import { addAgreementRoute } from "./routes/agreements/add-agreement-route";
 import {
   agreementPathIdRoute,
   viewAgreementByIdRoute,
   editAgreementByIdRoute,
   checkinAgreementByIdRoute,
-} from "./routes/agreements/agreementIdPath";
+} from "./routes/agreements/agreement-id-route";
 
 // /customers
 import { customersRoute } from "./routes/customers";
-import { searchCustomersRoute } from "./routes/customers/searchCustomers";
-import { addCustomerRoute } from "./routes/customers/addCustomer";
+import { searchCustomersRoute } from "./routes/customers/search-customers-route";
+import { addCustomerRoute } from "./routes/customers/add-customer-route";
 import {
   customerPathIdRoute,
   viewCustomerByIdRoute,
   editCustomerByIdRoute,
-} from "./routes/customers/customerIdPath";
+} from "./routes/customers/customer-id-route";
 
 // /reservations
 import { reservationsRoute } from "./routes/reservations";
-import { searchReservationsRoute } from "./routes/reservations/searchReservations";
-import { addReservationRoute } from "./routes/reservations/addReservation";
+import { searchReservationsRoute } from "./routes/reservations/search-reservations-route";
+import { addReservationRoute } from "./routes/reservations/add-reservation-route";
 import {
   reservationPathIdRoute,
   viewReservationByIdRoute,
   editReservationByIdRoute,
-} from "./routes/reservations/reservationIdPath";
+} from "./routes/reservations/reservation-id-route";
 
 // /fleet
 import { fleetRoute } from "./routes/fleet";
-import { searchFleetRoute } from "./routes/fleet/searchFleet";
-import { addFleetRoute } from "./routes/fleet/addFleet";
+import { searchFleetRoute } from "./routes/fleet/search-fleet-route";
+import { addFleetRoute } from "./routes/fleet/add-fleet-route";
 import {
   fleetPathIdRoute,
   viewFleetByIdRoute,
   editFleetByIdRoute,
-} from "./routes/fleet/fleetIdPath";
+} from "./routes/fleet/fleet-id-route";
 
 const routeTree = rootRoute.addChildren([
   indexRoute, // /

@@ -36,7 +36,7 @@ import {
   viewAgreementByIdRoute,
   editAgreementByIdRoute,
   checkinAgreementByIdRoute,
-} from "@/routes/agreements/agreementIdPath";
+} from "@/routes/agreements/agreement-id-route";
 
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
@@ -45,14 +45,13 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(
-  () => import("../../components/primary-module/tabs/agreement/summary-content")
+  () => import("../components/primary-module/tabs/agreement/summary-content")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/primary-module/tabs/notes-content")
+  () => import("../components/primary-module/tabs/notes-content")
 );
 const AgreementExchangesTab = lazy(
-  () =>
-    import("../../components/primary-module/tabs/agreement/exchanges-content")
+  () => import("../components/primary-module/tabs/agreement/exchanges-content")
 );
 
 function AgreementViewPage() {

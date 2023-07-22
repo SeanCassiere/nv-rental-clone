@@ -10,7 +10,7 @@ import { DocumentTextSolid } from "../../../icons";
 
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
 import { useGetVehicleExchanges } from "@/hooks/network/vehicle-exchange/useGetVehicleExchanges";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
 type TVehicleExchangeKeyHelp = {

@@ -1,10 +1,10 @@
 import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
-import { reservationsRoute } from ".";
+import { agreementsRoute } from ".";
 
-export const addReservationRoute = new Route({
-  getParentRoute: () => reservationsRoute,
+export const addAgreementRoute = new Route({
+  getParentRoute: () => agreementsRoute,
   path: "new",
   validateSearch: (search) =>
     z
@@ -13,7 +13,5 @@ export const addReservationRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(
-    () => import("../../pages/AddReservation/AddReservationPage"),
-  ),
+  component: lazy(() => import("../../pages/add-agreement")),
 });

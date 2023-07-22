@@ -1,23 +1,22 @@
-import { lazy, useMemo, Suspense, type ReactNode } from "react";
+import { Suspense, lazy, useMemo } from "react";
 import {
-  useNavigate,
-  useRouter,
-  useParams,
-  useSearch,
   Link,
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
 } from "@tanstack/router";
 import {
   MoreVerticalIcon,
   PencilIcon,
-  CopyIcon,
   ChevronRightIcon,
   PowerOffIcon,
   PowerIcon,
 } from "lucide-react";
 
 import Protector from "@/components/protector-shield";
-import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,81 +27,52 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import {
-  editFleetByIdRoute,
-  viewFleetByIdRoute,
-} from "@/routes/fleet/fleetIdPath";
+  editCustomerByIdRoute,
+  viewCustomerByIdRoute,
+} from "@/routes/customers/customer-id-route";
 
-import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
+import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
-import { Separator } from "@/components/ui/separator";
 
-const FleetSummaryTab = lazy(
-  () => import("../../components/primary-module/tabs/fleet/summary-content")
+const SummaryTab = lazy(
+  () => import("../components/primary-module/tabs/customer/summary-content")
 );
-const FleetReservationsTab = lazy(
-  () =>
-    import(
-      "../../components/primary-module/tabs/fleet/occupied-reservations-content"
-    )
-);
-const FleetAgreementsTab = lazy(
-  () =>
-    import(
-      "../../components/primary-module/tabs/fleet/occupied-agreements-content"
-    )
-);
-
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/primary-module/tabs/notes-content")
+  () => import("../components/primary-module/tabs/notes-content")
 );
 
-function VehicleViewPage() {
+function CustomerViewPage() {
   const router = useRouter();
   const params = useParams();
 
-  const { tab: tabName = "" } = useSearch({ from: viewFleetByIdRoute.id });
-
-  const navigate = useNavigate({ from: viewFleetByIdRoute.id });
-
-  const vehicleId = params.vehicleId || "";
-
-  const handleFindError = () => {
-    router.history.go(-1);
-  };
-
-  const onTabClick = (newTabId: string) => {
-    navigate({
-      to: viewFleetByIdRoute.to,
-      search: (others) => ({ ...others, tab: newTabId }),
-      params: { vehicleId },
-      replace: true,
-    });
-  };
-
-  const vehicle = useGetVehicleData({
-    vehicleId,
-    onError: handleFindError,
+  const { tab: tabName = "summary" } = useSearch({
+    from: viewCustomerByIdRoute.id,
   });
 
+  const navigate = useNavigate({ from: viewCustomerByIdRoute.id });
+
+  const customerId = params.customerId || "";
+
   const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: ReactNode }[] = [];
+    const tabs: { id: string; label: string; component: React.ReactNode }[] =
+      [];
 
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <FleetSummaryTab vehicleId={vehicleId} />,
+      component: <SummaryTab customerId={customerId} />,
     });
     tabs.push({
       id: "notes",
       label: "Notes",
       component: (
-        <ModuleNotesTabContent module="vehicles" referenceId={vehicleId} />
+        <ModuleNotesTabContent module="customers" referenceId={customerId} />
       ),
     });
     tabs.push({
@@ -110,32 +80,34 @@ function VehicleViewPage() {
       label: "Documents",
       component: "Documents Tab",
     });
-    tabs.push({
-      id: "reservations",
-      label: "Reservations",
-      component: (
-        <FleetReservationsTab
-          vehicleId={vehicleId}
-          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
-        />
-      ),
-    });
-    tabs.push({
-      id: "agreements",
-      label: "Agreements",
-      component: (
-        <FleetAgreementsTab
-          vehicleId={vehicleId}
-          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
-        />
-      ),
-    });
 
     return tabs;
-  }, [vehicleId, vehicle.data]);
+  }, [customerId]);
+
+  const handleFindError = () => {
+    router.history.go(-1);
+  };
+
+  const onTabClick = (newTabId: string) => {
+    navigate({
+      to: viewCustomerByIdRoute.to,
+      search: (others) => ({ ...others, tab: newTabId }),
+      params: { customerId },
+      replace: true,
+    });
+  };
+
+  const customer = useGetCustomerData({
+    customerId,
+    onError: handleFindError,
+  });
 
   useDocumentTitle(
-    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
+    titleMaker(
+      (customer.data?.firstName && customer.data?.lastName
+        ? customer.data?.firstName + " " + customer.data?.lastName
+        : "Loading") + " - Customers"
+    )
   );
 
   return (
@@ -157,28 +129,30 @@ function VehicleViewPage() {
                 router.history.go(-1);
               }}
             >
-              Fleet
+              Customers
             </Link>
             <ChevronRightIcon
               className="h-4 w-4 flex-shrink-0 text-primary"
               aria-hidden="true"
             />
             <Link
-              to={viewFleetByIdRoute.to}
+              to={viewCustomerByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
-              params={{ vehicleId }}
+              params={{ customerId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
-              {vehicle?.data?.vehicle.vehicleNo}
+              {customer?.data?.firstName}&nbsp;
+              {customer?.data?.lastName}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={editFleetByIdRoute.to}
-              params={{ vehicleId: String(vehicleId) }}
+              to={editCustomerByIdRoute.to}
+              search={() => ({})}
+              params={{ customerId: String(customerId) }}
               className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
             >
-              <PencilIcon className="mr-2 h-4 w-4" />
+              <PencilIcon className="h-4 w-4 sm:mr-2" />
               <span className="inline-block">Edit</span>
             </Link>
 
@@ -198,11 +172,7 @@ function VehicleViewPage() {
                 <DropdownMenuLabel>More actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <CopyIcon className="mr-2 h-4 w-4 sm:mr-4" />
-                    <span>Copy and create</span>
-                  </DropdownMenuItem>
-                  {vehicle.data?.vehicle.active ? (
+                  {customer.data?.active ? (
                     <DropdownMenuItem>
                       <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Deactivate</span>
@@ -219,15 +189,14 @@ function VehicleViewPage() {
           </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
-          View the details related to this fleet item.
+          View the details related to this customer.
         </p>
-        <Separator className="mb-3.5 mt-3.5" />
-        <FleetStatBlock vehicle={vehicle.data} />
+        <Separator className="mt-3.5" />
       </section>
 
       <section
         className={cn(
-          "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
+          "mx-auto mb-4 mt-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:mb-6 sm:px-1"
         )}
       >
         <Tabs value={tabName} onValueChange={onTabClick}>
@@ -255,4 +224,4 @@ function VehicleViewPage() {
   );
 }
 
-export default VehicleViewPage;
+export default CustomerViewPage;

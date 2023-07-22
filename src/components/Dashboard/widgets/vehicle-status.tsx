@@ -13,7 +13,7 @@ import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/us
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
-import { searchFleetRoute } from "@/routes/fleet/searchFleet";
+import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 
 const PIE_CHART_COLORS = [
   "#14b8a6",
