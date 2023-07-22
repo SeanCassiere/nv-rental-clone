@@ -1,4 +1,4 @@
-import { lazy, useMemo } from "react";
+import { lazy, useMemo, Suspense, type ReactNode } from "react";
 import {
   useNavigate,
   useRouter,
@@ -16,10 +16,6 @@ import {
 } from "lucide-react";
 
 import Protector from "@/components/Protector";
-import {
-  type ModuleTabConfigItem,
-  ModuleTabs,
-} from "@/components/primary-module/ModuleTabs";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -31,6 +27,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LoadingPlaceholder from "@/pages/loading-placeholder";
 
 import {
   editFleetByIdRoute,
@@ -40,7 +38,6 @@ import {
 import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 import { Separator } from "@/components/ui/separator";
@@ -73,10 +70,10 @@ function VehicleViewPage() {
     router.history.go(-1);
   };
 
-  const onTabClick = (newTab: ModuleTabConfigItem) => {
+  const onTabClick = (newTabId: string) => {
     navigate({
       to: viewFleetByIdRoute.to,
-      search: (others) => ({ ...others, tab: newTab.id }),
+      search: (others) => ({ ...others, tab: newTabId }),
       params: { vehicleId },
       replace: true,
     });
@@ -87,8 +84,8 @@ function VehicleViewPage() {
     onError: handleFindError,
   });
 
-  const tabsConfig: ModuleTabConfigItem[] = useMemo(() => {
-    const tabs: ModuleTabConfigItem[] = [];
+  const tabsConfig = useMemo(() => {
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
 
     tabs.push({
       id: "summary",
@@ -227,11 +224,26 @@ function VehicleViewPage() {
           "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
         )}
       >
-        <ModuleTabs
-          tabConfig={tabsConfig}
-          startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
-          onTabClick={onTabClick}
-        />
+        <Tabs value={tabName} onValueChange={onTabClick}>
+          <TabsList className="w-full sm:max-w-max">
+            {tabsConfig.map((tab, idx) => (
+              <TabsTrigger key={`tab-trigger-${idx}`} value={tab.id}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {tabsConfig.map((tab, idx) => (
+            <TabsContent
+              key={`tab-content-${idx}`}
+              value={tab.id}
+              className="min-h-[250px]"
+            >
+              <Suspense fallback={<LoadingPlaceholder />}>
+                {tab.component}
+              </Suspense>
+            </TabsContent>
+          ))}
+        </Tabs>
       </section>
     </Protector>
   );

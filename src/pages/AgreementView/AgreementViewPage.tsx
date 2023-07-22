@@ -1,4 +1,4 @@
-import { lazy, useMemo } from "react";
+import { lazy, useMemo, Suspense, type ReactNode } from "react";
 import {
   Link,
   useNavigate,
@@ -17,10 +17,6 @@ import {
 } from "lucide-react";
 
 import Protector from "@/components/Protector";
-import {
-  ModuleTabs,
-  type ModuleTabConfigItem,
-} from "@/components/primary-module/ModuleTabs";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -33,6 +29,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LoadingPlaceholder from "@/pages/loading-placeholder";
 
 import {
   viewAgreementByIdRoute,
@@ -43,7 +41,6 @@ import {
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
@@ -73,7 +70,7 @@ function AgreementViewPage() {
   const agreementId = params.agreementId || "";
 
   const tabsConfig = useMemo(() => {
-    const tabs: ModuleTabConfigItem[] = [];
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
 
     tabs.push({
       id: "summary",
@@ -115,10 +112,10 @@ function AgreementViewPage() {
     return tabs;
   }, [agreementId]);
 
-  const onTabClick = (newTab: ModuleTabConfigItem) => {
+  const onTabClick = (newTabId: string) => {
     navigate({
       to: viewAgreementByIdRoute.to,
-      search: (others) => ({ ...others, tab: newTab.id }),
+      search: (others) => ({ ...others, tab: newTabId }),
       params: { agreementId },
       replace: true,
     });
@@ -253,11 +250,26 @@ function AgreementViewPage() {
           "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
         )}
       >
-        <ModuleTabs
-          tabConfig={tabsConfig}
-          startingIndex={getStartingIndexFromTabName(tabName, tabsConfig)}
-          onTabClick={onTabClick}
-        />
+        <Tabs value={tabName} onValueChange={onTabClick}>
+          <TabsList className="w-full sm:max-w-max">
+            {tabsConfig.map((tab, idx) => (
+              <TabsTrigger key={`tab-trigger-${idx}`} value={tab.id}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {tabsConfig.map((tab, idx) => (
+            <TabsContent
+              key={`tab-content-${idx}`}
+              value={tab.id}
+              className="min-h-[250px]"
+            >
+              <Suspense fallback={<LoadingPlaceholder />}>
+                {tab.component}
+              </Suspense>
+            </TabsContent>
+          ))}
+        </Tabs>
       </section>
     </Protector>
   );
