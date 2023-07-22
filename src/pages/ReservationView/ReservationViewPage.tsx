@@ -46,7 +46,7 @@ const SummaryTab = lazy(
   () => import("../../components/Reservation/ReservationSummaryTab")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/primary-module/ModuleNotesTabContent")
+  () => import("../../components/primary-module/tabs/notes-content")
 );
 
 function ReservationViewPage() {

@@ -48,7 +48,7 @@ const SummaryTab = lazy(
   () => import("../../components/Agreement/AgreementSummaryTab")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../../components/primary-module/ModuleNotesTabContent")
+  () => import("../../components/primary-module/tabs/notes-content")
 );
 const AgreementExchangesTab = lazy(
   () => import("../../components/Agreement/AgreementExchangesTab")
