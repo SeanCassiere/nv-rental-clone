@@ -1,18 +1,14 @@
-import { useCallback, useMemo, useState } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 
-import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
-import RentalInformation from "../primary-module/ModuleInformation/RentalInformation";
-import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
+import CustomerInformation from "../../ModuleInformation/CustomerInformation";
+import RentalInformation from "../../ModuleInformation/RentalInformation";
+import VehicleInformation from "../../ModuleInformation/VehicleInformation";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
-import {
-  ModuleTabs,
-  type ModuleTabConfigItem,
-} from "@/components/primary-module/ModuleTabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
-import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 
 type AgreementSummaryTabProps = {
   agreementId: string;
@@ -23,9 +19,6 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
   const canViewRentalInformation = true;
 
   const [currentTab, setCurrentTab] = useState("vehicle");
-  const handleTabClick = useCallback((newTab: ModuleTabConfigItem) => {
-    setCurrentTab(newTab.id);
-  }, []);
 
   const agreementData = useGetAgreementData({
     agreementId: props.agreementId,
@@ -41,7 +34,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
-    const tabs: ModuleTabConfigItem[] = [];
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
 
     tabs.push({
       id: "vehicle",
@@ -152,14 +145,27 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
             isLoading={agreementData.isLoading}
           />
         )}
-        {/*  */}
-        <ModuleTabs
-          tabConfig={tabsConfig}
-          startingIndex={getStartingIndexFromTabName(currentTab, tabsConfig)}
-          onTabClick={handleTabClick}
-        />
+
+        <Tabs value={currentTab} onValueChange={setCurrentTab}>
+          <TabsList className="w-full sm:max-w-max">
+            {tabsConfig.map((tab, idx) => (
+              <TabsTrigger key={`tab-summary-trigger-${idx}`} value={tab.id}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {tabsConfig.map((tab, idx) => (
+            <TabsContent
+              key={`tab-summary-content-${idx}`}
+              value={tab.id}
+              className="min-h-[180px]"
+            >
+              {tab.component}
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
-      {/*  */}
+
       <div className="flex flex-col gap-4 lg:col-span-4">
         <RentalSummary
           module="agreements"

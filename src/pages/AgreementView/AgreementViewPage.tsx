@@ -45,13 +45,14 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(
-  () => import("../../components/Agreement/AgreementSummaryTab")
+  () => import("../../components/primary-module/tabs/agreement/summary-content")
 );
 const ModuleNotesTabContent = lazy(
   () => import("../../components/primary-module/tabs/notes-content")
 );
 const AgreementExchangesTab = lazy(
-  () => import("../../components/Agreement/AgreementExchangesTab")
+  () =>
+    import("../../components/primary-module/tabs/agreement/exchanges-content")
 );
 
 function AgreementViewPage() {

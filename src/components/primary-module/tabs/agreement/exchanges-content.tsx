@@ -4,9 +4,9 @@ import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 import parseISO from "date-fns/parseISO";
 
-import { CommonTable } from "../common/common-table";
-import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
-import { DocumentTextSolid } from "../icons";
+import { CommonTable } from "../../../common/common-table";
+import CommonEmptyStateContent from "../../../Layout/CommonEmptyStateContent";
+import { DocumentTextSolid } from "../../../icons";
 
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
 import { useGetVehicleExchanges } from "@/hooks/network/vehicle-exchange/useGetVehicleExchanges";
