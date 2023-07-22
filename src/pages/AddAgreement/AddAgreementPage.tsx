@@ -1,15 +1,15 @@
 import { useCallback } from "react";
 import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
-import AddRentalParentForm from "../../components/AddRental";
-import Protector from "../../components/Protector";
+import AddRentalParentForm from "@/components/add-rental";
+import Protector from "@/components/Protector";
 
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
-import { addAgreementRoute } from "../../routes/agreements/addAgreement";
+import { addAgreementRoute } from "@/routes/agreements/addAgreement";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 
-import { titleMaker } from "../../utils/title-maker";
-import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
-import { viewAgreementByIdRoute } from "../../routes/agreements/agreementIdPath";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+
+import { titleMaker } from "@/utils/title-maker";
 
 const AddAgreementPage = () => {
   const navigate = useNavigate({ from: addAgreementRoute.id });
@@ -20,9 +20,9 @@ const AddAgreementPage = () => {
   });
 
   const handleStageTabClick = useCallback(
-    (destination: ModuleTabConfigItem) => {
+    (destination: string) => {
       navigate({
-        search: () => ({ stage: destination.id }),
+        search: () => ({ stage: destination }),
       });
     },
     [navigate]

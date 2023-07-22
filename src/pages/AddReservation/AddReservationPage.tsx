@@ -1,16 +1,15 @@
 import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
 import { useCallback } from "react";
-import AddRentalParentForm from "../../components/AddRental";
-import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
-import Protector from "../../components/Protector";
+import AddRentalParentForm from "@/components/add-rental";
+import Protector from "@/components/Protector";
 
-import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { addReservationRoute } from "../../routes/reservations/addReservation";
-import { viewReservationByIdRoute } from "../../routes/reservations/reservationIdPath";
+import { addReservationRoute } from "@/routes/reservations/addReservation";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservationIdPath";
 
-import { titleMaker } from "../../utils/title-maker";
+import { titleMaker } from "@/utils/title-maker";
 
 const AddReservationPage = () => {
   const navigate = useNavigate({ from: addReservationRoute.id });
@@ -21,9 +20,9 @@ const AddReservationPage = () => {
   });
 
   const handleStageTabClick = useCallback(
-    (destination: ModuleTabConfigItem) => {
+    (destination: string) => {
       navigate({
-        search: () => ({ stage: destination.id }),
+        search: () => ({ stage: destination }),
       });
     },
     [navigate]

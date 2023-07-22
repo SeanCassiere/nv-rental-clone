@@ -1,15 +1,13 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/router";
 import parseISO from "date-fns/parseISO";
 
 import { ChevronRightOutline, PlayIconFilled } from "../icons";
 import CommonHeader from "../Layout/CommonHeader";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../Form";
-import {
-  ModuleTabs,
-  type ModuleTabConfigItem,
-} from "@/components/primary-module/ModuleTabs";
+
 import AgreementRentalInformationTab, {
   type AgreementRentalInformationSchemaParsed,
 } from "./AgreementRentalInformationTab";
@@ -39,7 +37,6 @@ import {
   editAgreementByIdRoute,
   viewAgreementByIdRoute,
 } from "@/routes/agreements/agreementIdPath";
-import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
 import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
 import { addReservationRoute } from "@/routes/reservations/addReservation";
 import {
@@ -69,7 +66,7 @@ interface TAddRentalParentFormProps {
   referenceId: number | string;
   currentStage: string;
   module: "agreement" | "reservation";
-  onStageTabClick: (destinationTab: ModuleTabConfigItem) => void;
+  onStageTabClick: (destinationTab: string) => void;
   onRentalSaveClick: (agreementId: number) => void;
   onRentalCancelClick: () => void;
   referenceNumber?: string;
@@ -181,7 +178,7 @@ const AddRentalParentForm = ({
   const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
-    const tabs: ModuleTabConfigItem[] = [];
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
     if (module === "agreement") {
       const others = {
         // 6
@@ -213,7 +210,7 @@ const AddRentalParentForm = ({
                 : undefined
             }
             onCompleted={() => {
-              handleStageTabClick(others);
+              handleStageTabClick(others.id);
             }}
             selectedTaxes={selectedTaxIds}
             onSelectedTaxes={(taxIds) => {
@@ -264,7 +261,7 @@ const AddRentalParentForm = ({
                 rates: true,
               }));
               setHasEdited(true);
-              handleStageTabClick(taxesAndPayments);
+              handleStageTabClick(taxesAndPayments.id);
             }}
             rateName={selectedRateName}
             onSelectRateName={handleSetSelectedRateName}
@@ -289,7 +286,7 @@ const AddRentalParentForm = ({
                 customer: true,
               }));
               setHasEdited(true);
-              handleStageTabClick(ratesAndCharges);
+              handleStageTabClick(ratesAndCharges.id);
             }}
           />
         ),
@@ -310,7 +307,7 @@ const AddRentalParentForm = ({
                 vehicle: true,
               }));
               setHasEdited(true);
-              handleStageTabClick(customerInformation);
+              handleStageTabClick(customerInformation.id);
             }}
           />
         ),
@@ -350,7 +347,7 @@ const AddRentalParentForm = ({
                 rental: true,
               }));
               setHasEdited(true);
-              handleStageTabClick(vehicleInformation);
+              handleStageTabClick(vehicleInformation.id);
             }}
           />
         ),
@@ -386,7 +383,7 @@ const AddRentalParentForm = ({
                 ...prev,
                 customer: true,
               }));
-              handleStageTabClick(ratesAndTaxes);
+              handleStageTabClick(ratesAndTaxes.id);
             }}
           />
         ),
@@ -975,12 +972,25 @@ const AddRentalParentForm = ({
 
         <div className="mx-auto px-2 sm:px-4 md:grid-cols-12">
           <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
-            <div className="flex flex-col gap-4 lg:col-span-8">
-              <ModuleTabs
-                tabConfig={tabsConfig}
-                startingIndex={getStartingIndexFromTabName(stage, tabsConfig)}
-                onTabClick={handleStageTabClick}
-              />
+            <div className="flex flex-col gap-4 pt-4 lg:col-span-8">
+              <Tabs value={stage} onValueChange={handleStageTabClick}>
+                <TabsList className="w-full sm:max-w-max">
+                  {tabsConfig.map((tab, idx) => (
+                    <TabsTrigger key={`tab-trigger-${idx}`} value={tab.id}>
+                      {tab.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {tabsConfig.map((tab, idx) => (
+                  <TabsContent
+                    key={`tab-content-${idx}`}
+                    value={tab.id}
+                    className="min-h-[250px]"
+                  >
+                    {tab.component}
+                  </TabsContent>
+                ))}
+              </Tabs>
             </div>
             <div className="flex flex-col gap-4 py-4 lg:col-span-4">
               <RentalSummary

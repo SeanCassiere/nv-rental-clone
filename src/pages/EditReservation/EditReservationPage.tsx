@@ -1,20 +1,19 @@
 import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
-import AddRentalParentForm from "@/components/AddRental";
+import AddRentalParentForm from "@/components/add-rental";
 import Protector from "@/components/Protector";
-import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
+
+import {
+  editReservationByIdRoute,
+  viewReservationByIdRoute,
+} from "@/routes/reservations/reservationIdPath";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { titleMaker } from "@/utils/title-maker";
-
-import {
-  editReservationByIdRoute,
-  viewReservationByIdRoute,
-} from "@/routes/reservations/reservationIdPath";
 
 const EditReservationPage = () => {
   const navigate = useNavigate({ from: editReservationByIdRoute.id });
@@ -38,9 +37,9 @@ const EditReservationPage = () => {
   });
 
   const handleStageTabClick = useCallback(
-    (destination: ModuleTabConfigItem) => {
+    (destination: string) => {
       navigate({
-        search: () => ({ stage: destination.id }),
+        search: () => ({ stage: destination }),
         params: { reservationId },
       });
     },

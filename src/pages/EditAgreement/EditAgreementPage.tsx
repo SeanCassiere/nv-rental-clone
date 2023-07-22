@@ -1,14 +1,13 @@
 import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
-import AddRentalParentForm from "@/components/AddRental";
+import AddRentalParentForm from "@/components/add-rental";
 import Protector from "@/components/Protector";
-import { type ModuleTabConfigItem } from "@/components/primary-module/ModuleTabs";
 
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
+import { editAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { editAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
@@ -36,9 +35,9 @@ const EditAgreementPage = () => {
   });
 
   const handleStageTabClick = useCallback(
-    (destination: ModuleTabConfigItem) => {
+    (destination: string) => {
       navigate({
-        search: () => ({ stage: destination.id }),
+        search: () => ({ stage: destination }),
         params: { agreementId },
       });
     },
