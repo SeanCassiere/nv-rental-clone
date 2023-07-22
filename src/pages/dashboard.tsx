@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 
 import Protector from "@/components/protector-shield";
-import DashboardStatsBlock from "@/components/dash/stats-block-display";
-import DashboardDndWidgetGrid from "@/components/dash/dnd-widget-display-grid";
-import WidgetPickerContent from "@/components/dash/widget-picker-content";
+import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
+import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
+import WidgetPickerContent from "@/components/dashboard/widget-picker-content";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
