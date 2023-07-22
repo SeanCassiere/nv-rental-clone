@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 import CommonHeader from "@/components/Layout/CommonHeader";
 
 import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
@@ -158,7 +158,7 @@ function CustomerSearchPage() {
   useDocumentTitle(titleMaker("Customers"));
 
   return (
-    <Protector>
+    <ProtectorShield>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -273,7 +273,7 @@ function CustomerSearchPage() {
           }}
         />
       </section>
-    </Protector>
+    </ProtectorShield>
   );
 }
 

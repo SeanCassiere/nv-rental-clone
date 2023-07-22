@@ -15,7 +15,7 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
 import { Separator } from "@/components/ui/separator";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -119,7 +119,7 @@ function ReservationViewPage() {
   );
 
   return (
-    <Protector>
+    <ProtectorShield>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -229,7 +229,7 @@ function ReservationViewPage() {
           ))}
         </Tabs>
       </section>
-    </Protector>
+    </ProtectorShield>
   );
 }
 

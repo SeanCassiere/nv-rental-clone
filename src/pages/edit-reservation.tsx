@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "@/components/add-rental";
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 
 import {
   editReservationByIdRoute,
@@ -66,7 +66,7 @@ const EditReservationPage = () => {
     )
   );
   return (
-    <Protector>
+    <ProtectorShield>
       <AddRentalParentForm
         referenceId={parseInt(reservationId)}
         currentStage={stage}
@@ -80,7 +80,7 @@ const EditReservationPage = () => {
         reservationData={reservationData.data || undefined}
         summaryData={summaryData.data}
       />
-    </Protector>
+    </ProtectorShield>
   );
 };
 

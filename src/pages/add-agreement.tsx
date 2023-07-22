@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "@/components/add-rental";
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 
 import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
@@ -47,7 +47,7 @@ const AddAgreementPage = () => {
 
   useDocumentTitle(titleMaker("New - Agreement"));
   return (
-    <Protector>
+    <ProtectorShield>
       <AddRentalParentForm
         referenceId={0}
         currentStage={stage}
@@ -56,7 +56,7 @@ const AddAgreementPage = () => {
         onRentalSaveClick={handleAgreementSaveComplete}
         onRentalCancelClick={handleCancelAddAgreement}
       />
-    </Protector>
+    </ProtectorShield>
   );
 };
 

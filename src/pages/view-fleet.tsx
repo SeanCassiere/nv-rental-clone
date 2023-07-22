@@ -15,7 +15,7 @@ import {
   PowerIcon,
 } from "lucide-react";
 
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -139,7 +139,7 @@ function VehicleViewPage() {
   );
 
   return (
-    <Protector>
+    <ProtectorShield>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -251,7 +251,7 @@ function VehicleViewPage() {
           ))}
         </Tabs>
       </section>
-    </Protector>
+    </ProtectorShield>
   );
 }
 
