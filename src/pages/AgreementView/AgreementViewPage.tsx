@@ -6,14 +6,17 @@ import {
   useRouter,
   useSearch,
 } from "@tanstack/router";
+import {
+  MoreVerticalIcon,
+  PencilIcon,
+  PrinterIcon,
+  MailPlusIcon,
+  BanIcon,
+  MoveDownLeftIcon,
+  ChevronRightIcon,
+} from "lucide-react";
 
 import Protector from "@/components/Protector";
-import {
-  ArrowDownLeftOutline,
-  ChevronRightOutline,
-  PencilIconFilled,
-  PrintIconFilled,
-} from "@/components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
@@ -21,6 +24,15 @@ import {
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   viewAgreementByIdRoute,
@@ -147,7 +159,7 @@ function AgreementViewPage() {
             >
               Agreements
             </Link>
-            <ChevronRightOutline
+            <ChevronRightIcon
               className="h-4 w-4 flex-shrink-0 text-primary"
               aria-hidden="true"
             />
@@ -155,12 +167,23 @@ function AgreementViewPage() {
               to={viewAgreementByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ agreementId }}
-              className="max-w-[230px] truncate text-xl font-semibold leading-6 text-primary/80 md:max-w-full"
+              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
               {agreement?.data?.agreementNumber}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
+            {!isCheckedIn && (
+              <Link
+                to={checkinAgreementByIdRoute.to}
+                search={() => ({ stage: "rental-information" })}
+                params={{ agreementId: String(agreementId) }}
+                className={cn(buttonVariants({ size: "sm" }))}
+              >
+                <MoveDownLeftIcon className="mr-2 h-4 w-4" />
+                <span className="inline-block">Checkin</span>
+              </Link>
+            )}
             {isCheckedIn ? (
               <Link
                 to={checkinAgreementByIdRoute.to}
@@ -168,8 +191,8 @@ function AgreementViewPage() {
                 params={{ agreementId: String(agreementId) }}
                 className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
               >
-                <PencilIconFilled className="h-3 w-3  sm:mr-2" />
-                <span className="hidden sm:inline-block">Edit</span>
+                <PencilIcon className="mr-2 h-4 w-4" />
+                <span className="inline-block">Edit</span>
               </Link>
             ) : (
               <Link
@@ -178,30 +201,41 @@ function AgreementViewPage() {
                 params={{ agreementId: String(agreementId) }}
                 className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
               >
-                <PencilIconFilled className="h-3 w-3  sm:mr-2" />
-                <span className="hidden sm:inline-block">Edit</span>
+                <PencilIcon className="mr-2 h-4 w-4" />
+                <span className="inline-block">Edit</span>
               </Link>
             )}
-            <Button
-              size="sm"
-              type="button"
-              className="flex items-center justify-center gap-2"
-              variant="ghost"
-            >
-              <PrintIconFilled className="h-3 w-3 sm:mr-2" />
-              <span className="hidden sm:inline-block">Print</span>
-            </Button>
-            {!isCheckedIn && (
-              <Link
-                to={checkinAgreementByIdRoute.to}
-                search={() => ({ stage: "rental-information" })}
-                params={{ agreementId: String(agreementId) }}
-                className={cn(buttonVariants({ size: "sm" }))}
-              >
-                <ArrowDownLeftOutline className="h-3.5 w-3.5 sm:mr-2" />
-                <span className="hidden sm:inline-block">Checkin</span>
-              </Link>
-            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="sm"
+                  type="button"
+                  className="flex items-center justify-center gap-2"
+                  variant="ghost"
+                >
+                  <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
+                  <span className="inline-block">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuLabel>More actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <PrinterIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Print</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MailPlusIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Email</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <BanIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Void</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
@@ -213,6 +247,7 @@ function AgreementViewPage() {
           isCheckedIn={isCheckedIn}
         />
       </section>
+
       <section
         className={cn(
           "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
