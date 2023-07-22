@@ -186,7 +186,9 @@ function AgreementViewPage() {
                 to={checkinAgreementByIdRoute.to}
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
-                className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+                className={cn(
+                  buttonVariants({ size: "sm", variant: "secondary" })
+                )}
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
                 <span className="inline-block">Edit</span>
@@ -196,7 +198,9 @@ function AgreementViewPage() {
                 to={editAgreementByIdRoute.to}
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
-                className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+                className={cn(
+                  buttonVariants({ size: "sm", variant: "secondary" })
+                )}
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
                 <span className="inline-block">Edit</span>
@@ -208,7 +212,7 @@ function AgreementViewPage() {
                   size="sm"
                   type="button"
                   className="flex items-center justify-center gap-2"
-                  variant="ghost"
+                  variant="secondary"
                 >
                   <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
                   <span className="inline-block">More</span>
