@@ -1,7 +1,7 @@
 import { Router, parseSearchWith, stringifySearchWith } from "@tanstack/router";
 import JSURL from "jsurl2";
 
-import LoadingPlaceholder from "./pages/loading-placeholder";
+import LoadingPlaceholder from "./components/loading-placeholder";
 import { rootRoute } from "./routes/__root";
 
 // /
@@ -11,51 +11,51 @@ import { indexRoute } from "./routes";
 import { loggedOutRoute } from "./routes/logged-out";
 
 // /oidc-callback
-import { oidcCallbackRoute } from '@/routes/oidc-callback'
+import { oidcCallbackRoute } from "@/routes/oidc-callback";
 
 // /styles
 import { stylingRoute } from "./routes/styles";
 
 // /agreements
 import { agreementsRoute } from "./routes/agreements";
-import { searchAgreementsRoute } from "./routes/agreements/searchAgreements";
-import { addAgreementRoute } from "./routes/agreements/addAgreement";
+import { searchAgreementsRoute } from "./routes/agreements/search-agreements-route";
+import { addAgreementRoute } from "./routes/agreements/add-agreement-route";
 import {
   agreementPathIdRoute,
   viewAgreementByIdRoute,
   editAgreementByIdRoute,
   checkinAgreementByIdRoute,
-} from "./routes/agreements/agreementIdPath";
+} from "./routes/agreements/agreement-id-route";
 
 // /customers
 import { customersRoute } from "./routes/customers";
-import { searchCustomersRoute } from "./routes/customers/searchCustomers";
-import { addCustomerRoute } from "./routes/customers/addCustomer";
+import { searchCustomersRoute } from "./routes/customers/search-customers-route";
+import { addCustomerRoute } from "./routes/customers/add-customer-route";
 import {
   customerPathIdRoute,
   viewCustomerByIdRoute,
   editCustomerByIdRoute,
-} from "./routes/customers/customerIdPath";
+} from "./routes/customers/customer-id-route";
 
 // /reservations
 import { reservationsRoute } from "./routes/reservations";
-import { searchReservationsRoute } from "./routes/reservations/searchReservations";
-import { addReservationRoute } from "./routes/reservations/addReservation";
+import { searchReservationsRoute } from "./routes/reservations/search-reservations-route";
+import { addReservationRoute } from "./routes/reservations/add-reservation-route";
 import {
   reservationPathIdRoute,
   viewReservationByIdRoute,
   editReservationByIdRoute,
-} from "./routes/reservations/reservationIdPath";
+} from "./routes/reservations/reservation-id-route";
 
 // /fleet
 import { fleetRoute } from "./routes/fleet";
-import { searchFleetRoute } from "./routes/fleet/searchFleet";
-import { addFleetRoute } from "./routes/fleet/addFleet";
+import { searchFleetRoute } from "./routes/fleet/search-fleet-route";
+import { addFleetRoute } from "./routes/fleet/add-fleet-route";
 import {
   fleetPathIdRoute,
   viewFleetByIdRoute,
   editFleetByIdRoute,
-} from "./routes/fleet/fleetIdPath";
+} from "./routes/fleet/fleet-id-route";
 
 const routeTree = rootRoute.addChildren([
   indexRoute, // /
@@ -125,7 +125,7 @@ export function decodeFromBinary(str: string): string {
       .call(atob(str), function (c) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join(""),
+      .join("")
   );
 }
 
@@ -133,6 +133,6 @@ export function encodeToBinary(str: string): string {
   return btoa(
     encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
       return String.fromCharCode(parseInt(p1, 16));
-    }),
+    })
   );
 }

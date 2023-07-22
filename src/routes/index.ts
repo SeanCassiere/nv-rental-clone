@@ -1,7 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { rootRoute } from "./__root";
-import { queryClient as qc } from "../App";
+import { queryClient as qc } from "../app-entry";
 import { fetchDashboardWidgetList } from "@/api/dashboard";
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
 
@@ -75,5 +75,5 @@ export const indexRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../pages/Index/IndexPage")),
+  component: lazy(() => import("../pages/dashboard")),
 });

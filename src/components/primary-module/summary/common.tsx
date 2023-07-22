@@ -23,7 +23,7 @@ export const SummaryHeader = ({
 }) => {
   return (
     <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
-      <CardTitle className="text-xl font-medium">{title}</CardTitle>
+      <CardTitle className="text-lg font-medium">{title}</CardTitle>
       <span>{icon}</span>
     </CardHeader>
   );

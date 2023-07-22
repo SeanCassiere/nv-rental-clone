@@ -10,8 +10,8 @@ import { CurrencyDollarSolid } from "@/components/icons";
 import { Card, CardContent } from "@/components/ui/card";
 import type { TCustomerSummarySchema } from "@/schemas/summary/customerSummary";
 
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
-import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 import { Separator } from "@/components/ui/separator";
 
 export const CustomerSummary = ({

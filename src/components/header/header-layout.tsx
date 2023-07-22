@@ -2,12 +2,12 @@ import React from "react";
 import { Link, useRouter } from "@tanstack/router";
 import { useAuth } from "react-oidc-context";
 
-import LoadingPlaceholder from "@/pages/loading-placeholder";
+import LoadingPlaceholder from "@/components/loading-placeholder";
 import { indexRoute } from "@/routes";
-import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
-import { searchFleetRoute } from "@/routes/fleet/searchFleet";
-import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
+import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
+import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 
 import { useGetDashboardMessages } from "@/hooks/network/dashboard/useGetDashboardMessages";
 import { cn } from "@/utils";

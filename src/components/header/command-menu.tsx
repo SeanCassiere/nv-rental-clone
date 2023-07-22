@@ -26,14 +26,14 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { indexRoute } from "@/routes/index";
-import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
-import { searchFleetRoute } from "@/routes/fleet/searchFleet";
-import { searchReservationsRoute } from "@/routes/reservations/searchReservations";
-import { searchAgreementsRoute } from "@/routes/agreements/searchAgreements";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";
-import { viewCustomerByIdRoute } from "@/routes/customers/customerIdPath";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservationIdPath";
+import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
+import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
+import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useGetGlobalSearch } from "@/hooks/network/module/useGetGlobalSearch";
