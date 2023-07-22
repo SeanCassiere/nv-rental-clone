@@ -1,7 +1,7 @@
 import { Router, parseSearchWith, stringifySearchWith } from "@tanstack/router";
 import JSURL from "jsurl2";
 
-import LoadingPlaceholder from "./pages/loading-placeholder";
+import LoadingPlaceholder from "./components/loading-placeholder";
 import { rootRoute } from "./routes/__root";
 
 // /
@@ -11,7 +11,7 @@ import { indexRoute } from "./routes";
 import { loggedOutRoute } from "./routes/logged-out";
 
 // /oidc-callback
-import { oidcCallbackRoute } from '@/routes/oidc-callback'
+import { oidcCallbackRoute } from "@/routes/oidc-callback";
 
 // /styles
 import { stylingRoute } from "./routes/styles";
@@ -125,7 +125,7 @@ export function decodeFromBinary(str: string): string {
       .call(atob(str), function (c) {
         return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join(""),
+      .join("")
   );
 }
 
@@ -133,6 +133,6 @@ export function encodeToBinary(str: string): string {
   return btoa(
     encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
       return String.fromCharCode(parseInt(p1, 16));
-    }),
+    })
   );
 }

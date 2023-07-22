@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useRouter } from "@tanstack/router";
 import { useAuth } from "react-oidc-context";
 
-import LoadingPlaceholder from "@/pages/loading-placeholder";
+import LoadingPlaceholder from "@/components/loading-placeholder";
 import { indexRoute } from "@/routes";
 import { searchCustomersRoute } from "@/routes/customers/searchCustomers";
 import { searchFleetRoute } from "@/routes/fleet/searchFleet";

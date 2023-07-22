@@ -5,7 +5,7 @@ import { hasAuthParams, useAuth } from "react-oidc-context";
 import { z } from "zod";
 
 import { rootRoute } from "./__root";
-import LoadingPlaceholder from "@/pages/loading-placeholder";
+import LoadingPlaceholder from "@/components/loading-placeholder";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 import { router } from "@/router.config";
 
@@ -18,7 +18,7 @@ export const oidcCallbackRoute = new Route({
   component: ({ useSearch }) => {
     const auth = useAuth();
     const search = useSearch();
-    
+
     useEffect(() => {
       // if there are no auth params, begin the sign-in process
       if (!hasAuthParams() && search.redirect) {
@@ -26,20 +26,26 @@ export const oidcCallbackRoute = new Route({
         auth.signinRedirect();
         return;
       }
-      
-      // if execution gets to here that means we have auth params and should look at redirection
-      const storedRedirectUri = window.localStorage.getItem(LS_OIDC_REDIRECT_URI_KEY);
 
-      if (storedRedirectUri && storedRedirectUri !== "" && storedRedirectUri !== '/') {
+      // if execution gets to here that means we have auth params and should look at redirection
+      const storedRedirectUri = window.localStorage.getItem(
+        LS_OIDC_REDIRECT_URI_KEY
+      );
+
+      if (
+        storedRedirectUri &&
+        storedRedirectUri !== "" &&
+        storedRedirectUri !== "/"
+      ) {
         router.navigate({
-          to: storedRedirectUri as any
-        })
+          to: storedRedirectUri as any,
+        });
         return;
       }
 
-      router.navigate({ to: '/' });
-    },[auth, search.redirect])
+      router.navigate({ to: "/" });
+    }, [auth, search.redirect]);
 
-    return <LoadingPlaceholder />
+    return <LoadingPlaceholder />;
   },
 });
