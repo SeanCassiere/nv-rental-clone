@@ -15,7 +15,7 @@ import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,
 } from "../Form";
-import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
+import { InformationBlockCardWithChildren } from "../primary-module/information-block/common";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";

@@ -1,8 +1,8 @@
 import { type ReactNode, useMemo, useState } from "react";
 
-import CustomerInformation from "../../ModuleInformation/CustomerInformation";
-import RentalInformation from "../../ModuleInformation/RentalInformation";
-import VehicleInformation from "../../ModuleInformation/VehicleInformation";
+import CustomerInformation from "../../information-block/customer-information";
+import RentalInformation from "../../information-block/rental-information";
+import FleetInformation from "../../information-block/fleet-information";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -40,7 +40,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
       id: "vehicle",
       label: "Vehicle",
       component: (
-        <VehicleInformation
+        <FleetInformation
           mode={isCheckedIn ? "agreement-checked-in" : "agreement-checked-out"}
           isLoading={agreementData.isLoading}
           data={

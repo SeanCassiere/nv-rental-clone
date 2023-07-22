@@ -4,7 +4,7 @@ import { Transition } from "@headlessui/react";
 import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { Button } from "../Form";
 import { ChevronDownOutline, DocumentTextSolid } from "../icons";
-import { InformationBlockCardWithChildren } from "../primary-module/ModuleInformation/common";
+import { InformationBlockCardWithChildren } from "../primary-module/information-block/common";
 import { cn } from "@/utils";
 
 interface StepTaxesAndPaymentsInformationProps {

@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 
-import CustomerInformation from "../../ModuleInformation/CustomerInformation";
-import FleetInformation from "../../ModuleInformation/VehicleInformation";
+import CustomerInformation from "../../information-block/customer-information";
+import FleetInformation from "../../information-block/fleet-information";
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

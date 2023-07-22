@@ -1,6 +1,6 @@
-import CustomerInformation from "../../ModuleInformation/CustomerInformation";
-import RentalInformation from "../../ModuleInformation/RentalInformation";
-import VehicleInformation from "../../ModuleInformation/VehicleInformation";
+import CustomerInformation from "../../information-block/customer-information";
+import RentalInformation from "../../information-block/rental-information";
+import FleetInformation from "../../information-block/fleet-information";
 
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 
@@ -58,7 +58,7 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
           />
         )}
         {canViewVehicleInformation && (
-          <VehicleInformation
+          <FleetInformation
             mode="reservation"
             data={{
               vehicleId: reservationData.data?.reservationview?.vehicleId,
