@@ -6,15 +6,30 @@ import {
   useRouter,
   useSearch,
 } from "@tanstack/router";
+import {
+  MoreVerticalIcon,
+  PencilIcon,
+  ChevronRightIcon,
+  PowerOffIcon,
+  PowerIcon,
+} from "lucide-react";
 
 import Protector from "@/components/Protector";
-import { ChevronRightOutline, PencilIconFilled } from "@/components/icons";
 import {
   ModuleTabs,
   type ModuleTabConfigItem,
 } from "@/components/primary-module/ModuleTabs";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   editCustomerByIdRoute,
@@ -118,7 +133,7 @@ function CustomerViewPage() {
             >
               Customers
             </Link>
-            <ChevronRightOutline
+            <ChevronRightIcon
               className="h-4 w-4 flex-shrink-0 text-primary"
               aria-hidden="true"
             />
@@ -126,7 +141,7 @@ function CustomerViewPage() {
               to={viewCustomerByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ customerId }}
-              className="max-w-[230px] truncate text-xl font-semibold leading-6 text-primary/80 md:max-w-full"
+              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
               {customer?.data?.firstName}&nbsp;
               {customer?.data?.lastName}
@@ -139,9 +154,40 @@ function CustomerViewPage() {
               params={{ customerId: String(customerId) }}
               className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
             >
-              <PencilIconFilled className="h-3 w-3 sm:mr-2" />
-              <span className="hidden sm:inline-block">Edit</span>
+              <PencilIcon className="h-4 w-4 sm:mr-2" />
+              <span className="inline-block">Edit</span>
             </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="sm"
+                  type="button"
+                  className="flex items-center justify-center gap-2"
+                  variant="ghost"
+                >
+                  <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
+                  <span className="inline-block">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuLabel>More actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  {customer.data?.active ? (
+                    <DropdownMenuItem>
+                      <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Deactivate</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem>
+                      <PowerIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Activate</span>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
