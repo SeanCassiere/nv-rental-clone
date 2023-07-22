@@ -11,7 +11,7 @@ import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,
 } from "../Form";
-import { type AgreementRentalInformationSchemaParsed } from "./AgreementRentalInformationTab";
+import { type AgreementRentalInformationSchemaParsed } from "./agreement-rental-information-tab";
 import SelectVehicleModal from "@/components/Dialogs/SelectVehicleModal";
 
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";

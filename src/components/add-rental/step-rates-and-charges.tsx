@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
 
-import CommonRatesInformation from "./CommonRatesInformation";
-import CommonMiscChargesInformation from "./CommonMiscChargesInformation";
+import CommonRatesInformation from "./common-rates-information";
+import CommonMiscChargesInformation from "./common-misc-charges-information";
 import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
 import { ChevronDownOutline, DocumentTextSolid } from "@/components/icons";
 import { type RentalRateParsed } from "@/schemas/rate";

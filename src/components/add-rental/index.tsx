@@ -10,13 +10,13 @@ import { Button } from "../Form";
 
 import AgreementRentalInformationTab, {
   type AgreementRentalInformationSchemaParsed,
-} from "./AgreementRentalInformationTab";
+} from "./agreement-rental-information-tab";
 import AgreementVehicleInformationTab, {
   type AgreementVehicleInformationSchemaParsed,
-} from "./AgreementVehicleInformationTab";
+} from "./agreement-vehicle-information-tab";
 import CommonCustomerInformation, {
   type CommonCustomerInformationSchemaParsed,
-} from "./CommonCustomerInformation";
+} from "./common-customer-information";
 import StepRatesAndChargesInformation from "./step-rates-and-charges";
 import StepTaxesAndPaymentsInformation from "./step-taxes-and-payments";
 
