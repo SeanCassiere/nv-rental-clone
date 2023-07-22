@@ -7,8 +7,12 @@ import {
   type TInformationBlockCardProps,
   EMPTY_KEY,
 } from "./common";
-import { TruckFilled } from "../../icons";
-import { viewFleetByIdRoute } from "../../../routes/fleet/fleet-id-route";
+import { TruckFilled } from "@/components/icons";
+import { buttonVariants } from "@/components/ui/button";
+
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
+
+import { cn } from "@/utils";
 
 interface TVehicleInformationProps {
   data: {
@@ -67,7 +71,10 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
               to={viewFleetByIdRoute.to}
               params={{ vehicleId: String(data.vehicleId) }}
               search={() => ({ tab: "summary" })}
-              className="underline underline-offset-4 transition-all focus-within:underline-offset-8"
+              className={cn(
+                buttonVariants({ variant: "link" }),
+                "h-auto p-0 text-base underline"
+              )}
             >
               {data.vehicleNo}
             </Link>
