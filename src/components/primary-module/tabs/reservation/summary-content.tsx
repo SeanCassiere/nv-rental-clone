@@ -1,6 +1,6 @@
-import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
-import RentalInformation from "../primary-module/ModuleInformation/RentalInformation";
-import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
+import CustomerInformation from "../../ModuleInformation/CustomerInformation";
+import RentalInformation from "../../ModuleInformation/RentalInformation";
+import VehicleInformation from "../../ModuleInformation/VehicleInformation";
 
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 

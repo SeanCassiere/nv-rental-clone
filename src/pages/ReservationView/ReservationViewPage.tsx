@@ -43,7 +43,8 @@ import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
 
 const SummaryTab = lazy(
-  () => import("../../components/Reservation/ReservationSummaryTab")
+  () =>
+    import("../../components/primary-module/tabs/reservation/summary-content")
 );
 const ModuleNotesTabContent = lazy(
   () => import("../../components/primary-module/tabs/notes-content")
