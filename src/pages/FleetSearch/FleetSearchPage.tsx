@@ -8,7 +8,7 @@ import {
   type ColumnFiltersState,
 } from "@tanstack/react-table";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 
 import { searchFleetRoute } from "@/routes/fleet/searchFleet";
 import { viewFleetByIdRoute } from "@/routes/fleet/fleetIdPath";

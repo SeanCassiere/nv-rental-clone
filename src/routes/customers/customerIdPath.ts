@@ -2,7 +2,7 @@ import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { customersRoute } from ".";
-import { queryClient as qc } from "../../App";
+import { queryClient as qc } from "../../app-entry";
 import { fetchCustomerSummaryAmounts } from "../../api/summary";
 import { fetchCustomerData } from "../../api/customers";
 
@@ -30,7 +30,7 @@ export const customerPathIdRoute = new Route({
                 accessToken: auth.access_token,
                 customerId,
               }),
-          }),
+          })
         );
       }
 
@@ -48,7 +48,7 @@ export const customerPathIdRoute = new Route({
               });
             },
             retry: 0,
-          }),
+          })
         );
       }
 

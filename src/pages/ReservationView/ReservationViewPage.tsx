@@ -15,7 +15,7 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
 import { Separator } from "@/components/ui/separator";
 import { Button, buttonVariants } from "@/components/ui/button";

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/router";
 
-import ScrollToTop from "../../components/ScrollToTop";
+import ScrollToTop from "../../components/scroll-to-top";
 import { useDocumentTitle } from "../../hooks/internal/useDocumentTitle";
 import { titleMaker } from "../../utils/title-maker";
 

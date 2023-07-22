@@ -1,7 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { reservationsRoute } from ".";
-import { queryClient } from "../../App";
+import { queryClient } from "../../app-entry";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";

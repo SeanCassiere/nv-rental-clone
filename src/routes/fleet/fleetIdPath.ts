@@ -2,7 +2,7 @@ import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { fleetRoute } from ".";
-import { queryClient as qc } from "../../App";
+import { queryClient as qc } from "../../app-entry";
 import { fetchVehicleSummaryAmounts } from "../../api/summary";
 import { fetchVehicleData } from "../../api/vehicles";
 
@@ -31,7 +31,7 @@ export const fleetPathIdRoute = new Route({
                 vehicleId,
                 clientDate: new Date(),
               }),
-          }),
+          })
         );
       }
 
@@ -50,7 +50,7 @@ export const fleetPathIdRoute = new Route({
               });
             },
             retry: 0,
-          }),
+          })
         );
       }
 

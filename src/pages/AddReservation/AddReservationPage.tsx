@@ -2,7 +2,7 @@ import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
 import { useCallback } from "react";
 import AddRentalParentForm from "@/components/add-rental";
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 

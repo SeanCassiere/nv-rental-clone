@@ -8,7 +8,7 @@ import {
   CheckIcon,
 } from "lucide-react";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 import DashboardStatsBlock from "@/components/Dashboard/stats-block-display";
 import DashboardDndWidgetGrid from "@/components/Dashboard/dnd-widget-display-grid";
 import WidgetPickerContent from "@/components/Dialogs/widget-picker-content";

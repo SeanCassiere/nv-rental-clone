@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 import CommonHeader from "@/components/Layout/CommonHeader";
 
 import { searchCustomersRoute } from "@/routes/customers/searchCustomers";

@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 import { PlusIconFilled } from "@/components/icons";
 
 import { searchReservationsRoute } from "@/routes/reservations/searchReservations";

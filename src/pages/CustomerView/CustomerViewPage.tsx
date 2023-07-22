@@ -14,7 +14,7 @@ import {
   PowerIcon,
 } from "lucide-react";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {

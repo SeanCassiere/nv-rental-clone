@@ -15,7 +15,7 @@ import {
   PowerIcon,
 } from "lucide-react";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {

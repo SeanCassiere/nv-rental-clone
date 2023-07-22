@@ -16,7 +16,7 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";

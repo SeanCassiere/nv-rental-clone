@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "@/components/add-rental";
-import Protector from "@/components/Protector";
+import Protector from "@/components/protector-shield";
 
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";
 import { editAgreementByIdRoute } from "@/routes/agreements/agreementIdPath";

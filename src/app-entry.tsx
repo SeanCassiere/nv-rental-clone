@@ -3,7 +3,7 @@ import { RouterProvider } from "@tanstack/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { OidcAuthProvider } from "./components/OidcAuthProvider";
+import { OidcAuthProvider } from "./components/oidc-auth-provider";
 import { router } from "./router.config";
 import "./i18n.config";
 

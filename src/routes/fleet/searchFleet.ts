@@ -1,7 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { fleetRoute } from ".";
-import { queryClient } from "../../App";
+import { queryClient } from "../../app-entry";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";

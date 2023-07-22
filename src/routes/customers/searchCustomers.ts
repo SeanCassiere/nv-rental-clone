@@ -1,7 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { customersRoute } from ".";
-import { queryClient as qc } from "../../App";
+import { queryClient as qc } from "../../app-entry";
 import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
