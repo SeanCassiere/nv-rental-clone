@@ -75,7 +75,7 @@ export const viewFleetByIdRoute = new Route({
         tab: z.string().optional(),
       })
       .parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
+  preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
 
   component: lazy(() => import("../../pages/view-fleet")),
 });

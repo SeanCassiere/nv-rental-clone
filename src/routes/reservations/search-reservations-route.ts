@@ -14,7 +14,8 @@ import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 export const searchReservationsRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "/",
-  validateSearch: ReservationSearchQuerySchema,
+  validateSearch: (search) =>
+    ReservationSearchQuerySchema.passthrough().parse(search),
   preSearchFilters: [
     () => ({
       page: 1,

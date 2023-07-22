@@ -14,7 +14,8 @@ export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "/",
   component: lazy(() => import("../../pages/search-customers")),
-  validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
+  validateSearch: (search) =>
+    CustomerSearchQuerySchema.passthrough().parse(search),
   preSearchFilters: [
     () => ({
       page: 1,

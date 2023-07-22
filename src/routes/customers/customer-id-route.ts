@@ -69,7 +69,7 @@ export const viewCustomerByIdRoute = new Route({
   path: "/",
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
-  preSearchFilters: [() => ({ tab: "summary" })],
+  preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
   component: lazy(() => import("../../pages/view-customer")),
 });
 

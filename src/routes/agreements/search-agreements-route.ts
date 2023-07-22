@@ -13,7 +13,8 @@ import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-par
 export const searchAgreementsRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "/",
-  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
+  validateSearch: (search) =>
+    AgreementSearchQuerySchema.passthrough().parse(search),
   preSearchFilters: [
     () => ({
       page: 1,

@@ -14,7 +14,8 @@ import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 export const searchFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "/",
-  validateSearch: VehicleSearchQuerySchema,
+  validateSearch: (search) =>
+    VehicleSearchQuerySchema.passthrough().parse(search),
   preSearchFilters: [
     () => ({
       page: 1,
