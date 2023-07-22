@@ -9,6 +9,12 @@ import LoadingPlaceholder from "@/components/loading-placeholder";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 import { router } from "@/router.config";
 
+function removeTrailingSlash(path: string) {
+  const pathParts = path.split("?");
+  const pathWithoutSlash = pathParts[0]?.replace(/\/$/, "");
+  return pathWithoutSlash + (pathParts[1] ? `?${pathParts[1]}` : "");
+}
+
 export const oidcCallbackRoute = new Route({
   getParentRoute: () => rootRoute,
   validateSearch: z.object({
@@ -22,7 +28,16 @@ export const oidcCallbackRoute = new Route({
     useEffect(() => {
       // if there are no auth params, begin the sign-in process
       if (!hasAuthParams() && typeof search.redirect !== "undefined") {
-        window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, search.redirect);
+        let safeRoute = search.redirect;
+
+        console.log("safeRoute", safeRoute);
+        if (safeRoute && safeRoute !== "/") {
+          console.log("safeRoute inner", safeRoute);
+          safeRoute = removeTrailingSlash(safeRoute);
+        }
+        console.log("safeRoute after", safeRoute);
+
+        window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, safeRoute);
         auth.signinRedirect();
         return;
       }
@@ -31,13 +46,17 @@ export const oidcCallbackRoute = new Route({
       const storedRedirectUri = window.localStorage.getItem(
         LS_OIDC_REDIRECT_URI_KEY
       );
-      if (
-        storedRedirectUri &&
-        storedRedirectUri !== "" &&
-        storedRedirectUri !== "/"
-      ) {
+
+      const pathname = storedRedirectUri?.split("?")[0];
+      const searchParams = new URLSearchParams(
+        storedRedirectUri?.split("?")[1] ?? ""
+      );
+      const searchParamsObj = Object.fromEntries(searchParams.entries());
+
+      if (pathname && pathname !== "" && pathname !== "/") {
         router.navigate({
-          to: storedRedirectUri as any,
+          to: (pathname as any) ?? "/",
+          search: searchParamsObj,
         });
         return;
       }
