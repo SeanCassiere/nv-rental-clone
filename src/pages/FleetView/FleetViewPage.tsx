@@ -6,6 +6,16 @@ import {
   useSearch,
   Link,
 } from "@tanstack/router";
+import {
+  MoreVerticalIcon,
+  PencilIcon,
+  PrinterIcon,
+  MailPlusIcon,
+  CopyIcon,
+  ChevronRightIcon,
+  PowerOffIcon,
+  PowerIcon,
+} from "lucide-react";
 
 import Protector from "@/components/Protector";
 import { ChevronRightOutline, PencilIconFilled } from "@/components/icons";
@@ -14,7 +24,16 @@ import {
   ModuleTabs,
 } from "@/components/primary-module/ModuleTabs";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   editFleetByIdRoute,
@@ -140,7 +159,7 @@ function VehicleViewPage() {
             >
               Fleet
             </Link>
-            <ChevronRightOutline
+            <ChevronRightIcon
               className="h-4 w-4 flex-shrink-0 text-primary"
               aria-hidden="true"
             />
@@ -148,7 +167,7 @@ function VehicleViewPage() {
               to={viewFleetByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ vehicleId }}
-              className="max-w-[230px] truncate text-xl font-semibold leading-6 text-primary/80 md:max-w-full"
+              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
               {vehicle?.data?.vehicle.vehicleNo}
             </Link>
@@ -159,9 +178,44 @@ function VehicleViewPage() {
               params={{ vehicleId: String(vehicleId) }}
               className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
             >
-              <PencilIconFilled className="h-3 w-3  sm:mr-2" />
-              <span className="hidden sm:inline-block">Edit</span>
+              <PencilIcon className="mr-2 h-4 w-4" />
+              <span className="inline-block">Edit</span>
             </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="sm"
+                  type="button"
+                  className="flex items-center justify-center gap-2"
+                  variant="ghost"
+                >
+                  <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
+                  <span className="inline-block">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuLabel>More actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <CopyIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Copy and create</span>
+                  </DropdownMenuItem>
+                  {vehicle.data?.vehicle.active ? (
+                    <DropdownMenuItem>
+                      <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Deactivate</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem>
+                      <PowerIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Activate</span>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
