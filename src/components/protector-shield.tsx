@@ -9,39 +9,57 @@ function Protector({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (auth.isAuthenticated || router.history.location.pathname.startsWith("/oidc-callback")) return;
+    if (
+      auth.isAuthenticated ||
+      router.history.location.pathname.startsWith("/oidc-callback")
+    )
+      return;
 
-    const redirection = router.history.location.pathname + router.history.location.search;
-    const shouldUseRedirection = !redirection.includes("/oidc-callback");
-    
-    router.navigate({ to: '/oidc-callback', search: () => {
-      return {
-        redirect: shouldUseRedirection ? redirection : '/'
-      }
-    }});
-  },[auth.isAuthenticated, router])
+    const redirection =
+      router.history.location.pathname + router.history.location.search;
+    const includesOidcCallback = redirection.includes("oidc-callback");
+
+    router.navigate({
+      to: "/oidc-callback",
+      search: () => {
+        return {
+          redirect: !includesOidcCallback ? redirection : "/",
+        };
+      },
+    });
+  }, [auth.isAuthenticated, router]);
 
   useEffect(() => {
     return auth.events.addAccessTokenExpiring(() => {
-      const redirectUri = router.history.location.pathname + router.history.location.search;
+      const redirectUri =
+        router.history.location.pathname + router.history.location.search;
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
       auth.signinSilent();
     });
-  }, [auth, auth.events, auth.signinSilent, router.history.location.pathname, router.history.location.search]);
+  }, [
+    auth,
+    auth.events,
+    auth.signinSilent,
+    router.history.location.pathname,
+    router.history.location.search,
+  ]);
 
   useEffect(() => {
     return auth.events.addAccessTokenExpired(() => {
-      const redirectUri = router.history.location.pathname + router.history.location.search;
+      const redirectUri =
+        router.history.location.pathname + router.history.location.search;
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
       auth.signinSilent();
     });
-  }, [auth, auth.events, auth.signinSilent, router.history.location.pathname, router.history.location.search]);
+  }, [
+    auth,
+    auth.events,
+    auth.signinSilent,
+    router.history.location.pathname,
+    router.history.location.search,
+  ]);
 
-  return (
-    <>
-      {children}
-    </>
-  )
+  return <>{children}</>;
 }
 
 export default Protector;

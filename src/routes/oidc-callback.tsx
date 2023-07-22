@@ -21,7 +21,7 @@ export const oidcCallbackRoute = new Route({
 
     useEffect(() => {
       // if there are no auth params, begin the sign-in process
-      if (!hasAuthParams() && search.redirect) {
+      if (!hasAuthParams() && typeof search.redirect !== "undefined") {
         window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, search.redirect);
         auth.signinRedirect();
         return;
@@ -31,7 +31,6 @@ export const oidcCallbackRoute = new Route({
       const storedRedirectUri = window.localStorage.getItem(
         LS_OIDC_REDIRECT_URI_KEY
       );
-
       if (
         storedRedirectUri &&
         storedRedirectUri !== "" &&
