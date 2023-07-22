@@ -315,10 +315,10 @@ function MiscChargeItem(props: {
                   checked={optionId === option.miscChargeOptionId}
                   onChange={() => {
                     setOptionId(option.miscChargeOptionId);
-                    setPrice(option.value ?? 0);
+                    setPrice(option.value !== null ? option.value : 0);
                     save({
                       optionIdToSave: option.miscChargeOptionId,
-                      priceToSave: option.value ?? 0,
+                      priceToSave: option.value !== null ? option.value : 0,
                       qtyToSave: qty,
                     });
                   }}
