@@ -1,13 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-    './index.html'
-	],
+  content: ["./src/**/*.{css,ts,tsx}", "./index.html"],
   theme: {
     container: {
       center: true,
@@ -76,6 +70,6 @@ module.exports = {
   plugins: [
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
-    require("tailwindcss-animate")
+    require("tailwindcss-animate"),
   ],
-}
+};
