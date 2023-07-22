@@ -9,8 +9,6 @@ import {
 import {
   MoreVerticalIcon,
   PencilIcon,
-  PrinterIcon,
-  MailPlusIcon,
   CopyIcon,
   ChevronRightIcon,
   PowerOffIcon,
@@ -18,7 +16,6 @@ import {
 } from "lucide-react";
 
 import Protector from "@/components/Protector";
-import { ChevronRightOutline, PencilIconFilled } from "@/components/icons";
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
