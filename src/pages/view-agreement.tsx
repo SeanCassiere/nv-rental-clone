@@ -16,7 +16,7 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -136,7 +136,7 @@ function AgreementViewPage() {
   );
 
   return (
-    <Protector>
+    <ProtectorShield>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -186,7 +186,9 @@ function AgreementViewPage() {
                 to={checkinAgreementByIdRoute.to}
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
-                className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+                className={cn(
+                  buttonVariants({ size: "sm", variant: "secondary" })
+                )}
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
                 <span className="inline-block">Edit</span>
@@ -196,7 +198,9 @@ function AgreementViewPage() {
                 to={editAgreementByIdRoute.to}
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
-                className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+                className={cn(
+                  buttonVariants({ size: "sm", variant: "secondary" })
+                )}
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
                 <span className="inline-block">Edit</span>
@@ -208,7 +212,7 @@ function AgreementViewPage() {
                   size="sm"
                   type="button"
                   className="flex items-center justify-center gap-2"
-                  variant="ghost"
+                  variant="secondary"
                 >
                   <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
                   <span className="inline-block">More</span>
@@ -271,7 +275,7 @@ function AgreementViewPage() {
           ))}
         </Tabs>
       </section>
-    </Protector>
+    </ProtectorShield>
   );
 }
 

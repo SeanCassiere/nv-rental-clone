@@ -2,7 +2,7 @@ import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 
 import { useCallback } from "react";
 import AddRentalParentForm from "@/components/add-rental";
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
@@ -47,7 +47,7 @@ const AddReservationPage = () => {
 
   useDocumentTitle(titleMaker("New - Reservation"));
   return (
-    <Protector>
+    <ProtectorShield>
       <AddRentalParentForm
         referenceId={0}
         currentStage={stage}
@@ -56,7 +56,7 @@ const AddReservationPage = () => {
         onRentalSaveClick={handleReservationSaveComplete}
         onRentalCancelClick={handleCancelAddReservation}
       />
-    </Protector>
+    </ProtectorShield>
   );
 };
 

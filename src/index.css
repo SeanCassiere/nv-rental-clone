@@ -27,6 +27,9 @@
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
+    --banner-promo: 173 80% 40%;
+    --banner-promo-foreground: 166 76% 97%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
@@ -61,6 +64,9 @@
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
+    --banner-promo: 175 77% 26%;
+    --banner-promo-foreground: 166 76% 97%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
 
@@ -87,7 +93,7 @@
 }
 
 .app-date-picker .react-datepicker-popper {
-  @apply z-40 mt-1 ml-0 w-72 rounded border border-slate-200 bg-white px-3 pt-3 pb-2 text-sm shadow-lg sm:w-60;
+  @apply z-40 ml-0 mt-1 w-72 rounded border border-slate-200 bg-white px-3 pb-2 pt-3 text-sm shadow-lg sm:w-60;
 }
 
 .app-date-picker .react-datepicker-left {
@@ -95,11 +101,11 @@
 }
 
 .app-date-picker .react-datepicker-right {
-  @apply absolute right-0 left-auto top-11 transform-none !important;
+  @apply absolute left-auto right-0 top-11 transform-none !important;
 }
 
 .app-date-picker .react-datepicker__portal {
-  @apply absolute top-12 right-0 z-10 w-72 transform-none rounded border-2 border-gray-200 bg-white px-3 py-2 text-sm shadow;
+  @apply absolute right-0 top-12 z-10 w-72 transform-none rounded border-2 border-gray-200 bg-white px-3 py-2 text-sm shadow;
 }
 
 .app-date-picker .react-datepicker__month-container {
@@ -224,7 +230,7 @@
 }
 
 .app-datetime-picker .react-datepicker-popper {
-  @apply z-40 mt-1 ml-0 w-72 rounded border border-slate-200 bg-white px-3 pt-3 pb-2 text-sm shadow-lg sm:w-60;
+  @apply z-40 ml-0 mt-1 w-72 rounded border border-slate-200 bg-white px-3 pb-2 pt-3 text-sm shadow-lg sm:w-60;
 }
 
 .app-datetime-picker .react-datepicker-left {
@@ -232,11 +238,11 @@
 }
 
 .app-datetime-picker .react-datepicker-right {
-  @apply absolute right-0 left-auto top-11 transform-none !important;
+  @apply absolute left-auto right-0 top-11 transform-none !important;
 }
 
 .app-datetime-picker .react-datepicker__portal {
-  @apply absolute top-12 right-0 z-10 w-72 transform-none rounded border-2 border-gray-200 bg-white px-3 py-2 text-sm shadow;
+  @apply absolute right-0 top-12 z-10 w-72 transform-none rounded border-2 border-gray-200 bg-white px-3 py-2 text-sm shadow;
 }
 
 .app-datetime-picker .react-datepicker__month-container {
@@ -316,7 +322,7 @@
 }
 
 .app-datetime-picker .react-datepicker__input-time-container {
-  @apply ml-0.5 mt-0.5 mb-2 flex flex-col;
+  @apply mb-2 ml-0.5 mt-0.5 flex flex-col;
 }
 
 .app-datetime-picker

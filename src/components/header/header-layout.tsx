@@ -101,7 +101,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <header className="relative border-b">
         {messages.length > 0 && (
-          <section className="grid w-full divide-y divide-teal-600 bg-teal-500">
+          <section className="grid w-full divide-y divide-bannerPromo-foreground/80 bg-bannerPromo">
             {messages.map((notice) => (
               <BannerNotice
                 message={notice}

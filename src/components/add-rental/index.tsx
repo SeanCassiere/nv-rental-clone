@@ -6,7 +6,7 @@ import { ChevronRightOutline, PlayIconFilled } from "../icons";
 import CommonHeader from "../Layout/CommonHeader";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "../Form";
+import { Button } from "@/components/ui/button";
 
 import AgreementRentalInformationTab, {
   type AgreementRentalInformationSchemaParsed,
@@ -908,45 +908,47 @@ const AddRentalParentForm = ({
                 <div className="flex flex-col gap-2 md:flex-row">
                   <Button
                     type="button"
-                    color="red"
                     onClick={() => {
                       handleRentalCancelClick?.();
                     }}
-                    fullWidth
+                    variant="outline"
                   >
                     Cancel
                   </Button>
                   {module === "agreement" ? (
                     <Button
                       type="button"
-                      color="teal"
                       onClick={() => {
-                        console.log("Functionality not implemented yet.");
+                        console.log(
+                          "Agreement Functionality not implemented yet."
+                        );
                       }}
-                      fullWidth
-                      className="flex items-center justify-center gap-2"
                       disabled={
                         !Object.values(creationStagesComplete).every(
                           (obj) => obj === true
                         )
                       }
                     >
-                      <PlayIconFilled className="h-3 w-3" />
-                      {isEdit ? "Save" : "Create"}
+                      <PlayIconFilled className="mr-2 h-3 w-3" />
+                      <span>{isEdit ? "Save" : "Create"}</span>
                     </Button>
                   ) : null}
                   {module === "reservation" ? (
                     <Button
                       type="button"
-                      color="teal"
                       onClick={() => {
-                        console.log("Functionality not implemented yet.");
+                        console.log(
+                          "Reservation Functionality not implemented yet."
+                        );
                       }}
-                      fullWidth
-                      className="flex items-center justify-center gap-2"
+                      disabled={
+                        !Object.values(creationStagesComplete).every(
+                          (obj) => obj === true
+                        )
+                      }
                     >
-                      <PlayIconFilled className="h-3 w-3" />
-                      {isEdit ? "Save" : "Create"}
+                      <PlayIconFilled className="mr-2 h-3 w-3" />
+                      <span>{isEdit ? "Save" : "Create"}</span>
                     </Button>
                   ) : null}
                 </div>

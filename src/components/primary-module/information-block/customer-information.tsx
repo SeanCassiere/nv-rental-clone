@@ -8,8 +8,12 @@ import {
   type TInformationBlockCardProps,
   EMPTY_KEY,
 } from "./common";
-import { UserSolid } from "../../icons";
-import { viewCustomerByIdRoute } from "../../../routes/customers/customer-id-route";
+import { UserSolid } from "@/components/icons";
+import { buttonVariants } from "@/components/ui/button";
+
+import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
+
+import { cn } from "@/utils";
 
 interface TCustomerInformationProps {
   data: {
@@ -64,7 +68,10 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
               to={viewCustomerByIdRoute.to}
               params={{ customerId: String(data.customerId) }}
               search={() => ({ tab: "summary" })}
-              className="underline underline-offset-4 transition-all focus-within:underline-offset-8"
+              className={cn(
+                buttonVariants({ variant: "link" }),
+                "h-auto p-0 text-base underline"
+              )}
             >
               {fullName}
             </Link>

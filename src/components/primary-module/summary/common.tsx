@@ -24,7 +24,7 @@ export const SummaryHeader = ({
   return (
     <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
       <CardTitle className="text-lg font-medium">{title}</CardTitle>
-      <span>{icon}</span>
+      <span className="text-primary/80">{icon}</span>
     </CardHeader>
   );
 };
@@ -103,11 +103,11 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
         )}
         hideBorder
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           {hasDropdownContent ? (
             <AccordionTrigger
               className={cn(
-                "w-full py-3",
+                "w-full py-3 text-left",
                 data.biggerText ? "text-lg" : "text-base"
               )}
             >

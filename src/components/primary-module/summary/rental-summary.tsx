@@ -115,7 +115,7 @@ export const RentalSummary = ({
           dropdownContent: taxableMischarges.map((charge) => (
             <span
               key={`taxable-charge-${charge.id}`}
-              className="truncate text-sm text-primary/70"
+              className="block truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -134,7 +134,7 @@ export const RentalSummary = ({
           dropdownContent: nonTaxableMischarges.map((charge) => (
             <span
               key={`non-taxable-charge-${charge.id}`}
-              className="truncate text-sm text-primary/70"
+              className="block truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -215,7 +215,7 @@ export const RentalSummary = ({
           dropdownContent: taxes.map((tax) => (
             <span
               key={`tax-charge-${tax.taxId}`}
-              className="truncate text-sm  text-primary/70"
+              className="block truncate  text-sm text-primary/70"
             >
               {makeTaxItemText(tax)}
             </span>
@@ -336,7 +336,7 @@ export const RentalSummary = ({
           dropdownContent: taxableMischarges.map((charge) => (
             <span
               key={`taxable-charge-${charge.id}`}
-              className="truncate text-sm text-primary/70"
+              className="block truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -356,7 +356,7 @@ export const RentalSummary = ({
           dropdownContent: nonTaxableMischarges.map((charge) => (
             <span
               key={`non-taxable-charge-${charge.id}`}
-              className="truncate text-sm text-primary/70"
+              className="block truncate text-sm text-primary/70"
             >
               {makeChargeItemText(charge, t, currency)}
             </span>
@@ -438,7 +438,7 @@ export const RentalSummary = ({
           dropdownContent: taxes.map((tax) => (
             <span
               key={`tax-charge-${tax.taxId}`}
-              className="truncate text-sm text-primary/70"
+              className="block truncate text-sm text-primary/70"
             >
               {makeTaxItemText(tax)}
             </span>

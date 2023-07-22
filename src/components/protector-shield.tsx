@@ -4,7 +4,7 @@ import { useRouter } from "@tanstack/router";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
-function Protector({ children }: { children: React.ReactNode }) {
+function ProtectorShield({ children }: { children: React.ReactNode }) {
   const auth = useAuth();
   const router = useRouter();
 
@@ -62,4 +62,4 @@ function Protector({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export default Protector;
+export default ProtectorShield;

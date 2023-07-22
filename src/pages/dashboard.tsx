@@ -8,10 +8,10 @@ import {
   CheckIcon,
 } from "lucide-react";
 
-import Protector from "@/components/protector-shield";
-import DashboardStatsBlock from "@/components/Dashboard/stats-block-display";
-import DashboardDndWidgetGrid from "@/components/Dashboard/dnd-widget-display-grid";
-import WidgetPickerContent from "@/components/Dialogs/widget-picker-content";
+import ProtectorShield from "@/components/protector-shield";
+import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
+import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
+import WidgetPickerContent from "@/components/dashboard/widget-picker-content";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
@@ -106,7 +106,7 @@ function IndexPage() {
   useDocumentTitle(titleMaker("Dashboard"));
 
   return (
-    <Protector>
+    <ProtectorShield>
       <section
         className={cn(
           "mx-auto mb-4 mt-6 flex max-w-full flex-col gap-2  px-2 pt-1.5 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4"
@@ -178,7 +178,7 @@ function IndexPage() {
           isLocked={isWidgetsLocked}
         />
       </section>
-    </Protector>
+    </ProtectorShield>
   );
 }
 

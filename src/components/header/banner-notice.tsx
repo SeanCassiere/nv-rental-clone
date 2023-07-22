@@ -62,14 +62,14 @@ export const BannerNotice = ({ message }: { message: ServerMessage }) => {
       {message.link ? (
         <a
           href={message.link}
-          className="[text-wrap=balance] group flex flex-1 flex-col flex-wrap items-start text-base leading-normal  text-white/95 sm:flex-row sm:items-center"
+          className="[text-wrap=balance] group flex flex-1 flex-col flex-wrap items-start text-base leading-normal text-bannerPromo-foreground sm:flex-row sm:items-center"
           target={message.link.startsWith("http") ? "_blank" : "_self"}
           rel="noopener noreferrer"
         >
           <MessageText message={message} />
         </a>
       ) : (
-        <p className="flex flex-1 flex-col flex-wrap items-start text-base leading-normal text-white/95 sm:flex-row sm:items-center">
+        <p className="flex flex-1 flex-col flex-wrap items-start text-base leading-normal text-bannerPromo-foreground sm:flex-row sm:items-center">
           <MessageText message={message} />
         </p>
       )}

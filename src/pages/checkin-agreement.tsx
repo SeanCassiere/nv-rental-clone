@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "@/components/add-rental";
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
@@ -64,7 +64,7 @@ const CheckinAgreementPage = () => {
     )
   );
   return (
-    <Protector>
+    <ProtectorShield>
       <AddRentalParentForm
         referenceId={parseInt(agreementId)}
         currentStage={stage}
@@ -76,7 +76,7 @@ const CheckinAgreementPage = () => {
         summaryData={rentalRatesSummary.data}
         isCheckin
       />
-    </Protector>
+    </ProtectorShield>
   );
 };
 

@@ -15,7 +15,7 @@ import {
   PowerIcon,
 } from "lucide-react";
 
-import Protector from "@/components/protector-shield";
+import ProtectorShield from "@/components/protector-shield";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -139,7 +139,7 @@ function VehicleViewPage() {
   );
 
   return (
-    <Protector>
+    <ProtectorShield>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -176,7 +176,9 @@ function VehicleViewPage() {
             <Link
               to={editFleetByIdRoute.to}
               params={{ vehicleId: String(vehicleId) }}
-              className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
+              className={cn(
+                buttonVariants({ size: "sm", variant: "secondary" })
+              )}
             >
               <PencilIcon className="mr-2 h-4 w-4" />
               <span className="inline-block">Edit</span>
@@ -188,7 +190,7 @@ function VehicleViewPage() {
                   size="sm"
                   type="button"
                   className="flex items-center justify-center gap-2"
-                  variant="ghost"
+                  variant="secondary"
                 >
                   <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
                   <span className="inline-block">More</span>
@@ -251,7 +253,7 @@ function VehicleViewPage() {
           ))}
         </Tabs>
       </section>
-    </Protector>
+    </ProtectorShield>
   );
 }
 

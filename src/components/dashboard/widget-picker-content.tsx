@@ -25,7 +25,7 @@ import { Bars3Outline, EyeOutline, EyeSlashOutline } from "@/components/icons";
 import {
   reorderBasedOnWidgetIdPositions,
   sortWidgetsByUserPositionFn,
-} from "../Dashboard/dnd-widget-display-grid";
+} from "@/components/dashboard/dnd-widget-display-grid";
 
 import { cn } from "@/utils";
 import { type DashboardWidgetItemParsed } from "@/schemas/dashboard";
