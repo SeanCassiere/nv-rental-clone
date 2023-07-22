@@ -73,14 +73,14 @@ export const BannerNotice = ({ message }: { message: ServerMessage }) => {
           <MessageText message={message} />
         </p>
       )}
-      <div className="flex justify-end">
+      {/* <div className="flex justify-end">
         <button
           className="p-3 text-white hover:text-white/70"
           onClick={onDismiss}
         >
           <XIcon className="h-4 w-4" />
         </button>
-      </div>
+      </div> */}
     </article>
   );
 };
