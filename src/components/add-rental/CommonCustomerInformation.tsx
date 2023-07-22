@@ -3,10 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { InformationBlockCardWithChildren } from "../primary-module/information-block/common";
-import { DocumentTextSolid } from "../icons";
+import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
+import { DocumentTextSolid } from "@/components/icons";
 import { Button, DatePicker, TextInput } from "../Form";
-import SelectCustomerModal from "../Dialogs/SelectCustomerModal";
+import SelectCustomerModal from "@/components/Dialogs/SelectCustomerModal";
 
 const REQUIRED = "Required" as const;
 

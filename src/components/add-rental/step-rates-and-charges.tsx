@@ -3,8 +3,8 @@ import { Transition } from "@headlessui/react";
 
 import CommonRatesInformation from "./CommonRatesInformation";
 import CommonMiscChargesInformation from "./CommonMiscChargesInformation";
-import { InformationBlockCardWithChildren } from "../primary-module/information-block/common";
-import { ChevronDownOutline, DocumentTextSolid } from "../icons";
+import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
+import { ChevronDownOutline, DocumentTextSolid } from "@/components/icons";
 import { type RentalRateParsed } from "@/schemas/rate";
 import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 import { cn } from "@/utils";

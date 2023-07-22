@@ -17,8 +17,8 @@ import AgreementVehicleInformationTab, {
 import CommonCustomerInformation, {
   type CommonCustomerInformationSchemaParsed,
 } from "./CommonCustomerInformation";
-import StepRatesAndChargesInformation from "./StepRatesAndChargesInformation";
-import StepTaxesAndPaymentsInformation from "./StepTaxesAndPaymentsInformation";
+import StepRatesAndChargesInformation from "./step-rates-and-charges";
+import StepTaxesAndPaymentsInformation from "./step-taxes-and-payments";
 
 import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";

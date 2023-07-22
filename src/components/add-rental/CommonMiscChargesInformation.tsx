@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { type StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
+import { type StepRatesAndChargesInformationProps } from "./step-rates-and-charges";
 import { Button } from "../Form";
 import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 

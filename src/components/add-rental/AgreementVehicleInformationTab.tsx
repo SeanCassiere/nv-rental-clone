@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { InformationBlockCardWithChildren } from "../primary-module/information-block/common";
-import { DocumentTextSolid } from "../icons";
+import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
+import { DocumentTextSolid } from "@/components/icons";
 import {
   Button,
   TextInput,
@@ -12,7 +12,7 @@ import {
   getSelectedOptionForSelectInput,
 } from "../Form";
 import { type AgreementRentalInformationSchemaParsed } from "./AgreementRentalInformationTab";
-import SelectVehicleModal from "../Dialogs/SelectVehicleModal";
+import SelectVehicleModal from "@/components/Dialogs/SelectVehicleModal";
 
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";

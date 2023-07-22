@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import type { StepRatesAndChargesInformationProps } from "./StepRatesAndChargesInformation";
+import type { StepRatesAndChargesInformationProps } from "./step-rates-and-charges";
 import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,

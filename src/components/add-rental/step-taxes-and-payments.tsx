@@ -3,8 +3,8 @@ import { Transition } from "@headlessui/react";
 
 import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { Button } from "../Form";
-import { ChevronDownOutline, DocumentTextSolid } from "../icons";
-import { InformationBlockCardWithChildren } from "../primary-module/information-block/common";
+import { ChevronDownOutline, DocumentTextSolid } from "@/components/icons";
+import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
 import { cn } from "@/utils";
 
 interface StepTaxesAndPaymentsInformationProps {

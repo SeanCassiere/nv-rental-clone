@@ -7,7 +7,7 @@ import isBefore from "date-fns/isBefore";
 import isEqual from "date-fns/isEqual";
 import differenceInSeconds from "date-fns/differenceInSeconds";
 
-import { DocumentTextSolid } from "../icons";
+import { DocumentTextSolid } from "@/components/icons";
 import {
   Button,
   TextInput,
@@ -15,7 +15,7 @@ import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,
 } from "../Form";
-import { InformationBlockCardWithChildren } from "../primary-module/information-block/common";
+import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
