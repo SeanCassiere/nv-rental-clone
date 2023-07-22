@@ -42,14 +42,20 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 import { Separator } from "@/components/ui/separator";
 
-const SummaryTab = lazy(
-  () => import("../../components/Vehicle/VehicleSummaryTab")
+const FleetSummaryTab = lazy(
+  () => import("../../components/primary-module/tabs/fleet/summary-content")
 );
-const VehicleReservationsTab = lazy(
-  () => import("../../components/Vehicle/VehicleReservationsTab")
+const FleetReservationsTab = lazy(
+  () =>
+    import(
+      "../../components/primary-module/tabs/fleet/occupied-reservations-content"
+    )
 );
-const VehicleAgreementsTab = lazy(
-  () => import("../../components/Vehicle/VehicleAgreementsTab")
+const FleetAgreementsTab = lazy(
+  () =>
+    import(
+      "../../components/primary-module/tabs/fleet/occupied-agreements-content"
+    )
 );
 
 const ModuleNotesTabContent = lazy(
@@ -90,7 +96,7 @@ function VehicleViewPage() {
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <SummaryTab vehicleId={vehicleId} />,
+      component: <FleetSummaryTab vehicleId={vehicleId} />,
     });
     tabs.push({
       id: "notes",
@@ -108,7 +114,7 @@ function VehicleViewPage() {
       id: "reservations",
       label: "Reservations",
       component: (
-        <VehicleReservationsTab
+        <FleetReservationsTab
           vehicleId={vehicleId}
           vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
         />
@@ -118,7 +124,7 @@ function VehicleViewPage() {
       id: "agreements",
       label: "Agreements",
       component: (
-        <VehicleAgreementsTab
+        <FleetAgreementsTab
           vehicleId={vehicleId}
           vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
         />

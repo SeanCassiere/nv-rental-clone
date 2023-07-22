@@ -1,24 +1,20 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
-import CustomerInformation from "../primary-module/ModuleInformation/CustomerInformation";
+import CustomerInformation from "../../ModuleInformation/CustomerInformation";
+import FleetInformation from "../../ModuleInformation/VehicleInformation";
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
-import {
-  ModuleTabs,
-  type ModuleTabConfigItem,
-} from "@/components/primary-module/ModuleTabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
 import { useGetVehicleSummary } from "@/hooks/network/vehicle/useGetVehicleSummary";
-import { getStartingIndexFromTabName } from "@/utils/moduleTabs";
-import VehicleInformation from "../primary-module/ModuleInformation/VehicleInformation";
 
-type VehicleSummaryTabProps = {
+type FleetSummaryTabProps = {
   vehicleId: string;
 };
 
-const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
+const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   const vehicleData = useGetVehicleData({
     vehicleId: props.vehicleId,
   });
@@ -34,13 +30,13 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   const [currentTab, setCurrentTab] = useState("general");
 
   const tabsConfig = useMemo(() => {
-    const tabs: ModuleTabConfigItem[] = [];
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
 
     tabs.push({
       id: "general",
       label: "General",
       component: (
-        <VehicleInformation
+        <FleetInformation
           mode="vehicle"
           isLoading={vehicleData.isLoading}
           data={
@@ -79,10 +75,6 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
     return tabs;
   }, [vehicleData.data, vehicleData.isLoading]);
 
-  const handleTabClick = useCallback((newTab: ModuleTabConfigItem) => {
-    setCurrentTab(newTab.id);
-  }, []);
-
   const canViewCurrentCustomerInformation = true;
 
   return (
@@ -116,13 +108,27 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
             isLoading={vehicleData.isLoading}
           />
         )}
-        <ModuleTabs
-          tabConfig={tabsConfig}
-          startingIndex={getStartingIndexFromTabName(currentTab, tabsConfig)}
-          onTabClick={handleTabClick}
-        />
+
+        <Tabs value={currentTab} onValueChange={setCurrentTab}>
+          <TabsList className="w-full sm:max-w-max">
+            {tabsConfig.map((tab, idx) => (
+              <TabsTrigger key={`tab-summary-trigger-${idx}`} value={tab.id}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {tabsConfig.map((tab, idx) => (
+            <TabsContent
+              key={`tab-summary-content-${idx}`}
+              value={tab.id}
+              className="min-h-[180px]"
+            >
+              {tab.component}
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
-      {/*  */}
+
       <div className="flex flex-col gap-4 lg:col-span-4">
         <VehicleSummary
           vehicleId={props.vehicleId}
@@ -135,4 +141,4 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   );
 };
 
-export default VehicleSummaryTab;
+export default FleetSummaryTab;

@@ -3,9 +3,9 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
-import { CommonTable } from "../common/common-table";
-import { DocumentTextSolid } from "../icons";
-import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
+import { CommonTable } from "../../../common/common-table";
+import { DocumentTextSolid } from "../../../icons";
+import CommonEmptyStateContent from "../../../Layout/CommonEmptyStateContent";
 
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 
@@ -19,7 +19,7 @@ import { AgreementDateTimeColumns } from "@/utils/columns";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 
-interface VehicleReservationsTabProps {
+interface FleetOccupiedAgreementsTabProps {
   vehicleId: string;
   vehicleNo: string | undefined;
 }
@@ -39,7 +39,7 @@ const acceptedColumns = [
 
 const pageSize = 50;
 
-const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
+const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
   const { t } = useTranslation();
   const items = normalizeAgreementListSearchParams({
     page: 1,
@@ -131,4 +131,4 @@ const VehicleAgreementsTab = (props: VehicleReservationsTabProps) => {
   );
 };
 
-export default VehicleAgreementsTab;
+export default FleetOccupiedAgreementsTab;

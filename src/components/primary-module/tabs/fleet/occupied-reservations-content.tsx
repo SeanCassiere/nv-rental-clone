@@ -3,8 +3,7 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
-import { CommonTable } from "../common/common-table";
-import CommonEmptyStateContent from "../Layout/CommonEmptyStateContent";
+import { CommonTable } from "../../../common/common-table";
 
 import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
@@ -18,7 +17,7 @@ import { ReservationDateTimeColumns } from "@/utils/columns";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 
-interface VehicleReservationsTabProps {
+interface FleetOccupiedReservationsTabProps {
   vehicleId: string;
   vehicleNo: string | undefined;
 }
@@ -39,7 +38,9 @@ const acceptedColumns = [
 
 const pageSize = 50;
 
-const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
+const FleetOccupiedReservationsTab = (
+  props: FleetOccupiedReservationsTabProps
+) => {
   const { t } = useTranslation();
   const items = normalizeReservationListSearchParams({
     page: 1,
@@ -130,4 +131,4 @@ const VehicleReservationsTab = (props: VehicleReservationsTabProps) => {
   );
 };
 
-export default VehicleReservationsTab;
+export default FleetOccupiedReservationsTab;
