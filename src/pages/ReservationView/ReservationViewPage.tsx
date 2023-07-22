@@ -11,18 +11,11 @@ import {
   PencilIcon,
   PrinterIcon,
   MailPlusIcon,
-  BanIcon,
-  MoveDownLeftIcon,
   CopyIcon,
   ChevronRightIcon,
 } from "lucide-react";
 
 import Protector from "@/components/Protector";
-import {
-  ChevronRightOutline,
-  PencilIconFilled,
-  PrintIconFilled,
-} from "@/components/icons";
 import {
   type ModuleTabConfigItem,
   ModuleTabs,
