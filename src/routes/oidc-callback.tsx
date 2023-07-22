@@ -30,12 +30,9 @@ export const oidcCallbackRoute = new Route({
       if (!hasAuthParams() && typeof search.redirect !== "undefined") {
         let safeRoute = search.redirect;
 
-        console.log("safeRoute", safeRoute);
         if (safeRoute && safeRoute !== "/") {
-          console.log("safeRoute inner", safeRoute);
           safeRoute = removeTrailingSlash(safeRoute);
         }
-        console.log("safeRoute after", safeRoute);
 
         window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, safeRoute);
         auth.signinRedirect();
