@@ -12,7 +12,7 @@ import { DurationStage, type DurationStageProps } from "./duration-stage";
 import { VehicleStage, type VehicleStageProps } from "./vehicle-stage";
 import { CustomerStage, type CustomerStageProps } from "./customer-stage";
 
-interface RentalInformationTabProps {
+export interface RentalInformationTabProps {
   durationStageData: DurationStageProps["initialData"];
   onDurationStageComplete: DurationStageProps["onCompleted"];
 

@@ -8,10 +8,17 @@ import { RentalSummary } from "@/components/primary-module/summary/rental-summar
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
-import RentalInformationTab from "./rental-information";
-import { type AgreementRentalInformationSchemaParsed } from "./rental-information/duration-stage";
-import { type AgreementVehicleInformationSchemaParsed } from "./rental-information/vehicle-stage";
-import { type CommonCustomerInformationSchemaParsed } from "./rental-information/customer-stage";
+import RentalInformationTab, {
+  type RentalInformationTabProps as RI_TabProps,
+} from "./rental-information";
+
+type AgreementRentalInformationSchemaParsed = RI_TabProps["durationStageData"];
+type AgreementVehicleInformationSchemaParsed = RI_TabProps["vehicleStageData"];
+type CommonCustomerInformationSchemaParsed = RI_TabProps["customerStageData"];
+
+import RatesAndChargesTab, {
+  type RatesAndChargesTabProps as RAC_TabProps,
+} from "./rates-and-charges";
 
 import StepRatesAndChargesInformation from "./step-rates-and-charges";
 import StepTaxesAndPaymentsInformation from "./step-taxes-and-payments";
@@ -158,7 +165,6 @@ const AddRentalParentForm = ({
   };
 
   const handleSetSelectedRateName = useCallback((rateName: string) => {
-    // setSelectedRateName(rateName);
     setRateDetails([rateName, null]);
   }, []);
 
@@ -184,13 +190,13 @@ const AddRentalParentForm = ({
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
     if (module === "agreement") {
       const others = {
-        // 6
+        // 4
         id: StageKeys.other,
         label: "Other information",
         component: "Other information",
       };
       const taxesAndPayments = {
-        // 5
+        // 3
         id: StageKeys.taxesAndPayments,
         label: "Taxes & Payments",
         component: (
@@ -229,14 +235,12 @@ const AddRentalParentForm = ({
         ),
       };
       const ratesAndCharges = {
-        // 4
+        // 2
         id: StageKeys.ratesAndCharges,
         label: "Rates & Charges",
         component: (
-          <StepRatesAndChargesInformation
-            module="agreements"
-            isEdit={isEdit}
-            rentalInformation={
+          <RatesAndChargesTab
+            durationStageData={
               agreementRentalInformation
                 ? {
                     checkinDate: agreementRentalInformation.checkinDate,
@@ -251,30 +255,28 @@ const AddRentalParentForm = ({
                   }
                 : undefined
             }
-            vehicleInformation={
+            vehicleStageData={
               agreementVehicleInformation
                 ? { vehicleTypeId: agreementVehicleInformation.vehicleTypeId }
                 : undefined
             }
-            misCharges={selectedMiscCharges}
-            onSelectedMiscCharges={handleSetSelectedMiscCharges}
-            onCompleted={() => {
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                rates: true,
-              }));
-              setHasEdited(true);
-              handleStageTabClick(taxesAndPayments.id);
-            }}
             rateName={selectedRateName}
             onSelectRateName={handleSetSelectedRateName}
             rate={selectedRate}
             onSelectedRate={handleSetSelectedRate}
+            miscCharges={selectedMiscCharges}
+            onSelectedMiscCharges={handleSetSelectedMiscCharges}
+            isEdit={isEdit}
+            onCompleted={() => {
+              setHasEdited(true);
+              handleStageTabClick(taxesAndPayments.id);
+            }}
             currency={clientProfile.data?.currency || undefined}
           />
         ),
       };
       const rentalInformation = {
+        // 1
         id: StageKeys.rental,
         label: "Rental information",
         component: (
