@@ -322,7 +322,6 @@ const AddRentalParentForm = ({
       //   ),
       // };
       // const rentalInformation = {
-      //   // 1
       //   id: "rental-information",
       //   label: "Rental information",
       //   component: (
@@ -400,10 +399,17 @@ const AddRentalParentForm = ({
 
               setHasEdited(true);
             }}
-            onCustomerStageComplete={() => {
+            vehicleStageData={agreementVehicleInformation ?? undefined}
+            onVehicleStageComplete={(data) => {
+              setAgreementVehicleInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                vehicle: true,
+              }));
+
               setHasEdited(true);
             }}
-            onVehicleStageComplete={() => {
+            onCustomerStageComplete={() => {
               setHasEdited(true);
             }}
             onCompleted={() => {

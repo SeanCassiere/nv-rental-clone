@@ -66,7 +66,7 @@ export type AgreementRentalInformationSchemaParsed = z.infer<
 >;
 
 export interface DurationStageProps {
-  initialData?: Partial<AgreementRentalInformationSchemaParsed>;
+  initialData?: AgreementRentalInformationSchemaParsed | undefined;
   onCompleted: (data: AgreementRentalInformationSchemaParsed) => void;
   isEdit: boolean;
 }
