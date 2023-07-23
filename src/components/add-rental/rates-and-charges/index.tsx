@@ -9,6 +9,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 
 import { RatesStage } from "./rates-stage";
+import { MiscChargesStage } from "./misc-charges-stage";
 
 import type { CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 import type { RentalRateParsed } from "@/schemas/rate";
@@ -89,7 +90,17 @@ const RatesAndChargesTab = (props: RatesAndChargesTabProps) => {
           <AccordionItem value="misc-charges">
             <AccordionTrigger>Miscellaneous charges</AccordionTrigger>
             <AccordionContent>
-              Miscellaneous charges information
+              <MiscChargesStage
+                durationStageData={durationStageData}
+                vehicleStageData={vehicleStageData}
+                selectedMiscCharges={miscCharges}
+                onSelectedMiscCharges={onSelectedMiscCharges}
+                isEdit={isEdit}
+                onCompleted={() => {
+                  onCompleted();
+                }}
+                currency={currency}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
