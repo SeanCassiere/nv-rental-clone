@@ -3,8 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
-import { DocumentTextSolid } from "@/components/icons";
 import { DatePicker, TextInput } from "@/components/Form";
 import { Button } from "@/components/ui/button";
 import SelectCustomerModal from "@/components/Dialogs/SelectCustomerModal";

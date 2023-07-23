@@ -42,7 +42,7 @@ const RentalInformationTab = (props: RentalInformationTabProps) => {
   return (
     <Accordion type="single" value={tab} onValueChange={setTab}>
       <AccordionItem value="duration">
-        <AccordionTrigger>Duration information</AccordionTrigger>
+        <AccordionTrigger>Duration details</AccordionTrigger>
         <AccordionContent>
           <DurationStage
             initialData={durationStageData}
@@ -55,7 +55,7 @@ const RentalInformationTab = (props: RentalInformationTabProps) => {
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="vehicle">
-        <AccordionTrigger>Vehicle information</AccordionTrigger>
+        <AccordionTrigger>Vehicle details</AccordionTrigger>
         <AccordionContent>
           <VehicleStage
             rentalInformation={durationStageData}
@@ -69,7 +69,7 @@ const RentalInformationTab = (props: RentalInformationTabProps) => {
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="customer">
-        <AccordionTrigger>Customer information</AccordionTrigger>
+        <AccordionTrigger>Customer details</AccordionTrigger>
         <AccordionContent>
           <CustomerStage
             customerInformation={customerStageData}
