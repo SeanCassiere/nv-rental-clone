@@ -1,24 +1,30 @@
 import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/router";
 import parseISO from "date-fns/parseISO";
+import { ChevronRightIcon } from "lucide-react";
 
-import { ChevronRightOutline, PlayIconFilled } from "../icons";
-import CommonHeader from "../Layout/CommonHeader";
+import { PlayIconFilled } from "@/components/icons";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
-import AgreementRentalInformationTab, {
-  type AgreementRentalInformationSchemaParsed,
-} from "./agreement-rental-information-tab";
-import AgreementVehicleInformationTab, {
-  type AgreementVehicleInformationSchemaParsed,
-} from "./agreement-vehicle-information-tab";
-import CommonCustomerInformation, {
-  type CommonCustomerInformationSchemaParsed,
-} from "./common-customer-information";
-import StepRatesAndChargesInformation from "./step-rates-and-charges";
-import StepTaxesAndPaymentsInformation from "./step-taxes-and-payments";
+import RentalInformationTab, {
+  type RentalInformationTabProps as RI_TabProps,
+} from "./rental-information";
+
+type AgreementRentalInformationSchemaParsed = RI_TabProps["durationStageData"];
+type AgreementVehicleInformationSchemaParsed = RI_TabProps["vehicleStageData"];
+
+import CustomerInformationTab, {
+  type CustomerInformationTabProps as CI_TabProps,
+} from "./customer-information";
+
+type CommonCustomerInformationSchemaParsed = CI_TabProps["customerStageData"];
+
+import RatesAndChargesTab from "./rates-and-charges";
+
+import TaxesAndPaymentsTab from "./taxes-and-payments";
 
 import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
@@ -44,11 +50,20 @@ import {
   viewReservationByIdRoute,
 } from "@/routes/reservations/reservation-id-route";
 
+import { cn } from "@/utils";
 import { sortObject } from "@/utils/sortObject";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
 import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
+
+const StageKeys = {
+  rental: "rental-information",
+  customer: "customer-information",
+  ratesAndCharges: "rates-and-charges-information",
+  taxesAndPayments: "taxes-and-payments-information",
+  other: "other-information",
+} as const;
 
 export type TRentalCompleteStage = {
   rental: boolean;
@@ -155,7 +170,6 @@ const AddRentalParentForm = ({
   };
 
   const handleSetSelectedRateName = useCallback((rateName: string) => {
-    // setSelectedRateName(rateName);
     setRateDetails([rateName, null]);
   }, []);
 
@@ -181,20 +195,19 @@ const AddRentalParentForm = ({
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
     if (module === "agreement") {
       const others = {
-        // 6
-        id: "others",
+        // 5
+        id: StageKeys.other,
         label: "Other information",
         component: "Other information",
       };
       const taxesAndPayments = {
-        // 5
-        id: "taxes-and-payments",
+        // 4
+        id: StageKeys.taxesAndPayments,
         label: "Taxes & Payments",
         component: (
-          <StepTaxesAndPaymentsInformation
-            module="agreements"
+          <TaxesAndPaymentsTab
             isEdit={isEdit}
-            rentalInformation={
+            durationStageData={
               agreementRentalInformation
                 ? {
                     checkinDate: agreementRentalInformation.checkinDate,
@@ -226,14 +239,12 @@ const AddRentalParentForm = ({
         ),
       };
       const ratesAndCharges = {
-        // 4
-        id: "rates-and-charges",
+        // 3
+        id: StageKeys.ratesAndCharges,
         label: "Rates & Charges",
         component: (
-          <StepRatesAndChargesInformation
-            module="agreements"
-            isEdit={isEdit}
-            rentalInformation={
+          <RatesAndChargesTab
+            durationStageData={
               agreementRentalInformation
                 ? {
                     checkinDate: agreementRentalInformation.checkinDate,
@@ -248,79 +259,58 @@ const AddRentalParentForm = ({
                   }
                 : undefined
             }
-            vehicleInformation={
+            vehicleStageData={
               agreementVehicleInformation
                 ? { vehicleTypeId: agreementVehicleInformation.vehicleTypeId }
                 : undefined
             }
-            misCharges={selectedMiscCharges}
-            onSelectedMiscCharges={handleSetSelectedMiscCharges}
-            onCompleted={() => {
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                rates: true,
-              }));
-              setHasEdited(true);
-              handleStageTabClick(taxesAndPayments.id);
-            }}
             rateName={selectedRateName}
             onSelectRateName={handleSetSelectedRateName}
             rate={selectedRate}
             onSelectedRate={handleSetSelectedRate}
+            miscCharges={selectedMiscCharges}
+            onSelectedMiscCharges={handleSetSelectedMiscCharges}
+            isEdit={isEdit}
+            onCompleted={() => {
+              setHasEdited(true);
+              handleStageTabClick(taxesAndPayments.id);
+            }}
             currency={clientProfile.data?.currency || undefined}
           />
         ),
       };
       const customerInformation = {
-        // 3
-        id: "customer-information",
+        // 2
+        id: StageKeys.customer,
         label: "Customer information",
         component: (
-          <CommonCustomerInformation
-            customerInformation={commonCustomerInformation || undefined}
+          <CustomerInformationTab
             isEdit={isEdit}
-            onCompleted={(data) => {
+            customerStageData={commonCustomerInformation || undefined}
+            onCustomerStageComplete={(data) => {
               setCommonCustomerInformation(data);
               setCreationStageComplete((prev) => ({
                 ...prev,
                 customer: true,
               }));
               setHasEdited(true);
-              handleStageTabClick(ratesAndCharges.id);
             }}
-          />
-        ),
-      };
-      const vehicleInformation = {
-        // 2
-        id: "vehicle-information",
-        label: "Vehicle information",
-        component: (
-          <AgreementVehicleInformationTab
-            rentalInformation={agreementRentalInformation || undefined}
-            vehicleInformation={agreementVehicleInformation || undefined}
-            isEdit={isEdit}
-            onCompleted={(data) => {
-              setAgreementVehicleInformation(data);
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                vehicle: true,
-              }));
+            onCompleted={() => {
               setHasEdited(true);
-              handleStageTabClick(customerInformation.id);
+              handleStageTabClick(ratesAndCharges.id);
             }}
           />
         ),
       };
       const rentalInformation = {
         // 1
-        id: "rental-information",
+        id: StageKeys.rental,
         label: "Rental information",
         component: (
-          <AgreementRentalInformationTab
+          <RentalInformationTab
             isEdit={isEdit}
-            initialData={agreementRentalInformation ?? undefined}
-            onCompleted={(data) => {
+            durationStageData={agreementRentalInformation ?? undefined}
+            onDurationStageComplete={(data) => {
               setAgreementRentalInformation((prevRentalData) => {
                 // if checkout location id not the same, reset vehicle, taxes, and misc charges
                 if (
@@ -346,14 +336,27 @@ const AddRentalParentForm = ({
                 ...prev,
                 rental: true,
               }));
+
               setHasEdited(true);
-              handleStageTabClick(vehicleInformation.id);
+            }}
+            vehicleStageData={agreementVehicleInformation ?? undefined}
+            onVehicleStageComplete={(data) => {
+              setAgreementVehicleInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                vehicle: true,
+              }));
+
+              setHasEdited(true);
+            }}
+            onCompleted={() => {
+              setHasEdited(true);
+              handleStageTabClick(customerInformation.id);
             }}
           />
         ),
       };
       tabs.push(rentalInformation);
-      tabs.push(vehicleInformation);
       tabs.push(customerInformation);
       tabs.push(ratesAndCharges);
       tabs.push(taxesAndPayments);
@@ -373,20 +376,7 @@ const AddRentalParentForm = ({
       const customerInformation = {
         id: "customer-information",
         label: "Customer information",
-        component: (
-          <CommonCustomerInformation
-            customerInformation={commonCustomerInformation || undefined}
-            isEdit={isEdit}
-            onCompleted={(data) => {
-              setCommonCustomerInformation(data);
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                customer: true,
-              }));
-              handleStageTabClick(ratesAndTaxes.id);
-            }}
-          />
-        ),
+        component: "Customer information",
       };
       const vehicleInformation = {
         id: "vehicle-information",
@@ -779,246 +769,243 @@ const AddRentalParentForm = ({
 
   return (
     <>
-      <div className="py-6">
-        <div className="mx-auto max-w-full px-2 sm:px-4">
-          <CommonHeader
-            titleContent={
-              <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-0">
-                <div className="flex flex-col items-center justify-start gap-2 align-top md:flex-row">
-                  {!isEdit && module === "agreement" && (
-                    <>
-                      <Link
-                        to={searchAgreementsRoute.to as any}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                      >
-                        Agreements
-                      </Link>
-                      <ChevronRightOutline
-                        className="h-4 w-4 flex-shrink-0 text-gray-500"
-                        aria-hidden="true"
-                      />
-                      <Link
-                        to={addAgreementRoute.to}
-                        className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                        search={() => ({ stage })}
-                      >
-                        Add Agreement
-                      </Link>
-                    </>
-                  )}
-                  {isEdit && module === "agreement" && (
-                    <>
-                      <Link
-                        to={searchAgreementsRoute.to as any}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                      >
-                        Agreements
-                      </Link>
-                      <ChevronRightOutline
-                        className="h-4 w-4 flex-shrink-0 text-gray-500"
-                        aria-hidden="true"
-                      />
-                      <Link
-                        to={viewAgreementByIdRoute.to as any}
-                        params={{ agreementId: String(referenceId) }}
-                        className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                      >
-                        {referenceNumber ?? "-"}
-                      </Link>
-                      <ChevronRightOutline
-                        className="h-4 w-4 flex-shrink-0 text-gray-500"
-                        aria-hidden="true"
-                      />
-                      {isCheckin ? (
-                        <Link
-                          to={checkinAgreementByIdRoute.to}
-                          className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                          search={() => ({ stage })}
-                          params={{ agreementId: String(referenceId) }}
-                        >
-                          Check-in Agreement
-                        </Link>
-                      ) : (
-                        <Link
-                          to={editAgreementByIdRoute.to}
-                          className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                          search={() => ({ stage })}
-                          params={{ agreementId: String(referenceId) }}
-                        >
-                          Edit Agreement
-                        </Link>
-                      )}
-                    </>
-                  )}
-                  {!isEdit && module === "reservation" && (
-                    <>
-                      <Link
-                        to={searchReservationsRoute.to as any}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                      >
-                        Reservations
-                      </Link>
-                      <ChevronRightOutline
-                        className="h-4 w-4 flex-shrink-0 text-gray-500"
-                        aria-hidden="true"
-                      />
-                      <Link
-                        to={addReservationRoute.to}
-                        className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                        search={() => ({ stage })}
-                      >
-                        Add Reservation
-                      </Link>
-                    </>
-                  )}
-                  {isEdit && module === "reservation" && (
-                    <>
-                      <Link
-                        to={searchReservationsRoute.to as any}
-                        className="select-none text-2xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                      >
-                        Reservations
-                      </Link>
-                      <ChevronRightOutline
-                        className="h-4 w-4 flex-shrink-0 text-gray-500"
-                        aria-hidden="true"
-                      />
-                      <Link
-                        to={viewReservationByIdRoute.to as any}
-                        params={{ reservationId: String(referenceId) }}
-                        className="select-none text-xl font-semibold leading-6 text-gray-700 hover:text-gray-800"
-                      >
-                        {referenceNumber ?? "-"}
-                      </Link>
-                      <ChevronRightOutline
-                        className="h-4 w-4 flex-shrink-0 text-gray-500"
-                        aria-hidden="true"
-                      />
-                      <Link
-                        to={editReservationByIdRoute.to}
-                        className="max-w-[230px] truncate text-xl leading-6 text-gray-800 md:max-w-full"
-                        search={() => ({ stage })}
-                        params={{ reservationId: String(referenceId) }}
-                      >
-                        Edit Reservation
-                      </Link>
-                    </>
-                  )}
-                </div>
-                <div className="flex flex-col gap-2 md:flex-row">
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      handleRentalCancelClick?.();
-                    }}
-                    variant="outline"
+      <section
+        className={cn(
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+        )}
+      >
+        <div
+          className={cn(
+            "flex min-h-[2.5rem] flex-col items-center justify-between gap-4 sm:flex-row"
+          )}
+        >
+          <div className="flex w-full items-center justify-start gap-2">
+            {!isEdit && module === "agreement" && (
+              <>
+                <Link
+                  to={searchAgreementsRoute.to as any}
+                  className="text-2xl font-semibold leading-6 text-primary"
+                >
+                  Agreements
+                </Link>
+                <ChevronRightIcon
+                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                <Link
+                  to={addAgreementRoute.to}
+                  search={() => ({ stage })}
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                >
+                  Add Agreement
+                </Link>
+              </>
+            )}
+            {isEdit && module === "agreement" && (
+              <>
+                <Link
+                  to={searchAgreementsRoute.to as any}
+                  className="text-2xl font-semibold leading-6 text-primary"
+                >
+                  Agreements
+                </Link>
+                <ChevronRightIcon
+                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                <Link
+                  to={viewAgreementByIdRoute.to as any}
+                  params={{ agreementId: String(referenceId) }}
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                >
+                  {referenceNumber ?? "-"}
+                </Link>
+                <ChevronRightIcon
+                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                {isCheckin ? (
+                  <Link
+                    to={checkinAgreementByIdRoute.to}
+                    search={() => ({ stage })}
+                    params={{ agreementId: String(referenceId) }}
+                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
                   >
-                    Cancel
-                  </Button>
-                  {module === "agreement" ? (
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        console.log(
-                          "Agreement Functionality not implemented yet."
-                        );
-                      }}
-                      disabled={
-                        !Object.values(creationStagesComplete).every(
-                          (obj) => obj === true
-                        )
-                      }
-                    >
-                      <PlayIconFilled className="mr-2 h-3 w-3" />
-                      <span>{isEdit ? "Save" : "Create"}</span>
-                    </Button>
-                  ) : null}
-                  {module === "reservation" ? (
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        console.log(
-                          "Reservation Functionality not implemented yet."
-                        );
-                      }}
-                      disabled={
-                        !Object.values(creationStagesComplete).every(
-                          (obj) => obj === true
-                        )
-                      }
-                    >
-                      <PlayIconFilled className="mr-2 h-3 w-3" />
-                      <span>{isEdit ? "Save" : "Create"}</span>
-                    </Button>
-                  ) : null}
-                </div>
-              </div>
-            }
-            subtitleText={
-              module === "agreement" && isEdit && isCheckin
-                ? "Check-in the rental contract."
-                : module === "agreement" && isEdit && !isCheckin
-                ? "Edit the rental contract."
-                : module === "agreement" && !isEdit
-                ? "Create a new rental contract."
-                : module === "reservation" && isEdit
-                ? "Edit the reservation."
-                : module === "reservation" && !isEdit
-                ? "Create a new reservation."
-                : ""
-            }
-            headerActionContent
-            includeBottomBorder
-          />
-        </div>
-
-        <div className="mx-auto px-2 sm:px-4 md:grid-cols-12">
-          <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
-            <div className="flex flex-col gap-4 pt-4 lg:col-span-8">
-              <Tabs value={stage} onValueChange={handleStageTabClick}>
-                <TabsList className="w-full sm:max-w-max">
-                  {tabsConfig.map((tab, idx) => (
-                    <TabsTrigger key={`tab-trigger-${idx}`} value={tab.id}>
-                      {tab.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                {tabsConfig.map((tab, idx) => (
-                  <TabsContent
-                    key={`tab-content-${idx}`}
-                    value={tab.id}
-                    className="min-h-[250px]"
+                    Check-in
+                  </Link>
+                ) : (
+                  <Link
+                    to={editAgreementByIdRoute.to}
+                    search={() => ({ stage })}
+                    params={{ agreementId: String(referenceId) }}
+                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
                   >
-                    {tab.component}
-                  </TabsContent>
-                ))}
-              </Tabs>
-            </div>
-            <div className="flex flex-col gap-4 py-4 lg:col-span-4">
-              <RentalSummary
-                module={
-                  module === "agreement"
-                    ? "add-edit-agreement"
-                    : "add-edit-reservation"
+                    Edit
+                  </Link>
+                )}
+              </>
+            )}
+            {!isEdit && module === "reservation" && (
+              <>
+                <Link
+                  to={searchReservationsRoute.to as any}
+                  className="text-2xl font-semibold leading-6 text-primary"
+                >
+                  Reservations
+                </Link>
+                <ChevronRightIcon
+                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                <Link
+                  to={addReservationRoute.to}
+                  search={() => ({ stage })}
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                >
+                  Add Reservation
+                </Link>
+              </>
+            )}
+            {isEdit && module === "reservation" && (
+              <>
+                <Link
+                  to={searchReservationsRoute.to as any}
+                  className="text-2xl font-semibold leading-6 text-primary"
+                >
+                  Reservations
+                </Link>
+                <ChevronRightIcon
+                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                <Link
+                  to={viewReservationByIdRoute.to as any}
+                  params={{ reservationId: String(referenceId) }}
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                >
+                  {referenceNumber ?? "-"}
+                </Link>
+                <ChevronRightIcon
+                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  aria-hidden="true"
+                />
+                <Link
+                  to={editReservationByIdRoute.to}
+                  search={() => ({ stage })}
+                  params={{ reservationId: String(referenceId) }}
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                >
+                  Edit
+                </Link>
+              </>
+            )}
+          </div>
+          <div className="flex w-full gap-2 sm:w-max">
+            <Button
+              size="sm"
+              type="button"
+              onClick={() => {
+                handleRentalCancelClick?.();
+              }}
+              variant="outline"
+            >
+              Cancel
+            </Button>
+            {module === "agreement" ? (
+              <Button
+                size="sm"
+                type="button"
+                onClick={() => {
+                  console.log("Agreement Functionality not implemented yet.");
+                }}
+                disabled={
+                  !Object.values(creationStagesComplete).every(
+                    (obj) => obj === true
+                  )
                 }
-                currency={clientProfile.data?.currency || undefined}
-                summaryData={
-                  // isEdit && !calculatedSummaryData.data
-                  //   ? summaryData
-                  //   : calculatedSummaryData.data
-                  //   ? calculatedSummaryData.data
-                  //   : undefined
-                  isEdit && hasEdited
-                    ? calculatedSummaryData.data
-                    : calculatedSummaryData.data
-                    ? calculatedSummaryData.data
-                    : summaryData ?? undefined
+              >
+                <PlayIconFilled className="mr-2 h-3 w-3" />
+                <span>{isEdit ? "Save" : "Create"}</span>
+              </Button>
+            ) : null}
+            {module === "reservation" ? (
+              <Button
+                size="sm"
+                type="button"
+                onClick={() => {
+                  console.log("Reservation Functionality not implemented yet.");
+                }}
+                disabled={
+                  !Object.values(creationStagesComplete).every(
+                    (obj) => obj === true
+                  )
                 }
-              />
-            </div>
+              >
+                <PlayIconFilled className="mr-2 h-3 w-3" />
+                <span>{isEdit ? "Save" : "Create"}</span>
+              </Button>
+            ) : null}
           </div>
         </div>
-      </div>
+        <p className={cn("text-base text-primary/80")}>
+          {isEdit && isCheckin ? "Check-in" : isEdit ? "Edit" : "Create"}
+          &nbsp;this&nbsp;
+          {module === "agreement" ? "rental" : "booking"} and proceed to&nbsp;
+          {isEdit ? "save" : "create"}.
+        </p>
+        <Separator className="mb-3.5 mt-3.5" />
+      </section>
+
+      <section
+        className={cn(
+          "mx-auto my-1 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
+        )}
+      >
+        <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
+          <div className="flex flex-col gap-4 pt-4 lg:col-span-8">
+            <Tabs value={stage} onValueChange={handleStageTabClick}>
+              <TabsList className="w-full sm:max-w-max">
+                {tabsConfig.map((tab, idx) => (
+                  <TabsTrigger key={`tab-trigger-${idx}`} value={tab.id}>
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {tabsConfig.map((tab, idx) => (
+                <TabsContent
+                  key={`tab-content-${idx}`}
+                  value={tab.id}
+                  className="min-h-[250px]"
+                >
+                  {tab.component}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+          <div className="flex flex-col gap-4 py-4 lg:col-span-4">
+            <RentalSummary
+              module={
+                module === "agreement"
+                  ? "add-edit-agreement"
+                  : "add-edit-reservation"
+              }
+              currency={clientProfile.data?.currency || undefined}
+              summaryData={
+                // isEdit && !calculatedSummaryData.data
+                //   ? summaryData
+                //   : calculatedSummaryData.data
+                //   ? calculatedSummaryData.data
+                //   : undefined
+                isEdit && hasEdited
+                  ? calculatedSummaryData.data
+                  : calculatedSummaryData.data
+                  ? calculatedSummaryData.data
+                  : summaryData ?? undefined
+              }
+            />
+          </div>
+        </div>
+      </section>
     </>
   );
 };

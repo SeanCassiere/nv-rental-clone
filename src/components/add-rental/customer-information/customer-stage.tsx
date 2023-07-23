@@ -3,9 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { InformationBlockCardWithChildren } from "@/components/primary-module/information-block/common";
-import { DocumentTextSolid } from "@/components/icons";
-import { Button, DatePicker, TextInput } from "../Form";
+import { DatePicker, TextInput } from "@/components/Form";
+import { Button } from "@/components/ui/button";
 import SelectCustomerModal from "@/components/Dialogs/SelectCustomerModal";
 
 const REQUIRED = "Required" as const;
@@ -50,15 +49,17 @@ const valOpts = {
   shouldValidate: true,
 };
 
-const CommonCustomerInformation = ({
-  customerInformation,
-  // isEdit,
-  onCompleted,
-}: {
+export interface CustomerStageProps {
   customerInformation: CommonCustomerInformationSchemaParsed | undefined;
   onCompleted: (data: CommonCustomerInformationSchemaParsed) => void;
   isEdit: boolean;
-}) => {
+}
+
+export const CustomerStage = ({
+  customerInformation,
+  // isEdit,
+  onCompleted,
+}: CustomerStageProps) => {
   const [showCustomerPicker, setShowCustomerPicker] = useState(false);
 
   const values: CommonCustomerInformationSchemaParsed = {
@@ -130,134 +131,125 @@ const CommonCustomerInformation = ({
           setValue("isTaxSaver", isTaxSaver, valOpts);
         }}
       />
-      <InformationBlockCardWithChildren
-        identifier="customer-information"
-        icon={<DocumentTextSolid className="h-5 w-5" />}
-        title="Customer information"
-        isLoading={false}
-      >
-        <div className="mt-4 flex">
-          <Button
-            onClick={() => {
-              setShowCustomerPicker(true);
-            }}
-          >
-            Search customer
-          </Button>
-        </div>
-        <form
-          onSubmit={handleSubmit(async (data) => {
-            onCompleted?.(data);
-          })}
-          className="flex flex-col gap-4 pt-4"
-          autoComplete="off"
+
+      <div className="flex">
+        <Button
+          variant="outline"
+          onClick={() => {
+            setShowCustomerPicker(true);
+          }}
         >
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-              <TextInput
-                label="First name"
-                {...register("firstName")}
-                error={!!errors.firstName}
-                errorText={errors.firstName?.message}
-                readOnly
-              />
-            </div>
-            <div>
-              <TextInput
-                label="Last name"
-                {...register("lastName")}
-                error={!!errors.lastName}
-                errorText={errors.lastName?.message}
-                readOnly
-              />
-            </div>
-            <div>
-              <DatePicker
-                selected={
-                  getValues("dateOfBirth")
-                    ? new Date(getValues("dateOfBirth")!)
-                    : null
-                }
-                onChange={(date) => {
-                  //
-                }}
-                placeholderText="Date of birth"
-                readOnly
-              />
-            </div>
-            <div>
-              <TextInput
-                label="Home phone"
-                {...register("hPhone")}
-                error={!!errors.hPhone}
-                errorText={errors.hPhone?.message}
-                readOnly
-              />
-            </div>
-            <div>
-              <TextInput
-                label="Work phone"
-                {...register("bPhone")}
-                error={!!errors.bPhone}
-                errorText={errors.bPhone?.message}
-                readOnly
-              />
-            </div>
-            <div>
-              <TextInput
-                label="Mobile phone"
-                {...register("cPhone")}
-                error={!!errors.cPhone}
-                errorText={errors.cPhone?.message}
-                readOnly
-              />
-            </div>
-            <div>
-              <TextInput
-                label="License no."
-                {...register("licenseNumber")}
-                error={!!errors.licenseNumber}
-                errorText={errors.licenseNumber?.message}
-                readOnly
-              />
-            </div>
-            <div className="md:col-span-2">
-              <TextInput
-                label="Address"
-                {...register("address")}
-                error={!!errors.address}
-                errorText={errors.address?.message}
-                readOnly
-              />
-            </div>
-            <div>
-              <TextInput
-                label="City"
-                {...register("city")}
-                error={!!errors.city}
-                errorText={errors.city?.message}
-                readOnly
-              />
-            </div>
-            <div>
-              <TextInput
-                label="Zip"
-                {...register("zipCode")}
-                error={!!errors.zipCode}
-                errorText={errors.zipCode?.message}
-                readOnly
-              />
-            </div>
+          Search customer
+        </Button>
+      </div>
+      <form
+        onSubmit={handleSubmit(async (data) => {
+          onCompleted?.(data);
+        })}
+        className="flex flex-col gap-4 pt-4"
+        autoComplete="off"
+      >
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div>
+            <TextInput
+              label="First name"
+              {...register("firstName")}
+              error={!!errors.firstName}
+              errorText={errors.firstName?.message}
+              readOnly
+            />
           </div>
           <div>
-            <Button type="submit" color="teal">
-              Save & Continue
-            </Button>
+            <TextInput
+              label="Last name"
+              {...register("lastName")}
+              error={!!errors.lastName}
+              errorText={errors.lastName?.message}
+              readOnly
+            />
           </div>
-        </form>
-      </InformationBlockCardWithChildren>
+          <div>
+            <DatePicker
+              selected={
+                getValues("dateOfBirth")
+                  ? new Date(getValues("dateOfBirth")!)
+                  : null
+              }
+              onChange={(date) => {
+                //
+              }}
+              placeholderText="Date of birth"
+              readOnly
+            />
+          </div>
+          <div>
+            <TextInput
+              label="Home phone"
+              {...register("hPhone")}
+              error={!!errors.hPhone}
+              errorText={errors.hPhone?.message}
+              readOnly
+            />
+          </div>
+          <div>
+            <TextInput
+              label="Work phone"
+              {...register("bPhone")}
+              error={!!errors.bPhone}
+              errorText={errors.bPhone?.message}
+              readOnly
+            />
+          </div>
+          <div>
+            <TextInput
+              label="Mobile phone"
+              {...register("cPhone")}
+              error={!!errors.cPhone}
+              errorText={errors.cPhone?.message}
+              readOnly
+            />
+          </div>
+          <div>
+            <TextInput
+              label="License no."
+              {...register("licenseNumber")}
+              error={!!errors.licenseNumber}
+              errorText={errors.licenseNumber?.message}
+              readOnly
+            />
+          </div>
+          <div className="md:col-span-2">
+            <TextInput
+              label="Address"
+              {...register("address")}
+              error={!!errors.address}
+              errorText={errors.address?.message}
+              readOnly
+            />
+          </div>
+          <div>
+            <TextInput
+              label="City"
+              {...register("city")}
+              error={!!errors.city}
+              errorText={errors.city?.message}
+              readOnly
+            />
+          </div>
+          <div>
+            <TextInput
+              label="Zip"
+              {...register("zipCode")}
+              error={!!errors.zipCode}
+              errorText={errors.zipCode?.message}
+              readOnly
+            />
+          </div>
+        </div>
+        <div>
+          <Button type="submit">Save & Continue</Button>
+        </div>
+      </form>
     </>
   );
 };
-
-export default CommonCustomerInformation;

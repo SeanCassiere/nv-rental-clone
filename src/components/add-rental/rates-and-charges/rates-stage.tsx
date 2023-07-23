@@ -2,48 +2,50 @@ import { useEffect, useMemo } from "react";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import type { StepRatesAndChargesInformationProps } from "./step-rates-and-charges";
 import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,
-  Button,
-} from "../Form";
+} from "@/components/Form";
+import { Button } from "@/components/ui/button";
+import { RatesAndChargesTabProps } from ".";
+
 import { useGetRentalRateTypesForRentals } from "@/hooks/network/rates/useGetRentalRateTypesForRental";
+
 import { RentalRateSchema, type RentalRateParsed } from "@/schemas/rate";
+
 import { cn } from "@/utils";
 
-interface CommonRatesInformationProps {
-  module: StepRatesAndChargesInformationProps["module"];
-  isEdit: StepRatesAndChargesInformationProps["isEdit"];
-  rentalInformation: StepRatesAndChargesInformationProps["rentalInformation"];
-  vehicleInformation: StepRatesAndChargesInformationProps["vehicleInformation"];
+interface RatesStageProps {
+  durationStageData: RatesAndChargesTabProps["durationStageData"];
+  vehicleStageData: RatesAndChargesTabProps["vehicleStageData"];
 
-  rate: StepRatesAndChargesInformationProps["rate"];
-  onSelectedRate: StepRatesAndChargesInformationProps["onSelectedRate"];
-  rateName: StepRatesAndChargesInformationProps["rateName"];
-  onSelectRateName: StepRatesAndChargesInformationProps["onSelectRateName"];
+  rate: RatesAndChargesTabProps["rate"];
+  onSelectedRate: RatesAndChargesTabProps["onSelectedRate"];
+
+  rateName: RatesAndChargesTabProps["rateName"];
+  onSelectRateName: RatesAndChargesTabProps["onSelectRateName"];
 
   hideRateSelector?: boolean;
-  hidePromotionCodesFields?: boolean;
-
-  isSupportingInfoAvailable: boolean;
-
-  onNavigateNext: () => void;
+  hidePromotionCodeFields?: boolean;
+  isEdit: boolean;
+  onCompleted: () => void;
 }
 
-const CommonRatesInformation = (props: CommonRatesInformationProps) => {
+export const RatesStage = (props: RatesStageProps) => {
   const {
-    rentalInformation,
-    vehicleInformation,
+    durationStageData,
+    vehicleStageData,
     rateName,
     rate,
     hideRateSelector = false,
-    hidePromotionCodesFields = false,
-    isSupportingInfoAvailable,
+    hidePromotionCodeFields = false,
   } = props;
 
-  const checkoutLocation = rentalInformation?.checkoutLocation || 0;
-  const vehicleTypeId = vehicleInformation?.vehicleTypeId || 0;
+  const isSupportingInfoAvailable =
+    Boolean(durationStageData) && Boolean(vehicleStageData);
+
+  const checkoutLocation = durationStageData?.checkoutLocation || 0;
+  const vehicleTypeId = vehicleStageData?.vehicleTypeId || 0;
 
   const rateTypesData = useGetRentalRateTypesForRentals({
     filters: {
@@ -91,9 +93,9 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
   };
 
   return (
-    <div className="mt-4">
+    <div>
       {!isSupportingInfoAvailable && (
-        <div className="pb-4 text-red-500">
+        <div className="text-destructive">
           Rental and Vehicle information not entered.
         </div>
       )}
@@ -116,7 +118,7 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
             />
           </div>
         )}
-        {!hidePromotionCodesFields && (
+        {!hidePromotionCodeFields && (
           <div className="col-span-1 flex items-end text-sm text-teal-500">
             Implement promotion codes later
           </div>
@@ -126,7 +128,7 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
         onSubmit={handleSubmit((data) => {
           const valuesToSubmit = { ...rate, ...data };
           props.onSelectedRate(valuesToSubmit);
-          props.onNavigateNext();
+          props.onCompleted();
         })}
         className="mt-8 text-sm"
       >
@@ -138,7 +140,7 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
           <NormalRatesForm {...commonFormProps} />
         )}
         <div className="mt-4">
-          <Button type="submit" color="teal" disabled={!rate}>
+          <Button type="submit" disabled={!rate}>
             Save & Continue
           </Button>
         </div>
@@ -146,8 +148,6 @@ const CommonRatesInformation = (props: CommonRatesInformationProps) => {
     </div>
   );
 };
-
-export default CommonRatesInformation;
 
 const optsAsNum = {
   valueAsNumber: true,

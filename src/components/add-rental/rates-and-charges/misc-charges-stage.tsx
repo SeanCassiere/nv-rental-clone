@@ -1,64 +1,63 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { type StepRatesAndChargesInformationProps } from "./step-rates-and-charges";
-import { Button } from "../Form";
+import { Button } from "@/components/ui/button";
+import type { RatesAndChargesTabProps } from ".";
+
 import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
-import { type MiscChargeListItem } from "@/schemas/misCharges";
+import type { MiscChargeListItem } from "@/schemas/misCharges";
+
 import { cn } from "@/utils";
+import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 
-interface CommonMiscChargesInformationProps {
-  module: StepRatesAndChargesInformationProps["module"];
-  isEdit: StepRatesAndChargesInformationProps["isEdit"];
-  rentalInformation: StepRatesAndChargesInformationProps["rentalInformation"];
-  vehicleInformation: StepRatesAndChargesInformationProps["vehicleInformation"];
+interface MiscChargesStageProps {
+  durationStageData: RatesAndChargesTabProps["durationStageData"];
+  vehicleStageData: RatesAndChargesTabProps["vehicleStageData"];
 
-  selectedMisCharges: StepRatesAndChargesInformationProps["misCharges"];
-  onSaveMisCharges: StepRatesAndChargesInformationProps["onSelectedMiscCharges"];
+  selectedMiscCharges: RatesAndChargesTabProps["miscCharges"];
+  onSelectedMiscCharges: RatesAndChargesTabProps["onSelectedMiscCharges"];
 
-  isSupportingInfoAvailable: boolean;
-
-  onNavigateNext: () => void;
-  currency?: string;
+  isEdit: boolean;
+  onCompleted: () => void;
+  currency: string | undefined;
 }
 
-const CommonMiscChargesInformation = (
-  props: CommonMiscChargesInformationProps
-) => {
+export const MiscChargesStage = (props: MiscChargesStageProps) => {
   const {
-    onNavigateNext,
-    onSaveMisCharges,
-    selectedMisCharges,
-    rentalInformation,
-    vehicleInformation,
-    isSupportingInfoAvailable,
+    durationStageData,
+    vehicleStageData,
+    selectedMiscCharges,
+    onSelectedMiscCharges,
+    isEdit,
+    onCompleted,
+    currency,
   } = props;
 
+  const isSupportingInfoAvailable =
+    Boolean(durationStageData) && Boolean(vehicleStageData);
+
   const [charges, setCharges] =
-    useState<StepRatesAndChargesInformationProps["misCharges"]>(
-      selectedMisCharges
-    );
+    useState<RatesAndChargesTabProps["miscCharges"]>(selectedMiscCharges);
 
   const selectedChargeIds = charges.map((charge) => `${charge.id}`);
 
   const miscCharges = useGetMiscCharges({
     filters: {
-      VehicleTypeId: vehicleInformation?.vehicleTypeId ?? 0,
-      LocationId: rentalInformation?.checkoutLocation ?? 0,
-      CheckoutDate: rentalInformation?.checkoutDate ?? new Date(),
-      CheckinDate: rentalInformation?.checkinDate ?? new Date(),
+      VehicleTypeId: vehicleStageData?.vehicleTypeId ?? 0,
+      LocationId: durationStageData?.checkoutLocation ?? 0,
+      CheckoutDate: durationStageData?.checkoutDate ?? new Date(),
+      CheckinDate: durationStageData?.checkinDate ?? new Date(),
     },
     enabled:
-      Boolean(rentalInformation?.checkinDate) &&
-      Boolean(rentalInformation?.checkoutDate) &&
-      Boolean(rentalInformation?.checkoutLocation) &&
-      Boolean(vehicleInformation?.vehicleTypeId),
+      Boolean(durationStageData?.checkinDate) &&
+      Boolean(durationStageData?.checkoutDate) &&
+      Boolean(durationStageData?.checkoutLocation) &&
+      Boolean(vehicleStageData?.vehicleTypeId),
   });
 
   const handleAddMiscCharge = (
-    charge: StepRatesAndChargesInformationProps["misCharges"][number]
+    charge: RatesAndChargesTabProps["miscCharges"][number]
   ) => {
     setCharges((previousCharges) => {
       const chargesWithoutSameId = previousCharges.filter(
@@ -67,6 +66,7 @@ const CommonMiscChargesInformation = (
       return [...chargesWithoutSameId, charge];
     });
   };
+
   const handleRemoveMiscCharge = (chargeId: number) => {
     setCharges((previousCharges) => {
       return previousCharges.filter((prevCharge) => prevCharge.id !== chargeId);
@@ -74,7 +74,7 @@ const CommonMiscChargesInformation = (
   };
 
   return (
-    <div className="mt-4">
+    <div>
       {miscCharges.isLoading && <span>Loading...</span>}
       {!isSupportingInfoAvailable && (
         <span>Please fill out the previous steps</span>
@@ -89,19 +89,19 @@ const CommonMiscChargesInformation = (
             onSave={handleAddMiscCharge}
             onRemove={handleRemoveMiscCharge}
             dates={{
-              startDate: rentalInformation?.checkoutDate ?? new Date(),
-              endDate: rentalInformation?.checkinDate ?? new Date(),
+              startDate: durationStageData?.checkoutDate ?? new Date(),
+              endDate: durationStageData?.checkinDate ?? new Date(),
             }}
+            currency={currency}
           />
         ))}
       </div>
       <div className="mt-4">
         <Button
           type="button"
-          color="teal"
           onClick={() => {
-            onSaveMisCharges(charges);
-            onNavigateNext();
+            onSelectedMiscCharges(charges);
+            onCompleted();
           }}
         >
           Save & Continue
@@ -111,18 +111,14 @@ const CommonMiscChargesInformation = (
   );
 };
 
-export default CommonMiscChargesInformation;
-
 function MiscChargeItem(props: {
   charge: MiscChargeListItem;
   isSelected: boolean;
-  selectedCharge?: StepRatesAndChargesInformationProps["misCharges"][number];
-  onSave: (
-    charge: StepRatesAndChargesInformationProps["misCharges"][number]
-  ) => void;
+  selectedCharge?: RatesAndChargesTabProps["miscCharges"][number];
+  onSave: (charge: RatesAndChargesTabProps["miscCharges"][number]) => void;
   onRemove: (chargeId: number) => void;
   dates: { startDate: Date; endDate: Date };
-  currency?: string;
+  currency: string | undefined;
 }) {
   const { t } = useTranslation();
 
