@@ -23,7 +23,7 @@ type CommonCustomerInformationSchemaParsed = CI_TabProps["customerStageData"];
 
 import RatesAndChargesTab from "./rates-and-charges";
 
-import StepTaxesAndPaymentsInformation from "./step-taxes-and-payments";
+import TaxesAndPaymentsTab from "./taxes-and-payments";
 
 import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
@@ -203,10 +203,9 @@ const AddRentalParentForm = ({
         id: StageKeys.taxesAndPayments,
         label: "Taxes & Payments",
         component: (
-          <StepTaxesAndPaymentsInformation
-            module="agreements"
+          <TaxesAndPaymentsTab
             isEdit={isEdit}
-            rentalInformation={
+            durationStageData={
               agreementRentalInformation
                 ? {
                     checkinDate: agreementRentalInformation.checkinDate,
