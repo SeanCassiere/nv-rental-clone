@@ -9,7 +9,7 @@ import {
 
 import { DurationStage, type DurationStageProps } from "./duration-stage";
 import { VehicleStage, type VehicleStageProps } from "./vehicle-stage";
-import { CustomerStage } from "./customer-stage";
+import { CustomerStage, type CustomerStageProps } from "./customer-stage";
 
 interface RentalInformationTabProps {
   durationStageData: DurationStageProps["initialData"];
@@ -18,7 +18,8 @@ interface RentalInformationTabProps {
   vehicleStageData: VehicleStageProps["vehicleInformation"];
   onVehicleStageComplete: VehicleStageProps["onCompleted"];
 
-  onCustomerStageComplete: () => void;
+  customerStageData: CustomerStageProps["customerInformation"];
+  onCustomerStageComplete: CustomerStageProps["onCompleted"];
 
   isEdit: boolean;
   onCompleted: () => void;
@@ -27,10 +28,13 @@ interface RentalInformationTabProps {
 const RentalInformationTab = (props: RentalInformationTabProps) => {
   const {
     durationStageData,
-    vehicleStageData,
     onDurationStageComplete,
+    vehicleStageData,
     onVehicleStageComplete,
+    customerStageData,
+    onCustomerStageComplete,
     isEdit,
+    onCompleted,
   } = props;
 
   const [tab, setTab] = React.useState("duration");
@@ -67,7 +71,14 @@ const RentalInformationTab = (props: RentalInformationTabProps) => {
       <AccordionItem value="customer">
         <AccordionTrigger>Customer information</AccordionTrigger>
         <AccordionContent>
-          <CustomerStage />
+          <CustomerStage
+            customerInformation={customerStageData}
+            onCompleted={(data) => {
+              onCustomerStageComplete(data);
+              onCompleted();
+            }}
+            isEdit={isEdit}
+          />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

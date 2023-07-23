@@ -409,7 +409,13 @@ const AddRentalParentForm = ({
 
               setHasEdited(true);
             }}
-            onCustomerStageComplete={() => {
+            customerStageData={commonCustomerInformation || undefined}
+            onCustomerStageComplete={(data) => {
+              setCommonCustomerInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                customer: true,
+              }));
               setHasEdited(true);
             }}
             onCompleted={() => {
