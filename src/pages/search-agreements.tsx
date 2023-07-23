@@ -10,7 +10,6 @@ import {
 import { useTranslation } from "react-i18next";
 
 import ProtectorShield from "@/components/protector-shield";
-import CommonHeader from "@/components/Layout/CommonHeader";
 import { PlusIconFilled } from "@/components/icons";
 
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";

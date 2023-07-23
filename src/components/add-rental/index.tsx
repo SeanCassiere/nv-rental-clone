@@ -3,12 +3,11 @@ import { Link } from "@tanstack/router";
 import parseISO from "date-fns/parseISO";
 import { ChevronRightIcon } from "lucide-react";
 
-import { ChevronRightOutline, PlayIconFilled } from "@/components/icons";
-import CommonHeader from "@/components/Layout/CommonHeader";
-import { Separator } from "@/components/ui/separator";
+import { PlayIconFilled } from "@/components/icons";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 import RentalInformationTab, {
   type RentalInformationTabProps as RI_TabProps,

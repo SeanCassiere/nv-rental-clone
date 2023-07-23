@@ -10,7 +10,6 @@ import {
 import { useTranslation } from "react-i18next";
 
 import ProtectorShield from "@/components/protector-shield";
-import CommonHeader from "@/components/Layout/CommonHeader";
 
 import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
 import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
