@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   type DragEndEvent,
   DndContext,
@@ -48,13 +48,17 @@ const WidgetPickerContent = ({
     setModalOpenState(false);
   };
 
-  useGetDashboardWidgetList({
-    onSuccess: (data) => {
-      if (widgetsLocal.length === 0) {
-        setWidgetsLocal(data.sort(sortWidgetsByUserPositionFn));
-      }
-    },
-  });
+  const widgetsQuery = useGetDashboardWidgetList();
+  useEffect(() => {
+    if (widgetsQuery.status === "success") {
+      setWidgetsLocal((local) => {
+        if (local.length === 0) {
+          return widgetsQuery.data.sort(sortWidgetsByUserPositionFn);
+        }
+        return local;
+      });
+    }
+  }, [widgetsQuery.data, widgetsQuery.status]);
   const widgetIdsList = widgetsLocal.map((widget) => widget.widgetID);
 
   const handleToggleWidgetVisibility = useCallback((widgetID: string) => {

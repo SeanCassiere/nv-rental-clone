@@ -35,7 +35,6 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogContent,
-  DialogFooter,
 } from "@/components/ui/dialog";
 
 import { indexRoute } from "@/routes";
