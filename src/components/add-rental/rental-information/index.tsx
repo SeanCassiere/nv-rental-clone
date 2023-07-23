@@ -10,7 +10,6 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import { DurationStage, type DurationStageProps } from "./duration-stage";
 import { VehicleStage, type VehicleStageProps } from "./vehicle-stage";
-import { CustomerStage, type CustomerStageProps } from "./customer-stage";
 
 export interface RentalInformationTabProps {
   durationStageData: DurationStageProps["initialData"];
@@ -18,9 +17,6 @@ export interface RentalInformationTabProps {
 
   vehicleStageData: VehicleStageProps["vehicleInformation"];
   onVehicleStageComplete: VehicleStageProps["onCompleted"];
-
-  customerStageData: CustomerStageProps["customerInformation"];
-  onCustomerStageComplete: CustomerStageProps["onCompleted"];
 
   isEdit: boolean;
   onCompleted: () => void;
@@ -32,8 +28,6 @@ const RentalInformationTab = (props: RentalInformationTabProps) => {
     onDurationStageComplete,
     vehicleStageData,
     onVehicleStageComplete,
-    customerStageData,
-    onCustomerStageComplete,
     isEdit,
     onCompleted,
   } = props;
@@ -65,19 +59,6 @@ const RentalInformationTab = (props: RentalInformationTabProps) => {
                 vehicleInformation={vehicleStageData}
                 onCompleted={(data) => {
                   onVehicleStageComplete(data);
-                  setTab("customer");
-                }}
-                isEdit={isEdit}
-              />
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="customer">
-            <AccordionTrigger>Customer details</AccordionTrigger>
-            <AccordionContent>
-              <CustomerStage
-                customerInformation={customerStageData}
-                onCompleted={(data) => {
-                  onCustomerStageComplete(data);
                   onCompleted();
                 }}
                 isEdit={isEdit}

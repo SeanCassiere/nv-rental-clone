@@ -14,13 +14,15 @@ import RentalInformationTab, {
 
 type AgreementRentalInformationSchemaParsed = RI_TabProps["durationStageData"];
 type AgreementVehicleInformationSchemaParsed = RI_TabProps["vehicleStageData"];
-type CommonCustomerInformationSchemaParsed = RI_TabProps["customerStageData"];
 
-import RatesAndChargesTab, {
-  type RatesAndChargesTabProps as RAC_TabProps,
-} from "./rates-and-charges";
+import CustomerInformationTab, {
+  type CustomerInformationTabProps as CI_TabProps,
+} from "./customer-information";
 
-import StepRatesAndChargesInformation from "./step-rates-and-charges";
+type CommonCustomerInformationSchemaParsed = CI_TabProps["customerStageData"];
+
+import RatesAndChargesTab from "./rates-and-charges";
+
 import StepTaxesAndPaymentsInformation from "./step-taxes-and-payments";
 
 import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
@@ -55,6 +57,7 @@ import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRent
 
 const StageKeys = {
   rental: "rental-information",
+  customer: "customer-information",
   ratesAndCharges: "rates-and-charges-information",
   taxesAndPayments: "taxes-and-payments-information",
   other: "other-information",
@@ -190,13 +193,13 @@ const AddRentalParentForm = ({
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
     if (module === "agreement") {
       const others = {
-        // 4
+        // 5
         id: StageKeys.other,
         label: "Other information",
         component: "Other information",
       };
       const taxesAndPayments = {
-        // 3
+        // 4
         id: StageKeys.taxesAndPayments,
         label: "Taxes & Payments",
         component: (
@@ -235,7 +238,7 @@ const AddRentalParentForm = ({
         ),
       };
       const ratesAndCharges = {
-        // 2
+        // 3
         id: StageKeys.ratesAndCharges,
         label: "Rates & Charges",
         component: (
@@ -272,6 +275,29 @@ const AddRentalParentForm = ({
               handleStageTabClick(taxesAndPayments.id);
             }}
             currency={clientProfile.data?.currency || undefined}
+          />
+        ),
+      };
+      const customerInformation = {
+        // 2
+        id: StageKeys.customer,
+        label: "Customer information",
+        component: (
+          <CustomerInformationTab
+            isEdit={isEdit}
+            customerStageData={commonCustomerInformation || undefined}
+            onCustomerStageComplete={(data) => {
+              setCommonCustomerInformation(data);
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                customer: true,
+              }));
+              setHasEdited(true);
+            }}
+            onCompleted={() => {
+              setHasEdited(true);
+              handleStageTabClick(ratesAndCharges.id);
+            }}
           />
         ),
       };
@@ -322,23 +348,15 @@ const AddRentalParentForm = ({
 
               setHasEdited(true);
             }}
-            customerStageData={commonCustomerInformation || undefined}
-            onCustomerStageComplete={(data) => {
-              setCommonCustomerInformation(data);
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                customer: true,
-              }));
-              setHasEdited(true);
-            }}
             onCompleted={() => {
               setHasEdited(true);
-              handleStageTabClick(ratesAndCharges.id);
+              handleStageTabClick(customerInformation.id);
             }}
           />
         ),
       };
       tabs.push(rentalInformation);
+      tabs.push(customerInformation);
       tabs.push(ratesAndCharges);
       tabs.push(taxesAndPayments);
       tabs.push(others);
