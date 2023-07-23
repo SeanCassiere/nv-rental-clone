@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 
+import { RatesStage } from "./rates-stage";
+
 import type { CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 import type { RentalRateParsed } from "@/schemas/rate";
 
@@ -46,7 +48,19 @@ export interface RatesAndChargesTabProps {
 }
 
 const RatesAndChargesTab = (props: RatesAndChargesTabProps) => {
-  const { isEdit, onCompleted } = props;
+  const {
+    durationStageData,
+    vehicleStageData,
+    miscCharges,
+    onSelectedMiscCharges,
+    rate,
+    onSelectedRate,
+    rateName,
+    onSelectRateName,
+    isEdit,
+    onCompleted,
+    currency,
+  } = props;
   const [tab, setTab] = React.useState("rates");
 
   return (
@@ -55,7 +69,22 @@ const RatesAndChargesTab = (props: RatesAndChargesTabProps) => {
         <Accordion type="single" value={tab} onValueChange={setTab}>
           <AccordionItem value="rates">
             <AccordionTrigger>Rates details</AccordionTrigger>
-            <AccordionContent>Rates information</AccordionContent>
+            <AccordionContent>
+              <RatesStage
+                durationStageData={durationStageData}
+                vehicleStageData={vehicleStageData}
+                rate={rate}
+                onSelectedRate={onSelectedRate}
+                rateName={rateName}
+                onSelectRateName={onSelectRateName}
+                isEdit={isEdit}
+                onCompleted={() => {
+                  setTab("misc-charges");
+                }}
+                hideRateSelector={false}
+                hidePromotionCodeFields
+              />
+            </AccordionContent>
           </AccordionItem>
           <AccordionItem value="misc-charges">
             <AccordionTrigger>Miscellaneous charges</AccordionTrigger>
