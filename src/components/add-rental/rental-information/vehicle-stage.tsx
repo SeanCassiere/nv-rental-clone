@@ -151,7 +151,9 @@ export const VehicleStage = ({
         }}
       />
       {!checkoutLocation && (
-        <div className="pt-4 text-red-500">Checkout location not selected.</div>
+        <span className="block text-base text-destructive">
+          Checkout location not selected.
+        </span>
       )}
       <div className="mt-4 flex">
         <Button
