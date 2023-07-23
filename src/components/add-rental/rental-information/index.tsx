@@ -7,27 +7,40 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 
-import { DurationStage } from "./duration-stage";
+import { DurationStage, type DurationStageProps } from "./duration-stage";
 import { VehicleStage } from "./vehicle-stage";
 import { CustomerStage } from "./customer-stage";
 
 interface RentalInformationTabProps {
-  onDurationStageComplete: () => void;
+  durationStageData: DurationStageProps["initialData"];
+  onDurationStageComplete: DurationStageProps["onCompleted"];
+
   onVehicleStageComplete: () => void;
+
   onCustomerStageComplete: () => void;
+
+  isEdit: boolean;
+  onCompleted: () => void;
 }
 
 const RentalInformationTab = (props: RentalInformationTabProps) => {
-  const {} = props;
+  const { durationStageData, onDurationStageComplete, isEdit } = props;
 
-  const [tab, setTab] = React.useState("rental");
+  const [tab, setTab] = React.useState("duration");
 
   return (
     <Accordion type="single" value={tab} onValueChange={setTab}>
-      <AccordionItem value="rental">
-        <AccordionTrigger>Rental information</AccordionTrigger>
+      <AccordionItem value="duration">
+        <AccordionTrigger>Duration information</AccordionTrigger>
         <AccordionContent>
-          <DurationStage />
+          <DurationStage
+            initialData={durationStageData}
+            onCompleted={(data) => {
+              onDurationStageComplete(data);
+              setTab("vehicle");
+            }}
+            isEdit={isEdit}
+          />
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="vehicle">

@@ -369,9 +369,47 @@ const AddRentalParentForm = ({
         label: "Rental information",
         component: (
           <RentalInformationTab
-            onDurationStageComplete={() => {}}
-            onCustomerStageComplete={() => {}}
-            onVehicleStageComplete={() => {}}
+            isEdit={isEdit}
+            durationStageData={agreementRentalInformation ?? undefined}
+            onDurationStageComplete={(data) => {
+              setAgreementRentalInformation((prevRentalData) => {
+                // if checkout location id not the same, reset vehicle, taxes, and misc charges
+                if (
+                  prevRentalData &&
+                  data &&
+                  prevRentalData.checkoutLocation !== data.checkoutLocation
+                ) {
+                  setCreationStageComplete((prev) => ({
+                    ...prev,
+                    miscCharges: false,
+                    rates: false,
+                    vehicle: false,
+                    taxes: false,
+                  }));
+                  setAgreementVehicleInformation(null);
+                  setRateDetails(["", null]);
+                  setSelectedMiscCharges([]);
+                  setSelectedTaxIds([]);
+                }
+                return data;
+              });
+              setCreationStageComplete((prev) => ({
+                ...prev,
+                rental: true,
+              }));
+
+              setHasEdited(true);
+            }}
+            onCustomerStageComplete={() => {
+              setHasEdited(true);
+            }}
+            onVehicleStageComplete={() => {
+              setHasEdited(true);
+            }}
+            onCompleted={() => {
+              setHasEdited(true);
+              handleStageTabClick(ratesAndCharges.id);
+            }}
           />
         ),
       };
