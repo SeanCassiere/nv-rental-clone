@@ -50,6 +50,15 @@ import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
 import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 
+import RentalInformationTab from "./rental-information";
+
+const StageKeys = {
+  rental: "rental-information",
+  ratesAndCharges: "rates-and-charges-information",
+  taxesAndPayments: "taxes-and-payments-information",
+  other: "other-information",
+} as const;
+
 export type TRentalCompleteStage = {
   rental: boolean;
   customer: boolean;
@@ -182,13 +191,13 @@ const AddRentalParentForm = ({
     if (module === "agreement") {
       const others = {
         // 6
-        id: "others",
+        id: StageKeys.other,
         label: "Other information",
         component: "Other information",
       };
       const taxesAndPayments = {
         // 5
-        id: "taxes-and-payments",
+        id: StageKeys.taxesAndPayments,
         label: "Taxes & Payments",
         component: (
           <StepTaxesAndPaymentsInformation
@@ -227,7 +236,7 @@ const AddRentalParentForm = ({
       };
       const ratesAndCharges = {
         // 4
-        id: "rates-and-charges",
+        id: StageKeys.ratesAndCharges,
         label: "Rates & Charges",
         component: (
           <StepRatesAndChargesInformation
@@ -271,90 +280,102 @@ const AddRentalParentForm = ({
           />
         ),
       };
-      const customerInformation = {
-        // 3
-        id: "customer-information",
-        label: "Customer information",
-        component: (
-          <CommonCustomerInformation
-            customerInformation={commonCustomerInformation || undefined}
-            isEdit={isEdit}
-            onCompleted={(data) => {
-              setCommonCustomerInformation(data);
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                customer: true,
-              }));
-              setHasEdited(true);
-              handleStageTabClick(ratesAndCharges.id);
-            }}
-          />
-        ),
-      };
-      const vehicleInformation = {
-        // 2
-        id: "vehicle-information",
-        label: "Vehicle information",
-        component: (
-          <AgreementVehicleInformationTab
-            rentalInformation={agreementRentalInformation || undefined}
-            vehicleInformation={agreementVehicleInformation || undefined}
-            isEdit={isEdit}
-            onCompleted={(data) => {
-              setAgreementVehicleInformation(data);
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                vehicle: true,
-              }));
-              setHasEdited(true);
-              handleStageTabClick(customerInformation.id);
-            }}
-          />
-        ),
-      };
+      // const customerInformation = {
+      //   // 3
+      //   id: "customer-information",
+      //   label: "Customer information",
+      //   component: (
+      //     <CommonCustomerInformation
+      //       customerInformation={commonCustomerInformation || undefined}
+      //       isEdit={isEdit}
+      //       onCompleted={(data) => {
+      //         setCommonCustomerInformation(data);
+      //         setCreationStageComplete((prev) => ({
+      //           ...prev,
+      //           customer: true,
+      //         }));
+      //         setHasEdited(true);
+      //         handleStageTabClick(ratesAndCharges.id);
+      //       }}
+      //     />
+      //   ),
+      // };
+      // const vehicleInformation = {
+      //   // 2
+      //   id: "vehicle-information",
+      //   label: "Vehicle information",
+      //   component: (
+      //     <AgreementVehicleInformationTab
+      //       rentalInformation={agreementRentalInformation || undefined}
+      //       vehicleInformation={agreementVehicleInformation || undefined}
+      //       isEdit={isEdit}
+      //       onCompleted={(data) => {
+      //         setAgreementVehicleInformation(data);
+      //         setCreationStageComplete((prev) => ({
+      //           ...prev,
+      //           vehicle: true,
+      //         }));
+      //         setHasEdited(true);
+      //         handleStageTabClick(customerInformation.id);
+      //       }}
+      //     />
+      //   ),
+      // };
+      // const rentalInformation = {
+      //   // 1
+      //   id: "rental-information",
+      //   label: "Rental information",
+      //   component: (
+      //     <AgreementRentalInformationTab
+      //       isEdit={isEdit}
+      //       initialData={agreementRentalInformation ?? undefined}
+      //       onCompleted={(data) => {
+      //         setAgreementRentalInformation((prevRentalData) => {
+      //           // if checkout location id not the same, reset vehicle, taxes, and misc charges
+      //           if (
+      //             prevRentalData &&
+      //             data &&
+      //             prevRentalData.checkoutLocation !== data.checkoutLocation
+      //           ) {
+      //             setCreationStageComplete((prev) => ({
+      //               ...prev,
+      //               miscCharges: false,
+      //               rates: false,
+      //               vehicle: false,
+      //               taxes: false,
+      //             }));
+      //             setAgreementVehicleInformation(null);
+      //             setRateDetails(["", null]);
+      //             setSelectedMiscCharges([]);
+      //             setSelectedTaxIds([]);
+      //           }
+      //           return data;
+      //         });
+      //         setCreationStageComplete((prev) => ({
+      //           ...prev,
+      //           rental: true,
+      //         }));
+      //         setHasEdited(true);
+      //         handleStageTabClick(vehicleInformation.id);
+      //       }}
+      //     />
+      //   ),
+      // };
+      // tabs.push(rentalInformation);
+      // tabs.push(vehicleInformation);
+      // tabs.push(customerInformation);
       const rentalInformation = {
-        // 1
-        id: "rental-information",
+        id: StageKeys.rental,
         label: "Rental information",
         component: (
-          <AgreementRentalInformationTab
-            isEdit={isEdit}
-            initialData={agreementRentalInformation ?? undefined}
-            onCompleted={(data) => {
-              setAgreementRentalInformation((prevRentalData) => {
-                // if checkout location id not the same, reset vehicle, taxes, and misc charges
-                if (
-                  prevRentalData &&
-                  data &&
-                  prevRentalData.checkoutLocation !== data.checkoutLocation
-                ) {
-                  setCreationStageComplete((prev) => ({
-                    ...prev,
-                    miscCharges: false,
-                    rates: false,
-                    vehicle: false,
-                    taxes: false,
-                  }));
-                  setAgreementVehicleInformation(null);
-                  setRateDetails(["", null]);
-                  setSelectedMiscCharges([]);
-                  setSelectedTaxIds([]);
-                }
-                return data;
-              });
-              setCreationStageComplete((prev) => ({
-                ...prev,
-                rental: true,
-              }));
-              setHasEdited(true);
-              handleStageTabClick(vehicleInformation.id);
-            }}
+          <RentalInformationTab
+            onDurationStageComplete={() => {}}
+            onCustomerStageComplete={() => {}}
+            onVehicleStageComplete={() => {}}
           />
         ),
       };
       tabs.push(rentalInformation);
-      tabs.push(vehicleInformation);
-      tabs.push(customerInformation);
       tabs.push(ratesAndCharges);
       tabs.push(taxesAndPayments);
       tabs.push(others);
