@@ -155,7 +155,7 @@ export const VehicleStage = ({
           Checkout location not selected.
         </span>
       )}
-      <div className="mt-4 flex">
+      <div className="flex">
         <Button
           variant="outline"
           onClick={() => {

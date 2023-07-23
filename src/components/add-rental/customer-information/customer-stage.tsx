@@ -132,7 +132,7 @@ export const CustomerStage = ({
         }}
       />
 
-      <div className="mt-4 flex">
+      <div className="flex">
         <Button
           variant="outline"
           onClick={() => {

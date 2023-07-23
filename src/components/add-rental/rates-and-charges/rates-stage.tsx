@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   NativeSelectInput,
   getSelectedOptionForSelectInput,
-  Button,
 } from "@/components/Form";
+import { Button } from "@/components/ui/button";
 import { RatesAndChargesTabProps } from ".";
 
 import { useGetRentalRateTypesForRentals } from "@/hooks/network/rates/useGetRentalRateTypesForRental";
@@ -93,7 +93,7 @@ export const RatesStage = (props: RatesStageProps) => {
   };
 
   return (
-    <div className="pt-4">
+    <div>
       {!isSupportingInfoAvailable && (
         <div className="text-destructive">
           Rental and Vehicle information not entered.
@@ -140,7 +140,7 @@ export const RatesStage = (props: RatesStageProps) => {
           <NormalRatesForm {...commonFormProps} />
         )}
         <div className="mt-4">
-          <Button type="submit" color="teal" disabled={!rate}>
+          <Button type="submit" disabled={!rate}>
             Save & Continue
           </Button>
         </div>
