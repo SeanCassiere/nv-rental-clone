@@ -36,6 +36,7 @@ import {
   DialogTrigger,
   DialogContent,
 } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 import { indexRoute } from "@/routes";
 
@@ -43,14 +44,14 @@ import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardS
 import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
+import type { fetchLocationsList } from "@/api/locations";
+
 import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { fetchLocationsList } from "@/api/locations";
-import { Badge } from "@/components/ui/badge";
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
