@@ -17,7 +17,6 @@ export function useGetDashboardWidgetList() {
       });
     },
     enabled: auth.isAuthenticated,
-    initialData: [],
   });
   return query;
 }
