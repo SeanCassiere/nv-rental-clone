@@ -84,19 +84,6 @@ export const VehicleStage = ({
   });
   const vehicleTypesList = vehicleTypesData.data || [];
 
-  const vehicleTypeOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!vehicleTypesData.data) return [empty];
-
-    return [
-      empty,
-      ...vehicleTypesData.data.map((option) => ({
-        value: `${option.VehicleTypeId}`,
-        label: `${option.VehicleTypeName}`,
-      })),
-    ];
-  }, [vehicleTypesData.data]);
-
   //
   const vehicleListData = useGetVehiclesList({
     page: 1,
@@ -111,19 +98,6 @@ export const VehicleStage = ({
     },
   });
   const vehiclesList = vehicleListData.data?.data || [];
-
-  const vehicleOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!vehicleListData.data) return [empty];
-
-    return [
-      empty,
-      ...vehicleListData.data.data.map((opt) => ({
-        value: `${opt.VehicleId}`,
-        label: `${opt.VehicleMakeName} ${opt.ModelName} ${opt.Year} ${opt.VehicleNo} ${opt.LicenseNo}`,
-      })),
-    ];
-  }, [vehicleListData.data]);
 
   //
   const fuelLevelListData = useGetVehicleFuelLevelList();
