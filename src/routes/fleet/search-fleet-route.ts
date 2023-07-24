@@ -43,7 +43,6 @@ export const searchFleetRoute = new Route({
                 accessToken: auth.access_token,
                 module: "vehicles",
               }),
-            initialData: [],
           })
         );
       }

@@ -46,7 +46,6 @@ export const searchAgreementsRoute = new Route({
                 accessToken: auth.access_token,
                 module: "agreements",
               }),
-            initialData: [],
           })
         );
       }
