@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "@/components/add-rental";
@@ -22,11 +22,8 @@ const CheckinAgreementPage = () => {
   });
   const { agreementId } = useParams({ from: checkinAgreementByIdRoute.id });
 
-  const handleFindError = () => router.history.go(-1);
-
   const summaryData = useGetAgreementData({
     agreementId,
-    onError: handleFindError,
   });
 
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
@@ -63,6 +60,13 @@ const CheckinAgreementPage = () => {
       `Check-in - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
     )
   );
+
+  useEffect(() => {
+    if (summaryData.status !== "error") return;
+
+    router.history.go(-1);
+  }, [router.history, summaryData.status]);
+
   return (
     <ProtectorShield>
       <AddRentalParentForm
