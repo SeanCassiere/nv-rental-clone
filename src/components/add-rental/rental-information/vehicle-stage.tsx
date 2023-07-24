@@ -201,6 +201,7 @@ export const VehicleStage = ({
                 <FormItem>
                   <FormLabel>Vehicle</FormLabel>
                   <Select
+                    key={`${formVehicleId}-select`}
                     onValueChange={(value) => {
                       field.onChange(value);
                       const vehicle = vehicleListData.data?.data.find(
@@ -223,7 +224,7 @@ export const VehicleStage = ({
                     disabled={Boolean(formVehicleTypeId) ? false : true}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger key={`${formVehicleId}-trigger`}>
                         <SelectValue placeholder="Select vehicle type" />
                       </SelectTrigger>
                     </FormControl>
