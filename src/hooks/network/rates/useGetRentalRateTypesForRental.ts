@@ -27,7 +27,6 @@ export function useGetRentalRateTypesForRentals(opts: {
       });
     },
     enabled: auth.isAuthenticated && isEnabled,
-    initialData: [],
   });
 
   return query;
