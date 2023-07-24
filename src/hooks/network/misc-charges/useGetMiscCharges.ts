@@ -23,7 +23,6 @@ export function useGetMiscCharges(params: {
       });
     },
     enabled: auth.isAuthenticated && enabled,
-    initialData: [],
   });
   return query;
 }

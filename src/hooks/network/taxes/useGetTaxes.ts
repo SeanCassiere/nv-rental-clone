@@ -23,7 +23,6 @@ export function useGetTaxes(params: {
       });
     },
     enabled: auth.isAuthenticated && enabled,
-    initialData: [],
   });
   return query;
 }

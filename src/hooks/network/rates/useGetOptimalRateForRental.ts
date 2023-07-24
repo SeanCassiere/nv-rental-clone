@@ -27,7 +27,6 @@ export function useGetOptimalRateForRental(opts: {
       });
     },
     enabled: auth.isAuthenticated && isEnabled,
-    initialData: null,
   });
 
   return query;

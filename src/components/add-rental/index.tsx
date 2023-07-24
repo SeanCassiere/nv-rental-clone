@@ -149,17 +149,17 @@ const AddRentalParentForm = ({
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
     [string, RentalRateParsed | null]
   >(["", null]);
-  const setSelectedRateName = (cb: string | ((name: string) => string)) => {
-    if (typeof cb === "function") {
-      setRateDetails((prev) => {
-        const pos1 = prev[0];
-        const cbReturn = cb(pos1);
-        return [cbReturn, prev[1]];
-      });
-      return;
-    }
-    setRateDetails((prev) => [cb, prev[1]]);
-  };
+  // const setSelectedRateName = (cb: string | ((name: string) => string)) => {
+  //   if (typeof cb === "function") {
+  //     setRateDetails((prev) => {
+  //       const pos1 = prev[0];
+  //       const cbReturn = cb(pos1);
+  //       return [cbReturn, prev[1]];
+  //     });
+  //     return;
+  //   }
+  //   setRateDetails((prev) => [cb, prev[1]]);
+  // };
   const setSelectedRate = (
     cb:
       | RentalRateParsed
@@ -409,22 +409,22 @@ const AddRentalParentForm = ({
 
     return tabs;
   }, [
-    module,
-    isEdit,
     agreementRentalInformation,
-    referenceId,
-    selectedTaxIds,
-    clientProfile.data?.currency,
     agreementVehicleInformation,
-    selectedMiscCharges,
-    handleSetSelectedMiscCharges,
-    selectedRateName,
-    handleSetSelectedRateName,
-    selectedRate,
-    handleSetSelectedRate,
+    clientProfile.data?.currency,
     commonCustomerInformation,
+    handleSetSelectedMiscCharges,
+    handleSetSelectedRate,
+    handleSetSelectedRateName,
     handleStageTabClick,
+    isEdit,
+    module,
+    referenceId,
     reservationData,
+    selectedMiscCharges,
+    selectedRate,
+    selectedRateName,
+    selectedTaxIds,
   ]);
 
   // fetching existing agreement data and set it to state
@@ -613,6 +613,7 @@ const AddRentalParentForm = ({
 
   useEffect(() => {
     if (getOptimalRateQuery.status !== "success") return;
+
     const data = getOptimalRateQuery.data;
 
     if (data && data?.rateName) {
@@ -632,7 +633,7 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation) &&
     selectedRateName !== "";
   const reservationConditionsForFetchingRates = false;
-  useGetRentalRates({
+  const getRentalRatesQuery = useGetRentalRates({
     enabled:
       module === "agreement"
         ? agreementConditionsForFetchingRates
@@ -661,19 +662,25 @@ const AddRentalParentForm = ({
           }
         : {}),
     },
-    onSuccess: (data) => {
-      if (Array.isArray(data) && data.length > 0) {
-        const rate = data[0];
-        if (rate) {
-          setSelectedRate(rate);
-          setCreationStageComplete((prev) => ({
-            ...prev,
-            rates: true,
-          }));
-        }
-      }
-    },
   });
+
+  useEffect(() => {
+    if (getRentalRatesQuery.status !== "success") return;
+
+    const data = getRentalRatesQuery.data;
+
+    if (Array.isArray(data) && data.length > 0) {
+      const rate = data[0];
+      if (rate) {
+        setSelectedRate(rate);
+
+        setCreationStageComplete((prev) => ({
+          ...prev,
+          rates: true,
+        }));
+      }
+    }
+  }, [getRentalRatesQuery.data, getRentalRatesQuery.status]);
 
   // fetching the data before page navigation
   useGetVehicleTypesList({
@@ -725,6 +732,7 @@ const AddRentalParentForm = ({
 
   useEffect(() => {
     if (getMiscChargesQuery.status !== "success") return;
+
     const data = getMiscChargesQuery.data;
 
     const mandatoryCharges = (data || []).filter(
@@ -765,9 +773,7 @@ const AddRentalParentForm = ({
   ]);
 
   // fetch taxes for the rental
-  const taxesAgreementReady =
-    creationStagesComplete.taxes === false &&
-    Boolean(agreementRentalInformation);
+  const taxesAgreementReady = Boolean(agreementRentalInformation);
   const taxesReservationReady = false;
   const getTaxesQuery = useGetTaxes({
     filters: {
@@ -786,17 +792,20 @@ const AddRentalParentForm = ({
     const data = getTaxesQuery.data;
     const selectedTaxesNow = (data || []).filter((tax) => !tax.isOptional);
 
-    setSelectedTaxIds(selectedTaxesNow.map((tax) => tax.id));
+    setSelectedTaxIds((prev) => {
+      if (prev.length > 0) return prev;
+      return selectedTaxesNow.map((tax) => tax.id);
+    });
     setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
   }, [getTaxesQuery.data, getTaxesQuery.status]);
 
+  // fetch a calculated rental summary
   const agreementConditionsForSummaryCalculation =
     Boolean(agreementRentalInformation) &&
     Boolean(agreementVehicleInformation) &&
     Boolean(commonCustomerInformation) &&
     Boolean(selectedRate);
 
-  // fetch a calculated rental summary
   const calculatedSummaryData = usePostCalculateRentalSummaryAmounts({
     input: {
       isCheckin: isCheckin,
