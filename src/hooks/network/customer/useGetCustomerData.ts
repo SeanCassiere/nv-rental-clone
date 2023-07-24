@@ -4,10 +4,7 @@ import { useAuth } from "react-oidc-context";
 import { fetchCustomerData } from "@/api/customers";
 import { customerQKeys } from "@/utils/query-key";
 
-export function useGetCustomerData(params: {
-  customerId: string | number;
-  onError?: (err: unknown) => void;
-}) {
+export function useGetCustomerData(params: { customerId: string | number }) {
   const auth = useAuth();
   const query = useQuery({
     queryKey: customerQKeys.id(params.customerId),
@@ -19,11 +16,6 @@ export function useGetCustomerData(params: {
         accessToken: auth.user?.access_token || "",
       }),
     enabled: auth.isAuthenticated,
-    onError: (err) => {
-      if (params?.onError) {
-        params?.onError(err);
-      }
-    },
     retry: 2,
   });
   return query;
