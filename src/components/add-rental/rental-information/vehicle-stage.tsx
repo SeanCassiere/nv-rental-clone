@@ -187,10 +187,13 @@ export const VehicleStage = ({
                   <FormLabel>Vehicle type</FormLabel>
                   <Select
                     onValueChange={(value) => {
+                      const existingVehicleId = formVehicleId;
                       field.onChange(value);
-                      form.setValue("fuelOut", "");
-                      form.setValue("odometerOut", 0);
-                      form.setValue("vehicleId", 0);
+                      if (existingVehicleId) {
+                        form.setValue("fuelOut", "");
+                        form.setValue("odometerOut", 0);
+                        form.setValue("vehicleId", 0);
+                      }
                     }}
                     value={field.value ? `${field.value}` : undefined}
                     disabled={Boolean(checkoutLocation) ? false : true}
