@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 
 import AddRentalParentForm from "@/components/add-rental";
@@ -24,11 +24,8 @@ const EditReservationPage = () => {
   });
   const { reservationId } = useParams({ from: editReservationByIdRoute.id });
 
-  const handleFindError = () => router.history.go(-1);
-
   const reservationData = useGetReservationData({
     reservationId,
-    onError: handleFindError,
   });
 
   const summaryData = useGetModuleRentalRatesSummary({
@@ -65,6 +62,13 @@ const EditReservationPage = () => {
       `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`
     )
   );
+
+  useEffect(() => {
+    if (summaryData.status !== "error") return;
+
+    router.history.go(-1);
+  }, [router.history, summaryData.status]);
+
   return (
     <ProtectorShield>
       <AddRentalParentForm

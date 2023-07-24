@@ -1,4 +1,4 @@
-import { lazy, useMemo, Suspense, type ReactNode } from "react";
+import { lazy, useMemo, Suspense, type ReactNode, useEffect } from "react";
 import {
   useNavigate,
   useRouter,
@@ -93,10 +93,6 @@ function ReservationViewPage() {
     return tabs;
   }, [reservationId]);
 
-  const handleFindError = () => {
-    router.history.go(-1);
-  };
-
   const onTabClick = (newTabId: string) => {
     navigate({
       to: viewReservationByIdRoute.to,
@@ -108,7 +104,6 @@ function ReservationViewPage() {
 
   const reservation = useGetReservationData({
     reservationId,
-    onError: handleFindError,
   });
 
   useDocumentTitle(
@@ -117,6 +112,12 @@ function ReservationViewPage() {
         " - Reservations"
     )
   );
+
+  useEffect(() => {
+    if (reservation.status !== "error") return;
+
+    router.history.go(-1);
+  }, [reservation.status, router.history]);
 
   return (
     <ProtectorShield>
