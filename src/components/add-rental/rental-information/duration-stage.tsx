@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,13 +7,16 @@ import isBefore from "date-fns/isBefore";
 import isEqual from "date-fns/isEqual";
 import differenceInSeconds from "date-fns/differenceInSeconds";
 
-import {
-  DateTimePicker,
-  NativeSelectInput,
-  getSelectedOptionForSelectInput,
-} from "@/components/Form";
+import { DateTimePicker } from "@/components/Form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -100,36 +103,15 @@ export const DurationStage = ({
   });
 
   const locationData = useGetLocationsList({ locationIsActive: true });
-  const locationOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!locationData.data) return [empty];
-
-    return [
-      empty,
-      ...locationData.data.data.map((option) => ({
-        value: `${option.locationId}`,
-        label: `${option.locationName}`,
-      })),
-    ];
-  }, [locationData.data]);
+  const locationsList = locationData.data?.data ?? [];
 
   const agreementTypeData = useGetAgreementTypesList();
-  const agreementTypeOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!agreementTypeData.data) return [empty];
+  const agreementTypesList = agreementTypeData.data ?? [];
 
-    return [
-      empty,
-      ...agreementTypeData.data.map((option) => ({
-        value: `${option.typeId}`,
-        label: `${option.typeName}`,
-      })),
-    ];
-  }, [agreementTypeData.data]);
-
+  const currentAgreementType = form.watch("agreementType");
   const agreementNumberQuery = useGetNewAgreementNumber({
-    agreementType: form.getValues("agreementType"),
-    enabled: form.getValues("agreementNumber") === "" && isEdit === false,
+    agreementType: currentAgreementType,
+    enabled: isEdit === false,
   });
 
   useEffect(() => {
@@ -161,7 +143,7 @@ export const DurationStage = ({
                 <FormItem>
                   <FormLabel>Agreement No.</FormLabel>
                   <FormControl>
-                    <Input placeholder="RT-01" readOnly={isEdit} {...field} />
+                    <Input placeholder="RT-01" disabled={isEdit} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,25 +151,36 @@ export const DurationStage = ({
             />
           </div>
           <div>
-            <NativeSelectInput
-              {...form.register("agreementType")}
-              label="Agreement type"
-              options={agreementTypeOptions}
-              value={getSelectedOptionForSelectInput(
-                agreementTypeOptions,
-                form.getValues("agreementType"),
-                "label"
+            <FormField
+              control={form.control}
+              name="agreementType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Agreement type</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={isEdit}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select an agreement type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {agreementTypesList.map((type, idx) => (
+                        <SelectItem
+                          key={`${type.typeId}-${idx}`}
+                          value={`${type.typeName}`}
+                        >
+                          {type.typeName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-              onSelect={(value) => {
-                if (value !== null && value.value !== "") {
-                  form.setValue("agreementType", value.label as any, {
-                    shouldValidate: true,
-                  });
-                }
-              }}
-              error={!!form.formState.errors.agreementType}
-              errorText={form.formState.errors.agreementType?.message}
-              disabled={isEdit}
             />
           </div>
           <div>
@@ -240,23 +233,36 @@ export const DurationStage = ({
             />
           </div>
           <div>
-            <NativeSelectInput
-              {...form.register("checkoutLocation")}
-              label="Checkout location"
-              options={locationOptions}
-              value={getSelectedOptionForSelectInput(
-                locationOptions,
-                form.getValues("checkoutLocation")
+            <FormField
+              control={form.control}
+              name="checkoutLocation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Checkout location</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={String(field.value)}
+                    key={`${field.value}`}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select checkout location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {locationsList.map((location, idx) => (
+                        <SelectItem
+                          key={`${location.locationId}-${idx}-checkout`}
+                          value={`${location.locationId}`}
+                        >
+                          {location.locationName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-              onSelect={(value) => {
-                if (value !== null && value.value !== "") {
-                  form.setValue("checkoutLocation", value.value as any, {
-                    shouldValidate: true,
-                  });
-                }
-              }}
-              error={!!form.formState.errors.checkoutLocation}
-              errorText={form.formState.errors.checkoutLocation?.message}
             />
           </div>
           <div>
@@ -277,23 +283,36 @@ export const DurationStage = ({
             />
           </div>
           <div>
-            <NativeSelectInput
-              {...form.register("checkinLocation")}
-              label="Checkin location"
-              options={locationOptions}
-              value={getSelectedOptionForSelectInput(
-                locationOptions,
-                form.getValues("checkinLocation")
+            <FormField
+              control={form.control}
+              name="checkinLocation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Checkin location</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={String(field.value)}
+                    key={`${field.value}`}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select checkin location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {locationsList.map((location, idx) => (
+                        <SelectItem
+                          key={`${location.locationId}-${idx}-checkin`}
+                          value={`${location.locationId}`}
+                        >
+                          {location.locationName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-              onSelect={(value) => {
-                if (value !== null && value.value !== "") {
-                  form.setValue("checkinLocation", value.value as any, {
-                    shouldValidate: true,
-                  });
-                }
-              }}
-              error={!!form.formState.errors.checkinLocation}
-              errorText={form.formState.errors.checkinLocation?.message}
             />
           </div>
         </div>
