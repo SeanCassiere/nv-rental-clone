@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -125,13 +125,20 @@ export const DurationStage = ({
     ];
   }, [agreementTypeData.data]);
 
-  useGetNewAgreementNumber({
+  const agreementNumberQuery = useGetNewAgreementNumber({
     agreementType: getValues("agreementType"),
     enabled: getValues("agreementNumber") === "" && isEdit === false,
-    onSuccess: (data) => {
-      setValue("agreementNumber", data.agreementNo);
-    },
   });
+
+  useEffect(() => {
+    if (agreementNumberQuery.status !== "success") return;
+
+    setValue("agreementNumber", agreementNumberQuery.data?.agreementNo);
+  }, [
+    agreementNumberQuery.data?.agreementNo,
+    agreementNumberQuery.status,
+    setValue,
+  ]);
 
   return (
     <form

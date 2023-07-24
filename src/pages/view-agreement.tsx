@@ -1,4 +1,4 @@
-import { lazy, useMemo, Suspense, type ReactNode } from "react";
+import { lazy, useMemo, useEffect, Suspense, type ReactNode } from "react";
 import {
   Link,
   useNavigate,
@@ -121,19 +121,20 @@ function AgreementViewPage() {
     });
   };
 
-  const handleFindError = () => {
-    router.history.go(-1);
-  };
-
   const agreement = useGetAgreementData({
     agreementId,
-    onError: handleFindError,
   });
   const isCheckedIn = agreement.data?.returnDate ? true : false;
 
   useDocumentTitle(
     titleMaker((agreement.data?.agreementNumber || "Loading") + " - Agreements")
   );
+
+  useEffect(() => {
+    if (agreement.status !== "error") return;
+
+    router.history.go(-1);
+  }, [agreement.status, router.history]);
 
   return (
     <ProtectorShield>

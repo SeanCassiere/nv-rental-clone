@@ -44,7 +44,6 @@ export const searchReservationsRoute = new Route({
                 accessToken: auth.access_token,
                 module: "reservations",
               }),
-            initialData: [],
           })
         );
       }

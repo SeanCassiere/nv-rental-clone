@@ -9,9 +9,6 @@ export function usePostCalculateRentalSummaryAmounts(opts: {
     "userId" | "clientId" | "accessToken"
   >;
   enabled?: boolean;
-  onSuccess?: (
-    data: Awaited<ReturnType<typeof postCalculateRentalSummaryAmounts>>
-  ) => void;
 }) {
   const { enabled = true } = opts;
   const auth = useAuth();
@@ -25,9 +22,6 @@ export function usePostCalculateRentalSummaryAmounts(opts: {
         userId: auth.user?.profile.navotar_userid || "",
         ...opts.input,
       });
-    },
-    onSuccess: (data) => {
-      opts?.onSuccess?.(data);
     },
   });
   return query;

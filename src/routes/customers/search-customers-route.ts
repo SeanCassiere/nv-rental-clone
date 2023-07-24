@@ -44,7 +44,6 @@ export const searchCustomersRoute = new Route({
                 accessToken: auth.access_token,
                 module: "customers",
               }),
-            initialData: [],
           })
         );
       }

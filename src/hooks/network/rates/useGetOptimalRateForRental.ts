@@ -9,9 +9,6 @@ export function useGetOptimalRateForRental(opts: {
     Parameters<typeof fetchOptimalRateForRental>[0],
     "userId" | "clientId" | "accessToken"
   >;
-  onSuccess?: (
-    data: Awaited<ReturnType<typeof fetchOptimalRateForRental>>
-  ) => void;
 }) {
   const auth = useAuth();
 
@@ -30,10 +27,6 @@ export function useGetOptimalRateForRental(opts: {
       });
     },
     enabled: auth.isAuthenticated && isEnabled,
-    onSuccess: (data) => {
-      opts?.onSuccess?.(data);
-    },
-    initialData: null,
   });
 
   return query;

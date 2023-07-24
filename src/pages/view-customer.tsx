@@ -1,4 +1,4 @@
-import { Suspense, lazy, useMemo } from "react";
+import { Suspense, lazy, useEffect, useMemo } from "react";
 import {
   Link,
   useNavigate,
@@ -84,10 +84,6 @@ function CustomerViewPage() {
     return tabs;
   }, [customerId]);
 
-  const handleFindError = () => {
-    router.history.go(-1);
-  };
-
   const onTabClick = (newTabId: string) => {
     navigate({
       to: viewCustomerByIdRoute.to,
@@ -99,7 +95,6 @@ function CustomerViewPage() {
 
   const customer = useGetCustomerData({
     customerId,
-    onError: handleFindError,
   });
 
   useDocumentTitle(
@@ -109,6 +104,12 @@ function CustomerViewPage() {
         : "Loading") + " - Customers"
     )
   );
+
+  useEffect(() => {
+    if (customer.status !== "error") return;
+
+    router.history.go(-1);
+  }, [customer.status, router.history]);
 
   return (
     <ProtectorShield>

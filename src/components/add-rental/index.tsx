@@ -1,4 +1,10 @@
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import { Link } from "@tanstack/router";
 import parseISO from "date-fns/parseISO";
 import { ChevronRightIcon } from "lucide-react";
@@ -65,6 +71,18 @@ const StageKeys = {
   other: "other-information",
 } as const;
 
+const defaultCompletionStages: TRentalCompleteStage = {
+  rental: false,
+  customer: false,
+  insurance: true,
+  vehicle: false,
+  rates: false,
+  taxes: false,
+  miscCharges: false,
+  payments: true,
+  others: true,
+};
+
 export type TRentalCompleteStage = {
   rental: boolean;
   customer: boolean;
@@ -113,17 +131,7 @@ const AddRentalParentForm = ({
   const [hasEdited, setHasEdited] = useState(false);
 
   const [creationStagesComplete, setCreationStageComplete] =
-    useState<TRentalCompleteStage>({
-      rental: false,
-      customer: false,
-      insurance: true,
-      vehicle: false,
-      rates: false,
-      taxes: false,
-      miscCharges: false,
-      payments: true,
-      others: true,
-    });
+    useState<TRentalCompleteStage>(defaultCompletionStages);
 
   const [agreementRentalInformation, setAgreementRentalInformation] =
     useState<AgreementRentalInformationSchemaParsed | null>(null);
@@ -141,17 +149,17 @@ const AddRentalParentForm = ({
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
     [string, RentalRateParsed | null]
   >(["", null]);
-  const setSelectedRateName = (cb: string | ((name: string) => string)) => {
-    if (typeof cb === "function") {
-      setRateDetails((prev) => {
-        const pos1 = prev[0];
-        const cbReturn = cb(pos1);
-        return [cbReturn, prev[1]];
-      });
-      return;
-    }
-    setRateDetails((prev) => [cb, prev[1]]);
-  };
+  // const setSelectedRateName = (cb: string | ((name: string) => string)) => {
+  //   if (typeof cb === "function") {
+  //     setRateDetails((prev) => {
+  //       const pos1 = prev[0];
+  //       const cbReturn = cb(pos1);
+  //       return [cbReturn, prev[1]];
+  //     });
+  //     return;
+  //   }
+  //   setRateDetails((prev) => [cb, prev[1]]);
+  // };
   const setSelectedRate = (
     cb:
       | RentalRateParsed
@@ -401,137 +409,175 @@ const AddRentalParentForm = ({
 
     return tabs;
   }, [
-    module,
-    isEdit,
     agreementRentalInformation,
-    referenceId,
-    selectedTaxIds,
-    clientProfile.data?.currency,
     agreementVehicleInformation,
-    selectedMiscCharges,
-    handleSetSelectedMiscCharges,
-    selectedRateName,
-    handleSetSelectedRateName,
-    selectedRate,
-    handleSetSelectedRate,
+    clientProfile.data?.currency,
     commonCustomerInformation,
+    handleSetSelectedMiscCharges,
+    handleSetSelectedRate,
+    handleSetSelectedRateName,
     handleStageTabClick,
+    isEdit,
+    module,
+    referenceId,
     reservationData,
+    selectedMiscCharges,
+    selectedRate,
+    selectedRateName,
+    selectedTaxIds,
   ]);
 
   // fetching existing agreement data and set it to state
-  useGetAgreementData({
+  const getAgreementQuery = useGetAgreementData({
     agreementId:
       module === "agreement" && isEdit && referenceId ? referenceId : 0,
-    onSuccess: (data) => {
-      const originalStartDate = parseISO(data.checkoutDate);
-      const originalEndDate = parseISO(data.checkinDate);
-
-      if (!agreementRentalInformation) {
-        setAgreementRentalInformation({
-          agreementNumber: data.agreementNumber ?? "",
-          agreementType: data.agreementType ?? "",
-          destination: data.destination ?? "",
-          checkoutLocation: data.checkoutLocation,
-          checkinLocation: data.checkinLocation,
-          checkoutDate: originalStartDate,
-          checkinDate: originalEndDate,
-        });
-        setCreationStageComplete((prev) => ({
-          ...prev,
-          rental: true,
-        }));
-      }
-
-      if (!agreementVehicleInformation) {
-        setAgreementVehicleInformation({
-          fuelOut: data.fuelLevelOut ?? "",
-          odometerOut: data.odometerOut ?? 0,
-          vehicleTypeId: data.vehicleTypeId ?? 0,
-          vehicleId: data.vehicleId ?? 0,
-        });
-        setCreationStageComplete((prev) => ({
-          ...prev,
-          vehicle: true,
-        }));
-      }
-
-      if (!commonCustomerInformation) {
-        setCommonCustomerInformation({
-          address: data?.customerDetails?.address1 || "",
-          city: data?.customerDetails?.city || "",
-          countryId: data?.countryId || 0,
-          customerId: data?.customerDetails?.customerId || 0,
-          dateOfBirth: data?.customerDetails.dateOfbirth || "",
-          email: data?.customerDetails?.email || "",
-          firstName: data?.customerDetails?.firstName || "",
-          lastName: data?.customerDetails?.lastName || "",
-          licenseExpiryDate: data?.customerDetails?.licenseExpiryDate || null,
-          licenseIssueDate: data?.customerDetails?.licenseIssueDate || null,
-          licenseNumber: data?.customerDetails?.licenseNumber || null,
-          bPhone: data?.customerDetails?.bPhone || "",
-          cPhone: data?.customerDetails?.cPhone || "",
-          hPhone: data?.customerDetails?.hPhone || "",
-          stateId: data?.stateId || 0,
-          zipCode: data?.zipCode || "",
-          isTaxSaver:
-            data.customerDetails?.customerType
-              ?.toLowerCase()
-              .includes("taxsaver") ||
-            data?.customerDetails?.isTaxExempt ||
-            false,
-        });
-        setCreationStageComplete((prev) => ({
-          ...prev,
-          customer: true,
-        }));
-      }
-      if (selectedRateName === "") {
-        if (data.rateList && data.rateList[0]) {
-          const existingRateName = data.rateList[0].rateName;
-          setSelectedRateName(existingRateName ?? "");
-        }
-      }
-
-      if (selectedMiscCharges.length === 0) {
-        const filledMiscCharges: CalculateRentalSummaryMiscChargeType[] = (
-          data.mischargeList || []
-        ).map((charge) => ({
-          id: charge.miscChargeId ?? 0,
-          locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
-          quantity: charge?.quantity ?? 0,
-          startDate: charge?.startDate ?? originalStartDate.toISOString(),
-          endDate: charge?.endDate ?? originalEndDate.toISOString(),
-          optionId: charge?.optionId ?? 0,
-          isSelected: charge?.isSelected ?? false,
-          value: charge?.value ?? 0,
-          unit: charge?.unit ?? 0,
-          isTaxable: charge?.isTaxable ?? false,
-          minValue: charge.minValue,
-          maxValue: charge.maxValue,
-          hourlyValue: charge.hourlyValue,
-          hourlyQuantity: charge.hourlyQuantity,
-          dailyValue: charge.dailyValue,
-          dailyQuantity: charge.dailyQuantity,
-          weeklyValue: charge.weeklyValue,
-          weeklyQuantity: charge.weeklyQuantity,
-          monthlyValue: charge.monthlyValue,
-          monthlyQuantity: charge.monthlyQuantity,
-        }));
-        setSelectedMiscCharges(filledMiscCharges);
-      }
-      setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
-
-      if (selectedTaxIds.length === 0) {
-        const list = data.taxList.filter((tax) => tax.taxId !== null);
-        const taxIds = [...list.map((tax) => tax.taxId)].filter(
-          (taxId) => typeof taxId === "number" && taxId !== null
-        ) as number[];
-        setSelectedTaxIds(taxIds);
-        setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
-      }
-    },
   });
+
+  useEffect(() => {
+    if (getAgreementQuery.status !== "success") return;
+
+    const data = getAgreementQuery.data;
+
+    const originalStartDate = parseISO(data.checkoutDate);
+    const originalEndDate = parseISO(data.checkinDate);
+
+    const startingCompletionStages = structuredClone(defaultCompletionStages);
+
+    setAgreementRentalInformation((info) => {
+      if (info) return info;
+      startingCompletionStages.rental = true;
+      return {
+        agreementNumber: data.agreementNumber ?? "",
+        agreementType: data.agreementType ?? "",
+        destination: data.destination ?? "",
+        checkoutLocation: data.checkoutLocation,
+        checkinLocation: data.checkinLocation,
+        checkoutDate: originalStartDate,
+        checkinDate: originalEndDate,
+      };
+    });
+
+    setAgreementVehicleInformation((info) => {
+      if (info) return info;
+      startingCompletionStages.vehicle = true;
+      return {
+        fuelOut: data.fuelLevelOut ?? "",
+        odometerOut: data.odometerOut ?? 0,
+        vehicleTypeId: data.vehicleTypeId ?? 0,
+        vehicleId: data.vehicleId ?? 0,
+      };
+    });
+
+    setCommonCustomerInformation((info) => {
+      if (info) return info;
+      startingCompletionStages.customer = true;
+      return {
+        address: data?.customerDetails?.address1 || "",
+        city: data?.customerDetails?.city || "",
+        countryId: data?.countryId || 0,
+        customerId: data?.customerDetails?.customerId || 0,
+        dateOfBirth: data?.customerDetails.dateOfbirth || "",
+        email: data?.customerDetails?.email || "",
+        firstName: data?.customerDetails?.firstName || "",
+        lastName: data?.customerDetails?.lastName || "",
+        licenseExpiryDate: data?.customerDetails?.licenseExpiryDate || null,
+        licenseIssueDate: data?.customerDetails?.licenseIssueDate || null,
+        licenseNumber: data?.customerDetails?.licenseNumber || null,
+        bPhone: data?.customerDetails?.bPhone || "",
+        cPhone: data?.customerDetails?.cPhone || "",
+        hPhone: data?.customerDetails?.hPhone || "",
+        stateId: data?.stateId || 0,
+        zipCode: data?.zipCode || "",
+        isTaxSaver:
+          data.customerDetails?.customerType
+            ?.toLowerCase()
+            .includes("taxsaver") ||
+          data?.customerDetails?.isTaxExempt ||
+          false,
+      };
+    });
+
+    setCommonCustomerInformation((info) => {
+      if (info) return info;
+      startingCompletionStages.customer = true;
+      return {
+        address: data?.customerDetails?.address1 || "",
+        city: data?.customerDetails?.city || "",
+        countryId: data?.countryId || 0,
+        customerId: data?.customerDetails?.customerId || 0,
+        dateOfBirth: data?.customerDetails.dateOfbirth || "",
+        email: data?.customerDetails?.email || "",
+        firstName: data?.customerDetails?.firstName || "",
+        lastName: data?.customerDetails?.lastName || "",
+        licenseExpiryDate: data?.customerDetails?.licenseExpiryDate || null,
+        licenseIssueDate: data?.customerDetails?.licenseIssueDate || null,
+        licenseNumber: data?.customerDetails?.licenseNumber || null,
+        bPhone: data?.customerDetails?.bPhone || "",
+        cPhone: data?.customerDetails?.cPhone || "",
+        hPhone: data?.customerDetails?.hPhone || "",
+        stateId: data?.stateId || 0,
+        zipCode: data?.zipCode || "",
+        isTaxSaver:
+          data.customerDetails?.customerType
+            ?.toLowerCase()
+            .includes("taxsaver") ||
+          data?.customerDetails?.isTaxExempt ||
+          false,
+      };
+    });
+
+    if (data.rateList && data.rateList[0]) {
+      const existingAgreementRateName = data.rateList[0].rateName;
+      setRateDetails((info) => {
+        if (info[0]) return info;
+        return [existingAgreementRateName ?? "", null];
+      });
+    }
+
+    setSelectedMiscCharges((info) => {
+      if (info.length > 0) return info;
+
+      const filledMiscCharges: CalculateRentalSummaryMiscChargeType[] = (
+        data.mischargeList || []
+      ).map((charge) => ({
+        id: charge.miscChargeId ?? 0,
+        locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
+        quantity: charge?.quantity ?? 0,
+        startDate: charge?.startDate ?? originalStartDate.toISOString(),
+        endDate: charge?.endDate ?? originalEndDate.toISOString(),
+        optionId: charge?.optionId ?? 0,
+        isSelected: charge?.isSelected ?? false,
+        value: charge?.value ?? 0,
+        unit: charge?.unit ?? 0,
+        isTaxable: charge?.isTaxable ?? false,
+        minValue: charge.minValue,
+        maxValue: charge.maxValue,
+        hourlyValue: charge.hourlyValue,
+        hourlyQuantity: charge.hourlyQuantity,
+        dailyValue: charge.dailyValue,
+        dailyQuantity: charge.dailyQuantity,
+        weeklyValue: charge.weeklyValue,
+        weeklyQuantity: charge.weeklyQuantity,
+        monthlyValue: charge.monthlyValue,
+        monthlyQuantity: charge.monthlyQuantity,
+      }));
+      return filledMiscCharges;
+    });
+    startingCompletionStages.miscCharges = true;
+
+    const agreementTaxList = data.taxList.filter((tax) => tax.taxId !== null);
+    const taxIds = [...agreementTaxList.map((tax) => tax.taxId)].filter(
+      (taxId) => typeof taxId === "number" && taxId !== null
+    ) as number[];
+
+    setSelectedTaxIds((info) => {
+      if (info.length > 0) return info;
+      startingCompletionStages.taxes = true;
+      return taxIds;
+    });
+
+    setCreationStageComplete(startingCompletionStages);
+  }, [getAgreementQuery.data, getAgreementQuery.status]);
 
   // fetching the optimal rate name for new rentals
   const agreementConditionsForOptimalRateFetch =
@@ -540,7 +586,7 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation?.vehicleTypeId) &&
     Boolean(agreementRentalInformation?.checkoutLocation);
   const reservationConditionsForOptimalRateFetch = false;
-  useGetOptimalRateForRental({
+  const getOptimalRateQuery = useGetOptimalRateForRental({
     filters: {
       CheckoutDate:
         module === "agreement"
@@ -559,22 +605,27 @@ const AddRentalParentForm = ({
           ? String(agreementRentalInformation?.checkoutLocation)
           : "demo-reservation-location-id",
     },
-    onSuccess: (data) => {
-      if (data && data?.rateName) {
-        setRateDetails((values) => {
-          const [prev] = values;
-          if (prev === "" && data.rateName !== null) {
-            return [data.rateName!, null];
-          }
-          return values;
-        });
-      }
-    },
     enabled:
       module === "agreement"
         ? agreementConditionsForOptimalRateFetch
         : reservationConditionsForOptimalRateFetch,
   });
+
+  useEffect(() => {
+    if (getOptimalRateQuery.status !== "success") return;
+
+    const data = getOptimalRateQuery.data;
+
+    if (data && data?.rateName) {
+      setRateDetails((values) => {
+        const [prev] = values;
+        if (prev === "" && data.rateName !== null) {
+          return [data.rateName!, null];
+        }
+        return values;
+      });
+    }
+  }, [getOptimalRateQuery.data, getOptimalRateQuery.status]);
 
   // fetching the rate for the rental
   const agreementConditionsForFetchingRates =
@@ -582,7 +633,7 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation) &&
     selectedRateName !== "";
   const reservationConditionsForFetchingRates = false;
-  useGetRentalRates({
+  const getRentalRatesQuery = useGetRentalRates({
     enabled:
       module === "agreement"
         ? agreementConditionsForFetchingRates
@@ -611,19 +662,25 @@ const AddRentalParentForm = ({
           }
         : {}),
     },
-    onSuccess: (data) => {
-      if (Array.isArray(data) && data.length > 0) {
-        const rate = data[0];
-        if (rate) {
-          setSelectedRate(rate);
-          setCreationStageComplete((prev) => ({
-            ...prev,
-            rates: true,
-          }));
-        }
-      }
-    },
   });
+
+  useEffect(() => {
+    if (getRentalRatesQuery.status !== "success") return;
+
+    const data = getRentalRatesQuery.data;
+
+    if (Array.isArray(data) && data.length > 0) {
+      const rate = data[0];
+      if (rate) {
+        setSelectedRate(rate);
+
+        setCreationStageComplete((prev) => ({
+          ...prev,
+          rates: true,
+        }));
+      }
+    }
+  }, [getRentalRatesQuery.data, getRentalRatesQuery.status]);
 
   // fetching the data before page navigation
   useGetVehicleTypesList({
@@ -659,7 +716,8 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation) &&
     isEdit === false;
   const miscChargesReservationReady = false;
-  useGetMiscCharges({
+
+  const getMiscChargesQuery = useGetMiscCharges({
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
@@ -670,47 +728,54 @@ const AddRentalParentForm = ({
       module === "agreement"
         ? miscChargesAgreementReady
         : miscChargesReservationReady,
-    onSuccess: (data) => {
-      const mandatoryCharges = (data || []).filter(
-        (charge) => charge.IsOptional === false
-      );
-      setSelectedMiscCharges((existing) => {
-        if (existing.length > 0) {
-          return existing;
-        }
-        return mandatoryCharges.map((charge) => ({
-          id: charge.Id,
-          locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
-          quantity: 1,
-          startDate: agreementRentalInformation!.checkoutDate.toISOString(),
-          endDate: agreementRentalInformation!.checkinDate.toISOString(),
-          optionId: 0,
-          isSelected: true,
-          value: charge.Total ?? 0,
-          unit: 0,
-          isTaxable: charge.IsTaxable ?? false,
-          minValue: charge.MinValue,
-          maxValue: charge.MaxValue,
-          hourlyValue: charge.HourlyValue,
-          hourlyQuantity: charge.HourlyQuantity,
-          dailyValue: charge.DailyValue,
-          dailyQuantity: charge.DailyQuantity,
-          weeklyValue: charge.WeeklyValue,
-          weeklyQuantity: charge.WeeklyQuantity,
-          monthlyValue: charge.MonthlyValue,
-          monthlyQuantity: charge.MonthlyQuantity,
-        }));
-      });
-      setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
-    },
   });
 
+  useEffect(() => {
+    if (getMiscChargesQuery.status !== "success") return;
+
+    const data = getMiscChargesQuery.data;
+
+    const mandatoryCharges = (data || []).filter(
+      (charge) => charge.IsOptional === false
+    );
+    setSelectedMiscCharges((existing) => {
+      if (existing.length > 0) {
+        return existing;
+      }
+      return mandatoryCharges.map((charge) => ({
+        id: charge.Id,
+        locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
+        quantity: 1,
+        startDate: agreementRentalInformation!.checkoutDate.toISOString(),
+        endDate: agreementRentalInformation!.checkinDate.toISOString(),
+        optionId: 0,
+        isSelected: true,
+        value: charge.Total ?? 0,
+        unit: 0,
+        isTaxable: charge.IsTaxable ?? false,
+        minValue: charge.MinValue,
+        maxValue: charge.MaxValue,
+        hourlyValue: charge.HourlyValue,
+        hourlyQuantity: charge.HourlyQuantity,
+        dailyValue: charge.DailyValue,
+        dailyQuantity: charge.DailyQuantity,
+        weeklyValue: charge.WeeklyValue,
+        weeklyQuantity: charge.WeeklyQuantity,
+        monthlyValue: charge.MonthlyValue,
+        monthlyQuantity: charge.MonthlyQuantity,
+      }));
+    });
+    setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
+  }, [
+    agreementRentalInformation,
+    getMiscChargesQuery.data,
+    getMiscChargesQuery.status,
+  ]);
+
   // fetch taxes for the rental
-  const taxesAgreementReady =
-    creationStagesComplete.taxes === false &&
-    Boolean(agreementRentalInformation);
+  const taxesAgreementReady = Boolean(agreementRentalInformation);
   const taxesReservationReady = false;
-  useGetTaxes({
+  const getTaxesQuery = useGetTaxes({
     filters: {
       LocationId:
         module === "agreement"
@@ -719,20 +784,28 @@ const AddRentalParentForm = ({
     },
     enabled:
       module === "agreement" ? taxesAgreementReady : taxesReservationReady,
-    onSuccess: (data) => {
-      const selectedTaxes = (data || []).filter((tax) => !tax.isOptional);
-      setSelectedTaxIds(selectedTaxes.map((tax) => tax.id));
-      setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
-    },
   });
 
+  useEffect(() => {
+    if (getTaxesQuery.status !== "success") return;
+
+    const data = getTaxesQuery.data;
+    const selectedTaxesNow = (data || []).filter((tax) => !tax.isOptional);
+
+    setSelectedTaxIds((prev) => {
+      if (prev.length > 0) return prev;
+      return selectedTaxesNow.map((tax) => tax.id);
+    });
+    setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
+  }, [getTaxesQuery.data, getTaxesQuery.status]);
+
+  // fetch a calculated rental summary
   const agreementConditionsForSummaryCalculation =
     Boolean(agreementRentalInformation) &&
     Boolean(agreementVehicleInformation) &&
     Boolean(commonCustomerInformation) &&
     Boolean(selectedRate);
 
-  // fetch a calculated rental summary
   const calculatedSummaryData = usePostCalculateRentalSummaryAmounts({
     input: {
       isCheckin: isCheckin,

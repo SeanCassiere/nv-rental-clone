@@ -31,7 +31,6 @@ export const indexRoute = new Route({
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
               }),
-            initialData: [],
           })
         );
       }
@@ -48,7 +47,6 @@ export const indexRoute = new Route({
                 userId: auth.profile.navotar_userid,
                 accessToken: auth.access_token,
               }),
-            initialData: [],
           })
         );
       }
@@ -66,7 +64,6 @@ export const indexRoute = new Route({
                 accessToken: auth.access_token,
                 withActive: true,
               }),
-            initialData: [],
           })
         );
       }

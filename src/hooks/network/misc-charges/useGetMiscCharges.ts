@@ -9,9 +9,8 @@ export function useGetMiscCharges(params: {
     Parameters<typeof fetchMiscCharges>[0],
     "accessToken" | "userId" | "clientId"
   >;
-  onSuccess?: (data: Awaited<ReturnType<typeof fetchMiscCharges>>) => void;
 }) {
-  const { enabled = true, filters = {}, onSuccess } = params;
+  const { enabled = true, filters = {} } = params;
   const auth = useAuth();
   const query = useQuery({
     queryKey: ["misc-charges", filters],
@@ -24,10 +23,6 @@ export function useGetMiscCharges(params: {
       });
     },
     enabled: auth.isAuthenticated && enabled,
-    onSuccess: (data) => {
-      onSuccess?.(data);
-    },
-    initialData: [],
   });
   return query;
 }

@@ -117,8 +117,7 @@ const ModuleNotesTabContent = ({
 
   return (
     <div className="max-w-full focus:ring-0">
-      {notesQuery.data.isRequestMade === false ? null : notesQuery.data.data
-          .length === 0 ? (
+      {notesQuery.status === "loading" || notesQuery.data?.data.length === 0 ? (
         <CommonEmptyStateContent
           title={emptyContentLabels[module]?.title ?? ""}
           subtitle={emptyContentLabels[module]?.subtitle ?? ""}

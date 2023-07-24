@@ -9,9 +9,8 @@ export function useGetTaxes(params: {
     Parameters<typeof fetchTaxesList>[0],
     "accessToken" | "userId" | "clientId"
   >;
-  onSuccess?: (data: Awaited<ReturnType<typeof fetchTaxesList>>) => void;
 }) {
-  const { enabled = true, filters = { LocationId: 0 }, onSuccess } = params;
+  const { enabled = true, filters = { LocationId: 0 } } = params;
   const auth = useAuth();
   const query = useQuery({
     queryKey: ["taxes", filters],
@@ -24,10 +23,6 @@ export function useGetTaxes(params: {
       });
     },
     enabled: auth.isAuthenticated && enabled,
-    onSuccess: (data) => {
-      onSuccess?.(data);
-    },
-    initialData: [],
   });
   return query;
 }

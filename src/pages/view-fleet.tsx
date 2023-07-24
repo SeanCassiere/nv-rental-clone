@@ -1,4 +1,4 @@
-import { lazy, useMemo, Suspense, type ReactNode } from "react";
+import { lazy, useMemo, Suspense, type ReactNode, useEffect } from "react";
 import {
   useNavigate,
   useRouter,
@@ -72,10 +72,6 @@ function VehicleViewPage() {
 
   const vehicleId = params.vehicleId || "";
 
-  const handleFindError = () => {
-    router.history.go(-1);
-  };
-
   const onTabClick = (newTabId: string) => {
     navigate({
       to: viewFleetByIdRoute.to,
@@ -87,7 +83,6 @@ function VehicleViewPage() {
 
   const vehicle = useGetVehicleData({
     vehicleId,
-    onError: handleFindError,
   });
 
   const tabsConfig = useMemo(() => {
@@ -137,6 +132,12 @@ function VehicleViewPage() {
   useDocumentTitle(
     titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
   );
+
+  useEffect(() => {
+    if (vehicle.status !== "error") return;
+
+    router.history.go(-1);
+  }, [router.history, vehicle.status]);
 
   return (
     <ProtectorShield>

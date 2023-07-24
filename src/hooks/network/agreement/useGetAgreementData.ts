@@ -4,11 +4,7 @@ import { useAuth } from "react-oidc-context";
 import { fetchAgreementData } from "@/api/agreements";
 import { agreementQKeys } from "@/utils/query-key";
 
-export function useGetAgreementData(params: {
-  agreementId: string | number;
-  onError?: (err: unknown) => void;
-  onSuccess?: (data: Awaited<ReturnType<typeof fetchAgreementData>>) => void;
-}) {
+export function useGetAgreementData(params: { agreementId: string | number }) {
   const auth = useAuth();
   const query = useQuery({
     queryKey: agreementQKeys.id(params.agreementId),
@@ -22,12 +18,6 @@ export function useGetAgreementData(params: {
     enabled:
       auth.isAuthenticated &&
       Boolean(params.agreementId && params.agreementId !== "0"),
-    onError: (err) => {
-      params?.onError?.(err);
-    },
-    onSuccess: (data) => {
-      params?.onSuccess?.(data);
-    },
     retry: 2,
   });
   return query;
