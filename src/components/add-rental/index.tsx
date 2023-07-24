@@ -765,7 +765,7 @@ const AddRentalParentForm = ({
     creationStagesComplete.taxes === false &&
     Boolean(agreementRentalInformation);
   const taxesReservationReady = false;
-  useGetTaxes({
+  const getTaxesQuery = useGetTaxes({
     filters: {
       LocationId:
         module === "agreement"
@@ -774,12 +774,17 @@ const AddRentalParentForm = ({
     },
     enabled:
       module === "agreement" ? taxesAgreementReady : taxesReservationReady,
-    onSuccess: (data) => {
-      const selectedTaxes = (data || []).filter((tax) => !tax.isOptional);
-      setSelectedTaxIds(selectedTaxes.map((tax) => tax.id));
-      setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
-    },
   });
+
+  useEffect(() => {
+    if (getTaxesQuery.status !== "success") return;
+
+    const data = getTaxesQuery.data;
+    const selectedTaxesNow = (data || []).filter((tax) => !tax.isOptional);
+
+    setSelectedTaxIds(selectedTaxesNow.map((tax) => tax.id));
+    setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
+  }, [getTaxesQuery.data, getTaxesQuery.status]);
 
   const agreementConditionsForSummaryCalculation =
     Boolean(agreementRentalInformation) &&
