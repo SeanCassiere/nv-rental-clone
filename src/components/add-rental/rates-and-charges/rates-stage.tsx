@@ -156,12 +156,16 @@ export const RatesStage = (props: RatesStageProps) => {
         })}
         className="mt-4 px-1 text-sm"
       >
-        {isWeekDayRate ? (
-          <WeekDayRatesForm {...commonFormProps} />
-        ) : isDayRate ? (
-          <DayRatesForm {...commonFormProps} />
-        ) : (
-          <NormalRatesForm {...commonFormProps} />
+        {rate && (
+          <>
+            {isWeekDayRate ? (
+              <WeekDayRatesForm {...commonFormProps} />
+            ) : isDayRate ? (
+              <DayRatesForm {...commonFormProps} />
+            ) : (
+              <NormalRatesForm {...commonFormProps} />
+            )}
+          </>
         )}
         <div className="mt-4">
           <Button type="submit" disabled={!rate}>

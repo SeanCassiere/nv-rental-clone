@@ -272,8 +272,9 @@ export const CustomerStage = ({
                     <Input
                       placeholder="License no."
                       readOnly
+                      key={`customer-licenseNumber-${field.value}`}
                       {...field}
-                      value={field.value ?? undefined}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />
