@@ -586,7 +586,7 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation?.vehicleTypeId) &&
     Boolean(agreementRentalInformation?.checkoutLocation);
   const reservationConditionsForOptimalRateFetch = false;
-  useGetOptimalRateForRental({
+  const getOptimalRateQuery = useGetOptimalRateForRental({
     filters: {
       CheckoutDate:
         module === "agreement"
@@ -605,22 +605,26 @@ const AddRentalParentForm = ({
           ? String(agreementRentalInformation?.checkoutLocation)
           : "demo-reservation-location-id",
     },
-    onSuccess: (data) => {
-      if (data && data?.rateName) {
-        setRateDetails((values) => {
-          const [prev] = values;
-          if (prev === "" && data.rateName !== null) {
-            return [data.rateName!, null];
-          }
-          return values;
-        });
-      }
-    },
     enabled:
       module === "agreement"
         ? agreementConditionsForOptimalRateFetch
         : reservationConditionsForOptimalRateFetch,
   });
+
+  useEffect(() => {
+    if (getOptimalRateQuery.status !== "success") return;
+    const data = getOptimalRateQuery.data;
+
+    if (data && data?.rateName) {
+      setRateDetails((values) => {
+        const [prev] = values;
+        if (prev === "" && data.rateName !== null) {
+          return [data.rateName!, null];
+        }
+        return values;
+      });
+    }
+  }, [getOptimalRateQuery.data, getOptimalRateQuery.status]);
 
   // fetching the rate for the rental
   const agreementConditionsForFetchingRates =
