@@ -705,7 +705,8 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation) &&
     isEdit === false;
   const miscChargesReservationReady = false;
-  useGetMiscCharges({
+
+  const getMiscChargesQuery = useGetMiscCharges({
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
@@ -716,40 +717,48 @@ const AddRentalParentForm = ({
       module === "agreement"
         ? miscChargesAgreementReady
         : miscChargesReservationReady,
-    onSuccess: (data) => {
-      const mandatoryCharges = (data || []).filter(
-        (charge) => charge.IsOptional === false
-      );
-      setSelectedMiscCharges((existing) => {
-        if (existing.length > 0) {
-          return existing;
-        }
-        return mandatoryCharges.map((charge) => ({
-          id: charge.Id,
-          locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
-          quantity: 1,
-          startDate: agreementRentalInformation!.checkoutDate.toISOString(),
-          endDate: agreementRentalInformation!.checkinDate.toISOString(),
-          optionId: 0,
-          isSelected: true,
-          value: charge.Total ?? 0,
-          unit: 0,
-          isTaxable: charge.IsTaxable ?? false,
-          minValue: charge.MinValue,
-          maxValue: charge.MaxValue,
-          hourlyValue: charge.HourlyValue,
-          hourlyQuantity: charge.HourlyQuantity,
-          dailyValue: charge.DailyValue,
-          dailyQuantity: charge.DailyQuantity,
-          weeklyValue: charge.WeeklyValue,
-          weeklyQuantity: charge.WeeklyQuantity,
-          monthlyValue: charge.MonthlyValue,
-          monthlyQuantity: charge.MonthlyQuantity,
-        }));
-      });
-      setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
-    },
   });
+
+  useEffect(() => {
+    if (getMiscChargesQuery.status !== "success") return;
+    const data = getMiscChargesQuery.data;
+
+    const mandatoryCharges = (data || []).filter(
+      (charge) => charge.IsOptional === false
+    );
+    setSelectedMiscCharges((existing) => {
+      if (existing.length > 0) {
+        return existing;
+      }
+      return mandatoryCharges.map((charge) => ({
+        id: charge.Id,
+        locationMiscChargeId: charge.LocationMiscChargeID ?? 0,
+        quantity: 1,
+        startDate: agreementRentalInformation!.checkoutDate.toISOString(),
+        endDate: agreementRentalInformation!.checkinDate.toISOString(),
+        optionId: 0,
+        isSelected: true,
+        value: charge.Total ?? 0,
+        unit: 0,
+        isTaxable: charge.IsTaxable ?? false,
+        minValue: charge.MinValue,
+        maxValue: charge.MaxValue,
+        hourlyValue: charge.HourlyValue,
+        hourlyQuantity: charge.HourlyQuantity,
+        dailyValue: charge.DailyValue,
+        dailyQuantity: charge.DailyQuantity,
+        weeklyValue: charge.WeeklyValue,
+        weeklyQuantity: charge.WeeklyQuantity,
+        monthlyValue: charge.MonthlyValue,
+        monthlyQuantity: charge.MonthlyQuantity,
+      }));
+    });
+    setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
+  }, [
+    agreementRentalInformation,
+    getMiscChargesQuery.data,
+    getMiscChargesQuery.status,
+  ]);
 
   // fetch taxes for the rental
   const taxesAgreementReady =
