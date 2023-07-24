@@ -159,7 +159,7 @@ export const DurationStage = ({
                   <FormLabel>Agreement type</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    value={field.value}
+                    value={field.value ? field.value : undefined}
                     disabled={isEdit}
                   >
                     <FormControl>
@@ -241,7 +241,7 @@ export const DurationStage = ({
                   <FormLabel>Checkout location</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    value={String(field.value)}
+                    value={field.value ? `${field.value}` : undefined}
                     key={`${field.value}`}
                   >
                     <FormControl>
@@ -291,7 +291,7 @@ export const DurationStage = ({
                   <FormLabel>Checkin location</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    value={String(field.value)}
+                    value={field.value ? `${field.value}` : undefined}
                     key={`${field.value}`}
                   >
                     <FormControl>
