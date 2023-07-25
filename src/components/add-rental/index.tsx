@@ -738,12 +738,9 @@ const AddRentalParentForm = ({
               ...charge,
               value: matched.Total ?? charge.value,
               dailyQuantity: matched.DailyQuantity ?? charge.dailyQuantity,
-              dailyValue: matched.DailyValue ?? charge.dailyValue,
               hourlyQuantity: matched.HourlyQuantity ?? charge.hourlyQuantity,
-              hourlyValue: matched.HourlyValue ?? charge.hourlyValue,
               monthlyQuantity:
                 matched.MonthlyQuantity ?? charge.monthlyQuantity,
-              monthlyValue: matched.MonthlyValue ?? charge.monthlyValue,
               minValue: matched.MinValue ?? charge.minValue,
               maxValue: matched.MaxValue ?? charge.maxValue,
             };
