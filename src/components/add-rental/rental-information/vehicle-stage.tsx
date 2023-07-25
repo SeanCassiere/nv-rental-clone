@@ -3,14 +3,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  TextInput,
-  NativeSelectInput,
-  getSelectedOptionForSelectInput,
-} from "@/components/Form";
 import SelectVehicleModal from "@/components/Dialogs/SelectVehicleModal";
 import { Button } from "@/components/ui/button";
-import { type AgreementRentalInformationSchemaParsed } from "./duration-stage";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import type { AgreementRentalInformationSchemaParsed } from "./duration-stage";
 
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
@@ -18,8 +30,8 @@ import { useGetVehicleFuelLevelList } from "@/hooks/network/vehicle/useGetVehicl
 
 function AgreementVehicleInformationSchema() {
   return z.object({
-    vehicleTypeId: z.number().min(1, "Required"),
-    vehicleId: z.number().min(1, "Required"),
+    vehicleTypeId: z.coerce.number().min(1, "Required"),
+    vehicleId: z.coerce.number().min(1, "Required"),
     fuelOut: z.string().min(1, "Required"),
     odometerOut: z.coerce.number().min(0, "Required"),
   });
@@ -55,17 +67,14 @@ export const VehicleStage = ({
     odometerOut: vehicleInformation?.odometerOut || 0,
   };
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useForm({
+  const form = useForm({
     resolver: zodResolver(AgreementVehicleInformationSchema()),
     defaultValues: values,
     values: vehicleInformation ? values : undefined,
   });
+
+  const formVehicleTypeId = form.watch("vehicleTypeId");
+  const formVehicleId = form.watch("vehicleId");
 
   //
   const vehicleTypesData = useGetVehicleTypesList({
@@ -73,18 +82,7 @@ export const VehicleStage = ({
     EndDate: rentalInformation?.checkinDate,
     LocationID: checkoutLocation,
   });
-  const vehicleTypeOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!vehicleTypesData.data) return [empty];
-
-    return [
-      empty,
-      ...vehicleTypesData.data.map((option) => ({
-        value: `${option.VehicleTypeId}`,
-        label: `${option.VehicleTypeName}`,
-      })),
-    ];
-  }, [vehicleTypesData.data]);
+  const vehicleTypesList = vehicleTypesData.data || [];
 
   //
   const vehicleListData = useGetVehiclesList({
@@ -92,43 +90,21 @@ export const VehicleStage = ({
     pageSize: 20,
     enabled:
       isEdit === false
-        ? !!checkoutLocation && !!getValues("vehicleTypeId")
+        ? !!checkoutLocation && !!form.getValues("vehicleTypeId")
         : true,
     filters: {
-      VehicleTypeId: getValues("vehicleTypeId"),
+      VehicleTypeId: formVehicleTypeId,
       CurrentLocationId: checkoutLocation,
     },
   });
-  const vehicleOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!vehicleListData.data) return [empty];
-
-    return [
-      empty,
-      ...vehicleListData.data.data.map((opt) => ({
-        value: `${opt.VehicleId}`,
-        label: `${opt.VehicleMakeName} ${opt.ModelName} ${opt.Year} ${opt.VehicleNo} ${opt.LicenseNo}`,
-      })),
-    ];
-  }, [vehicleListData.data]);
+  const vehiclesList = vehicleListData.data?.data || [];
 
   //
   const fuelLevelListData = useGetVehicleFuelLevelList();
-  const fuelOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!fuelLevelListData.data) return [empty];
-
-    return [
-      empty,
-      ...fuelLevelListData.data.map((opt) => ({
-        value: `${opt.value}`,
-        label: `${opt.value}`,
-      })),
-    ];
-  }, [fuelLevelListData.data]);
+  const fuelLevelsList = fuelLevelListData.data || [];
 
   return (
-    <>
+    <Form {...form}>
       <SelectVehicleModal
         show={showFleetPicker}
         setShow={setShowFleetPicker}
@@ -138,14 +114,16 @@ export const VehicleStage = ({
           EndDate: rentalInformation?.checkinDate,
         }}
         onSelect={(vehicle) => {
-          setValue("vehicleTypeId", vehicle.VehicleTypeId, {
+          form.setValue("vehicleTypeId", vehicle.VehicleTypeId, {
             shouldValidate: true,
           });
-          setValue("vehicleId", vehicle.VehicleId, { shouldValidate: true });
-          setValue("fuelOut", vehicle.FuelLevel ?? "Full", {
+          form.setValue("vehicleId", vehicle.VehicleId, {
             shouldValidate: true,
           });
-          setValue("odometerOut", vehicle.CurrentOdometer ?? 0, {
+          form.setValue("fuelOut", vehicle.FuelLevel ?? "Full", {
+            shouldValidate: true,
+          });
+          form.setValue("odometerOut", vehicle.CurrentOdometer ?? 0, {
             shouldValidate: true,
           });
         }}
@@ -167,99 +145,157 @@ export const VehicleStage = ({
         </Button>
       </div>
       <form
-        onSubmit={handleSubmit(async (data) => {
+        onSubmit={form.handleSubmit(async (data) => {
           onCompleted?.(data);
         })}
-        className="flex flex-col gap-4 pt-4"
+        className="flex flex-col gap-4 px-1 pt-4"
         autoComplete="off"
       >
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <NativeSelectInput
-              {...register("vehicleTypeId")}
-              label="Vehicle type"
-              options={vehicleTypeOptions}
-              value={getSelectedOptionForSelectInput(
-                vehicleTypeOptions,
-                getValues("vehicleTypeId")
+            <FormField
+              control={form.control}
+              name="vehicleTypeId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vehicle type</FormLabel>
+                  <Select
+                    onValueChange={(value) => {
+                      const existingVehicleId = formVehicleId;
+                      field.onChange(value);
+                      if (existingVehicleId) {
+                        form.setValue("fuelOut", "");
+                        form.setValue("odometerOut", 0);
+                        form.setValue("vehicleId", 0);
+                      }
+                    }}
+                    value={field.value ? `${field.value}` : undefined}
+                    disabled={Boolean(checkoutLocation) ? false : true}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select vehicle type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehicleTypesList.map((type, idx) => (
+                        <SelectItem
+                          key={`${type.VehicleTypeId}-${idx}`}
+                          value={`${type.VehicleTypeId}`}
+                        >
+                          {type.VehicleTypeName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-              onSelect={(value) => {
-                if (value !== null) {
-                  setValue("vehicleTypeId", parseInt(value.value ?? "0"), {
-                    shouldValidate: true,
-                  });
-                  setValue("fuelOut", "");
-                  setValue("odometerOut", 0);
-                  setValue("vehicleId", 0);
-                }
-              }}
-              error={!!errors.vehicleTypeId}
-              errorText={errors.vehicleTypeId?.message}
-              disabled={Boolean(checkoutLocation) ? false : true}
             />
           </div>
           <div>
-            <NativeSelectInput
-              {...register("vehicleId")}
-              label="Vehicle"
-              options={vehicleOptions}
-              value={getSelectedOptionForSelectInput(
-                vehicleOptions,
-                getValues("vehicleId")
+            <FormField
+              control={form.control}
+              name="vehicleId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vehicle</FormLabel>
+                  <Select
+                    key={`${formVehicleId}-select`}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      const vehicle = vehicleListData.data?.data.find(
+                        (v) => v.VehicleId === parseInt(value ?? "0")
+                      );
+                      if (vehicle) {
+                        form.setValue("fuelOut", vehicle.FuelLevel ?? "", {
+                          shouldValidate: true,
+                        });
+                        form.setValue(
+                          "odometerOut",
+                          vehicle.CurrentOdometer ?? 0,
+                          {
+                            shouldValidate: true,
+                          }
+                        );
+                      }
+                    }}
+                    value={field.value ? `${field.value}` : undefined}
+                    disabled={Boolean(formVehicleTypeId) ? false : true}
+                  >
+                    <FormControl>
+                      <SelectTrigger key={`${formVehicleId}-trigger`}>
+                        <SelectValue placeholder="Select vehicle type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehiclesList.map((vehicle, idx) => (
+                        <SelectItem
+                          key={`${vehicle.VehicleId}-${idx}`}
+                          value={`${vehicle.VehicleId}`}
+                        >
+                          {vehicle.VehicleMakeName}&nbsp;{vehicle.ModelName}
+                          &nbsp;{vehicle.Year}&nbsp;{vehicle.VehicleNo}&nbsp;
+                          {vehicle.LicenseNo}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-              onSelect={(value) => {
-                if (value !== null) {
-                  setValue("vehicleId", parseInt(value.value ?? "0"), {
-                    shouldValidate: true,
-                  });
-                  const vehicle = vehicleListData.data?.data.find(
-                    (v) => v.VehicleId === parseInt(value.value ?? "0")
-                  );
-                  if (vehicle) {
-                    setValue("fuelOut", vehicle.FuelLevel ?? "", {
-                      shouldValidate: true,
-                    });
-                    setValue("odometerOut", vehicle.CurrentOdometer ?? 0, {
-                      shouldValidate: true,
-                    });
-                  }
-                }
-              }}
-              error={!!errors.vehicleId}
-              errorText={errors.vehicleId?.message}
-              disabled={Boolean(getValues("vehicleTypeId")) ? false : true}
             />
           </div>
           <div>
-            <NativeSelectInput
-              {...register("fuelOut")}
-              label="Fuel out"
-              options={fuelOptions}
-              value={getSelectedOptionForSelectInput(
-                fuelOptions,
-                getValues("fuelOut")
+            <FormField
+              control={form.control}
+              name="fuelOut"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Fuel level out</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ? `${field.value}` : undefined}
+                    disabled={formVehicleId ? false : true}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select fuel level out" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {fuelLevelsList.map((level, idx) => (
+                        <SelectItem
+                          key={`${level.value}-${idx}`}
+                          value={level.value}
+                        >
+                          {level.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-              onSelect={(value) => {
-                if (value !== null) {
-                  setValue("fuelOut", value.label, {
-                    shouldValidate: true,
-                  });
-                }
-              }}
-              error={!!errors.fuelOut}
-              errorText={errors.fuelOut?.message}
-              disabled={Boolean(getValues("vehicleId")) ? false : true}
             />
           </div>
           <div>
-            <TextInput
-              label="Odometer Out"
-              type="number"
-              inputMode="numeric"
-              {...register("odometerOut")}
-              error={!!errors.odometerOut}
-              errorText={errors.odometerOut?.message}
-              disabled={Boolean(getValues("vehicleId")) ? false : true}
+            <FormField
+              control={form.control}
+              name="odometerOut"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Odometer out</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="100"
+                      disabled={formVehicleId ? false : true}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </div>
@@ -269,6 +305,6 @@ export const VehicleStage = ({
           </Button>
         </div>
       </form>
-    </>
+    </Form>
   );
 };

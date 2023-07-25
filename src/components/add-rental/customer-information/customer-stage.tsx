@@ -3,9 +3,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { DatePicker, TextInput } from "@/components/Form";
-import { Button } from "@/components/ui/button";
 import SelectCustomerModal from "@/components/Dialogs/SelectCustomerModal";
+import { DatePicker } from "@/components/Form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const REQUIRED = "Required" as const;
 
@@ -14,8 +23,8 @@ function CommonCustomerInformationSchema() {
     .object({
       address: z.string().min(1, REQUIRED),
       city: z.string().min(1, REQUIRED),
-      countryId: z.number().min(1, REQUIRED),
-      customerId: z.number().min(1, REQUIRED),
+      countryId: z.coerce.number().min(1, REQUIRED),
+      customerId: z.coerce.number().min(1, REQUIRED),
       dateOfBirth: z.string().min(1, REQUIRED).nullable(),
       // driverType
       email: z.string().min(1, REQUIRED),
@@ -27,7 +36,7 @@ function CommonCustomerInformationSchema() {
       bPhone: z.string().nullable(),
       cPhone: z.string().nullable(),
       hPhone: z.string().nullable(),
-      stateId: z.number().min(1, REQUIRED),
+      stateId: z.coerce.number().min(1, REQUIRED),
       zipCode: z.string().min(1, REQUIRED),
       isTaxSaver: z.boolean().default(false),
     })
@@ -82,57 +91,55 @@ export const CustomerStage = ({
     isTaxSaver: customerInformation?.isTaxSaver || false,
   };
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useForm({
+  const form = useForm({
     resolver: zodResolver(CommonCustomerInformationSchema()),
     defaultValues: values,
     values: customerInformation ? values : undefined,
   });
 
   return (
-    <>
+    <Form {...form}>
       <SelectCustomerModal
         show={showCustomerPicker}
         setShow={setShowCustomerPicker}
         onSelect={(customer) => {
-          setValue("address", customer.Address1 ?? "", valOpts);
-          setValue("city", customer.City ?? "", valOpts);
-          setValue("countryId", customer.CountryId ?? 0, valOpts);
-          setValue("customerId", customer.CustomerId, valOpts);
-          setValue("dateOfBirth", customer.DateOfbirth ?? null, valOpts);
-          setValue("email", customer.Email ?? "", valOpts);
-          setValue("firstName", customer.FirstName ?? "", valOpts);
-          setValue("lastName", customer.LastName ?? "", valOpts);
-          setValue(
+          form.setValue("address", customer.Address1 ?? "", valOpts);
+          form.setValue("city", customer.City ?? "", valOpts);
+          form.setValue("countryId", customer.CountryId ?? 0, valOpts);
+          form.setValue("customerId", customer.CustomerId, valOpts);
+          form.setValue("dateOfBirth", customer.DateOfbirth ?? null, valOpts);
+          form.setValue("email", customer.Email ?? "", valOpts);
+          form.setValue("firstName", customer.FirstName ?? "", valOpts);
+          form.setValue("lastName", customer.LastName ?? "", valOpts);
+          form.setValue(
             "licenseExpiryDate",
             customer.LicenseExpiryDate ?? null,
             valOpts
           );
-          setValue(
+          form.setValue(
             "licenseIssueDate",
             customer.LicenseIssueDate ?? null,
             valOpts
           );
-          setValue("licenseNumber", customer.LicenseNumber ?? null, valOpts);
-          setValue("bPhone", customer.bPhone ?? "", valOpts);
-          setValue("cPhone", customer.cPhone ?? "", valOpts);
-          setValue("hPhone", customer.hPhone ?? "", valOpts);
-          setValue("stateId", customer.StateId ?? 0, valOpts);
-          setValue("zipCode", customer.ZipCode ?? "", valOpts);
+          form.setValue(
+            "licenseNumber",
+            customer.LicenseNumber ?? null,
+            valOpts
+          );
+          form.setValue("bPhone", customer.bPhone ?? "", valOpts);
+          form.setValue("cPhone", customer.cPhone ?? "", valOpts);
+          form.setValue("hPhone", customer.hPhone ?? "", valOpts);
+          form.setValue("stateId", customer.StateId ?? 0, valOpts);
+          form.setValue("zipCode", customer.ZipCode ?? "", valOpts);
           const isTaxSaver =
             customer.CustomerType?.toLowerCase().includes("taxsaver") ||
             customer.IsTaxExempt ||
             false;
-          setValue("isTaxSaver", isTaxSaver, valOpts);
+          form.setValue("isTaxSaver", isTaxSaver, valOpts);
         }}
       />
 
-      <div className="flex">
+      <div className="flex px-1">
         <Button
           variant="outline"
           onClick={() => {
@@ -143,36 +150,48 @@ export const CustomerStage = ({
         </Button>
       </div>
       <form
-        onSubmit={handleSubmit(async (data) => {
+        onSubmit={form.handleSubmit(async (data) => {
           onCompleted?.(data);
         })}
-        className="flex flex-col gap-4 pt-4"
+        className="flex flex-col gap-4 px-1 pt-4"
         autoComplete="off"
       >
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div>
-            <TextInput
-              label="First name"
-              {...register("firstName")}
-              error={!!errors.firstName}
-              errorText={errors.firstName?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="First name" readOnly {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
-            <TextInput
-              label="Last name"
-              {...register("lastName")}
-              error={!!errors.lastName}
-              errorText={errors.lastName?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Last name" readOnly {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
             <DatePicker
               selected={
-                getValues("dateOfBirth")
-                  ? new Date(getValues("dateOfBirth")!)
+                form.getValues("dateOfBirth")
+                  ? new Date(form.getValues("dateOfBirth")!)
                   : null
               }
               onChange={(date) => {
@@ -183,66 +202,129 @@ export const CustomerStage = ({
             />
           </div>
           <div>
-            <TextInput
-              label="Home phone"
-              {...register("hPhone")}
-              error={!!errors.hPhone}
-              errorText={errors.hPhone?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="hPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Home phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Home phone"
+                      readOnly
+                      {...field}
+                      value={field.value ?? undefined}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
-            <TextInput
-              label="Work phone"
-              {...register("bPhone")}
-              error={!!errors.bPhone}
-              errorText={errors.bPhone?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="bPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Work phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Work phone"
+                      readOnly
+                      {...field}
+                      value={field.value ?? undefined}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
-            <TextInput
-              label="Mobile phone"
-              {...register("cPhone")}
-              error={!!errors.cPhone}
-              errorText={errors.cPhone?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="cPhone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mobile phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Mobile phone"
+                      readOnly
+                      {...field}
+                      value={field.value ?? undefined}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
-            <TextInput
-              label="License no."
-              {...register("licenseNumber")}
-              error={!!errors.licenseNumber}
-              errorText={errors.licenseNumber?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="licenseNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>License no.</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="License no."
+                      readOnly
+                      key={`customer-licenseNumber-${field.value}`}
+                      {...field}
+                      value={field.value ?? ""}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div className="md:col-span-2">
-            <TextInput
-              label="Address"
-              {...register("address")}
-              error={!!errors.address}
-              errorText={errors.address?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Address" readOnly {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
-            <TextInput
-              label="City"
-              {...register("city")}
-              error={!!errors.city}
-              errorText={errors.city?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>City</FormLabel>
+                  <FormControl>
+                    <Input placeholder="City" readOnly {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
-            <TextInput
-              label="Zip"
-              {...register("zipCode")}
-              error={!!errors.zipCode}
-              errorText={errors.zipCode?.message}
-              readOnly
+            <FormField
+              control={form.control}
+              name="zipCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Zip</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Zip code" readOnly {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </div>
@@ -250,6 +332,6 @@ export const CustomerStage = ({
           <Button type="submit">Save & Continue</Button>
         </div>
       </form>
-    </>
+    </Form>
   );
 };

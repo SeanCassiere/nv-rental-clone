@@ -104,7 +104,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
         hideBorder
       >
         <div className="flex items-center justify-between gap-2">
-          {hasDropdownContent ? (
+          {hasDropdownContent && dropdownContent ? (
             <AccordionTrigger
               className={cn(
                 "w-full py-3 text-left",
@@ -138,7 +138,9 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
             </Link>
           )}
         </div>
-        <AccordionContent>{dropdownContent}</AccordionContent>
+        {hasDropdownContent && dropdownContent && (
+          <AccordionContent>{dropdownContent}</AccordionContent>
+        )}
       </AccordionItem>
     </Accordion>
   );

@@ -2,18 +2,30 @@ import { useEffect, useMemo } from "react";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  NativeSelectInput,
-  getSelectedOptionForSelectInput,
-} from "@/components/Form";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RatesAndChargesTabProps } from ".";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import type { RatesAndChargesTabProps } from ".";
 
 import { useGetRentalRateTypesForRentals } from "@/hooks/network/rates/useGetRentalRateTypesForRental";
 
 import { RentalRateSchema, type RentalRateParsed } from "@/schemas/rate";
-
-import { cn } from "@/utils";
 
 interface RatesStageProps {
   durationStageData: RatesAndChargesTabProps["durationStageData"];
@@ -53,91 +65,107 @@ export const RatesStage = (props: RatesStageProps) => {
       VehicleTypeId: String(vehicleTypeId),
     },
   });
+  const rateTypesList = rateTypesData.data ?? [];
 
-  const rateTypeOptions = useMemo(() => {
-    const empty = { value: "", label: "Select" };
-    if (!rateTypesData.data) return [empty];
-
-    return [
-      empty,
-      ...rateTypesData.data.map((rateOption) => ({
-        value: `${rateOption.rateName}`,
-        label: `${rateOption.rateName}`,
-      })),
-    ];
-  }, [rateTypesData.data]);
-
-  const { handleSubmit, reset, watch, register, formState } =
-    useForm<RentalRateParsed>({
-      resolver: zodResolver(RentalRateSchema),
-      defaultValues: useMemo(() => {
-        return rate !== null ? rate : undefined;
-      }, [rate]),
-    });
+  const form = useForm<RentalRateParsed>({
+    resolver: zodResolver(RentalRateSchema),
+    defaultValues: useMemo(() => {
+      return rate !== null ? rate : undefined;
+    }, [rate]),
+  });
 
   useEffect(() => {
     if (rate) {
-      reset(rate);
+      form.reset(rate);
     }
-  }, [reset, rate, rate?.rateName, rateName]);
+  }, [form, rate, rate?.rateName, rateName]);
 
-  const isDayRate = watch("isDayRate");
-  const isWeekDayRate = watch("isDayWeek");
+  const isDayRate = form.watch("isDayRate");
+  const isWeekDayRate = form.watch("isDayWeek");
 
-  const totalDays = watch("totalDays");
+  const totalDays = form.watch("totalDays");
   const rentalDays = totalDays ?? 0;
 
   const commonFormProps: CommonRatesFormProps = {
-    registerFn: register,
-    formState,
+    registerFn: form.register,
+    formState: form.formState,
   };
 
   return (
-    <div>
+    <Form {...form}>
       {!isSupportingInfoAvailable && (
         <div className="text-destructive">
           Rental and Vehicle information not entered.
         </div>
       )}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 px-1 md:grid-cols-3">
         <div className="col-span-1 text-base md:col-span-3">
           Total days: <span className="font-semibold">{rentalDays}</span>
         </div>
         {!hideRateSelector && (
           <div className="col-span-1">
-            <NativeSelectInput
-              label="Rate"
-              value={getSelectedOptionForSelectInput(rateTypeOptions, rateName)}
-              options={rateTypeOptions}
-              onSelect={(value) => {
-                if (value && value.value && value.value !== "") {
-                  props.onSelectRateName(value.value);
-                }
-              }}
-              disabled={!isSupportingInfoAvailable}
+            <FormField
+              control={form.control}
+              name="rateName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Rate</FormLabel>
+                  <Select
+                    onValueChange={(value) => {
+                      if (value && value !== "") {
+                        field.onChange(value);
+                        props.onSelectRateName(value);
+                      }
+                    }}
+                    value={field.value ? `${field.value}` : undefined}
+                    disabled={!isSupportingInfoAvailable}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select rate" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {rateTypesList.map((rate, idx) => (
+                        <SelectItem
+                          key={`${rate.rateName}-${idx}`}
+                          value={`${rate.rateName}`}
+                        >
+                          {rate.rateName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         )}
         {!hidePromotionCodeFields && (
-          <div className="col-span-1 flex items-end text-sm text-teal-500">
+          <div className="col-span-1 flex items-end text-sm text-primary">
             Implement promotion codes later
           </div>
         )}
       </div>
       <form
-        onSubmit={handleSubmit((data) => {
+        onSubmit={form.handleSubmit((data) => {
           const valuesToSubmit = { ...rate, ...data };
           props.onSelectedRate(valuesToSubmit);
           props.onCompleted();
         })}
-        className="mt-8 text-sm"
+        className="mt-4 px-1 text-sm"
       >
-        {isWeekDayRate ? (
-          <WeekDayRatesForm {...commonFormProps} />
-        ) : isDayRate ? (
-          <DayRatesForm {...commonFormProps} />
-        ) : (
-          <NormalRatesForm {...commonFormProps} />
+        {rate && (
+          <>
+            {isWeekDayRate ? (
+              <WeekDayRatesForm {...commonFormProps} />
+            ) : isDayRate ? (
+              <DayRatesForm {...commonFormProps} />
+            ) : (
+              <NormalRatesForm {...commonFormProps} />
+            )}
+          </>
         )}
         <div className="mt-4">
           <Button type="submit" disabled={!rate}>
@@ -145,7 +173,7 @@ export const RatesStage = (props: RatesStageProps) => {
           </Button>
         </div>
       </form>
-    </div>
+    </Form>
   );
 };
 
@@ -158,249 +186,250 @@ interface CommonRatesFormProps {
   formState: FormState<RentalRateParsed>;
 }
 
-const numberInputClassnames =
-  "rounded border-0 px-2 py-1 outline-none focus:border-0 focus:outline-teal-500 focus:ring-0";
-const normalContainerClassnames =
-  "grid grid-cols-2 sm:grid-cols-3 items-center rounded bg-slate-100 py-2 px-4 text-base";
-const extraContainerClassnames =
-  "flex items-center justify-between rounded bg-slate-100 px-4 py-2 text-base";
-const weekDayContainerClassnames =
-  "grid grid-cols-2 md:grid-cols-3 gap-2 items-center rounded bg-slate-100 py-2 px-4 text-base";
-
 function NormalRatesForm(props: CommonRatesFormProps) {
   const { registerFn: register } = props;
   return (
-    <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div className="flex flex-col gap-4">
-        <div className={cn(normalContainerClassnames)}>
-          <div>Hourly</div>
-          <div className="col-span-2 flex w-full items-center justify-end gap-4">
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={1}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("hourlyQty", optsAsNum)}
-              />
-            </div>
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className="flex flex-col gap-3">
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Hourly</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("hourlyQty", optsAsNum)}
+            />
             <span>x</span>
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("hourlyRate", optsAsNum)}
-              />
-            </div>
-          </div>
-        </div>
-        <div className={cn(normalContainerClassnames)}>
-          <div>Half daily</div>
-          <div className="col-span-2 flex w-full items-center justify-end gap-4">
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={1}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("halfDayQty", optsAsNum)}
-              />
-            </div>
+            <Input
+              type="number"
+              min={0}
+              step={0.01}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("hourlyRate", optsAsNum)}
+            />
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Half daily</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("halfDayQty", optsAsNum)}
+            />
             <span>x</span>
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("halfDayRate", optsAsNum)}
-              />
-            </div>
-          </div>
-        </div>
-        <div className={cn(normalContainerClassnames)}>
-          <div>Daily</div>
-          <div className="col-span-2 flex w-full items-center justify-end gap-4">
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={1}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("dailyQty", optsAsNum)}
-              />
-            </div>
+            <Input
+              type="number"
+              min={0}
+              step={0.01}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("halfDayRate", optsAsNum)}
+            />
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Daily</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("dailyQty", optsAsNum)}
+            />
             <span>x</span>
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("dailyRate", optsAsNum)}
-              />
-            </div>
-          </div>
-        </div>
+            <Input
+              type="number"
+              min={0}
+              step={0.01}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("dailyRate", optsAsNum)}
+            />
+          </CardContent>
+        </Card>
       </div>
-      <div className="flex flex-col gap-4">
-        <div className={cn(normalContainerClassnames)}>
-          <div>Weekly</div>
-          <div className="col-span-2 flex w-full items-center justify-end gap-4">
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={1}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("weeklyQty", optsAsNum)}
-              />
-            </div>
+      <div className="flex flex-col gap-3">
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Weekly</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("weeklyQty", optsAsNum)}
+            />
             <span>x</span>
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("weeklyRate", optsAsNum)}
-              />
-            </div>
-          </div>
-        </div>
-        <div className={cn(normalContainerClassnames)}>
-          <div>Monthly</div>
-          <div className="col-span-2 flex w-full items-center justify-end gap-4">
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={1}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("monthlyQty", optsAsNum)}
-              />
-            </div>
+            <Input
+              type="number"
+              min={0}
+              step={0.01}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("weeklyRate", optsAsNum)}
+            />
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Monthly</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("monthlyQty", optsAsNum)}
+            />
             <span>x</span>
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("monthlyRate", optsAsNum)}
-              />
-            </div>
-          </div>
-        </div>
-        <div className={cn(normalContainerClassnames)}>
-          <div>Weekend daily</div>
-          <div className="col-span-2 flex w-full items-center justify-end gap-4">
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={1}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("weekendDailyQty", optsAsNum)}
-              />
-            </div>
+            <Input
+              type="number"
+              min={0}
+              step={0.01}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("monthlyRate", optsAsNum)}
+            />
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">
+              Weekend daily
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("weekendDailyQty", optsAsNum)}
+            />
             <span>x</span>
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("weekendDayRate", optsAsNum)}
-              />
-            </div>
-          </div>
-        </div>
+            <Input
+              type="number"
+              min={0}
+              step={0.01}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("weekendDayRate", optsAsNum)}
+            />
+          </CardContent>
+        </Card>
       </div>
       {/* Extra stuff */}
-      <div className="col-span-1 grid w-full grid-cols-1 gap-4 md:col-span-2 md:w-4/5 md:grid-cols-2">
+      <div className="col-span-1 grid w-full grid-cols-1 gap-4 md:col-span-2 md:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <div className={cn(extraContainerClassnames)}>
-            <div>Daily miles allowed</div>
-            <div>
-              <input
+          <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+            <CardHeader className="flex-1 px-4 py-3.5">
+              <CardTitle className="text-base font-medium">
+                Daily miles allowed
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4 sm:pb-0">
+              <Input
                 type="number"
                 min={0}
                 step={0.25}
-                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
+                className="h-8 max-w-[100px]"
                 {...register("dailyKMorMileageAllowed", optsAsNum)}
               />
-            </div>
-          </div>
-          <div className={cn(extraContainerClassnames)}>
-            <div>Weekly miles allowed</div>
-            <div>
-              <input
+            </CardContent>
+          </Card>
+          <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+            <CardHeader className="flex-1 px-4 py-3.5">
+              <CardTitle className="text-base font-medium">
+                Weekly miles allowed
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4 sm:pb-0">
+              <Input
                 type="number"
                 min={0}
                 step={0.25}
-                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
+                className="h-8 max-w-[100px]"
                 {...register("weeklyKMorMileageAllowed", optsAsNum)}
               />
-            </div>
-          </div>
-          <div className={cn(extraContainerClassnames)}>
-            <div>Monthly miles allowed</div>
-            <div>
-              <input
+            </CardContent>
+          </Card>
+          <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+            <CardHeader className="flex-1 px-4 py-3.5">
+              <CardTitle className="text-base font-medium">
+                Monthly miles allowed
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4 sm:pb-0">
+              <Input
                 type="number"
                 min={0}
                 step={0.25}
-                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
+                className="h-8 max-w-[100px]"
                 {...register("monthlyKMorMileageAllowed", optsAsNum)}
               />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
         <div className="flex flex-col gap-2">
-          <div className={cn(extraContainerClassnames)}>
-            <div>Fuel charge</div>
-            <div>
-              <input
+          <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+            <CardHeader className="flex-1 px-4 py-3.5">
+              <CardTitle className="text-base font-medium">
+                Fuel charge
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4 sm:pb-0">
+              <Input
                 type="number"
                 min={0}
                 step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
+                className="h-8 max-w-[100px]"
                 {...register("fuelCharge", optsAsNum)}
               />
-            </div>
-          </div>
-          <div className={cn(extraContainerClassnames)}>
-            <div>Miles charge</div>
-            <div>
-              <input
+            </CardContent>
+          </Card>
+          <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+            <CardHeader className="flex-1 px-4 py-3.5">
+              <CardTitle className="text-base font-medium">
+                Miles charge
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4 sm:pb-0">
+              <Input
                 type="number"
                 min={0}
                 step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
                 autoComplete="off"
+                className="h-8 max-w-[100px]"
                 {...register("kMorMileageCharge", optsAsNum)}
               />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
@@ -410,74 +439,80 @@ function NormalRatesForm(props: CommonRatesFormProps) {
 function DayRatesForm(props: CommonRatesFormProps) {
   const { registerFn: register } = props;
   return (
-    <div className="mt-4 grid w-full grid-cols-1 gap-4 md:w-1/2">
+    <div className="grid w-full grid-cols-1 gap-3 md:w-1/2">
       <div>
-        <div className={cn(normalContainerClassnames)}>
-          <div>Daily</div>
-          <div className="col-span-2 flex w-full items-center justify-end gap-4">
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={1}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("dailyQty", optsAsNum)}
-              />
-            </div>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Daily</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
+              type="number"
+              min={0}
+              step={1}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("dailyQty", optsAsNum)}
+            />
             <span>x</span>
-            <div>
-              <input
-                type="number"
-                min={0}
-                step={0.01}
-                className={cn("w-[100px]", numberInputClassnames)}
-                autoComplete="off"
-                {...register("dailyRate", optsAsNum)}
-              />
-            </div>
-          </div>
-        </div>
+            <Input
+              type="number"
+              min={0}
+              step={0.01}
+              autoComplete="off"
+              className="h-8 max-w-[100px]"
+              {...register("dailyRate", optsAsNum)}
+            />
+          </CardContent>
+        </Card>
       </div>
-      <div className={cn(extraContainerClassnames)}>
-        <div>Daily miles allowed</div>
-        <div>
-          <input
+      <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+        <CardHeader className="flex-1 px-4 py-3.5">
+          <CardTitle className="text-base font-medium">
+            Daily miles allowed
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 pb-4 sm:pb-0">
+          <Input
             type="number"
             min={0}
             step={0.25}
-            className={cn("w-[100px]", numberInputClassnames)}
             autoComplete="off"
+            className="h-8 max-w-[100px]"
             {...register("dailyKMorMileageAllowed", optsAsNum)}
           />
-        </div>
-      </div>
-      <div className={cn(extraContainerClassnames)}>
-        <div>Fuel charge</div>
-        <div>
-          <input
+        </CardContent>
+      </Card>
+      <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+        <CardHeader className="flex-1 px-4 py-3.5">
+          <CardTitle className="text-base font-medium">Fuel charge</CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 pb-4 sm:pb-0">
+          <Input
             type="number"
             min={0}
             step={0.01}
-            className={cn("w-[100px]", numberInputClassnames)}
             autoComplete="off"
+            className="h-8 max-w-[100px]"
             {...register("fuelCharge", optsAsNum)}
           />
-        </div>
-      </div>
-      <div className={cn(extraContainerClassnames)}>
-        <div>Miles charge</div>
-        <div>
-          <input
+        </CardContent>
+      </Card>
+      <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+        <CardHeader className="flex-1 px-4 py-3.5">
+          <CardTitle className="text-base font-medium">Miles charge</CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 pb-4 sm:pb-0">
+          <Input
             type="number"
             min={0}
             step={0.01}
-            className={cn("w-[100px]", numberInputClassnames)}
             autoComplete="off"
+            className="h-8 max-w-[100px]"
             {...register("kMorMileageCharge", optsAsNum)}
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -485,230 +520,227 @@ function DayRatesForm(props: CommonRatesFormProps) {
 function WeekDayRatesForm(props: CommonRatesFormProps) {
   const { registerFn: register } = props;
   return (
-    <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div className={cn(weekDayContainerClassnames)}>
-        <div>Monday</div>
-        <div className="col-span-2 flex w-full items-center justify-end gap-4">
-          <div>
-            <input
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div className="col-span-2 grid grid-cols-1 gap-3 md:grid-cols-2">
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Monday</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={1}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("monCount", optsAsNum)}
             />
-          </div>
-          <span>x</span>
-          <div>
-            <input
+            <span>x</span>
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("monRate", optsAsNum)}
             />
-          </div>
-        </div>
-      </div>
-      <div className={cn(weekDayContainerClassnames)}>
-        <div>Tuesday</div>
-        <div className="col-span-2 flex w-full items-center justify-end gap-4">
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Tuesday</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={1}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("tuesCount", optsAsNum)}
             />
-          </div>
-          <span>x</span>
-          <div>
-            <input
+            <span>x</span>
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("tuesRate", optsAsNum)}
             />
-          </div>
-        </div>
-      </div>
-      <div className={cn(weekDayContainerClassnames)}>
-        <div>Wednesday</div>
-        <div className="col-span-2 flex w-full items-center justify-end gap-4">
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Wednesday</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={1}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("wedCount", optsAsNum)}
             />
-          </div>
-          <span>x</span>
-          <div>
-            <input
+            <span>x</span>
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("wedRate", optsAsNum)}
             />
-          </div>
-        </div>
-      </div>
-      <div className={cn(weekDayContainerClassnames)}>
-        <div>Thursday</div>
-        <div className="col-span-2 flex w-full items-center justify-end gap-4">
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Thursday</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={1}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("thursCount", optsAsNum)}
             />
-          </div>
-          <span>x</span>
-          <div>
-            <input
+            <span>x</span>
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("thursRate", optsAsNum)}
             />
-          </div>
-        </div>
-      </div>
-      <div className={cn(weekDayContainerClassnames)}>
-        <div>Friday</div>
-        <div className="col-span-2 flex w-full items-center justify-end gap-4">
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Friday</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={1}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("friCount", optsAsNum)}
             />
-          </div>
-          <span>x</span>
-          <div>
-            <input
+            <span>x</span>
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("friRate", optsAsNum)}
             />
-          </div>
-        </div>
-      </div>
-      <div className={cn(weekDayContainerClassnames)}>
-        <div>Saturday</div>
-        <div className="col-span-2 flex w-full items-center justify-end gap-4">
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Saturday</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={1}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("satCount", optsAsNum)}
             />
-          </div>
-          <span>x</span>
-          <div>
-            <input
+            <span>x</span>
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("satRate", optsAsNum)}
             />
-          </div>
-        </div>
-      </div>
-      <div className={cn(weekDayContainerClassnames)}>
-        <div>Sunday</div>
-        <div className="col-span-2 flex w-full items-center justify-end gap-4">
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Sunday</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-row items-center gap-4 px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={1}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("sunCount", optsAsNum)}
             />
-          </div>
-          <span>x</span>
-          <div>
-            <input
+            <span>x</span>
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("sunRate", optsAsNum)}
             />
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
-      <div className="hidden md:col-span-1 md:block">{/* empty */}</div>
-      <div className="col-span-1 flex flex-col gap-4">
-        <div className={cn(extraContainerClassnames)}>
-          <div>Daily miles allowed</div>
-          <div>
-            <input
+      <div className="col-span-1 flex flex-col gap-3">
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">
+              Daily miles allowed
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={0.25}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("dailyKMorMileageAllowed", optsAsNum)}
             />
-          </div>
-        </div>
-        <div className={cn(extraContainerClassnames)}>
-          <div>Fuel charge</div>
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">Fuel charge</CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("fuelCharge", optsAsNum)}
             />
-          </div>
-        </div>
-        <div className={cn(extraContainerClassnames)}>
-          <div>Miles charge</div>
-          <div>
-            <input
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col items-start shadow-none sm:flex-row sm:items-center">
+          <CardHeader className="flex-1 px-4 py-3.5">
+            <CardTitle className="text-base font-medium">
+              Miles charge
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4 sm:pb-0">
+            <Input
               type="number"
               min={0}
               step={0.01}
-              className={cn("w-[100px]", numberInputClassnames)}
               autoComplete="off"
+              className="h-8 max-w-[100px]"
               {...register("kMorMileageCharge", optsAsNum)}
             />
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
