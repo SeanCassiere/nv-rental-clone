@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -295,6 +295,10 @@ function MiscChargeItem(props: {
     (charge.IsDeductible && (charge.Options?.length || 0) > 0) || // deductible misc. charge
     charge.CalculationType?.toLowerCase() === "perday"; // show per day misc. charge
 
+  const showAccordionTrigger =
+    charge.CalculationType?.toLowerCase() === "perday" ||
+    Boolean(charge.IsDeductible);
+
   useEffect(() => {
     if (!isSelected && charge.IsOptional === false) {
       save({ optionIdToSave: 0, priceToSave: charge.Total ?? 0, qtyToSave: 1 });
@@ -377,11 +381,19 @@ function MiscChargeItem(props: {
                     className="h-8 max-w-[100px]"
                     disabled={!isSelected}
                   />
+                  {!charge.IsDeductible && (
+                    <span className="invisible w-5"></span>
+                  )}
                 </>
               )}
-              {charge.CalculationType?.toLowerCase() === "perday" && (
-                <AccordionPrimitive.Trigger className="[&[data-state=open]>svg]:rotate-180">
-                  <ChevronDown className="ml-1.5 h-3 w-3 shrink-0 transition-transform duration-200" />
+              {showAccordionTrigger && (
+                <AccordionPrimitive.Trigger
+                  className={cn(
+                    buttonVariants({ size: "sm", variant: "secondary" }),
+                    "flex h-6 w-6 items-center justify-center p-0 [&[data-state=open]>svg]:rotate-180"
+                  )}
+                >
+                  <ChevronDown className="h-3 w-3 shrink-0 transition-transform duration-200" />
                 </AccordionPrimitive.Trigger>
               )}
             </div>
@@ -395,119 +407,123 @@ function MiscChargeItem(props: {
                 </div>
               )}
               {charge.IsDeductible && charge.Options?.length && (
-                <fieldset
-                  className="flex flex-col gap-3 pb-6"
-                  disabled={!isSelected}
-                >
-                  <legend className="sr-only">
-                    {charge.Name} deductible miscellaneous charge options
-                  </legend>
-                  {charge.Options.map((option, idx) => {
-                    return (
-                      <Fragment key={`${idx}-${option.miscChargeOptionId}`}>
-                        <label
-                          htmlFor={`${idx}-${charge.Id}-${option.miscChargeOptionId}`}
-                          className={cn(
-                            "relative block w-full rounded-lg border bg-background px-4 py-3.5 focus:outline-none sm:flex sm:justify-between",
-                            String(optionId) ===
-                              String(option.miscChargeOptionId)
-                              ? "border-transparent"
-                              : "border-primary/10",
-                            isSelected ? "cursor-pointer" : "cursor-not-allowed"
-                          )}
-                        >
-                          <input
-                            type="radio"
-                            name={`${idx}-${charge.Id}`}
-                            className="sr-only absolute inset-0"
-                            id={`${idx}-${charge.Id}-${option.miscChargeOptionId}`}
-                            value={`${option.miscChargeOptionId}`}
-                            checked={optionId === option.miscChargeOptionId}
-                            aria-labelledby={`${charge.Id}-${option.miscChargeOptionId}-label`}
-                            aria-describedby={[
-                              String(option.option) !== String(option.value)
-                                ? `${charge.Id}-${option.miscChargeOptionId}-description-0`
-                                : "",
-                              `${charge.Id}-${option.miscChargeOptionId}-description-1`,
-                            ]
-                              .filter(Boolean)
-                              .join(" ")}
-                            onChange={() => {
-                              setOptionId(option.miscChargeOptionId);
-                              setPrice(
-                                option.value !== null ? option.value : 0
-                              );
-                              save({
-                                optionIdToSave: option.miscChargeOptionId,
-                                priceToSave:
-                                  option.value !== null ? option.value : 0,
-                                qtyToSave: qty,
-                              });
-                            }}
-                          />
-                          <div className="flex items-center">
-                            <div className="text-sm">
-                              <p
-                                id={`${charge.Id}-${option.miscChargeOptionId}-label`}
-                                className="font-medium text-primary"
-                              >
-                                {option.name
-                                  ? option.name
-                                  : String(option.option)}
-                              </p>
-                              {String(option.option) !==
-                                String(option.value) && (
-                                <div
-                                  id={`${charge.Id}-${option.miscChargeOptionId}-description-0`}
-                                  className="text-gray-500"
-                                >
-                                  <p className="sm:inline">
-                                    Option: {Number(option.option).toString()}
-                                  </p>
-                                  <span
-                                    className="hidden sm:mx-1 sm:inline"
-                                    aria-hidden="true"
-                                  >
-                                    &middot;
-                                  </span>
-                                  <p className="sm:inline">
-                                    Value: {Number(option.value).toString()}
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div
-                            id={`${charge.Id}-${option.miscChargeOptionId}-description-1`}
+                <AccordionPrimitive.Content className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                  <fieldset
+                    className="flex flex-col gap-3 pb-6"
+                    disabled={!isSelected}
+                  >
+                    <legend className="sr-only">
+                      {charge.Name} deductible miscellaneous charge options
+                    </legend>
+                    {charge.Options.map((option, idx) => {
+                      return (
+                        <Fragment key={`${idx}-${option.miscChargeOptionId}`}>
+                          <label
+                            htmlFor={`${idx}-${charge.Id}-${option.miscChargeOptionId}`}
                             className={cn(
-                              "mt-2 flex text-sm sm:ml-4 sm:block sm:text-right",
-                              String(option.option) !== String(option.value)
-                                ? "sm:mt-2"
-                                : "sm:mt-0"
-                            )}
-                          >
-                            <div className="font-medium text-primary">
-                              {t("intlCurrency", {
-                                currency: props.currency,
-                                value: Number(option.value),
-                              })}
-                            </div>
-                          </div>
-                          <div
-                            className={cn(
-                              "pointer-events-none absolute -inset-px rounded-lg",
+                              "relative block w-full rounded-lg border bg-background px-4 py-3.5 focus:outline-none sm:flex sm:justify-between",
                               String(optionId) ===
                                 String(option.miscChargeOptionId)
-                                ? "border-2 border-primary/50"
-                                : "border border-transparent"
+                                ? "border-transparent"
+                                : "border-primary/10",
+                              isSelected
+                                ? "cursor-pointer"
+                                : "cursor-not-allowed"
                             )}
-                            aria-hidden="true"
-                          ></div>
-                        </label>
-                      </Fragment>
-                    );
-                  })}
-                </fieldset>
+                          >
+                            <input
+                              type="radio"
+                              name={`${idx}-${charge.Id}`}
+                              className="sr-only absolute inset-0"
+                              id={`${idx}-${charge.Id}-${option.miscChargeOptionId}`}
+                              value={`${option.miscChargeOptionId}`}
+                              checked={optionId === option.miscChargeOptionId}
+                              aria-labelledby={`${charge.Id}-${option.miscChargeOptionId}-label`}
+                              aria-describedby={[
+                                String(option.option) !== String(option.value)
+                                  ? `${charge.Id}-${option.miscChargeOptionId}-description-0`
+                                  : "",
+                                `${charge.Id}-${option.miscChargeOptionId}-description-1`,
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
+                              onChange={() => {
+                                setOptionId(option.miscChargeOptionId);
+                                setPrice(
+                                  option.value !== null ? option.value : 0
+                                );
+                                save({
+                                  optionIdToSave: option.miscChargeOptionId,
+                                  priceToSave:
+                                    option.value !== null ? option.value : 0,
+                                  qtyToSave: qty,
+                                });
+                              }}
+                            />
+                            <div className="flex items-center">
+                              <div className="text-sm">
+                                <p
+                                  id={`${charge.Id}-${option.miscChargeOptionId}-label`}
+                                  className="font-medium text-primary"
+                                >
+                                  {option.name
+                                    ? option.name
+                                    : String(option.option)}
+                                </p>
+                                {String(option.option) !==
+                                  String(option.value) && (
+                                  <div
+                                    id={`${charge.Id}-${option.miscChargeOptionId}-description-0`}
+                                    className="text-gray-500"
+                                  >
+                                    <p className="sm:inline">
+                                      Option: {Number(option.option).toString()}
+                                    </p>
+                                    <span
+                                      className="hidden sm:mx-1 sm:inline"
+                                      aria-hidden="true"
+                                    >
+                                      &middot;
+                                    </span>
+                                    <p className="sm:inline">
+                                      Value: {Number(option.value).toString()}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div
+                              id={`${charge.Id}-${option.miscChargeOptionId}-description-1`}
+                              className={cn(
+                                "mt-2 flex text-sm sm:ml-4 sm:block sm:text-right",
+                                String(option.option) !== String(option.value)
+                                  ? "sm:mt-2"
+                                  : "sm:mt-0"
+                              )}
+                            >
+                              <div className="font-medium text-primary">
+                                {t("intlCurrency", {
+                                  currency: props.currency,
+                                  value: Number(option.value),
+                                })}
+                              </div>
+                            </div>
+                            <div
+                              className={cn(
+                                "pointer-events-none absolute -inset-px rounded-lg",
+                                String(optionId) ===
+                                  String(option.miscChargeOptionId)
+                                  ? "border-2 border-primary/50"
+                                  : "border border-transparent"
+                              )}
+                              aria-hidden="true"
+                            ></div>
+                          </label>
+                        </Fragment>
+                      );
+                    })}
+                  </fieldset>
+                </AccordionPrimitive.Content>
               )}
               {charge.CalculationType?.toLowerCase() === "perday" && (
                 <AccordionPrimitive.Content className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
