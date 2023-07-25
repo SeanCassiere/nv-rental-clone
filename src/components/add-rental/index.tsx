@@ -149,17 +149,6 @@ const AddRentalParentForm = ({
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
     [string, RentalRateParsed | null]
   >(["", null]);
-  // const setSelectedRateName = (cb: string | ((name: string) => string)) => {
-  //   if (typeof cb === "function") {
-  //     setRateDetails((prev) => {
-  //       const pos1 = prev[0];
-  //       const cbReturn = cb(pos1);
-  //       return [cbReturn, prev[1]];
-  //     });
-  //     return;
-  //   }
-  //   setRateDetails((prev) => [cb, prev[1]]);
-  // };
   const setSelectedRate = (
     cb:
       | RentalRateParsed
@@ -711,7 +700,6 @@ const AddRentalParentForm = ({
 
   // fetching the mandatory misc. charges
   const miscChargesAgreementReady =
-    creationStagesComplete.miscCharges === false &&
     Boolean(agreementRentalInformation) &&
     Boolean(agreementVehicleInformation) &&
     isEdit === false;
@@ -735,12 +723,32 @@ const AddRentalParentForm = ({
 
     const data = getMiscChargesQuery.data;
 
-    const mandatoryCharges = (data || []).filter(
+    const mandatoryCharges = data.filter(
       (charge) => charge.IsOptional === false
     );
     setSelectedMiscCharges((existing) => {
       if (existing.length > 0) {
-        return existing;
+        // match existing misc charges with the new ones by updating the value
+        const updated = existing.map((charge) => {
+          const matched = data.find(
+            (dataCharge) => String(dataCharge.Id) === String(charge.id)
+          );
+          if (matched) {
+            return {
+              ...charge,
+              value: matched.Total ?? charge.value,
+              dailyQuantity: matched.DailyQuantity ?? charge.dailyQuantity,
+              hourlyQuantity: matched.HourlyQuantity ?? charge.hourlyQuantity,
+              monthlyQuantity:
+                matched.MonthlyQuantity ?? charge.monthlyQuantity,
+              minValue: matched.MinValue ?? charge.minValue,
+              maxValue: matched.MaxValue ?? charge.maxValue,
+            };
+          }
+          return charge;
+        });
+
+        return updated;
       }
       return mandatoryCharges.map((charge) => ({
         id: charge.Id,
