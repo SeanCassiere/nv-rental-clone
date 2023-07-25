@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useNavigate, useSearch } from "@tanstack/router";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   LockIcon,
   UnlockIcon,
@@ -13,7 +13,7 @@ import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
 import WidgetPickerContent from "@/components/dashboard/widget-picker-content";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Popover,
   PopoverTrigger,
@@ -49,6 +49,8 @@ import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsLis
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import type { fetchLocationsList } from "@/api/locations";
+
+import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 
 import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
@@ -112,15 +114,33 @@ function IndexPage() {
           "mx-auto mb-4 mt-6 flex max-w-full flex-col gap-2  px-2 pt-1.5 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4"
         )}
       >
-        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6 text-primary">
-            Dashboard
-          </h1>
-          <LocationPicker
-            locations={locations}
-            selected={currentLocationIds}
-            onSelect={setLocations}
-          />
+        <div
+          className={cn(
+            "flex min-h-[2.5rem] flex-col items-center justify-between gap-4 sm:flex-row"
+          )}
+        >
+          <div className="flex w-full items-center justify-start gap-2">
+            <h1 className="text-2xl font-semibold leading-6 text-primary">
+              Dashboard
+            </h1>
+          </div>
+          <div className="flex w-full gap-2 sm:w-max">
+            <LocationPicker
+              locations={locations}
+              selected={currentLocationIds}
+              onSelect={setLocations}
+            />
+            <Link
+              to={addAgreementRoute.to}
+              search={{ stage: "rental-information" }}
+              className={cn(
+                buttonVariants({ size: "sm" }),
+                "h-8 min-w-[120px]"
+              )}
+            >
+              <span className="block">Start rental</span>
+            </Link>
+          </div>
         </div>
         <p className={cn("text-base text-primary/80")}>
           Jump into what's going on with your fleet.
