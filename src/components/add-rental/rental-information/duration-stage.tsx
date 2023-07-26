@@ -6,9 +6,6 @@ import add from "date-fns/add";
 import isBefore from "date-fns/isBefore";
 import isEqual from "date-fns/isEqual";
 import differenceInMinutes from "date-fns/differenceInMinutes";
-import { getTime } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,21 +24,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Calendar } from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+  InputDatePicker,
+  InputDatePickerSlot,
+} from "@/components/ui/input-datepicker";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
-import { useDateInput } from "@/hooks/internal/useDateInput";
-
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
-import { USER_STORAGE_KEYS } from "@/utils/constants";
-import { dfnsDateFormat, dfnsTimeFormat } from "@/i18n.config";
+import { useDatePreference } from "@/hooks/internal/useDatePreferences";
 
 const AgreementRentalInformationSchema = z
   .object({
@@ -100,27 +91,7 @@ export const DurationStage = ({
   onCompleted,
   isEdit,
 }: DurationStageProps) => {
-  const auth = useAuth();
-
-  const clientId = auth.user?.profile.navotar_clientid;
-  const userId = auth.user?.profile.navotar_userid;
-
-  const fromStorageDate =
-    clientId && userId
-      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.dateFormat)
-      : null;
-  const fromStorageTime =
-    clientId && userId
-      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.timeFormat)
-      : null;
-
-  const defaultDateTimeFormat = `${dfnsDateFormat} ${dfnsTimeFormat}`;
-  const parsedUserDateTimeFormat = `${fromStorageDate} ${fromStorageTime}`;
-
-  const dateFormat =
-    fromStorageDate && fromStorageTime
-      ? parsedUserDateTimeFormat
-      : defaultDateTimeFormat;
+  const { dateTimeFormat } = useDatePreference();
 
   const values = {
     agreementNumber: initialData?.agreementNumber ?? "",
@@ -152,32 +123,24 @@ export const DurationStage = ({
   const form_checkoutDate = form.watch("checkoutDate");
   const form_checkinDate = form.watch("checkinDate");
 
-  const checkoutDateInput = useDateInput({
-    defaultSelected: form_checkoutDate,
-    format: dateFormat,
-    onValidChange: (date) => {
-      const previousCheckoutDate = form_checkoutDate;
-      const previousCheckinDate = form_checkinDate;
+  const handleCheckoutDateChange = (date: Date) => {
+    const previousCheckoutDate = form_checkoutDate;
+    const previousCheckinDate = form_checkinDate;
 
-      const diffMinsBetweenDates = differenceInMinutes(
-        previousCheckinDate,
-        previousCheckoutDate
-      );
-      const checkin = add(new Date(date), {
-        minutes: diffMinsBetweenDates,
-      });
-      form.setValue("checkoutDate", date, { shouldValidate: true });
-      form.setValue("checkinDate", checkin, { shouldValidate: true });
-    },
-  });
+    const diffMinsBetweenDates = differenceInMinutes(
+      previousCheckinDate,
+      previousCheckoutDate
+    );
+    const checkin = add(new Date(date), {
+      minutes: diffMinsBetweenDates,
+    });
+    form.setValue("checkoutDate", date, { shouldValidate: true });
+    form.setValue("checkinDate", checkin, { shouldValidate: true });
+  };
 
-  const checkinDateInput = useDateInput({
-    defaultSelected: form_checkinDate,
-    format: dateFormat,
-    onValidChange: (date) => {
-      form.setValue("checkinDate", date, { shouldValidate: true });
-    },
-  });
+  const handleCheckinDateChange = (date: Date) => {
+    form.setValue("checkinDate", date, { shouldValidate: true });
+  };
 
   useEffect(() => {
     if (agreementNumberQuery.status !== "success") return;
@@ -270,34 +233,16 @@ export const DurationStage = ({
               render={() => (
                 <FormItem>
                   <FormLabel>Checkout date</FormLabel>
-                  <Popover>
+                  <InputDatePicker
+                    value={form_checkoutDate}
+                    onChange={handleCheckoutDateChange}
+                    mode="datetime"
+                    format={dateTimeFormat}
+                  >
                     <FormControl>
-                      <div className="flex gap-1">
-                        <Input
-                          placeholder="Checkout date"
-                          {...checkoutDateInput.inputProps}
-                        />
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            disabled={
-                              checkoutDateInput.inputProps.disabled ||
-                              checkoutDateInput.inputProps.readOnly
-                            }
-                          >
-                            <CalendarIcon className="h-3.5 w-3.5" />
-                          </Button>
-                        </PopoverTrigger>
-                      </div>
+                      <InputDatePickerSlot placeholder="Checkout date" />
                     </FormControl>
-                    <PopoverContent align="end" className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        initialFocus
-                        {...checkoutDateInput.dayPickerProps}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  </InputDatePicker>
                   <FormMessage />
                 </FormItem>
               )}
@@ -343,34 +288,16 @@ export const DurationStage = ({
               render={() => (
                 <FormItem>
                   <FormLabel>Checkin date</FormLabel>
-                  <Popover>
+                  <InputDatePicker
+                    value={form_checkinDate}
+                    onChange={handleCheckinDateChange}
+                    mode="datetime"
+                    format={dateTimeFormat}
+                  >
                     <FormControl>
-                      <div className="flex gap-1">
-                        <Input
-                          placeholder="Checkin date"
-                          {...checkinDateInput.inputProps}
-                        />
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            disabled={
-                              checkinDateInput.inputProps.disabled ||
-                              checkinDateInput.inputProps.readOnly
-                            }
-                          >
-                            <CalendarIcon className="h-3.5 w-3.5" />
-                          </Button>
-                        </PopoverTrigger>
-                      </div>
+                      <InputDatePickerSlot placeholder="Checkin date" />
                     </FormControl>
-                    <PopoverContent align="end" className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        initialFocus
-                        {...checkinDateInput.dayPickerProps}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  </InputDatePicker>
                   <FormMessage />
                 </FormItem>
               )}
