@@ -79,16 +79,24 @@ function InputDatePicker({
           <Tabs value={tabStage} onValueChange={setTabStage}>
             {(mode === "time" || mode === "datetime") && (
               <>
-                <TabsList className="h-12 w-full px-2.5">
-                  <TabsTrigger value="date">Date</TabsTrigger>
-                  <TabsTrigger value="time">Time</TabsTrigger>
+                <TabsList className="h-12 w-full rounded-b-none px-2.5">
+                  <TabsTrigger className="w-full" value="date">
+                    Date
+                  </TabsTrigger>
+                  <TabsTrigger className="w-full" value="time">
+                    Time
+                  </TabsTrigger>
                 </TabsList>
               </>
             )}
-            <TabsContent value="date" className="flex w-full justify-center">
+            <TabsContent
+              value="date"
+              className="flex w-full justify-center pt-0"
+            >
               <Calendar
                 mode="single"
                 initialFocus
+                className="pb-4 pt-1"
                 {...useDateInputHook.dayPickerProps}
               />
             </TabsContent>
