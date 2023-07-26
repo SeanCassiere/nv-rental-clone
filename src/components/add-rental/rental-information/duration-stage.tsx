@@ -278,7 +278,13 @@ export const DurationStage = ({
                           {...checkoutDateInput.inputProps}
                         />
                         <PopoverTrigger asChild>
-                          <Button variant="outline">
+                          <Button
+                            variant="outline"
+                            disabled={
+                              checkoutDateInput.inputProps.disabled ||
+                              checkoutDateInput.inputProps.readOnly
+                            }
+                          >
                             <CalendarIcon className="h-3.5 w-3.5" />
                           </Button>
                         </PopoverTrigger>
@@ -345,7 +351,13 @@ export const DurationStage = ({
                           {...checkinDateInput.inputProps}
                         />
                         <PopoverTrigger asChild>
-                          <Button variant="outline">
+                          <Button
+                            variant="outline"
+                            disabled={
+                              checkinDateInput.inputProps.disabled ||
+                              checkinDateInput.inputProps.readOnly
+                            }
+                          >
                             <CalendarIcon className="h-3.5 w-3.5" />
                           </Button>
                         </PopoverTrigger>
