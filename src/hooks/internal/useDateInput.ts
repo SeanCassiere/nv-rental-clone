@@ -55,7 +55,13 @@ function parseFromToProps(
 /** The props to attach to the input field when using {@link useDateInput}. */
 export type InputHTMLAttributes = Pick<
   React.InputHTMLAttributes<HTMLInputElement>,
-  "onBlur" | "onChange" | "onFocus" | "value" | "placeholder"
+  | "onBlur"
+  | "onChange"
+  | "onFocus"
+  | "value"
+  | "placeholder"
+  | "disabled"
+  | "readOnly"
 >;
 
 /** The props to attach to the DayPicker component when using {@link useDateInput}. */
@@ -94,7 +100,21 @@ export interface UseDateInputOptions
   format?: string;
   /** Make the selection required. */
   required?: boolean;
+
+  /** Callback function that is called when the user selects a valid day. */
   onValidChange?: (date: Date) => void;
+  /**
+   * Disable the input field and the calendar.
+   *
+   * @defaultValue false
+   *  */
+  disabled?: boolean;
+  /**
+   * Make the input field read-only.
+   *
+   * @defaultValue false
+   *  */
+  readOnly?: boolean;
 }
 
 /** Represent the value returned by {@link useDateInput}. */
@@ -120,6 +140,8 @@ export function useDateInput(
     defaultSelected,
     today = new Date(),
     onValidChange = undefined,
+    disabled = false,
+    readOnly = false,
   } = options;
   const { fromDate, toDate } = parseFromToProps(options);
 
@@ -225,6 +247,8 @@ export function useDateInput(
     onFocus: handleFocus,
     value: inputValue,
     placeholder: _format(new Date(), format, { locale }),
+    disabled,
+    readOnly,
   };
 
   useEffect(() => {
