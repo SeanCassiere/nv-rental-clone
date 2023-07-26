@@ -91,7 +91,7 @@ export const DurationStage = ({
   onCompleted,
   isEdit,
 }: DurationStageProps) => {
-  const { dateTimeFormat } = useDatePreference();
+  const { dateTimeFormat, timeFormat } = useDatePreference();
 
   const values = {
     agreementNumber: initialData?.agreementNumber ?? "",
@@ -238,6 +238,7 @@ export const DurationStage = ({
                     onChange={handleCheckoutDateChange}
                     mode="datetime"
                     format={dateTimeFormat}
+                    timeFormat={timeFormat}
                   >
                     <FormControl>
                       <InputDatePickerSlot placeholder="Checkout date" />
@@ -293,6 +294,7 @@ export const DurationStage = ({
                     onChange={handleCheckinDateChange}
                     mode="datetime"
                     format={dateTimeFormat}
+                    timeFormat={timeFormat}
                   >
                     <FormControl>
                       <InputDatePickerSlot placeholder="Checkin date" />
