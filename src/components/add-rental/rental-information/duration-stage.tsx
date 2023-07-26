@@ -5,9 +5,8 @@ import { z } from "zod";
 import add from "date-fns/add";
 import isBefore from "date-fns/isBefore";
 import isEqual from "date-fns/isEqual";
-import differenceInSeconds from "date-fns/differenceInSeconds";
+import differenceInMinutes from "date-fns/differenceInMinutes";
 
-import { DateTimePicker } from "@/components/Form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -25,10 +24,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  InputDatePicker,
+  InputDatePickerSlot,
+} from "@/components/ui/input-datepicker";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
+import { useDatePreference } from "@/hooks/internal/useDatePreferences";
 
 const AgreementRentalInformationSchema = z
   .object({
@@ -87,6 +91,8 @@ export const DurationStage = ({
   onCompleted,
   isEdit,
 }: DurationStageProps) => {
+  const { dateTimeFormat, timeFormat } = useDatePreference();
+
   const values = {
     agreementNumber: initialData?.agreementNumber ?? "",
     agreementType: initialData?.agreementType ?? "Retail",
@@ -113,6 +119,28 @@ export const DurationStage = ({
     agreementType: currentAgreementType,
     enabled: isEdit === false,
   });
+
+  const form_checkoutDate = form.watch("checkoutDate");
+  const form_checkinDate = form.watch("checkinDate");
+
+  const handleCheckoutDateChange = (date: Date) => {
+    const previousCheckoutDate = form_checkoutDate;
+    const previousCheckinDate = form_checkinDate;
+
+    const diffMinsBetweenDates = differenceInMinutes(
+      previousCheckinDate,
+      previousCheckoutDate
+    );
+    const checkin = add(new Date(date), {
+      minutes: diffMinsBetweenDates,
+    });
+    form.setValue("checkoutDate", date, { shouldValidate: true });
+    form.setValue("checkinDate", checkin, { shouldValidate: true });
+  };
+
+  const handleCheckinDateChange = (date: Date) => {
+    form.setValue("checkinDate", date, { shouldValidate: true });
+  };
 
   useEffect(() => {
     if (agreementNumberQuery.status !== "success") return;
@@ -199,37 +227,26 @@ export const DurationStage = ({
             />
           </div>
           <div>
-            <DateTimePicker
-              label="Checkout Date"
-              placeholderText="Checkout Date"
-              {...form.register("checkoutDate")}
-              selected={form.getValues("checkoutDate")}
-              onChange={(date) => {
-                if (date) {
-                  const previousCheckoutDate =
-                    form.getValues("checkoutDate") ?? values.checkoutDate;
-                  const previousCheckinDate =
-                    form.getValues("checkinDate") ?? values.checkinDate;
-
-                  const differenceInSecondsBetweenDates = differenceInSeconds(
-                    previousCheckinDate,
-                    previousCheckoutDate
-                  );
-                  const newCheckinDate = add(new Date(date), {
-                    seconds: differenceInSecondsBetweenDates,
-                  });
-                  form.setValue("checkinDate", newCheckinDate, {
-                    shouldValidate: true,
-                  });
-                }
-                form.setValue("checkoutDate", date as any, {
-                  shouldValidate: true,
-                });
-              }}
-              inputProps={{
-                error: !!form.formState.errors.checkoutDate,
-                errorText: form.formState.errors.checkoutDate?.message,
-              }}
+            <FormField
+              control={form.control}
+              name="checkoutDate"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Checkout date</FormLabel>
+                  <InputDatePicker
+                    value={form_checkoutDate}
+                    onChange={handleCheckoutDateChange}
+                    mode="datetime"
+                    format={dateTimeFormat}
+                    timeFormat={timeFormat}
+                  >
+                    <FormControl>
+                      <InputDatePickerSlot placeholder="Checkout date" />
+                    </FormControl>
+                  </InputDatePicker>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>
@@ -266,20 +283,26 @@ export const DurationStage = ({
             />
           </div>
           <div>
-            <DateTimePicker
-              label="Checkin Date"
-              placeholderText="Checkin Date"
-              {...form.register("checkinDate")}
-              selected={form.getValues("checkinDate")}
-              onChange={(date) => {
-                form.setValue("checkinDate", date as any, {
-                  shouldValidate: true,
-                });
-              }}
-              inputProps={{
-                error: !!form.formState.errors.checkinDate,
-                errorText: form.formState.errors.checkinDate?.message,
-              }}
+            <FormField
+              control={form.control}
+              name="checkinDate"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Checkin date</FormLabel>
+                  <InputDatePicker
+                    value={form_checkinDate}
+                    onChange={handleCheckinDateChange}
+                    mode="datetime"
+                    format={dateTimeFormat}
+                    timeFormat={timeFormat}
+                  >
+                    <FormControl>
+                      <InputDatePickerSlot placeholder="Checkin date" />
+                    </FormControl>
+                  </InputDatePicker>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>

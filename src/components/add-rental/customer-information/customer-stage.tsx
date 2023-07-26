@@ -4,9 +4,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import SelectCustomerModal from "@/components/Dialogs/SelectCustomerModal";
-import { DatePicker } from "@/components/Form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  InputDatePicker,
+  InputDatePickerSlot,
+} from "@/components/ui/input-datepicker";
 import {
   Form,
   FormControl,
@@ -15,6 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+import { useDatePreference } from "@/hooks/internal/useDatePreferences";
 
 const REQUIRED = "Required" as const;
 
@@ -69,6 +74,8 @@ export const CustomerStage = ({
   // isEdit,
   onCompleted,
 }: CustomerStageProps) => {
+  const { dateFormat } = useDatePreference();
+
   const [showCustomerPicker, setShowCustomerPicker] = useState(false);
 
   const values: CommonCustomerInformationSchemaParsed = {
@@ -96,6 +103,8 @@ export const CustomerStage = ({
     defaultValues: values,
     values: customerInformation ? values : undefined,
   });
+
+  const form_dob = form.watch("dateOfBirth");
 
   return (
     <Form {...form}>
@@ -188,17 +197,30 @@ export const CustomerStage = ({
             />
           </div>
           <div>
-            <DatePicker
-              selected={
-                form.getValues("dateOfBirth")
-                  ? new Date(form.getValues("dateOfBirth")!)
-                  : null
-              }
-              onChange={(date) => {
-                //
-              }}
-              placeholderText="Date of birth"
-              readOnly
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date of birth</FormLabel>
+                  <InputDatePicker
+                    mode="date"
+                    format={dateFormat}
+                    value={
+                      form_dob !== "" && form_dob !== null
+                        ? new Date(form_dob)
+                        : undefined
+                    }
+                    onChange={field.onChange}
+                    readOnly
+                  >
+                    <FormControl>
+                      <InputDatePickerSlot placeholder="Date of birth" />
+                    </FormControl>
+                  </InputDatePicker>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div>

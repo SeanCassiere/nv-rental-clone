@@ -1,8 +1,13 @@
-import { useState } from "react";
-import { TextInput, Button } from "../../components/Form";
+import { useId, useState } from "react";
 import JSURL from "jsurl2";
 
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+
 const JsURLDecoder = () => {
+  const encodeValueId = useId();
+  const decodeJSURLtoJSONId = useId();
   const [encodeValue, setEncodeValue] = useState("");
   const [encoded, setEncoded] = useState("");
 
@@ -11,20 +16,23 @@ const JsURLDecoder = () => {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <TextInput
-        label="Encode JSON"
-        value={encodeValue}
-        onChange={(evt) => {
-          setEncodeValue(evt.target.value);
-          try {
-            const parsed = JSON.parse(evt.target.value);
-            const url = JSURL.stringify(parsed);
-            setEncoded(url);
-          } catch (error) {
-            setEncoded("could not encode");
-          }
-        }}
-      />
+      <div>
+        <Label htmlFor={encodeValueId}>Encode JSON</Label>
+        <Input
+          id={encodeValueId}
+          value={encodeValue}
+          onChange={(evt) => {
+            setEncodeValue(evt.target.value);
+            try {
+              const parsed = JSON.parse(evt.target.value);
+              const url = JSURL.stringify(parsed);
+              setEncoded(url);
+            } catch (error) {
+              setEncoded("could not encode");
+            }
+          }}
+        />
+      </div>
       <div>
         <p className="text-sm">Encoded</p>
         <div className="flex flex-col md:flex-row">
@@ -41,19 +49,22 @@ const JsURLDecoder = () => {
           </p>
         </div>
       </div>
-      <TextInput
-        label="Decode JSURL to JSON"
-        value={decodeValue}
-        onChange={(evt) => {
-          setDecodeValue(evt.target.value);
-          try {
-            const parsed = JSURL.parse(evt.target.value);
-            setDecoded(parsed);
-          } catch (error) {
-            setDecoded("could not decode");
-          }
-        }}
-      />
+      <div>
+        <Label htmlFor={decodeJSURLtoJSONId}>Decode JSURL to JSON</Label>
+        <Input
+          id={decodeJSURLtoJSONId}
+          value={decodeValue}
+          onChange={(evt) => {
+            setDecodeValue(evt.target.value);
+            try {
+              const parsed = JSURL.parse(evt.target.value);
+              setDecoded(parsed);
+            } catch (error) {
+              setDecoded("could not decode");
+            }
+          }}
+        />
+      </div>
       <div>
         <p className="text-sm">Decoded</p>
         <div className="flex flex-col md:flex-row">
