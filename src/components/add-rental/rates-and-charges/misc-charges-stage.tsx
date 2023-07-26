@@ -24,6 +24,7 @@ import type { MiscChargeListItem } from "@/schemas/misCharges";
 
 import { cn } from "@/utils";
 import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface MiscChargesStageProps {
   durationStageData: RatesAndChargesTabProps["durationStageData"];
@@ -89,9 +90,15 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
 
   return (
     <div className="px-1">
-      {miscCharges.isLoading && <span>Loading...</span>}
       {!isSupportingInfoAvailable && (
         <span>Please fill out the previous steps</span>
+      )}
+      {miscCharges.isLoading && (
+        <div className="grid grid-cols-1 gap-3">
+          <Skeleton className="h-[78px] w-full" />
+          <Skeleton className="h-[78px] w-full" />
+          <Skeleton className="h-[78px] w-full" />
+        </div>
       )}
       <div className="grid grid-cols-1 gap-3">
         {(miscCharges.data || []).map((charge, idx) => (
