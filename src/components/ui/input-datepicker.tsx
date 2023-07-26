@@ -24,7 +24,7 @@ const InputDatePickerContext = createContext<ReturnType<
 > | null>(null);
 
 interface InputDatePickerProps {
-  value: Date;
+  value?: Date;
   mode: "date" | "time" | "datetime";
   children: ReactNode;
   disabled?: boolean;
@@ -94,7 +94,7 @@ function InputDatePickerSlot({
 
   return (
     <div className="flex gap-1">
-      <Input id={formItemId} placeholder={placeholder} {...ctx.inputProps} />
+      <Input id={formItemId} {...ctx.inputProps} placeholder={placeholder} />
       <PopoverTrigger asChild>
         <Button
           variant="outline"

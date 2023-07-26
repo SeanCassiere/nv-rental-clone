@@ -245,8 +245,13 @@ export function useDateInput(
     onBlur: handleBlur,
     onChange: handleChange,
     onFocus: handleFocus,
-    value: inputValue,
-    placeholder: _format(new Date(), format, { locale }),
+    value:
+      (disabled || readOnly) && defaultSelected
+        ? _format(defaultSelected, format, { locale })
+        : inputValue,
+    placeholder: defaultSelected
+      ? _format(defaultSelected, format, { locale })
+      : undefined,
     disabled,
     readOnly,
   };
