@@ -101,7 +101,7 @@ export const CustomerSummary = ({
           filters: {
             Statuses: ["2"],
             CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: false,
+            IsSearchOverdues: "false",
           },
         }),
       },
@@ -117,7 +117,7 @@ export const CustomerSummary = ({
           filters: {
             Statuses: ["3"],
             CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: false,
+            IsSearchOverdues: "false",
           },
         }),
       },
@@ -138,7 +138,7 @@ export const CustomerSummary = ({
           filters: {
             Statuses: ["5"],
             CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: false,
+            IsSearchOverdues: "false",
           },
         }),
       },
@@ -154,7 +154,7 @@ export const CustomerSummary = ({
           filters: {
             Statuses: ["7"],
             CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: false,
+            IsSearchOverdues: "false",
           },
         }),
       },

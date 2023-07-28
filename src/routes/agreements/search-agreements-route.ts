@@ -1,7 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { agreementsRoute } from ".";
-import { queryClient as qc } from "../../app-entry";
+import { queryClient as qc } from "@/app-entry";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 
@@ -13,12 +13,12 @@ import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-par
 export const searchAgreementsRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "/",
-  validateSearch: (search) =>
-    AgreementSearchQuerySchema.passthrough().parse(search),
+  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
-    () => ({
-      page: 1,
-      size: 10,
+    (search) => ({
+      page: search?.page || 1,
+      size: search?.size || 10,
+      ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
   loader: async ({ search }) => {

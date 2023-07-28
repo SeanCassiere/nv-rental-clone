@@ -62,7 +62,7 @@ const DashboardStatsBlock = ({
               filters: {
                 EndDate: localDateToQueryYearMonthDay(new Date()),
                 Statuses: ["2"],
-                IsSearchOverdues: false,
+                IsSearchOverdues: "false",
               },
             }),
             preload: "intent",
@@ -92,10 +92,10 @@ const DashboardStatsBlock = ({
           value={Number(statistics?.overDues || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
-            search: () => ({
+            search: (search) => ({
               page: 1,
               size: 10,
-              filters: { Statuses: ["2"], IsSearchOverdues: true },
+              filters: { Statuses: ["2"], IsSearchOverdues: "true" },
             }),
             preload: "intent",
           }}

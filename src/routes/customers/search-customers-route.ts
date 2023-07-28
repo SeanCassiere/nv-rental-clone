@@ -1,7 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { customersRoute } from ".";
-import { queryClient as qc } from "../../app-entry";
+import { queryClient as qc } from "@/app-entry";
 import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
@@ -14,12 +14,12 @@ export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "/",
   component: lazy(() => import("../../pages/search-customers")),
-  validateSearch: (search) =>
-    CustomerSearchQuerySchema.passthrough().parse(search),
+  validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
-    () => ({
-      page: 1,
-      size: 10,
+    (search) => ({
+      page: search?.page || 1,
+      size: search?.size || 10,
+      ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
   loader: async ({ search }) => {

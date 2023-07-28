@@ -1,8 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { fleetRoute } from ".";
-import { queryClient } from "../../app-entry";
-
+import { queryClient } from "@/app-entry";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
@@ -14,12 +13,12 @@ import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 export const searchFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "/",
-  validateSearch: (search) =>
-    VehicleSearchQuerySchema.passthrough().parse(search),
+  validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
-    () => ({
-      page: 1,
-      size: 10,
+    (search) => ({
+      page: search?.page || 1,
+      size: search?.size || 10,
+      ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
   loader: async ({ search }) => {
