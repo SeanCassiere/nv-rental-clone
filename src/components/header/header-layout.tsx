@@ -135,7 +135,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
               <UserNavigationDropdown />
             </div>
           </div>
-          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 sm:space-x-0 md:px-10">
+          <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0 md:px-10 [&::-webkit-scrollbar]:hidden">
             {navigation.map((navItem) => (
               <Link
                 key={`nav_${navItem.name}`}
