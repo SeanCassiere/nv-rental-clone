@@ -57,6 +57,10 @@ import {
   editFleetByIdRoute,
 } from "./routes/fleet/fleet-id-route";
 
+import { settingsRoute } from "./routes/settings";
+import { mainSettingsRoute } from "./routes/settings/main-settings-route";
+import { destinationSettingsRoute } from "./routes/settings/destination-settings-route";
+
 const routeTree = rootRoute.addChildren([
   indexRoute, // /
   loggedOutRoute, // /logged-out
@@ -98,6 +102,10 @@ const routeTree = rootRoute.addChildren([
       viewFleetByIdRoute, // /fleet/:fleetId/
       editFleetByIdRoute, // /fleet/:fleetId/edit
     ]),
+  ]),
+  settingsRoute.addChildren([
+    mainSettingsRoute, // /settings
+    destinationSettingsRoute, // /settings/destinations
   ]),
 ]);
 
