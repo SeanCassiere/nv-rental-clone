@@ -18,10 +18,10 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { MenuIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Bars3Outline, EyeOutline, EyeSlashOutline } from "@/components/icons";
 import {
   reorderBasedOnWidgetIdPositions,
   sortWidgetsByUserPositionFn,
@@ -196,7 +196,7 @@ const WidgetOption = ({
             {...listeners}
             {...attributes}
           >
-            <Bars3Outline className="h-4 w-4" />
+            <MenuIcon className="h-4 w-4" />
           </button>
           <span className="select-none">{widget.widgetName}</span>
         </div>
@@ -208,9 +208,9 @@ const WidgetOption = ({
             }}
           >
             {widget.isDeleted ? (
-              <EyeSlashOutline className="h-4 w-4" />
+              <EyeOffIcon className="h-4 w-4" />
             ) : (
-              <EyeOutline className="h-4 w-4" />
+              <EyeIcon className="h-4 w-4" />
             )}
           </button>
         </div>

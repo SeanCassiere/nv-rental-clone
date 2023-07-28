@@ -3,21 +3,21 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
 
-import { CommonTable } from "../../../common/common-table";
-import { DocumentTextSolid } from "../../../icons";
-import CommonEmptyStateContent from "../../../Layout/CommonEmptyStateContent";
-
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
-
-import { type TAgreementListItemParsed } from "@/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { AgreementDateTimeColumns } from "@/utils/columns";
+import { CommonTable } from "@/components/common/common-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
+
+import { type TAgreementListItemParsed } from "@/schemas/agreement";
+
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+
+import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+
+import { AgreementDateTimeColumns } from "@/utils/columns";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 
 interface FleetOccupiedAgreementsTabProps {
   vehicleId: string;

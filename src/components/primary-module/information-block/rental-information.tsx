@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { BanknoteIcon } from "lucide-react";
 
-import { BankNotesSolid } from "../../icons";
 import {
   InformationBlockCard,
   type TAnyCustomerValueType,
@@ -161,7 +161,7 @@ const RentalInformation = (props: TRentalInformationProps) => {
   return (
     <InformationBlockCard
       identifier="rental-information"
-      icon={<BankNotesSolid className="h-5 w-5" />}
+      icon={<BanknoteIcon className="h-5 w-5" />}
       title="Rental information"
       blocks={infoBlocks}
       numberPerBlock={4}

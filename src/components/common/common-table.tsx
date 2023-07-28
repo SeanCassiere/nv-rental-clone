@@ -6,9 +6,8 @@ import {
   type ColumnDef,
   type PaginationState,
 } from "@tanstack/react-table";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-import { getPaginationWithDoubleEllipsis } from "../../utils/pagination";
-import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
 import {
   Table,
   TableHeader,
@@ -18,7 +17,9 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+
 import { cn } from "@/utils";
+import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
 
 interface TCommonTableProps<T> {
   data: T[];
@@ -169,7 +170,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                   className="rounded-l px-2 tabular-nums"
                 >
                   <span className="sr-only">Previous</span>
-                  <ChevronLeftOutline className="h-4 w-4" aria-hidden="true" />
+                  <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
                 </Button>
                 {pageNumbers.map((pageNum, idx) => {
                   const current = Boolean(
@@ -201,7 +202,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
                   className="rounded-r px-2 tabular-nums"
                 >
                   <span className="sr-only">Next</span>
-                  <ChevronRightOutline className="h-4 w-4" aria-hidden="true" />
+                  <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </nav>
             </div>

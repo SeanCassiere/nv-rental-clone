@@ -2,11 +2,11 @@ import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
+import { FilesIcon } from "lucide-react";
 import parseISO from "date-fns/parseISO";
 
 import { CommonTable } from "../../../common/common-table";
 import CommonEmptyStateContent from "../../../Layout/CommonEmptyStateContent";
-import { DocumentTextSolid } from "../../../icons";
 
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
 import { useGetVehicleExchanges } from "@/hooks/network/vehicle-exchange/useGetVehicleExchanges";
@@ -94,9 +94,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
         <CommonEmptyStateContent
           title="No exchanges"
           subtitle="You haven't made any vehicle exchanges for this rental agreement."
-          icon={
-            <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
-          }
+          icon={<FilesIcon className="mx-auto h-12 w-12 text-slate-400" />}
         />
       ) : (
         <CommonTable columns={colDefs} data={dataList.data?.data || []} />

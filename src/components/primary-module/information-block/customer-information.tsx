@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
+import { UserIcon } from "lucide-react";
 
 import {
   InformationBlockCard,
@@ -8,7 +9,6 @@ import {
   type TInformationBlockCardProps,
   EMPTY_KEY,
 } from "./common";
-import { UserSolid } from "@/components/icons";
 import { buttonVariants } from "@/components/ui/button";
 
 import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
@@ -182,7 +182,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
   return (
     <InformationBlockCard
       identifier="customer-information"
-      icon={<UserSolid className="h-5 w-5" />}
+      icon={<UserIcon className="h-5 w-5" />}
       title={title}
       blocks={infoBlocks}
       numberPerBlock={3}

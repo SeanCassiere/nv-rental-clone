@@ -1,11 +1,11 @@
 import { useMemo, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { type TFunction } from "i18next";
+import { CircleDollarSignIcon } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
-import { CurrencyDollarSolid } from "../../icons";
 import {
   SummaryHeader,
   SummaryLineItem,
@@ -734,7 +734,7 @@ export const RentalSummary = ({
     <Card>
       <SummaryHeader
         title="Summary of charges"
-        icon={<CurrencyDollarSolid className="h-6 w-6" />}
+        icon={<CircleDollarSignIcon className="h-6 w-6" />}
       />
       <CardContent className="px-0 py-0">
         <ul className="flex flex-col">

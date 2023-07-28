@@ -24,7 +24,9 @@ export const ModuleStatBlock = ({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{header}</CardTitle>
+        <CardTitle className="text-sm font-medium sm:text-base">
+          {header}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <p className="block text-xl font-medium tabular-nums underline-offset-4">

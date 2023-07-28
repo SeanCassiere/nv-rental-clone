@@ -2,14 +2,15 @@ import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import parseISO from "date-fns/parseISO";
+import { FilesIcon } from "lucide-react";
 
-import { CommonTable } from "../../common/common-table";
-import { DocumentTextSolid } from "../../icons";
-import CommonEmptyStateContent from "../../Layout/CommonEmptyStateContent";
+import { CommonTable } from "@/components/common/common-table";
+import CommonEmptyStateContent from "@/components/Layout/CommonEmptyStateContent";
 
 import { useGetModuleNotes } from "@/hooks/network/module/useGetModuleNotes";
-import { type TNoteDataParsed } from "@/schemas/note";
-import { type AppPrimaryModuleType } from "@/types/General";
+import type { TNoteDataParsed } from "@/schemas/note";
+
+import type { AppPrimaryModuleType } from "@/types/General";
 
 const columnHelper = createColumnHelper<TNoteDataParsed>();
 
@@ -121,9 +122,7 @@ const ModuleNotesTabContent = ({
         <CommonEmptyStateContent
           title={emptyContentLabels[module]?.title ?? ""}
           subtitle={emptyContentLabels[module]?.subtitle ?? ""}
-          icon={
-            <DocumentTextSolid className="mx-auto h-12 w-12 text-slate-400" />
-          }
+          icon={<FilesIcon className="mx-auto h-12 w-12 text-slate-400" />}
         />
       ) : (
         <CommonTable data={notesQuery.data?.data || []} columns={colDefs} />

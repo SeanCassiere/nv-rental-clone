@@ -7,9 +7,8 @@ import {
 } from "react";
 import { Link } from "@tanstack/router";
 import parseISO from "date-fns/parseISO";
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, PlayIcon } from "lucide-react";
 
-import { PlayIconFilled } from "@/components/icons";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1005,7 +1004,7 @@ const AddRentalParentForm = ({
                   )
                 }
               >
-                <PlayIconFilled className="mr-2 h-3 w-3" />
+                <PlayIcon className="mr-2 h-3 w-3" />
                 <span>{isEdit ? "Save" : "Create"}</span>
               </Button>
             ) : null}
@@ -1022,7 +1021,7 @@ const AddRentalParentForm = ({
                   )
                 }
               >
-                <PlayIconFilled className="mr-2 h-3 w-3" />
+                <PlayIcon className="mr-2 h-3 w-3" />
                 <span>{isEdit ? "Save" : "Create"}</span>
               </Button>
             ) : null}

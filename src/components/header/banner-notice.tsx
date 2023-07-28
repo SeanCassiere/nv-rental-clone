@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { DotIcon, XIcon } from "lucide-react";
+import { DotIcon } from "lucide-react";
 
 import type { ServerMessage } from "@/schemas/dashboard";
 import {

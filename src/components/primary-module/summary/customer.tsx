@@ -1,12 +1,12 @@
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { CircleDollarSignIcon } from "lucide-react";
 
 import {
   SummaryHeader,
   SummaryLineItem,
   type TSummaryLineItemProps,
 } from "./common";
-import { CurrencyDollarSolid } from "@/components/icons";
 import { Card, CardContent } from "@/components/ui/card";
 import type { TCustomerSummarySchema } from "@/schemas/summary/customerSummary";
 
@@ -174,7 +174,7 @@ export const CustomerSummary = ({
     <Card>
       <SummaryHeader
         title="Summary"
-        icon={<CurrencyDollarSolid className="h-5 w-5" />}
+        icon={<CircleDollarSignIcon className="h-6 w-6" />}
       />
       <CardContent className="px-0 py-0">
         <ul className="flex flex-col">

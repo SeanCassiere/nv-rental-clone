@@ -1,24 +1,26 @@
 import {
-  type IconProps,
-  CreditCardOutline,
-  ArrowDownRightOutline,
-  TruckOutline,
-  BankNotesOutline,
-  BellIconOutline,
-} from "../icons";
-import {
   Link,
   type MakeLinkOptions,
   type RegisteredRoutesInfo,
 } from "@tanstack/router";
-import { localDateToQueryYearMonthDay } from "@/utils/date";
-import type { TDashboardStats } from "@/schemas/dashboard";
+import {
+  type LucideIcon,
+  CreditCardIcon,
+  ArrowDownLeftIcon,
+  CarIcon,
+  BanknoteIcon,
+  BellIcon,
+} from "lucide-react";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { indexRoute } from "@/routes";
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+
+import type { TDashboardStats } from "@/schemas/dashboard";
+
+import { localDateToQueryYearMonthDay } from "@/utils/date";
 
 const DashboardStatsBlock = ({
   statistics,
@@ -30,7 +32,7 @@ const DashboardStatsBlock = ({
       <li>
         <StatBlock
           title="Reservation"
-          icon={CreditCardOutline}
+          icon={CreditCardIcon}
           value={Number(statistics?.todaysReservationCount || 0).toString()}
           linkProps={{
             to: searchReservationsRoute.to,
@@ -50,7 +52,7 @@ const DashboardStatsBlock = ({
       <li>
         <StatBlock
           title="Return"
-          icon={ArrowDownRightOutline}
+          icon={ArrowDownLeftIcon}
           value={Number(statistics?.todaysArrivalsCount || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
@@ -70,7 +72,7 @@ const DashboardStatsBlock = ({
       <li>
         <StatBlock
           title="On rent"
-          icon={TruckOutline}
+          icon={CarIcon}
           value={Number(statistics?.openAgreement || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
@@ -86,7 +88,7 @@ const DashboardStatsBlock = ({
       <li>
         <StatBlock
           title="Overdue"
-          icon={CreditCardOutline}
+          icon={CreditCardIcon}
           value={Number(statistics?.overDues || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
@@ -102,7 +104,7 @@ const DashboardStatsBlock = ({
       <li>
         <StatBlock
           title="Pending payment"
-          icon={BankNotesOutline}
+          icon={BanknoteIcon}
           value={Number(statistics?.pendingPayment || 0).toString()}
           linkProps={{
             to: searchAgreementsRoute.to,
@@ -118,7 +120,7 @@ const DashboardStatsBlock = ({
       <li>
         <StatBlock
           title="Service alert"
-          icon={BellIconOutline}
+          icon={BellIcon}
           value={Number(statistics?.serviceAlerts || 0).toString()}
           linkProps={{
             to: indexRoute.id,
@@ -137,13 +139,15 @@ const StatBlock = ({
 }: {
   title: string;
   value: string;
-  icon: ({ className }: IconProps) => JSX.Element;
+  icon: LucideIcon;
   linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
 }) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <CardTitle className="text-sm font-medium sm:text-base">
+          {title}
+        </CardTitle>
         <Icon className="h-3.5 w-3.5 text-muted-foreground sm:h-4 sm:w-4" />
         <span className="sr-only">{title} icon</span>
       </CardHeader>

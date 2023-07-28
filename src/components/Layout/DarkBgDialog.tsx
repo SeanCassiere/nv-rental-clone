@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 import { Transition, Dialog } from "@headlessui/react";
+import { XIcon } from "lucide-react";
 
-import { XMarkOutline } from "../icons";
 import { cn } from "@/utils";
 
 interface DarkBgDialogProps {
@@ -66,7 +66,7 @@ const DarkBgDialog = (props: DarkBgDialogProps) => {
                     "md:max-w-4xl": sizing === "4xl",
                     "md:max-w-5xl": sizing === "5xl",
                   },
-                  "w-full rounded bg-white p-4",
+                  "w-full rounded bg-white p-4"
                 )}
               >
                 <Dialog.Title className="flex w-full items-center justify-between">
@@ -80,7 +80,7 @@ const DarkBgDialog = (props: DarkBgDialogProps) => {
                         disabled={restrictClose}
                         onClick={handleClose}
                       >
-                        <XMarkOutline className="h-4 w-4" />
+                        <XIcon className="h-4 w-4" />
                       </button>
                     </div>
                   )}

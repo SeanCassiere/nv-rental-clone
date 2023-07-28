@@ -8,9 +8,9 @@ import {
   type ColumnFiltersState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+import { PlusIcon } from "lucide-react";
 
 import ProtectorShield from "@/components/protector-shield";
-import { PlusIconFilled } from "@/components/icons";
 
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
@@ -187,7 +187,7 @@ function ReservationsSearchPage() {
             search={() => ({ stage: "rental-information" })}
             className={cn(buttonVariants({ size: "sm" }))}
           >
-            <PlusIconFilled className="h-4 w-4 sm:mr-2" />
+            <PlusIcon className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline-block">New Reservation</span>
           </Link>
         </div>

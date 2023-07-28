@@ -40,14 +40,9 @@ import {
   EyeOff,
   GripVertical,
   ChevronsDownUp,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "lucide-react";
-
-import { ChevronLeftOutline, ChevronRightOutline } from "../icons";
-
-import { type TColumnListItemParsed } from "@/schemas/column";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
-import { cn } from "@/utils";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -67,6 +62,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
 import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
+
+import { type TColumnListItemParsed } from "@/schemas/column";
+
+import { cn } from "@/utils";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
 
 interface PrimaryModuleTableProps<
   TData,
@@ -291,7 +292,7 @@ export function PrimaryModuleTable<
             className="rounded-l px-2 tabular-nums"
           >
             <span className="sr-only">Previous</span>
-            <ChevronLeftOutline className="h-4 w-4" aria-hidden="true" />
+            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
           {pageNumbers.map((pageNum, idx) => {
             const current = Boolean(props.pagination.pageIndex + 1 === pageNum);
@@ -321,7 +322,7 @@ export function PrimaryModuleTable<
             className="rounded-r px-2 tabular-nums"
           >
             <span className="sr-only">Next</span>
-            <ChevronRightOutline className="h-4 w-4" aria-hidden="true" />
+            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
         </nav>
       </div>

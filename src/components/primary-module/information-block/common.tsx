@@ -49,7 +49,9 @@ export const InformationBlockCard = (props: TInformationBlockCardProps) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
-        <CardTitle className="text-lg font-medium">{props.title}</CardTitle>
+        <CardTitle className="text-base font-medium sm:text-lg">
+          {props.title}
+        </CardTitle>
         <span className="text-primary/80">{props.icon}</span>
       </CardHeader>
       <CardContent
@@ -67,26 +69,6 @@ export const InformationBlockCard = (props: TInformationBlockCardProps) => {
           />
         ))}
       </CardContent>
-    </Card>
-  );
-};
-
-export const InformationBlockCardWithChildren = (
-  props: Omit<
-    TInformationBlockCardProps & { children: ReactNode },
-    "numberPerBlock" | "blocks"
-  > & { renderEndIcon?: ReactNode }
-) => {
-  return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
-        <CardTitle className="text-lg font-medium">{props.title}</CardTitle>
-        <span className="flex items-center text-primary/80">
-          {props.icon}
-          {props.renderEndIcon && <>{props.renderEndIcon}</>}
-        </span>
-      </CardHeader>
-      <CardContent>{props.children}</CardContent>
     </Card>
   );
 };
