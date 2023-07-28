@@ -1,9 +1,9 @@
-import { Route } from "@tanstack/router";
+import { lazy, Route } from "@tanstack/router";
 
 import { settingsRoute } from ".";
 
 export const mainSettingsRoute = new Route({
   getParentRoute: () => settingsRoute,
   path: "/",
-  component: () => "Settings page",
+  component: lazy(() => import("@/pages/settings-catch-all")),
 });

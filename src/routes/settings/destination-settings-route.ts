@@ -1,4 +1,4 @@
-import { Route } from "@tanstack/router";
+import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { settingsRoute } from ".";
@@ -12,5 +12,5 @@ export const destinationSettingsRoute = new Route({
   stringifyParams: (params) => ({
     destination: `${params.destination}`,
   }),
-  component: () => "Destination settings",
+  component: lazy(() => import("@/pages/settings-catch-all")),
 });
