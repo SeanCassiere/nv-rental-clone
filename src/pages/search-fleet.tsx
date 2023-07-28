@@ -101,10 +101,7 @@ function VehiclesSearchPage() {
                     to={viewFleetByIdRoute.to}
                     params={{ vehicleId: String(vehicleId) }}
                     search={() => ({ tab: "summary" })}
-                    className={cn(
-                      buttonVariants({ variant: "link", size: "sm" }),
-                      "p-0"
-                    )}
+                    className={cn(buttonVariants({ variant: "link" }), "p-0")}
                     preload="intent"
                   >
                     {value}

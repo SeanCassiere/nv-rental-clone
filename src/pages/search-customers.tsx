@@ -100,10 +100,7 @@ function CustomerSearchPage() {
                     to={viewCustomerByIdRoute.to}
                     params={{ customerId: String(customerId) }}
                     search={() => ({ tab: "summary" })}
-                    className={cn(
-                      buttonVariants({ variant: "link", size: "sm" }),
-                      "p-0"
-                    )}
+                    className={cn(buttonVariants({ variant: "link" }), "p-0")}
                     preload="intent"
                   >
                     {value}

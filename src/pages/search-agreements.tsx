@@ -112,10 +112,7 @@ function AgreementsSearchPage() {
                     to={viewAgreementByIdRoute.to}
                     params={{ agreementId: String(agreementId) }}
                     search={() => ({ tab: "summary" })}
-                    className={cn(
-                      buttonVariants({ variant: "link", size: "sm" }),
-                      "p-0"
-                    )}
+                    className={cn(buttonVariants({ variant: "link" }), "p-0")}
                     preload="intent"
                   >
                     {value}

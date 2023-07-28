@@ -207,7 +207,7 @@ export function PrimaryModuleTable<
             onDragEnd={handleDndDragEnd}
             modifiers={[restrictToHorizontalAxis]}
           >
-            <Table className="table-auto">
+            <Table className="table-auto text-base">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
@@ -376,8 +376,7 @@ export function PrimaryModuleTableColumnHeader<TData, TValue>({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="secondary"
-            size="sm"
+            variant="outline"
             className="-ml-3 h-8 whitespace-nowrap text-left data-[state=open]:bg-accent"
           >
             <span>{title}</span>
@@ -419,8 +418,8 @@ export function PrimaryModuleTableColumnHeader<TData, TValue>({
         </DropdownMenuContent>
       </DropdownMenu>
       <Button
-        size="sm"
         variant="ghost"
+        className="h-8"
         ref={setActivatorNodeRef}
         {...listeners}
         {...attributes}
