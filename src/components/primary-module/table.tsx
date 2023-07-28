@@ -291,8 +291,8 @@ export function PrimaryModuleTable<
             disabled={!table.getCanPreviousPage()}
             className="rounded-l px-2 tabular-nums"
           >
-            <span className="sr-only">Previous</span>
-            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            <ChevronLeftIcon className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
+            <span className="text-sm">Previous</span>
           </Button>
           {pageNumbers.map((pageNum, idx) => {
             const current = Boolean(props.pagination.pageIndex + 1 === pageNum);
@@ -321,8 +321,8 @@ export function PrimaryModuleTable<
             disabled={!table.getCanNextPage()}
             className="rounded-r px-2 tabular-nums"
           >
-            <span className="sr-only">Next</span>
-            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+            <span className="ml-1.5 text-sm">Next</span>
+            <ChevronRightIcon className="ml-1 h-3.5 w-3.5" aria-hidden="true" />
           </Button>
         </nav>
       </div>
