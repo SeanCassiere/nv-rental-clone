@@ -6,6 +6,7 @@ import { searchCustomersRoute } from "@/routes/customers/search-customers-route"
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
 
 import { cn } from "@/utils";
 
@@ -71,7 +72,7 @@ export const AppNavigation = () => {
     },
     {
       name: "Settings",
-      href: searchAgreementsRoute.to,
+      href: mainSettingsRoute.to,
       current: matches(["/settings", "/settings/$location"]),
       props: {},
     },

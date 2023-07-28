@@ -34,6 +34,8 @@ import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
 import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
+import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
+import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useGetGlobalSearch } from "@/hooks/network/module/useGetGlobalSearch";
@@ -340,8 +342,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchAgreementsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: destinationSettingsRoute.to,
+                    params: () => ({ destination: "profile" }),
                   })
                 );
               }}
@@ -353,8 +355,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchAgreementsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: mainSettingsRoute.to,
                   })
                 );
               }}
