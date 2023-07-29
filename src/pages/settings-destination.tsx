@@ -80,7 +80,9 @@ export default function SettingsCatchAllPage() {
 
   const getNavigationItem = React.useCallback(
     (id: string) => {
-      const find = destinations.find((item) => item.id === id);
+      const find = destinations.find(
+        (item) => item.id.toLowerCase() === id.toLowerCase()
+      );
       if (find) {
         return find;
       }

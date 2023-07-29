@@ -66,7 +66,9 @@ export const SelectorSettingsNavigation = ({
               <CommandEmpty>No results found</CommandEmpty>
               <CommandGroup>
                 {items.map((item, idx) => {
-                  const isSelected = item.id === currentId;
+                  const isSelected =
+                    String(item.id).toLowerCase() ===
+                    String(currentId).toLowerCase();
                   return (
                     <CommandItem
                       key={`settings_selector_${idx}_${item.title}`}

@@ -20,21 +20,25 @@ export const SidebarSettingsNavigation = ({
 }: SidebarSettingsNavigationProps) => {
   return (
     <nav className="hidden space-x-2 lg:flex lg:flex-col lg:space-x-0 lg:space-y-1">
-      {items.map((item, idx) => (
-        <Link
-          key={`settings_sidebar_${idx}_${item.title}`}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            item.id === currentId
-              ? "bg-muted hover:bg-muted"
-              : "text-primary/80 hover:bg-transparent hover:underline",
-            "justify-start"
-          )}
-          {...item.linkProps}
-        >
-          {item.title}
-        </Link>
-      ))}
+      {items.map((item, idx) => {
+        const isSelected =
+          String(item.id).toLowerCase() === String(currentId).toLowerCase();
+        return (
+          <Link
+            key={`settings_sidebar_${idx}_${item.title}`}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              isSelected
+                ? "bg-muted hover:bg-muted"
+                : "text-primary/80 hover:bg-transparent hover:underline",
+              "justify-start"
+            )}
+            {...item.linkProps}
+          >
+            {item.title}
+          </Link>
+        );
+      })}
     </nav>
   );
 };
