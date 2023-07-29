@@ -27,15 +27,18 @@ interface SelectorSettingsNavigationProps {
     linkProps: LinkPropsOptions;
   }[];
   currentId: string;
+  currentTitle: string;
 }
 
 export const SelectorSettingsNavigation = ({
   items,
   currentId,
+  currentTitle,
 }: SelectorSettingsNavigationProps) => {
   const navigate = useNavigate();
 
   const [open, setOpen] = React.useState(false);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <div className="lg:hidden">
@@ -55,7 +58,7 @@ export const SelectorSettingsNavigation = ({
                 variant="outline"
                 className="ml-2 rounded-sm text-sm font-normal"
               >
-                {currentId}
+                {currentTitle}
               </Badge>
             </span>
           </Button>

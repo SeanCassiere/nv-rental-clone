@@ -126,6 +126,7 @@ export default function SettingsCatchAllPage() {
           <SelectorSettingsNavigation
             items={destinations}
             currentId={destination}
+            currentTitle={currentDestination?.title || "Unknown"}
           />
           <SidebarSettingsNavigation
             items={destinations}
