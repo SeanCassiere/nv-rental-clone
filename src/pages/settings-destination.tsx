@@ -25,6 +25,9 @@ type SettingsNavigationDestination = {
 const SettingsProfileTab = React.lazy(
   () => import("@/components/settings/profile")
 );
+const SettingsRuntimeConfigurationTab = React.lazy(
+  () => import("@/components/settings/runtime-configuration")
+);
 
 export default function SettingsCatchAllPage() {
   const { destination = "profile" } = useParams({
@@ -54,7 +57,7 @@ export default function SettingsCatchAllPage() {
       {
         id: "runtime-configuration",
         title: "Runtime configuration", // email, global documents, id configuration, compatibility, etc.
-        component: <Skeleton className="h-96" />,
+        component: <SettingsRuntimeConfigurationTab />,
         linkProps: {
           to: destinationSettingsRoute.to,
           params: { destination: "runtime-configuration" },

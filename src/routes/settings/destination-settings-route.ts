@@ -12,5 +12,11 @@ export const destinationSettingsRoute = new Route({
   stringifyParams: (params) => ({
     destination: `${params.destination}`,
   }),
+  validateSearch: (search) =>
+    z
+      .object({
+        tab: z.string().optional(),
+      })
+      .parse(search),
   component: lazy(() => import("@/pages/settings-destination")),
 });
