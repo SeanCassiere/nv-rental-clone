@@ -228,11 +228,10 @@ function ProfileForm(props: {
             </FormItem>
           )}
         />
-        <div className="pt-2">
-          <Button type="submit" className="w-full lg:w-min">
-            Save
-          </Button>
-        </div>
+        <Separator className="mt-0.5" />
+        <Button type="submit" className="w-full lg:w-min">
+          Save
+        </Button>
       </form>
     </Form>
   );
