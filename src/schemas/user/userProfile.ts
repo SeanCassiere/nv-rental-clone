@@ -31,7 +31,13 @@ export const UserProfileSchema = z
     scanAccessKey: z.string().nullable(),
     languageName: z.string().nullable(),
     lockOut: z.boolean(),
-    locationList: z.any(),
+    locationList: z.array(
+      z.object({
+        isSelected: z.preprocess((val) => (val ? true : false), z.boolean()),
+        locationName: z.preprocess((val) => val ?? "", z.string()),
+        locationId: z.number(),
+      })
+    ),
     userIdV3: z.string().nullable(),
     overrideDateFormat: z.string().nullable(),
     overrideTimeFormat: z.string().nullable(),

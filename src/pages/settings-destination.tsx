@@ -22,6 +22,10 @@ type SettingsNavigationDestination = {
   linkProps: LinkPropsOptions;
 };
 
+const SettingsProfileTab = React.lazy(
+  () => import("@/components/settings/profile")
+);
+
 export default function SettingsCatchAllPage() {
   const { destination = "profile" } = useParams({
     from: destinationSettingsRoute.id,
@@ -32,7 +36,7 @@ export default function SettingsCatchAllPage() {
       {
         id: "profile",
         title: "Profile",
-        component: <Skeleton className="h-96" />,
+        component: <SettingsProfileTab />,
         linkProps: {
           to: destinationSettingsRoute.to,
           params: { destination: "profile" },
@@ -122,7 +126,7 @@ export default function SettingsCatchAllPage() {
           "mx-auto my-4 flex max-w-full flex-col space-y-8 px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4 lg:flex-row lg:space-x-12 lg:space-y-0"
         )}
       >
-        <aside className="border-b pb-4 lg:w-1/5 lg:border-b-0 lg:pb-0">
+        <aside className="shrink-0 border-b pb-4 lg:w-1/5 lg:border-b-0 lg:pb-0">
           <SelectorSettingsNavigation
             items={destinations}
             currentId={destination}

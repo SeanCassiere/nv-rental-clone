@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +10,10 @@ import { userQKeys } from "@/utils/query-key";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "@/utils/constants";
 
-export function useGetUserProfile() {
+type UseGetUserProfileOptions = Pick<UseQueryOptions, "suspense">;
+
+export function useGetUserProfile(useQueryOptions?: UseGetUserProfileOptions) {
+  const queryOptions = useQueryOptions || {};
   const { i18n } = useTranslation();
 
   const auth = useAuth();
@@ -21,9 +24,11 @@ export function useGetUserProfile() {
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
         accessToken: auth.user?.access_token || "",
+        currentUserId: auth.user?.profile.navotar_userid || "",
       }).then((data) => UserProfileSchema.parse(data)),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
+    ...queryOptions,
   });
 
   React.useEffect(() => {
