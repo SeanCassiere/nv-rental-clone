@@ -66,7 +66,7 @@ const SettingsRuntimeConfigurationTab = () => {
         onValueChange={onTabChange}
         className="mt-6 overflow-x-hidden"
       >
-        <TabsList className="w-full [-ms-overflow-style:none] [scrollbar-width:none] lg:max-w-max [&::-webkit-scrollbar]:hidden">
+        <TabsList className="w-full lg:max-w-max">
           {tabs.map((item, idx) => (
             <TabsTrigger key={`tab_trigger_${item.id}_${idx}`} value={item.id}>
               {item.title}
