@@ -97,10 +97,10 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
                         page: 1,
                         size: 10,
                         filters: {
-                          Active: true,
+                          Active: "true",
                           VehicleStatus: getStatusIdByName(value).toString(),
                           ...(vehicleTypeId > 0
-                            ? { VehicleTypeId: vehicleTypeId }
+                            ? { VehicleTypeId: String(vehicleTypeId) }
                             : {}),
                         },
                       })}

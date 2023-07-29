@@ -1,8 +1,27 @@
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
-export const fetchUserProfile = async (opts: CommonAuthParams) => {
+import { UserLanguageListSchema } from "@/schemas/user";
+
+export const fetchUserProfile = async (
+  opts: CommonAuthParams & { currentUserId: string }
+) => {
   return await callV3Api(
     makeUrl(`/v3/users/${opts.userId}`, {
+      clientId: opts.clientId,
+      userId: opts.userId,
+      currentUserId: opts.currentUserId,
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${opts.accessToken}`,
+      },
+    }
+  ).then((res) => res.data);
+};
+
+export const fetchUserLanguages = async (opts: CommonAuthParams) => {
+  return await callV3Api(
+    makeUrl("/v3/users/language", {
       clientId: opts.clientId,
       userId: opts.userId,
     }),
@@ -10,6 +29,6 @@ export const fetchUserProfile = async (opts: CommonAuthParams) => {
       headers: {
         Authorization: `Bearer ${opts.accessToken}`,
       },
-    },
-  ).then((res) => res.data);
+    }
+  ).then((res) => UserLanguageListSchema.parse(res.data));
 };
