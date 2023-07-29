@@ -46,7 +46,7 @@ export const SelectorSettingsNavigation = ({
           <Button
             size="lg"
             variant="outline"
-            className="w-full justify-start whitespace-nowrap border-dashed"
+            className="w-full justify-start whitespace-nowrap border-dashed px-4"
             onClick={() => setOpen(true)}
           >
             <span className="flex">
