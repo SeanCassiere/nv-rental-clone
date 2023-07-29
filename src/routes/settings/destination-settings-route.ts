@@ -12,5 +12,5 @@ export const destinationSettingsRoute = new Route({
   stringifyParams: (params) => ({
     destination: `${params.destination}`,
   }),
-  component: lazy(() => import("@/pages/settings-catch-all")),
+  component: lazy(() => import("@/pages/settings-destination")),
 });

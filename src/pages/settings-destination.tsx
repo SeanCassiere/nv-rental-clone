@@ -1,7 +1,9 @@
 import React from "react";
-import { LinkPropsOptions } from "@tanstack/router";
+import { useParams, type LinkPropsOptions } from "@tanstack/router";
 
 import ProtectorShield from "@/components/protector-shield";
+import { SidebarSettingsNavigation } from "@/components/settings/nav-sidebar";
+import { SelectorSettingsNavigation } from "@/components/settings/nav-selector";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -12,8 +14,6 @@ import { destinationSettingsRoute } from "@/routes/settings/destination-settings
 import { cn } from "@/utils";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { titleMaker } from "@/utils/title-maker";
-import { SidebarSettingsNavigation } from "@/components/settings/nav-sidebar";
-import { SelectorSettingsNavigation } from "@/components/settings/nav-selector";
 
 type SettingsNavigationDestination = {
   id: string;
@@ -23,7 +23,9 @@ type SettingsNavigationDestination = {
 };
 
 export default function SettingsCatchAllPage() {
-  const currentDestinationString = "profile";
+  const { destination = "profile" } = useParams({
+    from: destinationSettingsRoute.id,
+  });
 
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
@@ -60,7 +62,7 @@ export default function SettingsCatchAllPage() {
         component: <Skeleton className="h-96" />,
         linkProps: {
           to: destinationSettingsRoute.to,
-          params: { destination: "vehicles" },
+          params: { destination: "vehicles-and-categories" },
         },
       },
       {
@@ -76,7 +78,25 @@ export default function SettingsCatchAllPage() {
     return items;
   }, []);
 
-  useDocumentTitle(titleMaker("Settings"));
+  const getNavigationItem = React.useCallback(
+    (id: string) => {
+      const find = destinations.find((item) => item.id === id);
+      if (find) {
+        return find;
+      }
+      return destinations[0];
+    },
+    [destinations]
+  );
+
+  const currentDestination = React.useMemo(
+    () => getNavigationItem(destination)!,
+    [destination, getNavigationItem]
+  );
+
+  useDocumentTitle(
+    titleMaker(`Settings - ${currentDestination?.title || "Unknown"}`)
+  );
 
   return (
     <ProtectorShield>
@@ -103,16 +123,16 @@ export default function SettingsCatchAllPage() {
         <aside className="border-b pb-4 lg:w-1/5 lg:border-b-0 lg:pb-0">
           <SelectorSettingsNavigation
             items={destinations}
-            currentId={currentDestinationString}
+            currentId={destination}
           />
           <SidebarSettingsNavigation
             items={destinations}
-            currentId={currentDestinationString}
+            currentId={destination}
           />
         </aside>
         <div className="flex-1">
           <React.Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <Skeleton className="h-96 w-full" />
+            {currentDestination?.component || null}
           </React.Suspense>
         </div>
       </section>
