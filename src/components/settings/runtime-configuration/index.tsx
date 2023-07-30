@@ -2,8 +2,11 @@ import React, { Suspense } from "react";
 import { useNavigate, useSearch } from "@tanstack/router";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
+
+import { useFeature } from "@/hooks/internal/useFeature";
 
 type TabListItem = {
   id: string;
@@ -26,6 +29,13 @@ const SettingsRuntimeConfigurationTab = () => {
     [navigate]
   );
 
+  const adminUrlsFeature = useFeature("SHOW_ADMIN_URLS", "");
+  const adminUrlsSplit = (adminUrlsFeature || "")
+    .split(",")
+    .map((url) => url.trim());
+
+  const showGlobalDocuments = adminUrlsSplit.includes("4");
+
   const tabs = React.useMemo(() => {
     const tabItems: TabListItem[] = [
       {
@@ -33,25 +43,29 @@ const SettingsRuntimeConfigurationTab = () => {
         title: "Email templates",
         component: <Skeleton className="h-96" />,
       },
-      {
+    ];
+
+    if (showGlobalDocuments) {
+      tabItems.push({
         id: "global-documents",
         title: "Global documents",
         component: <Skeleton className="h-96" />,
-      },
-      {
-        id: "number-sequencing",
-        title: "Number sequencing",
-        component: <Skeleton className="h-96" />,
-      },
-      {
-        id: "system-lists",
-        title: "System lists",
-        component: <Skeleton className="h-96" />,
-      },
-    ];
+      });
+    }
+
+    tabItems.push({
+      id: "number-sequencing",
+      title: "Number sequencing",
+      component: <Skeleton className="h-96" />,
+    });
+    tabItems.push({
+      id: "system-lists",
+      title: "System lists",
+      component: <Skeleton className="h-96" />,
+    });
 
     return tabItems;
-  }, []);
+  }, [showGlobalDocuments]);
 
   return (
     <>
