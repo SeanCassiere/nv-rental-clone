@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { usePermission } from "@/hooks/internal/usePermission";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
@@ -34,6 +35,8 @@ export default function SettingsCatchAllPage() {
     from: destinationSettingsRoute.id,
   });
 
+  const canSeeAdminTab = usePermission("VIEW_ADMIN_TAB");
+
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
       {
@@ -45,45 +48,48 @@ export default function SettingsCatchAllPage() {
           params: { destination: "profile" },
         },
       },
-      {
-        id: "application",
-        title: "Application", // users, locations, taxes,
-        component: <Skeleton className="h-96" />,
-        linkProps: {
-          to: destinationSettingsRoute.to,
-          params: { destination: "application" },
-        },
-      },
-      {
-        id: "runtime-configuration",
-        title: "Runtime configuration", // email, global documents, id configuration, compatibility, etc.
-        component: <SettingsRuntimeConfigurationTab />,
-        linkProps: {
-          to: destinationSettingsRoute.to,
-          params: { destination: "runtime-configuration" },
-        },
-      },
-      {
-        id: "vehicles-and-categories",
-        title: "Vehicles and categories", // vehicle types, vehicle makes, vehicle models, options, etc.
-        component: <Skeleton className="h-96" />,
-        linkProps: {
-          to: destinationSettingsRoute.to,
-          params: { destination: "vehicles-and-categories" },
-        },
-      },
-      {
-        id: "rates-and-charges",
-        title: "Rates and charges", // rates, rules, promotions, miscellaneous charges
-        component: <Skeleton className="h-96" />,
-        linkProps: {
-          to: destinationSettingsRoute.to,
-          params: { destination: "rates-and-charges" },
-        },
-      },
     ];
+
+    if (!canSeeAdminTab) return items;
+
+    items.push({
+      id: "application",
+      title: "Application", // users, locations, taxes,
+      component: <Skeleton className="h-96" />,
+      linkProps: {
+        to: destinationSettingsRoute.to,
+        params: { destination: "application" },
+      },
+    });
+    items.push({
+      id: "runtime-configuration",
+      title: "Runtime configuration", // email, global documents, id configuration, compatibility, etc.
+      component: <SettingsRuntimeConfigurationTab />,
+      linkProps: {
+        to: destinationSettingsRoute.to,
+        params: { destination: "runtime-configuration" },
+      },
+    });
+    items.push({
+      id: "vehicles-and-categories",
+      title: "Vehicles and categories", // vehicle types, vehicle makes, vehicle models, options, etc.
+      component: <Skeleton className="h-96" />,
+      linkProps: {
+        to: destinationSettingsRoute.to,
+        params: { destination: "vehicles-and-categories" },
+      },
+    });
+    items.push({
+      id: "rates-and-charges",
+      title: "Rates and charges", // rates, rules, promotions, miscellaneous charges
+      component: <Skeleton className="h-96" />,
+      linkProps: {
+        to: destinationSettingsRoute.to,
+        params: { destination: "rates-and-charges" },
+      },
+    });
     return items;
-  }, []);
+  }, [canSeeAdminTab]);
 
   const getNavigationItem = React.useCallback(
     (id: string) => {
@@ -132,12 +138,12 @@ export default function SettingsCatchAllPage() {
         <aside className="shrink-0 border-b pb-4 lg:w-1/5 lg:border-b-0 lg:pb-0">
           <SelectorSettingsNavigation
             items={destinations}
-            currentId={destination}
+            currentId={currentDestination.id}
             currentTitle={currentDestination?.title || "Unknown"}
           />
           <SidebarSettingsNavigation
             items={destinations}
-            currentId={destination}
+            currentId={currentDestination.id}
           />
         </aside>
         <div className="flex-1">
