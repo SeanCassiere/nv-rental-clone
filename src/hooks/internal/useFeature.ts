@@ -1,13 +1,16 @@
 import { useGetClientFeatures } from "../network/client/useGetClientFeatures";
 
+type FeatureValue = string | null;
+type IsFeaturePresent = boolean;
+
 export function useFeature(
   featureName: string,
   defaultValue: string | null = null
-) {
+): [FeatureValue, IsFeaturePresent] {
   const features = useGetClientFeatures();
 
   if (features.status === "loading" || features.status === "error") {
-    return defaultValue;
+    return [defaultValue, false];
   }
 
   const feature = features.data?.find(
@@ -17,8 +20,8 @@ export function useFeature(
   );
 
   if (!feature) {
-    return defaultValue;
+    return [defaultValue, false];
   }
 
-  return feature.value;
+  return [feature.value, true];
 }

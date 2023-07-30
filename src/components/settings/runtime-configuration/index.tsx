@@ -27,7 +27,7 @@ const SettingsRuntimeConfigurationTab = () => {
     from: destinationSettingsRoute.id,
   });
 
-  const adminUrlsFeature = useFeature("SHOW_ADMIN_URLS", "");
+  const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS", "");
   const adminUrlsSplit = (adminUrlsFeature || "")
     .split(",")
     .map((url) => url.trim());
