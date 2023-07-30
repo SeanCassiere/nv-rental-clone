@@ -90,6 +90,7 @@ export const fleetQKeys = {
 export const clientQKeys = {
   rootKey: "client",
   profile: () => [clientQKeys.rootKey, "profile"],
+  features: () => [clientQKeys.rootKey, "features"],
 };
 
 export const userQKeys = {
