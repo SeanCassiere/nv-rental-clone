@@ -89,7 +89,7 @@ function AgreementsSearchPage() {
 
   const columnDefs = useMemo(
     () =>
-      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
+      (columnsData.data || []).sort(sortColOrderByOrderIndex).map((column) =>
         columnHelper.accessor(column.columnHeader as any, {
           id: column.columnHeader,
           meta: {
