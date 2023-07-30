@@ -14,20 +14,18 @@ type TabListItem = {
   component: React.ReactNode;
 };
 
+function getValueForTabList(list: TabListItem[], id: string) {
+  const firstItem = list[0];
+  const item = list.find((item) => item.id === id);
+  return item ? item.id : firstItem ? firstItem.id : "";
+}
+
 const SettingsRuntimeConfigurationTab = () => {
   const navigate = useNavigate({ from: destinationSettingsRoute.id });
 
   const { tab } = useSearch({
     from: destinationSettingsRoute.id,
   });
-
-  const currentTab = tab ?? "email-templates";
-  const onTabChange = React.useCallback(
-    (id: string) => {
-      navigate({ search: { tab: id }, replace: true });
-    },
-    [navigate]
-  );
 
   const adminUrlsFeature = useFeature("SHOW_ADMIN_URLS", "");
   const adminUrlsSplit = (adminUrlsFeature || "")
@@ -67,6 +65,15 @@ const SettingsRuntimeConfigurationTab = () => {
     return tabItems;
   }, [showGlobalDocuments]);
 
+  const currentTab = tab ?? "email-templates";
+  const activeTab = getValueForTabList(tabs, currentTab);
+  const onTabChange = React.useCallback(
+    (id: string) => {
+      navigate({ search: { tab: id }, replace: true });
+    },
+    [navigate]
+  );
+
   return (
     <>
       <h2 className="text-xl font-semibold leading-10 text-primary">
@@ -76,7 +83,7 @@ const SettingsRuntimeConfigurationTab = () => {
         Customize and manage your application runtime configuration with ease.
       </p>
       <Tabs
-        value={currentTab}
+        value={activeTab}
         onValueChange={onTabChange}
         className="mt-6 overflow-x-hidden"
       >
