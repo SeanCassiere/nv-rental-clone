@@ -2,14 +2,23 @@ import React, { Suspense } from "react";
 import { useNavigate, useSearch } from "@tanstack/router";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
+
+import { useFeature } from "@/hooks/internal/useFeature";
 
 type TabListItem = {
   id: string;
   title: string;
   component: React.ReactNode;
 };
+
+function getValueForTabList(list: TabListItem[], id: string) {
+  const firstItem = list[0];
+  const item = list.find((item) => item.id === id);
+  return item ? item.id : firstItem ? firstItem.id : "";
+}
 
 const SettingsRuntimeConfigurationTab = () => {
   const navigate = useNavigate({ from: destinationSettingsRoute.id });
@@ -18,13 +27,12 @@ const SettingsRuntimeConfigurationTab = () => {
     from: destinationSettingsRoute.id,
   });
 
-  const currentTab = tab ?? "email-templates";
-  const onTabChange = React.useCallback(
-    (id: string) => {
-      navigate({ search: { tab: id }, replace: true });
-    },
-    [navigate]
-  );
+  const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS", "");
+  const adminUrlsSplit = (adminUrlsFeature || "")
+    .split(",")
+    .map((url) => url.trim());
+
+  const showGlobalDocuments = adminUrlsSplit.includes("4");
 
   const tabs = React.useMemo(() => {
     const tabItems: TabListItem[] = [
@@ -33,25 +41,38 @@ const SettingsRuntimeConfigurationTab = () => {
         title: "Email templates",
         component: <Skeleton className="h-96" />,
       },
-      {
+    ];
+
+    if (showGlobalDocuments) {
+      tabItems.push({
         id: "global-documents",
         title: "Global documents",
         component: <Skeleton className="h-96" />,
-      },
-      {
-        id: "number-sequencing",
-        title: "Number sequencing",
-        component: <Skeleton className="h-96" />,
-      },
-      {
-        id: "system-lists",
-        title: "System lists",
-        component: <Skeleton className="h-96" />,
-      },
-    ];
+      });
+    }
+
+    tabItems.push({
+      id: "number-sequencing",
+      title: "Number sequencing",
+      component: <Skeleton className="h-96" />,
+    });
+    tabItems.push({
+      id: "system-lists",
+      title: "System lists",
+      component: <Skeleton className="h-96" />,
+    });
 
     return tabItems;
-  }, []);
+  }, [showGlobalDocuments]);
+
+  const currentTab = tab ?? "email-templates";
+  const activeTab = getValueForTabList(tabs, currentTab);
+  const onTabChange = React.useCallback(
+    (id: string) => {
+      navigate({ search: { tab: id }, replace: true });
+    },
+    [navigate]
+  );
 
   return (
     <>
@@ -62,7 +83,7 @@ const SettingsRuntimeConfigurationTab = () => {
         Customize and manage your application runtime configuration with ease.
       </p>
       <Tabs
-        value={currentTab}
+        value={activeTab}
         onValueChange={onTabChange}
         className="mt-6 overflow-x-hidden"
       >

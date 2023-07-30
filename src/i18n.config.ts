@@ -69,13 +69,13 @@ i18n
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format",
+              "date-format"
             ) || dfnsDateFormat;
           const timeFormat =
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "time-format",
+              "time-format"
             ) || dfnsTimeFormat;
           const dfnsDateFormatWithTime = `${dateFormat} ${timeFormat}`;
 
@@ -107,7 +107,7 @@ i18n
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format",
+              "date-format"
             ) || dfnsDateFormat;
           try {
             return dateFnsFormat(new Date(value), dateFormat, {
@@ -119,12 +119,18 @@ i18n
         }
 
         if (i18nFormat === "currency") {
-          const { currency = "USD", value: numberValue = 0 } = options as any;
+          const {
+            currency = "USD",
+            value: numberValue = 0,
+            digits = 2,
+          } = options as any;
 
           if (currency !== "" && currency) {
             return new Intl.NumberFormat(lng, {
               style: "currency",
               currency,
+              minimumFractionDigits: digits,
+              maximumFractionDigits: digits,
             }).format(numberValue);
           }
         }
