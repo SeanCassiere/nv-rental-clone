@@ -97,6 +97,7 @@ export const userQKeys = {
   rootKey: "users",
   me: () => [userQKeys.rootKey, "people", "me"],
   languages: () => [userQKeys.rootKey, "languages"],
+  permissions: (userId: string) => [userQKeys.rootKey, userId, "permissions"],
 };
 
 export const dashboardQKeys = {

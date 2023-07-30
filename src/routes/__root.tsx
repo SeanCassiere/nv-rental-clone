@@ -7,8 +7,9 @@ import { queryClient as qc } from "@/app-entry";
 
 import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
 import { getAuthToken } from "@/utils/authLocal";
-import { clientQKeys } from "@/utils/query-key";
+import { clientQKeys, userQKeys } from "@/utils/query-key";
 import { fetchClientFeatures } from "@/api/clients";
+import { fetchUserPermissions } from "@/api/users";
 
 export const rootRoute = new RootRoute({
   loader: async () => {
@@ -26,6 +27,22 @@ export const rootRoute = new RootRoute({
               fetchClientFeatures({
                 clientId: auth.profile.navotar_clientid,
                 accessToken: auth.access_token,
+              }),
+            staleTime: 1000 * 60 * 5, // 5 minutes
+          })
+        );
+      }
+
+      const permissionsKey = userQKeys.permissions(auth.profile.navotar_userid);
+      if (!qc.getQueryData(permissionsKey)) {
+        promises.push(
+          qc.prefetchQuery({
+            queryKey: permissionsKey,
+            queryFn: async () =>
+              fetchUserPermissions({
+                clientId: auth.profile.navotar_clientid,
+                accessToken: auth.access_token,
+                intendedUserId: auth.profile.navotar_userid,
               }),
             staleTime: 1000 * 60 * 5, // 5 minutes
           })
