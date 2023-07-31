@@ -132,6 +132,8 @@ i18n
               minimumFractionDigits: digits,
               maximumFractionDigits: digits,
             }).format(numberValue);
+          } else {
+            return 'intlCurrency'
           }
         }
 
