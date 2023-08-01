@@ -12,7 +12,7 @@ import enLocale from "date-fns/locale/en-US";
 
 import { getAuthToken } from "./utils/authLocal";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
-import { OIDC_REDIRECT_URI } from "./utils/constants";
+import { OIDC_REDIRECT_URI, USER_STORAGE_KEYS } from "./utils/constants";
 
 // START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";
@@ -85,13 +85,13 @@ i18next
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format"
+              USER_STORAGE_KEYS.dateFormat
             ) || dfnsDateFormat;
           const timeFormat =
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "time-format"
+              USER_STORAGE_KEYS.timeFormat
             ) || dfnsTimeFormat;
           const dfnsDateFormatWithTime = `${dateFormat} ${timeFormat}`;
 
@@ -123,7 +123,7 @@ i18next
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format"
+              USER_STORAGE_KEYS.dateFormat
             ) || dfnsDateFormat;
           try {
             return dateFnsFormat(new Date(value), dateFormat, {
@@ -135,11 +135,18 @@ i18next
         }
 
         if (i18nFormat === "currency") {
-          const {
-            currency = "USD",
-            value: numberValue = 0,
-            digits = 2,
-          } = options as any;
+          const { value: numberValue = 0, digits = 2 } = options as any;
+
+          const auth = getAuthToken();
+          const clientId = auth?.profile.navotar_clientid;
+          const userId = auth?.profile.navotar_userid;
+
+          const currency =
+            getLocalStorageForUser(
+              clientId ?? "",
+              userId ?? "",
+              USER_STORAGE_KEYS.currency
+            ) ?? "USD";
 
           if (currency !== "" && currency) {
             return new Intl.NumberFormat(lng, {

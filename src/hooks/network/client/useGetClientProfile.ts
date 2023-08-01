@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import type { TClientProfileSchema } from "@/schemas/client";
 import { fetchClientProfile } from "@/api/clients";
 import { clientQKeys } from "@/utils/query-key";
 
 export function useGetClientProfile() {
   const auth = useAuth();
 
-  const query = useQuery<TClientProfileSchema>({
+  const query = useQuery({
     queryKey: clientQKeys.profile(),
     queryFn: async () => {
       return await fetchClientProfile({
