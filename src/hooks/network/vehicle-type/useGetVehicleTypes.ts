@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 import {
   fetchVehicleTypesList,
@@ -6,14 +6,21 @@ import {
 } from "@/api/vehicleTypes";
 import { vehicleTypeQKeys } from "@/utils/query-key";
 
-export function useGetVehicleTypesList(params?: VehicleTypesListExtraOpts) {
+export function useGetVehicleTypesList(
+  params?: { search?: VehicleTypesListExtraOpts } & Pick<
+    UseQueryOptions,
+    "suspense"
+  >
+) {
+  const searchParams = params?.search || {};
+
   const otherSearch: VehicleTypesListExtraOpts = {
-    ...(params?.StartDate ? { StartDate: params.StartDate } : {}),
-    ...(params?.EndDate ? { EndDate: params.EndDate } : {}),
-    ...(typeof params?.LocationID !== "undefined"
-      ? { LocationID: params.LocationID }
+    ...(searchParams.StartDate ? { StartDate: searchParams.StartDate } : {}),
+    ...(searchParams.EndDate ? { EndDate: searchParams.EndDate } : {}),
+    ...(typeof searchParams.LocationID !== "undefined"
+      ? { LocationID: searchParams.LocationID }
       : {}),
-    ...(params
+    ...(params?.search
       ? {
           BaseRate: 0,
           VehicleTypeId: 0,
@@ -21,9 +28,13 @@ export function useGetVehicleTypesList(params?: VehicleTypesListExtraOpts) {
       : {}),
   };
 
+  const queryOptions = {
+    suspense: params?.suspense,
+  };
+
   const auth = useAuth();
   const query = useQuery({
-    queryKey: vehicleTypeQKeys.all(),
+    queryKey: vehicleTypeQKeys.all(searchParams),
     queryFn: async () =>
       await fetchVehicleTypesList({
         clientId: auth.user?.profile.navotar_clientid || "",
@@ -33,6 +44,7 @@ export function useGetVehicleTypesList(params?: VehicleTypesListExtraOpts) {
       }),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1, // 1 minute
+    ...queryOptions,
   });
   return query;
 }

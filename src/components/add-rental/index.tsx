@@ -672,15 +672,17 @@ const AddRentalParentForm = ({
 
   // fetching the data before page navigation
   useGetVehicleTypesList({
-    StartDate:
-      module === "agreement"
-        ? agreementRentalInformation?.checkoutDate
-        : undefined,
-    EndDate:
-      module === "agreement"
-        ? agreementRentalInformation?.checkinDate
-        : undefined,
-    LocationID: agreementRentalInformation?.checkoutLocation ?? 0,
+    search: {
+      StartDate:
+        module === "agreement"
+          ? agreementRentalInformation?.checkoutDate
+          : undefined,
+      EndDate:
+        module === "agreement"
+          ? agreementRentalInformation?.checkinDate
+          : undefined,
+      LocationID: agreementRentalInformation?.checkoutLocation ?? 0,
+    },
   });
 
   // fetching the data before page navigation only for rentals in edit mode
