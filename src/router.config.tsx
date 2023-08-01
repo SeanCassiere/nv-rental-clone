@@ -61,11 +61,13 @@ import { settingsRoute } from "./routes/settings";
 import { mainSettingsRoute } from "./routes/settings/main-settings-route";
 import { destinationSettingsRoute } from "./routes/settings/destination-settings-route";
 
+import { OIDC_REDIRECT_URI } from "./utils/constants";
+
 const routeTree = rootRoute.addChildren([
   indexRoute, // /
   loggedOutRoute, // /logged-out
   oidcCallbackRoute, // /oidc-callback
-  ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
+  ...(!OIDC_REDIRECT_URI.startsWith("https://") ? [stylingRoute] : []),
   agreementsRoute.addChildren([
     searchAgreementsRoute, // /agreements
     addAgreementRoute, // /agreements/new
