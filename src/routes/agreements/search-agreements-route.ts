@@ -1,14 +1,15 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { agreementsRoute } from ".";
-import { queryClient as qc } from "@/app-entry";
+import { queryClient } from "@/tanstack-query-config";
+
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { agreementQKeys } from "@/utils/query-key";
-import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
 export const searchAgreementsRoute = new Route({
   getParentRoute: () => agreementsRoute,
@@ -35,9 +36,9 @@ export const searchAgreementsRoute = new Route({
 
       // get columns
       const columnsKey = agreementQKeys.columns();
-      if (!qc.getQueryData(columnsKey)) {
+      if (!queryClient.getQueryData(columnsKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: columnsKey,
             queryFn: () =>
               fetchModuleColumnsModded({
@@ -55,9 +56,9 @@ export const searchAgreementsRoute = new Route({
         pagination: { page: pageNumber, pageSize: pageSize },
         filters: searchFilters,
       });
-      if (!qc.getQueryData(searchKey)) {
+      if (!queryClient.getQueryData(searchKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: searchKey,
             queryFn: () =>
               fetchAgreementsListModded({
@@ -77,5 +78,5 @@ export const searchAgreementsRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../../pages/search-agreements")),
+  component: lazy(() => import("@/pages/search-agreements")),
 });

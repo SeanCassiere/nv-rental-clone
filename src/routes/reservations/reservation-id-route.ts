@@ -2,12 +2,13 @@ import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { reservationsRoute } from ".";
-import { queryClient as qc } from "../../app-entry";
-import { fetchRentalRateSummaryAmounts } from "../../api/summary";
-import { fetchReservationData } from "../../api/reservations";
+import { queryClient } from "@/tanstack-query-config";
 
-import { getAuthToken } from "../../utils/authLocal";
-import { reservationQKeys } from "../../utils/query-key";
+import { fetchRentalRateSummaryAmounts } from "@/api/summary";
+import { fetchReservationData } from "@/api/reservations";
+
+import { getAuthToken } from "@/utils/authLocal";
+import { reservationQKeys } from "@/utils/query-key";
 
 export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,
@@ -19,9 +20,9 @@ export const reservationPathIdRoute = new Route({
       const promises = [];
       // get summary
       const summaryKey = reservationQKeys.summary(reservationId);
-      if (!qc.getQueryData(summaryKey)) {
+      if (!queryClient.getQueryData(summaryKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: summaryKey,
             queryFn: () =>
               fetchRentalRateSummaryAmounts({
@@ -36,9 +37,9 @@ export const reservationPathIdRoute = new Route({
       }
 
       const dataKey = reservationQKeys.id(reservationId);
-      if (!qc.getQueryData(dataKey)) {
+      if (!queryClient.getQueryData(dataKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: dataKey,
             queryFn: () => {
               return fetchReservationData({
@@ -75,7 +76,7 @@ export const viewReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  component: lazy(() => import("../../pages/view-reservation")),
+  component: lazy(() => import("@/pages/view-reservation")),
 });
 
 export const editReservationByIdRoute = new Route({
@@ -88,5 +89,5 @@ export const editReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("../../pages/edit-reservation")),
+  component: lazy(() => import("@/pages/edit-reservation")),
 });

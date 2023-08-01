@@ -1,15 +1,16 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { rootRoute } from "./__root";
-import { queryClient as qc } from "../app-entry";
+import { queryClient } from "@/tanstack-query-config";
+
 import { fetchDashboardWidgetList } from "@/api/dashboard";
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
+import { fetchLocationsList } from "@/api/locations";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
-import { fetchLocationsList } from "@/api/locations";
 
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -21,9 +22,9 @@ export const indexRoute = new Route({
       const promises = [];
       // get messages
       const messagesKey = dashboardQKeys.messages();
-      if (!qc.getQueryData(messagesKey)) {
+      if (!queryClient.getQueryData(messagesKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: messagesKey,
             queryFn: async () =>
               await fetchDashboardMessagesListModded({
@@ -37,9 +38,9 @@ export const indexRoute = new Route({
 
       // get widgets
       const widgetsKey = dashboardQKeys.widgets();
-      if (!qc.getQueryData(widgetsKey)) {
+      if (!queryClient.getQueryData(widgetsKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: widgetsKey,
             queryFn: async () =>
               await fetchDashboardWidgetList({
@@ -53,9 +54,9 @@ export const indexRoute = new Route({
 
       // get locations
       const locationsKey = locationQKeys.all();
-      if (!qc.getQueryData(locationsKey)) {
+      if (!queryClient.getQueryData(locationsKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: locationsKey,
             queryFn: async () =>
               fetchLocationsList({
@@ -72,5 +73,5 @@ export const indexRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../pages/dashboard")),
+  component: lazy(() => import("@/pages/dashboard")),
 });

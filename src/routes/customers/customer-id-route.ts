@@ -2,12 +2,13 @@ import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { customersRoute } from ".";
-import { queryClient as qc } from "../../app-entry";
-import { fetchCustomerSummaryAmounts } from "../../api/summary";
-import { fetchCustomerData } from "../../api/customers";
+import { queryClient } from "@/tanstack-query-config";
 
-import { getAuthToken } from "../../utils/authLocal";
-import { customerQKeys } from "../../utils/query-key";
+import { fetchCustomerSummaryAmounts } from "@/api/summary";
+import { fetchCustomerData } from "@/api/customers";
+
+import { getAuthToken } from "@/utils/authLocal";
+import { customerQKeys } from "@/utils/query-key";
 
 export const customerPathIdRoute = new Route({
   getParentRoute: () => customersRoute,
@@ -19,9 +20,9 @@ export const customerPathIdRoute = new Route({
       const promises = [];
       // get summary
       const summaryKey = customerQKeys.summary(customerId);
-      if (!qc.getQueryData(summaryKey)) {
+      if (!queryClient.getQueryData(summaryKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: summaryKey,
             queryFn: () =>
               fetchCustomerSummaryAmounts({
@@ -35,9 +36,9 @@ export const customerPathIdRoute = new Route({
       }
 
       const dataKey = customerQKeys.id(customerId);
-      if (!qc.getQueryData(dataKey)) {
+      if (!queryClient.getQueryData(dataKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: dataKey,
             queryFn: () => {
               return fetchCustomerData({
@@ -70,7 +71,7 @@ export const viewCustomerByIdRoute = new Route({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  component: lazy(() => import("../../pages/view-customer")),
+  component: lazy(() => import("@/pages/view-customer")),
 });
 
 export const editCustomerByIdRoute = new Route({

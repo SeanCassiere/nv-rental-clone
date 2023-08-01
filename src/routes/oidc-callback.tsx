@@ -4,10 +4,12 @@ import { Route } from "@tanstack/router";
 import { hasAuthParams, useAuth } from "react-oidc-context";
 import { z } from "zod";
 
-import { rootRoute } from "./__root";
 import LoadingPlaceholder from "@/components/loading-placeholder";
+
+import { rootRoute } from "./__root";
+import { router } from "@/app-entry";
+
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
-import { router } from "@/router.config";
 
 function removeTrailingSlash(path: string) {
   const pathParts = path.split("?");

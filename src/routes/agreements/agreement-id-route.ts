@@ -2,12 +2,13 @@ import { lazy, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { agreementsRoute } from ".";
-import { queryClient as qc } from "../../app-entry";
-import { fetchRentalRateSummaryAmounts } from "../../api/summary";
-import { fetchAgreementData } from "../../api/agreements";
+import { queryClient } from "@/tanstack-query-config";
 
-import { getAuthToken } from "../../utils/authLocal";
-import { agreementQKeys } from "../../utils/query-key";
+import { fetchRentalRateSummaryAmounts } from "@/api/summary";
+import { fetchAgreementData } from "@/api/agreements";
+
+import { getAuthToken } from "@/utils/authLocal";
+import { agreementQKeys } from "@/utils/query-key";
 
 export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
@@ -19,9 +20,9 @@ export const agreementPathIdRoute = new Route({
       const promises = [];
       // get summary
       const summaryKey = agreementQKeys.summary(agreementId);
-      if (!qc.getQueryData(summaryKey)) {
+      if (!queryClient.getQueryData(summaryKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: summaryKey,
             queryFn: () =>
               fetchRentalRateSummaryAmounts({
@@ -36,9 +37,9 @@ export const agreementPathIdRoute = new Route({
       }
 
       const dataKey = agreementQKeys.id(agreementId);
-      if (!qc.getQueryData(dataKey)) {
+      if (!queryClient.getQueryData(dataKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: dataKey,
             queryFn: () => {
               return fetchAgreementData({
@@ -75,7 +76,7 @@ export const viewAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  component: lazy(() => import("../../pages/view-agreement")),
+  component: lazy(() => import("@/pages/view-agreement")),
 });
 
 export const editAgreementByIdRoute = new Route({
@@ -88,7 +89,7 @@ export const editAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("../../pages/edit-agreement")),
+  component: lazy(() => import("@/pages/edit-agreement")),
 });
 
 export const checkinAgreementByIdRoute = new Route({
@@ -101,5 +102,5 @@ export const checkinAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("../../pages/checkin-agreement")),
+  component: lazy(() => import("@/pages/checkin-agreement")),
 });

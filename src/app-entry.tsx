@@ -1,21 +1,32 @@
 import { Suspense } from "react";
-import { RouterProvider } from "@tanstack/router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Router, RouterProvider } from "@tanstack/router";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { OidcAuthProvider } from "./components/oidc-auth-provider";
-import { router } from "./router.config";
+import { OidcAuthProvider } from "@/components/oidc-auth-provider";
+import LoadingPlaceholder from "@/components/loading-placeholder";
+
+import {
+  routeTree,
+  stringifySearchFn,
+  parseSearchFn,
+} from "@/tanstack-router-config";
+import { queryClient } from "@/tanstack-query-config";
 import "./i18n.config";
 
-// Create a client for react-query
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnReconnect: true,
-      refetchOnWindowFocus: true,
-    },
-  },
+export const router = new Router({
+  routeTree,
+  defaultPreload: "intent",
+  parseSearch: parseSearchFn,
+  stringifySearch: stringifySearchFn,
+  defaultPendingComponent: LoadingPlaceholder,
 });
+
+declare module "@tanstack/router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 const App = () => {
   return (
