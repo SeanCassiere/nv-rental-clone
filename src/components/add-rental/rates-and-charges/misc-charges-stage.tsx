@@ -512,6 +512,7 @@ function MiscChargeItem(props: {
                                 {t("intlCurrency", {
                                   currency: props.currency,
                                   value: Number(option.value),
+                                  ns: "format",
                                 })}
                               </div>
                             </div>

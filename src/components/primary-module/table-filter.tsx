@@ -197,7 +197,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                     variant="secondary"
                     className="rounded-sm px-1 font-normal"
                   >
-                    {t("intlDate", { value: baseState?.value })}
+                    {t("intlDate", { value: baseState?.value, ns: "format" })}
                   </Badge>
                 </>
               )}

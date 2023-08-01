@@ -27,7 +27,9 @@ function makeChargeItemText(
     chargeText += " ( ";
   }
   if (type !== "percentage") {
-    chargeText += String(t("intlCurrency", { value: charge.value, currency }));
+    chargeText += String(
+      t("intlCurrency", { value: charge.value, currency, ns: "format" })
+    );
   } else {
     chargeText += `${charge.value}`;
   }
@@ -45,6 +47,7 @@ function makeChargeItemText(
   return `${name}: ${chargeText} = ${t("intlCurrency", {
     value: total,
     currency,
+    ns: "format",
   })}`;
 }
 
@@ -85,6 +88,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.baseRate,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.baseRate),
         },
@@ -93,6 +97,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.promotionDiscount,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.promotionDiscount),
         },
@@ -101,6 +106,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.finalBaseRate,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.finalBaseRate),
         },
@@ -109,6 +115,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalMiscChargesTaxable,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
           hasDropdownContent: Boolean(taxableMischarges.length > 0),
@@ -126,6 +133,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalMiscChargesNonTaxable,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(
             summaryData?.totalMiscChargesNonTaxable
@@ -145,6 +153,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraMilesCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
           shown: summaryData?.isExtraMileageChargeTaxable || false,
@@ -154,6 +163,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraDayCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
           shown: summaryData?.isExtraDayChargeTaxable || false,
@@ -163,6 +173,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraFuelCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
           shown: summaryData?.isFuelChargeTaxable || false,
@@ -172,6 +183,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.preAdjustment,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.preAdjustment),
           shown: Boolean(summaryData?.preAdjustment),
@@ -181,6 +193,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.preSubTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.preSubTotal),
           shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
@@ -190,6 +203,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.promotionDiscountOnSubTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(
             summaryData?.promotionDiscountOnSubTotal
@@ -201,6 +215,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.subTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.subTotal),
         },
@@ -209,6 +224,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalTax,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.totalTax),
           hasDropdownContent: Boolean(taxes.length > 0),
@@ -226,6 +242,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraMilesCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
           shown: !summaryData?.isExtraMileageChargeTaxable || false,
@@ -235,6 +252,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraDayCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
           shown: !summaryData?.isExtraDayChargeTaxable || false,
@@ -244,6 +262,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraFuelCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
           shown: !summaryData?.isFuelChargeTaxable || false,
@@ -253,6 +272,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.additionalCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.additionalCharge),
           shown: Boolean(summaryData?.additionalCharge),
@@ -262,13 +282,18 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.postAdjustment,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.postAdjustment),
           shown: Boolean(summaryData?.postAdjustment),
         },
         {
           label: "Grand total",
-          amount: t("intlCurrency", { value: summaryData?.total, currency }),
+          amount: t("intlCurrency", {
+            value: summaryData?.total,
+            currency,
+            ns: "format",
+          }),
           primaryBlockHighlight: true,
           biggerText: true,
         },
@@ -277,6 +302,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.amountPaid,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.amountPaid),
         },
@@ -285,6 +311,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.balanceDue,
             currency,
+            ns: "format",
           }),
           redHighlight: Boolean(summaryData?.balanceDue),
         },
@@ -293,6 +320,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.securityDeposit,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.securityDeposit),
         },
@@ -306,6 +334,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.baseRate,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.baseRate),
         },
@@ -314,6 +343,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.promotionDiscount,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.promotionDiscount),
         },
@@ -322,6 +352,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.finalBaseRate,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.finalBaseRate),
         },
@@ -330,6 +361,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalMiscChargesTaxable,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
           hasDropdownContent: Boolean(taxableMischarges.length > 0),
@@ -348,6 +380,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalMiscChargesNonTaxable,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(
             summaryData?.totalMiscChargesNonTaxable
@@ -368,6 +401,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraMilesCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
           shown: summaryData?.isExtraMileageChargeTaxable || false,
@@ -377,6 +411,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraDayCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
           shown: summaryData?.isExtraDayChargeTaxable || false,
@@ -386,6 +421,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraFuelCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
           shown: summaryData?.isFuelChargeTaxable || false,
@@ -395,6 +431,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.preAdjustment,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.preAdjustment),
           shown: Boolean(summaryData?.preAdjustment),
@@ -404,6 +441,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.preSubTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.preSubTotal),
           shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
@@ -413,6 +451,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.promotionDiscountOnSubTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(
             summaryData?.promotionDiscountOnSubTotal
@@ -424,6 +463,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.subTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.subTotal),
         },
@@ -432,6 +472,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalTax,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.totalTax),
           hasDropdownContent: Boolean(taxes.length > 0),
@@ -450,6 +491,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraMilesCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
           shown: !summaryData?.isExtraMileageChargeTaxable || false,
@@ -459,6 +501,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraDayCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
           shown: !summaryData?.isExtraDayChargeTaxable || false,
@@ -468,6 +511,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraFuelCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
           shown: !summaryData?.isFuelChargeTaxable || false,
@@ -477,6 +521,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.additionalCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.additionalCharge),
           shown: Boolean(summaryData?.additionalCharge),
@@ -486,13 +531,18 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.postAdjustment,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.postAdjustment),
           shown: Boolean(summaryData?.postAdjustment),
         },
         {
           label: "Grand total",
-          amount: t("intlCurrency", { value: summaryData?.total, currency }),
+          amount: t("intlCurrency", {
+            value: summaryData?.total,
+            currency,
+            ns: "format",
+          }),
           primaryBlockHighlight: true,
           biggerText: true,
         },
@@ -501,6 +551,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.amountPaid,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.amountPaid),
         },
@@ -509,6 +560,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.balanceDue,
             currency,
+            ns: "format",
           }),
           redHighlight: Boolean(summaryData?.balanceDue),
         },
@@ -517,6 +569,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.securityDeposit,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.securityDeposit),
         },
@@ -530,6 +583,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.baseRate,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.baseRate),
         },
@@ -538,6 +592,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.promotionDiscount,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.promotionDiscount),
         },
@@ -546,6 +601,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.finalBaseRate,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.finalBaseRate),
         },
@@ -554,6 +610,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalMiscChargesTaxable,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
           dropdownContent: <></>,
@@ -563,6 +620,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalMiscChargesNonTaxable,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(
             summaryData?.totalMiscChargesNonTaxable
@@ -573,6 +631,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraMilesCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
           shown: summaryData?.isExtraMileageChargeTaxable || false,
@@ -582,6 +641,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraDayCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
           shown: summaryData?.isExtraDayChargeTaxable || false,
@@ -591,6 +651,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraFuelCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
           shown: summaryData?.isFuelChargeTaxable || false,
@@ -600,6 +661,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.preAdjustment,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.preAdjustment),
           shown: Boolean(summaryData?.preAdjustment),
@@ -609,6 +671,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.preSubTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.preSubTotal),
           shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
@@ -618,6 +681,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.promotionDiscountOnSubTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(
             summaryData?.promotionDiscountOnSubTotal
@@ -629,6 +693,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.subTotal,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.subTotal),
         },
@@ -637,6 +702,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.totalTax,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.totalTax),
         },
@@ -645,6 +711,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraMilesCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
           shown: !summaryData?.isExtraMileageChargeTaxable || false,
@@ -654,6 +721,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraDayCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
           shown: !summaryData?.isExtraDayChargeTaxable || false,
@@ -663,6 +731,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.extraFuelCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
           shown: !summaryData?.isFuelChargeTaxable || false,
@@ -672,6 +741,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.additionalCharge,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.additionalCharge),
           shown: Boolean(summaryData?.additionalCharge),
@@ -681,13 +751,18 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.postAdjustment,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.postAdjustment),
           shown: Boolean(summaryData?.postAdjustment),
         },
         {
           label: "Grand total",
-          amount: t("intlCurrency", { value: summaryData?.total, currency }),
+          amount: t("intlCurrency", {
+            value: summaryData?.total,
+            currency,
+            ns: "format",
+          }),
           primaryBlockHighlight: true,
           biggerText: true,
         },
@@ -696,6 +771,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.amountPaid,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.amountPaid),
         },
@@ -704,6 +780,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.balanceDue,
             currency,
+            ns: "format",
           }),
           redHighlight: Boolean(summaryData?.balanceDue),
         },
@@ -712,6 +789,7 @@ export const RentalSummary = ({
           amount: t("intlCurrency", {
             value: summaryData?.securityDeposit,
             currency,
+            ns: "format",
           }),
           primaryTextHighlight: Boolean(summaryData?.securityDeposit),
         },

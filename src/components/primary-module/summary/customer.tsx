@@ -26,7 +26,11 @@ export const CustomerSummary = ({
   const lineItems: Omit<TSummaryLineItemProps, "id">[] = [
     {
       label: "Total revenue",
-      amount: t("intlCurrency", { value: summaryData?.totalRevenue, currency }),
+      amount: t("intlCurrency", {
+        value: summaryData?.totalRevenue,
+        currency,
+        ns: "format",
+      }),
       biggerText: true,
       primaryTextHighlight: Boolean(summaryData?.totalRevenue),
     },

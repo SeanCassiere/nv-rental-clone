@@ -57,7 +57,11 @@ const SalesStatus = ({
               <YAxis />
               <Tooltip
                 formatter={(value) =>
-                  t("intlCurrency", { currency, value: Number(value) })
+                  t("intlCurrency", {
+                    currency,
+                    value: Number(value),
+                    ns: "format",
+                  })
                 }
               />
               <CartesianGrid vertical={false} stroke="#e2e8f0" />

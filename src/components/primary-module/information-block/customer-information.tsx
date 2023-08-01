@@ -120,7 +120,10 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
       blocks.push({
         heading: "Card expiration",
         value: data?.creditCardExpirationDate
-          ? t("intlMonthYear", { value: data.creditCardExpirationDate })
+          ? t("intlMonthYear", {
+              value: data.creditCardExpirationDate,
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
       blocks.push({
@@ -132,7 +135,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
       blocks.push({
         heading: "Date of birth",
         value: data?.dateOfBirth
-          ? t("intlDate", { value: data.dateOfBirth })
+          ? t("intlDate", { value: data.dateOfBirth, ns: "format" })
           : EMPTY_KEY,
       });
     };
@@ -140,7 +143,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
       blocks.push({
         heading: "Checkout date",
         value: data?.checkoutDate
-          ? t("intlDateTime", { value: data.checkoutDate })
+          ? t("intlDateTime", { value: data.checkoutDate, ns: "format" })
           : EMPTY_KEY,
       });
     };
@@ -148,7 +151,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
       blocks.push({
         heading: "Checkin date",
         value: data?.checkoutDate
-          ? t("intlDateTime", { value: data.checkinDate })
+          ? t("intlDateTime", { value: data.checkinDate, ns: "format" })
           : EMPTY_KEY,
       });
     };

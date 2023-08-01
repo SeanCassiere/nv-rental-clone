@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { fetchUserProfile } from "@/api/users";
 import { UserProfileSchema } from "@/schemas/user";
-import { dfnsDateFormat, dfnsTimeFormat } from "@/i18n.config";
+import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 import { userQKeys } from "@/utils/query-key";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "@/utils/constants";

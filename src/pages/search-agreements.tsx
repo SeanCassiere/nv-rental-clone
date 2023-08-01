@@ -130,7 +130,7 @@ function AgreementsSearchPage() {
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
               return (
                 <PrimaryModuleTableCellWrap>
-                  {t("intlDateTime", { value: new Date(value) })}
+                  {t("intlDateTime", { value: new Date(value), ns: "format" })}
                 </PrimaryModuleTableCellWrap>
               );
             }

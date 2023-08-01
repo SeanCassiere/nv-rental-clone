@@ -2,7 +2,7 @@ import { useAuth } from "react-oidc-context";
 
 import { USER_STORAGE_KEYS } from "@/utils/constants";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
-import { dfnsDateFormat, dfnsTimeFormat } from "@/i18n.config";
+import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 
 export function useDatePreference() {
   const auth = useAuth();

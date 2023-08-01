@@ -78,7 +78,11 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Hourly rate",
         value: data?.hourlyRate
-          ? t("intlCurrency", { currency, value: Number(data.hourlyRate) })
+          ? t("intlCurrency", {
+              currency,
+              value: Number(data.hourlyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -86,7 +90,11 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Half day rate",
         value: data?.halfDayRate
-          ? t("intlCurrency", { currency, value: Number(data.halfDayRate) })
+          ? t("intlCurrency", {
+              currency,
+              value: Number(data.halfDayRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -94,7 +102,11 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Daily rate",
         value: data?.dailyRate
-          ? t("intlCurrency", { currency, value: Number(data.dailyRate) })
+          ? t("intlCurrency", {
+              currency,
+              value: Number(data.dailyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -102,7 +114,11 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Weekly rate",
         value: data?.weeklyRate
-          ? t("intlCurrency", { currency, value: Number(data.weeklyRate) })
+          ? t("intlCurrency", {
+              currency,
+              value: Number(data.weeklyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -110,7 +126,11 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Monthly rate",
         value: data?.monthlyRate
-          ? t("intlCurrency", { currency, value: Number(data.monthlyRate) })
+          ? t("intlCurrency", {
+              currency,
+              value: Number(data.monthlyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -118,7 +138,11 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Weekend rate",
         value: data?.weekendRate
-          ? t("intlCurrency", { currency, value: Number(data.weekendRate) })
+          ? t("intlCurrency", {
+              currency,
+              value: Number(data.weekendRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -129,6 +153,7 @@ const RentalInformation = (props: TRentalInformationProps) => {
           ? t("intlCurrency", {
               currency,
               value: Number(data.additionalMileageFee),
+              ns: "format",
             })
           : EMPTY_KEY,
       });
