@@ -1,9 +1,9 @@
-import i18n from "i18next";
+import i18next from "i18next";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import dateFnsFormat from "date-fns/format";
-import { type Locale } from "date-fns";
+import type { Locale } from "date-fns";
 
 import enUSLocale from "date-fns/locale/en-US";
 import enNZLocal from "date-fns/locale/en-NZ";
@@ -14,19 +14,24 @@ import { getAuthToken } from "./utils/authLocal";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
 import { OIDC_REDIRECT_URI } from "./utils/constants";
 
+// START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";
 export const dfnsDateFormat = "dd/MM/yyyy";
+// END: date-fns formats
 
+// START: locales for date-fns
 const dateFnsLocales: Record<string, Locale> = {
   en: enLocale,
   "en-US": enUSLocale,
   "en-NZ": enNZLocal,
   ru: ruLocale,
 };
+
 export function getDateFnsLocale(lng?: string) {
   if (lng && dateFnsLocales[lng]) return dateFnsLocales[lng];
   return enUSLocale;
 }
+// END: locales for date-fns
 
 const common = "common";
 export const commonFormatNamespace = {
@@ -47,7 +52,7 @@ export const supportedLanguages = [
 
 export const i18nDefaultNs = "translation";
 
-i18n
+i18next
   .use(HttpApi)
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -160,6 +165,6 @@ i18n
     resources: {},
   });
 
-i18n.addResourceBundle(common, "format", commonFormatNamespace);
+i18next.addResourceBundle(common, "format", commonFormatNamespace);
 
-export default i18n;
+export default i18next;
