@@ -1,19 +1,18 @@
 // customized based on source: https://github.com/gpbl/react-day-picker/blob/HEAD/src/hooks/useInput/useInput.ts
 import React, { useState, useEffect } from "react";
 
-import {
-  differenceInCalendarDays,
-  format as _format,
-  parse,
-  endOfMonth,
-  startOfDay,
-  startOfMonth,
-  isEqual,
-  getHours,
-  getMinutes,
-  setHours,
-  setMinutes,
-} from "date-fns";
+import _format from "date-fns/format";
+import parse from "date-fns/parse";
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import startOfMonth from "date-fns/startOfMonth";
+import endOfMonth from "date-fns/endOfMonth";
+import startOfDay from "date-fns/startOfDay";
+import isEqual from "date-fns/isEqual";
+import getHours from "date-fns/getHours";
+import getMinutes from "date-fns/getMinutes";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
+
 import { enUS } from "date-fns/locale";
 import type {
   DayPickerBase,

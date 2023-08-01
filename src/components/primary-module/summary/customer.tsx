@@ -16,17 +16,18 @@ import { Separator } from "@/components/ui/separator";
 
 export const CustomerSummary = ({
   summaryData,
-  currency = "",
 }: {
   summaryData: TCustomerSummarySchema;
-  currency?: string;
 }) => {
   const { t } = useTranslation();
 
   const lineItems: Omit<TSummaryLineItemProps, "id">[] = [
     {
       label: "Total revenue",
-      amount: t("intlCurrency", { value: summaryData?.totalRevenue, currency }),
+      amount: t("intlCurrency", {
+        value: summaryData?.totalRevenue,
+        ns: "format",
+      }),
       biggerText: true,
       primaryTextHighlight: Boolean(summaryData?.totalRevenue),
     },

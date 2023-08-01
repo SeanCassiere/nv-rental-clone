@@ -31,7 +31,6 @@ import RatesAndChargesTab from "./rates-and-charges";
 
 import TaxesAndPaymentsTab from "./taxes-and-payments";
 
-import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
@@ -185,8 +184,6 @@ const AddRentalParentForm = ({
     []
   );
 
-  const clientProfile = useGetClientProfile();
-
   const tabsConfig = useMemo(() => {
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
     if (module === "agreement") {
@@ -230,7 +227,6 @@ const AddRentalParentForm = ({
                 taxes: true,
               }));
             }}
-            currency={clientProfile.data?.currency || undefined}
           />
         ),
       };
@@ -271,7 +267,6 @@ const AddRentalParentForm = ({
               setHasEdited(true);
               handleStageTabClick(taxesAndPayments.id);
             }}
-            currency={clientProfile.data?.currency || undefined}
           />
         ),
       };
@@ -399,7 +394,6 @@ const AddRentalParentForm = ({
   }, [
     agreementRentalInformation,
     agreementVehicleInformation,
-    clientProfile.data?.currency,
     commonCustomerInformation,
     handleSetSelectedMiscCharges,
     handleSetSelectedRate,
@@ -1071,7 +1065,6 @@ const AddRentalParentForm = ({
                   ? "add-edit-agreement"
                   : "add-edit-reservation"
               }
-              currency={clientProfile.data?.currency || undefined}
               summaryData={
                 // isEdit && !calculatedSummaryData.data
                 //   ? summaryData

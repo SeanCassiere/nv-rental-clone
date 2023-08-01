@@ -92,7 +92,10 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
             }
 
             if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-              return t("intlDateTime", { value: new Date(value as any) });
+              return t("intlDateTime", {
+                value: new Date(value as any),
+                ns: "format",
+              });
             }
 
             return value;

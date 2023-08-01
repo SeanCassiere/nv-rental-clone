@@ -44,8 +44,6 @@ export interface RatesAndChargesTabProps {
 
   isEdit: boolean;
   onCompleted: () => void;
-
-  currency?: string;
 }
 
 const RatesAndChargesTab = (props: RatesAndChargesTabProps) => {
@@ -60,7 +58,6 @@ const RatesAndChargesTab = (props: RatesAndChargesTabProps) => {
     onSelectRateName,
     isEdit,
     onCompleted,
-    currency,
   } = props;
   const [tab, setTab] = React.useState("rates");
 
@@ -99,7 +96,6 @@ const RatesAndChargesTab = (props: RatesAndChargesTabProps) => {
                 onCompleted={() => {
                   onCompleted();
                 }}
-                currency={currency}
               />
             </AccordionContent>
           </AccordionItem>

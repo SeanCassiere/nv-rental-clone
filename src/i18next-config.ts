@@ -1,60 +1,76 @@
-import i18n from "i18next";
+import i18next from "i18next";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import dateFnsFormat from "date-fns/format";
-import { type Locale } from "date-fns";
 
-import enUS from "date-fns/locale/en-US";
-import enNZ from "date-fns/locale/en-NZ";
-import ru from "date-fns/locale/ru";
+import type { Locale } from "date-fns";
+import dateFnsFormat from "date-fns/format";
+import enUSLocale from "date-fns/locale/en-US";
+import enNZLocale from "date-fns/locale/en-NZ";
+import ruLocale from "date-fns/locale/ru";
+import enLocale from "date-fns/locale/en-US";
 
 import { getAuthToken } from "./utils/authLocal";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
+import { OIDC_REDIRECT_URI, USER_STORAGE_KEYS } from "./utils/constants";
 
+// START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";
 export const dfnsDateFormat = "dd/MM/yyyy";
+// END: date-fns formats
 
+// START: locales for date-fns
 const dateFnsLocales: Record<string, Locale> = {
-  "en-US": enUS,
-  "en-NZ": enNZ,
-  ru: ru,
+  en: enLocale,
+  "en-US": enUSLocale,
+  "en-NZ": enNZLocale,
+  ru: ruLocale,
 };
+
 export function getDateFnsLocale(lng?: string) {
   if (lng && dateFnsLocales[lng]) return dateFnsLocales[lng];
-  return enUS;
+  return enUSLocale;
 }
+// END: locales for date-fns
 
-const common = "common";
+export const i18nextNsTranslation = "translation";
+export const i18nextNsFormat = "format"; // do not add this to the list of namespaces to prevent a network fetch
+
+export const i18nextNsDefault = i18nextNsTranslation;
+export const formatNsResources = {
+  intlCurrency: "{{value, currency}}",
+  intlDateTime: "{{value, datetime}}",
+  intlDate: "{{value, date}}",
+  intlMonthYear: "{{value, monthyear}}",
+};
 
 // Using language codes from https://github.com/ladjs/i18n-locales
 const en = "en";
-const languagesCore = [common, en];
-const languagesExtensions: string[] = []; // i.e: "en-GB", "en-US", etc...
-export const supportedLanguages = [
-  ...languagesCore,
-  ...languagesExtensions,
-].filter((l) => l !== common);
+const languagesCore = [en];
+const languagesExtensions = ["en-US"]; // i.e: "en-GB", "en-US", etc...
+export const supportedLanguages = [...languagesCore, ...languagesExtensions];
 
-i18n
+i18next
   .use(HttpApi)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: (code) => {
-      let langsToUse = [common];
+      let langsToUse: string[] = [];
       let foundLang = false;
 
-      for (const coreLang of languagesCore.filter((l) => l !== common)) {
+      for (const coreLang of languagesCore) {
         if (code && String(code).startsWith(`${coreLang}-`)) {
-          langsToUse = [coreLang, ...langsToUse];
+          langsToUse = [...langsToUse, coreLang, code];
           foundLang = true;
           break;
         }
       }
+
       if (!foundLang) {
-        langsToUse = [en, ...langsToUse];
+        langsToUse = [...langsToUse, en];
       }
+
       return langsToUse;
     },
     interpolation: {
@@ -69,13 +85,13 @@ i18n
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format"
+              USER_STORAGE_KEYS.dateFormat
             ) || dfnsDateFormat;
           const timeFormat =
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "time-format"
+              USER_STORAGE_KEYS.timeFormat
             ) || dfnsTimeFormat;
           const dfnsDateFormatWithTime = `${dateFormat} ${timeFormat}`;
 
@@ -107,7 +123,7 @@ i18n
             getLocalStorageForUser(
               clientId ?? "",
               userId ?? "",
-              "date-format"
+              USER_STORAGE_KEYS.dateFormat
             ) || dfnsDateFormat;
           try {
             return dateFnsFormat(new Date(value), dateFormat, {
@@ -119,11 +135,18 @@ i18n
         }
 
         if (i18nFormat === "currency") {
-          const {
-            currency = "USD",
-            value: numberValue = 0,
-            digits = 2,
-          } = options as any;
+          const { value: numberValue = 0, digits = 2 } = options as any;
+
+          const auth = getAuthToken();
+          const clientId = auth?.profile.navotar_clientid;
+          const userId = auth?.profile.navotar_userid;
+
+          const currency =
+            getLocalStorageForUser(
+              clientId ?? "",
+              userId ?? "",
+              USER_STORAGE_KEYS.currency
+            ) ?? "USD";
 
           if (currency !== "" && currency) {
             return new Intl.NumberFormat(lng, {
@@ -133,14 +156,22 @@ i18n
               maximumFractionDigits: digits,
             }).format(numberValue);
           } else {
-            return 'intlCurrency'
+            return "intlCurrency";
           }
         }
 
         return value;
       },
     },
-    debug: false,
+    debug: OIDC_REDIRECT_URI.startsWith("http://"),
+    defaultNS: i18nextNsDefault,
+    ns: [i18nextNsTranslation],
+    partialBundledLanguages: true,
+    resources: {},
   });
 
-export default i18n;
+for (const lang of supportedLanguages) {
+  i18next.addResourceBundle(lang, i18nextNsFormat, formatNsResources);
+}
+
+export default i18next;

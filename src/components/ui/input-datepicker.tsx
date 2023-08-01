@@ -13,7 +13,7 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 import { useDateInput } from "@/hooks/internal/useDateInput";
-import { dfnsDateFormat, dfnsTimeFormat } from "@/i18n.config";
+import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 import { useFormField } from "./form";
 
 const DEFAULT_DATE_FORMAT = dfnsDateFormat;

@@ -29,6 +29,7 @@ const ReservationStatBlock = ({
             reservation?.reservationview.canceledDate
               ? t("intlDateTime", {
                   value: reservation?.reservationview.canceledDate,
+                  ns: "format",
                 })
               : "-"
           }
@@ -48,6 +49,7 @@ const ReservationStatBlock = ({
           reservation?.reservationview.startDate
             ? t("intlDateTime", {
                 value: reservation?.reservationview.startDate,
+                ns: "format",
               })
             : "-"
         }
@@ -62,6 +64,7 @@ const ReservationStatBlock = ({
           reservation?.reservationview.endDate
             ? t("intlDateTime", {
                 value: reservation?.reservationview.endDate,
+                ns: "format",
               })
             : "-"
         }

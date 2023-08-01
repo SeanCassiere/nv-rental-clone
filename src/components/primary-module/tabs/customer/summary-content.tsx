@@ -1,5 +1,4 @@
 import { CustomerSummary } from "@/components/primary-module/summary/customer";
-import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 import { useGetCustomerSummary } from "@/hooks/network/customer/useGetCustomerSummary";
 import { sortObject } from "@/utils/sortObject";
@@ -17,8 +16,6 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
     customerId: props.customerId,
   });
 
-  const clientProfile = useGetClientProfile();
-
   return (
     <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
       <div className="flex flex-col gap-4 lg:col-span-8">
@@ -31,10 +28,7 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-4">
-        <CustomerSummary
-          summaryData={customerSummary.data}
-          currency={clientProfile.data?.currency || undefined}
-        />
+        <CustomerSummary summaryData={customerSummary.data} />
       </div>
     </div>
   );

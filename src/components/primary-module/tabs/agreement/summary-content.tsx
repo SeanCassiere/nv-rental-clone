@@ -7,7 +7,6 @@ import { RentalSummary } from "@/components/primary-module/summary/rental-summar
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
-import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
 type AgreementSummaryTabProps = {
@@ -30,8 +29,6 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
     module: "agreements",
     referenceId: props.agreementId,
   });
-
-  const clientProfile = useGetClientProfile();
 
   const tabsConfig = useMemo(() => {
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
@@ -97,8 +94,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
                   }
                 : {}
             }
-            isLoading={agreementData.isLoading || clientProfile.isLoading}
-            currency={clientProfile.data?.currency || undefined}
+            isLoading={agreementData.isLoading}
           />
         ),
       });
@@ -109,8 +105,6 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
     agreementData.data,
     agreementData.isLoading,
     canViewRentalInformation,
-    clientProfile.data,
-    clientProfile.isLoading,
     isCheckedIn,
   ]);
 
@@ -170,7 +164,6 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
         <RentalSummary
           module="agreements"
           summaryData={rentalRatesSummary.data}
-          currency={clientProfile.data?.currency || undefined}
         />
       </div>
     </div>

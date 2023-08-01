@@ -11,7 +11,6 @@ import {
 } from "./common";
 
 interface TRentalInformationProps {
-  currency?: string;
   data: {
     totalDays?: TAnyCustomerValueType;
     rateName?: TAnyCustomerValueType;
@@ -33,7 +32,7 @@ interface TRentalInformationProps {
 }
 
 const RentalInformation = (props: TRentalInformationProps) => {
-  const { data, mode, isLoading, currency } = props;
+  const { data, mode, isLoading } = props;
   const { t } = useTranslation();
 
   const infoBlocks = useMemo(() => {
@@ -78,7 +77,10 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Hourly rate",
         value: data?.hourlyRate
-          ? t("intlCurrency", { currency, value: Number(data.hourlyRate) })
+          ? t("intlCurrency", {
+              value: Number(data.hourlyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -86,7 +88,10 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Half day rate",
         value: data?.halfDayRate
-          ? t("intlCurrency", { currency, value: Number(data.halfDayRate) })
+          ? t("intlCurrency", {
+              value: Number(data.halfDayRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -94,7 +99,10 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Daily rate",
         value: data?.dailyRate
-          ? t("intlCurrency", { currency, value: Number(data.dailyRate) })
+          ? t("intlCurrency", {
+              value: Number(data.dailyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -102,7 +110,10 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Weekly rate",
         value: data?.weeklyRate
-          ? t("intlCurrency", { currency, value: Number(data.weeklyRate) })
+          ? t("intlCurrency", {
+              value: Number(data.weeklyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -110,7 +121,10 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Monthly rate",
         value: data?.monthlyRate
-          ? t("intlCurrency", { currency, value: Number(data.monthlyRate) })
+          ? t("intlCurrency", {
+              value: Number(data.monthlyRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -118,7 +132,10 @@ const RentalInformation = (props: TRentalInformationProps) => {
       blocks.push({
         heading: "Weekend rate",
         value: data?.weekendRate
-          ? t("intlCurrency", { currency, value: Number(data.weekendRate) })
+          ? t("intlCurrency", {
+              value: Number(data.weekendRate),
+              ns: "format",
+            })
           : EMPTY_KEY,
       });
     };
@@ -127,8 +144,8 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Extra mileage fee",
         value: data?.additionalMileageFee
           ? t("intlCurrency", {
-              currency,
               value: Number(data.additionalMileageFee),
+              ns: "format",
             })
           : EMPTY_KEY,
       });
@@ -157,7 +174,8 @@ const RentalInformation = (props: TRentalInformationProps) => {
     }
 
     return blocks;
-  }, [t, data, mode, currency]);
+  }, [t, data, mode]);
+
   return (
     <InformationBlockCard
       identifier="rental-information"

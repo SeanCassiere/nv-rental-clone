@@ -87,7 +87,7 @@ const ModuleNotesTabContent = ({
             cell: (item) => {
               const value = item.getValue();
               if (column.type === "date" && typeof value === "string") {
-                return t("intlDate", { value: parseISO(value) });
+                return t("intlDate", { value: parseISO(value), ns: "format" });
               }
 
               if (!value) {

@@ -70,7 +70,10 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
               }
 
               if (column.type === "date-time" && typeof value === "string") {
-                return t("intlDateTime", { value: parseISO(value) });
+                return t("intlDateTime", {
+                  value: parseISO(value),
+                  ns: "format",
+                });
               }
 
               if (!value) {

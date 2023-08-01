@@ -16,13 +16,7 @@ import { useGetSalesStatus } from "@/hooks/network/dashboard/useGetSalesStatus";
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
 import { useTranslation } from "react-i18next";
 
-const SalesStatus = ({
-  locations,
-  currency = "USD",
-}: {
-  locations: string[];
-  currency: string;
-}) => {
+const SalesStatus = ({ locations }: { locations: string[] }) => {
   const { t } = useTranslation();
   const sales = useGetSalesStatus({ locations, clientDate: new Date() });
 
@@ -57,7 +51,10 @@ const SalesStatus = ({
               <YAxis />
               <Tooltip
                 formatter={(value) =>
-                  t("intlCurrency", { currency, value: Number(value) })
+                  t("intlCurrency", {
+                    value: Number(value),
+                    ns: "format",
+                  })
                 }
               />
               <CartesianGrid vertical={false} stroke="#e2e8f0" />

@@ -36,6 +36,7 @@ const AgreementStatBlock = ({
           agreement?.checkoutDate
             ? t("intlDateTime", {
                 value: agreement?.checkoutDate,
+                ns: "format",
               })
             : "-"
         }
@@ -50,6 +51,7 @@ const AgreementStatBlock = ({
           agreement?.checkinDate
             ? t("intlDateTime", {
                 value: agreement?.checkinDate,
+                ns: "format",
               })
             : "-"
         }
@@ -65,6 +67,7 @@ const AgreementStatBlock = ({
             agreement?.returnDate
               ? t("intlDateTime", {
                   value: agreement?.returnDate,
+                  ns: "format",
                 })
               : "-"
           }

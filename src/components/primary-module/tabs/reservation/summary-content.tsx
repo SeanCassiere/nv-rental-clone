@@ -4,7 +4,6 @@ import FleetInformation from "../../information-block/fleet-information";
 
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 
-import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 
@@ -21,8 +20,6 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
     module: "reservations",
     referenceId: props.reservationId,
   });
-
-  const clientProfile = useGetClientProfile();
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
@@ -104,8 +101,7 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
                   }
                 : {}
             }
-            isLoading={reservationData.isLoading || clientProfile.isLoading}
-            currency={clientProfile.data?.currency || undefined}
+            isLoading={reservationData.isLoading}
           />
         )}
       </div>
@@ -114,7 +110,6 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
         <RentalSummary
           module="reservations"
           summaryData={rentalRatesSummary.data}
-          currency={clientProfile.data?.currency || undefined}
         />
       </div>
     </div>

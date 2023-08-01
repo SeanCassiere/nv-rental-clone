@@ -35,7 +35,6 @@ interface MiscChargesStageProps {
 
   isEdit: boolean;
   onCompleted: () => void;
-  currency: string | undefined;
 }
 
 export const MiscChargesStage = (props: MiscChargesStageProps) => {
@@ -46,7 +45,6 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
     onSelectedMiscCharges,
     isEdit,
     onCompleted,
-    currency,
   } = props;
 
   const isSupportingInfoAvailable =
@@ -113,7 +111,6 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
               startDate: durationStageData?.checkoutDate ?? new Date(),
               endDate: durationStageData?.checkinDate ?? new Date(),
             }}
-            currency={currency}
           />
         ))}
       </div>
@@ -139,7 +136,6 @@ function MiscChargeItem(props: {
   onSave: (charge: RatesAndChargesTabProps["miscCharges"][number]) => void;
   onRemove: (chargeId: number) => void;
   dates: { startDate: Date; endDate: Date };
-  currency: string | undefined;
 }) {
   const id = useId();
   const { t } = useTranslation();
@@ -510,8 +506,8 @@ function MiscChargeItem(props: {
                             >
                               <div className="font-medium text-primary">
                                 {t("intlCurrency", {
-                                  currency: props.currency,
                                   value: Number(option.value),
+                                  ns: "format",
                                 })}
                               </div>
                             </div>

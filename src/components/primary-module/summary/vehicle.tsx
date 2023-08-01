@@ -20,12 +20,10 @@ import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 export const VehicleSummary = ({
   summaryData,
-  currency = "",
   vehicleNo,
   vehicleId,
 }: {
   summaryData: TVehicleSummarySchema;
-  currency?: string;
   vehicleNo?: string;
   vehicleId: string;
 }) => {
@@ -34,26 +32,38 @@ export const VehicleSummary = ({
   const lineItems: Omit<TSummaryLineItemProps, "id">[] = [
     {
       label: "Total revenue",
-      amount: t("intlCurrency", { value: summaryData?.totalRevenue, currency }),
+      amount: t("intlCurrency", {
+        value: summaryData?.totalRevenue,
+        ns: "format",
+      }),
       biggerText: true,
       primaryTextHighlight: Boolean(summaryData?.totalRevenue),
     },
 
     {
       label: "Total expenses",
-      amount: t("intlCurrency", { value: summaryData?.totalExpense, currency }),
+      amount: t("intlCurrency", {
+        value: summaryData?.totalExpense,
+        ns: "format",
+      }),
       primaryTextHighlight: Boolean(summaryData?.totalExpense),
     },
 
     {
       label: "Total profits",
-      amount: t("intlCurrency", { value: summaryData?.totalProfit, currency }),
+      amount: t("intlCurrency", {
+        value: summaryData?.totalProfit,
+        ns: "format",
+      }),
       primaryTextHighlight: Boolean(summaryData?.totalProfit),
     },
 
     {
       label: "Balances owing",
-      amount: t("intlCurrency", { value: summaryData?.balanceOwing, currency }),
+      amount: t("intlCurrency", {
+        value: summaryData?.balanceOwing,
+        ns: "format",
+      }),
       primaryTextHighlight: Boolean(summaryData?.balanceOwing),
     },
 
@@ -61,7 +71,7 @@ export const VehicleSummary = ({
       label: "Monthly payment",
       amount: t("intlCurrency", {
         value: summaryData?.monthlyPayment,
-        currency,
+        ns: "format",
       }),
       primaryTextHighlight: Boolean(summaryData?.monthlyPayment),
     },
@@ -70,7 +80,7 @@ export const VehicleSummary = ({
       label: "Lease payout",
       amount: t("intlCurrency", {
         value: summaryData?.leasePayoutAmount,
-        currency,
+        ns: "format",
       }),
       primaryTextHighlight: Boolean(summaryData?.leasePayoutAmount),
     },
@@ -80,7 +90,7 @@ export const VehicleSummary = ({
       amount: summaryData?.finalPaymentDate
         ? t("intlDate", {
             value: summaryData?.finalPaymentDate,
-            currency,
+            ns: "format",
           })
         : "No date",
       primaryTextHighlight: Boolean(summaryData?.finalPaymentDate),
@@ -181,7 +191,7 @@ export const VehicleSummary = ({
       label: "Current net value",
       amount: t("intlCurrency", {
         value: summaryData?.currentNetValue,
-        currency,
+        ns: "format",
       }),
       primaryTextHighlight: Boolean(summaryData?.currentNetValue),
     },
@@ -190,7 +200,7 @@ export const VehicleSummary = ({
       label: "Monthly depreciation",
       amount: t("intlCurrency", {
         value: summaryData?.monthlyDepreciation,
-        currency,
+        ns: "format",
       }),
       primaryTextHighlight: Boolean(summaryData?.monthlyDepreciation),
     },
@@ -199,7 +209,7 @@ export const VehicleSummary = ({
       label: "Total depreciation",
       amount: t("intlCurrency", {
         value: summaryData?.totalAmountDepreciated,
-        currency,
+        ns: "format",
       }),
       primaryTextHighlight: Boolean(summaryData?.totalAmountDepreciated),
     },
@@ -223,7 +233,10 @@ export const VehicleSummary = ({
     {
       label: "Last rental date",
       amount: summaryData?.lastRentalDate
-        ? t("intlDate", { value: summaryData?.lastRentalDate, currency })
+        ? t("intlDate", {
+            value: summaryData?.lastRentalDate,
+            ns: "format",
+          })
         : "None",
     },
   ];

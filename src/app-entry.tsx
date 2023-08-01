@@ -13,7 +13,7 @@ import {
   stringifySearchFn,
   parseSearchFn,
 } from "@/tanstack-router-config";
-import "./i18n.config";
+import "./i18next-config";
 
 export const router = new Router({
   routeTree,

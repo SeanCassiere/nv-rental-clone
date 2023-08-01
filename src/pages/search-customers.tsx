@@ -112,7 +112,7 @@ function CustomerSearchPage() {
             if (DateColumns.includes(column.columnHeader)) {
               return (
                 <PrimaryModuleTableCellWrap>
-                  {t("intlDate", { value: new Date(value) })}
+                  {t("intlDate", { value: new Date(value), ns: "format" })}
                 </PrimaryModuleTableCellWrap>
               );
             }
