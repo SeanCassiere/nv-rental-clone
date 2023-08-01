@@ -1,4 +1,4 @@
-import { Outlet, RootRoute } from "@tanstack/router";
+import { Outlet, RouterContext } from "@tanstack/router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import { HeaderLayout } from "@/components/header/header-layout";
@@ -12,7 +12,9 @@ import { getAuthToken } from "@/utils/authLocal";
 import { clientQKeys, userQKeys } from "@/utils/query-key";
 import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
 
-export const rootRoute = new RootRoute({
+const routerContext = new RouterContext();
+
+export const rootRoute = routerContext.createRootRoute({
   loader: async () => {
     const auth = getAuthToken();
 
