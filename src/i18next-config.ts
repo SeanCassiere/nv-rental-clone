@@ -5,27 +5,36 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import dateFnsFormat from "date-fns/format";
 import { type Locale } from "date-fns";
 
-import enUS from "date-fns/locale/en-US";
-import enNZ from "date-fns/locale/en-NZ";
-import ru from "date-fns/locale/ru";
+import enUSLocale from "date-fns/locale/en-US";
+import enNZLocal from "date-fns/locale/en-NZ";
+import ruLocale from "date-fns/locale/ru";
+import enLocale from "date-fns/locale/en-US";
 
 import { getAuthToken } from "./utils/authLocal";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
+import { OIDC_REDIRECT_URI } from "./utils/constants";
 
 export const dfnsTimeFormat = "hh:mm a";
 export const dfnsDateFormat = "dd/MM/yyyy";
 
 const dateFnsLocales: Record<string, Locale> = {
-  "en-US": enUS,
-  "en-NZ": enNZ,
-  ru: ru,
+  en: enLocale,
+  "en-US": enUSLocale,
+  "en-NZ": enNZLocal,
+  ru: ruLocale,
 };
 export function getDateFnsLocale(lng?: string) {
   if (lng && dateFnsLocales[lng]) return dateFnsLocales[lng];
-  return enUS;
+  return enUSLocale;
 }
 
 const common = "common";
+export const commonFormatNamespace = {
+  intlCurrency: "{{value, currency}}",
+  intlDateTime: "{{value, datetime}}",
+  intlDate: "{{value, date}}",
+  intlMonthYear: "{{value, monthyear}}",
+};
 
 // Using language codes from https://github.com/ladjs/i18n-locales
 const en = "en";
@@ -35,6 +44,8 @@ export const supportedLanguages = [
   ...languagesCore,
   ...languagesExtensions,
 ].filter((l) => l !== common);
+
+export const i18nDefaultNs = "translation";
 
 i18n
   .use(HttpApi)
@@ -47,14 +58,16 @@ i18n
 
       for (const coreLang of languagesCore.filter((l) => l !== common)) {
         if (code && String(code).startsWith(`${coreLang}-`)) {
-          langsToUse = [coreLang, ...langsToUse];
+          langsToUse = [...langsToUse, coreLang, code];
           foundLang = true;
           break;
         }
       }
+
       if (!foundLang) {
-        langsToUse = [en, ...langsToUse];
+        langsToUse = [...langsToUse, en];
       }
+
       return langsToUse;
     },
     interpolation: {
@@ -133,14 +146,20 @@ i18n
               maximumFractionDigits: digits,
             }).format(numberValue);
           } else {
-            return 'intlCurrency'
+            return "intlCurrency";
           }
         }
 
         return value;
       },
     },
-    debug: false,
+    debug: OIDC_REDIRECT_URI.startsWith("http://"),
+    defaultNS: i18nDefaultNs,
+    ns: ["format", "translation"],
+    partialBundledLanguages: true,
+    resources: {},
   });
+
+i18n.addResourceBundle(common, "format", commonFormatNamespace);
 
 export default i18n;

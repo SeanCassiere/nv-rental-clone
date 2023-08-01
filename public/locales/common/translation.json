@@ -1,6 +1,0 @@
-{
-  "intlCurrency": "{{value, currency}}",
-  "intlDateTime": "{{value, datetime}}",
-  "intlDate": "{{value, date}}",
-  "intlMonthYear": "{{value, monthyear}}"
-}
