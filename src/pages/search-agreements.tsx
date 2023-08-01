@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import { PlusIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 import ProtectorShield from "@/components/protector-shield";
 
@@ -20,9 +21,9 @@ import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreements
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
+import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import {
@@ -33,13 +34,12 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { type TAgreementListItemParsed } from "@/schemas/agreement";
-import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { cn } from "@/utils";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 import { AgreementDateTimeColumns } from "@/utils/columns";
-import { cn } from "@/utils";
-import { Separator } from "@/components/ui/separator";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -76,7 +76,7 @@ function AgreementsSearchPage() {
   const agreementStatusList = useGetAgreementStatusList();
   const agreementStatuses = agreementStatusList.data ?? [];
 
-  const vehicleTypesList = useGetVehicleTypesList();
+  const vehicleTypesList = useGetVehicleTypesLookupList();
   const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useGetLocationsList({ locationIsActive: true });
@@ -312,8 +312,8 @@ function AgreementsSearchPage() {
                 title: "Vehicle type",
                 type: "select",
                 options: vehicleTypes.map((item) => ({
-                  value: `${item.VehicleTypeId}`,
-                  label: item.VehicleTypeName,
+                  value: `${item.id}`,
+                  label: item.value,
                 })),
               },
               {

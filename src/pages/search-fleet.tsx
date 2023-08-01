@@ -17,7 +17,7 @@ import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
-import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
@@ -69,7 +69,7 @@ function VehiclesSearchPage() {
   const vehicleStatusList = useGetVehicleStatusList();
   const vehicleStatuses = vehicleStatusList.data ?? [];
 
-  const vehicleTypesList = useGetVehicleTypesList();
+  const vehicleTypesList = useGetVehicleTypesLookupList();
   const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useGetLocationsList({ locationIsActive: true });
@@ -242,8 +242,8 @@ function VehiclesSearchPage() {
                 title: "Type",
                 type: "select",
                 options: vehicleTypes.map((item) => ({
-                  value: `${item.VehicleTypeId}`,
-                  label: item.VehicleTypeName,
+                  value: `${item.id}`,
+                  label: item.value,
                 })),
               },
               {

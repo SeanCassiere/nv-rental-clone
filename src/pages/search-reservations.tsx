@@ -20,7 +20,7 @@ import { useGetReservationsList } from "@/hooks/network/reservation/useGetReserv
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
-import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
@@ -76,7 +76,7 @@ function ReservationsSearchPage() {
   const reservationStatusList = useGetReservationStatusList();
   const reservationStatuses = reservationStatusList.data ?? [];
 
-  const vehicleTypesList = useGetVehicleTypesList();
+  const vehicleTypesList = useGetVehicleTypesLookupList();
   const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useGetLocationsList({ locationIsActive: true });
@@ -285,8 +285,8 @@ function ReservationsSearchPage() {
                 title: "Vehicle type",
                 type: "select",
                 options: vehicleTypes.map((item) => ({
-                  value: `${item.VehicleTypeId}`,
-                  label: item.VehicleTypeName,
+                  value: `${item.id}`,
+                  label: item.value,
                 })),
               },
               {
