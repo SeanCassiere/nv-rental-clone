@@ -1,17 +1,20 @@
-import { Outlet, RootRoute } from "@tanstack/router";
+import { Outlet, RouterContext } from "@tanstack/router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import { HeaderLayout } from "@/components/header/header-layout";
 
-import { queryClient as qc } from "@/app-entry";
+import { queryClient } from "@/tanstack-query-config";
 
-import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
-import { getAuthToken } from "@/utils/authLocal";
-import { clientQKeys, userQKeys } from "@/utils/query-key";
 import { fetchClientFeatures } from "@/api/clients";
 import { fetchUserPermissions } from "@/api/users";
 
-export const rootRoute = new RootRoute({
+import { getAuthToken } from "@/utils/authLocal";
+import { clientQKeys, userQKeys } from "@/utils/query-key";
+import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
+
+const routerContext = new RouterContext();
+
+export const rootRoute = routerContext.createRootRoute({
   loader: async () => {
     const auth = getAuthToken();
 
@@ -19,9 +22,9 @@ export const rootRoute = new RootRoute({
       const promises = [];
 
       const featuresKey = clientQKeys.features();
-      if (!qc.getQueryData(featuresKey)) {
+      if (!queryClient.getQueryData(featuresKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: featuresKey,
             queryFn: async () =>
               fetchClientFeatures({
@@ -34,9 +37,9 @@ export const rootRoute = new RootRoute({
       }
 
       const permissionsKey = userQKeys.permissions(auth.profile.navotar_userid);
-      if (!qc.getQueryData(permissionsKey)) {
+      if (!queryClient.getQueryData(permissionsKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: permissionsKey,
             queryFn: async () =>
               fetchUserPermissions({

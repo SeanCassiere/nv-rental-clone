@@ -61,7 +61,7 @@ function AgreementViewPage() {
     from: viewAgreementByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewAgreementByIdRoute.id });
+  const navigate = useNavigate();
 
   const params = useParams({
     from: viewAgreementByIdRoute.id,

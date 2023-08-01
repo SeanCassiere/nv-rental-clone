@@ -1,9 +1,5 @@
 import { useState, type ReactNode } from "react";
-import {
-  Link,
-  type MakeLinkOptions,
-  type RegisteredRoutesInfo,
-} from "@tanstack/router";
+import { Link, type LinkPropsOptions } from "@tanstack/router";
 
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -33,7 +29,7 @@ export type TSummaryLineItemProps = {
   id: string;
   label: string;
   type?: "text" | "link";
-  linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
+  linkProps?: LinkPropsOptions;
   amount: string | number | null;
   shown?: boolean;
   redHighlight?: boolean;

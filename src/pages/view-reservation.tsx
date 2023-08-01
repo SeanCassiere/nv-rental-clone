@@ -57,7 +57,7 @@ function ReservationViewPage() {
     from: viewReservationByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewReservationByIdRoute.id });
+  const navigate = useNavigate();
 
   const reservationId = params.reservationId || "";
 

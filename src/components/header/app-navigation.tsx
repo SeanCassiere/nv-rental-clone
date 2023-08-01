@@ -14,10 +14,9 @@ export const AppNavigation = () => {
   const router = useRouter();
 
   const routerStore = router.__store.state;
+
   const matches = (routes: string[], mode: "=" | "~" = "~") => {
-    const matching: string[] = [
-      ...routerStore.currentMatches.map((mat) => mat.route.to),
-    ];
+    const matching: string[] = [...routerStore.matches.map((mat) => mat.id)];
 
     // because this comes out like ['/','/customers','/customers/$customerId'] or ['/','/']
     // we take out the first element in the array

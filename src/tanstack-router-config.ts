@@ -1,7 +1,6 @@
-import { Router, parseSearchWith, stringifySearchWith } from "@tanstack/router";
+import { parseSearchWith, stringifySearchWith } from "@tanstack/router";
 import JSURL from "jsurl2";
 
-import LoadingPlaceholder from "./components/loading-placeholder";
 import { rootRoute } from "./routes/__root";
 
 // /
@@ -61,11 +60,41 @@ import { settingsRoute } from "./routes/settings";
 import { mainSettingsRoute } from "./routes/settings/main-settings-route";
 import { destinationSettingsRoute } from "./routes/settings/destination-settings-route";
 
-const routeTree = rootRoute.addChildren([
+import { OIDC_REDIRECT_URI } from "./utils/constants";
+
+export function decodeFromBinary(str: string): string {
+  return decodeURIComponent(
+    Array.prototype.map
+      .call(atob(str), function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+}
+
+export function encodeToBinary(str: string): string {
+  return btoa(
+    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+      return String.fromCharCode(parseInt(p1, 16));
+    })
+  );
+}
+
+export const parseSearchFn = parseSearchWith((value) => JSURL.parse(value));
+// export const parseSearchFn = parseSearchWith((value) => JSON.parse(decodeFromBinary(value)));
+
+export const stringifySearchFn = stringifySearchWith((value) =>
+  JSURL.stringify(value)
+);
+// export const stringifySearchFn = stringifySearchWith((value) =>
+//   encodeToBinary(JSON.stringify(value))
+// );
+
+export const routeTree = rootRoute.addChildren([
   indexRoute, // /
   loggedOutRoute, // /logged-out
   oidcCallbackRoute, // /oidc-callback
-  ...(import.meta.env?.NODE_ENV !== "production" ? [stylingRoute] : []),
+  ...(!OIDC_REDIRECT_URI.startsWith("https://") ? [stylingRoute] : []),
   agreementsRoute.addChildren([
     searchAgreementsRoute, // /agreements
     addAgreementRoute, // /agreements/new
@@ -108,39 +137,3 @@ const routeTree = rootRoute.addChildren([
     destinationSettingsRoute, // /settings/destinations
   ]),
 ]);
-
-export const router = new Router({
-  routeTree,
-  parseSearch: parseSearchWith((value) => JSURL.parse(value)),
-  stringifySearch: stringifySearchWith((value) => JSURL.stringify(value)),
-  // parseSearch: parseSearchWith((value) => JSON.parse(decodeFromBinary(value))),
-  // stringifySearch: stringifySearchWith((value) =>
-  //   encodeToBinary(JSON.stringify(value))
-  // ),
-  defaultPendingComponent: LoadingPlaceholder,
-  defaultPreload: "intent",
-});
-
-declare module "@tanstack/router" {
-  interface Register {
-    router: typeof router;
-  }
-}
-
-export function decodeFromBinary(str: string): string {
-  return decodeURIComponent(
-    Array.prototype.map
-      .call(atob(str), function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
-}
-
-export function encodeToBinary(str: string): string {
-  return btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-      return String.fromCharCode(parseInt(p1, 16));
-    })
-  );
-}

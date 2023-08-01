@@ -13,5 +13,5 @@ export const addAgreementRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("../../pages/add-agreement")),
+  component: lazy(() => import("@/pages/add-agreement")),
 });

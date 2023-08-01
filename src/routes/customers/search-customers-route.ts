@@ -1,19 +1,20 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { customersRoute } from ".";
-import { queryClient as qc } from "@/app-entry";
+import { queryClient } from "@/tanstack-query-config";
+
 import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { customerQKeys } from "@/utils/query-key";
+import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
 export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "/",
-  component: lazy(() => import("../../pages/search-customers")),
+  component: lazy(() => import("@/pages/search-customers")),
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
@@ -33,9 +34,9 @@ export const searchCustomersRoute = new Route({
 
       // get columns
       const columnsKey = customerQKeys.columns();
-      if (!qc.getQueryData(columnsKey)) {
+      if (!queryClient.getQueryData(columnsKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: columnsKey,
             queryFn: () =>
               fetchModuleColumnsModded({
@@ -53,9 +54,9 @@ export const searchCustomersRoute = new Route({
         pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
-      if (!qc.getQueryData(searchKey)) {
+      if (!queryClient.getQueryData(searchKey)) {
         promises.push(
-          qc.prefetchQuery({
+          queryClient.prefetchQuery({
             queryKey: searchKey,
             queryFn: () =>
               fetchCustomersListModded({

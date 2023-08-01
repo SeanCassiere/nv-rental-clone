@@ -1,7 +1,7 @@
 import { lazy, Route } from "@tanstack/router";
 
 import { reservationsRoute } from ".";
-import { queryClient } from "@/app-entry";
+import { queryClient } from "@/tanstack-query-config";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
@@ -74,5 +74,5 @@ export const searchReservationsRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("../../pages/search-reservations")),
+  component: lazy(() => import("@/pages/search-reservations")),
 });
