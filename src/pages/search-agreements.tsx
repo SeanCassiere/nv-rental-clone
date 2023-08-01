@@ -46,7 +46,7 @@ const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 function AgreementsSearchPage() {
   const { t } = useTranslation();
 
-  const navigate = useNavigate({ from: searchAgreementsRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchAgreementsRoute.id });
   const { searchFilters, pageNumber, size } =

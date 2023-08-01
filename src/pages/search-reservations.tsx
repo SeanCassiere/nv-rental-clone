@@ -46,7 +46,7 @@ const columnHelper = createColumnHelper<TReservationListItemParsed>();
 function ReservationsSearchPage() {
   const { t } = useTranslation();
 
-  const navigate = useNavigate({ from: searchReservationsRoute.id });
+  const navigate = useNavigate();
 
   const search = useSearch({ from: searchReservationsRoute.id });
   const { pageNumber, size, searchFilters } =

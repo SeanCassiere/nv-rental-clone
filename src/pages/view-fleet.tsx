@@ -68,7 +68,7 @@ function VehicleViewPage() {
 
   const { tab: tabName = "" } = useSearch({ from: viewFleetByIdRoute.id });
 
-  const navigate = useNavigate({ from: viewFleetByIdRoute.id });
+  const navigate = useNavigate();
 
   const vehicleId = params.vehicleId || "";
 

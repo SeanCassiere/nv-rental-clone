@@ -55,7 +55,7 @@ function CustomerViewPage() {
     from: viewCustomerByIdRoute.id,
   });
 
-  const navigate = useNavigate({ from: viewCustomerByIdRoute.id });
+  const navigate = useNavigate();
 
   const customerId = params.customerId || "";
 
