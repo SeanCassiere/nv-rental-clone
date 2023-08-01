@@ -1,7 +1,4 @@
-import {
-  AuthProvider,
-  type AuthProviderNoUserManagerProps,
-} from "react-oidc-context";
+import type { AuthProviderNoUserManagerProps } from "react-oidc-context";
 
 import {
   OIDC_AUTHORITY,
@@ -11,7 +8,7 @@ import {
   OIDC_SILENT_REDIRECT_URI,
 } from "@/utils/constants";
 
-const config: AuthProviderNoUserManagerProps = {
+export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   authority: OIDC_AUTHORITY,
   metadataUrl: `${OIDC_AUTHORITY}/.well-known/openid-configuration`,
   client_id: OIDC_CLIENT_ID,
@@ -24,12 +21,4 @@ const config: AuthProviderNoUserManagerProps = {
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
-};
-
-export const OidcAuthProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  return <AuthProvider {...config}>{children}</AuthProvider>;
 };

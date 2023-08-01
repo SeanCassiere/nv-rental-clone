@@ -1,17 +1,18 @@
 import { Suspense } from "react";
-import { Router, RouterProvider } from "@tanstack/router";
+import { AuthProvider } from "react-oidc-context";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Router, RouterProvider } from "@tanstack/router";
 
-import { OidcAuthProvider } from "@/components/oidc-auth-provider";
 import LoadingPlaceholder from "@/components/loading-placeholder";
 
+import { reactOidcContextConfig } from "@/react-oidc-context-config";
+import { queryClient } from "@/tanstack-query-config";
 import {
   routeTree,
   stringifySearchFn,
   parseSearchFn,
 } from "@/tanstack-router-config";
-import { queryClient } from "@/tanstack-query-config";
 import "./i18n.config";
 
 export const router = new Router({
@@ -32,12 +33,12 @@ declare module "@tanstack/router" {
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <OidcAuthProvider>
+      <AuthProvider {...reactOidcContextConfig}>
         <Suspense fallback={<p>root suspense loading...</p>}>
           <RouterProvider router={router} defaultPreload="intent" />
         </Suspense>
         <ReactQueryDevtools initialIsOpen={false} />
-      </OidcAuthProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
