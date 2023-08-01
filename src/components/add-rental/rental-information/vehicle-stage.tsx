@@ -78,9 +78,11 @@ export const VehicleStage = ({
 
   //
   const vehicleTypesData = useGetVehicleTypesList({
-    StartDate: rentalInformation?.checkoutDate,
-    EndDate: rentalInformation?.checkinDate,
-    LocationID: checkoutLocation,
+    search: {
+      StartDate: rentalInformation?.checkoutDate,
+      EndDate: rentalInformation?.checkinDate,
+      LocationID: checkoutLocation,
+    },
   });
   const vehicleTypesList = vehicleTypesData.data || [];
 
