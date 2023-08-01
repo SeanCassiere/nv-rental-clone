@@ -1,4 +1,5 @@
-import { isBefore, isAfter } from "date-fns";
+import isBefore from "date-fns/isBefore";
+import isAfter from "date-fns/isAfter";
 
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import {

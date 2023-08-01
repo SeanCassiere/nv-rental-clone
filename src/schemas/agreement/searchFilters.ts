@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { parse, isBefore } from "date-fns";
+import parse from "date-fns/parse";
+import isBefore from "date-fns/isBefore";
 
 export const AgreementFiltersSchema = z
   .object({
