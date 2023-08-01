@@ -1,5 +1,6 @@
 {
   "cSpell.ignoreWords": [],
   "cSpell.words": [],
-  "conventionalCommits.scopes": []
+  "conventionalCommits.scopes": [],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
