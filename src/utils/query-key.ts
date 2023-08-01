@@ -127,6 +127,7 @@ export const dashboardQKeys = {
 export const vehicleTypeQKeys = {
   rootKey: "vehicle-types",
   all: () => [vehicleTypeQKeys.rootKey, "all"],
+  lookup: () => [vehicleTypeQKeys.rootKey, "lookup"],
 };
 
 export const locationQKeys = {
