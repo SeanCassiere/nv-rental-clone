@@ -55,8 +55,6 @@ export const UserProfileSchema = z
       overrideTimeFormat = momentToDateFnsFormat(user.overrideTimeFormat);
     }
 
-    console.log("overrideTimeFormat", overrideTimeFormat);
-
     return {
       ...user,
       fullName: `${user?.firstName} ${user?.lastName}`,
