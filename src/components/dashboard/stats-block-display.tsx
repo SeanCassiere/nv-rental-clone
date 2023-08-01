@@ -1,8 +1,4 @@
-import {
-  Link,
-  type MakeLinkOptions,
-  type RegisteredRoutesInfo,
-} from "@tanstack/router";
+import { Link, type LinkPropsOptions } from "@tanstack/router";
 import {
   type LucideIcon,
   CreditCardIcon,
@@ -140,7 +136,7 @@ const StatBlock = ({
   title: string;
   value: string;
   icon: LucideIcon;
-  linkProps?: MakeLinkOptions<RegisteredRoutesInfo["routePaths"], ".">;
+  linkProps: LinkPropsOptions;
 }) => {
   return (
     <Card>
