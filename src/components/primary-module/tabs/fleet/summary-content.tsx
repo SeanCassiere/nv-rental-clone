@@ -6,7 +6,6 @@ import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
-import { useGetClientProfile } from "@/hooks/network/client/useGetClientProfile";
 import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
 import { useGetVehicleSummary } from "@/hooks/network/vehicle/useGetVehicleSummary";
 
@@ -24,8 +23,6 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   const agreementData = useGetAgreementData({
     agreementId: vehicleSummary.data?.currentAgreement,
   });
-
-  const clientProfile = useGetClientProfile();
 
   const [currentTab, setCurrentTab] = useState("general");
 
@@ -133,7 +130,6 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
         <VehicleSummary
           vehicleId={props.vehicleId}
           summaryData={vehicleSummary.data}
-          currency={clientProfile.data?.currency || undefined}
           vehicleNo={vehicleData.data?.vehicle.vehicleNo || undefined}
         />
       </div>

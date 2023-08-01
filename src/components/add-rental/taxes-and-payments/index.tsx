@@ -28,7 +28,6 @@ export interface TaxesAndPaymentsTabProps {
 
   isEdit: boolean;
   onCompleted: () => void;
-  currency: string | undefined;
 }
 
 const TaxesAndPaymentsTab = (props: TaxesAndPaymentsTabProps) => {
@@ -38,7 +37,6 @@ const TaxesAndPaymentsTab = (props: TaxesAndPaymentsTabProps) => {
     onSelectedTaxes,
     isEdit,
     onCompleted,
-    currency,
   } = props;
 
   const [tab, setTab] = React.useState("taxes");

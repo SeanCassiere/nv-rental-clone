@@ -16,10 +16,8 @@ import { Separator } from "@/components/ui/separator";
 
 export const CustomerSummary = ({
   summaryData,
-  currency = "",
 }: {
   summaryData: TCustomerSummarySchema;
-  currency?: string;
 }) => {
   const { t } = useTranslation();
 
@@ -28,7 +26,6 @@ export const CustomerSummary = ({
       label: "Total revenue",
       amount: t("intlCurrency", {
         value: summaryData?.totalRevenue,
-        currency,
         ns: "format",
       }),
       biggerText: true,

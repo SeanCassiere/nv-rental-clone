@@ -11,7 +11,6 @@ import {
 } from "./common";
 
 interface TRentalInformationProps {
-  currency?: string;
   data: {
     totalDays?: TAnyCustomerValueType;
     rateName?: TAnyCustomerValueType;
@@ -33,7 +32,7 @@ interface TRentalInformationProps {
 }
 
 const RentalInformation = (props: TRentalInformationProps) => {
-  const { data, mode, isLoading, currency } = props;
+  const { data, mode, isLoading } = props;
   const { t } = useTranslation();
 
   const infoBlocks = useMemo(() => {
@@ -79,7 +78,6 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Hourly rate",
         value: data?.hourlyRate
           ? t("intlCurrency", {
-              currency,
               value: Number(data.hourlyRate),
               ns: "format",
             })
@@ -91,7 +89,6 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Half day rate",
         value: data?.halfDayRate
           ? t("intlCurrency", {
-              currency,
               value: Number(data.halfDayRate),
               ns: "format",
             })
@@ -103,7 +100,6 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Daily rate",
         value: data?.dailyRate
           ? t("intlCurrency", {
-              currency,
               value: Number(data.dailyRate),
               ns: "format",
             })
@@ -115,7 +111,6 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Weekly rate",
         value: data?.weeklyRate
           ? t("intlCurrency", {
-              currency,
               value: Number(data.weeklyRate),
               ns: "format",
             })
@@ -127,7 +122,6 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Monthly rate",
         value: data?.monthlyRate
           ? t("intlCurrency", {
-              currency,
               value: Number(data.monthlyRate),
               ns: "format",
             })
@@ -139,7 +133,6 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Weekend rate",
         value: data?.weekendRate
           ? t("intlCurrency", {
-              currency,
               value: Number(data.weekendRate),
               ns: "format",
             })
@@ -151,7 +144,6 @@ const RentalInformation = (props: TRentalInformationProps) => {
         heading: "Extra mileage fee",
         value: data?.additionalMileageFee
           ? t("intlCurrency", {
-              currency,
               value: Number(data.additionalMileageFee),
               ns: "format",
             })
@@ -182,7 +174,8 @@ const RentalInformation = (props: TRentalInformationProps) => {
     }
 
     return blocks;
-  }, [t, data, mode, currency]);
+  }, [t, data, mode]);
+
   return (
     <InformationBlockCard
       identifier="rental-information"
