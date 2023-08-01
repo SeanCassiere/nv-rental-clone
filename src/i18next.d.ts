@@ -1,15 +1,20 @@
-import { i18nDefaultNs, commonFormatNamespace } from "./i18next-config";
+import {
+  i18nextNsDefault,
+  i18nextNsTranslation,
+  i18nextNsFormat,
+  formatNsResources,
+} from "./i18next-config";
 
 import enTranslation from "../public/locales/en/translation.json";
 
 const resources = {
-  format: commonFormatNamespace,
-  translation: enTranslation,
+  [i18nextNsFormat]: formatNsResources,
+  [i18nextNsTranslation]: enTranslation,
 };
 
 declare module "i18next" {
   interface CustomTypeOptions {
-    defaultNS: typeof i18nDefaultNs;
+    defaultNS: typeof i18nextNsDefault;
     resources: typeof resources;
   }
 }

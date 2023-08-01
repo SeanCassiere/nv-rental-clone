@@ -2,11 +2,11 @@ import i18next from "i18next";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import dateFnsFormat from "date-fns/format";
-import type { Locale } from "date-fns";
 
+import type { Locale } from "date-fns";
+import dateFnsFormat from "date-fns/format";
 import enUSLocale from "date-fns/locale/en-US";
-import enNZLocal from "date-fns/locale/en-NZ";
+import enNZLocale from "date-fns/locale/en-NZ";
 import ruLocale from "date-fns/locale/ru";
 import enLocale from "date-fns/locale/en-US";
 
@@ -23,7 +23,7 @@ export const dfnsDateFormat = "dd/MM/yyyy";
 const dateFnsLocales: Record<string, Locale> = {
   en: enLocale,
   "en-US": enUSLocale,
-  "en-NZ": enNZLocal,
+  "en-NZ": enNZLocale,
   ru: ruLocale,
 };
 
@@ -33,8 +33,11 @@ export function getDateFnsLocale(lng?: string) {
 }
 // END: locales for date-fns
 
-const common = "common";
-export const commonFormatNamespace = {
+export const i18nextNsTranslation = "translation";
+export const i18nextNsFormat = "format"; // do not add this to the list of namespaces to prevent a network fetch
+
+export const i18nextNsDefault = i18nextNsTranslation;
+export const formatNsResources = {
   intlCurrency: "{{value, currency}}",
   intlDateTime: "{{value, datetime}}",
   intlDate: "{{value, date}}",
@@ -43,14 +46,9 @@ export const commonFormatNamespace = {
 
 // Using language codes from https://github.com/ladjs/i18n-locales
 const en = "en";
-const languagesCore = [common, en];
-const languagesExtensions: string[] = []; // i.e: "en-GB", "en-US", etc...
-export const supportedLanguages = [
-  ...languagesCore,
-  ...languagesExtensions,
-].filter((l) => l !== common);
-
-export const i18nDefaultNs = "translation";
+const languagesCore = [en];
+const languagesExtensions = ["en-US"]; // i.e: "en-GB", "en-US", etc...
+export const supportedLanguages = [...languagesCore, ...languagesExtensions];
 
 i18next
   .use(HttpApi)
@@ -58,10 +56,10 @@ i18next
   .use(initReactI18next)
   .init({
     fallbackLng: (code) => {
-      let langsToUse = [common];
+      let langsToUse: string[] = [];
       let foundLang = false;
 
-      for (const coreLang of languagesCore.filter((l) => l !== common)) {
+      for (const coreLang of languagesCore) {
         if (code && String(code).startsWith(`${coreLang}-`)) {
           langsToUse = [...langsToUse, coreLang, code];
           foundLang = true;
@@ -159,12 +157,14 @@ i18next
       },
     },
     debug: OIDC_REDIRECT_URI.startsWith("http://"),
-    defaultNS: i18nDefaultNs,
-    ns: ["format", "translation"],
+    defaultNS: i18nextNsDefault,
+    ns: [i18nextNsTranslation],
     partialBundledLanguages: true,
     resources: {},
   });
 
-i18next.addResourceBundle(common, "format", commonFormatNamespace);
+for (const lang of supportedLanguages) {
+  i18next.addResourceBundle(lang, i18nextNsFormat, formatNsResources);
+}
 
 export default i18next;
