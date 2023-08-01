@@ -18,8 +18,8 @@ export const CustomerFiltersSchema = z.object({
 });
 
 export const CustomerSearchQuerySchema = z.object({
-  page: z.number().min(1).default(1),
-  size: z.number().min(1).default(10),
+  page: z.coerce.number().min(1).default(1),
+  size: z.coerce.number().min(1).default(10),
   filters: CustomerFiltersSchema.optional(),
 });
 export type TCustomerSearchQuery = z.infer<typeof CustomerSearchQuerySchema>;
