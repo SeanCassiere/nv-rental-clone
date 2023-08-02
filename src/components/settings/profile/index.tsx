@@ -229,8 +229,8 @@ function ProfileForm(props: {
           )}
         />
         <Separator className="mt-0.5" />
-        <Button type="submit" className="w-full lg:w-min">
-          Save
+        <Button type="submit" className="w-full lg:w-max">
+          Save profile details
         </Button>
       </form>
     </Form>
