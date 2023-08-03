@@ -7,10 +7,14 @@ import { buttonVariants } from "@/components/ui/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
+const currentYear = new Date().getFullYear();
+
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  fromYear = currentYear - 15,
+  toYear = currentYear + 7,
   ...props
 }: CalendarProps) {
   return (
@@ -18,21 +22,22 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       captionLayout="dropdown-buttons"
-      fromYear={1900}
-      toYear={2080}
+      fromYear={fromYear}
+      toYear={toYear}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
         caption: "flex justify-center pt-1 relative items-center",
         caption_label: "text-sm font-medium hidden",
-        caption_dropdowns: "flex gap-2",
+        caption_dropdowns: "flex gap-1.5 justify-center items-center",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
           "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
         ),
-        dropdown:
-          "text-sm border-0 p-1 m-0 h-8 w-20 rounded-sm border border-input ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        dropdown: cn(
+          "m-0 h-6 w-20 rounded border-0 border-input px-1 py-0.5 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+        ),
         dropdown_month: "relative inline-flex items-center [&>span]:hidden",
         dropdown_year: "relative inline-flex items-center [&>span]:hidden",
         nav_button_previous: "absolute left-1",
