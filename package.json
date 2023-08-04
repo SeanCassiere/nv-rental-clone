@@ -58,6 +58,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.4",
     "@tailwindcss/typography": "^0.5.9",
     "@types/jsurl2": "^2.1.1",
