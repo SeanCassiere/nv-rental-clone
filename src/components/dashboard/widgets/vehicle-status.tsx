@@ -63,7 +63,7 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
                 data={statusCounts.data || []}
                 cx="40%"
                 cy="50%"
-                innerRadius="60%"
+                innerRadius="65%"
                 outerRadius="90%"
                 fill="#8884d8"
                 paddingAngle={5}
@@ -91,7 +91,7 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
                 formatter={(value, entry) => {
                   return (
                     <Link
-                      className="mb-1 inline-block text-primary"
+                      className="mb-1 inline-block text-base text-primary/70"
                       to={searchFleetRoute.to}
                       search={() => ({
                         page: 1,
@@ -105,8 +105,7 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
                         },
                       })}
                     >
-                      {value.replace(/([A-Z])/g, " $1").trim()}{" "}
-                      &nbsp;-&nbsp;&nbsp;
+                      {value.replace(/([A-Z])/g, " $1").trim()}&nbsp;-&nbsp;
                       {String((entry.payload as any)?.total || "0")}
                     </Link>
                   );
@@ -144,7 +143,7 @@ function RenderActiveShape(props: any) {
         style={{
           fontSize: 18,
           fill: "var(--primary)",
-          fontWeight: 600,
+          fontWeight: 400,
         }}
       >
         {payload.name}
@@ -154,7 +153,7 @@ function RenderActiveShape(props: any) {
         y={cy - 20}
         dy={8}
         textAnchor="middle"
-        style={{ fontSize: 28, fill: "var(--primary)" }}
+        style={{ fontSize: 28, fill: "var(--primary)", fontWeight: 600 }}
       >
         {payload.total}
       </text>
@@ -173,7 +172,7 @@ function RenderActiveShape(props: any) {
         startAngle={startAngle}
         endAngle={endAngle}
         innerRadius={outerRadius}
-        outerRadius={outerRadius + 15}
+        outerRadius={outerRadius + 10}
         fill={fill}
         fillOpacity="0.5"
       />
