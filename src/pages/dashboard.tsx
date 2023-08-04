@@ -39,6 +39,9 @@ import { titleMaker } from "@/utils/title-maker";
 const DefaultDashboardContent = lazy(
   () => import("@/components/dashboard/default-content")
 );
+const V2DashboardContent = lazy(
+  () => import("@/components/dashboard/v2-content")
+);
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
@@ -60,12 +63,9 @@ function IndexPage() {
   const adminUrlsSplit = (adminUrlsFeature || "")
     .split(",")
     .map((url) => url.trim());
-  console.log(
-    "dashboard SHOW_ADMIN_URLS\n",
-    JSON.stringify(adminUrlsFeature),
-    "\n",
-    adminUrlsSplit
-  );
+
+  const showV2Dashboard = adminUrlsSplit.includes("dashboard-v2");
+  const dashboardVersion = showV2Dashboard ? "v2" : "v1";
 
   const handleSetShowWidgetPickerModal = useCallback(
     (show: boolean) => {
@@ -131,12 +131,28 @@ function IndexPage() {
           </div>
         }
       >
-        <DefaultDashboardContent
-          locations={currentLocationIds}
-          statisticsQuery={statistics}
-          showWidgetsPicker={showWidgetPickerModal}
-          onShowWidgetPicker={handleSetShowWidgetPickerModal}
-        />
+        {dashboardVersion === "v1" && (
+          <DefaultDashboardContent
+            locations={currentLocationIds}
+            statisticsQuery={statistics}
+            showWidgetsPicker={showWidgetPickerModal}
+            onShowWidgetPicker={handleSetShowWidgetPickerModal}
+          />
+        )}
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="mx-auto mb-4 mt-2.5 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mb-2 sm:px-4 sm:pb-4">
+            <Skeleton className="min-h-[400px] w-full" />
+          </div>
+        }
+      >
+        {dashboardVersion === "v2" && (
+          <V2DashboardContent
+            locations={currentLocationIds}
+            statisticsQuery={statistics}
+          />
+        )}
       </Suspense>
     </ProtectorShield>
   );
