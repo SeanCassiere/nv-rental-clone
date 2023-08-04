@@ -65,7 +65,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
     <WidgetSkeleton />
   ) : (
     <ResponsiveContainer className="min-h-[250px]">
-      <PieChart margin={{ top: 0, left: 25, right: 0, bottom: 0 }}>
+      <PieChart margin={{ top: 10, left: 0, right: 0, bottom: 0 }}>
         <Pie
           activeIndex={activeIdx}
           activeShape={RenderActiveShape}
