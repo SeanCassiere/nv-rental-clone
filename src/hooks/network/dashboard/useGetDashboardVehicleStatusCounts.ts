@@ -31,6 +31,7 @@ export function useGetDashboardVehicleStatusCounts({
     },
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
+    keepPreviousData: true,
   });
   return query;
 }
