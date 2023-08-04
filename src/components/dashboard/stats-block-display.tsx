@@ -25,7 +25,7 @@ const DashboardStatsBlock = ({
 }) => {
   return (
     <div className="@container">
-      <ul className="grid grid-cols-2 gap-4 @xl:grid-cols-3 @3xl:grid-cols-4 @5xl:grid-cols-6">
+      <ul className="grid grid-cols-2 gap-4 @xl:grid-cols-3 @3xl:grid-cols-4 @5xl:grid-cols-6 [&>li]:h-full">
         <li>
           <StatBlock
             title="Reservation"
@@ -141,7 +141,7 @@ const StatBlock = ({
   linkProps: LinkPropsOptions;
 }) => {
   return (
-    <Card>
+    <Card className="flex h-full flex-col justify-between">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium sm:text-base">
           {title}
