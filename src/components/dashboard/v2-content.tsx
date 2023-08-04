@@ -67,7 +67,7 @@ function HeroBlock({
 
   const [statisticsTab, setStatisticsTab] = React.useState("today");
   const [chartsTab, setChartsTab] = React.useState(
-    canViewSalesStatus ? "sales-performance" : "fleet-status"
+    !canViewVehicleStatus ? "sales-performance" : "fleet-status"
   );
 
   const canSeeCharts = canViewVehicleStatus || canViewSalesStatus;
