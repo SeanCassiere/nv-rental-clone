@@ -1,24 +1,10 @@
-import { useCallback, useMemo, useState } from "react";
+import { Suspense, lazy, useCallback, useState } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/router";
-import {
-  LockIcon,
-  UnlockIcon,
-  SettingsIcon,
-  PlusCircle,
-  CheckIcon,
-} from "lucide-react";
+import { PlusCircle, CheckIcon } from "lucide-react";
 
 import ProtectorShield from "@/components/protector-shield";
-import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
-import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
-import WidgetPickerContent from "@/components/dashboard/widget-picker-content";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
 import {
   Command,
   CommandInput,
@@ -29,24 +15,19 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import {
-  Dialog,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogContent,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { indexRoute } from "@/routes";
 
 import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
-import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
-import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-
-import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
+import { useFeature } from "@/hooks/internal/useFeature";
 
 import type { fetchLocationsList } from "@/api/locations";
 
@@ -55,9 +36,15 @@ import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
 
+const DefaultDashboardContent = lazy(
+  () => import("@/components/dashboard/default-content")
+);
+const V2DashboardContent = lazy(
+  () => import("@/components/dashboard/v2-content")
+);
+
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
-  const [isWidgetsLocked, setIsWidgetsLocked] = useState(true);
 
   const [currentLocationIds, setCurrentLocationIds] = useState<string[]>([]);
 
@@ -72,6 +59,14 @@ function IndexPage() {
   const locationsList = useGetLocationsList({ locationIsActive: true });
   const locations = locationsList.data?.data ?? [];
 
+  const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS");
+  const adminUrlsSplit = (adminUrlsFeature || "")
+    .split(",")
+    .map((url) => url.trim());
+
+  const showV2Dashboard = adminUrlsSplit.includes("dashboard-v2");
+  const dashboardVersion = showV2Dashboard ? "v2" : "v1";
+
   const handleSetShowWidgetPickerModal = useCallback(
     (show: boolean) => {
       navigate({
@@ -82,28 +77,10 @@ function IndexPage() {
     [navigate]
   );
 
-  const widgetList = useGetDashboardWidgetList();
-
-  const widgets = useMemo(() => {
-    if (widgetList.data && Array.isArray(widgetList.data)) {
-      return widgetList.data;
-    }
-    return [];
-  }, [widgetList.data]);
-
   const statistics = useGetDashboardStats({
     locationIds: currentLocationIds,
     clientDate: new Date(),
   });
-
-  const saveDashboardWidgetsMutation = useSaveDashboardWidgetList();
-
-  const handleWidgetSortingEnd = useCallback(
-    (widgets: DashboardWidgetItemParsed[]) => {
-      saveDashboardWidgetsMutation.mutate({ widgets });
-    },
-    [saveDashboardWidgetsMutation]
-  );
 
   useDocumentTitle(titleMaker("Dashboard"));
 
@@ -111,7 +88,7 @@ function IndexPage() {
     <ProtectorShield>
       <section
         className={cn(
-          "mx-auto mb-4 mt-6 flex max-w-full flex-col gap-2  px-2 pt-1.5 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4"
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:px-4 sm:pb-2"
         )}
       >
         <div
@@ -145,59 +122,38 @@ function IndexPage() {
         <p className={cn("text-base text-primary/80")}>
           Jump into what's going on with your fleet.
         </p>
-        <Separator className="mb-4 mt-3.5" />
-        <DashboardStatsBlock statistics={statistics.data} />
-        <div className="mb-2 mt-3.5 flex space-x-2">
-          <Button
-            size="sm"
-            variant={isWidgetsLocked ? "outline" : "secondary"}
-            onClick={() => setIsWidgetsLocked((prev) => !prev)}
-          >
-            {isWidgetsLocked ? (
-              <LockIcon className="h-5 w-5 sm:h-4 sm:w-4" />
-            ) : (
-              <UnlockIcon className="h-5 w-5 sm:h-4 sm:w-4" />
-            )}
-            <span className="sr-only">
-              {isWidgetsLocked ? "Locked widgets" : "Unlocked widgets"}
-            </span>
-          </Button>
-
-          <Dialog
-            open={showWidgetPickerModal}
-            onOpenChange={handleSetShowWidgetPickerModal}
-          >
-            <DialogTrigger asChild>
-              <Button
-                size="sm"
-                variant={!showWidgetPickerModal ? "outline" : "secondary"}
-              >
-                <SettingsIcon className="h-5 w-5 sm:h-4 sm:w-4" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Customize widgets</DialogTitle>
-                <DialogDescription>
-                  Select and order the widgets you want to see on your
-                  dashboard.
-                </DialogDescription>
-              </DialogHeader>
-              <WidgetPickerContent
-                onModalStateChange={handleSetShowWidgetPickerModal}
-                onWidgetSave={handleWidgetSortingEnd}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-        <DashboardDndWidgetGrid
-          // key={widgetIds.join(",")}
-          widgets={widgets}
-          selectedLocationIds={currentLocationIds}
-          onWidgetSortingEnd={handleWidgetSortingEnd}
-          isLocked={isWidgetsLocked}
-        />
+        <Separator className="mt-3.5" />
       </section>
+      <Suspense
+        fallback={
+          <div className="mx-auto mb-4 mt-2.5 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mb-2 sm:px-4 sm:pb-4">
+            <Skeleton className="min-h-[400px] w-full" />
+          </div>
+        }
+      >
+        {dashboardVersion === "v1" && (
+          <DefaultDashboardContent
+            locations={currentLocationIds}
+            statisticsQuery={statistics}
+            showWidgetsPicker={showWidgetPickerModal}
+            onShowWidgetPicker={handleSetShowWidgetPickerModal}
+          />
+        )}
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="mx-auto mb-4 mt-2.5 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mb-2 sm:px-4 sm:pb-4">
+            <Skeleton className="min-h-[400px] w-full" />
+          </div>
+        }
+      >
+        {dashboardVersion === "v2" && (
+          <V2DashboardContent
+            locations={currentLocationIds}
+            statisticsQuery={statistics}
+          />
+        )}
+      </Suspense>
     </ProtectorShield>
   );
 }

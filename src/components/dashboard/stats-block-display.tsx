@@ -24,106 +24,108 @@ const DashboardStatsBlock = ({
   statistics: TDashboardStats | undefined;
 }) => {
   return (
-    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
-      <li>
-        <StatBlock
-          title="Reservation"
-          icon={CreditCardIcon}
-          value={Number(statistics?.todaysReservationCount || 0).toString()}
-          linkProps={{
-            to: searchReservationsRoute.to,
-            search: () => ({
-              page: 1,
-              size: 10,
-              filters: {
-                Statuses: ["2"],
-                CreatedDateFrom: localDateToQueryYearMonthDay(new Date()),
-                CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
-              },
-            }),
-            preload: "intent",
-          }}
-        />
-      </li>
-      <li>
-        <StatBlock
-          title="Return"
-          icon={ArrowDownLeftIcon}
-          value={Number(statistics?.todaysArrivalsCount || 0).toString()}
-          linkProps={{
-            to: searchAgreementsRoute.to,
-            search: () => ({
-              page: 1,
-              size: 10,
-              filters: {
-                EndDate: localDateToQueryYearMonthDay(new Date()),
-                Statuses: ["2"],
-                IsSearchOverdues: "false",
-              },
-            }),
-            preload: "intent",
-          }}
-        />
-      </li>
-      <li>
-        <StatBlock
-          title="On rent"
-          icon={CarIcon}
-          value={Number(statistics?.openAgreement || 0).toString()}
-          linkProps={{
-            to: searchAgreementsRoute.to,
-            search: () => ({
-              page: 1,
-              size: 10,
-              filters: { Statuses: ["2"] },
-            }),
-            preload: "intent",
-          }}
-        />
-      </li>
-      <li>
-        <StatBlock
-          title="Overdue"
-          icon={CreditCardIcon}
-          value={Number(statistics?.overDues || 0).toString()}
-          linkProps={{
-            to: searchAgreementsRoute.to,
-            search: (search) => ({
-              page: 1,
-              size: 10,
-              filters: { Statuses: ["2"], IsSearchOverdues: "true" },
-            }),
-            preload: "intent",
-          }}
-        />
-      </li>
-      <li>
-        <StatBlock
-          title="Pending payment"
-          icon={BanknoteIcon}
-          value={Number(statistics?.pendingPayment || 0).toString()}
-          linkProps={{
-            to: searchAgreementsRoute.to,
-            search: () => ({
-              page: 1,
-              size: 10,
-              filters: { Statuses: ["5"] },
-            }),
-            preload: "intent",
-          }}
-        />
-      </li>
-      <li>
-        <StatBlock
-          title="Service alert"
-          icon={BellIcon}
-          value={Number(statistics?.serviceAlerts || 0).toString()}
-          linkProps={{
-            to: indexRoute.id,
-          }}
-        />
-      </li>
-    </ul>
+    <div className="@container">
+      <ul className="grid grid-cols-2 gap-4 @xl:grid-cols-3 @3xl:grid-cols-4 @5xl:grid-cols-6 [&>li]:h-full">
+        <li>
+          <StatBlock
+            title="Reservation"
+            icon={CreditCardIcon}
+            value={Number(statistics?.todaysReservationCount || 0).toString()}
+            linkProps={{
+              to: searchReservationsRoute.to,
+              search: () => ({
+                page: 1,
+                size: 10,
+                filters: {
+                  Statuses: ["2"],
+                  CreatedDateFrom: localDateToQueryYearMonthDay(new Date()),
+                  CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
+                },
+              }),
+              preload: "intent",
+            }}
+          />
+        </li>
+        <li>
+          <StatBlock
+            title="Return"
+            icon={ArrowDownLeftIcon}
+            value={Number(statistics?.todaysArrivalsCount || 0).toString()}
+            linkProps={{
+              to: searchAgreementsRoute.to,
+              search: () => ({
+                page: 1,
+                size: 10,
+                filters: {
+                  EndDate: localDateToQueryYearMonthDay(new Date()),
+                  Statuses: ["2"],
+                  IsSearchOverdues: "false",
+                },
+              }),
+              preload: "intent",
+            }}
+          />
+        </li>
+        <li>
+          <StatBlock
+            title="On rent"
+            icon={CarIcon}
+            value={Number(statistics?.openAgreement || 0).toString()}
+            linkProps={{
+              to: searchAgreementsRoute.to,
+              search: () => ({
+                page: 1,
+                size: 10,
+                filters: { Statuses: ["2"] },
+              }),
+              preload: "intent",
+            }}
+          />
+        </li>
+        <li>
+          <StatBlock
+            title="Overdue"
+            icon={CreditCardIcon}
+            value={Number(statistics?.overDues || 0).toString()}
+            linkProps={{
+              to: searchAgreementsRoute.to,
+              search: (search) => ({
+                page: 1,
+                size: 10,
+                filters: { Statuses: ["2"], IsSearchOverdues: "true" },
+              }),
+              preload: "intent",
+            }}
+          />
+        </li>
+        <li>
+          <StatBlock
+            title="Pending payment"
+            icon={BanknoteIcon}
+            value={Number(statistics?.pendingPayment || 0).toString()}
+            linkProps={{
+              to: searchAgreementsRoute.to,
+              search: () => ({
+                page: 1,
+                size: 10,
+                filters: { Statuses: ["5"] },
+              }),
+              preload: "intent",
+            }}
+          />
+        </li>
+        <li>
+          <StatBlock
+            title="Service alert"
+            icon={BellIcon}
+            value={Number(statistics?.serviceAlerts || 0).toString()}
+            linkProps={{
+              to: indexRoute.id,
+            }}
+          />
+        </li>
+      </ul>
+    </div>
   );
 };
 
@@ -139,7 +141,7 @@ const StatBlock = ({
   linkProps: LinkPropsOptions;
 }) => {
   return (
-    <Card>
+    <Card className="flex h-full flex-col justify-between">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium sm:text-base">
           {title}

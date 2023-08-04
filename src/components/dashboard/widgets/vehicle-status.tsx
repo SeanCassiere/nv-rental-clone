@@ -29,6 +29,21 @@ const PIE_CHART_COLORS = [
 ];
 
 const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
+  return (
+    <>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base font-medium">Fleet status</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <VehicleStatusPieChart locations={locations} />
+      </CardContent>
+    </>
+  );
+};
+
+export default VehicleStatusWidget;
+
+export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
   const [activeIdx, setActiveIdx] = React.useState<number | undefined>(
     undefined
   );
@@ -46,80 +61,67 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
     return status?.id || 0;
   };
 
-  return (
-    <>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">Fleet status</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {statusCounts.status === "loading" ? (
-          <WidgetSkeleton />
-        ) : (
-          <ResponsiveContainer className="min-h-[300px]">
-            <PieChart margin={{ top: 0, left: 25, right: 0, bottom: 0 }}>
-              <Pie
-                activeIndex={activeIdx}
-                activeShape={RenderActiveShape}
-                data={statusCounts.data || []}
-                cx="40%"
-                cy="50%"
-                innerRadius="65%"
-                outerRadius="90%"
-                fill="#8884d8"
-                paddingAngle={5}
-                dataKey="total"
-                onMouseEnter={(_, idx) => setActiveIdx(idx)}
-                onMouseLeave={() => setActiveIdx(undefined)}
+  return statusCounts.status === "loading" ? (
+    <WidgetSkeleton />
+  ) : (
+    <ResponsiveContainer className="min-h-[250px]">
+      <PieChart margin={{ top: 10, left: 35, right: 0, bottom: 0 }}>
+        <Pie
+          activeIndex={activeIdx}
+          activeShape={RenderActiveShape}
+          data={statusCounts.data || []}
+          cx="30%"
+          cy="50%"
+          innerRadius="65%"
+          outerRadius="90%"
+          fill="#8884d8"
+          paddingAngle={5}
+          dataKey="total"
+          onMouseEnter={(_, idx) => setActiveIdx(idx)}
+          onMouseLeave={() => setActiveIdx(undefined)}
+        >
+          {[...(statusCounts.data ? statusCounts.data : [])].map((_, idx) => (
+            <Cell
+              key={`pie-cell-${idx}`}
+              fill={PIE_CHART_COLORS[idx % PIE_CHART_COLORS.length]}
+            />
+          ))}
+        </Pie>
+        <Legend
+          iconType="circle"
+          verticalAlign="middle"
+          layout="vertical"
+          align="right"
+          wrapperStyle={{
+            marginRight: "2%",
+          }}
+          formatter={(value, entry) => {
+            return (
+              <Link
+                className="mb-1 inline-block text-base text-primary/70"
+                to={searchFleetRoute.to}
+                search={() => ({
+                  page: 1,
+                  size: 10,
+                  filters: {
+                    Active: "true",
+                    VehicleStatus: getStatusIdByName(value).toString(),
+                    ...(vehicleTypeId > 0
+                      ? { VehicleTypeId: String(vehicleTypeId) }
+                      : {}),
+                  },
+                })}
               >
-                {[...(statusCounts.data ? statusCounts.data : [])].map(
-                  (_, idx) => (
-                    <Cell
-                      key={`pie-cell-${idx}`}
-                      fill={PIE_CHART_COLORS[idx % PIE_CHART_COLORS.length]}
-                    />
-                  )
-                )}
-              </Pie>
-              <Legend
-                iconType="circle"
-                verticalAlign="middle"
-                layout="vertical"
-                align="right"
-                wrapperStyle={{
-                  marginRight: "2%",
-                }}
-                formatter={(value, entry) => {
-                  return (
-                    <Link
-                      className="mb-1 inline-block text-base text-primary/70"
-                      to={searchFleetRoute.to}
-                      search={() => ({
-                        page: 1,
-                        size: 10,
-                        filters: {
-                          Active: "true",
-                          VehicleStatus: getStatusIdByName(value).toString(),
-                          ...(vehicleTypeId > 0
-                            ? { VehicleTypeId: String(vehicleTypeId) }
-                            : {}),
-                        },
-                      })}
-                    >
-                      {value.replace(/([A-Z])/g, " $1").trim()}&nbsp;-&nbsp;
-                      {String((entry.payload as any)?.total || "0")}
-                    </Link>
-                  );
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        )}
-      </CardContent>
-    </>
+                {value.replace(/([A-Z])/g, " $1").trim()}&nbsp;-&nbsp;
+                {String((entry.payload as any)?.total || "0")}
+              </Link>
+            );
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
   );
-};
-
-export default VehicleStatusWidget;
+}
 
 function RenderActiveShape(props: any) {
   const {
