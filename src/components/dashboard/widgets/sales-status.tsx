@@ -47,8 +47,18 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
                   <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="monthName" stroke="#475569" />
-              <YAxis />
+              <XAxis dataKey="monthName" stroke="#888888" fontSize={13} />
+              <YAxis
+                stroke="#888888"
+                fontSize={13}
+                tickFormatter={(value) =>
+                  t("intlCurrency", {
+                    value: Number(value),
+                    ns: "format",
+                    digits: 0,
+                  })
+                }
+              />
               <Tooltip
                 formatter={(value) =>
                   t("intlCurrency", {
@@ -57,9 +67,13 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
                   })
                 }
               />
-              <CartesianGrid vertical={false} stroke="#e2e8f0" />
+              <CartesianGrid
+                vertical={false}
+                stroke="#e2e8f0"
+                strokeDasharray="3 3"
+              />
               <Area
-                name="Previous year"
+                name="Last year"
                 type="monotone"
                 dataKey="previousTotal"
                 strokeWidth={2}
@@ -78,6 +92,7 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
               />
               <Legend
                 iconType="circle"
+                iconSize={9}
                 verticalAlign="top"
                 layout="horizontal"
                 align="left"
@@ -85,10 +100,9 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
                 formatter={(value) => {
                   return (
                     <span className="mb-6 inline-block">
-                      <span className="inline-block min-w-[100px] text-primary/70">
+                      <span className="inline-block min-w-[80px] text-base text-primary/70">
                         {value}
                       </span>
-                      <span>&nbsp;&nbsp;&nbsp;</span>
                     </span>
                   );
                 }}
