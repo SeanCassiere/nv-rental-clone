@@ -28,7 +28,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
   return (
     <section
       className={cn(
-        "mx-auto mb-4 mt-2.5 grid max-w-full grid-cols-1 gap-5 px-2 pt-1.5 [grid-template-rows:masonry] [masonry-auto-flow:next] sm:mb-2 sm:px-4 sm:pb-4 lg:grid-cols-2"
+        "mx-auto mb-4 mt-2.5 grid max-w-full grid-cols-1 gap-3 px-2 pt-1.5 [grid-template-rows:masonry] [masonry-auto-flow:next] sm:mb-2 sm:px-4 sm:pb-4 lg:grid-cols-2 lg:gap-5"
       )}
     >
       {canViewRentalSummary || canViewVehicleStatus || canViewSalesStatus ? (
@@ -77,7 +77,7 @@ function HeroBlock({
   return (
     <Card
       className={cn(
-        bothTabs ? "col-span-2" : "col-span-1",
+        bothTabs ? "lg:col-span-2" : "col-span-1",
         "grid grid-cols-1 divide-y py-4 shadow-none lg:grid-cols-2 lg:divide-x lg:divide-y-0"
       )}
     >
