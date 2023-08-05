@@ -91,6 +91,7 @@ export const clientQKeys = {
   rootKey: "client",
   profile: () => [clientQKeys.rootKey, "profile"],
   features: () => [clientQKeys.rootKey, "features"],
+  screenSettings: () => [clientQKeys.rootKey, "screen-settings"],
 };
 
 export const userQKeys = {
