@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { agreementsRoute } from ".";
@@ -13,5 +13,6 @@ export const addAgreementRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("@/pages/add-agreement")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/add-agreement")),
 });

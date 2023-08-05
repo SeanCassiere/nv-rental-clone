@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { agreementsRoute } from ".";
@@ -76,7 +76,8 @@ export const viewAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  component: lazy(() => import("@/pages/view-agreement")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/view-agreement")),
 });
 
 export const editAgreementByIdRoute = new Route({
@@ -89,7 +90,8 @@ export const editAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("@/pages/edit-agreement")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/edit-agreement")),
 });
 
 export const checkinAgreementByIdRoute = new Route({
@@ -102,5 +104,6 @@ export const checkinAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("@/pages/checkin-agreement")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/checkin-agreement")),
 });

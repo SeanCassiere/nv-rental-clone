@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { customersRoute } from ".";
 import { queryClient } from "@/tanstack-query-config";
@@ -14,7 +14,6 @@ import { CustomerSearchQuerySchema } from "@/schemas/customer";
 export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "/",
-  component: lazy(() => import("@/pages/search-customers")),
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
@@ -75,4 +74,6 @@ export const searchCustomersRoute = new Route({
     }
     return {};
   },
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/search-customers")),
 });

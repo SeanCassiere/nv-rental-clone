@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { settingsRoute } from ".";
@@ -18,5 +18,6 @@ export const destinationSettingsRoute = new Route({
         tab: z.string().optional(),
       })
       .parse(search),
-  component: lazy(() => import("@/pages/settings-destination")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/settings-destination")),
 });
