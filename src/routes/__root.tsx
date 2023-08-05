@@ -7,7 +7,11 @@ import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import { queryClient } from "@/tanstack-query-config";
 
-import { fetchClientProfile, fetchClientFeatures } from "@/api/clients";
+import {
+  fetchClientProfile,
+  fetchClientFeatures,
+  fetchClientScreenSettings,
+} from "@/api/clients";
 import { fetchUserPermissions } from "@/api/users";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -41,6 +45,18 @@ export const rootRoute = routerContext.createRootRoute({
           queryKey: clientQKeys.features(),
           queryFn: async () =>
             fetchClientFeatures({
+              clientId: auth.profile.navotar_clientid,
+              accessToken: auth.access_token,
+            }),
+          staleTime: 1000 * 60 * 5, // 5 minutes
+        })
+      );
+
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: clientQKeys.screenSettings(),
+          queryFn: async () =>
+            fetchClientScreenSettings({
               clientId: auth.profile.navotar_clientid,
               accessToken: auth.access_token,
             }),
