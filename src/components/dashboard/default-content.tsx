@@ -1,5 +1,4 @@
 import React from "react";
-import type { UseQueryResult } from "@tanstack/react-query";
 import { LockIcon, UnlockIcon, SettingsIcon } from "lucide-react";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
@@ -17,11 +16,9 @@ import {
 
 import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
+import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
-import type {
-  DashboardWidgetItemParsed,
-  TDashboardStats,
-} from "@/schemas/dashboard";
+import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import { cn } from "@/utils";
 
@@ -29,18 +26,17 @@ interface DefaultDashboardContentProps {
   locations: string[];
   showWidgetsPicker: boolean;
   onShowWidgetPicker: (show: boolean) => void;
-  statisticsQuery: UseQueryResult<TDashboardStats>;
 }
 
 const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
-  const {
-    locations,
-    showWidgetsPicker,
-    onShowWidgetPicker,
-    statisticsQuery: statistics,
-  } = props;
+  const { locations, showWidgetsPicker, onShowWidgetPicker } = props;
 
   const [isWidgetsLocked, setIsWidgetsLocked] = React.useState(true);
+
+  const statistics = useGetDashboardStats({
+    locationIds: locations,
+    clientDate: new Date(),
+  });
 
   const widgetList = useGetDashboardWidgetList();
   const widgets = React.useMemo(() => {

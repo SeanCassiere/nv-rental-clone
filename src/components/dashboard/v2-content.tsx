@@ -9,17 +9,16 @@ import { VehicleStatusPieChart } from "@/components/dashboard/widgets/vehicle-st
 
 import { usePermission } from "@/hooks/internal/usePermission";
 
-import type { TDashboardStats } from "@/schemas/dashboard";
+import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
 import { cn } from "@/utils";
 
 interface V2DashboardContentProps {
   locations: string[];
-  statisticsQuery: UseQueryResult<TDashboardStats>;
 }
 
 export default function V2DashboardContent(props: V2DashboardContentProps) {
-  const { locations, statisticsQuery: statistics } = props;
+  const { locations } = props;
 
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
@@ -32,7 +31,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
       )}
     >
       {canViewRentalSummary || canViewVehicleStatus || canViewSalesStatus ? (
-        <HeroBlock locations={locations} statistics={statistics} />
+        <HeroBlock locations={locations} />
       ) : null}
       <Card className="shadow-none">
         <CardHeader className="pb-2">
@@ -54,13 +53,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
   );
 }
 
-function HeroBlock({
-  locations,
-  statistics,
-}: {
-  locations: string[];
-  statistics: V2DashboardContentProps["statisticsQuery"];
-}) {
+function HeroBlock({ locations }: { locations: string[] }) {
   const canViewRentalSummary = usePermission("VIEW_RENTAL_SUMMARY?");
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
@@ -73,6 +66,11 @@ function HeroBlock({
   const canSeeCharts = canViewVehicleStatus || canViewSalesStatus;
 
   const bothTabs = canViewRentalSummary && canSeeCharts;
+
+  const statistics = useGetDashboardStats({
+    locationIds: locations,
+    clientDate: new Date(),
+  });
 
   return (
     <Card

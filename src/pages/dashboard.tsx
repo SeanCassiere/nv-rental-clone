@@ -24,7 +24,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { indexRoute } from "@/routes";
 
-import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useFeature } from "@/hooks/internal/useFeature";
@@ -76,11 +75,6 @@ function IndexPage() {
     },
     [navigate]
   );
-
-  const statistics = useGetDashboardStats({
-    locationIds: currentLocationIds,
-    clientDate: new Date(),
-  });
 
   useDocumentTitle(titleMaker("Dashboard"));
 
@@ -134,7 +128,6 @@ function IndexPage() {
         {dashboardVersion === "v1" && (
           <DefaultDashboardContent
             locations={currentLocationIds}
-            statisticsQuery={statistics}
             showWidgetsPicker={showWidgetPickerModal}
             onShowWidgetPicker={handleSetShowWidgetPickerModal}
           />
@@ -148,10 +141,7 @@ function IndexPage() {
         }
       >
         {dashboardVersion === "v2" && (
-          <V2DashboardContent
-            locations={currentLocationIds}
-            statisticsQuery={statistics}
-          />
+          <V2DashboardContent locations={currentLocationIds} />
         )}
       </Suspense>
     </ProtectorShield>
