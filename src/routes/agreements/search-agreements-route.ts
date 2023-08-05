@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { agreementsRoute } from ".";
 import { queryClient } from "@/tanstack-query-config";
@@ -78,5 +78,6 @@ export const searchAgreementsRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("@/pages/search-agreements")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/search-agreements")),
 });

@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { rootRoute } from "./__root";
 import { queryClient } from "@/tanstack-query-config";
@@ -73,5 +73,6 @@ export const indexRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("@/pages/dashboard")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/dashboard")),
 });

@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { customersRoute } from ".";
@@ -71,7 +71,8 @@ export const viewCustomerByIdRoute = new Route({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  component: lazy(() => import("@/pages/view-customer")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/view-customer")),
 });
 
 export const editCustomerByIdRoute = new Route({

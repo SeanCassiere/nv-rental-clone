@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { reservationsRoute } from ".";
@@ -76,7 +76,8 @@ export const viewReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  component: lazy(() => import("@/pages/view-reservation")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/view-reservation")),
 });
 
 export const editReservationByIdRoute = new Route({
@@ -89,5 +90,6 @@ export const editReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazy(() => import("@/pages/edit-reservation")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/edit-reservation")),
 });

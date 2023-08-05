@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { fleetRoute } from ".";
 import { queryClient } from "@/tanstack-query-config";
@@ -73,5 +73,6 @@ export const searchFleetRoute = new Route({
     }
     return {};
   },
-  component: lazy(() => import("@/pages/search-fleet")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/search-fleet")),
 });

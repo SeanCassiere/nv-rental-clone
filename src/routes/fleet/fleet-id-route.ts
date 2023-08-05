@@ -1,4 +1,4 @@
-import { lazy, Route } from "@tanstack/router";
+import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { fleetRoute } from ".";
@@ -77,8 +77,8 @@ export const viewFleetByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-
-  component: lazy(() => import("@/pages/view-fleet")),
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/view-fleet")),
 });
 
 export const editFleetByIdRoute = new Route({

@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { Outlet, RouterContext } from "@tanstack/router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import { HeaderLayout } from "@/components/header/header-layout";
+import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import { queryClient } from "@/tanstack-query-config";
 
@@ -67,7 +69,9 @@ export const rootRoute = routerContext.createRootRoute({
   component: () => {
     return (
       <HeaderLayout>
-        <Outlet />
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <Outlet />
+        </Suspense>
         {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
           <TanStackRouterDevtools position="bottom-right" />
         )}
