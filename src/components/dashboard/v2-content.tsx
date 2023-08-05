@@ -1,5 +1,5 @@
 import React from "react";
-import type { UseQueryResult } from "@tanstack/react-query";
+import add from "date-fns/add";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -8,18 +8,17 @@ import { SalesAreaChart } from "@/components/dashboard/widgets/sales-status";
 import { VehicleStatusPieChart } from "@/components/dashboard/widgets/vehicle-status";
 
 import { usePermission } from "@/hooks/internal/usePermission";
-
-import type { TDashboardStats } from "@/schemas/dashboard";
+import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
+import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
 import { cn } from "@/utils";
 
 interface V2DashboardContentProps {
   locations: string[];
-  statisticsQuery: UseQueryResult<TDashboardStats>;
 }
 
 export default function V2DashboardContent(props: V2DashboardContentProps) {
-  const { locations, statisticsQuery: statistics } = props;
+  const { locations } = props;
 
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
@@ -32,7 +31,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
       )}
     >
       {canViewRentalSummary || canViewVehicleStatus || canViewSalesStatus ? (
-        <HeroBlock locations={locations} statistics={statistics} />
+        <HeroBlock locations={locations} />
       ) : null}
       <Card className="shadow-none">
         <CardHeader className="pb-2">
@@ -54,13 +53,15 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
   );
 }
 
-function HeroBlock({
-  locations,
-  statistics,
-}: {
-  locations: string[];
-  statistics: V2DashboardContentProps["statisticsQuery"];
-}) {
+function HeroBlock({ locations }: { locations: string[] }) {
+  const tomorrowTabScreenSetting = useScreenSetting(
+    "Dashboard",
+    "RentalManagementSummary",
+    "Tomorrowtab"
+  );
+
+  const canViewTomorrowTab = tomorrowTabScreenSetting?.isVisible || false;
+
   const canViewRentalSummary = usePermission("VIEW_RENTAL_SUMMARY?");
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
@@ -73,6 +74,16 @@ function HeroBlock({
   const canSeeCharts = canViewVehicleStatus || canViewSalesStatus;
 
   const bothTabs = canViewRentalSummary && canSeeCharts;
+
+  const currentDate = new Date();
+
+  const statistics = useGetDashboardStats({
+    locationIds: locations,
+    clientDate:
+      statisticsTab === "tomorrow"
+        ? add(currentDate, { days: 1 })
+        : currentDate,
+  });
 
   return (
     <Card
@@ -92,9 +103,15 @@ function HeroBlock({
             <div className="h-10">
               <TabsList>
                 <TabsTrigger value="today">Today</TabsTrigger>
+                {canViewTomorrowTab && (
+                  <TabsTrigger value="tomorrow">Tomorrow</TabsTrigger>
+                )}
               </TabsList>
             </div>
             <TabsContent value="today">
+              <DashboardStatsBlock statistics={statistics.data} />
+            </TabsContent>
+            <TabsContent value="tomorrow">
               <DashboardStatsBlock statistics={statistics.data} />
             </TabsContent>
           </Tabs>

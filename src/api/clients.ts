@@ -1,6 +1,10 @@
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
-import { ClientProfileSchema, ClientFeatureListSchema } from "@/schemas/client";
+import {
+  ClientProfileSchema,
+  ClientFeatureListSchema,
+  ClientScreenSettingListSchema,
+} from "@/schemas/client";
 
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "@/utils/constants";
@@ -33,4 +37,12 @@ export const fetchClientFeatures = async (
       headers: { Authorization: `Bearer ${opts.accessToken}` },
     }
   ).then((res) => ClientFeatureListSchema.parse(res.data));
+};
+
+export const fetchClientScreenSettings = async (
+  opts: Omit<CommonAuthParams, "userId">
+) => {
+  return callV3Api(makeUrl(`/v3/clients/${opts.clientId}/screensettings`, {}), {
+    headers: { Authorization: `Bearer ${opts.accessToken}` },
+  }).then((res) => ClientScreenSettingListSchema.parse(res.data));
 };

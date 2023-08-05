@@ -1,3 +1,5 @@
+import { localDateToQueryYearMonthDay } from "@/utils/date";
+
 type Pagination = { page: number; pageSize: number };
 type Filters = Record<string, any>;
 type ReferenceId = string | number;
@@ -91,6 +93,7 @@ export const clientQKeys = {
   rootKey: "client",
   profile: () => [clientQKeys.rootKey, "profile"],
   features: () => [clientQKeys.rootKey, "features"],
+  screenSettings: () => [clientQKeys.rootKey, "screen-settings"],
 };
 
 export const userQKeys = {
@@ -103,7 +106,11 @@ export const userQKeys = {
 export const dashboardQKeys = {
   rootKey: "dashboard",
   widgets: () => [dashboardQKeys.rootKey, "widgets"],
-  stats: () => [dashboardQKeys.rootKey, "statistics"],
+  stats: (date: Date) => [
+    dashboardQKeys.rootKey,
+    "statistics",
+    localDateToQueryYearMonthDay(date),
+  ],
   messages: () => [dashboardQKeys.rootKey, "messages"],
   salesStatus: ({ locations }: { locations: string[] }) => [
     dashboardQKeys.rootKey,
