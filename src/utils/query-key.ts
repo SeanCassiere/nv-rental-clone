@@ -106,9 +106,10 @@ export const userQKeys = {
 export const dashboardQKeys = {
   rootKey: "dashboard",
   widgets: () => [dashboardQKeys.rootKey, "widgets"],
-  stats: (date: Date) => [
+  stats: (date: Date, locations: string[]) => [
     dashboardQKeys.rootKey,
     "statistics",
+    `locations-[${locations.join(",")}]`,
     localDateToQueryYearMonthDay(date),
   ],
   messages: () => [dashboardQKeys.rootKey, "messages"],
