@@ -1,5 +1,4 @@
 import React from "react";
-import type { UseQueryResult } from "@tanstack/react-query";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
