@@ -1,4 +1,5 @@
 import React from "react";
+import add from "date-fns/add";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -7,7 +8,7 @@ import { SalesAreaChart } from "@/components/dashboard/widgets/sales-status";
 import { VehicleStatusPieChart } from "@/components/dashboard/widgets/vehicle-status";
 
 import { usePermission } from "@/hooks/internal/usePermission";
-
+import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
 import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
 import { cn } from "@/utils";
@@ -53,6 +54,14 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
 }
 
 function HeroBlock({ locations }: { locations: string[] }) {
+  const tomorrowTabScreenSetting = useScreenSetting(
+    "Dashboard",
+    "RentalManagementSummary",
+    "Tomorrowtab"
+  );
+
+  const canViewTomorrowTab = tomorrowTabScreenSetting?.isVisible || false;
+
   const canViewRentalSummary = usePermission("VIEW_RENTAL_SUMMARY?");
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
@@ -66,9 +75,14 @@ function HeroBlock({ locations }: { locations: string[] }) {
 
   const bothTabs = canViewRentalSummary && canSeeCharts;
 
+  const currentDate = new Date();
+
   const statistics = useGetDashboardStats({
     locationIds: locations,
-    clientDate: new Date(),
+    clientDate:
+      statisticsTab === "tomorrow"
+        ? add(currentDate, { days: 1 })
+        : currentDate,
   });
 
   return (
@@ -89,9 +103,15 @@ function HeroBlock({ locations }: { locations: string[] }) {
             <div className="h-10">
               <TabsList>
                 <TabsTrigger value="today">Today</TabsTrigger>
+                {canViewTomorrowTab && (
+                  <TabsTrigger value="tomorrow">Tomorrow</TabsTrigger>
+                )}
               </TabsList>
             </div>
             <TabsContent value="today">
+              <DashboardStatsBlock statistics={statistics.data} />
+            </TabsContent>
+            <TabsContent value="tomorrow">
               <DashboardStatsBlock statistics={statistics.data} />
             </TabsContent>
           </Tabs>
