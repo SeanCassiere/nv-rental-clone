@@ -13,7 +13,7 @@ export function useGetDashboardStats({
 }) {
   const auth = useAuth();
   const query = useQuery({
-    queryKey: dashboardQKeys.stats(),
+    queryKey: dashboardQKeys.stats(clientDate),
     queryFn: async () => {
       return await fetchDashboardStats({
         clientId: auth.user?.profile.navotar_clientid || "",
