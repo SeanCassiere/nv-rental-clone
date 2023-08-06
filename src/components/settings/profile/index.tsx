@@ -1,4 +1,5 @@
 import React from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
@@ -24,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 
 import {
   UpdateUserSchema,
@@ -32,8 +34,14 @@ import {
   type UserLanguageItem,
 } from "@/schemas/user";
 
+import { usePermission } from "@/hooks/internal/usePermission";
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
+
+import { updateUserProfile } from "@/api/users";
+
+import { locationQKeys, userQKeys } from "@/utils/query-key";
 
 export default function SettingsProfileTab() {
   const userQuery = useGetUserProfile({
@@ -72,6 +80,12 @@ function ProfileForm(props: {
   languages: UserLanguageItem[];
 }) {
   const { user, languages } = props;
+  const auth = useAuthValues();
+  const queryClient = useQueryClient();
+
+  const { toast } = useToast();
+
+  const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
 
   const languagesList = languages.filter((item) => item.key);
 
@@ -94,12 +108,50 @@ function ProfileForm(props: {
     },
   });
 
+  const { mutate, isLoading } = useMutation({
+    mutationFn: updateUserProfile,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries(userQKeys.me());
+      queryClient.invalidateQueries(
+        userQKeys.permissions(variables.payload.userId)
+      );
+      queryClient.invalidateQueries(locationQKeys.all());
+
+      if (data.status >= 200 && data.status < 300) {
+        toast({
+          title: "Profile updated",
+          description: "Your profile has been updated successfully.",
+        });
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: "Please try again later.",
+          variant: "destructive",
+        });
+      }
+    },
+    onError: (err) => {
+      if (err instanceof Error) {
+        toast({
+          title: "Something went wrong",
+          description: err?.message || "Please try again later.",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const isDisabled = canViewAdminTab === false || isLoading;
+
   return (
     <Form {...form}>
       <form
         className="flex flex-col gap-5"
         onSubmit={form.handleSubmit(async (values) => {
-          console.log("update user", values);
+          mutate({
+            auth,
+            payload: { ...values, userId: auth.userId },
+          });
         })}
       >
         <FormField
@@ -126,7 +178,7 @@ function ProfileForm(props: {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} disabled={isDisabled} />
               </FormControl>
               <FormDescription>
                 The email address associated with your account.
@@ -143,7 +195,7 @@ function ProfileForm(props: {
               <FormItem className="w-full">
                 <FormLabel>First name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={isDisabled} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -156,7 +208,7 @@ function ProfileForm(props: {
               <FormItem className="w-full">
                 <FormLabel>Last name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={isDisabled} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -173,6 +225,7 @@ function ProfileForm(props: {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={isDisabled}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -201,7 +254,7 @@ function ProfileForm(props: {
                   <span className="text-xs text-primary/70">(optional)</span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={isDisabled} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -223,13 +276,14 @@ function ProfileForm(props: {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={isDisabled}
                 />
               </FormControl>
             </FormItem>
           )}
         />
         <Separator className="mt-0.5" />
-        <Button type="submit" className="w-full lg:w-max">
+        <Button type="submit" className="w-full lg:w-max" disabled={isDisabled}>
           Save profile details
         </Button>
       </form>
