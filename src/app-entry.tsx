@@ -13,6 +13,8 @@ import {
   stringifySearchFn,
   parseSearchFn,
 } from "@/tanstack-router-config";
+
+import { Toaster } from "@/components/ui/toaster";
 import "./i18next-config";
 
 export const router = new Router({
@@ -32,14 +34,17 @@ declare module "@tanstack/router" {
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider {...reactOidcContextConfig}>
-        <Suspense fallback={<p>root suspense loading...</p>}>
-          <RouterProvider router={router} defaultPreload="intent" />
-        </Suspense>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </AuthProvider>
-    </QueryClientProvider>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider {...reactOidcContextConfig}>
+          <Suspense fallback={<p>root suspense loading...</p>}>
+            <RouterProvider router={router} defaultPreload="intent" />
+          </Suspense>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </AuthProvider>
+      </QueryClientProvider>
+      <Toaster />
+    </>
   );
 };
 
