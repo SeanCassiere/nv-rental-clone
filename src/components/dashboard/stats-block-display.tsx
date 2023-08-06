@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { indexRoute } from "@/routes";
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
@@ -17,7 +18,6 @@ import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-rou
 import type { TDashboardStats } from "@/schemas/dashboard";
 
 import { localDateToQueryYearMonthDay } from "@/utils/date";
-import { Skeleton } from "../ui/skeleton";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;
