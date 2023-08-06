@@ -43,25 +43,33 @@ export const AppNavigation = () => {
       name: "Fleet",
       href: searchFleetRoute.to,
       current: matches(["/fleet", "/fleet/$vehicleId"]),
-      props: {},
+      props: {
+        search: () => ({ page: 1, size: 10 }),
+      },
     },
     {
       name: "Customers",
       href: searchCustomersRoute.to,
       current: matches(["/customers", "/customers/$customerId"]),
-      props: {},
+      props: {
+        search: () => ({ page: 1, size: 10 }),
+      },
     },
     {
       name: "Reservations",
       href: searchReservationsRoute.to,
       current: matches(["/reservations", "/reservations/$reservationId"]),
-      props: {},
+      props: {
+        search: () => ({ page: 1, size: 10 }),
+      },
     },
     {
       name: "Agreements",
       href: searchAgreementsRoute.to,
       current: matches(["/agreements", "/agreements/$agreementId"]),
-      props: {},
+      props: {
+        search: () => ({ page: 1, size: 10 }),
+      },
     },
     {
       name: "Reports",
