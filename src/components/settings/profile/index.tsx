@@ -87,7 +87,9 @@ function ProfileForm(props: {
 
   const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
 
-  const languagesList = languages.filter((item) => item.key);
+  const languagesList = languages
+    .filter((item) => item.key)
+    .sort((a, b) => a.key.localeCompare(b.key));
 
   const form = useForm<UpdateUserInput>({
     resolver: zodResolver(UpdateUserSchema),
