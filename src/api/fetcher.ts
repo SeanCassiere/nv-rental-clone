@@ -23,30 +23,34 @@ export function makeInitialApiData<T>(initialData: T) {
 
 export function makeUrl(
   endpoint: string,
-  params: Record<string, string | number | null | any[] | undefined>,
+  params: Record<string, string | number | null | any[] | undefined>
 ) {
-  const queryParams = new URLSearchParams();
+  const urlSearchParams = Object.entries(params).reduce((acc, [key, value]) => {
+    if (typeof value === "undefined") return acc;
 
-  for (const key of Object.entries(params)) {
-    const [keyName, value] = key;
-
-    if (typeof value !== "undefined") {
-      //
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          queryParams.append(keyName, `${item}`);
-        });
-      } else {
-        //
-        if (value !== "") {
-          queryParams.append(keyName, `${value}`);
-        }
-      }
+    if (typeof value === "string" && value !== "") {
+      acc.append(key, value);
     }
-  }
+
+    if (typeof value === "number") {
+      acc.append(key, `${value}`);
+    }
+
+    if (value === null) {
+      acc.append(key, "null");
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        acc.append(key, `${item}`);
+      });
+    }
+
+    return acc;
+  }, new URLSearchParams());
 
   const queryUrl = new URL(`${apiBaseUrl}${endpoint}`);
-  queryUrl.search = queryParams.toString();
+  queryUrl.search = urlSearchParams.toString();
 
   return queryUrl;
 }
