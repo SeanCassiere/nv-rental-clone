@@ -17,6 +17,12 @@ import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-rou
 import type { TDashboardStats } from "@/schemas/dashboard";
 
 import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { Skeleton } from "../ui/skeleton";
+
+function formatDisplayValue(value: number | null | undefined): string | null {
+  if (typeof value === "undefined") return null;
+  return Number(value ?? 0).toString();
+}
 
 const DashboardStatsBlock = ({
   statistics,
@@ -30,7 +36,7 @@ const DashboardStatsBlock = ({
           <StatBlock
             title="Reservation"
             icon={CreditCardIcon}
-            value={Number(statistics?.todaysReservationCount || 0).toString()}
+            value={formatDisplayValue(statistics?.todaysReservationCount)}
             linkProps={{
               to: searchReservationsRoute.to,
               search: () => ({
@@ -50,7 +56,7 @@ const DashboardStatsBlock = ({
           <StatBlock
             title="Return"
             icon={ArrowDownLeftIcon}
-            value={Number(statistics?.todaysArrivalsCount || 0).toString()}
+            value={formatDisplayValue(statistics?.todaysArrivalsCount)}
             linkProps={{
               to: searchAgreementsRoute.to,
               search: () => ({
@@ -70,7 +76,7 @@ const DashboardStatsBlock = ({
           <StatBlock
             title="On rent"
             icon={CarIcon}
-            value={Number(statistics?.openAgreement || 0).toString()}
+            value={formatDisplayValue(statistics?.openAgreement)}
             linkProps={{
               to: searchAgreementsRoute.to,
               search: () => ({
@@ -86,10 +92,10 @@ const DashboardStatsBlock = ({
           <StatBlock
             title="Overdue"
             icon={CreditCardIcon}
-            value={Number(statistics?.overDues || 0).toString()}
+            value={formatDisplayValue(statistics?.overDues)}
             linkProps={{
               to: searchAgreementsRoute.to,
-              search: (search) => ({
+              search: () => ({
                 page: 1,
                 size: 10,
                 filters: { Statuses: ["2"], IsSearchOverdues: "true" },
@@ -102,7 +108,7 @@ const DashboardStatsBlock = ({
           <StatBlock
             title="Pending payment"
             icon={BanknoteIcon}
-            value={Number(statistics?.pendingPayment || 0).toString()}
+            value={formatDisplayValue(statistics?.pendingPayment)}
             linkProps={{
               to: searchAgreementsRoute.to,
               search: () => ({
@@ -118,7 +124,7 @@ const DashboardStatsBlock = ({
           <StatBlock
             title="Service alert"
             icon={BellIcon}
-            value={Number(statistics?.serviceAlerts || 0).toString()}
+            value={formatDisplayValue(statistics?.serviceAlerts)}
             linkProps={{
               to: indexRoute.id,
             }}
@@ -136,7 +142,7 @@ const StatBlock = ({
   linkProps,
 }: {
   title: string;
-  value: string;
+  value: string | null;
   icon: LucideIcon;
   linkProps: LinkPropsOptions;
 }) => {
@@ -154,7 +160,7 @@ const StatBlock = ({
           className="block text-2xl font-bold tabular-nums underline-offset-4 focus-within:underline hover:underline"
           {...(linkProps as any)}
         >
-          {value}
+          {value ?? <Skeleton className="h-8 w-full" />}
         </Link>
       </CardContent>
     </Card>
