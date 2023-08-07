@@ -37,10 +37,11 @@ export const searchReservationsRoute = new Route({
           queryKey: columnsKey,
           queryFn: () =>
             fetchModuleColumnsModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "reservations",
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                module: "reservation",
+              },
             }),
         })
       );

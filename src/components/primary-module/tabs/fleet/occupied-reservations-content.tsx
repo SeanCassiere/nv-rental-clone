@@ -59,52 +59,55 @@ const FleetOccupiedReservationsTab = (
   const columnDefs = useMemo(() => {
     const columns: ColumnDef<TReservationListItemParsed>[] = [];
 
-    columnsData.data.sort(sortColOrderByOrderIndex).forEach((column) => {
-      if (acceptedColumns.includes(column.columnHeader) === false) return;
+    (columnsData.data.status === 200 ? columnsData.data.body : [])
+      .sort(sortColOrderByOrderIndex)
+      .forEach((column) => {
+        if (acceptedColumns.includes(column.columnHeader) === false) return;
 
-      columns.push(
-        columnHelper.accessor(column.columnHeader as any, {
-          id: column.columnHeader,
-          header: ({ column: columnChild }) => (
-            <DataTableColumnHeader
-              column={columnChild}
-              title={column.columnHeaderDescription ?? ""}
-            />
-          ),
-          cell: (item) => {
-            const value = item.getValue();
-            if (column.columnHeader === "ReservationNumber") {
-              const reservationId = item.table.getRow(item.row.id).original.id;
-              return (
-                <Link
-                  to={viewReservationByIdRoute.to}
-                  params={{ reservationId: String(reservationId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value as any}
-                </Link>
-              );
-            }
-            if (column.columnHeader === "ReservationStatusName") {
-              return <Badge variant="outline">{String(value)}</Badge>;
-            }
+        columns.push(
+          columnHelper.accessor(column.columnHeader as any, {
+            id: column.columnHeader,
+            header: ({ column: columnChild }) => (
+              <DataTableColumnHeader
+                column={columnChild}
+                title={column.columnHeaderDescription ?? ""}
+              />
+            ),
+            cell: (item) => {
+              const value = item.getValue();
+              if (column.columnHeader === "ReservationNumber") {
+                const reservationId = item.table.getRow(item.row.id).original
+                  .id;
+                return (
+                  <Link
+                    to={viewReservationByIdRoute.to}
+                    params={{ reservationId: String(reservationId) }}
+                    search={() => ({ tab: "summary" })}
+                    className="font-semibold text-slate-800"
+                    preload="intent"
+                  >
+                    {value as any}
+                  </Link>
+                );
+              }
+              if (column.columnHeader === "ReservationStatusName") {
+                return <Badge variant="outline">{String(value)}</Badge>;
+              }
 
-            if (ReservationDateTimeColumns.includes(column.columnHeader)) {
-              return t("intlDateTime", {
-                value: new Date(value as any),
-                ns: "format",
-              });
-            }
+              if (ReservationDateTimeColumns.includes(column.columnHeader)) {
+                return t("intlDateTime", {
+                  value: new Date(value as any),
+                  ns: "format",
+                });
+              }
 
-            return value;
-          },
-          enableHiding: false,
-          enableSorting: false,
-        })
-      );
-    });
+              return value;
+            },
+            enableHiding: false,
+            enableSorting: false,
+          })
+        );
+      });
 
     return columns;
   }, [columnsData.data, t]);

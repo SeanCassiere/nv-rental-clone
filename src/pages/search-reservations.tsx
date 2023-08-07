@@ -89,60 +89,66 @@ function ReservationsSearchPage() {
 
   const columnDefs = useMemo(
     () =>
-      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
-        columnHelper.accessor(column.columnHeader as any, {
-          id: column.columnHeader,
-          meta: {
-            columnName: column.columnHeaderDescription ?? undefined,
-          },
-          header: ({ column: columnChild }) => (
-            <PrimaryModuleTableColumnHeader
-              column={columnChild}
-              title={column.columnHeaderDescription ?? ""}
-            />
-          ),
-          cell: (item) => {
-            const value = item.getValue();
-            if (column.columnHeader === "ReservationNumber") {
-              const reservationId = item.table.getRow(item.row.id).original.id;
-              return (
-                <PrimaryModuleTableCellWrap>
-                  <Link
-                    to={viewReservationByIdRoute.to}
-                    params={{ reservationId: String(reservationId) }}
-                    search={() => ({ tab: "summary" })}
-                    className={cn(buttonVariants({ variant: "link" }), "p-0")}
-                    preload="intent"
-                  >
-                    {value}
-                  </Link>
-                </PrimaryModuleTableCellWrap>
-              );
-            }
-            if (column.columnHeader === "ReservationStatusName") {
-              return (
-                <PrimaryModuleTableCellWrap>
-                  <Badge variant="outline">{value}</Badge>
-                </PrimaryModuleTableCellWrap>
-              );
-            }
+      (columnsData.data.status === 200 ? columnsData.data.body : [])
+        .sort(sortColOrderByOrderIndex)
+        .map((column) =>
+          columnHelper.accessor(column.columnHeader as any, {
+            id: column.columnHeader,
+            meta: {
+              columnName: column.columnHeaderDescription ?? undefined,
+            },
+            header: ({ column: columnChild }) => (
+              <PrimaryModuleTableColumnHeader
+                column={columnChild}
+                title={column.columnHeaderDescription ?? ""}
+              />
+            ),
+            cell: (item) => {
+              const value = item.getValue();
+              if (column.columnHeader === "ReservationNumber") {
+                const reservationId = item.table.getRow(item.row.id).original
+                  .id;
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    <Link
+                      to={viewReservationByIdRoute.to}
+                      params={{ reservationId: String(reservationId) }}
+                      search={() => ({ tab: "summary" })}
+                      className={cn(buttonVariants({ variant: "link" }), "p-0")}
+                      preload="intent"
+                    >
+                      {value}
+                    </Link>
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
+              if (column.columnHeader === "ReservationStatusName") {
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    <Badge variant="outline">{value}</Badge>
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
 
-            if (ReservationDateTimeColumns.includes(column.columnHeader)) {
-              return (
-                <PrimaryModuleTableCellWrap>
-                  {t("intlDateTime", { value: new Date(value), ns: "format" })}
-                </PrimaryModuleTableCellWrap>
-              );
-            }
+              if (ReservationDateTimeColumns.includes(column.columnHeader)) {
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    {t("intlDateTime", {
+                      value: new Date(value),
+                      ns: "format",
+                    })}
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
 
-            return (
-              <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-            );
-          },
-          enableHiding: column.columnHeader !== "ReservationNumber",
-          enableSorting: false,
-        })
-      ),
+              return (
+                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
+              );
+            },
+            enableHiding: column.columnHeader !== "ReservationNumber",
+            enableSorting: false,
+          })
+        ),
     [columnsData.data, t]
   );
 
@@ -151,7 +157,8 @@ function ReservationsSearchPage() {
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
-        allColumns: columnsData.data,
+        allColumns:
+          columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
@@ -160,7 +167,9 @@ function ReservationsSearchPage() {
 
   const handleSaveColumnVisibility = useCallback(
     (graph: VisibilityState) => {
-      const newColumnsData = columnsData.data.map((col) => {
+      const newColumnsData = (
+        columnsData.data.status === 200 ? columnsData.data.body : []
+      ).map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
@@ -202,7 +211,9 @@ function ReservationsSearchPage() {
           data={reservationsData.data?.data || []}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
-          rawColumnsData={columnsData?.data || []}
+          rawColumnsData={
+            columnsData.data.status === 200 ? columnsData.data.body : []
+          }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
             reservationsData.data?.totalRecords

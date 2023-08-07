@@ -79,52 +79,54 @@ function VehiclesSearchPage() {
 
   const columnDefs = useMemo(
     () =>
-      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
-        columnHelper.accessor(column.columnHeader as any, {
-          id: column.columnHeader,
-          meta: {
-            columnName: column.columnHeaderDescription ?? undefined,
-          },
-          header: ({ column: columnChild }) => (
-            <PrimaryModuleTableColumnHeader
-              column={columnChild}
-              title={column.columnHeaderDescription ?? ""}
-            />
-          ),
-          cell: (item) => {
-            const value = item.getValue();
-            if (column.columnHeader === "VehicleNo") {
-              const vehicleId = item.table.getRow(item.row.id).original.id;
-              return (
-                <PrimaryModuleTableCellWrap>
-                  <Link
-                    to={viewFleetByIdRoute.to}
-                    params={{ vehicleId: String(vehicleId) }}
-                    search={() => ({ tab: "summary" })}
-                    className={cn(buttonVariants({ variant: "link" }), "p-0")}
-                    preload="intent"
-                  >
-                    {value}
-                  </Link>
-                </PrimaryModuleTableCellWrap>
-              );
-            }
-            if (column.columnHeader === "VehicleStatus") {
-              return (
-                <PrimaryModuleTableCellWrap>
-                  <Badge variant="outline">{value}</Badge>
-                </PrimaryModuleTableCellWrap>
-              );
-            }
+      (columnsData.data.status === 200 ? columnsData.data.body : [])
+        .sort(sortColOrderByOrderIndex)
+        .map((column) =>
+          columnHelper.accessor(column.columnHeader as any, {
+            id: column.columnHeader,
+            meta: {
+              columnName: column.columnHeaderDescription ?? undefined,
+            },
+            header: ({ column: columnChild }) => (
+              <PrimaryModuleTableColumnHeader
+                column={columnChild}
+                title={column.columnHeaderDescription ?? ""}
+              />
+            ),
+            cell: (item) => {
+              const value = item.getValue();
+              if (column.columnHeader === "VehicleNo") {
+                const vehicleId = item.table.getRow(item.row.id).original.id;
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    <Link
+                      to={viewFleetByIdRoute.to}
+                      params={{ vehicleId: String(vehicleId) }}
+                      search={() => ({ tab: "summary" })}
+                      className={cn(buttonVariants({ variant: "link" }), "p-0")}
+                      preload="intent"
+                    >
+                      {value}
+                    </Link>
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
+              if (column.columnHeader === "VehicleStatus") {
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    <Badge variant="outline">{value}</Badge>
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
 
-            return (
-              <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-            );
-          },
-          enableHiding: column.columnHeader !== "VehicleNo",
-          enableSorting: false,
-        })
-      ),
+              return (
+                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
+              );
+            },
+            enableHiding: column.columnHeader !== "VehicleNo",
+            enableSorting: false,
+          })
+        ),
     [columnsData.data]
   );
 
@@ -133,7 +135,8 @@ function VehiclesSearchPage() {
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
-        allColumns: columnsData.data,
+        allColumns:
+          columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
@@ -142,7 +145,9 @@ function VehiclesSearchPage() {
 
   const handleSaveColumnVisibility = useCallback(
     (graph: VisibilityState) => {
-      const newColumnsData = columnsData.data.map((col) => {
+      const newColumnsData = (
+        columnsData.data.status === 200 ? columnsData.data.body : []
+      ).map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
@@ -176,7 +181,9 @@ function VehiclesSearchPage() {
           data={vehiclesData.data?.data || []}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
-          rawColumnsData={columnsData?.data || []}
+          rawColumnsData={
+            columnsData.data.status === 200 ? columnsData.data.body : []
+          }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
             vehiclesData.data?.totalRecords

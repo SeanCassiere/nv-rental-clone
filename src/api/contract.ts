@@ -15,6 +15,7 @@ import {
   ClientProfileSchema,
   ClientScreenSettingListSchema,
 } from "@/schemas/client";
+import { ColumnListItemListSchema } from "@/schemas/column";
 import { UserLanguageListSchema } from "@/schemas/user";
 
 const c = initContract();
@@ -55,6 +56,16 @@ const contract = c.router(
       responses: {
         200: ClientScreenSettingListSchema,
         404: StructuredErrorSchema,
+      },
+    },
+    getClientColumnHeaderInformation: {
+      method: "GET",
+      path: "/v3/clients/columnheaderinformation",
+      query: UserAndClientIdAuthSchema.extend({
+        module: z.enum(["customer", "vehicle", "reservation", "agreement"]),
+      }),
+      responses: {
+        200: ColumnListItemListSchema,
       },
     },
     getUserPermissionByUserId: {
