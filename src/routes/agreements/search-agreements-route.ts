@@ -1,7 +1,6 @@
 import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { agreementsRoute } from ".";
-import { queryClient } from "@/tanstack-query-config";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
@@ -22,7 +21,7 @@ export const searchAgreementsRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loader: async ({ search }) => {
+  loader: async ({ search, context: { queryClient } }) => {
     const auth = getAuthToken();
 
     const {
@@ -36,43 +35,39 @@ export const searchAgreementsRoute = new Route({
 
       // get columns
       const columnsKey = agreementQKeys.columns();
-      if (!queryClient.getQueryData(columnsKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: columnsKey,
-            queryFn: () =>
-              fetchModuleColumnsModded({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                module: "agreements",
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: columnsKey,
+          queryFn: () =>
+            fetchModuleColumnsModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "agreements",
+            }),
+        })
+      );
 
       // get list
       const searchKey = agreementQKeys.search({
         pagination: { page: pageNumber, pageSize: pageSize },
         filters: searchFilters,
       });
-      if (!queryClient.getQueryData(searchKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: searchKey,
-            queryFn: () =>
-              fetchAgreementsListModded({
-                page: pageNumber,
-                pageSize: pageSize,
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                currentDate: new Date(),
-                filters: searchFilters,
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: searchKey,
+          queryFn: () =>
+            fetchAgreementsListModded({
+              page: pageNumber,
+              pageSize: pageSize,
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              currentDate: new Date(),
+              filters: searchFilters,
+            }),
+        })
+      );
 
       await Promise.all(promises);
     }

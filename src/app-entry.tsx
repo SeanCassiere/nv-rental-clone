@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Router, RouterProvider } from "@tanstack/router";
 
 import LoadingPlaceholder from "@/components/loading-placeholder";
+import { Toaster } from "@/components/ui/toaster";
 
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { queryClient } from "@/tanstack-query-config";
@@ -14,7 +15,6 @@ import {
   parseSearchFn,
 } from "@/tanstack-router-config";
 
-import { Toaster } from "@/components/ui/toaster";
 import "./i18next-config";
 
 export const router = new Router({
@@ -23,7 +23,9 @@ export const router = new Router({
   parseSearch: parseSearchFn,
   stringifySearch: stringifySearchFn,
   defaultPendingComponent: LoadingPlaceholder,
-  context: {},
+  context: {
+    queryClient,
+  },
 });
 
 declare module "@tanstack/router" {

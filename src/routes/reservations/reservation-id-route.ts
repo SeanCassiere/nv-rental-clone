@@ -2,7 +2,6 @@ import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { reservationsRoute } from ".";
-import { queryClient } from "@/tanstack-query-config";
 
 import { fetchRentalRateSummaryAmounts } from "@/api/summary";
 import { fetchReservationData } from "@/api/reservations";
@@ -13,46 +12,42 @@ import { reservationQKeys } from "@/utils/query-key";
 export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "$reservationId",
-  loader: async ({ params: { reservationId } }) => {
+  loader: async ({ params: { reservationId }, context: { queryClient } }) => {
     const auth = getAuthToken();
 
     if (auth) {
       const promises = [];
       // get summary
       const summaryKey = reservationQKeys.summary(reservationId);
-      if (!queryClient.getQueryData(summaryKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: summaryKey,
-            queryFn: () =>
-              fetchRentalRateSummaryAmounts({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                module: "reservations",
-                referenceId: reservationId,
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: summaryKey,
+          queryFn: () =>
+            fetchRentalRateSummaryAmounts({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "reservations",
+              referenceId: reservationId,
+            }),
+        })
+      );
 
       const dataKey = reservationQKeys.id(reservationId);
-      if (!queryClient.getQueryData(dataKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: dataKey,
-            queryFn: () => {
-              return fetchReservationData({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                reservationId,
-              });
-            },
-            retry: 0,
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: dataKey,
+          queryFn: () => {
+            return fetchReservationData({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              reservationId,
+            });
+          },
+          retry: 0,
+        })
+      );
 
       await Promise.all(promises);
     }
