@@ -2,7 +2,6 @@ import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { customersRoute } from ".";
-import { queryClient } from "@/tanstack-query-config";
 
 import { fetchCustomerSummaryAmounts } from "@/api/summary";
 import { fetchCustomerData } from "@/api/customers";
@@ -13,45 +12,41 @@ import { customerQKeys } from "@/utils/query-key";
 export const customerPathIdRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "$customerId",
-  loader: async ({ params: { customerId } }) => {
+  loader: async ({ params: { customerId }, context: { queryClient } }) => {
     const auth = getAuthToken();
 
     if (auth) {
       const promises = [];
       // get summary
       const summaryKey = customerQKeys.summary(customerId);
-      if (!queryClient.getQueryData(summaryKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: summaryKey,
-            queryFn: () =>
-              fetchCustomerSummaryAmounts({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                customerId,
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: summaryKey,
+          queryFn: () =>
+            fetchCustomerSummaryAmounts({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              customerId,
+            }),
+        })
+      );
 
       const dataKey = customerQKeys.id(customerId);
-      if (!queryClient.getQueryData(dataKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: dataKey,
-            queryFn: () => {
-              return fetchCustomerData({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                customerId,
-              });
-            },
-            retry: 0,
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: dataKey,
+          queryFn: () => {
+            return fetchCustomerData({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              customerId,
+            });
+          },
+          retry: 0,
+        })
+      );
 
       await Promise.all(promises);
     }
