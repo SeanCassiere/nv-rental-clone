@@ -1,10 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
+import { apiClient } from "@/api";
 import { allModulesKeySelector } from "./useGetModuleColumns";
-import { saveModuleColumns } from "@/api/columns";
+
+import { getModuleApiName } from "@/utils/columns";
 import type { AppPrimaryModuleType } from "@/types/General";
-import type { TColumnListItemParsed } from "@/schemas/column";
+import type { TColumnHeaderItem } from "@/schemas/client/column";
 
 export function useSaveModuleColumns({
   module,
@@ -19,7 +21,7 @@ export function useSaveModuleColumns({
       allColumns,
     }: {
       accessorKeys?: string[];
-      allColumns: TColumnListItemParsed[];
+      allColumns: TColumnHeaderItem[];
     }) => {
       const headerSettingVisibleIdList: number[] = [];
 
@@ -57,13 +59,17 @@ export function useSaveModuleColumns({
         ...columnsMovedToTheEnd,
       ];
 
-      return await saveModuleColumns({
-        module,
-        headerSettingIDList: headerSettingVisibleIdList.join(","),
-        orderHeaderSettingIDList: orderedColumnsIdList.join(","),
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
+      const modValues = getModuleApiName(module);
+
+      return await apiClient.saveClientColumnHeaderInformation({
+        body: {
+          clientID: auth.user?.profile.navotar_clientid || "",
+          userID: auth.user?.profile.navotar_userid || "",
+          type: modValues.moduleId,
+          typeName: modValues.capitalModule,
+          headerSettingIDList: headerSettingVisibleIdList.join(","),
+          orderdHeaderSettingIDList: orderedColumnsIdList.join(","),
+        },
       });
     },
     onSettled: () => {

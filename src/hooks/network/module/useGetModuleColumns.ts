@@ -8,7 +8,7 @@ import {
   customerQKeys,
   fleetQKeys,
 } from "@/utils/query-key";
-import { type TColumnListItemParsed } from "@/schemas/column";
+import { type TColumnHeaderItem } from "@/schemas/client/column";
 import { apiClient } from "@/api";
 import { getModuleApiName } from "@/utils/columns";
 
@@ -107,7 +107,7 @@ export function mutateColumnAccessors(
   type: Parameters<
     (typeof apiClient)["getClientColumnHeaderInformation"]
   >[0]["query"]["module"],
-  data: { status: number; body: TColumnListItemParsed[]; headers: Headers }
+  data: { status: number; body: TColumnHeaderItem[]; headers: Headers }
 ) {
   switch (type) {
     case "reservation":
@@ -426,7 +426,7 @@ export function makeInitialColumnAccessors(module: AppPrimaryModuleType) {
 }
 
 function settingStartingColumn(
-  columns: TColumnListItemParsed[],
+  columns: TColumnHeaderItem[],
   startingColumnHeader: string
 ) {
   let columnData = columns;
