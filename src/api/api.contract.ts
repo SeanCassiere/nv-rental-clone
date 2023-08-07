@@ -2,9 +2,11 @@ import { z } from "zod";
 import { initContract } from "@ts-rest/core";
 
 import {
+  ClientIdAuthSchema,
   UserAndClientIdAuthSchema,
   StructuredErrorSchema,
   PaginationSchema,
+  StringArraySchema,
 } from "@/api/api.helpers";
 
 import { AgreementListItemListSchema } from "@/schemas/agreement";
@@ -52,6 +54,14 @@ const contract = c.router(
       responses: {
         200: ClientScreenSettingListSchema,
         404: StructuredErrorSchema,
+      },
+    },
+    getUserPermissionByUserId: {
+      method: "GET",
+      path: "/v3/users/:userId/permissions",
+      query: ClientIdAuthSchema,
+      responses: {
+        200: StringArraySchema,
       },
     },
   },

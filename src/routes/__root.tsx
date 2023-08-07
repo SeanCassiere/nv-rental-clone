@@ -7,7 +7,6 @@ import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import { queryClient } from "@/tanstack-query-config";
 
-import { fetchUserPermissions } from "@/api/users";
 import { apiClient } from "@/api/api.client";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -82,11 +81,10 @@ export const rootRoute = routerContext.createRootRoute({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: userQKeys.permissions(auth.profile.navotar_userid),
-          queryFn: async () =>
-            fetchUserPermissions({
-              clientId: auth.profile.navotar_clientid,
-              accessToken: auth.access_token,
-              intendedUserId: auth.profile.navotar_userid,
+          queryFn: () =>
+            apiClient.getUserPermissionByUserId({
+              params: { userId: auth.profile.navotar_userid },
+              query: { clientId: auth.profile.navotar_clientid },
             }),
           staleTime: 1000 * 60 * 5, // 5 minutes
         })

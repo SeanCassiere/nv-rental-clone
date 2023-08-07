@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 import { UserLanguageListSchema, type UpdateUserInput } from "@/schemas/user";
@@ -34,21 +32,6 @@ export const fetchUserLanguages = async (opts: CommonAuthParams) => {
       },
     }
   ).then((res) => UserLanguageListSchema.parse(res.data));
-};
-
-const StringArraySchema = z.array(z.string());
-
-export const fetchUserPermissions = async (
-  opts: Omit<CommonAuthParams, "userId"> & { intendedUserId: string }
-) => {
-  return await callV3Api(
-    makeUrl(`/v3/users/${opts.intendedUserId}/permissions`, {
-      clientId: opts.clientId,
-    }),
-    {
-      headers: { Authorization: `Bearer ${opts.accessToken}` },
-    }
-  ).then((res) => StringArraySchema.parse(res.data));
 };
 
 export const updateUserProfile = async ({

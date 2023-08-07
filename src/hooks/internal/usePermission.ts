@@ -1,5 +1,6 @@
-import { useGetUserPermissions } from "@/hooks/network/user/useGetUserPermissions";
 import { useAuth } from "react-oidc-context";
+
+import { useGetUserPermissions } from "@/hooks/network/user/useGetUserPermissions";
 
 export function usePermission(
   permission: string,
@@ -15,7 +16,9 @@ export function usePermission(
     return defaultValue;
   }
 
-  const hasPermission = permissions.data.includes(permission);
+  const list = permissions.data?.status === 200 ? permissions.data?.body : [];
+
+  const hasPermission = list.includes(permission);
 
   return hasPermission;
 }

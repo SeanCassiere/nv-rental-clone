@@ -20,9 +20,12 @@ const PaginationSchema = z.object({
   pageSize: z.number(),
 });
 
+const StringArraySchema = z.array(z.string());
+
 export {
   StructuredErrorSchema,
   ClientIdAuthSchema,
   UserAndClientIdAuthSchema,
   PaginationSchema,
+  StringArraySchema,
 };
