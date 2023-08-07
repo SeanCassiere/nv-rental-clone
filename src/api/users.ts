@@ -1,6 +1,6 @@
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
-import { UserLanguageListSchema, type UpdateUserInput } from "@/schemas/user";
+import { type UpdateUserInput } from "@/schemas/user";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 
 export const fetchUserProfile = async (
@@ -18,20 +18,6 @@ export const fetchUserProfile = async (
       },
     }
   ).then((res) => res.data);
-};
-
-export const fetchUserLanguages = async (opts: CommonAuthParams) => {
-  return await callV3Api(
-    makeUrl("/v3/users/language", {
-      clientId: opts.clientId,
-      userId: opts.userId,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => UserLanguageListSchema.parse(res.data));
 };
 
 export const updateUserProfile = async ({

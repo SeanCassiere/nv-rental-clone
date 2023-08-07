@@ -7,7 +7,7 @@ import {
   StructuredErrorSchema,
   PaginationSchema,
   StringArraySchema,
-} from "@/api/api.helpers";
+} from "@/api/helpers";
 
 import { AgreementListItemListSchema } from "@/schemas/agreement";
 import {

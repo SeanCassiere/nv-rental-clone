@@ -7,7 +7,7 @@ import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import { queryClient } from "@/tanstack-query-config";
 
-import { apiClient } from "@/api/api.client";
+import { apiClient } from "@/api";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { clientQKeys, userQKeys } from "@/utils/query-key";
