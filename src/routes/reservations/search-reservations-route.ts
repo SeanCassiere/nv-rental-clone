@@ -1,7 +1,6 @@
 import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { reservationsRoute } from ".";
-import { queryClient } from "@/tanstack-query-config";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
@@ -22,7 +21,7 @@ export const searchReservationsRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loader: async ({ search }) => {
+  loader: async ({ search, context: { queryClient } }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } =
@@ -33,43 +32,40 @@ export const searchReservationsRoute = new Route({
 
       // get columns
       const columnsKey = reservationQKeys.columns();
-      if (!queryClient.getQueryData(columnsKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: columnsKey,
-            queryFn: () =>
-              fetchModuleColumnsModded({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                module: "reservations",
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: columnsKey,
+          queryFn: () =>
+            fetchModuleColumnsModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "reservations",
+            }),
+        })
+      );
 
       // get search
       const searchKey = reservationQKeys.search({
         pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
-      if (!queryClient.getQueryData(searchKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: searchKey,
-            queryFn: () =>
-              fetchReservationsListModded({
-                page: pageNumber,
-                pageSize: size,
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                filters: searchFilters,
-                clientDate: new Date(),
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: searchKey,
+          queryFn: () =>
+            fetchReservationsListModded({
+              page: pageNumber,
+              pageSize: size,
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              filters: searchFilters,
+              clientDate: new Date(),
+            }),
+        })
+      );
+
       await Promise.all(promises);
     }
     return {};
