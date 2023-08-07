@@ -80,7 +80,8 @@ function AgreementsSearchPage() {
   const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useGetLocationsList({ locationIsActive: true });
-  const locations = locationsList.data?.data ?? [];
+  const locations =
+    locationsList.data?.status === 200 ? locationsList.data.body : [];
 
   const agreementTypesList = useGetAgreementTypesList();
   const agreementTypes = agreementTypesList.data ?? [];

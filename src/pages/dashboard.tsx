@@ -28,12 +28,11 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useFeature } from "@/hooks/internal/useFeature";
 
-import type { fetchLocationsList } from "@/api/locations";
-
 import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 
 import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
+import type { apiClient } from "@/api";
 
 const DefaultDashboardContent = lazy(
   () => import("@/components/dashboard/default-content")
@@ -56,7 +55,8 @@ function IndexPage() {
   });
 
   const locationsList = useGetLocationsList({ locationIsActive: true });
-  const locations = locationsList.data?.data ?? [];
+  const locations =
+    locationsList.data?.status === 200 ? locationsList.data.body : [];
 
   const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS");
   const adminUrlsSplit = (adminUrlsFeature || "")
@@ -148,7 +148,9 @@ function IndexPage() {
   );
 }
 
-type LocationResult = Awaited<ReturnType<typeof fetchLocationsList>>["data"];
+type LocationResult = Awaited<
+  ReturnType<(typeof apiClient)["getLocations"]>
+>["body"];
 
 function LocationPicker({
   locations,
