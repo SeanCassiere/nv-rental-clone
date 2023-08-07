@@ -1,7 +1,6 @@
 import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { fleetRoute } from ".";
-import { queryClient } from "@/tanstack-query-config";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
@@ -22,7 +21,7 @@ export const searchFleetRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loader: async ({ search }) => {
+  loader: async ({ search, context: { queryClient } }) => {
     const auth = getAuthToken();
     const { pageNumber, size, searchFilters } =
       normalizeVehicleListSearchParams(search);
@@ -32,42 +31,38 @@ export const searchFleetRoute = new Route({
 
       // get columns
       const columnsKey = fleetQKeys.columns();
-      if (!queryClient.getQueryData(columnsKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: columnsKey,
-            queryFn: () =>
-              fetchModuleColumnsModded({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                module: "vehicles",
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: columnsKey,
+          queryFn: () =>
+            fetchModuleColumnsModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              module: "vehicles",
+            }),
+        })
+      );
 
       // get search
       const searchKey = fleetQKeys.search({
         pagination: { page: pageNumber, pageSize: size },
         filters: searchFilters,
       });
-      if (!queryClient.getQueryData(searchKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: searchKey,
-            queryFn: () =>
-              fetchVehiclesListModded({
-                page: pageNumber,
-                pageSize: size,
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                filters: searchFilters,
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: searchKey,
+          queryFn: () =>
+            fetchVehiclesListModded({
+              page: pageNumber,
+              pageSize: size,
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              filters: searchFilters,
+            }),
+        })
+      );
 
       await Promise.all(promises);
     }
