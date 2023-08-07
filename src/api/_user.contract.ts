@@ -1,4 +1,4 @@
-import { c } from "@/api/contract";
+import { c } from "@/api/c";
 import {
   UserAndClientIdAuthSchema,
   ClientIdAuthSchema,
