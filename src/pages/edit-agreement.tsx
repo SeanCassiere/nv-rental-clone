@@ -55,10 +55,11 @@ const EditAgreementPage = () => {
     });
   }, [router]);
 
+  const agreement =
+    summaryData.data?.status === 200 ? summaryData.data.body : null;
+
   useDocumentTitle(
-    titleMaker(
-      `Edit - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
-    )
+    titleMaker(`Edit - ${agreement?.agreementNumber || "Loading"} - Agreement`)
   );
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const EditAgreementPage = () => {
         onStageTabClick={handleStageTabClick}
         onRentalSaveClick={handleAgreementSaveComplete}
         onRentalCancelClick={handleCancelEditAgreement}
-        referenceNumber={summaryData.data?.agreementNumber || undefined}
+        referenceNumber={agreement?.agreementNumber || undefined}
         summaryData={rentalRatesSummary.data}
       />
     </ProtectorShield>

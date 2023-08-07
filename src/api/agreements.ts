@@ -1,5 +1,4 @@
 import {
-  AgreementDataSchema,
   AgreementStatusListSchema,
   AgreementTypeArraySchema,
   GenerateAgreementNumberSchema,
@@ -29,22 +28,6 @@ export const fetchAgreementsList = async (
       },
     }
   );
-};
-
-export const fetchAgreementData = async (
-  opts: { agreementId: string | number } & CommonAuthParams
-) => {
-  return await callV3Api(
-    makeUrl(`/v3/agreements/${opts.agreementId}`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => AgreementDataSchema.parse(res.data));
 };
 
 export const fetchAgreementStatusesList = async (opts: CommonAuthParams) => {

@@ -55,9 +55,12 @@ const CheckinAgreementPage = () => {
     });
   }, [router]);
 
+  const agreement =
+    summaryData.data?.status === 200 ? summaryData.data.body : null;
+
   useDocumentTitle(
     titleMaker(
-      `Check-in - ${summaryData.data?.agreementNumber || "Loading"} - Agreement`
+      `Check-in - ${agreement?.agreementNumber || "Loading"} - Agreement`
     )
   );
 
@@ -76,7 +79,7 @@ const CheckinAgreementPage = () => {
         onStageTabClick={handleStageTabClick}
         onRentalSaveClick={handleAgreementSaveComplete}
         onRentalCancelClick={handleCancelEditAgreement}
-        referenceNumber={summaryData.data?.agreementNumber || undefined}
+        referenceNumber={agreement?.agreementNumber || undefined}
         summaryData={rentalRatesSummary.data}
         isCheckin
       />

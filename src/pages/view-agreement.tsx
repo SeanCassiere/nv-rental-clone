@@ -121,20 +121,22 @@ function AgreementViewPage() {
     });
   };
 
-  const agreement = useGetAgreementData({
+  const agreementQuery = useGetAgreementData({
     agreementId,
   });
-  const isCheckedIn = agreement.data?.returnDate ? true : false;
+  const agreement =
+    agreementQuery.data?.status === 200 ? agreementQuery.data.body : null;
+  const isCheckedIn = agreement?.returnDate ? true : false;
 
   useDocumentTitle(
-    titleMaker((agreement.data?.agreementNumber || "Loading") + " - Agreements")
+    titleMaker((agreement?.agreementNumber || "Loading") + " - Agreements")
   );
 
   useEffect(() => {
-    if (agreement.status !== "error") return;
+    if (agreementQuery.status !== "error") return;
 
     router.history.go(-1);
-  }, [agreement.status, router.history]);
+  }, [agreementQuery.status, router.history]);
 
   return (
     <ProtectorShield>
@@ -167,7 +169,7 @@ function AgreementViewPage() {
               params={{ agreementId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
             >
-              {agreement?.data?.agreementNumber}
+              {agreement?.agreementNumber}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
@@ -244,10 +246,7 @@ function AgreementViewPage() {
           View the details related to this rental.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <AgreementStatBlock
-          agreement={agreement.data}
-          isCheckedIn={isCheckedIn}
-        />
+        <AgreementStatBlock agreement={agreement} isCheckedIn={isCheckedIn} />
       </section>
 
       <section

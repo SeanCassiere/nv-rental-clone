@@ -416,9 +416,12 @@ const AddRentalParentForm = ({
   });
 
   useEffect(() => {
-    if (getAgreementQuery.status !== "success") return;
+    if (getAgreementQuery.status !== "success" || !getAgreementQuery.data)
+      return;
+    if (getAgreementQuery.data && getAgreementQuery.data?.status !== 200)
+      return;
 
-    const data = getAgreementQuery.data;
+    const data = getAgreementQuery.data.body;
 
     const originalStartDate = parseISO(data.checkoutDate);
     const originalEndDate = parseISO(data.checkinDate);

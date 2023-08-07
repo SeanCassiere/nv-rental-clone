@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { agreementsRoute } from ".";
 
+import { apiClient } from "@/api";
 import { fetchRentalRateSummaryAmounts } from "@/api/summary";
-import { fetchAgreementData } from "@/api/agreements";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { agreementQKeys } from "@/utils/query-key";
@@ -38,18 +38,24 @@ export const agreementPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: dataKey,
           queryFn: () => {
-            return fetchAgreementData({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              agreementId,
+            return apiClient.getAgreementById({
+              params: {
+                agreementId,
+              },
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+              },
             });
           },
-          retry: 0,
         })
       );
 
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch (e) {
+        console.error(e);
+      }
     }
     return {};
   },

@@ -6,7 +6,10 @@ import {
   StructuredErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
-import { AgreementListItemListSchema } from "@/schemas/agreement";
+import {
+  AgreementDataSchema,
+  AgreementListItemListSchema,
+} from "@/schemas/agreement";
 
 const rootAgreementContract = c.router({
   getAgreementsList: {
@@ -17,6 +20,15 @@ const rootAgreementContract = c.router({
     }),
     responses: {
       200: AgreementListItemListSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  getAgreementById: {
+    method: "GET",
+    path: "/v3/agreements/:agreementId",
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: AgreementDataSchema,
       404: StructuredErrorSchema,
     },
   },
