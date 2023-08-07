@@ -2,7 +2,6 @@ import { Route, lazyRouteComponent } from "@tanstack/router";
 import { z } from "zod";
 
 import { fleetRoute } from ".";
-import { queryClient } from "@/tanstack-query-config";
 
 import { fetchVehicleSummaryAmounts } from "@/api/summary";
 import { fetchVehicleData } from "@/api/vehicles";
@@ -13,47 +12,43 @@ import { fleetQKeys } from "@/utils/query-key";
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
-  loader: async ({ params: { vehicleId } }) => {
+  loader: async ({ params: { vehicleId }, context: { queryClient } }) => {
     const auth = getAuthToken();
 
     if (auth) {
       const promises = [];
       // get summary
       const summaryKey = fleetQKeys.summary(vehicleId);
-      if (!queryClient.getQueryData(summaryKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: summaryKey,
-            queryFn: () =>
-              fetchVehicleSummaryAmounts({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                vehicleId,
-                clientDate: new Date(),
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: summaryKey,
+          queryFn: () =>
+            fetchVehicleSummaryAmounts({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              vehicleId,
+              clientDate: new Date(),
+            }),
+        })
+      );
 
       const dataKey = fleetQKeys.id(vehicleId);
-      if (!queryClient.getQueryData(dataKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: dataKey,
-            queryFn: () => {
-              return fetchVehicleData({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                vehicleId,
-                clientTime: new Date(),
-              });
-            },
-            retry: 0,
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: dataKey,
+          queryFn: () => {
+            return fetchVehicleData({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              vehicleId,
+              clientTime: new Date(),
+            });
+          },
+          retry: 0,
+        })
+      );
 
       await Promise.all(promises);
     }
