@@ -18,7 +18,11 @@ import { getAuthToken } from "@/utils/authLocal";
 import { clientQKeys, userQKeys } from "@/utils/query-key";
 import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
 
-const routerContext = new RouterContext();
+interface MyRouterContext {
+  queryClient: typeof queryClient;
+}
+
+const routerContext = new RouterContext<MyRouterContext>();
 
 export const rootRoute = routerContext.createRootRoute({
   loader: async () => {

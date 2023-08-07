@@ -23,7 +23,9 @@ export const router = new Router({
   parseSearch: parseSearchFn,
   stringifySearch: stringifySearchFn,
   defaultPendingComponent: LoadingPlaceholder,
-  context: {},
+  context: {
+    queryClient,
+  },
 });
 
 declare module "@tanstack/router" {
