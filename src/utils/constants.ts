@@ -1,5 +1,9 @@
 export const LS_OIDC_REDIRECT_URI_KEY = "oidc:redirect_uri" as const;
 
+export const apiBaseUrl = import.meta.env.VITE_APP_API_URI
+  ? `${import.meta.env.VITE_APP_API_URI}/api`
+  : "https://testapi.appnavotar.com/api";
+
 export const USER_STORAGE_KEYS = {
   dateFormat: "date-format",
   timeFormat: "time-format",
@@ -8,7 +12,7 @@ export const USER_STORAGE_KEYS = {
 } as const;
 
 export const OIDC_AUTHORITY =
-  import.meta.env.VITE_APP_AUTH_AUTHORITY || "https://testauth.appnavotar.com/";
+  import.meta.env.VITE_APP_AUTH_AUTHORITY || "https://testauth.appnavotar.com";
 export const OIDC_CLIENT_ID =
   import.meta.env.VITE_APP_AUTH_CLIENT_ID ?? "xxx-xxx-xxx-xxx";
 export const OIDC_REDIRECT_URI: string =
