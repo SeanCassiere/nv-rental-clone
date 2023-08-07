@@ -67,7 +67,11 @@ export default function SettingsProfileTab() {
           <article className="mt-6 w-full lg:max-w-2xl">
             <ProfileForm
               user={userQuery.data}
-              languages={languagesQuery.data}
+              languages={
+                languagesQuery.data.status === 200
+                  ? languagesQuery.data.body
+                  : []
+              }
             />
           </article>
         )}

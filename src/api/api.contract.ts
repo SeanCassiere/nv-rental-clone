@@ -15,6 +15,7 @@ import {
   ClientProfileSchema,
   ClientScreenSettingListSchema,
 } from "@/schemas/client";
+import { UserLanguageListSchema } from "@/schemas/user";
 
 const c = initContract();
 
@@ -62,6 +63,14 @@ const contract = c.router(
       query: ClientIdAuthSchema,
       responses: {
         200: StringArraySchema,
+      },
+    },
+    getUserLanguages: {
+      method: "GET",
+      path: "/v3/users/language",
+      query: UserAndClientIdAuthSchema,
+      responses: {
+        200: UserLanguageListSchema,
       },
     },
   },
