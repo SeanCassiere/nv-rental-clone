@@ -1,10 +1,9 @@
 import { Route, lazyRouteComponent } from "@tanstack/router";
 
 import { rootRoute } from "./__root";
-import { queryClient } from "@/tanstack-query-config";
 
-import { fetchDashboardWidgetList } from "@/api/dashboard";
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
+import { fetchDashboardWidgetList } from "@/api/dashboard";
 import { fetchLocationsList } from "@/api/locations";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -16,58 +15,53 @@ export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
-  loader: async () => {
+  loader: async ({ context: { queryClient } }) => {
     const auth = getAuthToken();
     if (auth) {
       const promises = [];
       // get messages
       const messagesKey = dashboardQKeys.messages();
-      if (!queryClient.getQueryData(messagesKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: messagesKey,
-            queryFn: async () =>
-              await fetchDashboardMessagesListModded({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: messagesKey,
+          queryFn: async () =>
+            await fetchDashboardMessagesListModded({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+            }),
+          staleTime: 1000 * 60 * 1,
+        })
+      );
 
       // get widgets
       const widgetsKey = dashboardQKeys.widgets();
-      if (!queryClient.getQueryData(widgetsKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: widgetsKey,
-            queryFn: async () =>
-              await fetchDashboardWidgetList({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: widgetsKey,
+          queryFn: async () =>
+            await fetchDashboardWidgetList({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+            }),
+        })
+      );
 
       // get locations
       const locationsKey = locationQKeys.all();
-      if (!queryClient.getQueryData(locationsKey)) {
-        promises.push(
-          queryClient.prefetchQuery({
-            queryKey: locationsKey,
-            queryFn: async () =>
-              fetchLocationsList({
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                accessToken: auth.access_token,
-                withActive: true,
-              }),
-          })
-        );
-      }
+      promises.push(
+        queryClient.ensureQueryData({
+          queryKey: locationsKey,
+          queryFn: async () =>
+            fetchLocationsList({
+              clientId: auth.profile.navotar_clientid,
+              userId: auth.profile.navotar_userid,
+              accessToken: auth.access_token,
+              withActive: true,
+            }),
+        })
+      );
 
       await Promise.all(promises);
     }
