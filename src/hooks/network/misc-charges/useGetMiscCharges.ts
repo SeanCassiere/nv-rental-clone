@@ -1,27 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchMiscCharges } from "@/api/miscCharges";
+import { apiClient } from "@/api";
 
 export function useGetMiscCharges(params: {
   enabled?: boolean;
   filters?: Omit<
-    Parameters<typeof fetchMiscCharges>[0],
-    "accessToken" | "userId" | "clientId"
+    Parameters<(typeof apiClient)["getMiscCharges"]>[0]["query"],
+    "clientId" | "userId"
   >;
 }) {
   const { enabled = true, filters = {} } = params;
   const auth = useAuth();
   const query = useQuery({
     queryKey: ["misc-charges", filters],
-    queryFn: async () => {
-      return await fetchMiscCharges({
-        accessToken: auth.user?.access_token || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        clientId: auth.user?.profile.navotar_clientid || "",
-        ...filters,
-      });
-    },
+    queryFn: () =>
+      apiClient.getMiscCharges({
+        query: {
+          userId: auth.user?.profile.navotar_userid || "",
+          clientId: auth.user?.profile.navotar_clientid || "",
+          Active: "true",
+          ...filters,
+        },
+      }),
     enabled: auth.isAuthenticated && enabled,
   });
   return query;

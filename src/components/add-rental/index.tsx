@@ -56,6 +56,7 @@ import {
 
 import { cn } from "@/utils";
 import { sortObject } from "@/utils/sortObject";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
@@ -707,8 +708,13 @@ const AddRentalParentForm = ({
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
-      CheckoutDate: agreementRentalInformation?.checkoutDate ?? new Date(),
-      CheckinDate: agreementRentalInformation?.checkinDate ?? new Date(),
+      CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+        agreementRentalInformation?.checkoutDate ?? new Date()
+      ),
+      CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+        agreementRentalInformation?.checkinDate ?? new Date()
+      ),
+      Active: "true",
     },
     enabled:
       module === "agreement"
@@ -718,8 +724,9 @@ const AddRentalParentForm = ({
 
   useEffect(() => {
     if (getMiscChargesQuery.status !== "success") return;
-
-    const data = getMiscChargesQuery.data;
+    if (!getMiscChargesQuery.data || getMiscChargesQuery.data.status !== 200)
+      return;
+    const data = getMiscChargesQuery.data.body;
 
     const mandatoryCharges = data.filter(
       (charge) => charge.IsOptional === false
