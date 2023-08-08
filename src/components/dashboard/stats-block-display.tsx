@@ -27,7 +27,7 @@ function formatDisplayValue(value: number | null | undefined): string | null {
 const DashboardStatsBlock = ({
   statistics,
 }: {
-  statistics: TDashboardStats | undefined;
+  statistics: TDashboardStats | null | undefined;
 }) => {
   return (
     <div className="@container">

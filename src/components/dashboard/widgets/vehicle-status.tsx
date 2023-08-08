@@ -47,7 +47,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
   const [activeIdx, setActiveIdx] = React.useState<number | undefined>(
     undefined
   );
-  const vehicleTypeId = 0;
+  const vehicleTypeId = "0";
   const statusCounts = useGetDashboardVehicleStatusCounts({
     locationIds: locations,
     vehicleType: vehicleTypeId,
@@ -106,7 +106,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
                   filters: {
                     Active: "true",
                     VehicleStatus: getStatusIdByName(value).toString(),
-                    ...(vehicleTypeId > 0
+                    ...(vehicleTypeId !== "0"
                       ? { VehicleTypeId: String(vehicleTypeId) }
                       : {}),
                   },
