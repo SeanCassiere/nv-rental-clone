@@ -1,6 +1,6 @@
 import { initClient, type ApiFetcher } from "@ts-rest/core";
 
-import { contract } from "@/api/contract";
+import { contract } from "@/api/_root.contract";
 
 import { apiBaseUrl } from "@/utils/constants";
 import { getAuthToken } from "@/utils/authLocal";

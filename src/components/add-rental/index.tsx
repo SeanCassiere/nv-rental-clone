@@ -56,6 +56,7 @@ import {
 
 import { cn } from "@/utils";
 import { sortObject } from "@/utils/sortObject";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
@@ -673,12 +674,22 @@ const AddRentalParentForm = ({
       StartDate:
         module === "agreement"
           ? agreementRentalInformation?.checkoutDate
+            ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+                agreementRentalInformation?.checkoutDate
+              )
+            : undefined
           : undefined,
       EndDate:
         module === "agreement"
           ? agreementRentalInformation?.checkinDate
+            ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+                agreementRentalInformation?.checkinDate
+              )
+            : undefined
           : undefined,
-      LocationID: agreementRentalInformation?.checkoutLocation ?? 0,
+      LocationId: Number(
+        agreementRentalInformation?.checkoutLocation ?? 0
+      ).toString(),
     },
   });
 
@@ -707,8 +718,13 @@ const AddRentalParentForm = ({
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
       LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
-      CheckoutDate: agreementRentalInformation?.checkoutDate ?? new Date(),
-      CheckinDate: agreementRentalInformation?.checkinDate ?? new Date(),
+      CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+        agreementRentalInformation?.checkoutDate ?? new Date()
+      ),
+      CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+        agreementRentalInformation?.checkinDate ?? new Date()
+      ),
+      Active: "true",
     },
     enabled:
       module === "agreement"
@@ -718,8 +734,9 @@ const AddRentalParentForm = ({
 
   useEffect(() => {
     if (getMiscChargesQuery.status !== "success") return;
-
-    const data = getMiscChargesQuery.data;
+    if (!getMiscChargesQuery.data || getMiscChargesQuery.data.status !== 200)
+      return;
+    const data = getMiscChargesQuery.data.body;
 
     const mandatoryCharges = data.filter(
       (charge) => charge.IsOptional === false
@@ -785,8 +802,8 @@ const AddRentalParentForm = ({
     filters: {
       LocationId:
         module === "agreement"
-          ? agreementRentalInformation?.checkoutLocation ?? 0
-          : 0,
+          ? Number(agreementRentalInformation?.checkoutLocation ?? 0).toString()
+          : "0",
     },
     enabled:
       module === "agreement" ? taxesAgreementReady : taxesReservationReady,
@@ -794,8 +811,9 @@ const AddRentalParentForm = ({
 
   useEffect(() => {
     if (getTaxesQuery.status !== "success") return;
+    if (!getTaxesQuery.data || getTaxesQuery.data.status !== 200) return;
 
-    const data = getTaxesQuery.data;
+    const data = getTaxesQuery.data.body;
     const selectedTaxesNow = (data || []).filter((tax) => !tax.isOptional);
 
     setSelectedTaxIds((prev) => {

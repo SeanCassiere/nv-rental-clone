@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -20,7 +20,6 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuItem,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
@@ -41,7 +40,9 @@ export const UserNavigationDropdown = () => {
   const auth = useAuth();
 
   const userQuery = useGetUserProfile();
-  const fullName = `${userQuery.data?.firstName} ${userQuery.data?.lastName}`;
+  const user = userQuery.data?.status === 200 ? userQuery.data?.body : null;
+
+  const fullName = `${user?.firstName} ${user?.lastName}`.trim();
 
   const handleLogout = () => {
     const client_id = auth.user?.profile.navotar_clientid;
@@ -50,8 +51,8 @@ export const UserNavigationDropdown = () => {
       removeAllLocalStorageKeysForUser(client_id, user_id);
     }
 
-    auth.signoutRedirect()
-  }
+    auth.signoutRedirect();
+  };
 
   return (
     <AlertDialog>
@@ -60,7 +61,7 @@ export const UserNavigationDropdown = () => {
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
             <Avatar className="h-10 w-10">
               <AvatarImage
-                src={`https://avatars.dicebear.com/api/miniavs/${userQuery.data?.userName}.svg?mood[]=happy`}
+                src={`https://avatars.dicebear.com/api/miniavs/${user?.userName}.svg?mood[]=happy`}
                 alt={fullName}
               />
               <AvatarFallback>{getAvatarFallbackText(fullName)}</AvatarFallback>
@@ -71,35 +72,21 @@ export const UserNavigationDropdown = () => {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {userQuery.data?.userName}
+                {user?.userName}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
-                {userQuery.data?.email}
+                {user?.email}
               </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <AlertDialogTrigger asChild>
-            <DropdownMenuItem>
-              Log out
-              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-            </DropdownMenuItem>
+            <DropdownMenuItem>Log out</DropdownMenuItem>
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -107,7 +94,8 @@ export const UserNavigationDropdown = () => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            Continuing with this action will sign you out of the <strong>{UI_APPLICATION_NAME}</strong> application.
+            Continuing with this action will sign you out of the&nbsp;
+            <strong>{UI_APPLICATION_NAME}</strong> application.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

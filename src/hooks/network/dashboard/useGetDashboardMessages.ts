@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
+import isBefore from "date-fns/isBefore";
+import isAfter from "date-fns/isAfter";
 
-import { fetchDashboardMessagesList } from "@/api/dashboard";
+import { apiClient } from "@/api";
+
 import { dashboardQKeys } from "@/utils/query-key";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "@/utils/constants";
@@ -13,26 +16,73 @@ export function useGetDashboardMessages() {
   const query = useQuery({
     queryKey: dashboardQKeys.messages(),
     queryFn: async () => {
-      return await fetchDashboardMessagesListModded({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-      });
+      return await fetchDashboardMessagesListModded(
+        {
+          query: {
+            clientId: auth.user?.profile.navotar_clientid || "",
+          },
+        },
+        {
+          userId: auth.user?.profile.navotar_userid || "",
+        }
+      );
     },
     enabled: auth.isAuthenticated,
-    staleTime: 1000 * 60 * 1,
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
   return query;
 }
 
 export async function fetchDashboardMessagesListModded(
-  opts: Parameters<typeof fetchDashboardMessagesList>[0]
+  opts: Parameters<(typeof apiClient)["getApplicationMessages"]>[0],
+  extra: { userId: string }
 ) {
-  return await fetchDashboardMessagesList(opts)
+  return await apiClient
+    .getApplicationMessages(opts)
+    .then((res) => {
+      if (res.status === 200) {
+        const allMessages = res.body;
+
+        const currentDate = new Date();
+        const sortedMessages = allMessages.filter((message) => {
+          if (!message.active) return false;
+
+          const startDate = message.sentDate
+            ? new Date(message.sentDate)
+            : new Date("1970-01-01");
+          const endDate = message.expiryDate
+            ? new Date(message.expiryDate)
+            : null;
+
+          // if start date is in the future, don't show
+          if (isAfter(startDate, currentDate)) return false;
+
+          // if end date is in the past, don't show
+          if (endDate && isBefore(endDate, currentDate)) return false;
+
+          // if start date is in the past and end date is in the future, show
+          if (
+            isBefore(startDate, currentDate) &&
+            endDate &&
+            isAfter(endDate, currentDate)
+          ) {
+            return true;
+          }
+
+          // if start date is in the past and no end date, show
+          if (isBefore(startDate, currentDate) && !endDate) return true;
+
+          return false;
+        });
+
+        return sortedMessages;
+      }
+      return [];
+    })
     .then((res) => {
       const local = getLocalStorageForUser(
-        opts.clientId,
-        opts.userId,
+        opts.query.clientId,
+        extra.userId,
         USER_STORAGE_KEYS.dismissedMessages
       );
       const dismissedMessageIds = tryParseJson<string[]>(local, []);

@@ -1,8 +1,3 @@
-import {
-  AgreementStatusListSchema,
-  AgreementTypeArraySchema,
-  GenerateAgreementNumberSchema,
-} from "@/schemas/agreement";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchAgreementsList = async (
@@ -28,49 +23,4 @@ export const fetchAgreementsList = async (
       },
     }
   );
-};
-
-export const fetchAgreementStatusesList = async (opts: CommonAuthParams) => {
-  return await callV3Api(
-    makeUrl(`/v3/agreements/statuses`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => AgreementStatusListSchema.parse(res.data));
-};
-
-export const fetchAgreementTypesList = async (opts: CommonAuthParams) => {
-  return await callV3Api(
-    makeUrl(`/v3/agreements/types`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => AgreementTypeArraySchema.parse(res.data));
-};
-
-export const fetchNewAgreementNo = async (
-  opts: CommonAuthParams & { agreementType: string }
-) => {
-  return await callV3Api(
-    makeUrl(`/v3/agreements/generateagreementno`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-      agreementType: opts.agreementType,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => GenerateAgreementNumberSchema.parse(res.data));
 };

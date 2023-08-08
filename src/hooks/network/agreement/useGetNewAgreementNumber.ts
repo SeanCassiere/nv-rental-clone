@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchNewAgreementNo } from "@/api/agreements";
+import { apiClient } from "@/api";
+
 import { agreementQKeys } from "@/utils/query-key";
 
 export function useGetNewAgreementNumber(params: {
@@ -12,13 +13,18 @@ export function useGetNewAgreementNumber(params: {
   const auth = useAuth();
   const query = useQuery({
     queryKey: agreementQKeys.generateNumber(params.agreementType),
-    queryFn: async () =>
-      await fetchNewAgreementNo({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        agreementType: params.agreementType,
-      }),
+    queryFn: () =>
+      apiClient
+        .getNewAgreementNumber({
+          query: {
+            clientId: auth.user?.profile.navotar_clientid || "",
+            userId: auth.user?.profile.navotar_userid || "",
+            agreementType: params.agreementType,
+          },
+        })
+        .then((res) =>
+          res.status === 200 ? res.body : { agreementNo: "NONE" }
+        ),
     enabled: enabled && auth.isAuthenticated,
   });
   return query;

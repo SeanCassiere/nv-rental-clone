@@ -24,12 +24,17 @@ export const indexRoute = new Route({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: messagesKey,
-          queryFn: async () =>
-            await fetchDashboardMessagesListModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-            }),
+          queryFn: () =>
+            fetchDashboardMessagesListModded(
+              {
+                query: {
+                  clientId: auth.profile.navotar_clientid,
+                },
+              },
+              {
+                userId: auth.profile.navotar_userid,
+              }
+            ),
           staleTime: 1000 * 60 * 1,
         })
       );

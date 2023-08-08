@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchVehicleStatusCounts } from "@/api/dashboard";
+import { apiClient } from "@/api";
+
 import { dashboardQKeys } from "@/utils/query-key";
+import { localDateToQueryYearMonthDay } from "@/utils/date";
 
 export function useGetDashboardVehicleStatusCounts({
   locationIds,
@@ -11,7 +13,7 @@ export function useGetDashboardVehicleStatusCounts({
 }: {
   locationIds: string[];
   clientDate: Date;
-  vehicleType: string | number;
+  vehicleType: string;
 }) {
   const auth = useAuth();
   const query = useQuery({
@@ -19,16 +21,23 @@ export function useGetDashboardVehicleStatusCounts({
       vehicleType,
       locationId: locationIds,
     }),
-    queryFn: async () => {
-      return await fetchVehicleStatusCounts({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        locationIds,
-        clientDate,
-        vehicleType,
-      });
-    },
+    queryFn: () =>
+      apiClient
+        .getStatisticsForVehiclesStatuses({
+          query: {
+            clientId: auth.user?.profile.navotar_clientid || "",
+            userId: auth.user?.profile.navotar_userid || "",
+            ClientDate: localDateToQueryYearMonthDay(clientDate),
+            ...(locationIds.length === 0
+              ? {
+                  LocationId: "0",
+                }
+              : {
+                  MultipleLocation: locationIds,
+                }),
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : null)),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
     keepPreviousData: true,

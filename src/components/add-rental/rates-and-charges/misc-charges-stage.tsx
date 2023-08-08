@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import type { RatesAndChargesTabProps } from ".";
 
@@ -23,8 +24,10 @@ import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharge
 import type { MiscChargeListItem } from "@/schemas/misCharges";
 
 import { cn } from "@/utils";
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+  localDateTimeToQueryYearMonthDay,
+  localDateTimeWithoutSecondsToQueryYearMonthDay,
+} from "@/utils/date";
 
 interface MiscChargesStageProps {
   durationStageData: RatesAndChargesTabProps["durationStageData"];
@@ -43,7 +46,6 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
     vehicleStageData,
     selectedMiscCharges,
     onSelectedMiscCharges,
-    isEdit,
     onCompleted,
   } = props;
 
@@ -59,8 +61,13 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
     filters: {
       VehicleTypeId: vehicleStageData?.vehicleTypeId ?? 0,
       LocationId: durationStageData?.checkoutLocation ?? 0,
-      CheckoutDate: durationStageData?.checkoutDate ?? new Date(),
-      CheckinDate: durationStageData?.checkinDate ?? new Date(),
+      CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+        durationStageData?.checkoutDate ?? new Date()
+      ),
+      CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+        durationStageData?.checkinDate ?? new Date()
+      ),
+      Active: "true",
     },
     enabled:
       Boolean(durationStageData?.checkinDate) &&
@@ -99,20 +106,22 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
         </div>
       )}
       <div className="grid grid-cols-1 gap-3">
-        {(miscCharges.data || []).map((charge, idx) => (
-          <MiscChargeItem
-            key={`${charge.Id}-${idx}-${charge.Name}`}
-            charge={charge}
-            isSelected={selectedChargeIds.includes(`${charge.Id}`)}
-            selectedCharge={charges.find((chg) => chg.id === charge.Id)}
-            onSave={handleAddMiscCharge}
-            onRemove={handleRemoveMiscCharge}
-            dates={{
-              startDate: durationStageData?.checkoutDate ?? new Date(),
-              endDate: durationStageData?.checkinDate ?? new Date(),
-            }}
-          />
-        ))}
+        {(miscCharges.data?.status === 200 ? miscCharges.data.body : []).map(
+          (charge, idx) => (
+            <MiscChargeItem
+              key={`${charge.Id}-${idx}-${charge.Name}`}
+              charge={charge}
+              isSelected={selectedChargeIds.includes(`${charge.Id}`)}
+              selectedCharge={charges.find((chg) => chg.id === charge.Id)}
+              onSave={handleAddMiscCharge}
+              onRemove={handleRemoveMiscCharge}
+              dates={{
+                startDate: durationStageData?.checkoutDate ?? new Date(),
+                endDate: durationStageData?.checkinDate ?? new Date(),
+              }}
+            />
+          )
+        )}
       </div>
       <div className="mt-4">
         <Button
