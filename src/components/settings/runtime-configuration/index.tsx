@@ -76,10 +76,10 @@ const SettingsRuntimeConfigurationTab = () => {
 
   return (
     <>
-      <h2 className="text-xl font-semibold leading-10 text-primary">
+      <h2 className="text-xl font-semibold leading-10">
         Runtime configuration
       </h2>
-      <p className="text-base text-primary/80">
+      <p className="text-base text-foreground/80">
         Customize and manage your application runtime configuration with ease.
       </p>
       <Tabs

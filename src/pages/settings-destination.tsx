@@ -121,11 +121,9 @@ export default function SettingsCatchAllPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6 text-primary">
-            Settings
-          </h1>
+          <h1 className="text-2xl font-semibold leading-6">Settings</h1>
         </div>
-        <p className={cn("text-base text-primary/80 [text-wrap:balance]")}>
+        <p className={cn("text-base text-foreground/80 [text-wrap:balance]")}>
           Manage and configure your {UI_APPLICATION_NAME} account.
         </p>
         <Separator className="mt-3.5" />

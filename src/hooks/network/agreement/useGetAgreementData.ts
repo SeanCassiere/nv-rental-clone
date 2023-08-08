@@ -1,24 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchAgreementData } from "@/api/agreements";
 import { agreementQKeys } from "@/utils/query-key";
+import { apiClient } from "@/api";
 
 export function useGetAgreementData(params: { agreementId: string | number }) {
   const auth = useAuth();
   const query = useQuery({
     queryKey: agreementQKeys.id(params.agreementId),
-    queryFn: async () =>
-      fetchAgreementData({
-        agreementId: params.agreementId,
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
+    queryFn: () =>
+      apiClient.getAgreementById({
+        params: {
+          agreementId: String(params.agreementId),
+        },
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+        },
       }),
     enabled:
       auth.isAuthenticated &&
       Boolean(params.agreementId && params.agreementId !== "0"),
-    retry: 2,
   });
   return query;
 }

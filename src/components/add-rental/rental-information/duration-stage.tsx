@@ -109,7 +109,8 @@ export const DurationStage = ({
   });
 
   const locationData = useGetLocationsList({ locationIsActive: true });
-  const locationsList = locationData.data?.data ?? [];
+  const locationsList =
+    locationData.data?.status === 200 ? locationData.data.body : [];
 
   const agreementTypeData = useGetAgreementTypesList();
   const agreementTypesList = agreementTypeData.data ?? [];

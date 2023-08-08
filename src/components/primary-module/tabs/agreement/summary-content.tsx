@@ -1,8 +1,8 @@
 import { type ReactNode, useMemo, useState } from "react";
 
-import CustomerInformation from "../../information-block/customer-information";
-import RentalInformation from "../../information-block/rental-information";
-import FleetInformation from "../../information-block/fleet-information";
+import CustomerInformation from "@/components/primary-module/information-block/customer-information";
+import RentalInformation from "@/components/primary-module/information-block/rental-information";
+import FleetInformation from "@/components/primary-module/information-block/fleet-information";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -19,11 +19,13 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
 
   const [currentTab, setCurrentTab] = useState("vehicle");
 
-  const agreementData = useGetAgreementData({
+  const agreementQuery = useGetAgreementData({
     agreementId: props.agreementId,
   });
+  const agreement =
+    agreementQuery.data?.status === 200 ? agreementQuery.data.body : null;
 
-  const isCheckedIn = agreementData.data?.returnDate ? true : false;
+  const isCheckedIn = agreement?.returnDate ? true : false;
 
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
     module: "agreements",
@@ -39,21 +41,21 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
       component: (
         <FleetInformation
           mode={isCheckedIn ? "agreement-checked-in" : "agreement-checked-out"}
-          isLoading={agreementData.isLoading}
+          isLoading={agreementQuery.isLoading}
           data={
-            agreementData.data
+            agreement
               ? {
-                  vehicleId: agreementData.data?.vehicleId,
-                  vehicleNo: agreementData.data?.vehicleNo,
-                  vehicleType: agreementData.data?.vehicleType,
-                  licenseNo: agreementData.data?.licenseNo,
-                  make: agreementData.data?.vehicleMakeName,
-                  model: agreementData.data?.modelName,
-                  year: agreementData.data?.year,
-                  fuelLevelOut: agreementData.data?.fuelLevelOut,
-                  fuelLevelIn: agreementData.data?.fuelLevelIn,
-                  odometerOut: agreementData.data?.odometerOut,
-                  odometerIn: agreementData.data?.odometerIn,
+                  vehicleId: agreement?.vehicleId,
+                  vehicleNo: agreement?.vehicleNo,
+                  vehicleType: agreement?.vehicleType,
+                  licenseNo: agreement?.licenseNo,
+                  make: agreement?.vehicleMakeName,
+                  model: agreement?.modelName,
+                  year: agreement?.year,
+                  fuelLevelOut: agreement?.fuelLevelOut,
+                  fuelLevelIn: agreement?.fuelLevelIn,
+                  odometerOut: agreement?.odometerOut,
+                  odometerIn: agreement?.odometerIn,
                 }
               : {}
           }
@@ -69,32 +71,28 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
           <RentalInformation
             mode="agreement"
             data={
-              agreementData.data?.rateList && agreementData.data?.rateList[0]
+              agreement?.rateList && agreement?.rateList[0]
                 ? {
-                    totalDays: agreementData.data?.totalDays,
-                    rateName: agreementData.data?.rateList[0]?.rateName,
+                    totalDays: agreement?.totalDays,
+                    rateName: agreement?.rateList[0]?.rateName,
                     dailyMilesAllowed:
-                      agreementData.data?.rateList[0]?.displaydailyMilesAllowed,
+                      agreement?.rateList[0]?.displaydailyMilesAllowed,
                     weeklyMilesAllowed:
-                      agreementData.data?.rateList[0]
-                        ?.displayweeklyMilesAllowed,
+                      agreement?.rateList[0]?.displayweeklyMilesAllowed,
                     monthlyMilesAllowed:
-                      agreementData.data?.rateList[0]
-                        ?.displaymonthlyMilesAllowed,
-                    hourlyRate: agreementData.data?.rateList[0]?.hourlyRate,
-                    halfHourlyRate:
-                      agreementData.data?.rateList[0]?.halfHourlyRate,
-                    dailyRate: agreementData.data?.rateList[0]?.dailyRate,
-                    halfDayRate: agreementData.data?.rateList[0]?.halfDayRate,
-                    weeklyRate: agreementData.data?.rateList[0]?.weeklyRate,
-                    weekendRate:
-                      agreementData.data?.rateList[0]?.weekendDayRate,
-                    monthlyRate: agreementData.data?.rateList[0]?.monthlyRate,
-                    destination: agreementData.data?.destination,
+                      agreement?.rateList[0]?.displaymonthlyMilesAllowed,
+                    hourlyRate: agreement?.rateList[0]?.hourlyRate,
+                    halfHourlyRate: agreement?.rateList[0]?.halfHourlyRate,
+                    dailyRate: agreement?.rateList[0]?.dailyRate,
+                    halfDayRate: agreement?.rateList[0]?.halfDayRate,
+                    weeklyRate: agreement?.rateList[0]?.weeklyRate,
+                    weekendRate: agreement?.rateList[0]?.weekendDayRate,
+                    monthlyRate: agreement?.rateList[0]?.monthlyRate,
+                    destination: agreement?.destination,
                   }
                 : {}
             }
-            isLoading={agreementData.isLoading}
+            isLoading={agreementQuery.isLoading}
           />
         ),
       });
@@ -102,8 +100,8 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
 
     return tabs;
   }, [
-    agreementData.data,
-    agreementData.isLoading,
+    agreement,
+    agreementQuery.isLoading,
     canViewRentalInformation,
     isCheckedIn,
   ]);
@@ -115,28 +113,25 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
           <CustomerInformation
             mode="agreement"
             data={{
-              customerId: agreementData.data?.customerDetails?.customerId,
-              firstName: agreementData.data?.customerDetails?.firstName,
-              middleName: agreementData.data?.customerDetails?.middleName,
-              lastName: agreementData.data?.customerDetails?.lastName,
-              email: agreementData.data?.customerEmail,
-              dateOfBirth: agreementData.data?.customerDetails?.dateOfbirth,
-              mobileNumber: agreementData.data?.customerDetails?.cPhone,
-              homeNumber: agreementData.data?.customerDetails?.hPhone,
-              driverLicenseNumber:
-                agreementData.data?.customerDetails?.licenseNumber,
-              creditCardType:
-                agreementData.data?.customerDetails?.creditCardType,
-              creditCardNumber:
-                agreementData.data?.customerDetails?.creditCardNo,
+              customerId: agreement?.customerDetails?.customerId,
+              firstName: agreement?.customerDetails?.firstName,
+              middleName: agreement?.customerDetails?.middleName,
+              lastName: agreement?.customerDetails?.lastName,
+              email: agreement?.customerEmail,
+              dateOfBirth: agreement?.customerDetails?.dateOfbirth,
+              mobileNumber: agreement?.customerDetails?.cPhone,
+              homeNumber: agreement?.customerDetails?.hPhone,
+              driverLicenseNumber: agreement?.customerDetails?.licenseNumber,
+              creditCardType: agreement?.customerDetails?.creditCardType,
+              creditCardNumber: agreement?.customerDetails?.creditCardNo,
               creditCardExpirationDate:
-                agreementData.data?.customerDetails?.creditCardExpiryDate,
+                agreement?.customerDetails?.creditCardExpiryDate,
               creditCardSecurityCode:
-                agreementData.data?.customerDetails?.creditCardCVSNo,
-              checkoutDate: agreementData.data?.checkoutDate,
-              checkinDate: agreementData.data?.checkinDate,
+                agreement?.customerDetails?.creditCardCVSNo,
+              checkoutDate: agreement?.checkoutDate,
+              checkinDate: agreement?.checkinDate,
             }}
-            isLoading={agreementData.isLoading}
+            isLoading={agreementQuery.isLoading}
           />
         )}
 

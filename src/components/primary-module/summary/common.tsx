@@ -18,9 +18,9 @@ export const SummaryHeader = ({
   icon: ReactNode;
 }) => {
   return (
-    <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
+    <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4">
       <CardTitle className="text-lg font-medium">{title}</CardTitle>
-      <span className="text-primary/80">{icon}</span>
+      <span>{icon}</span>
     </CardHeader>
   );
 };
@@ -62,9 +62,9 @@ export const makeSummaryDataStyles = (
   return cn(
     "text-base font-semibold",
     data.biggerText ? "text-lg" : "text-base",
-    colorMode === "" ? "text-primary/70" : "",
+    colorMode === "" ? "text-foreground/70" : "",
     colorMode === "primary-block-only" ? "text-primary-foreground" : "",
-    colorMode === "primary-text-only" ? "text-primary" : "",
+    colorMode === "primary-text-only" ? "text-foreground" : "",
     colorMode === "red-highlight" ? "text-destructive" : ""
   );
 };
@@ -127,7 +127,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
               {...(data?.linkProps as any)}
               className={cn(
                 makeSummaryDataStyles(data),
-                "underline underline-offset-4"
+                "text-primary underline underline-offset-4"
               )}
             >
               {data.amount}

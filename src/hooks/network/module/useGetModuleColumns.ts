@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchModuleColumns } from "@/api/columns";
 import type { AppPrimaryModuleType } from "@/types/General";
 import {
   agreementQKeys,
@@ -9,10 +8,9 @@ import {
   customerQKeys,
   fleetQKeys,
 } from "@/utils/query-key";
-import {
-  ColumnListItemListSchema,
-  type TColumnListItemParsed,
-} from "@/schemas/column";
+import { type TColumnHeaderItem } from "@/schemas/client/column";
+import { apiClient } from "@/api";
+import { getModuleApiName } from "@/utils/columns";
 
 export const allModulesKeySelector = (module: AppPrimaryModuleType) => {
   switch (module) {
@@ -36,34 +34,41 @@ export function useGetModuleColumns({
   const query = useQuery({
     queryKey: allModulesKeySelector(module).columns(),
     queryFn: async () =>
-      await fetchModuleColumnsModded({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        module,
+      fetchModuleColumnsModded({
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+          module: getModuleApiName(module).module,
+        },
       }),
     enabled: auth.isAuthenticated,
-    initialData: makeInitialColumnAccessors(module),
+    initialData: {
+      status: 200,
+      body: makeInitialColumnAccessors(module),
+      headers: new Headers(),
+    },
   });
   return query;
 }
 
 export async function fetchModuleColumnsModded(
-  params: Parameters<typeof fetchModuleColumns>[0]
+  params: Parameters<(typeof apiClient)["getClientColumnHeaderInformation"]>[0]
 ) {
-  return await fetchModuleColumns({
-    clientId: params.clientId || "",
-    userId: params.userId || "",
-    accessToken: params.accessToken || "",
-    module: params.module,
-  })
-    .then((data) => ColumnListItemListSchema.parse(data))
-    .then((data) => mutateColumnAccessors(params.module, data))
-    .then((cols) =>
-      cols.sort(
+  return await apiClient
+    .getClientColumnHeaderInformation({
+      query: {
+        clientId: params.query.clientId || "",
+        userId: params.query.userId || "",
+        module: params.query.module,
+      },
+    })
+    .then((data) => mutateColumnAccessors(params.query.module, data))
+    .then((data) => ({
+      ...data,
+      body: data.body.sort(
         (col1, col2) => col1.columnHeaderSettingID - col2.columnHeaderSettingID // sort by columnHeaderSettingID
-      )
-    )
+      ),
+    }))
     .catch((e) => {
       console.error(e);
       throw e;
@@ -99,62 +104,114 @@ const customerColumnHeaderMap: ColumMap = {
 };
 
 export function mutateColumnAccessors(
-  type: AppPrimaryModuleType,
-  data: TColumnListItemParsed[]
+  type: Parameters<
+    (typeof apiClient)["getClientColumnHeaderInformation"]
+  >[0]["query"]["module"],
+  data: { status: number; body: TColumnHeaderItem[]; headers: Headers }
 ) {
   switch (type) {
-    case "reservations":
+    case "reservation":
       const reservationColumnData = settingStartingColumn(
-        data,
+        data.body,
         "ReservationNumber"
       );
 
-      return reservationColumnData.map((column) => {
-        if (column.columnHeader in reservationColumnHeaderMap) {
-          column.columnHeader = reservationColumnHeaderMap[
-            column.columnHeader
-          ] as string;
-          column.searchText = reservationColumnHeaderMap[
-            column.columnHeader
-          ] as string;
-        }
+      return {
+        ...data,
+        body: reservationColumnData.map((column) => {
+          if (column.columnHeader in reservationColumnHeaderMap) {
+            column.columnHeader = reservationColumnHeaderMap[
+              column.columnHeader
+            ] as string;
+            column.searchText = reservationColumnHeaderMap[
+              column.columnHeader
+            ] as string;
+          }
 
-        return column;
-      });
-    case "agreements":
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
+
+          return column;
+        }),
+      };
+    case "agreement":
       const agreementColumnData = settingStartingColumn(
-        data,
+        data.body,
         "AgreementNumber"
       );
-      return agreementColumnData.map((column) => {
-        if (column.columnHeader in agreementColumnHeaderMap) {
-          column.columnHeader = agreementColumnHeaderMap[
-            column.columnHeader
-          ] as string;
-          column.searchText = agreementColumnHeaderMap[
-            column.columnHeader
-          ] as string;
-        }
+      return {
+        ...data,
+        body: agreementColumnData.map((column) => {
+          if (column.columnHeader in agreementColumnHeaderMap) {
+            column.columnHeader = agreementColumnHeaderMap[
+              column.columnHeader
+            ] as string;
+            column.searchText = agreementColumnHeaderMap[
+              column.columnHeader
+            ] as string;
+          }
 
-        return column;
-      });
-    case "customers":
-      const customerColumnData = settingStartingColumn(data, "FirstName");
-      return customerColumnData.map((column) => {
-        if (column.columnHeader in customerColumnHeaderMap) {
-          column.columnHeader = customerColumnHeaderMap[
-            column.columnHeader
-          ] as string;
-          column.searchText = customerColumnHeaderMap[
-            column.columnHeader
-          ] as string;
-        }
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
 
-        return column;
-      });
-    case "vehicles":
-      const vehicleColumnData = settingStartingColumn(data, "VehicleNo");
-      return vehicleColumnData;
+          return column;
+        }),
+      };
+    case "customer":
+      const customerColumnData = settingStartingColumn(data.body, "FirstName");
+      return {
+        ...data,
+        body: customerColumnData.map((column) => {
+          if (column.columnHeader in customerColumnHeaderMap) {
+            column.columnHeader = customerColumnHeaderMap[
+              column.columnHeader
+            ] as string;
+            column.searchText = customerColumnHeaderMap[
+              column.columnHeader
+            ] as string;
+          }
+
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
+
+          return column;
+        }),
+      };
+    case "vehicle":
+      const vehicleColumnData = settingStartingColumn(data.body, "VehicleNo");
+      return {
+        ...data,
+        body: vehicleColumnData.map((column) => {
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
+
+          return column;
+        }),
+      };
     default:
       return data;
   }
@@ -410,7 +467,7 @@ export function makeInitialColumnAccessors(module: AppPrimaryModuleType) {
 }
 
 function settingStartingColumn(
-  columns: TColumnListItemParsed[],
+  columns: TColumnHeaderItem[],
   startingColumnHeader: string
 ) {
   let columnData = columns;

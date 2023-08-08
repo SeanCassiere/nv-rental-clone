@@ -1,4 +1,4 @@
-import { useGetClientFeatures } from "../network/client/useGetClientFeatures";
+import { useGetClientFeatures } from "@/hooks/network/client/useGetClientFeatures";
 
 type FeatureValue = string | null;
 type IsFeaturePresent = boolean;
@@ -9,11 +9,13 @@ export function useFeature(
 ): [FeatureValue, IsFeaturePresent] {
   const features = useGetClientFeatures();
 
-  if (features.status === "loading" || features.status === "error") {
+  if (features.status !== "success") {
     return [defaultValue, false];
   }
 
-  const feature = features.data?.find(
+  const list = features.data?.status === 200 ? features.data?.body : [];
+
+  const feature = list.find(
     (feature) =>
       String(feature.featureName).toLowerCase() ===
       String(featureName).toLowerCase()

@@ -34,7 +34,8 @@ function useScreenSetting(
     return [];
   }
 
-  const settings = settingsQuery.data;
+  const settings =
+    settingsQuery.data.status === 200 ? settingsQuery.data.body : [];
 
   if (screenName && sectionName && fieldName) {
     return (

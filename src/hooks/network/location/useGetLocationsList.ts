@@ -1,19 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchLocationsList } from "@/api/locations";
 import { locationQKeys } from "@/utils/query-key";
+import { apiClient } from "@/api";
 
 export function useGetLocationsList(params: { locationIsActive: boolean }) {
   const auth = useAuth();
   const query = useQuery({
     queryKey: locationQKeys.all(),
-    queryFn: async () =>
-      await fetchLocationsList({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        withActive: params.locationIsActive,
+    queryFn: () =>
+      apiClient.getLocations({
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+          withActive: params.locationIsActive,
+        },
       }),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,

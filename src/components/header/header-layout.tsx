@@ -44,18 +44,24 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to={indexRoute.to}>
-                <img
-                  className="h-10 w-10 rounded-full p-1"
-                  src="/android-chrome-192x192.png"
-                  alt={UI_APPLICATION_NAME}
-                  style={{ imageRendering: "crisp-edges" }}
-                />
+                <picture>
+                  <source
+                    srcSet="/android-chrome-192x192-dark.png"
+                    media="(prefers-color-scheme: dark)"
+                  />
+                  <img
+                    className="h-10 w-10 rounded-full p-1"
+                    src="/android-chrome-192x192-light.png"
+                    alt={UI_APPLICATION_NAME}
+                    style={{ imageRendering: "crisp-edges" }}
+                  />
+                </picture>
               </Link>
             </div>
             <div className="flex flex-grow items-center">
               <Link
                 to={indexRoute.to}
-                className="hidden items-center rounded p-1 text-lg font-medium leading-3 text-primary transition sm:flex"
+                className="hidden items-center rounded p-1 text-lg font-medium leading-3 transition sm:flex"
               >
                 {UI_APPLICATION_NAME}
               </Link>

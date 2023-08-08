@@ -63,7 +63,7 @@ import {
 import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
 import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 
-import { type TColumnListItemParsed } from "@/schemas/column";
+import { type TColumnHeaderItem } from "@/schemas/client/column";
 
 import { cn } from "@/utils";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
@@ -76,7 +76,7 @@ interface PrimaryModuleTableProps<
 > {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
-  rawColumnsData: TColumnListItemParsed[];
+  rawColumnsData: TColumnHeaderItem[];
 
   onColumnOrderChange?: (updatedValues: ColumnOrderState) => void;
 

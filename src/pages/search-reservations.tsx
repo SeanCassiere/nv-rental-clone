@@ -80,7 +80,8 @@ function ReservationsSearchPage() {
   const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useGetLocationsList({ locationIsActive: true });
-  const locations = locationsList.data?.data ?? [];
+  const locations =
+    locationsList.data?.status === 200 ? locationsList.data.body : [];
 
   const reservationTypesList = useGetReservationTypesList();
   const reservationTypes = reservationTypesList.data ?? [];
@@ -89,60 +90,69 @@ function ReservationsSearchPage() {
 
   const columnDefs = useMemo(
     () =>
-      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
-        columnHelper.accessor(column.columnHeader as any, {
-          id: column.columnHeader,
-          meta: {
-            columnName: column.columnHeaderDescription ?? undefined,
-          },
-          header: ({ column: columnChild }) => (
-            <PrimaryModuleTableColumnHeader
-              column={columnChild}
-              title={column.columnHeaderDescription ?? ""}
-            />
-          ),
-          cell: (item) => {
-            const value = item.getValue();
-            if (column.columnHeader === "ReservationNumber") {
-              const reservationId = item.table.getRow(item.row.id).original.id;
-              return (
-                <PrimaryModuleTableCellWrap>
-                  <Link
-                    to={viewReservationByIdRoute.to}
-                    params={{ reservationId: String(reservationId) }}
-                    search={() => ({ tab: "summary" })}
-                    className={cn(buttonVariants({ variant: "link" }), "p-0")}
-                    preload="intent"
-                  >
-                    {value}
-                  </Link>
-                </PrimaryModuleTableCellWrap>
-              );
-            }
-            if (column.columnHeader === "ReservationStatusName") {
-              return (
-                <PrimaryModuleTableCellWrap>
-                  <Badge variant="outline">{value}</Badge>
-                </PrimaryModuleTableCellWrap>
-              );
-            }
+      (columnsData.data.status === 200 ? columnsData.data.body : [])
+        .sort(sortColOrderByOrderIndex)
+        .map((column) =>
+          columnHelper.accessor(column.columnHeader as any, {
+            id: column.columnHeader,
+            meta: {
+              columnName: column.columnHeaderDescription ?? undefined,
+            },
+            header: ({ column: columnChild }) => (
+              <PrimaryModuleTableColumnHeader
+                column={columnChild}
+                title={column.columnHeaderDescription ?? ""}
+              />
+            ),
+            cell: (item) => {
+              const value = item.getValue();
+              if (column.columnHeader === "ReservationNumber") {
+                const reservationId = item.table.getRow(item.row.id).original
+                  .id;
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    <Link
+                      to={viewReservationByIdRoute.to}
+                      params={{ reservationId: String(reservationId) }}
+                      search={() => ({ tab: "summary" })}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "p-0 text-base"
+                      )}
+                      preload="intent"
+                    >
+                      {value}
+                    </Link>
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
+              if (column.columnHeader === "ReservationStatusName") {
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    <Badge variant="outline">{value}</Badge>
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
 
-            if (ReservationDateTimeColumns.includes(column.columnHeader)) {
-              return (
-                <PrimaryModuleTableCellWrap>
-                  {t("intlDateTime", { value: new Date(value), ns: "format" })}
-                </PrimaryModuleTableCellWrap>
-              );
-            }
+              if (ReservationDateTimeColumns.includes(column.columnHeader)) {
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    {t("intlDateTime", {
+                      value: new Date(value),
+                      ns: "format",
+                    })}
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
 
-            return (
-              <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-            );
-          },
-          enableHiding: column.columnHeader !== "ReservationNumber",
-          enableSorting: false,
-        })
-      ),
+              return (
+                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
+              );
+            },
+            enableHiding: column.columnHeader !== "ReservationNumber",
+            enableSorting: false,
+          })
+        ),
     [columnsData.data, t]
   );
 
@@ -151,7 +161,8 @@ function ReservationsSearchPage() {
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
-        allColumns: columnsData.data,
+        allColumns:
+          columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
@@ -160,7 +171,9 @@ function ReservationsSearchPage() {
 
   const handleSaveColumnVisibility = useCallback(
     (graph: VisibilityState) => {
-      const newColumnsData = columnsData.data.map((col) => {
+      const newColumnsData = (
+        columnsData.data.status === 200 ? columnsData.data.body : []
+      ).map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
@@ -179,9 +192,7 @@ function ReservationsSearchPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6 text-primary">
-            Reservations
-          </h1>
+          <h1 className="text-2xl font-semibold leading-6">Reservations</h1>
           <Link
             to={addReservationRoute.to}
             search={() => ({ stage: "rental-information" })}
@@ -191,7 +202,7 @@ function ReservationsSearchPage() {
             <span className="hidden sm:inline-block">New Reservation</span>
           </Link>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           Search through your bookings and view details.
         </p>
         <Separator className="mt-3.5" />
@@ -202,7 +213,9 @@ function ReservationsSearchPage() {
           data={reservationsData.data?.data || []}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
-          rawColumnsData={columnsData?.data || []}
+          rawColumnsData={
+            columnsData.data.status === 200 ? columnsData.data.body : []
+          }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
             reservationsData.data?.totalRecords

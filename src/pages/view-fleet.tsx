@@ -153,7 +153,7 @@ function VehicleViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link
-              className="text-2xl font-semibold leading-6 text-primary"
+              className="text-2xl font-semibold leading-6"
               onClick={() => {
                 router.history.go(-1);
               }}
@@ -161,14 +161,14 @@ function VehicleViewPage() {
               Fleet
             </Link>
             <ChevronRightIcon
-              className="h-4 w-4 flex-shrink-0 text-primary"
+              className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
             <Link
               to={viewFleetByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ vehicleId }}
-              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
               {vehicle?.data?.vehicle.vehicleNo}
             </Link>
@@ -221,7 +221,7 @@ function VehicleViewPage() {
             </DropdownMenu>
           </div>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           View the details related to this fleet item.
         </p>
         <Separator className="mb-3.5 mt-3.5" />

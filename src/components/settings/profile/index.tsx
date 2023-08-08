@@ -54,8 +54,8 @@ export default function SettingsProfileTab() {
 
   return (
     <>
-      <h2 className="text-xl font-semibold leading-10 text-primary">Profile</h2>
-      <p className="text-base text-primary/80">
+      <h2 className="text-xl font-semibold leading-10">Profile</h2>
+      <p className="text-base text-foreground/80">
         Customize and manage your profile with ease.
       </p>
       {(userQuery.status === "loading" ||
@@ -67,7 +67,11 @@ export default function SettingsProfileTab() {
           <article className="mt-6 w-full lg:max-w-2xl">
             <ProfileForm
               user={userQuery.data}
-              languages={languagesQuery.data}
+              languages={
+                languagesQuery.data.status === 200
+                  ? languagesQuery.data.body
+                  : []
+              }
             />
           </article>
         )}
@@ -253,7 +257,7 @@ function ProfileForm(props: {
               <FormItem className="w-full">
                 <FormLabel>
                   Phone no.{" "}
-                  <span className="text-xs text-primary/70">(optional)</span>
+                  <span className="text-xs text-foreground/70">(optional)</span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} disabled={isDisabled} />

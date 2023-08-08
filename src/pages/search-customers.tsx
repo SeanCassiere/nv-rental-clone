@@ -74,57 +74,62 @@ function CustomerSearchPage() {
 
   const columnDefs = useMemo(
     () =>
-      columnsData.data.sort(sortColOrderByOrderIndex).map((column) =>
-        columnHelper.accessor(column.columnHeader as any, {
-          id: column.columnHeader,
-          meta: {
-            columnName: column.columnHeaderDescription ?? undefined,
-          },
-          header: ({ column: columnChild }) => (
-            <PrimaryModuleTableColumnHeader
-              column={columnChild}
-              title={column.columnHeaderDescription ?? ""}
-            />
-          ),
-          cell: (item) => {
-            const value = item.getValue();
-            if (
-              column.columnHeader === "FirstName" &&
-              column.isSelected === true
-            ) {
-              const customerId = item.table.getRow(item.row.id).original
-                .CustomerId;
-              return (
-                <PrimaryModuleTableCellWrap>
-                  <Link
-                    to={viewCustomerByIdRoute.to}
-                    params={{ customerId: String(customerId) }}
-                    search={() => ({ tab: "summary" })}
-                    className={cn(buttonVariants({ variant: "link" }), "p-0")}
-                    preload="intent"
-                  >
-                    {value}
-                  </Link>
-                </PrimaryModuleTableCellWrap>
-              );
-            }
+      (columnsData.data.status === 200 ? columnsData.data.body : [])
+        .sort(sortColOrderByOrderIndex)
+        .map((column) =>
+          columnHelper.accessor(column.columnHeader as any, {
+            id: column.columnHeader,
+            meta: {
+              columnName: column.columnHeaderDescription ?? undefined,
+            },
+            header: ({ column: columnChild }) => (
+              <PrimaryModuleTableColumnHeader
+                column={columnChild}
+                title={column.columnHeaderDescription ?? ""}
+              />
+            ),
+            cell: (item) => {
+              const value = item.getValue();
+              if (
+                column.columnHeader === "FirstName" &&
+                column.isSelected === true
+              ) {
+                const customerId = item.table.getRow(item.row.id).original
+                  .CustomerId;
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    <Link
+                      to={viewCustomerByIdRoute.to}
+                      params={{ customerId: String(customerId) }}
+                      search={() => ({ tab: "summary" })}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "p-0 text-base"
+                      )}
+                      preload="intent"
+                    >
+                      {value}
+                    </Link>
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
 
-            if (DateColumns.includes(column.columnHeader)) {
-              return (
-                <PrimaryModuleTableCellWrap>
-                  {t("intlDate", { value: new Date(value), ns: "format" })}
-                </PrimaryModuleTableCellWrap>
-              );
-            }
+              if (DateColumns.includes(column.columnHeader)) {
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    {t("intlDate", { value: new Date(value), ns: "format" })}
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
 
-            return (
-              <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-            );
-          },
-          enableHiding: column.columnHeader !== "FirstName",
-          enableSorting: false,
-        })
-      ),
+              return (
+                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
+              );
+            },
+            enableHiding: column.columnHeader !== "FirstName",
+            enableSorting: false,
+          })
+        ),
     [columnsData.data, t]
   );
 
@@ -133,7 +138,8 @@ function CustomerSearchPage() {
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
-        allColumns: columnsData.data,
+        allColumns:
+          columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
@@ -142,7 +148,9 @@ function CustomerSearchPage() {
 
   const handleSaveColumnVisibility = useCallback(
     (graph: VisibilityState) => {
-      const newColumnsData = columnsData.data.map((col) => {
+      const newColumnsData = (
+        columnsData.data.status === 200 ? columnsData.data.body : []
+      ).map((col) => {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
@@ -161,11 +169,9 @@ function CustomerSearchPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6 text-primary">
-            Customers
-          </h1>
+          <h1 className="text-2xl font-semibold leading-6">Customers</h1>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           Search through your customers and view details.
         </p>
         <Separator className="mt-3.5" />
@@ -176,7 +182,9 @@ function CustomerSearchPage() {
           data={customersData.data?.data || []}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
-          rawColumnsData={columnsData?.data || []}
+          rawColumnsData={
+            columnsData.data.status === 200 ? columnsData.data.body : []
+          }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
             customersData.data?.totalRecords

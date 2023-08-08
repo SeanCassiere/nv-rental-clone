@@ -7,16 +7,15 @@ import LoadingPlaceholder from "@/components/loading-placeholder";
 
 import { queryClient } from "@/tanstack-query-config";
 
-import {
-  fetchClientProfile,
-  fetchClientFeatures,
-  fetchClientScreenSettings,
-} from "@/api/clients";
-import { fetchUserPermissions } from "@/api/users";
+import { apiClient } from "@/api";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { clientQKeys, userQKeys } from "@/utils/query-key";
-import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
+import {
+  UI_APPLICATION_SHOW_ROUTER_DEVTOOLS,
+  USER_STORAGE_KEYS,
+} from "@/utils/constants";
+import { setLocalStorageForUser } from "@/utils/user-local-storage";
 
 interface MyRouterContext {
   queryClient: typeof queryClient;
@@ -34,12 +33,24 @@ export const rootRoute = routerContext.createRootRoute({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: clientQKeys.profile(),
-          queryFn: async () =>
-            await fetchClientProfile({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-            }),
+          queryFn: () =>
+            apiClient
+              .getClientProfile({
+                params: { clientId: auth.profile.navotar_clientid },
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  const currency = res.body.currency || "USD";
+
+                  setLocalStorageForUser(
+                    auth.profile.navotar_clientid,
+                    auth.profile.navotar_userid,
+                    USER_STORAGE_KEYS.currency,
+                    currency
+                  );
+                }
+                return res;
+              }),
           staleTime: 1000 * 30, // 30 seconds
         })
       );
@@ -47,10 +58,10 @@ export const rootRoute = routerContext.createRootRoute({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: clientQKeys.features(),
-          queryFn: async () =>
-            fetchClientFeatures({
-              clientId: auth.profile.navotar_clientid,
-              accessToken: auth.access_token,
+          queryFn: () =>
+            apiClient.getClientFeatures({
+              params: { clientId: auth.profile.navotar_clientid },
+              body: {},
             }),
           staleTime: 1000 * 60 * 5, // 5 minutes
         })
@@ -59,10 +70,9 @@ export const rootRoute = routerContext.createRootRoute({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: clientQKeys.screenSettings(),
-          queryFn: async () =>
-            fetchClientScreenSettings({
-              clientId: auth.profile.navotar_clientid,
-              accessToken: auth.access_token,
+          queryFn: () =>
+            apiClient.getClientScreenSettings({
+              params: { clientId: auth.profile.navotar_clientid },
             }),
           staleTime: 1000 * 60 * 5, // 5 minutes
         })
@@ -71,11 +81,10 @@ export const rootRoute = routerContext.createRootRoute({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: userQKeys.permissions(auth.profile.navotar_userid),
-          queryFn: async () =>
-            fetchUserPermissions({
-              clientId: auth.profile.navotar_clientid,
-              accessToken: auth.access_token,
-              intendedUserId: auth.profile.navotar_userid,
+          queryFn: () =>
+            apiClient.getUserPermissionByUserId({
+              params: { userId: auth.profile.navotar_userid },
+              query: { clientId: auth.profile.navotar_clientid },
             }),
           staleTime: 1000 * 60 * 5, // 5 minutes
         })

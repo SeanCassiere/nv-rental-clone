@@ -58,53 +58,55 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
   const columnDefs = useMemo(() => {
     const columns: ColumnDef<TAgreementListItemParsed>[] = [];
 
-    columnsData.data.sort(sortColOrderByOrderIndex).forEach((column) => {
-      if (acceptedColumns.includes(column.columnHeader) === false) return;
+    (columnsData.data.status === 200 ? columnsData.data.body : [])
+      .sort(sortColOrderByOrderIndex)
+      .forEach((column) => {
+        if (acceptedColumns.includes(column.columnHeader) === false) return;
 
-      columns.push(
-        columnHelper.accessor(column.columnHeader as any, {
-          id: column.columnHeader,
-          header: ({ column: columnChild }) => (
-            <DataTableColumnHeader
-              column={columnChild}
-              title={column.columnHeaderDescription ?? ""}
-            />
-          ),
-          cell: (item) => {
-            const value = item.getValue();
-            if (column.columnHeader === "AgreementNumber") {
-              const agreementId = item.table.getRow(item.row.id).original
-                .AgreementId;
-              return (
-                <Link
-                  to={viewAgreementByIdRoute.to}
-                  params={{ agreementId: String(agreementId) }}
-                  search={() => ({ tab: "summary" })}
-                  className="font-semibold text-slate-800"
-                  preload="intent"
-                >
-                  {value as any}
-                </Link>
-              );
-            }
-            if (column.columnHeader === "AgreementStatusName") {
-              return <Badge variant="outline">{String(value)}</Badge>;
-            }
+        columns.push(
+          columnHelper.accessor(column.columnHeader as any, {
+            id: column.columnHeader,
+            header: ({ column: columnChild }) => (
+              <DataTableColumnHeader
+                column={columnChild}
+                title={column.columnHeaderDescription ?? ""}
+              />
+            ),
+            cell: (item) => {
+              const value = item.getValue();
+              if (column.columnHeader === "AgreementNumber") {
+                const agreementId = item.table.getRow(item.row.id).original
+                  .AgreementId;
+                return (
+                  <Link
+                    to={viewAgreementByIdRoute.to}
+                    params={{ agreementId: String(agreementId) }}
+                    search={() => ({ tab: "summary" })}
+                    className="font-semibold text-slate-800"
+                    preload="intent"
+                  >
+                    {value as any}
+                  </Link>
+                );
+              }
+              if (column.columnHeader === "AgreementStatusName") {
+                return <Badge variant="outline">{String(value)}</Badge>;
+              }
 
-            if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-              return t("intlDateTime", {
-                value: new Date(value as any),
-                ns: "format",
-              });
-            }
+              if (AgreementDateTimeColumns.includes(column.columnHeader)) {
+                return t("intlDateTime", {
+                  value: new Date(value as any),
+                  ns: "format",
+                });
+              }
 
-            return value;
-          },
-          enableHiding: false,
-          enableSorting: false,
-        })
-      );
-    });
+              return value;
+            },
+            enableHiding: false,
+            enableSorting: false,
+          })
+        );
+      });
 
     return columns;
   }, [columnsData.data, t]);

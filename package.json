@@ -38,6 +38,7 @@
     "@tanstack/react-table": "^8.9.3",
     "@tanstack/router": "^0.0.1-beta.139",
     "@tanstack/router-devtools": "^0.0.1-beta.139",
+    "@ts-rest/core": "^3.27.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",

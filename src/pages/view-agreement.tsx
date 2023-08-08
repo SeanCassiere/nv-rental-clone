@@ -121,20 +121,22 @@ function AgreementViewPage() {
     });
   };
 
-  const agreement = useGetAgreementData({
+  const agreementQuery = useGetAgreementData({
     agreementId,
   });
-  const isCheckedIn = agreement.data?.returnDate ? true : false;
+  const agreement =
+    agreementQuery.data?.status === 200 ? agreementQuery.data.body : null;
+  const isCheckedIn = agreement?.returnDate ? true : false;
 
   useDocumentTitle(
-    titleMaker((agreement.data?.agreementNumber || "Loading") + " - Agreements")
+    titleMaker((agreement?.agreementNumber || "Loading") + " - Agreements")
   );
 
   useEffect(() => {
-    if (agreement.status !== "error") return;
+    if (agreementQuery.status !== "error") return;
 
     router.history.go(-1);
-  }, [agreement.status, router.history]);
+  }, [agreementQuery.status, router.history]);
 
   return (
     <ProtectorShield>
@@ -150,7 +152,7 @@ function AgreementViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link
-              className="text-2xl font-semibold leading-6 text-primary"
+              className="text-2xl font-semibold leading-6"
               onClick={() => {
                 router.history.go(-1);
               }}
@@ -158,16 +160,16 @@ function AgreementViewPage() {
               Agreements
             </Link>
             <ChevronRightIcon
-              className="h-4 w-4 flex-shrink-0 text-primary"
+              className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
             <Link
               to={viewAgreementByIdRoute.to}
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ agreementId }}
-              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+              className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
-              {agreement?.data?.agreementNumber}
+              {agreement?.agreementNumber}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
@@ -240,14 +242,11 @@ function AgreementViewPage() {
             </DropdownMenu>
           </div>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           View the details related to this rental.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <AgreementStatBlock
-          agreement={agreement.data}
-          isCheckedIn={isCheckedIn}
-        />
+        <AgreementStatBlock agreement={agreement} isCheckedIn={isCheckedIn} />
       </section>
 
       <section

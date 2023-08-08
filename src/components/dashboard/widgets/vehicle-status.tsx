@@ -98,7 +98,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
           formatter={(value, entry) => {
             return (
               <Link
-                className="mb-1 inline-block text-base text-primary/70"
+                className="mb-1 inline-block text-base"
                 to={searchFleetRoute.to}
                 search={() => ({
                   page: 1,

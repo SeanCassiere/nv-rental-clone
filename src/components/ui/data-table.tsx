@@ -303,7 +303,7 @@ export function DataTableToolbar<TData>({
         <>{customSearchFilters}</>
       ) : (
         <div className="flex flex-1 items-center space-x-2">
-          <div className="text-sm text-primary/80">
+          <div className="text-sm text-foreground/80">
             TODO: implement a more modern search filter toolbar
           </div>
           {/* <Input

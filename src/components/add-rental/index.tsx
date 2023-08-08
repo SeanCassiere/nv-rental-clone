@@ -416,9 +416,12 @@ const AddRentalParentForm = ({
   });
 
   useEffect(() => {
-    if (getAgreementQuery.status !== "success") return;
+    if (getAgreementQuery.status !== "success" || !getAgreementQuery.data)
+      return;
+    if (getAgreementQuery.data && getAgreementQuery.data?.status !== 200)
+      return;
 
-    const data = getAgreementQuery.data;
+    const data = getAgreementQuery.data.body;
 
     const originalStartDate = parseISO(data.checkoutDate);
     const originalEndDate = parseISO(data.checkinDate);
@@ -860,18 +863,18 @@ const AddRentalParentForm = ({
               <>
                 <Link
                   to={searchAgreementsRoute.to as any}
-                  className="text-2xl font-semibold leading-6 text-primary"
+                  className="text-2xl font-semibold leading-6"
                 >
                   Agreements
                 </Link>
                 <ChevronRightIcon
-                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
                 <Link
                   to={addAgreementRoute.to}
                   search={() => ({ stage })}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
                   Add Agreement
                 </Link>
@@ -881,23 +884,23 @@ const AddRentalParentForm = ({
               <>
                 <Link
                   to={searchAgreementsRoute.to as any}
-                  className="text-2xl font-semibold leading-6 text-primary"
+                  className="text-2xl font-semibold leading-6"
                 >
                   Agreements
                 </Link>
                 <ChevronRightIcon
-                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
                 <Link
                   to={viewAgreementByIdRoute.to as any}
                   params={{ agreementId: String(referenceId) }}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
                   {referenceNumber ?? "-"}
                 </Link>
                 <ChevronRightIcon
-                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
                 {isCheckin ? (
@@ -905,7 +908,7 @@ const AddRentalParentForm = ({
                     to={checkinAgreementByIdRoute.to}
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
-                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                   >
                     Check-in
                   </Link>
@@ -914,7 +917,7 @@ const AddRentalParentForm = ({
                     to={editAgreementByIdRoute.to}
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
-                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                   >
                     Edit
                   </Link>
@@ -925,18 +928,18 @@ const AddRentalParentForm = ({
               <>
                 <Link
                   to={searchReservationsRoute.to as any}
-                  className="text-2xl font-semibold leading-6 text-primary"
+                  className="text-2xl font-semibold leading-6"
                 >
                   Reservations
                 </Link>
                 <ChevronRightIcon
-                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
                 <Link
                   to={addReservationRoute.to}
                   search={() => ({ stage })}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
                   Add Reservation
                 </Link>
@@ -946,30 +949,30 @@ const AddRentalParentForm = ({
               <>
                 <Link
                   to={searchReservationsRoute.to as any}
-                  className="text-2xl font-semibold leading-6 text-primary"
+                  className="text-2xl font-semibold leading-6"
                 >
                   Reservations
                 </Link>
                 <ChevronRightIcon
-                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
                 <Link
                   to={viewReservationByIdRoute.to as any}
                   params={{ reservationId: String(referenceId) }}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
                   {referenceNumber ?? "-"}
                 </Link>
                 <ChevronRightIcon
-                  className="h-4 w-4 flex-shrink-0 text-primary"
+                  className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
                 <Link
                   to={editReservationByIdRoute.to}
                   search={() => ({ stage })}
                   params={{ reservationId: String(referenceId) }}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-primary/80 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
                   Edit
                 </Link>
@@ -1023,7 +1026,7 @@ const AddRentalParentForm = ({
             ) : null}
           </div>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base")}>
           {isEdit && isCheckin ? "Check-in" : isEdit ? "Edit" : "Create"}
           &nbsp;this&nbsp;
           {module === "agreement" ? "rental" : "booking"} and proceed to&nbsp;

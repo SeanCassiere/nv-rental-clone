@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 
-import CustomerInformation from "../../information-block/customer-information";
-import FleetInformation from "../../information-block/fleet-information";
+import CustomerInformation from "@/components/primary-module/information-block/customer-information";
+import FleetInformation from "@/components/primary-module/information-block/fleet-information";
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -23,6 +23,8 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   const agreementData = useGetAgreementData({
     agreementId: vehicleSummary.data?.currentAgreement,
   });
+  const agreement =
+    agreementData.data?.status === 200 ? agreementData.data.body : null;
 
   const [currentTab, setCurrentTab] = useState("general");
 
@@ -81,26 +83,23 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
           <CustomerInformation
             mode="vehicle"
             data={{
-              customerId: agreementData.data?.customerDetails?.customerId,
-              firstName: agreementData.data?.customerDetails?.firstName,
-              middleName: agreementData.data?.customerDetails?.middleName,
-              lastName: agreementData.data?.customerDetails?.lastName,
-              email: agreementData.data?.customerEmail,
-              dateOfBirth: agreementData.data?.customerDetails?.dateOfbirth,
-              mobileNumber: agreementData.data?.customerDetails?.cPhone,
-              homeNumber: agreementData.data?.customerDetails?.hPhone,
-              driverLicenseNumber:
-                agreementData.data?.customerDetails?.licenseNumber,
-              creditCardType:
-                agreementData.data?.customerDetails?.creditCardType,
-              creditCardNumber:
-                agreementData.data?.customerDetails?.creditCardNo,
+              customerId: agreement?.customerDetails?.customerId,
+              firstName: agreement?.customerDetails?.firstName,
+              middleName: agreement?.customerDetails?.middleName,
+              lastName: agreement?.customerDetails?.lastName,
+              email: agreement?.customerEmail,
+              dateOfBirth: agreement?.customerDetails?.dateOfbirth,
+              mobileNumber: agreement?.customerDetails?.cPhone,
+              homeNumber: agreement?.customerDetails?.hPhone,
+              driverLicenseNumber: agreement?.customerDetails?.licenseNumber,
+              creditCardType: agreement?.customerDetails?.creditCardType,
+              creditCardNumber: agreement?.customerDetails?.creditCardNo,
               creditCardExpirationDate:
-                agreementData.data?.customerDetails?.creditCardExpiryDate,
+                agreement?.customerDetails?.creditCardExpiryDate,
               creditCardSecurityCode:
-                agreementData.data?.customerDetails?.creditCardCVSNo,
-              checkoutDate: agreementData.data?.checkoutDate,
-              checkinDate: agreementData.data?.checkinDate,
+                agreement?.customerDetails?.creditCardCVSNo,
+              checkoutDate: agreement?.checkoutDate,
+              checkinDate: agreement?.checkinDate,
             }}
             isLoading={vehicleData.isLoading}
           />

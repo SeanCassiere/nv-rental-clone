@@ -28,12 +28,11 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useFeature } from "@/hooks/internal/useFeature";
 
-import type { fetchLocationsList } from "@/api/locations";
-
 import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 
 import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
+import type { apiClient } from "@/api";
 
 const DefaultDashboardContent = lazy(
   () => import("@/components/dashboard/default-content")
@@ -56,7 +55,8 @@ function IndexPage() {
   });
 
   const locationsList = useGetLocationsList({ locationIsActive: true });
-  const locations = locationsList.data?.data ?? [];
+  const locations =
+    locationsList.data?.status === 200 ? locationsList.data.body : [];
 
   const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS");
   const adminUrlsSplit = (adminUrlsFeature || "")
@@ -91,9 +91,7 @@ function IndexPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <h1 className="text-2xl font-semibold leading-6 text-primary">
-              Dashboard
-            </h1>
+            <h1 className="text-2xl font-semibold leading-6">Dashboard</h1>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <LocationPicker
@@ -113,7 +111,7 @@ function IndexPage() {
             </Link>
           </div>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           Jump into what's going on with your fleet.
         </p>
         <Separator className="mt-3.5" />
@@ -148,7 +146,9 @@ function IndexPage() {
   );
 }
 
-type LocationResult = Awaited<ReturnType<typeof fetchLocationsList>>["data"];
+type LocationResult = Awaited<
+  ReturnType<(typeof apiClient)["getLocations"]>
+>["body"];
 
 function LocationPicker({
   locations,

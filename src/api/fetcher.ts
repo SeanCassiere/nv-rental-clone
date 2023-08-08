@@ -1,6 +1,4 @@
-export const apiBaseUrl = import.meta.env.VITE_APP_API_URI
-  ? `${import.meta.env.VITE_APP_API_URI}/api`
-  : "https://testapi.appnavotar.com/api";
+import { apiBaseUrl } from "@/utils/constants";
 
 export interface CommonAuthParams {
   accessToken: string;

@@ -4,12 +4,12 @@ import { rootRoute } from "./__root";
 
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
 import { fetchDashboardWidgetList } from "@/api/dashboard";
-import { fetchLocationsList } from "@/api/locations";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
+import { apiClient } from "@/api";
 
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -54,11 +54,12 @@ export const indexRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: locationsKey,
           queryFn: async () =>
-            fetchLocationsList({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              withActive: true,
+            apiClient.getLocations({
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                withActive: true,
+              },
             }),
         })
       );

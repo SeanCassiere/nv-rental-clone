@@ -1,8 +1,8 @@
 import { useAuth } from "react-oidc-context";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
-import { fetchUserPermissions } from "@/api/users";
 import { userQKeys } from "@/utils/query-key";
+import { apiClient } from "@/api";
 
 type UseGetUserPermissionsOptions = Pick<UseQueryOptions, "suspense">;
 
@@ -16,10 +16,11 @@ export function useGetUserPermissions(
   const query = useQuery({
     queryKey: userQKeys.permissions(userId),
     queryFn: () =>
-      fetchUserPermissions({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        accessToken: auth.user?.access_token || "",
-        intendedUserId: userId,
+      apiClient.getUserPermissionByUserId({
+        params: { userId },
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+        },
       }),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 5, // 5 minutes
