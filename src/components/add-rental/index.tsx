@@ -674,12 +674,22 @@ const AddRentalParentForm = ({
       StartDate:
         module === "agreement"
           ? agreementRentalInformation?.checkoutDate
+            ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+                agreementRentalInformation?.checkoutDate
+              )
+            : undefined
           : undefined,
       EndDate:
         module === "agreement"
           ? agreementRentalInformation?.checkinDate
+            ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+                agreementRentalInformation?.checkinDate
+              )
+            : undefined
           : undefined,
-      LocationID: agreementRentalInformation?.checkoutLocation ?? 0,
+      LocationId: Number(
+        agreementRentalInformation?.checkoutLocation ?? 0
+      ).toString(),
     },
   });
 

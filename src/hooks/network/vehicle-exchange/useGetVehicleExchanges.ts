@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchExchangesForAgreement } from "@/api/vehicleExchanges";
+import { apiClient } from "@/api";
+
 import { agreementQKeys } from "@/utils/query-key";
 
 export function useGetVehicleExchanges(params: {
@@ -12,11 +13,12 @@ export function useGetVehicleExchanges(params: {
   const query = useQuery({
     queryKey: agreementQKeys.exchanges(params.agreementId),
     queryFn: () =>
-      fetchExchangesForAgreement({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        agreementId: `${params.agreementId}`,
+      apiClient.getVehicleExchanges({
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+          agreementId: `${params.agreementId}`,
+        },
       }),
     enabled: auth.isAuthenticated,
   });

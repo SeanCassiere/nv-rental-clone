@@ -93,14 +93,14 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.status === "loading" || dataList.data?.data.length === 0 ? (
+      {dataList.status === "loading" || dataList.data?.status !== 200 ? (
         <CommonEmptyStateContent
           title="No exchanges"
           subtitle="You haven't made any vehicle exchanges for this rental agreement."
           icon={<FilesIcon className="mx-auto h-12 w-12 text-slate-400" />}
         />
       ) : (
-        <CommonTable columns={colDefs} data={dataList.data?.data || []} />
+        <CommonTable columns={colDefs} data={dataList.data?.body || []} />
       )}
     </div>
   );

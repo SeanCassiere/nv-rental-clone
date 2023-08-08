@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchNotesForModule } from "@/api/notes";
+import { apiClient } from "@/api";
+
 import { allModulesKeySelector } from "./useGetModuleColumns";
 import type { AppPrimaryModuleType } from "@/types/General";
 
@@ -16,15 +17,15 @@ export function useGetModuleNotes({
 
   const query = useQuery({
     queryKey: allModulesKeySelector(module).notes(referenceId),
-    queryFn: async () =>
-      fetchNotesForModule({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        accessToken: auth.user?.access_token || "",
-        module,
-        referenceId,
-      }).catch((e) => {
-        console.error(e);
-        throw e;
+    queryFn: () =>
+      apiClient.getNotesByReferenceId({
+        params: {
+          referenceType: module,
+          referenceId,
+        },
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+        },
       }),
     enabled: auth.isAuthenticated,
   });

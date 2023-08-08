@@ -27,6 +27,7 @@ import type { AgreementRentalInformationSchemaParsed } from "./duration-stage";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 import { useGetVehicleFuelLevelList } from "@/hooks/network/vehicle/useGetVehicleFuelLevelList";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 
 function AgreementVehicleInformationSchema() {
   return z.object({
@@ -79,12 +80,21 @@ export const VehicleStage = ({
   //
   const vehicleTypesData = useGetVehicleTypesList({
     search: {
-      StartDate: rentalInformation?.checkoutDate,
-      EndDate: rentalInformation?.checkinDate,
-      LocationID: checkoutLocation,
+      StartDate: rentalInformation?.checkoutDate
+        ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+            rentalInformation?.checkoutDate
+          )
+        : undefined,
+      EndDate: rentalInformation?.checkinDate
+        ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+            rentalInformation?.checkinDate
+          )
+        : undefined,
+      LocationId: Number(checkoutLocation).toString(),
     },
   });
-  const vehicleTypesList = vehicleTypesData.data || [];
+  const vehicleTypesList =
+    vehicleTypesData.data?.status === 200 ? vehicleTypesData.data.body : [];
 
   //
   const vehicleListData = useGetVehiclesList({

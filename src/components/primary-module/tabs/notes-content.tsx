@@ -118,14 +118,17 @@ const ModuleNotesTabContent = ({
 
   return (
     <div className="max-w-full focus:ring-0">
-      {notesQuery.status === "loading" || notesQuery.data?.data.length === 0 ? (
+      {notesQuery.status === "loading" || notesQuery.data?.status !== 200 ? (
         <CommonEmptyStateContent
           title={emptyContentLabels[module]?.title ?? ""}
           subtitle={emptyContentLabels[module]?.subtitle ?? ""}
-          icon={<FilesIcon className="mx-auto h-12 w-12 text-slate-400" />}
+          icon={<FilesIcon className="mx-auto h-12 w-12 text-foreground/80" />}
         />
       ) : (
-        <CommonTable data={notesQuery.data?.data || []} columns={colDefs} />
+        <CommonTable
+          data={notesQuery.data?.status === 200 ? notesQuery.data.body : []}
+          columns={colDefs}
+        />
       )}
     </div>
   );
