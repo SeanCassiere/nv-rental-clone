@@ -22,10 +22,13 @@ const PaginationSchema = z.object({
 
 const StringArraySchema = z.array(z.string());
 
+const UnauthorizedErrorSchema = z.string();
+
 export {
   StructuredErrorSchema,
   ClientIdAuthSchema,
   UserAndClientIdAuthSchema,
   PaginationSchema,
   StringArraySchema,
+  UnauthorizedErrorSchema,
 };

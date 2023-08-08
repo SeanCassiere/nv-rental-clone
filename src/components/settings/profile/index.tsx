@@ -64,10 +64,11 @@ export default function SettingsProfileTab() {
         <Skeleton className="mt-6 h-96 w-full lg:max-w-2xl" />
       )}
       {userQuery.status === "success" &&
-        languagesQuery.status === "success" && (
+        languagesQuery.status === "success" &&
+        userQuery.data.status === 200 && (
           <article className="mt-6 w-full lg:max-w-2xl">
             <ProfileForm
-              user={userQuery.data}
+              user={userQuery.data.body}
               languages={
                 languagesQuery.data.status === 200
                   ? languagesQuery.data.body
