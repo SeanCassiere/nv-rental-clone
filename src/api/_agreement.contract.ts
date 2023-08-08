@@ -6,7 +6,12 @@ import {
   StructuredErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
-import { AgreementDataSchema } from "@/schemas/agreement";
+import {
+  AgreementDataSchema,
+  AgreementStatusListSchema,
+  AgreementTypeArraySchema,
+  GenerateAgreementNumberSchema,
+} from "@/schemas/agreement";
 
 const rootAgreementContract = c.router({
   getAgreementById: {
@@ -16,6 +21,32 @@ const rootAgreementContract = c.router({
     responses: {
       200: AgreementDataSchema,
       404: StructuredErrorSchema,
+    },
+  },
+  getAgreementStatuses: {
+    method: "GET",
+    path: "/v3/agreements/statuses",
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: AgreementStatusListSchema,
+    },
+  },
+  getAgreementTypes: {
+    method: "GET",
+    path: "/v3/agreements/types",
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: AgreementTypeArraySchema,
+    },
+  },
+  getNewAgreementNumber: {
+    method: "GET",
+    path: "/v3/agreements/generateagreementno",
+    query: UserAndClientIdAuthSchema.extend({
+      agreementType: z.string(),
+    }),
+    responses: {
+      200: GenerateAgreementNumberSchema,
     },
   },
 });
