@@ -191,16 +191,24 @@ function ReservationsSearchPage() {
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
         )}
       >
-        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6">Reservations</h1>
-          <Link
-            to={addReservationRoute.to}
-            search={() => ({ stage: "rental-information" })}
-            className={cn(buttonVariants({ size: "sm" }))}
-          >
-            <PlusIcon className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline-block">New Reservation</span>
-          </Link>
+        <div
+          className={cn(
+            "flex min-h-[2.5rem] flex-col items-center justify-between gap-4 sm:flex-row"
+          )}
+        >
+          <div className="flex w-full items-center justify-start gap-2">
+            <h1 className="text-2xl font-semibold leading-6">Reservations</h1>
+          </div>
+          <div className="flex w-full gap-2 sm:w-max">
+            <Link
+              to={addReservationRoute.to}
+              search={() => ({ stage: "rental-information" })}
+              className={cn(buttonVariants({ size: "sm" }), "w-max")}
+            >
+              <PlusIcon className="h-4 w-4 sm:mr-2" />
+              <span>New Reservation</span>
+            </Link>
+          </div>
         </div>
         <p className={cn("text-base text-foreground/80")}>
           Search through your bookings and view details.
