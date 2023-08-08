@@ -128,6 +128,15 @@ export function mutateColumnAccessors(
             ] as string;
           }
 
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
+
           return column;
         }),
       };
@@ -148,6 +157,15 @@ export function mutateColumnAccessors(
             ] as string;
           }
 
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
+
           return column;
         }),
       };
@@ -165,12 +183,35 @@ export function mutateColumnAccessors(
             ] as string;
           }
 
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
+
           return column;
         }),
       };
     case "vehicle":
       const vehicleColumnData = settingStartingColumn(data.body, "VehicleNo");
-      return { ...data, body: vehicleColumnData };
+      return {
+        ...data,
+        body: vehicleColumnData.map((column) => {
+          column.isSelected =
+            typeof column.isSelected === "string" &&
+            column.isSelected === "true"
+              ? true
+              : typeof column.isSelected === "string" &&
+                column.isSelected === "false"
+              ? false
+              : column.isSelected;
+
+          return column;
+        }),
+      };
     default:
       return data;
   }
