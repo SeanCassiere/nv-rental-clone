@@ -94,8 +94,8 @@ export const AppNavigation = () => {
           preload="intent"
           className={cn(
             navItem.current
-              ? "whitespace-nowrap border-b border-primary pb-4 pt-3 font-semibold leading-none text-primary transition sm:px-4"
-              : "whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none text-primary transition hover:border-primary/20 dark:hover:border-primary/20 sm:px-4"
+              ? "whitespace-nowrap border-b border-foreground pb-4 pt-3 font-semibold leading-none transition sm:px-4"
+              : "whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-foreground/20 dark:hover:border-foreground/20 sm:px-4"
           )}
           {...navItem.props}
         >

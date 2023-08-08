@@ -143,7 +143,7 @@ export const RatesStage = (props: RatesStageProps) => {
           </div>
         )}
         {!hidePromotionCodeFields && (
-          <div className="col-span-1 flex items-end text-sm text-primary">
+          <div className="col-span-1 flex items-end text-sm">
             Implement promotion codes later
           </div>
         )}

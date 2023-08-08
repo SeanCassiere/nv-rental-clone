@@ -55,7 +55,7 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex flex-grow items-center">
               <Link
                 to={indexRoute.to}
-                className="hidden items-center rounded p-1 text-lg font-medium leading-3 text-primary transition sm:flex"
+                className="hidden items-center rounded p-1 text-lg font-medium leading-3 transition sm:flex"
               >
                 {UI_APPLICATION_NAME}
               </Link>

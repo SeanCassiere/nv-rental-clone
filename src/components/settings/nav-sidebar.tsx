@@ -30,7 +30,7 @@ export const SidebarSettingsNavigation = ({
               buttonVariants({ variant: "ghost" }),
               isSelected
                 ? "bg-muted hover:bg-muted"
-                : "text-primary/80 hover:bg-transparent hover:underline",
+                : "text-foreground/80 hover:bg-transparent hover:underline",
               "justify-start"
             )}
             {...item.linkProps}

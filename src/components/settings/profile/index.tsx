@@ -54,8 +54,8 @@ export default function SettingsProfileTab() {
 
   return (
     <>
-      <h2 className="text-xl font-semibold leading-10 text-primary">Profile</h2>
-      <p className="text-base text-primary/80">
+      <h2 className="text-xl font-semibold leading-10">Profile</h2>
+      <p className="text-base text-foreground/80">
         Customize and manage your profile with ease.
       </p>
       {(userQuery.status === "loading" ||
@@ -257,7 +257,7 @@ function ProfileForm(props: {
               <FormItem className="w-full">
                 <FormLabel>
                   Phone no.{" "}
-                  <span className="text-xs text-primary/70">(optional)</span>
+                  <span className="text-xs text-foreground/70">(optional)</span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} disabled={isDisabled} />

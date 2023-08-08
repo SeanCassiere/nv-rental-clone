@@ -467,7 +467,7 @@ function MiscChargeItem(props: {
                               <div className="text-sm">
                                 <p
                                   id={`${charge.Id}-${option.miscChargeOptionId}-label`}
-                                  className="font-medium text-primary"
+                                  className="font-medium"
                                 >
                                   {option.name
                                     ? option.name
@@ -504,7 +504,7 @@ function MiscChargeItem(props: {
                                   : "sm:mt-0"
                               )}
                             >
-                              <div className="font-medium text-primary">
+                              <div className="font-medium">
                                 {t("intlCurrency", {
                                   value: Number(option.value),
                                   ns: "format",
@@ -516,7 +516,7 @@ function MiscChargeItem(props: {
                                 "pointer-events-none absolute -inset-px rounded-lg",
                                 String(optionId) ===
                                   String(option.miscChargeOptionId)
-                                  ? "border-2 border-primary/50"
+                                  ? "border-2 border-primary"
                                   : "border border-transparent"
                               )}
                               aria-hidden="true"

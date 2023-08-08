@@ -103,7 +103,7 @@ export function SalesAreaChart({ locations }: { locations: string[] }) {
           formatter={(value) => {
             return (
               <span className="mb-6 inline-block">
-                <span className="inline-block min-w-[80px] text-base text-primary/70">
+                <span className="inline-block min-w-[80px] text-base">
                   {value}
                 </span>
               </span>

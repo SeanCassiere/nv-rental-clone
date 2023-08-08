@@ -91,9 +91,7 @@ function IndexPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <h1 className="text-2xl font-semibold leading-6 text-primary">
-              Dashboard
-            </h1>
+            <h1 className="text-2xl font-semibold leading-6">Dashboard</h1>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <LocationPicker
@@ -113,7 +111,7 @@ function IndexPage() {
             </Link>
           </div>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           Jump into what's going on with your fleet.
         </p>
         <Separator className="mt-3.5" />

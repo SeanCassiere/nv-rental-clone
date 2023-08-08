@@ -27,10 +27,10 @@ const InformationBlock = (props: TInformationBlockProps) => {
         "gap-0.5 border-b pb-2 sm:grid"
       )}
     >
-      <span className="select-none truncate px-1 text-base font-semibold text-primary">
+      <span className="select-none truncate px-1 text-base font-semibold">
         {props.heading}
       </span>
-      <span className="truncate px-1 pb-2 pt-1.5 text-base leading-3 text-primary/80">
+      <span className="truncate px-1 pb-2 pt-1.5 text-base leading-3">
         {props.isLoading ? EMPTY_KEY : props.value}
       </span>
     </div>
@@ -48,11 +48,11 @@ export interface TInformationBlockCardProps {
 export const InformationBlockCard = (props: TInformationBlockCardProps) => {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4 text-primary">
+      <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4">
         <CardTitle className="text-base font-medium sm:text-lg">
           {props.title}
         </CardTitle>
-        <span className="text-primary/80">{props.icon}</span>
+        <span>{props.icon}</span>
       </CardHeader>
       <CardContent
         className={cn(

@@ -102,7 +102,10 @@ function CustomerSearchPage() {
                       to={viewCustomerByIdRoute.to}
                       params={{ customerId: String(customerId) }}
                       search={() => ({ tab: "summary" })}
-                      className={cn(buttonVariants({ variant: "link" }), "p-0")}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "p-0 text-base"
+                      )}
                       preload="intent"
                     >
                       {value}
@@ -166,11 +169,9 @@ function CustomerSearchPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6 text-primary">
-            Customers
-          </h1>
+          <h1 className="text-2xl font-semibold leading-6">Customers</h1>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           Search through your customers and view details.
         </p>
         <Separator className="mt-3.5" />

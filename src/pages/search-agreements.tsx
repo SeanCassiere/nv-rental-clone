@@ -115,7 +115,10 @@ function AgreementsSearchPage() {
                       to={viewAgreementByIdRoute.to}
                       params={{ agreementId: String(agreementId) }}
                       search={() => ({ tab: "summary" })}
-                      className={cn(buttonVariants({ variant: "link" }), "p-0")}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "p-0 text-base"
+                      )}
                       preload="intent"
                     >
                       {value}
@@ -187,9 +190,7 @@ function AgreementsSearchPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6 text-primary">
-            Agreements
-          </h1>
+          <h1 className="text-2xl font-semibold leading-6">Agreements</h1>
           <Link
             to={addAgreementRoute.to}
             search={() => ({ stage: "rental-information" })}
@@ -199,7 +200,7 @@ function AgreementsSearchPage() {
             <span className="hidden sm:inline-block">New Agreement</span>
           </Link>
         </div>
-        <p className={cn("text-base text-primary/80")}>
+        <p className={cn("text-base text-foreground/80")}>
           Search through your rentals and view details.
         </p>
         <Separator className="mt-3.5" />
