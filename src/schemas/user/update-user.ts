@@ -4,8 +4,8 @@ const REQUIRED = "Required";
 
 export const UpdateUserSchema = z.object({
   clientId: z.number(),
-  // createdBy: z.number(),
-  // createdDate: z.string(),
+  createdBy: z.number(),
+  createdDate: z.string(),
   userName: z.string().min(1, REQUIRED),
   firstName: z.string().min(1, REQUIRED),
   lastName: z.string().min(1, REQUIRED),

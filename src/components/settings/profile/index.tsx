@@ -39,9 +39,10 @@ import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
 
-import { updateUserProfile } from "@/api/users";
+import { apiClient } from "@/api";
 
 import { locationQKeys, userQKeys } from "@/utils/query-key";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 
 export default function SettingsProfileTab() {
   const userQuery = useGetUserProfile({
@@ -111,15 +112,17 @@ function ProfileForm(props: {
       isActive: user.isActive ?? false,
       lockOut: user.lockOut ?? false,
       isReservationEmail: user.isReservationEmail ?? false,
+      createdBy: Number(auth.userId),
+      createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(new Date()),
     },
   });
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: updateUserProfile,
+    mutationFn: apiClient.updateUserProfileById,
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries(userQKeys.me());
       queryClient.invalidateQueries(
-        userQKeys.permissions(variables.payload.userId)
+        userQKeys.permissions(variables.params.userId)
       );
       queryClient.invalidateQueries(locationQKeys.all());
 
@@ -155,8 +158,15 @@ function ProfileForm(props: {
         className="flex flex-col gap-5"
         onSubmit={form.handleSubmit(async (values) => {
           mutate({
-            auth,
-            payload: { ...values, userId: auth.userId },
+            params: {
+              userId: auth.userId,
+            },
+            body: {
+              ...values,
+              createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+                new Date()
+              ),
+            },
           });
         })}
       >

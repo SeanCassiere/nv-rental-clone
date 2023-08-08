@@ -4,7 +4,8 @@ import {
   ClientIdAuthSchema,
   StringArraySchema,
 } from "./helpers";
-import { UserLanguageListSchema } from "@/schemas/user";
+import { UpdateUserSchema, UserLanguageListSchema } from "@/schemas/user";
+import { z } from "zod";
 
 const rootUserContract = c.router({
   getUserPermissionByUserId: {
@@ -21,6 +22,16 @@ const rootUserContract = c.router({
     query: UserAndClientIdAuthSchema,
     responses: {
       200: UserLanguageListSchema,
+    },
+  },
+  updateUserProfileById: {
+    method: "PUT",
+    path: "/v3/users/:userId",
+    body: UpdateUserSchema,
+    responses: {
+      200: z.any(),
+      401: z.any(),
+      403: z.any(),
     },
   },
 });
