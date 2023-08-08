@@ -792,8 +792,8 @@ const AddRentalParentForm = ({
     filters: {
       LocationId:
         module === "agreement"
-          ? agreementRentalInformation?.checkoutLocation ?? 0
-          : 0,
+          ? Number(agreementRentalInformation?.checkoutLocation ?? 0).toString()
+          : "0",
     },
     enabled:
       module === "agreement" ? taxesAgreementReady : taxesReservationReady,
@@ -801,8 +801,9 @@ const AddRentalParentForm = ({
 
   useEffect(() => {
     if (getTaxesQuery.status !== "success") return;
+    if (!getTaxesQuery.data || getTaxesQuery.data.status !== 200) return;
 
-    const data = getTaxesQuery.data;
+    const data = getTaxesQuery.data.body;
     const selectedTaxesNow = (data || []).filter((tax) => !tax.isOptional);
 
     setSelectedTaxIds((prev) => {

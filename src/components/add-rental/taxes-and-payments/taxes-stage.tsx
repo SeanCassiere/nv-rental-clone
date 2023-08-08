@@ -26,11 +26,15 @@ export const TaxesStage = (props: TaxesStageProps) => {
     useState<TaxesStageProps["taxes"]>(taxes);
 
   const taxesData = useGetTaxes({
-    filters: { LocationId: durationStageData?.checkoutLocation ?? 0 },
+    filters: {
+      LocationId: Number(durationStageData?.checkoutLocation ?? 0).toString(),
+    },
     enabled: isSupportingInfoAvailable,
   });
 
-  const mandatoryTaxes = (taxesData.data || [])
+  const loadedTaxes = taxesData.data?.status === 200 ? taxesData.data.body : [];
+
+  const mandatoryTaxes = loadedTaxes
     .filter((tax) => tax.isOptional === false)
     .map((tax) => tax.id);
 
@@ -43,7 +47,7 @@ export const TaxesStage = (props: TaxesStageProps) => {
           </div>
         )}
         <div className="grid grid-cols-1 items-center md:grid-cols-3">
-          {(taxesData.data || [])
+          {loadedTaxes
             .sort((tax1, tax2) => tax1.id - tax2.id)
             .map((tax, idx) => (
               <div
