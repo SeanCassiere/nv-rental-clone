@@ -127,7 +127,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
               {...(data?.linkProps as any)}
               className={cn(
                 makeSummaryDataStyles(data),
-                "underline underline-offset-4"
+                "text-primary underline underline-offset-4"
               )}
             >
               {data.amount}
