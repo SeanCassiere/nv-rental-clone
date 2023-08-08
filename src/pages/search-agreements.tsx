@@ -201,7 +201,7 @@ function AgreementsSearchPage() {
             <Link
               to={addAgreementRoute.to}
               search={() => ({ stage: "rental-information" })}
-              className={cn(buttonVariants({ size: "sm" }))}
+              className={cn(buttonVariants({ size: "sm" }), "w-max")}
             >
               <PlusIcon className="h-4 w-4 sm:mr-2" />
               <span>New Agreement</span>

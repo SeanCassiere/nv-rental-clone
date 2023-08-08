@@ -203,7 +203,7 @@ function ReservationsSearchPage() {
             <Link
               to={addReservationRoute.to}
               search={() => ({ stage: "rental-information" })}
-              className={cn(buttonVariants({ size: "sm" }))}
+              className={cn(buttonVariants({ size: "sm" }), "w-max")}
             >
               <PlusIcon className="h-4 w-4 sm:mr-2" />
               <span>New Reservation</span>
