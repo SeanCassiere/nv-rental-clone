@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { reservationsRoute } from ".";
 
+import { apiClient } from "@/api";
 import { fetchRentalRateSummaryAmounts } from "@/api/summary";
-import { fetchReservationData } from "@/api/reservations";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { reservationQKeys } from "@/utils/query-key";
@@ -37,19 +37,25 @@ export const reservationPathIdRoute = new Route({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: dataKey,
-          queryFn: () => {
-            return fetchReservationData({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              reservationId,
-            });
-          },
+          queryFn: () =>
+            apiClient.getReservationById({
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+              },
+              params: {
+                reservationId,
+              },
+            }),
           retry: 0,
         })
       );
 
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch (error) {
+        console.log("route prefetch failed for /reservations/:id", error);
+      }
     }
     return {};
   },

@@ -1,10 +1,3 @@
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
-import { AgreementStatusListSchema } from "@/schemas/agreement";
-import {
-  VehicleDataSchema,
-  VehicleLevelListSchema,
-  VehicleTypeLookupList,
-} from "@/schemas/vehicle";
 import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchVehiclesList = async (
@@ -28,67 +21,4 @@ export const fetchVehiclesList = async (
       },
     }
   );
-};
-
-export const fetchVehicleData = async (
-  opts: {
-    vehicleId: string | number;
-    clientTime: Date;
-  } & CommonAuthParams
-) => {
-  return await callV3Api(
-    makeUrl(`/v3/vehicles/${opts.vehicleId}`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-      getMakeDetails: "true",
-      clientTime: localDateTimeToQueryYearMonthDay(opts.clientTime),
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => VehicleDataSchema.parse(res.data));
-};
-
-export const fetchVehicleStatusesList = async (opts: CommonAuthParams) => {
-  return await callV3Api(
-    makeUrl(`/v3/vehicles/statuses`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => AgreementStatusListSchema.parse(res.data));
-};
-
-export const fetchVehicleFuelLevelsList = async (opts: CommonAuthParams) => {
-  return await callV3Api(
-    makeUrl(`/v3/vehicles/fuellevels`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => VehicleLevelListSchema.parse(res.data));
-};
-
-export const fetchVehicleTypesLookupList = async (opts: CommonAuthParams) => {
-  return await callV3Api(
-    makeUrl(`/v3/vehicles/types`, {
-      clientId: opts.clientId,
-      userId: opts.userId,
-    }),
-    {
-      headers: {
-        Authorization: `Bearer ${opts.accessToken}`,
-      },
-    }
-  ).then((res) => VehicleTypeLookupList.parse(res.data));
 };

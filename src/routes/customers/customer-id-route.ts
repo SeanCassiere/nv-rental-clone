@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { customersRoute } from ".";
 
+import { apiClient } from "@/api";
 import { fetchCustomerSummaryAmounts } from "@/api/summary";
-import { fetchCustomerData } from "@/api/customers";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { customerQKeys } from "@/utils/query-key";
@@ -36,19 +36,25 @@ export const customerPathIdRoute = new Route({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: dataKey,
-          queryFn: () => {
-            return fetchCustomerData({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              customerId,
-            });
-          },
+          queryFn: () =>
+            apiClient.getCustomerById({
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+              },
+              params: {
+                customerId,
+              },
+            }),
           retry: 0,
         })
       );
 
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch (error) {
+        console.error("route prefetch failed for /customers/:id", error);
+      }
     }
     return {};
   },

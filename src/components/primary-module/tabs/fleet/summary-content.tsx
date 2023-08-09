@@ -17,6 +17,8 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   const vehicleData = useGetVehicleData({
     vehicleId: props.vehicleId,
   });
+  const vehicle =
+    vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
   const vehicleSummary = useGetVehicleSummary({ vehicleId: props.vehicleId });
 
@@ -39,19 +41,19 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
           mode="vehicle"
           isLoading={vehicleData.isLoading}
           data={
-            vehicleData.data
+            vehicle
               ? {
-                  doors: vehicleData.data.vehicle?.doors,
-                  batteryLevel: vehicleData.data.vehicle?.batteryLevel,
-                  cylinders: vehicleData.data.vehicle?.cylinders,
-                  fuelLevel: vehicleData.data.vehicle?.fuelLevel,
-                  trim: vehicleData.data.vehicle?.trim,
-                  spotNo: vehicleData.data.vehicle?.spotNumber,
-                  tankSize: vehicleData.data.vehicle?.tankSize,
-                  fuelType: vehicleData.data.vehicle?.fuelType,
-                  transmission: vehicleData.data.vehicle?.transmission,
-                  originalOdometer: vehicleData.data.vehicle?.origionalOdometer,
-                  vin: vehicleData.data.vehicle?.vin,
+                  doors: vehicle.vehicle?.doors,
+                  batteryLevel: vehicle.vehicle?.batteryLevel,
+                  cylinders: vehicle.vehicle?.cylinders,
+                  fuelLevel: vehicle.vehicle?.fuelLevel,
+                  trim: vehicle.vehicle?.trim,
+                  spotNo: vehicle.vehicle?.spotNumber,
+                  tankSize: vehicle.vehicle?.tankSize,
+                  fuelType: vehicle.vehicle?.fuelType,
+                  transmission: vehicle.vehicle?.transmission,
+                  originalOdometer: vehicle.vehicle?.origionalOdometer,
+                  vin: vehicle.vehicle?.vin,
                 }
               : {}
           }
@@ -72,7 +74,7 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
     });
 
     return tabs;
-  }, [vehicleData.data, vehicleData.isLoading]);
+  }, [vehicle, vehicleData.isLoading]);
 
   const canViewCurrentCustomerInformation = true;
 
@@ -129,7 +131,7 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
         <VehicleSummary
           vehicleId={props.vehicleId}
           summaryData={vehicleSummary.data}
-          vehicleNo={vehicleData.data?.vehicle.vehicleNo || undefined}
+          vehicleNo={vehicle?.vehicle.vehicleNo || undefined}
         />
       </div>
     </div>

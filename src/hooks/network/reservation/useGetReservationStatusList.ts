@@ -1,20 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchReservationStatusesList } from "@/api/reservations";
+import { apiClient } from "@/api";
+
 import { reservationQKeys } from "@/utils/query-key";
-import { type AgreementStatusListParsed } from "@/schemas/agreement";
 
 export function useGetReservationStatusList() {
   const auth = useAuth();
-  const query = useQuery<AgreementStatusListParsed>({
+  const query = useQuery({
     queryKey: reservationQKeys.statuses(),
-    queryFn: async () =>
-      await fetchReservationStatusesList({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-      }),
+    queryFn: () =>
+      apiClient
+        .getReservationStatuses({
+          query: {
+            clientId: auth.user?.profile.navotar_clientid || "",
+            userId: auth.user?.profile.navotar_userid || "",
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : [])),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
   });

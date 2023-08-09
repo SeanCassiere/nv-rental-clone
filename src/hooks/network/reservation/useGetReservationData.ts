@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchReservationData } from "@/api/reservations";
+import { apiClient } from "@/api";
+
 import { reservationQKeys } from "@/utils/query-key";
 
 export function useGetReservationData(params: {
@@ -11,14 +12,16 @@ export function useGetReservationData(params: {
   const query = useQuery({
     queryKey: reservationQKeys.id(params.reservationId),
     queryFn: async () =>
-      fetchReservationData({
-        reservationId: params.reservationId,
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
+      apiClient.getReservationById({
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+        },
+        params: {
+          reservationId: String(params.reservationId),
+        },
       }),
     enabled: auth.isAuthenticated,
-    retry: 2,
   });
   return query;
 }

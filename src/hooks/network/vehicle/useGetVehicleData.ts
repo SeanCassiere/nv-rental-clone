@@ -1,23 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchVehicleData } from "@/api/vehicles";
+import { apiClient } from "@/api";
+
 import { fleetQKeys } from "@/utils/query-key";
+import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 
 export function useGetVehicleData(params: { vehicleId: string | number }) {
   const auth = useAuth();
   const query = useQuery({
     queryKey: fleetQKeys.id(params.vehicleId),
-    queryFn: async () =>
-      fetchVehicleData({
-        vehicleId: params.vehicleId,
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        clientTime: new Date(),
+    queryFn: () =>
+      apiClient.getVehicleById({
+        params: {
+          vehicleId: String(params.vehicleId),
+        },
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+          clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+          getMakeDetails: "true",
+        },
       }),
     enabled: auth.isAuthenticated,
-    retry: 2,
   });
   return query;
 }

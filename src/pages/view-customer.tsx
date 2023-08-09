@@ -93,23 +93,25 @@ function CustomerViewPage() {
     });
   };
 
-  const customer = useGetCustomerData({
+  const customerQuery = useGetCustomerData({
     customerId,
   });
+  const customer =
+    customerQuery.data?.status === 200 ? customerQuery.data.body : null;
 
   useDocumentTitle(
     titleMaker(
-      (customer.data?.firstName && customer.data?.lastName
-        ? customer.data?.firstName + " " + customer.data?.lastName
+      (customer?.firstName && customer?.lastName
+        ? customer?.firstName + " " + customer?.lastName
         : "Loading") + " - Customers"
     )
   );
 
   useEffect(() => {
-    if (customer.status !== "error") return;
+    if (customerQuery.status !== "error") return;
 
     router.history.go(-1);
-  }, [customer.status, router.history]);
+  }, [customerQuery.status, router.history]);
 
   return (
     <ProtectorShield>
@@ -142,8 +144,8 @@ function CustomerViewPage() {
               params={{ customerId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
-              {customer?.data?.firstName}&nbsp;
-              {customer?.data?.lastName}
+              {customer?.firstName}&nbsp;
+              {customer?.lastName}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
@@ -175,7 +177,7 @@ function CustomerViewPage() {
                 <DropdownMenuLabel>More actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  {customer.data?.active ? (
+                  {customer?.active ? (
                     <DropdownMenuItem>
                       <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Deactivate</span>
