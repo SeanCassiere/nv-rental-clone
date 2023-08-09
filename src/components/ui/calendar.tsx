@@ -36,7 +36,7 @@ function Calendar({
           "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
         ),
         dropdown: cn(
-          "m-0 h-6 w-20 rounded border-0 border-input px-1 py-0.5 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          "m-0 h-6 w-20 rounded border-0 border-input bg-background px-1 py-0.5 text-sm ring-offset-background transition-colors focus:border-input focus:outline-none focus:ring-ring focus-visible:border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
         ),
         dropdown_month: "relative inline-flex items-center [&>span]:hidden",
         dropdown_year: "relative inline-flex items-center [&>span]:hidden",
