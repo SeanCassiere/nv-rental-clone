@@ -15,6 +15,8 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
   const reservationData = useGetReservationData({
     reservationId: props.reservationId,
   });
+  const reservation =
+    reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
     module: "reservations",
@@ -32,24 +34,21 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
           <CustomerInformation
             mode="reservation"
             data={{
-              customerId: reservationData.data?.customerDetails?.customerId,
-              firstName: reservationData.data?.customerDetails?.firstName,
-              middleName: reservationData.data?.customerDetails?.middleName,
-              lastName: reservationData.data?.customerDetails?.lastName,
-              email: reservationData.data?.customerDetails?.email,
-              dateOfBirth: reservationData.data?.customerDetails?.dateOfbirth,
-              mobileNumber: reservationData.data?.customerDetails?.cPhone,
-              homeNumber: reservationData.data?.customerDetails?.hPhone,
-              driverLicenseNumber:
-                reservationData.data?.customerDetails?.licenseNumber,
-              creditCardType:
-                reservationData.data?.customerDetails?.creditCardType,
-              creditCardNumber:
-                reservationData.data?.customerDetails?.creditCardNo,
+              customerId: reservation?.customerDetails?.customerId,
+              firstName: reservation?.customerDetails?.firstName,
+              middleName: reservation?.customerDetails?.middleName,
+              lastName: reservation?.customerDetails?.lastName,
+              email: reservation?.customerDetails?.email,
+              dateOfBirth: reservation?.customerDetails?.dateOfbirth,
+              mobileNumber: reservation?.customerDetails?.cPhone,
+              homeNumber: reservation?.customerDetails?.hPhone,
+              driverLicenseNumber: reservation?.customerDetails?.licenseNumber,
+              creditCardType: reservation?.customerDetails?.creditCardType,
+              creditCardNumber: reservation?.customerDetails?.creditCardNo,
               creditCardExpirationDate:
-                reservationData.data?.customerDetails?.creditCardExpiryDate,
+                reservation?.customerDetails?.creditCardExpiryDate,
               creditCardSecurityCode:
-                reservationData.data?.customerDetails?.creditCardCVSNo,
+                reservation?.customerDetails?.creditCardCVSNo,
             }}
             isLoading={reservationData.isLoading}
           />
@@ -58,13 +57,13 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
           <FleetInformation
             mode="reservation"
             data={{
-              vehicleId: reservationData.data?.reservationview?.vehicleId,
-              vehicleNo: reservationData.data?.reservationview?.vehicleNo,
-              vehicleType: reservationData.data?.reservationview?.vehicleType,
-              licenseNo: reservationData.data?.reservationview?.licenseNo,
-              make: reservationData.data?.reservationview?.vehicleMakeName,
-              model: reservationData.data?.reservationview?.modelName,
-              year: reservationData.data?.reservationview?.year,
+              vehicleId: reservation?.reservationview?.vehicleId,
+              vehicleNo: reservation?.reservationview?.vehicleNo,
+              vehicleType: reservation?.reservationview?.vehicleType,
+              licenseNo: reservation?.reservationview?.licenseNo,
+              make: reservation?.reservationview?.vehicleMakeName,
+              model: reservation?.reservationview?.modelName,
+              year: reservation?.reservationview?.year,
             }}
             isLoading={reservationData.isLoading}
           />
@@ -73,31 +72,24 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
           <RentalInformation
             mode="reservation"
             data={
-              reservationData.data?.rateList &&
-              reservationData.data?.rateList[0]
+              reservation?.rateList && reservation?.rateList[0]
                 ? {
-                    totalDays: reservationData.data?.reservationview?.totalDays,
-                    rateName: reservationData.data?.rateList[0]?.rateName,
+                    totalDays: reservation?.reservationview?.totalDays,
+                    rateName: reservation?.rateList[0]?.rateName,
                     dailyMilesAllowed:
-                      reservationData.data?.rateList[0]
-                        ?.displaydailyMilesAllowed,
+                      reservation?.rateList[0]?.displaydailyMilesAllowed,
                     weeklyMilesAllowed:
-                      reservationData.data?.rateList[0]
-                        ?.displayweeklyMilesAllowed,
+                      reservation?.rateList[0]?.displayweeklyMilesAllowed,
                     monthlyMilesAllowed:
-                      reservationData.data?.rateList[0]
-                        ?.displaymonthlyMilesAllowed,
-                    hourlyRate: reservationData.data?.rateList[0]?.hourlyRate,
-                    halfHourlyRate:
-                      reservationData.data?.rateList[0]?.halfHourlyRate,
-                    dailyRate: reservationData.data?.rateList[0]?.dailyRate,
-                    halfDayRate: reservationData.data?.rateList[0]?.halfDayRate,
-                    weeklyRate: reservationData.data?.rateList[0]?.weeklyRate,
-                    weekendRate:
-                      reservationData.data?.rateList[0]?.weekendDayRate,
-                    monthlyRate: reservationData.data?.rateList[0]?.monthlyRate,
-                    destination:
-                      reservationData.data?.reservationview?.destination,
+                      reservation?.rateList[0]?.displaymonthlyMilesAllowed,
+                    hourlyRate: reservation?.rateList[0]?.hourlyRate,
+                    halfHourlyRate: reservation?.rateList[0]?.halfHourlyRate,
+                    dailyRate: reservation?.rateList[0]?.dailyRate,
+                    halfDayRate: reservation?.rateList[0]?.halfDayRate,
+                    weeklyRate: reservation?.rateList[0]?.weeklyRate,
+                    weekendRate: reservation?.rateList[0]?.weekendDayRate,
+                    monthlyRate: reservation?.rateList[0]?.monthlyRate,
+                    destination: reservation?.reservationview?.destination,
                   }
                 : {}
             }

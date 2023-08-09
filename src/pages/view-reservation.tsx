@@ -102,22 +102,24 @@ function ReservationViewPage() {
     });
   };
 
-  const reservation = useGetReservationData({
+  const reservationData = useGetReservationData({
     reservationId,
   });
+  const reservation =
+    reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
   useDocumentTitle(
     titleMaker(
-      (reservation.data?.reservationview.reservationNumber || "Loading") +
+      (reservation?.reservationview.reservationNumber || "Loading") +
         " - Reservations"
     )
   );
 
   useEffect(() => {
-    if (reservation.status !== "error") return;
+    if (reservationData.status !== "error") return;
 
     router.history.go(-1);
-  }, [reservation.status, router.history]);
+  }, [reservationData.status, router.history]);
 
   return (
     <ProtectorShield>
@@ -150,7 +152,7 @@ function ReservationViewPage() {
               params={{ reservationId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
-              {reservation?.data?.reservationview?.reservationNumber}
+              {reservation?.reservationview?.reservationNumber}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
@@ -203,7 +205,7 @@ function ReservationViewPage() {
           View the details related to this booking.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <ReservationStatBlock reservation={reservation.data} />
+        <ReservationStatBlock reservation={reservation} />
       </section>
 
       <section

@@ -27,6 +27,8 @@ const EditReservationPage = () => {
   const reservationData = useGetReservationData({
     reservationId,
   });
+  const reservation =
+    reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
   const summaryData = useGetModuleRentalRatesSummary({
     module: "reservations",
@@ -59,7 +61,7 @@ const EditReservationPage = () => {
 
   useDocumentTitle(
     titleMaker(
-      `Edit - ${reservationData.data?.reservationview.reservationNumber} - Agreement`
+      `Edit - ${reservation?.reservationview.reservationNumber} - Agreement`
     )
   );
 
@@ -79,9 +81,9 @@ const EditReservationPage = () => {
         onRentalSaveClick={handleAgreementSaveComplete}
         onRentalCancelClick={handleCancelEditReservation}
         referenceNumber={
-          reservationData.data?.reservationview.reservationNumber || undefined
+          reservation?.reservationview.reservationNumber || undefined
         }
-        reservationData={reservationData.data || undefined}
+        reservationData={reservation || undefined}
         summaryData={summaryData.data}
       />
     </ProtectorShield>
