@@ -4,11 +4,10 @@ import { useAuth } from "react-oidc-context";
 import { apiClient } from "@/api";
 
 import { agreementQKeys } from "@/utils/query-key";
-import { type AgreementStatusListParsed } from "@/schemas/agreement";
 
 export function useGetAgreementStatusList() {
   const auth = useAuth();
-  const query = useQuery<AgreementStatusListParsed>({
+  const query = useQuery({
     queryKey: agreementQKeys.statuses(),
     queryFn: () =>
       apiClient

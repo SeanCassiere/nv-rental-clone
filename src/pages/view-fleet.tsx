@@ -81,9 +81,11 @@ function VehicleViewPage() {
     });
   };
 
-  const vehicle = useGetVehicleData({
+  const vehicleData = useGetVehicleData({
     vehicleId,
   });
+  const vehicle =
+    vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
   const tabsConfig = useMemo(() => {
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
@@ -111,7 +113,7 @@ function VehicleViewPage() {
       component: (
         <FleetReservationsTab
           vehicleId={vehicleId}
-          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
+          vehicleNo={vehicle?.vehicle.vehicleNo || ""}
         />
       ),
     });
@@ -121,23 +123,23 @@ function VehicleViewPage() {
       component: (
         <FleetAgreementsTab
           vehicleId={vehicleId}
-          vehicleNo={vehicle.data?.vehicle.vehicleNo || ""}
+          vehicleNo={vehicle?.vehicle.vehicleNo || ""}
         />
       ),
     });
 
     return tabs;
-  }, [vehicleId, vehicle.data]);
+  }, [vehicleId, vehicle]);
 
   useDocumentTitle(
-    titleMaker((vehicle.data?.vehicle.vehicleNo || "Loading") + " - Fleet")
+    titleMaker((vehicle?.vehicle.vehicleNo || "Loading") + " - Fleet")
   );
 
   useEffect(() => {
-    if (vehicle.status !== "error") return;
+    if (vehicleData.status !== "error") return;
 
     router.history.go(-1);
-  }, [router.history, vehicle.status]);
+  }, [router.history, vehicleData.status]);
 
   return (
     <ProtectorShield>
@@ -170,7 +172,7 @@ function VehicleViewPage() {
               params={{ vehicleId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
-              {vehicle?.data?.vehicle.vehicleNo}
+              {vehicle?.vehicle.vehicleNo}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
@@ -205,7 +207,7 @@ function VehicleViewPage() {
                     <CopyIcon className="mr-2 h-4 w-4 sm:mr-4" />
                     <span>Copy and create</span>
                   </DropdownMenuItem>
-                  {vehicle.data?.vehicle.active ? (
+                  {vehicle?.vehicle.active ? (
                     <DropdownMenuItem>
                       <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Deactivate</span>
@@ -225,7 +227,7 @@ function VehicleViewPage() {
           View the details related to this fleet item.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <FleetStatBlock vehicle={vehicle.data} />
+        <FleetStatBlock vehicle={vehicle} />
       </section>
 
       <section

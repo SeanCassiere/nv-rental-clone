@@ -3,11 +3,12 @@ import { z } from "zod";
 
 import { fleetRoute } from ".";
 
+import { apiClient } from "@/api";
 import { fetchVehicleSummaryAmounts } from "@/api/summary";
-import { fetchVehicleData } from "@/api/vehicles";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { fleetQKeys } from "@/utils/query-key";
+import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
@@ -38,12 +39,16 @@ export const fleetPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: dataKey,
           queryFn: () => {
-            return fetchVehicleData({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              vehicleId,
-              clientTime: new Date(),
+            apiClient.getVehicleById({
+              params: {
+                vehicleId,
+              },
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+                getMakeDetails: "true",
+              },
             });
           },
           retry: 0,
