@@ -61,7 +61,6 @@ export function SalesAreaChart({ locations }: { locations: string[] }) {
                         {t("intlCurrency", {
                           value: Number(payload[0]?.value ?? 0),
                           ns: "format",
-                          digits: 0,
                         })}
                       </span>
                     </div>
@@ -73,7 +72,6 @@ export function SalesAreaChart({ locations }: { locations: string[] }) {
                         {t("intlCurrency", {
                           value: Number(payload[1]?.value ?? 0),
                           ns: "format",
-                          digits: 0,
                         })}
                       </span>
                     </div>
