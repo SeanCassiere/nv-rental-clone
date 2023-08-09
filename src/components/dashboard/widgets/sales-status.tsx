@@ -45,7 +45,6 @@ export function SalesAreaChart({ locations }: { locations: string[] }) {
           stroke="hsl(var(--muted-foreground)/0.7)"
           fontSize={13}
           dy={10}
-          tick
         />
         <Tooltip
           content={({ active, payload }) => {
