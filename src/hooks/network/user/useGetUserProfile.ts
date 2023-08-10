@@ -40,7 +40,7 @@ export function useGetUserProfile(useQueryOptions?: UseGetUserProfileOptions) {
     if (!query.data || query.data.status !== 200) return;
     const data = query.data.body;
 
-    if (data?.language) {
+    if (data?.language && i18n.language !== data.language) {
       i18n.changeLanguage(data.language);
     }
 
