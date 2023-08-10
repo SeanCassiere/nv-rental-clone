@@ -9,6 +9,7 @@ export const USER_STORAGE_KEYS = {
   timeFormat: "time-format",
   dismissedMessages: "dismissed-messages",
   currency: "currency",
+  theme: "theme",
 } as const;
 
 export const OIDC_AUTHORITY =
