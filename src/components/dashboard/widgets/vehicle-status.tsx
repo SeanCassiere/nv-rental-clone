@@ -16,9 +16,9 @@ import { WidgetSkeleton } from "../dnd-widget-display-grid";
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 
 const PIE_CHART_COLORS = [
-  "#14b8a6",
+  "#16a34a",
   "#3b82f6",
-  "#06b6d4",
+  "#22c55e",
   "#0ea5e9",
   "#f59e0b",
   "#ef4444",
@@ -68,7 +68,68 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
       <PieChart margin={{ top: 10, left: 35, right: 0, bottom: 0 }}>
         <Pie
           activeIndex={activeIdx}
-          activeShape={RenderActiveShape}
+          activeShape={({
+            cx,
+            cy,
+            innerRadius,
+            outerRadius,
+            startAngle,
+            endAngle,
+            fill,
+            payload,
+          }) => {
+            return (
+              <g>
+                <text
+                  x={cx}
+                  y={cy + 20}
+                  dy={8}
+                  textAnchor="middle"
+                  style={{
+                    fontSize: 18,
+                    fill: "hsl(var(--foreground))",
+                    fontWeight: 400,
+                  }}
+                >
+                  {String(payload.name)
+                    .replace(/([A-Z])/g, " $1")
+                    .trim()}
+                </text>
+                <text
+                  x={cx}
+                  y={cy - 20}
+                  dy={8}
+                  textAnchor="middle"
+                  style={{
+                    fontSize: 28,
+                    fill: "hsl(var(--foreground))",
+                    fontWeight: 600,
+                  }}
+                >
+                  {payload.total}
+                </text>
+                <Sector
+                  cx={cx}
+                  cy={cy}
+                  innerRadius={innerRadius}
+                  outerRadius={outerRadius}
+                  startAngle={startAngle}
+                  endAngle={endAngle}
+                  fill={fill}
+                />
+                <Sector
+                  cx={cx}
+                  cy={cy}
+                  startAngle={startAngle}
+                  endAngle={endAngle}
+                  innerRadius={outerRadius}
+                  outerRadius={outerRadius + 10}
+                  fill={fill}
+                  fillOpacity="0.5"
+                />
+              </g>
+            );
+          }}
           data={statusCounts.data || []}
           cx="30%"
           cy="50%"
@@ -82,6 +143,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
         >
           {[...(statusCounts.data ? statusCounts.data : [])].map((_, idx) => (
             <Cell
+              stroke="hsl(var(--border)/0.5)"
               key={`pie-cell-${idx}`}
               fill={PIE_CHART_COLORS[idx % PIE_CHART_COLORS.length]}
             />
@@ -98,7 +160,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
           formatter={(value, entry) => {
             return (
               <Link
-                className="mb-1 inline-block text-base"
+                className="mb-1 ml-1.5 inline-block text-base text-foreground"
                 to={searchFleetRoute.to}
                 search={() => ({
                   page: 1,
@@ -120,64 +182,5 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
         />
       </PieChart>
     </ResponsiveContainer>
-  );
-}
-
-function RenderActiveShape(props: any) {
-  const {
-    cx,
-    cy,
-    innerRadius,
-    outerRadius,
-    startAngle,
-    endAngle,
-    fill,
-    payload,
-  } = props;
-
-  return (
-    <g>
-      <text
-        x={cx}
-        y={cy + 20}
-        dy={8}
-        textAnchor="middle"
-        style={{
-          fontSize: 18,
-          fill: "var(--primary)",
-          fontWeight: 400,
-        }}
-      >
-        {payload.name}
-      </text>
-      <text
-        x={cx}
-        y={cy - 20}
-        dy={8}
-        textAnchor="middle"
-        style={{ fontSize: 28, fill: "var(--primary)", fontWeight: 600 }}
-      >
-        {payload.total}
-      </text>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius}
-        outerRadius={outerRadius + 10}
-        fill={fill}
-        fillOpacity="0.5"
-      />
-    </g>
   );
 }

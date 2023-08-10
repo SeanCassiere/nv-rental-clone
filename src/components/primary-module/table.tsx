@@ -208,7 +208,7 @@ export function PrimaryModuleTable<
             onDragEnd={handleDndDragEnd}
             modifiers={[restrictToHorizontalAxis]}
           >
-            <Table className="table-auto text-base">
+            <Table className="table-auto bg-card text-base">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
