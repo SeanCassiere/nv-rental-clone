@@ -22,6 +22,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
   DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
@@ -38,6 +44,8 @@ function getAvatarFallbackText(name: string) {
 
 export const UserNavigationDropdown = () => {
   const auth = useAuth();
+
+  const [theme, setTheme] = React.useState("light");
 
   const userQuery = useGetUserProfile();
   const user = userQuery.data?.status === 200 ? userQuery.data?.body : null;
@@ -85,9 +93,32 @@ export const UserNavigationDropdown = () => {
             <DropdownMenuItem>Settings</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem>Log out</DropdownMenuItem>
-          </AlertDialogTrigger>
+          <DropdownMenuGroup>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent alignOffset={0} sideOffset={4}>
+                  <DropdownMenuRadioGroup
+                    value={theme}
+                    onValueChange={setTheme}
+                  >
+                    <DropdownMenuRadioItem value="system">
+                      System
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="light">
+                      Light
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="dark">
+                      Dark
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem>Log out</DropdownMenuItem>
+            </AlertDialogTrigger>
+          </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
       <AlertDialogContent>
