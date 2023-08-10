@@ -8,7 +8,10 @@ import {
   customerQKeys,
   fleetQKeys,
 } from "@/utils/query-key";
-import { type TColumnHeaderItem } from "@/schemas/client/column";
+import {
+  ClientColumnHeadersListSchema,
+  type TColumnHeaderItem,
+} from "@/schemas/client/column";
 import { apiClient } from "@/api";
 import { getModuleApiName } from "@/utils/columns";
 
@@ -61,6 +64,12 @@ export async function fetchModuleColumnsModded(
         userId: params.query.userId || "",
         module: params.query.module,
       },
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        res.body = ClientColumnHeadersListSchema.parse(res.body);
+      }
+      return res;
     })
     .then((data) => mutateColumnAccessors(params.query.module, data))
     .then((data) => ({
@@ -128,15 +137,6 @@ export function mutateColumnAccessors(
             ] as string;
           }
 
-          column.isSelected =
-            typeof column.isSelected === "string" &&
-            column.isSelected === "true"
-              ? true
-              : typeof column.isSelected === "string" &&
-                column.isSelected === "false"
-              ? false
-              : column.isSelected;
-
           return column;
         }),
       };
@@ -157,15 +157,6 @@ export function mutateColumnAccessors(
             ] as string;
           }
 
-          column.isSelected =
-            typeof column.isSelected === "string" &&
-            column.isSelected === "true"
-              ? true
-              : typeof column.isSelected === "string" &&
-                column.isSelected === "false"
-              ? false
-              : column.isSelected;
-
           return column;
         }),
       };
@@ -183,15 +174,6 @@ export function mutateColumnAccessors(
             ] as string;
           }
 
-          column.isSelected =
-            typeof column.isSelected === "string" &&
-            column.isSelected === "true"
-              ? true
-              : typeof column.isSelected === "string" &&
-                column.isSelected === "false"
-              ? false
-              : column.isSelected;
-
           return column;
         }),
       };
@@ -199,18 +181,7 @@ export function mutateColumnAccessors(
       const vehicleColumnData = settingStartingColumn(data.body, "VehicleNo");
       return {
         ...data,
-        body: vehicleColumnData.map((column) => {
-          column.isSelected =
-            typeof column.isSelected === "string" &&
-            column.isSelected === "true"
-              ? true
-              : typeof column.isSelected === "string" &&
-                column.isSelected === "false"
-              ? false
-              : column.isSelected;
-
-          return column;
-        }),
+        body: vehicleColumnData,
       };
     default:
       return data;
