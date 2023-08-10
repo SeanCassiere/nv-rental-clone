@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "react-oidc-context";
+import { useNavigate } from "@tanstack/router";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -35,6 +36,7 @@ import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
+import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 function getAvatarFallbackText(name: string) {
   const nameParts = name.split(" ");
@@ -46,6 +48,7 @@ function getAvatarFallbackText(name: string) {
 
 export const UserNavigationDropdown = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
 
@@ -90,8 +93,30 @@ export const UserNavigationDropdown = () => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                navigate({
+                  to: destinationSettingsRoute.to,
+                  params: {
+                    destination: "profile",
+                  },
+                });
+              }}
+            >
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                navigate({
+                  to: destinationSettingsRoute.to,
+                  params: {
+                    destination: "profile",
+                  },
+                });
+              }}
+            >
+              Settings
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
