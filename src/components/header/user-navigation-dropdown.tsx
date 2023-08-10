@@ -31,6 +31,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
+import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
 
@@ -45,7 +47,7 @@ function getAvatarFallbackText(name: string) {
 export const UserNavigationDropdown = () => {
   const auth = useAuth();
 
-  const [theme, setTheme] = React.useState("light");
+  const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
 
   const userQuery = useGetUserProfile();
   const user = userQuery.data?.status === 200 ? userQuery.data?.body : null;
@@ -98,8 +100,12 @@ export const UserNavigationDropdown = () => {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent alignOffset={0} sideOffset={4}>
                   <DropdownMenuRadioGroup
-                    value={theme}
-                    onValueChange={setTheme}
+                    value={ternaryDarkMode}
+                    onValueChange={(value) => {
+                      if (["system", "light", "dark"].includes(value)) {
+                        setTernaryDarkMode(value as any);
+                      }
+                    }}
                   >
                     <DropdownMenuRadioItem value="system">
                       System
