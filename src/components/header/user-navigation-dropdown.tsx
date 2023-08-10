@@ -55,7 +55,7 @@ export const UserNavigationDropdown = () => {
   const userQuery = useGetUserProfile();
   const user = userQuery.data?.status === 200 ? userQuery.data?.body : null;
 
-  const fullName = `${user?.firstName} ${user?.lastName}`.trim();
+  const fullName = `${user?.firstName || "N"} ${user?.lastName || "A"}`.trim();
 
   const imgUrl = `https://avatars.dicebear.com/api/miniavs/${user?.userName}.svg?mood[]=happy`;
 
