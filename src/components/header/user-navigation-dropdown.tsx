@@ -52,6 +52,8 @@ export const UserNavigationDropdown = () => {
 
   const fullName = `${user?.firstName} ${user?.lastName}`.trim();
 
+  const imgUrl = `https://avatars.dicebear.com/api/miniavs/${user?.userName}.svg?mood[]=happy`;
+
   const handleLogout = () => {
     const client_id = auth.user?.profile.navotar_clientid;
     const user_id = auth.user?.profile.navotar_userid;
@@ -68,10 +70,7 @@ export const UserNavigationDropdown = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
             <Avatar className="h-10 w-10">
-              <AvatarImage
-                src={`https://avatars.dicebear.com/api/miniavs/${user?.userName}.svg?mood[]=happy`}
-                alt={fullName}
-              />
+              <AvatarImage src={user ? imgUrl : undefined} alt={fullName} />
               <AvatarFallback>{getAvatarFallbackText(fullName)}</AvatarFallback>
             </Avatar>
           </Button>
