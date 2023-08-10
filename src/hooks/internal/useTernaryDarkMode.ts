@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useLocalStorage } from "@/hooks/internal/useLocalStorage";
 import { useMediaQuery } from "@/hooks/internal/useMediaQuery";
 import { useUpdateEffect } from "@/hooks/internal/useUpdateEffect";
-import { useAuthValues } from "./useAuthValues";
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
+
 import { setDomClass } from "@/utils/dom";
 import { USER_STORAGE_KEYS } from "@/utils/constants";
 
