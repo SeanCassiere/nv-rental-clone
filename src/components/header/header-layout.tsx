@@ -44,18 +44,12 @@ export const HeaderLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to={indexRoute.to}>
-                <picture>
-                  <source
-                    srcSet="/android-chrome-192x192-dark.png"
-                    media="(prefers-color-scheme: dark)"
-                  />
-                  <img
-                    className="h-10 w-10 rounded-full p-1"
-                    src="/android-chrome-192x192-light.png"
-                    alt={UI_APPLICATION_NAME}
-                    style={{ imageRendering: "crisp-edges" }}
-                  />
-                </picture>
+                <img
+                  // logo url is set in the global css under the name --logo-url
+                  className="h-10 w-10 rounded-full p-1 [content:var(--logo-url)]"
+                  alt={UI_APPLICATION_NAME}
+                  style={{ imageRendering: "crisp-edges" }}
+                />
               </Link>
             </div>
             <div className="flex flex-grow items-center">

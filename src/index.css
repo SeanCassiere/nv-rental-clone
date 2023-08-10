@@ -26,6 +26,8 @@
 
     --banner-promo: 173 80% 40%;
     --banner-promo-foreground: 166 76% 97%;
+
+    --logo-url: url(/android-chrome-192x192-light.png);
   }
 
   :root.dark {
@@ -52,6 +54,8 @@
 
     --banner-promo: 175 77% 26%;
     --banner-promo-foreground: 166 76% 97%;
+
+    --logo-url: url(/android-chrome-192x192-dark.png);
   }
 }
 
