@@ -29,3 +29,5 @@ export const UI_APPLICATION_SHOW_ROUTER_DEVTOOLS =
   import.meta.env.VITE_APP_UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === "true"
     ? true
     : false;
+
+export const IS_LOCAL_DEV = OIDC_REDIRECT_URI.startsWith("http://localhost");

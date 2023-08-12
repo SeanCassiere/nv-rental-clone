@@ -127,7 +127,7 @@ export const rootRoute = routerContext.createRootRoute({
           <Outlet />
         </Suspense>
         {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
-          <TanStackRouterDevtools position="bottom-right" />
+          <TanStackRouterDevtools position="top-right" />
         )}
       </HeaderLayout>
     );

@@ -12,7 +12,7 @@ import enLocale from "date-fns/locale/en-US";
 
 import { getAuthToken } from "./utils/authLocal";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
-import { OIDC_REDIRECT_URI, USER_STORAGE_KEYS } from "./utils/constants";
+import { USER_STORAGE_KEYS, IS_LOCAL_DEV } from "./utils/constants";
 
 // START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";
@@ -163,7 +163,7 @@ i18next
         return value;
       },
     },
-    debug: OIDC_REDIRECT_URI.startsWith("http://"),
+    debug: IS_LOCAL_DEV,
     defaultNS: i18nextNsDefault,
     ns: [i18nextNsTranslation],
     partialBundledLanguages: true,
