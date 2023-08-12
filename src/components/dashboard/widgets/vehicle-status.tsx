@@ -46,9 +46,8 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
 export default VehicleStatusWidget;
 
 export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
-  const [activeIdx, setActiveIdx] = React.useState<number | undefined>(
-    undefined
-  );
+  const [activeIdx, setActiveIdx] = React.useState(0);
+
   const vehicleTypeId = "0";
   const statusCounts = useGetDashboardVehicleStatusCounts({
     locationIds: locations,
@@ -90,33 +89,23 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
               <g>
                 <text
                   x={cx}
+                  y={cy - 20}
+                  dy={8}
+                  textAnchor="middle"
+                  className="fill-foreground text-2xl font-semibold opacity-90 lg:text-3xl"
+                >
+                  {payload.total}
+                </text>
+                <text
+                  x={cx}
                   y={cy + 20}
                   dy={8}
                   textAnchor="middle"
-                  style={{
-                    fontSize: 18,
-                    fill: "hsl(var(--foreground))",
-                    fontWeight: 400,
-                    opacity: 0.9,
-                  }}
+                  className="fill-foreground text-sm font-normal opacity-90 lg:text-xl"
                 >
                   {String(payload.name)
                     .replace(/([A-Z])/g, " $1")
                     .trim()}
-                </text>
-                <text
-                  x={cx}
-                  y={cy - 20}
-                  dy={8}
-                  textAnchor="middle"
-                  style={{
-                    fontSize: 28,
-                    fill: "hsl(var(--foreground))",
-                    fontWeight: 600,
-                    opacity: 0.9,
-                  }}
-                >
-                  {payload.total}
                 </text>
                 <Sector
                   cx={cx}
@@ -140,7 +129,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
               </g>
             );
           }}
-          data={statusCounts.data || []}
+          data={dataList}
           cx="30%"
           cy="50%"
           innerRadius="65%"
@@ -149,12 +138,11 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
           paddingAngle={5}
           dataKey="total"
           onMouseEnter={(_, idx) => setActiveIdx(idx)}
-          onMouseLeave={() => setActiveIdx(undefined)}
         >
           {dataList.map((_, idx) => (
             <Cell
               stroke="hsl(var(--border)/0.5)"
-              key={`pie-cell-${idx}`}
+              key={`vehicle-status-pie-cell-${idx}`}
               fill={PIE_CHART_COLORS[idx % PIE_CHART_COLORS.length]}
             />
           ))}
@@ -165,16 +153,15 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
           layout="vertical"
           align="right"
           wrapperStyle={{
-            marginRight: "10%",
+            marginRight: "1%",
           }}
           formatter={(value, entry) => {
             const dataListIdx = getDataListIndexForName(value);
             return (
               <Link
-                className="mb-1 ml-1.5 inline-block text-base text-foreground"
+                className="mb-1 ml-1.5 inline-block text-sm text-foreground md:text-base"
                 to={searchFleetRoute.to}
                 onMouseEnter={() => setActiveIdx(dataListIdx)}
-                onMouseLeave={() => setActiveIdx(undefined)}
                 search={() => ({
                   page: 1,
                   size: 10,
