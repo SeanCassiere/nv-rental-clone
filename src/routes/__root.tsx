@@ -5,8 +5,6 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { HeaderLayout } from "@/components/header/header-layout";
 import LoadingPlaceholder from "@/components/loading-placeholder";
 
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-
 import { apiClient } from "@/api";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -122,8 +120,6 @@ export const rootRoute = routerContext.createRootRoute({
     return {};
   },
   component: () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useTernaryDarkMode();
     return (
       <HeaderLayout>
         <Suspense fallback={<LoadingPlaceholder />}>
