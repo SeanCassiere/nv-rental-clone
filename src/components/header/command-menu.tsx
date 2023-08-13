@@ -11,6 +11,9 @@ import {
   FileSignatureIcon,
   User2Icon,
   LayoutDashboardIcon,
+  SunIcon,
+  MoonIcon,
+  LaptopIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -38,6 +41,7 @@ import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 import { useDebounce } from "@/hooks/internal/useDebounce";
+import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 import { useGetGlobalSearch } from "@/hooks/network/module/useGetGlobalSearch";
 
 import { IsMacLike, cn } from "@/utils";
@@ -50,6 +54,9 @@ export const CommandMenu = () => {
 
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
+
+  const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =
+    useTernaryDarkMode();
 
   const searchTerm = useDebounce(text, 350);
 
@@ -338,6 +345,22 @@ export const CommandMenu = () => {
           </CommandGroup>
 
           <CommandGroup heading="System">
+            <CommandItem
+              onSelect={() => {
+                run(() => toggleTernaryDarkMode());
+              }}
+            >
+              {ternaryDarkMode === "system" && (
+                <LaptopIcon className="mr-2 h-4 w-4 text-primary/70" />
+              )}
+              {ternaryDarkMode === "light" && (
+                <SunIcon className="mr-2 h-4 w-4 text-primary/70" />
+              )}
+              {ternaryDarkMode === "dark" && (
+                <MoonIcon className="mr-2 h-4 w-4 text-primary/70" />
+              )}
+              Toggle theme (to {nextToggleTernaryDarkMode})
+            </CommandItem>
             <CommandItem
               onSelect={() => {
                 run(() =>
