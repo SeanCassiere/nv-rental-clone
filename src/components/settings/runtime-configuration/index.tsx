@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useRef, useEffect } from "react";
 import { useNavigate, useSearch } from "@tanstack/router";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,6 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 import { useFeature } from "@/hooks/internal/useFeature";
+
+const SettingsEmailTemplatesTab = React.lazy(
+  () => import("@/components/settings/runtime-configuration/email-templates")
+);
+
+const SettingsGlobalDocumentsTab = React.lazy(
+  () => import("@/components/settings/runtime-configuration/global-documents")
+);
 
 type TabListItem = {
   id: string;
@@ -27,6 +35,8 @@ const SettingsRuntimeConfigurationTab = () => {
     from: destinationSettingsRoute.id,
   });
 
+  const hasLoadedRef = useRef(false);
+
   const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS", "");
   const adminUrlsSplit = (adminUrlsFeature || "")
     .split(",")
@@ -39,7 +49,7 @@ const SettingsRuntimeConfigurationTab = () => {
       {
         id: "email-templates",
         title: "Email templates",
-        component: <Skeleton className="h-96" />,
+        component: <SettingsEmailTemplatesTab />,
       },
     ];
 
@@ -47,7 +57,7 @@ const SettingsRuntimeConfigurationTab = () => {
       tabItems.push({
         id: "global-documents",
         title: "Global documents",
-        component: <Skeleton className="h-96" />,
+        component: <SettingsGlobalDocumentsTab />,
       });
     }
 
@@ -74,6 +84,10 @@ const SettingsRuntimeConfigurationTab = () => {
     [navigate]
   );
 
+  useEffect(() => {
+    hasLoadedRef.current = true;
+  }, []);
+
   return (
     <>
       <h2 className="text-xl font-semibold leading-10">
@@ -96,9 +110,7 @@ const SettingsRuntimeConfigurationTab = () => {
         </TabsList>
         {tabs.map((item, idx) => (
           <TabsContent key={`tab_content_${item.id}_${idx}`} value={item.id}>
-            <Suspense fallback={<Skeleton className="h-96" />}>
-              {item.component}
-            </Suspense>
+            <Suspense fallback={null}>{item.component}</Suspense>
           </TabsContent>
         ))}
       </Tabs>
