@@ -61,14 +61,14 @@ export default function SettingsProfileTab() {
   });
 
   return (
-    <Card className="lg:w-[600px] [&>div]:p-4 [&>div]:lg:p-6">
-      <CardHeader>
+    <Card className="lg:w-[600px]">
+      <CardHeader className="p-4 lg:p-6">
         <CardTitle className="text-xl">Profile</CardTitle>
         <CardDescription className="text-base text-foreground/80">
           Customize and manage your profile with ease.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 pt-0 lg:p-6">
         {(userQuery.status === "loading" ||
           languagesQuery.status === "loading") && (
           <Skeleton className="h-96 w-full lg:max-w-2xl" />

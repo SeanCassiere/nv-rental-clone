@@ -10,14 +10,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const EmailTemplatesSettings = () => {
   return (
-    <Card className="[&>div]:p-4 [&>div]:lg:p-6">
-      <CardHeader>
+    <Card>
+      <CardHeader className="p-4 lg:p-6">
         <CardTitle className="text-lg">Email templates</CardTitle>
         <CardDescription className="text-base">
           Configure the email templates that are used by the system.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 pt-0 lg:p-6">
         <Skeleton className="h-72" />
       </CardContent>
     </Card>

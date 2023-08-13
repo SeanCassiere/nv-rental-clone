@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useEffect } from "react";
+import React, { Suspense } from "react";
 import { useNavigate, useSearch } from "@tanstack/router";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -34,8 +34,6 @@ const SettingsRuntimeConfigurationTab = () => {
   const { tab } = useSearch({
     from: destinationSettingsRoute.id,
   });
-
-  const hasLoadedRef = useRef(false);
 
   const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS", "");
   const adminUrlsSplit = (adminUrlsFeature || "")
@@ -84,10 +82,6 @@ const SettingsRuntimeConfigurationTab = () => {
     [navigate]
   );
 
-  useEffect(() => {
-    hasLoadedRef.current = true;
-  }, []);
-
   return (
     <>
       <h2 className="text-xl font-semibold leading-10">
@@ -110,7 +104,9 @@ const SettingsRuntimeConfigurationTab = () => {
         </TabsList>
         {tabs.map((item, idx) => (
           <TabsContent key={`tab_content_${item.id}_${idx}`} value={item.id}>
-            <Suspense fallback={null}>{item.component}</Suspense>
+            <Suspense fallback={<Skeleton className="h-24" />}>
+              {item.component}
+            </Suspense>
           </TabsContent>
         ))}
       </Tabs>
