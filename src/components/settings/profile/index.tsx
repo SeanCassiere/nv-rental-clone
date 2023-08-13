@@ -15,6 +15,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
@@ -54,30 +61,34 @@ export default function SettingsProfileTab() {
   });
 
   return (
-    <>
-      <h2 className="text-xl font-semibold leading-10">Profile</h2>
-      <p className="text-base text-foreground/80">
-        Customize and manage your profile with ease.
-      </p>
-      {(userQuery.status === "loading" ||
-        languagesQuery.status === "loading") && (
-        <Skeleton className="mt-6 h-96 w-full lg:max-w-2xl" />
-      )}
-      {userQuery.status === "success" &&
-        languagesQuery.status === "success" &&
-        userQuery.data.status === 200 && (
-          <article className="mt-6 w-full lg:max-w-2xl">
-            <ProfileForm
-              user={userQuery.data.body}
-              languages={
-                languagesQuery.data.status === 200
-                  ? languagesQuery.data.body
-                  : []
-              }
-            />
-          </article>
+    <Card className="lg:w-[600px] [&>div]:p-4 [&>div]:lg:p-6">
+      <CardHeader>
+        <CardTitle className="text-xl">Profile</CardTitle>
+        <CardDescription className="text-base text-foreground/80">
+          Customize and manage your profile with ease.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {(userQuery.status === "loading" ||
+          languagesQuery.status === "loading") && (
+          <Skeleton className="h-96 w-full lg:max-w-2xl" />
         )}
-    </>
+        {userQuery.status === "success" &&
+          languagesQuery.status === "success" &&
+          userQuery.data.status === 200 && (
+            <article className="w-full lg:max-w-2xl">
+              <ProfileForm
+                user={userQuery.data.body}
+                languages={
+                  languagesQuery.data.status === 200
+                    ? languagesQuery.data.body
+                    : []
+                }
+              />
+            </article>
+          )}
+      </CardContent>
+    </Card>
   );
 }
 
