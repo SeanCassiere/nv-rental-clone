@@ -5,7 +5,7 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { HeaderLayout } from "@/components/header/header-layout";
 import LoadingPlaceholder from "@/components/loading-placeholder";
 
-import { queryClient } from "@/tanstack-query-config";
+import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
 import { apiClient } from "@/api";
 
@@ -16,6 +16,7 @@ import {
   USER_STORAGE_KEYS,
 } from "@/utils/constants";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
+import { queryClient } from "@/tanstack-query-config";
 
 interface MyRouterContext {
   queryClient: typeof queryClient;
@@ -121,6 +122,8 @@ export const rootRoute = routerContext.createRootRoute({
     return {};
   },
   component: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useTernaryDarkMode();
     return (
       <HeaderLayout>
         <Suspense fallback={<LoadingPlaceholder />}>

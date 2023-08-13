@@ -8,7 +8,7 @@ export function useAuthValues(): {
 } {
   const auth = useAuth();
 
-  if (!auth.isAuthenticated || !auth.user) {
+  if (!auth.user) {
     return {
       isAuthed: false,
       accessToken: "",
