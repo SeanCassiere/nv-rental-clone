@@ -71,7 +71,12 @@ export async function fetchModuleColumnsModded(
       }
       return res;
     })
-    .then((data) => mutateColumnAccessors(params.query.module, data))
+    .then((data) =>
+      mutateColumnAccessors(params.query.module, {
+        ...data,
+        body: data.status === 200 ? data.body : [],
+      })
+    )
     .then((data) => ({
       ...data,
       body: data.body.sort(
