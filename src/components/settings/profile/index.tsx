@@ -61,7 +61,7 @@ export default function SettingsProfileTab() {
   });
 
   return (
-    <Card className="lg:w-[600px]">
+    <Card className="shadow-none lg:w-[600px]">
       <CardHeader className="p-4 lg:p-6">
         <CardTitle className="text-xl">Profile</CardTitle>
         <CardDescription className="text-base text-foreground/80">

@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const GlobalDocumentsSettings = () => {
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader className="p-4 lg:p-6">
         <CardTitle className="text-lg">Global documents</CardTitle>
         <CardDescription className="text-base">
