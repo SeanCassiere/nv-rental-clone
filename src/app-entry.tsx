@@ -8,6 +8,8 @@ import LoadingPlaceholder from "@/components/loading-placeholder";
 import { Toaster } from "@/components/ui/toaster";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 
+import { apiClient } from "@/api";
+
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { queryClient } from "@/tanstack-query-config";
 import {
@@ -26,6 +28,7 @@ export const router = new Router({
   defaultPendingComponent: LoadingPlaceholder,
   context: {
     queryClient,
+    apiClient,
   },
 });
 

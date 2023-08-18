@@ -18,6 +18,7 @@ import { queryClient } from "@/tanstack-query-config";
 
 interface MyRouterContext {
   queryClient: typeof queryClient;
+  apiClient: typeof apiClient;
 }
 
 const routerContext = new RouterContext<MyRouterContext>();

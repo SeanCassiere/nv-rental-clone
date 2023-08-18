@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import { reservationsRoute } from ".";
 
-import { apiClient } from "@/api";
 import { fetchRentalRateSummaryAmounts } from "@/api/summary";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -12,7 +11,10 @@ import { reservationQKeys } from "@/utils/query-key";
 export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "$reservationId",
-  loader: async ({ params: { reservationId }, context: { queryClient } }) => {
+  loader: async ({
+    params: { reservationId },
+    context: { queryClient, apiClient },
+  }) => {
     const auth = getAuthToken();
 
     if (auth) {
