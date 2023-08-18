@@ -8,6 +8,8 @@ import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { apiClient } from "@/api";
 
+import { UserProfileSchema } from "@/schemas/user";
+
 import { getAuthToken } from "@/utils/authLocal";
 import { clientQKeys, userQKeys } from "@/utils/query-key";
 import {
@@ -16,6 +18,7 @@ import {
 } from "@/utils/constants";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
 import { queryClient } from "@/tanstack-query-config";
+import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 
 interface MyRouterContext {
   apiClient: typeof apiClient;
@@ -87,14 +90,21 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: userQKeys.me(),
           queryFn: () =>
-            apiClient.getUserProfileById({
-              params: { userId: auth.profile.navotar_userid },
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                currentUserId: auth.profile.navotar_userid,
-              },
-            }),
+            apiClient
+              .getUserProfileById({
+                params: { userId: auth.profile.navotar_userid },
+                query: {
+                  clientId: auth.profile.navotar_clientid,
+                  userId: auth.profile.navotar_userid,
+                  currentUserId: auth.profile.navotar_userid,
+                },
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  res.body = UserProfileSchema.parse(res.body);
+                }
+                return res;
+              }),
           staleTime: 1000 * 60 * 1, // 1 minute
         })
       );
@@ -137,9 +147,12 @@ function RootComponent() {
         {isFreshAuthenticating ? (
           <LoadingPlaceholder />
         ) : (
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <Outlet />
-          </Suspense>
+          <>
+            <HiddenFeatureSetter />
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <Outlet />
+            </Suspense>
+          </>
         )}
         {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
           <TanStackRouterDevtools position="top-right" />
