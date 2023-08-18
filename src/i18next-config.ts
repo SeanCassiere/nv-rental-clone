@@ -100,6 +100,7 @@ i18next
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
+            console.error("error at i18next.t('intlDateTime')", error);
             return "intlDateTime";
           }
         }
@@ -110,6 +111,7 @@ i18next
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
+            console.error("error at i18next.t('intlMonthYear')", error);
             return "intlMonthYear";
           }
         }
@@ -130,6 +132,7 @@ i18next
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
+            console.error("error at i18next.t('intlDate')", error);
             return "intlDate";
           }
         }
@@ -148,14 +151,19 @@ i18next
               USER_STORAGE_KEYS.currency
             ) ?? "USD";
 
-          if (currency !== "" && currency) {
-            return new Intl.NumberFormat(lng, {
-              style: "currency",
-              currency,
-              minimumFractionDigits: digits,
-              maximumFractionDigits: digits,
-            }).format(numberValue);
-          } else {
+          try {
+            if (currency !== "" && currency) {
+              return new Intl.NumberFormat(lng, {
+                style: "currency",
+                currency,
+                minimumFractionDigits: digits,
+                maximumFractionDigits: digits,
+              }).format(numberValue);
+            } else {
+              throw new Error("Currency is not defined");
+            }
+          } catch (error) {
+            console.error("error at i18next.t('intlCurrency')", error);
             return "intlCurrency";
           }
         }
