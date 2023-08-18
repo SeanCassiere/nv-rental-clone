@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import { agreementsRoute } from ".";
 
-import { apiClient } from "@/api";
 import { fetchRentalRateSummaryAmounts } from "@/api/summary";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -12,7 +11,10 @@ import { agreementQKeys } from "@/utils/query-key";
 export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "$agreementId",
-  loader: async ({ params: { agreementId }, context: { queryClient } }) => {
+  loader: async ({
+    params: { agreementId },
+    context: { queryClient, apiClient },
+  }) => {
     const auth = getAuthToken();
 
     if (auth) {

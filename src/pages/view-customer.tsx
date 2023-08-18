@@ -35,7 +35,7 @@ import {
 
 import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import LoadingPlaceholder from "@/components/loading-placeholder";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";

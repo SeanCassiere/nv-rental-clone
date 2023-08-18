@@ -5,10 +5,12 @@ import { customersRoute } from ".";
 import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
+import { CustomerSearchQuerySchema } from "@/schemas/customer";
+
 import { getAuthToken } from "@/utils/authLocal";
 import { customerQKeys } from "@/utils/query-key";
 import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
-import { CustomerSearchQuerySchema } from "@/schemas/customer";
+import { APP_DEFAULTS } from "@/utils/constants";
 
 export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,
@@ -17,7 +19,7 @@ export const searchCustomersRoute = new Route({
   preSearchFilters: [
     (search) => ({
       page: search?.page || 1,
-      size: search?.size || 10,
+      size: search?.size || parseInt(APP_DEFAULTS.tableRowCount),
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],

@@ -5,10 +5,12 @@ import { reservationsRoute } from ".";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 
+import { ReservationSearchQuerySchema } from "@/schemas/reservation";
+
 import { getAuthToken } from "@/utils/authLocal";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { reservationQKeys } from "@/utils/query-key";
-import { ReservationSearchQuerySchema } from "@/schemas/reservation";
+import { APP_DEFAULTS } from "@/utils/constants";
 
 export const searchReservationsRoute = new Route({
   getParentRoute: () => reservationsRoute,
@@ -17,7 +19,7 @@ export const searchReservationsRoute = new Route({
   preSearchFilters: [
     (search) => ({
       page: search?.page || 1,
-      size: search?.size || 10,
+      size: search?.size || parseInt(APP_DEFAULTS.tableRowCount),
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],

@@ -11,6 +11,8 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
+
 import { indexRoute } from "@/routes";
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
@@ -18,6 +20,8 @@ import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-rou
 import type { TDashboardStats } from "@/schemas/dashboard";
 
 import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
+import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;
@@ -29,6 +33,16 @@ const DashboardStatsBlock = ({
 }: {
   statistics: TDashboardStats | null | undefined;
 }) => {
+  const auth = useAuthValues();
+
+  const rowCountStr =
+    getLocalStorageForUser(
+      auth.clientId,
+      auth.userId,
+      USER_STORAGE_KEYS.tableRowCount
+    ) || APP_DEFAULTS.tableRowCount;
+  const defaultRowCount = parseInt(rowCountStr, 10);
+
   return (
     <div className="@container">
       <ul className="grid grid-cols-2 gap-4 @xl:grid-cols-3 @3xl:grid-cols-4 @5xl:grid-cols-6 [&>li]:h-full">
@@ -41,7 +55,7 @@ const DashboardStatsBlock = ({
               to: searchReservationsRoute.to,
               search: () => ({
                 page: 1,
-                size: 10,
+                size: defaultRowCount,
                 filters: {
                   Statuses: ["2"],
                   CreatedDateFrom: localDateToQueryYearMonthDay(new Date()),
@@ -61,7 +75,7 @@ const DashboardStatsBlock = ({
               to: searchAgreementsRoute.to,
               search: () => ({
                 page: 1,
-                size: 10,
+                size: defaultRowCount,
                 filters: {
                   EndDate: localDateToQueryYearMonthDay(new Date()),
                   Statuses: ["2"],
@@ -81,7 +95,7 @@ const DashboardStatsBlock = ({
               to: searchAgreementsRoute.to,
               search: () => ({
                 page: 1,
-                size: 10,
+                size: defaultRowCount,
                 filters: { Statuses: ["2"] },
               }),
               preload: "intent",
@@ -97,7 +111,7 @@ const DashboardStatsBlock = ({
               to: searchAgreementsRoute.to,
               search: () => ({
                 page: 1,
-                size: 10,
+                size: defaultRowCount,
                 filters: { Statuses: ["2"], IsSearchOverdues: "true" },
               }),
               preload: "intent",
@@ -113,7 +127,7 @@ const DashboardStatsBlock = ({
               to: searchAgreementsRoute.to,
               search: () => ({
                 page: 1,
-                size: 10,
+                size: defaultRowCount,
                 filters: { Statuses: ["5"] },
               }),
               preload: "intent",

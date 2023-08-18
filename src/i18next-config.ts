@@ -100,6 +100,7 @@ i18next
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
+            console.error("error at i18next.t('intlDateTime')", error);
             return "intlDateTime";
           }
         }
@@ -110,6 +111,7 @@ i18next
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
+            console.error("error at i18next.t('intlMonthYear')", error);
             return "intlMonthYear";
           }
         }
@@ -130,16 +132,31 @@ i18next
               locale: getDateFnsLocale(lng),
             });
           } catch (error) {
+            console.error("error at i18next.t('intlDate')", error);
             return "intlDate";
           }
         }
 
         if (i18nFormat === "currency") {
-          const { value: numberValue = 0, digits = 2 } = options as any;
+          const { value: numberValue = 0, digits } = options as any;
 
           const auth = getAuthToken();
           const clientId = auth?.profile.navotar_clientid;
           const userId = auth?.profile.navotar_userid;
+
+          const digitsCountFromLocal = getLocalStorageForUser(
+            clientId ?? "",
+            userId ?? "",
+            USER_STORAGE_KEYS.currencyDigits
+          );
+
+          const digitsCountParsed = parseInt(digitsCountFromLocal ?? "2", 10);
+          const digitsToShow =
+            typeof digits !== "undefined"
+              ? typeof digits === "number"
+                ? digits
+                : parseInt(digits, 10)
+              : digitsCountParsed;
 
           const currency =
             getLocalStorageForUser(
@@ -148,14 +165,19 @@ i18next
               USER_STORAGE_KEYS.currency
             ) ?? "USD";
 
-          if (currency !== "" && currency) {
-            return new Intl.NumberFormat(lng, {
-              style: "currency",
-              currency,
-              minimumFractionDigits: digits,
-              maximumFractionDigits: digits,
-            }).format(numberValue);
-          } else {
+          try {
+            if (currency !== "" && currency) {
+              return new Intl.NumberFormat(lng, {
+                style: "currency",
+                currency,
+                minimumFractionDigits: digitsToShow,
+                maximumFractionDigits: digitsToShow,
+              }).format(numberValue);
+            } else {
+              throw new Error("Currency is not defined");
+            }
+          } catch (error) {
+            console.error("error at i18next.t('intlCurrency')", error);
             return "intlCurrency";
           }
         }

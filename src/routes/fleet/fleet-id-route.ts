@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import { fleetRoute } from ".";
 
-import { apiClient } from "@/api";
 import { fetchVehicleSummaryAmounts } from "@/api/summary";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -13,7 +12,10 @@ import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
-  loader: async ({ params: { vehicleId }, context: { queryClient } }) => {
+  loader: async ({
+    params: { vehicleId },
+    context: { queryClient, apiClient },
+  }) => {
     const auth = getAuthToken();
 
     if (auth) {

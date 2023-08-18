@@ -1,12 +1,27 @@
-import { type TAgreementSearchQuery } from "../schemas/agreement";
-import { type TCustomerSearchQuery } from "../schemas/customer";
-import { type TReservationSearchQuery } from "../schemas/reservation";
-import { type TVehicleSearchQuery } from "../schemas/vehicle";
+import { type TAgreementSearchQuery } from "@/schemas/agreement";
+import { type TCustomerSearchQuery } from "@/schemas/customer";
+import { type TReservationSearchQuery } from "@/schemas/reservation";
+import { type TVehicleSearchQuery } from "@/schemas/vehicle";
+
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "./constants";
+import { getLocalStorageForUser } from "./user-local-storage";
+import { getAuthToken } from "./authLocal";
 
 export function normalizeAgreementListSearchParams(
   search: TAgreementSearchQuery
 ) {
   const { page, size, filters } = search;
+
+  const auth = getAuthToken();
+
+  const localRowCountStr = auth
+    ? getLocalStorageForUser(
+        auth.profile.navotar_clientid,
+        auth.profile.navotar_userid,
+        USER_STORAGE_KEYS.tableRowCount
+      )
+    : null;
+  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     AgreementStatusName: filters?.AgreementStatusName || undefined,
@@ -30,7 +45,7 @@ export function normalizeAgreementListSearchParams(
   };
 
   const pageNumber = page || 1;
-  const pageSize = size || 10;
+  const pageSize = size || rowCount;
   return { pageNumber, size: pageSize, searchFilters };
 }
 
@@ -38,6 +53,17 @@ export function normalizeCustomerListSearchParams(
   search: TCustomerSearchQuery
 ) {
   const { page, size, filters } = search;
+
+  const auth = getAuthToken();
+
+  const localRowCountStr = auth
+    ? getLocalStorageForUser(
+        auth.profile.navotar_clientid,
+        auth.profile.navotar_userid,
+        USER_STORAGE_KEYS.tableRowCount
+      )
+    : null;
+  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     Active: typeof filters?.Active !== "undefined" ? filters?.Active : "true",
@@ -49,7 +75,7 @@ export function normalizeCustomerListSearchParams(
   };
 
   const pageNumber = page || 1;
-  const pageSize = size || 10;
+  const pageSize = size || rowCount;
   return { pageNumber, size: pageSize, searchFilters };
 }
 
@@ -57,6 +83,17 @@ export function normalizeReservationListSearchParams(
   search: TReservationSearchQuery
 ) {
   const { page, size, filters } = search;
+
+  const auth = getAuthToken();
+
+  const localRowCountStr = auth
+    ? getLocalStorageForUser(
+        auth.profile.navotar_clientid,
+        auth.profile.navotar_userid,
+        USER_STORAGE_KEYS.tableRowCount
+      )
+    : null;
+  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     Statuses: filters?.Statuses || [],
@@ -74,12 +111,23 @@ export function normalizeReservationListSearchParams(
   };
 
   const pageNumber = page || 1;
-  const pageSize = size || 10;
+  const pageSize = size || rowCount;
   return { pageNumber, size: pageSize, searchFilters };
 }
 
 export function normalizeVehicleListSearchParams(search: TVehicleSearchQuery) {
   const { page, size, filters } = search;
+
+  const auth = getAuthToken();
+
+  const localRowCountStr = auth
+    ? getLocalStorageForUser(
+        auth.profile.navotar_clientid,
+        auth.profile.navotar_userid,
+        USER_STORAGE_KEYS.tableRowCount
+      )
+    : null;
+  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     Active: typeof filters?.Active !== "undefined" ? filters?.Active : "true",
@@ -93,6 +141,6 @@ export function normalizeVehicleListSearchParams(search: TVehicleSearchQuery) {
   };
 
   const pageNumber = page || 1;
-  const pageSize = size || 10;
+  const pageSize = size || rowCount;
   return { pageNumber, size: pageSize, searchFilters };
 }

@@ -9,13 +9,12 @@ import { getAuthToken } from "@/utils/authLocal";
 import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
-import { apiClient } from "@/api";
 
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
-  loader: async ({ context: { queryClient } }) => {
+  loader: async ({ context: { queryClient, apiClient } }) => {
     const auth = getAuthToken();
     if (auth) {
       const promises = [];

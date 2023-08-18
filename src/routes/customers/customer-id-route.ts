@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import { customersRoute } from ".";
 
-import { apiClient } from "@/api";
 import { fetchCustomerSummaryAmounts } from "@/api/summary";
 
 import { getAuthToken } from "@/utils/authLocal";
@@ -12,7 +11,10 @@ import { customerQKeys } from "@/utils/query-key";
 export const customerPathIdRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "$customerId",
-  loader: async ({ params: { customerId }, context: { queryClient } }) => {
+  loader: async ({
+    params: { customerId },
+    context: { queryClient, apiClient },
+  }) => {
     const auth = getAuthToken();
 
     if (auth) {

@@ -1,11 +1,14 @@
 import { Suspense } from "react";
 import { Outlet, RouterContext } from "@tanstack/router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { useAuth } from "react-oidc-context";
 
 import { HeaderLayout } from "@/components/header/header-layout";
-import LoadingPlaceholder from "@/components/loading-placeholder";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { apiClient } from "@/api";
+
+import { UserProfileSchema } from "@/schemas/user";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { clientQKeys, userQKeys } from "@/utils/query-key";
@@ -15,8 +18,10 @@ import {
 } from "@/utils/constants";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
 import { queryClient } from "@/tanstack-query-config";
+import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 
 interface MyRouterContext {
+  apiClient: typeof apiClient;
   queryClient: typeof queryClient;
 }
 
@@ -85,14 +90,21 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: userQKeys.me(),
           queryFn: () =>
-            apiClient.getUserProfileById({
-              params: { userId: auth.profile.navotar_userid },
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                currentUserId: auth.profile.navotar_userid,
-              },
-            }),
+            apiClient
+              .getUserProfileById({
+                params: { userId: auth.profile.navotar_userid },
+                query: {
+                  clientId: auth.profile.navotar_clientid,
+                  userId: auth.profile.navotar_userid,
+                  currentUserId: auth.profile.navotar_userid,
+                },
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  res.body = UserProfileSchema.parse(res.body);
+                }
+                return res;
+              }),
           staleTime: 1000 * 60 * 1, // 1 minute
         })
       );
@@ -119,16 +131,33 @@ export const rootRoute = routerContext.createRootRoute({
 
     return {};
   },
-  component: () => {
-    return (
-      <HeaderLayout>
-        <Suspense fallback={<LoadingPlaceholder />}>
-          <Outlet />
-        </Suspense>
+  component: RootComponent,
+});
+
+function RootComponent() {
+  const auth = useAuth();
+
+  const isHeaderShown = auth.isAuthenticated;
+  const isFreshAuthenticating = auth.isLoading && !auth.isAuthenticated;
+
+  return (
+    <>
+      {isHeaderShown && <HeaderLayout />}
+      <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
+        {isFreshAuthenticating ? (
+          <LoadingPlaceholder />
+        ) : (
+          <>
+            <HiddenFeatureSetter />
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <Outlet />
+            </Suspense>
+          </>
+        )}
         {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
           <TanStackRouterDevtools position="top-right" />
         )}
-      </HeaderLayout>
-    );
-  },
-});
+      </main>
+    </>
+  );
+}

@@ -7,8 +7,12 @@ import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 import { apiClient } from "@/api";
 
 import { userQKeys } from "@/utils/query-key";
-import { setLocalStorageForUser } from "@/utils/user-local-storage";
+import {
+  getLocalStorageForUser,
+  setLocalStorageForUser,
+} from "@/utils/user-local-storage";
 import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { UserProfileSchema } from "@/schemas/user";
 
 type UseGetUserProfileOptions = Pick<UseQueryOptions, "suspense">;
 
@@ -20,16 +24,23 @@ export function useGetUserProfile(useQueryOptions?: UseGetUserProfileOptions) {
   const query = useQuery({
     queryKey: userQKeys.me(),
     queryFn: () =>
-      apiClient.getUserProfileById({
-        params: {
-          userId: auth.user?.profile.navotar_userid || "",
-        },
-        query: {
-          clientId: auth.user?.profile.navotar_clientid || "",
-          userId: auth.user?.profile.navotar_userid || "",
-          currentUserId: auth.user?.profile.navotar_userid || "",
-        },
-      }),
+      apiClient
+        .getUserProfileById({
+          params: {
+            userId: auth.user?.profile.navotar_userid || "",
+          },
+          query: {
+            clientId: auth.user?.profile.navotar_clientid || "",
+            userId: auth.user?.profile.navotar_userid || "",
+            currentUserId: auth.user?.profile.navotar_userid || "",
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            res.body = UserProfileSchema.parse(res.body);
+          }
+          return res;
+        }),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1, // 1 minute
     ...queryOptions,
@@ -51,18 +62,33 @@ export function useGetUserProfile(useQueryOptions?: UseGetUserProfileOptions) {
       const clientId = auth.user?.profile.navotar_clientid;
       const userId = auth.user?.profile.navotar_userid;
 
-      setLocalStorageForUser(
+      const existingDateFormat = getLocalStorageForUser(
         clientId,
         userId,
-        USER_STORAGE_KEYS.dateFormat,
-        data?.overrideDateFormat || dfnsDateFormat
+        USER_STORAGE_KEYS.dateFormat
       );
-      setLocalStorageForUser(
+      if (!existingDateFormat) {
+        setLocalStorageForUser(
+          clientId,
+          userId,
+          USER_STORAGE_KEYS.dateFormat,
+          data?.overrideDateFormat || dfnsDateFormat
+        );
+      }
+
+      const existingTimeFormat = getLocalStorageForUser(
         clientId,
         userId,
-        USER_STORAGE_KEYS.timeFormat,
-        data?.overrideTimeFormat || dfnsTimeFormat
+        USER_STORAGE_KEYS.timeFormat
       );
+      if (!existingTimeFormat) {
+        setLocalStorageForUser(
+          clientId,
+          userId,
+          USER_STORAGE_KEYS.timeFormat,
+          data?.overrideTimeFormat || dfnsTimeFormat
+        );
+      }
     }
   }, [
     auth.user?.profile.navotar_clientid,

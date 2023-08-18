@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-function momentToDateFnsFormat(format: string) {
+export function momentToDateFnsFormat(format: string) {
   return format
     .replace("DD", "dd") // 01 02 ... 30 31
     .replace("Do", "do") // 1st 2nd ... 30th 31st
