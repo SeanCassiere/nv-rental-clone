@@ -4,7 +4,7 @@ import { Route } from "@tanstack/router";
 import { hasAuthParams, useAuth } from "react-oidc-context";
 import { z } from "zod";
 
-import LoadingPlaceholder from "@/components/loading-placeholder";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { rootRoute } from "./__root";
 import { router } from "@/app-entry";

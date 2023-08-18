@@ -10,4 +10,4 @@ const LoadingPlaceholder = () => {
   );
 };
 
-export default LoadingPlaceholder;
+export { LoadingPlaceholder };

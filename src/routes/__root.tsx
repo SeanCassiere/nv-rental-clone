@@ -3,7 +3,7 @@ import { Outlet, RouterContext } from "@tanstack/router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import { HeaderLayout } from "@/components/header/header-layout";
-import LoadingPlaceholder from "@/components/loading-placeholder";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { apiClient } from "@/api";
 
@@ -17,8 +17,8 @@ import { setLocalStorageForUser } from "@/utils/user-local-storage";
 import { queryClient } from "@/tanstack-query-config";
 
 interface MyRouterContext {
-  queryClient: typeof queryClient;
   apiClient: typeof apiClient;
+  queryClient: typeof queryClient;
 }
 
 const routerContext = new RouterContext<MyRouterContext>();
@@ -120,16 +120,18 @@ export const rootRoute = routerContext.createRootRoute({
 
     return {};
   },
-  component: () => {
-    return (
-      <HeaderLayout>
-        <Suspense fallback={<LoadingPlaceholder />}>
-          <Outlet />
-        </Suspense>
-        {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
-          <TanStackRouterDevtools position="top-right" />
-        )}
-      </HeaderLayout>
-    );
-  },
+  component: RootComponent,
 });
+
+function RootComponent() {
+  return (
+    <HeaderLayout>
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <Outlet />
+      </Suspense>
+      {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
+        <TanStackRouterDevtools position="top-right" />
+      )}
+    </HeaderLayout>
+  );
+}

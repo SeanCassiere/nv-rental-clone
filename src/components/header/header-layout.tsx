@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/router";
 import { useAuth } from "react-oidc-context";
 
-import LoadingPlaceholder from "@/components/loading-placeholder";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { indexRoute } from "@/routes";
 import { useGetDashboardMessages } from "@/hooks/network/dashboard/useGetDashboardMessages";
