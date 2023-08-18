@@ -8,8 +8,13 @@ export const USER_STORAGE_KEYS = {
   dateFormat: "date-format",
   timeFormat: "time-format",
   dismissedMessages: "dismissed-messages",
+  tableRowCount: "table-row-count",
   currency: "currency",
   theme: "theme",
+} as const;
+
+export const APP_DEFAULTS = {
+  tableRowCount: "10",
 } as const;
 
 export const OIDC_AUTHORITY =

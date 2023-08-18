@@ -1,6 +1,8 @@
 import React from "react";
 import { useRouter, Link } from "@tanstack/router";
 
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
+
 import { indexRoute } from "@/routes";
 import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
@@ -9,9 +11,20 @@ import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-rou
 import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
 
 import { cn } from "@/utils";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
+import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
 
 export const AppNavigation = () => {
   const router = useRouter();
+  const auth = useAuthValues();
+
+  const rowCountStr =
+    getLocalStorageForUser(
+      auth.clientId,
+      auth.userId,
+      USER_STORAGE_KEYS.tableRowCount
+    ) || APP_DEFAULTS.tableRowCount;
+  const defaultRowCount = parseInt(rowCountStr, 10);
 
   const routerStore = router.__store.state;
 
@@ -44,7 +57,7 @@ export const AppNavigation = () => {
       href: searchFleetRoute.to,
       current: matches(["/fleet", "/fleet/$vehicleId"]),
       props: {
-        search: () => ({ page: 1, size: 10 }),
+        search: () => ({ page: 1, size: defaultRowCount }),
       },
     },
     {
@@ -52,7 +65,7 @@ export const AppNavigation = () => {
       href: searchCustomersRoute.to,
       current: matches(["/customers", "/customers/$customerId"]),
       props: {
-        search: () => ({ page: 1, size: 10 }),
+        search: () => ({ page: 1, size: defaultRowCount }),
       },
     },
     {
@@ -60,7 +73,7 @@ export const AppNavigation = () => {
       href: searchReservationsRoute.to,
       current: matches(["/reservations", "/reservations/$reservationId"]),
       props: {
-        search: () => ({ page: 1, size: 10 }),
+        search: () => ({ page: 1, size: defaultRowCount }),
       },
     },
     {
@@ -68,7 +81,7 @@ export const AppNavigation = () => {
       href: searchAgreementsRoute.to,
       current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {
-        search: () => ({ page: 1, size: 10 }),
+        search: () => ({ page: 1, size: defaultRowCount }),
       },
     },
     {

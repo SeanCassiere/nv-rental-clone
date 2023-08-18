@@ -11,9 +11,16 @@ import {
 
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
+
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WidgetSkeleton } from "../dnd-widget-display-grid";
+
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
+
+import { WidgetSkeleton } from "../dnd-widget-display-grid";
+
+import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 // generated from https://www.learnui.design/tools/data-color-picker.html#divergent
 const PIE_CHART_COLORS = [
@@ -67,6 +74,16 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
   const getDataListIndexForName = (name: string) => {
     return dataList.findIndex((d) => d.name === name);
   };
+
+  const auth = useAuthValues();
+
+  const rowCountStr =
+    getLocalStorageForUser(
+      auth.clientId,
+      auth.userId,
+      USER_STORAGE_KEYS.tableRowCount
+    ) || APP_DEFAULTS.tableRowCount;
+  const defaultRowCount = parseInt(rowCountStr, 10);
 
   return statusCounts.status === "loading" ? (
     <WidgetSkeleton />
@@ -164,7 +181,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
                 onMouseEnter={() => setActiveIdx(dataListIdx)}
                 search={() => ({
                   page: 1,
-                  size: 10,
+                  size: defaultRowCount,
                   filters: {
                     Active: "true",
                     VehicleStatus: getStatusIdByName(value).toString(),

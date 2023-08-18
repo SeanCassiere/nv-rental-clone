@@ -5,10 +5,12 @@ import { fleetRoute } from ".";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
+import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
+
 import { getAuthToken } from "@/utils/authLocal";
 import { fleetQKeys } from "@/utils/query-key";
 import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
-import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
+import { APP_DEFAULTS } from "@/utils/constants";
 
 export const searchFleetRoute = new Route({
   getParentRoute: () => fleetRoute,
@@ -17,7 +19,7 @@ export const searchFleetRoute = new Route({
   preSearchFilters: [
     (search) => ({
       page: search?.page || 1,
-      size: search?.size || 10,
+      size: search?.size || parseInt(APP_DEFAULTS.tableRowCount),
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],

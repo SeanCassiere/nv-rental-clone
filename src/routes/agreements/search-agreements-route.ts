@@ -5,21 +5,40 @@ import { agreementsRoute } from ".";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 
+import { AgreementSearchQuerySchema } from "@/schemas/agreement";
+
 import { getAuthToken } from "@/utils/authLocal";
 import { agreementQKeys } from "@/utils/query-key";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
-import { AgreementSearchQuerySchema } from "@/schemas/agreement";
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 export const searchAgreementsRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "/",
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
-    (search) => ({
-      page: search?.page || 1,
-      size: search?.size || 10,
-      ...(search.filters ? { filters: search.filters } : {}),
-    }),
+    (search) => {
+      const auth = getAuthToken();
+
+      const localRowCountStr = auth
+        ? getLocalStorageForUser(
+            auth.profile.navotar_clientid,
+            auth.profile.navotar_userid,
+            USER_STORAGE_KEYS.tableRowCount
+          )
+        : null;
+      const rowCount = parseInt(
+        localRowCountStr || APP_DEFAULTS.tableRowCount,
+        10
+      );
+
+      return {
+        page: search?.page || 1,
+        size: search?.size || rowCount,
+        ...(search.filters ? { filters: search.filters } : {}),
+      };
+    },
   ],
   loader: async ({ search, context: { queryClient } }) => {
     const auth = getAuthToken();

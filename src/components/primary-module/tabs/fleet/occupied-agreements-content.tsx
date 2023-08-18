@@ -125,7 +125,10 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
           </p>
           <Link
             to={searchAgreementsRoute.to}
-            search={() => ({ filters: { VehicleNo: props.vehicleNo } }) as any}
+            search={(prev) => ({
+              ...prev,
+              filters: { VehicleNo: props.vehicleNo },
+            })}
             className="text-slate-600 underline hover:text-slate-800"
           >
             Need more? Click here to search for agreements.

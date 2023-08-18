@@ -7,7 +7,7 @@ import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 import { momentToDateFnsFormat } from "@/schemas/user";
 
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
-import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
 
 export function HiddenFeatureSetter() {
   const auth = useAuthValues();
@@ -35,6 +35,18 @@ export function HiddenFeatureSetter() {
       timeFormat
     );
   }, [auth.clientId, auth.userId, timeFormat]);
+
+  const [tableRowCountFeature] = useFeature("DEFAULT_ROW_COUNT");
+  const tableRowCount = tableRowCountFeature || APP_DEFAULTS.tableRowCount;
+
+  useEffect(() => {
+    setLocalStorageForUser(
+      auth.clientId,
+      auth.userId,
+      USER_STORAGE_KEYS.tableRowCount,
+      tableRowCount
+    );
+  }, [auth.clientId, auth.userId, tableRowCount]);
 
   return null;
 }
