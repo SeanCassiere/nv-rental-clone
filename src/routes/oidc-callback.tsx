@@ -45,6 +45,7 @@ export const oidcCallbackRoute = new Route({
       const storedRedirectUri = window.localStorage.getItem(
         LS_OIDC_REDIRECT_URI_KEY
       );
+      window.localStorage.removeItem(LS_OIDC_REDIRECT_URI_KEY);
 
       const pathname = storedRedirectUri?.split("?")[0];
       const searchParams = new URLSearchParams(

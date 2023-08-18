@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Outlet, RouterContext } from "@tanstack/router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { useAuth } from "react-oidc-context";
 
 import { HeaderLayout } from "@/components/header/header-layout";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -124,14 +125,26 @@ export const rootRoute = routerContext.createRootRoute({
 });
 
 function RootComponent() {
+  const auth = useAuth();
+
+  const isHeaderShown = auth.isAuthenticated;
+  const isFreshAuthenticating = auth.isLoading && !auth.isAuthenticated;
+
   return (
-    <HeaderLayout>
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <Outlet />
-      </Suspense>
-      {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
-        <TanStackRouterDevtools position="top-right" />
-      )}
-    </HeaderLayout>
+    <>
+      {isHeaderShown && <HeaderLayout />}
+      <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
+        {isFreshAuthenticating ? (
+          <LoadingPlaceholder />
+        ) : (
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <Outlet />
+          </Suspense>
+        )}
+        {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
+          <TanStackRouterDevtools position="top-right" />
+        )}
+      </main>
+    </>
   );
 }
