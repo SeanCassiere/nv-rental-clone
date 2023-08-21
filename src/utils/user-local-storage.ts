@@ -1,6 +1,6 @@
 export function removeAllLocalStorageKeysForUser(
   clientId: string,
-  userId: string,
+  userId: string
 ) {
   const localStorageKeyPrefix = `${clientId}:${userId}:`;
   Object.keys(window.localStorage)
@@ -11,7 +11,7 @@ export function removeAllLocalStorageKeysForUser(
 export function getLocalStorageForUser(
   clientId: string,
   userId: string,
-  key: string,
+  key: string
 ) {
   const localStorageKey = `${clientId}:${userId}:${key}`;
   return window.localStorage.getItem(localStorageKey);
@@ -22,7 +22,7 @@ export function setLocalStorageForUser(
   clientId: string,
   userId: string,
   key: string,
-  value: string,
+  value: string
 ) {
   const localStorageKey = `${clientId}:${userId}:${key}`;
   return window.localStorage.setItem(localStorageKey, value);

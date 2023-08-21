@@ -108,7 +108,7 @@ export const VehicleDataSchema = z.object({
       imageView: z.string().nullable(),
       imageUrl: z.string().nullable(),
       isActive: z.boolean(),
-    }),
+    })
   ),
   addedInventoryItemList: z.array(z.any()),
 });

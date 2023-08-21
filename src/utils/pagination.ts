@@ -6,7 +6,7 @@
  */
 export function getPaginationWithSingleEllipsis(
   c: number,
-  m: number,
+  m: number
 ): number[] {
   const current = c,
     last = m,
@@ -48,7 +48,7 @@ export function getPaginationWithSingleEllipsis(
 export function getPaginationWithDoubleEllipsis(
   currentPage: number,
   lastPage: number,
-  maxLength: number,
+  maxLength: number
 ): number[] {
   const res: Array<number> = [];
 

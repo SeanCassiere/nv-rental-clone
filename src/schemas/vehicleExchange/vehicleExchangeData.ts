@@ -33,5 +33,5 @@ export type TVehicleExchangeListItemParsed = z.infer<
   typeof VehicleExchangeListItemSchema
 >;
 export const VehicleExchangeItemListSchema = z.array(
-  VehicleExchangeListItemSchema,
+  VehicleExchangeListItemSchema
 );
