@@ -1,4 +1,4 @@
-import { initClient, tsRestFetchApi, type ApiFetcher } from "@ts-rest/core";
+import { initClient, tsRestFetchApi } from "@ts-rest/core";
 
 import { contract } from "@/api/_root.contract";
 
