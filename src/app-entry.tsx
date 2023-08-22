@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Router, RouterProvider } from "@tanstack/router";
+import { Router, RouterProvider } from "@tanstack/react-router";
 import { AuthProvider } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -31,7 +31,7 @@ export const router = new Router({
   },
 });
 
-declare module "@tanstack/router" {
+declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }

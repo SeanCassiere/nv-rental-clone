@@ -1,5 +1,10 @@
 import { useCallback, useEffect } from "react";
-import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
+import {
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";

@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { fetchCustomerSummaryAmounts } from "@/api/summary";

@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";

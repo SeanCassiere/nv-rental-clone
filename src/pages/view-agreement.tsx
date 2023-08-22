@@ -5,7 +5,7 @@ import {
   useParams,
   useRouter,
   useSearch,
-} from "@tanstack/router";
+} from "@tanstack/react-router";
 import {
   BanIcon,
   ChevronRightIcon,

@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link, type LinkPropsOptions } from "@tanstack/router";
+import { Link, type LinkPropsOptions } from "@tanstack/react-router";
 
 import {
   Accordion,

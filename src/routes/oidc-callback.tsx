@@ -1,6 +1,6 @@
 /* eslint react-hooks/rules-of-hooks: 0 */
 import { useEffect } from "react";
-import { Route } from "@tanstack/router";
+import { Route } from "@tanstack/react-router";
 import { hasAuthParams, useAuth } from "react-oidc-context";
 import { z } from "zod";
 

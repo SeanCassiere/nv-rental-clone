@@ -1,4 +1,4 @@
-import { Navigate, Route } from "@tanstack/router";
+import { Navigate, Route } from "@tanstack/react-router";
 
 import { settingsRoute } from ".";
 

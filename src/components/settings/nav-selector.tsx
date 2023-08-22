@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, type LinkPropsOptions } from "@tanstack/router";
+import { useNavigate, type LinkPropsOptions } from "@tanstack/react-router";
 import { ChevronRightIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";

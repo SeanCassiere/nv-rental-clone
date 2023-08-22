@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useRouter } from "@tanstack/router";
+import { Link, useRouter } from "@tanstack/react-router";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 

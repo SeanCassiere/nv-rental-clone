@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/router";
+import { Link } from "@tanstack/react-router";
 
 import ScrollToTop from "../components/scroll-to-top";
 import { useDocumentTitle } from "../hooks/internal/useDocumentTitle";
