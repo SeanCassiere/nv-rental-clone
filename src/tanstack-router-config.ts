@@ -1,4 +1,4 @@
-import { parseSearchWith, stringifySearchWith } from "@tanstack/router";
+import { parseSearchWith, stringifySearchWith } from "@tanstack/react-router";
 import JSURL from "jsurl2";
 
 // /oidc-callback

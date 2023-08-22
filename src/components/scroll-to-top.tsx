@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRouter } from "@tanstack/router";
+import { useRouter } from "@tanstack/react-router";
 
 const ScrollToTop = () => {
   const router = useRouter();

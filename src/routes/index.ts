@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
 import { fetchDashboardWidgetList } from "@/api/dashboard";

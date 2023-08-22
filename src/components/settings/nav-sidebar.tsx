@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, type LinkPropsOptions } from "@tanstack/router";
+import { Link, type LinkPropsOptions } from "@tanstack/react-router";
 
 import { buttonVariants } from "@/components/ui/button";
 

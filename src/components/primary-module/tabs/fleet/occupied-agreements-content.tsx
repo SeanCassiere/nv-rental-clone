@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
-import { Link } from "@tanstack/router";
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";

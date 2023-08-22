@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, type LinkPropsOptions } from "@tanstack/router";
+import { useParams, type LinkPropsOptions } from "@tanstack/react-router";
 
 import ProtectorShield from "@/components/protector-shield";
 import { SelectorSettingsNavigation } from "@/components/settings/nav-selector";

@@ -6,7 +6,7 @@ import {
   type PaginationState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { Link, useNavigate, useSearch } from "@tanstack/router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 
 import {
   PrimaryModuleTable,

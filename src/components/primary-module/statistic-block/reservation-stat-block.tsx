@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/router";
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { viewAgreementByIdRoute } from "../../../routes/agreements/agreement-id-route";

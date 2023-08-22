@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "@tanstack/router";
+import { Link } from "@tanstack/react-router";
 import { UserIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 

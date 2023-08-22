@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { CheckIcon, PlusCircle } from "lucide-react";
 
 import ProtectorShield from "@/components/protector-shield";

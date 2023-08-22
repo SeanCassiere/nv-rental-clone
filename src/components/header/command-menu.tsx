@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { useRouter } from "@tanstack/router";
+import { useRouter } from "@tanstack/react-router";
 import {
   BarChart4Icon,
   CalendarIcon,

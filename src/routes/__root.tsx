@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Outlet, RouterContext } from "@tanstack/router";
+import { Outlet, RouterContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth } from "react-oidc-context";
 

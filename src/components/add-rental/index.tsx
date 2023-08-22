@@ -5,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Link } from "@tanstack/router";
+import { Link } from "@tanstack/react-router";
 import parseISO from "date-fns/parseISO";
 import { ChevronRightIcon, PlayIcon } from "lucide-react";
 
