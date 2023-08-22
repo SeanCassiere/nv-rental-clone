@@ -6,10 +6,11 @@ import { z } from "zod";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
-import { rootRoute } from "./__root";
+import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
+
 import { router } from "@/app-entry";
 
-import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
+import { rootRoute } from "./__root";
 
 function removeTrailingSlash(path: string) {
   const pathParts = path.split("?");

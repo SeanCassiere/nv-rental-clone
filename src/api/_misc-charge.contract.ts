@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
-import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
+
 import { MiscChargeListItemSchema } from "@/schemas/misCharges";
+
+import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
 const rootMiscChargeContract = c.router({
   getMiscCharges: {

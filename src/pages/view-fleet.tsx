@@ -1,22 +1,23 @@
-import { lazy, useMemo, Suspense, type ReactNode, useEffect } from "react";
+import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
 import {
-  useNavigate,
-  useRouter,
-  useParams,
-  useSearch,
   Link,
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
 } from "@tanstack/router";
 import {
+  ChevronRightIcon,
+  CopyIcon,
   MoreVerticalIcon,
   PencilIcon,
-  CopyIcon,
-  ChevronRightIcon,
-  PowerOffIcon,
   PowerIcon,
+  PowerOffIcon,
 } from "lucide-react";
 
-import ProtectorShield from "@/components/protector-shield";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
+import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,20 +28,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LoadingPlaceholder } from "@/components/loading-placeholder";
+
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
 
 import {
   editFleetByIdRoute,
   viewFleetByIdRoute,
 } from "@/routes/fleet/fleet-id-route";
 
-import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-
 import { titleMaker } from "@/utils/title-maker";
+
 import { cn } from "@/utils";
-import { Separator } from "@/components/ui/separator";
 
 const FleetSummaryTab = lazy(
   () => import("../components/primary-module/tabs/fleet/summary-content")

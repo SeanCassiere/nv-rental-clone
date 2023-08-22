@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const ModuleStatBlockContainer = ({
   children,

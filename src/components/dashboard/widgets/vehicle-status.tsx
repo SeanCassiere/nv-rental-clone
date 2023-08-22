@@ -1,26 +1,26 @@
 import React from "react";
 import { Link } from "@tanstack/router";
 import {
-  PieChart,
-  Pie,
-  Sector,
   Cell,
-  ResponsiveContainer,
   Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Sector,
 } from "recharts";
-
-import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
-import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
 
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
+import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
+import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
+
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 
-import { WidgetSkeleton } from "../dnd-widget-display-grid";
-
-import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
+
+import { WidgetSkeleton } from "../dnd-widget-display-grid";
 
 // generated from https://www.learnui.design/tools/data-color-picker.html#divergent
 const PIE_CHART_COLORS = [

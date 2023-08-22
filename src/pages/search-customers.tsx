@@ -1,38 +1,39 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
+  type ColumnFiltersState,
   type ColumnOrderState,
   type PaginationState,
   type VisibilityState,
-  type ColumnFiltersState,
 } from "@tanstack/react-table";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import { useTranslation } from "react-i18next";
-
-import ProtectorShield from "@/components/protector-shield";
-
-import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
-
-import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
-import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomerTypes";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import {
   PrimaryModuleTable,
-  PrimaryModuleTableColumnHeader,
   PrimaryModuleTableCellWrap,
+  PrimaryModuleTableColumnHeader,
 } from "@/components/primary-module/table";
+import ProtectorShield from "@/components/protector-shield";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-import { cn } from "@/utils";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
+import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomerTypes";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+
+import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
+import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
+
 import type { TCustomerListItemParsed } from "@/schemas/customer";
+
 import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
+
+import { cn } from "@/utils";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 

@@ -1,30 +1,31 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { PlusCircle, CheckIcon, XIcon } from "lucide-react";
 import { type Table } from "@tanstack/react-table";
+import { CheckIcon, PlusCircle, XIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import {
-  Command,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandSeparator,
-} from "@/components/ui/command";
-import { Calendar } from "@/components/ui/calendar";
+
+import { localDateToQueryYearMonthDay } from "@/utils/date";
 
 import { cn } from "@/utils";
-import { localDateToQueryYearMonthDay } from "@/utils/date";
 
 export type FilterOption = {
   label: string;

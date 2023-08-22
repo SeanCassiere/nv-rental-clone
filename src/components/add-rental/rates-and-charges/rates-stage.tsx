@@ -1,17 +1,9 @@
 import { useEffect, useMemo } from "react";
-import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -20,12 +12,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import type { RatesAndChargesTabProps } from ".";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useGetRentalRateTypesForRentals } from "@/hooks/network/rates/useGetRentalRateTypesForRental";
 
 import { RentalRateSchema, type RentalRateParsed } from "@/schemas/rate";
+
+import type { RatesAndChargesTabProps } from ".";
 
 interface RatesStageProps {
   durationStageData: RatesAndChargesTabProps["durationStageData"];

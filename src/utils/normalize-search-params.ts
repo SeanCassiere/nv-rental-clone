@@ -3,9 +3,9 @@ import { type TCustomerSearchQuery } from "@/schemas/customer";
 import { type TReservationSearchQuery } from "@/schemas/reservation";
 import { type TVehicleSearchQuery } from "@/schemas/vehicle";
 
+import { getAuthToken } from "./authLocal";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "./constants";
 import { getLocalStorageForUser } from "./user-local-storage";
-import { getAuthToken } from "./authLocal";
 
 export function normalizeAgreementListSearchParams(
   search: TAgreementSearchQuery

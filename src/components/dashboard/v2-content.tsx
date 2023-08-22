@@ -2,10 +2,10 @@ import React from "react";
 import add from "date-fns/add";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SalesAreaChart } from "@/components/dashboard/widgets/sales-status";
 import { VehicleStatusPieChart } from "@/components/dashboard/widgets/vehicle-status";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
 import { useScreenSetting } from "@/hooks/internal/useScreenSetting";

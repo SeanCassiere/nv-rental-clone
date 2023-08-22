@@ -1,27 +1,27 @@
 import React from "react";
 import {
-  useReactTable,
+  flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  flexRender,
+  useReactTable,
   type ColumnDef,
+  type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
-  type ColumnFiltersState,
 } from "@tanstack/react-table";
 
 import { DataTableToolbar } from "@/components/ui/data-table";
 import {
   Table,
-  TableHeader,
-  TableHead,
-  TableRow,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 
 interface ModuleTableProps<TData, TValue> {

@@ -1,17 +1,19 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
-import {
-  UserAndClientIdAuthSchema,
-  ClientIdAuthSchema,
-  StringArraySchema,
-  StructuredErrorSchema,
-} from "./helpers";
+
 import {
   UpdateUserSchema,
   UserLanguageListSchema,
   UserProfileSchema,
 } from "@/schemas/user";
+
+import {
+  ClientIdAuthSchema,
+  StringArraySchema,
+  StructuredErrorSchema,
+  UserAndClientIdAuthSchema,
+} from "./helpers";
 
 const rootUserContract = c.router({
   getUserProfileById: {

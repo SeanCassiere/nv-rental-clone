@@ -1,6 +1,8 @@
-import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
-import { type VehicleDataParsed } from "@/schemas/vehicle";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
+
+import { type VehicleDataParsed } from "@/schemas/vehicle";
+
+import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
 export const getVehicleStatusNameFromRaw = (status: string) => {
   const name = status.trim();

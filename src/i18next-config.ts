@@ -1,18 +1,17 @@
-import i18next from "i18next";
-import HttpApi from "i18next-http-backend";
-import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-
 import type { Locale } from "date-fns";
 import dateFnsFormat from "date-fns/format";
-import enUSLocale from "date-fns/locale/en-US";
 import enNZLocale from "date-fns/locale/en-NZ";
-import ruLocale from "date-fns/locale/ru";
+import enUSLocale from "date-fns/locale/en-US";
 import enLocale from "date-fns/locale/en-US";
+import ruLocale from "date-fns/locale/ru";
+import i18next from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import HttpApi from "i18next-http-backend";
+import { initReactI18next } from "react-i18next";
 
 import { getAuthToken } from "./utils/authLocal";
+import { IS_LOCAL_DEV, USER_STORAGE_KEYS } from "./utils/constants";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
-import { USER_STORAGE_KEYS, IS_LOCAL_DEV } from "./utils/constants";
 
 // START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";

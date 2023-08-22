@@ -1,4 +1,4 @@
-import { Route, Navigate } from "@tanstack/router";
+import { Navigate, Route } from "@tanstack/router";
 
 import { settingsRoute } from ".";
 

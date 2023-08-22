@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
-import { UserAndClientIdAuthSchema } from "./helpers";
+
 import { LocationSchemaArray } from "@/schemas/location";
+
+import { UserAndClientIdAuthSchema } from "./helpers";
 
 const rootLocationContract = c.router({
   getLocations: {

@@ -1,6 +1,8 @@
 import { CustomerSummary } from "@/components/primary-module/summary/customer";
+
 import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 import { useGetCustomerSummary } from "@/hooks/network/customer/useGetCustomerSummary";
+
 import { sortObject } from "@/utils/sortObject";
 
 type CustomerSummaryTabProps = {

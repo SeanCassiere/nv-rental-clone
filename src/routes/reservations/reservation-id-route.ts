@@ -1,12 +1,12 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 import { z } from "zod";
-
-import { reservationsRoute } from ".";
 
 import { fetchRentalRateSummaryAmounts } from "@/api/summary";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { reservationQKeys } from "@/utils/query-key";
+
+import { reservationsRoute } from ".";
 
 export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,

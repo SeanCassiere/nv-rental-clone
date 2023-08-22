@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
-import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
+
 import { TaxListSchema } from "@/schemas/tax";
+
+import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
 const rootTaxContract = c.router({
   getTaxes: {

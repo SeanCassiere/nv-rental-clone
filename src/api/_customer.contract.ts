@@ -1,15 +1,17 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
+
+import {
+  CustomerDataSchema,
+  CustomerTypeArraySchema,
+} from "@/schemas/customer";
+
 import {
   // PaginationSchema,
   StructuredErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
-import {
-  CustomerDataSchema,
-  CustomerTypeArraySchema,
-} from "@/schemas/customer";
 
 const rootCustomerContract = c.router({
   getCustomerById: {

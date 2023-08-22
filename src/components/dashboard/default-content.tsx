@@ -1,26 +1,26 @@
 import React from "react";
-import { LockIcon, UnlockIcon, SettingsIcon } from "lucide-react";
 import add from "date-fns/add";
+import { LockIcon, SettingsIcon, UnlockIcon } from "lucide-react";
 
-import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
+import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import WidgetPickerContent from "@/components/dashboard/widget-picker-content";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogContent,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
 import { usePermission } from "@/hooks/internal/usePermission";
+import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
+import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
-import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 

@@ -1,45 +1,46 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/router";
 import {
   createColumnHelper,
+  type ColumnFiltersState,
   type ColumnOrderState,
   type PaginationState,
   type VisibilityState,
-  type ColumnFiltersState,
 } from "@tanstack/react-table";
-import { useTranslation } from "react-i18next";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 import { PlusIcon } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-
-import ProtectorShield from "@/components/protector-shield";
-
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
-import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
-import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
-import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useTranslation } from "react-i18next";
 
 import {
   PrimaryModuleTable,
-  PrimaryModuleTableColumnHeader,
   PrimaryModuleTableCellWrap,
+  PrimaryModuleTableColumnHeader,
 } from "@/components/primary-module/table";
-import { buttonVariants } from "@/components/ui/button";
+import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
+import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
+import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
+
+import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 
 import { type TAgreementListItemParsed } from "@/schemas/agreement";
-import { cn } from "@/utils";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { titleMaker } from "@/utils/title-maker";
+
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { titleMaker } from "@/utils/title-maker";
+
+import { cn } from "@/utils";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 

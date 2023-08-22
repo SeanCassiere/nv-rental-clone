@@ -1,12 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { apiClient } from "@/api";
-import { allModulesKeySelector } from "./useGetModuleColumns";
+import type { TColumnHeaderItem } from "@/schemas/client/column";
 
 import { getModuleApiName } from "@/utils/columns";
 import type { AppPrimaryModuleType } from "@/types/General";
-import type { TColumnHeaderItem } from "@/schemas/client/column";
+
+import { apiClient } from "@/api";
+
+import { allModulesKeySelector } from "./useGetModuleColumns";
 
 export function useSaveModuleColumns({
   module,

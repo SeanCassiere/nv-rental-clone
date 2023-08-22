@@ -1,11 +1,10 @@
-import {
-  i18nextNsDefault,
-  i18nextNsTranslation,
-  i18nextNsFormat,
-  formatNsResources,
-} from "./i18next-config";
-
 import enTranslation from "../public/locales/en/translation.json";
+import {
+  formatNsResources,
+  i18nextNsDefault,
+  i18nextNsFormat,
+  i18nextNsTranslation,
+} from "./i18next-config";
 
 const resources = {
   [i18nextNsFormat]: formatNsResources,

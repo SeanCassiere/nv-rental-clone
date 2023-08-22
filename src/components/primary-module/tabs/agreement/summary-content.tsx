@@ -1,8 +1,8 @@
-import { type ReactNode, useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
-import RentalInformation from "@/components/primary-module/information-block/rental-information";
 import FleetInformation from "@/components/primary-module/information-block/fleet-information";
+import RentalInformation from "@/components/primary-module/information-block/rental-information";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

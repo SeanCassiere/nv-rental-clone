@@ -1,4 +1,4 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 import { z } from "zod";
 
 import { reservationsRoute } from ".";

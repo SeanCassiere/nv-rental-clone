@@ -1,5 +1,5 @@
 import { Fragment, type ReactNode } from "react";
-import { Transition, Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "lucide-react";
 
 import { cn } from "@/utils";

@@ -1,9 +1,9 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ResponsiveContainer, LineChart, Line, Tooltip, XAxis } from "recharts";
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WidgetSkeleton } from "@/components/dashboard/dnd-widget-display-grid";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useGetSalesStatus } from "@/hooks/network/dashboard/useGetSalesStatus";
 

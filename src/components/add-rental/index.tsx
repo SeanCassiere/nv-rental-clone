@@ -1,8 +1,8 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useState,
-  useEffect,
   type ReactNode,
 } from "react";
 import { Link } from "@tanstack/router";
@@ -10,57 +10,56 @@ import parseISO from "date-fns/parseISO";
 import { ChevronRightIcon, PlayIcon } from "lucide-react";
 
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-
-import RentalInformationTab, {
-  type RentalInformationTabProps as RI_TabProps,
-} from "./rental-information";
-
-type AgreementRentalInformationSchemaParsed = RI_TabProps["durationStageData"];
-type AgreementVehicleInformationSchemaParsed = RI_TabProps["vehicleStageData"];
-
-import CustomerInformationTab, {
-  type CustomerInformationTabProps as CI_TabProps,
-} from "./customer-information";
-
-type CommonCustomerInformationSchemaParsed = CI_TabProps["customerStageData"];
-
-import RatesAndChargesTab from "./rates-and-charges";
-
-import TaxesAndPaymentsTab from "./taxes-and-payments";
 
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
-import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
 import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
 import { usePostCalculateRentalSummaryAmounts } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
+import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 import {
   checkinAgreementByIdRoute,
   editAgreementByIdRoute,
   viewAgreementByIdRoute,
 } from "@/routes/agreements/agreement-id-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
 } from "@/routes/reservations/reservation-id-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 
-import { cn } from "@/utils";
-import { sortObject } from "@/utils/sortObject";
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
+import { type TRentalRatesSummarySchema } from "@/schemas/summary";
+
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+import { sortObject } from "@/utils/sortObject";
 import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
+
+import { cn } from "@/utils";
+
+import CustomerInformationTab, {
+  type CustomerInformationTabProps as CI_TabProps,
+} from "./customer-information";
+import RatesAndChargesTab from "./rates-and-charges";
+import RentalInformationTab, {
+  type RentalInformationTabProps as RI_TabProps,
+} from "./rental-information";
+import TaxesAndPaymentsTab from "./taxes-and-payments";
+
+type AgreementRentalInformationSchemaParsed = RI_TabProps["durationStageData"];
+type AgreementVehicleInformationSchemaParsed = RI_TabProps["vehicleStageData"];
+
+type CommonCustomerInformationSchemaParsed = CI_TabProps["customerStageData"];
 
 const StageKeys = {
   rental: "rental-information",

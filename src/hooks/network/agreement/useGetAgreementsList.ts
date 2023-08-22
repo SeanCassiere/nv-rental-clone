@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchAgreementsList } from "@/api/agreements";
+
 import { AgreementListItemListSchema } from "@/schemas/agreement";
 import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
+
 import { agreementQKeys } from "@/utils/query-key";
 
 export function useGetAgreementsList(params: {

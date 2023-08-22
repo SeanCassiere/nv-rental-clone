@@ -1,18 +1,19 @@
 import React from "react";
-import { useRouter, Link } from "@tanstack/router";
+import { Link, useRouter } from "@tanstack/router";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 
-import { indexRoute } from "@/routes";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
 
-import { cn } from "@/utils";
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
-import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
+
+import { indexRoute } from "@/routes";
+import { cn } from "@/utils";
 
 export const AppNavigation = () => {
   const router = useRouter();

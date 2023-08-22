@@ -1,6 +1,4 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
-
-import { reservationsRoute } from ".";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
@@ -8,9 +6,11 @@ import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetR
 import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 
 import { getAuthToken } from "@/utils/authLocal";
+import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { reservationQKeys } from "@/utils/query-key";
-import { APP_DEFAULTS } from "@/utils/constants";
+
+import { reservationsRoute } from ".";
 
 export const searchReservationsRoute = new Route({
   getParentRoute: () => reservationsRoute,

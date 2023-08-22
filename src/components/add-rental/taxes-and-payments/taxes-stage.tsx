@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import type { TaxesAndPaymentsTabProps } from ".";
 
 import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 
 import { cn } from "@/utils";
+
+import type { TaxesAndPaymentsTabProps } from ".";
 
 interface TaxesStageProps {
   isEdit: boolean;

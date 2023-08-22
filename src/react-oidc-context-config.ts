@@ -3,8 +3,8 @@ import type { AuthProviderNoUserManagerProps } from "react-oidc-context";
 import {
   OIDC_AUTHORITY,
   OIDC_CLIENT_ID,
-  OIDC_REDIRECT_URI,
   OIDC_POST_LOGOUT_REDIRECT_URI,
+  OIDC_REDIRECT_URI,
   OIDC_SILENT_REDIRECT_URI,
 } from "@/utils/constants";
 

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { apiClient } from "@/api";
-
 import { agreementQKeys } from "@/utils/query-key";
+
+import { apiClient } from "@/api";
 
 export function useGetAgreementStatusList() {
   const auth = useAuth();

@@ -1,16 +1,18 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
+
+import { AgreementStatusListSchema } from "@/schemas/agreement";
+import {
+  ReservationDataSchema,
+  ReservationTypeArraySchema,
+} from "@/schemas/reservation";
+
 import {
   // PaginationSchema,
   StructuredErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
-import {
-  ReservationDataSchema,
-  ReservationTypeArraySchema,
-} from "@/schemas/reservation";
-import { AgreementStatusListSchema } from "@/schemas/agreement";
 
 const rootReservationContract = c.router({
   getReservationById: {

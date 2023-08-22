@@ -1,8 +1,7 @@
 import React from "react";
-import { useAuth } from "react-oidc-context";
 import { useNavigate } from "@tanstack/router";
+import { useAuth } from "react-oidc-context";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,29 +13,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
   DropdownMenuGroup,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
+
+import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 function getAvatarFallbackText(name: string) {
   const nameParts = name.split(" ");

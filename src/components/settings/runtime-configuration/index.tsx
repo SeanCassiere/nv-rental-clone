@@ -4,9 +4,9 @@ import { useNavigate, useSearch } from "@tanstack/router";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
-
 import { useFeature } from "@/hooks/internal/useFeature";
+
+import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 const SettingsEmailTemplatesTab = React.lazy(
   () => import("@/components/settings/runtime-configuration/email-templates")

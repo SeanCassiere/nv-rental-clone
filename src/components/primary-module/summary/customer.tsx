@@ -1,18 +1,20 @@
 import { Fragment } from "react";
-import { useTranslation } from "react-i18next";
 import { CircleDollarSignIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+
+import type { TCustomerSummarySchema } from "@/schemas/summary/customerSummary";
 
 import {
   SummaryHeader,
   SummaryLineItem,
   type TSummaryLineItemProps,
 } from "./common";
-import { Card, CardContent } from "@/components/ui/card";
-import type { TCustomerSummarySchema } from "@/schemas/summary/customerSummary";
-
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-import { Separator } from "@/components/ui/separator";
 
 export const CustomerSummary = ({
   summaryData,

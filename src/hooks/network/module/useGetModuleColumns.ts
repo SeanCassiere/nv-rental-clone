@@ -1,19 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import type { AppPrimaryModuleType } from "@/types/General";
-import {
-  agreementQKeys,
-  reservationQKeys,
-  customerQKeys,
-  fleetQKeys,
-} from "@/utils/query-key";
 import {
   ClientColumnHeadersListSchema,
   type TColumnHeaderItem,
 } from "@/schemas/client/column";
-import { apiClient } from "@/api";
+
 import { getModuleApiName } from "@/utils/columns";
+import {
+  agreementQKeys,
+  customerQKeys,
+  fleetQKeys,
+  reservationQKeys,
+} from "@/utils/query-key";
+import type { AppPrimaryModuleType } from "@/types/General";
+
+import { apiClient } from "@/api";
 
 export const allModulesKeySelector = (module: AppPrimaryModuleType) => {
   switch (module) {

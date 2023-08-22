@@ -1,6 +1,4 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
-
-import { customersRoute } from ".";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 
 import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
@@ -8,9 +6,11 @@ import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleCol
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { customerQKeys } from "@/utils/query-key";
-import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { APP_DEFAULTS } from "@/utils/constants";
+import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
+import { customerQKeys } from "@/utils/query-key";
+
+import { customersRoute } from ".";
 
 export const searchCustomersRoute = new Route({
   getParentRoute: () => customersRoute,

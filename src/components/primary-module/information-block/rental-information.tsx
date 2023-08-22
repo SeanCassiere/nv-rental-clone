@@ -1,13 +1,13 @@
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { BanknoteIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import {
+  EMPTY_KEY,
   InformationBlockCard,
+  isUndefined,
   type TAnyCustomerValueType,
   type TInformationBlockCardProps,
-  EMPTY_KEY,
-  isUndefined,
 } from "./common";
 
 interface TRentalInformationProps {

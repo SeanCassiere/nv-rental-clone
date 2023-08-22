@@ -1,25 +1,25 @@
-import { useState, useCallback, Suspense, lazy } from "react";
+import { lazy, Suspense, useCallback, useState } from "react";
 import {
-  type DragEndEvent,
+  closestCorners,
   DndContext,
-  useSensors,
-  useSensor,
   MouseSensor,
   TouchSensor,
-  closestCorners,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
-  useSortable,
-  SortableContext,
   rectSortingStrategy,
+  SortableContext,
+  useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+
+import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import { cn } from "@/utils";
 

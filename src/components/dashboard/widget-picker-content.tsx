@@ -1,35 +1,37 @@
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
-  type DragEndEvent,
+  closestCorners,
   DndContext,
-  useSensors,
-  useSensor,
+  KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  KeyboardSensor,
-  closestCorners,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
 } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   arrayMove,
   SortableContext,
+  sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
-  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { MenuIcon, EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, MenuIcon } from "lucide-react";
 
-import { DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import {
   reorderBasedOnWidgetIdPositions,
   sortWidgetsByUserPositionFn,
 } from "@/components/dashboard/dnd-widget-display-grid";
+import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
+
+import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
+
+import { type DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import { cn } from "@/utils";
-import { type DashboardWidgetItemParsed } from "@/schemas/dashboard";
-import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 
 const WidgetPickerContent = ({
   onModalStateChange: setModalOpenState,

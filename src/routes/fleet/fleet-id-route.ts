@@ -1,13 +1,13 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 import { z } from "zod";
-
-import { fleetRoute } from ".";
 
 import { fetchVehicleSummaryAmounts } from "@/api/summary";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { fleetQKeys } from "@/utils/query-key";
 import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
+import { fleetQKeys } from "@/utils/query-key";
+
+import { fleetRoute } from ".";
 
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,

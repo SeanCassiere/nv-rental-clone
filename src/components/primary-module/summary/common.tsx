@@ -1,13 +1,14 @@
 import { useState, type ReactNode } from "react";
 import { Link, type LinkPropsOptions } from "@tanstack/router";
 
-import { CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion";
+import { CardHeader, CardTitle } from "@/components/ui/card";
+
 import { cn } from "@/utils";
 
 export const SummaryHeader = ({

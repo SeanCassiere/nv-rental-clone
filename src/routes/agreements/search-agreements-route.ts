@@ -1,17 +1,17 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 
-import { agreementsRoute } from ".";
-
-import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
+import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { agreementQKeys } from "@/utils/query-key";
-import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { agreementQKeys } from "@/utils/query-key";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
+
+import { agreementsRoute } from ".";
 
 export const searchAgreementsRoute = new Route({
   getParentRoute: () => agreementsRoute,

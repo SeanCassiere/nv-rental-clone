@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 
-import { useFeature } from "@/hooks/internal/useFeature";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
+import { useFeature } from "@/hooks/internal/useFeature";
 
-import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 import { momentToDateFnsFormat } from "@/schemas/user";
 
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
-import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
+
+import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 
 export function HiddenFeatureSetter() {
   const auth = useAuthValues();

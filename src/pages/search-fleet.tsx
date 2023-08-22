@@ -1,40 +1,41 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useSearch, useNavigate } from "@tanstack/router";
 import {
   createColumnHelper,
+  type ColumnFiltersState,
   type ColumnOrderState,
   type PaginationState,
   type VisibilityState,
-  type ColumnFiltersState,
 } from "@tanstack/react-table";
-
-import ProtectorShield from "@/components/protector-shield";
-
-import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
-import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
-import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { Link, useNavigate, useSearch } from "@tanstack/router";
 
 import {
   PrimaryModuleTable,
-  PrimaryModuleTableColumnHeader,
   PrimaryModuleTableCellWrap,
+  PrimaryModuleTableColumnHeader,
 } from "@/components/primary-module/table";
-import { buttonVariants } from "@/components/ui/button";
+import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-import { cn } from "@/utils";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
+
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
+import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
+
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
+
+import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
+
+import { cn } from "@/utils";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 

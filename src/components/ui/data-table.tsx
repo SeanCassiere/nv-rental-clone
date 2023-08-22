@@ -1,15 +1,15 @@
 import React from "react";
+import { type Column, type Table } from "@tanstack/react-table";
 import {
+  Check as CheckIcon,
+  CircleDashed,
+  Cross as Cross2Icon,
+  EyeOff,
+  Columns as MixerHorizontalIcon,
+  PlusCircle as PlusCircledIcon,
   SortAsc,
   SortDesc,
-  EyeOff,
-  CircleDashed,
-  Check as CheckIcon,
-  PlusCircle as PlusCircledIcon,
-  Columns as MixerHorizontalIcon,
-  Cross as Cross2Icon,
 } from "lucide-react";
-import { type Column, type Table } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,21 +23,21 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 import { cn } from "@/utils";
 

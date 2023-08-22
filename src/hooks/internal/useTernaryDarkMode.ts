@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useLocalStorage } from "@/hooks/internal/useLocalStorage";
 import { useMediaQuery } from "@/hooks/internal/useMediaQuery";
 import { useUpdateEffect } from "@/hooks/internal/useUpdateEffect";
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
 
-import { setDomClass } from "@/utils/dom";
 import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { setDomClass } from "@/utils/dom";
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 

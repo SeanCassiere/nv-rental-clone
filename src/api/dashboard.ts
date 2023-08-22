@@ -1,8 +1,9 @@
-import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 import {
   DashboardWidgetItemListSchema,
   type DashboardWidgetItemParsed,
 } from "@/schemas/dashboard";
+
+import { callV3Api, makeUrl, type CommonAuthParams } from "./fetcher";
 
 export const fetchDashboardWidgetList = async (opts: CommonAuthParams) => {
   return await callV3Api(
