@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { apiClient } from "@/api";
-
-import { fleetQKeys } from "@/utils/query-key";
 import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
+import { fleetQKeys } from "@/utils/query-key";
+
+import { apiClient } from "@/api";
 
 export function useGetVehicleData(params: { vehicleId: string | number }) {
   const auth = useAuth();

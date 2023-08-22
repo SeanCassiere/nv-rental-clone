@@ -1,14 +1,14 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
-
-import { rootRoute } from "./__root";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
 import { fetchDashboardWidgetList } from "@/api/dashboard";
 
+import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
+
 import { getAuthToken } from "@/utils/authLocal";
 import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
 
-import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
+import { rootRoute } from "./__root";
 
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,

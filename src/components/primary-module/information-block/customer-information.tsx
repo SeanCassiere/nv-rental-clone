@@ -1,19 +1,20 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/router";
-import { useTranslation } from "react-i18next";
 import { UserIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-import {
-  InformationBlockCard,
-  type TAnyCustomerValueType,
-  type TInformationBlockCardProps,
-  EMPTY_KEY,
-} from "./common";
 import { buttonVariants } from "@/components/ui/button";
 
 import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
 
 import { cn } from "@/utils";
+
+import {
+  EMPTY_KEY,
+  InformationBlockCard,
+  type TAnyCustomerValueType,
+  type TInformationBlockCardProps,
+} from "./common";
 
 interface TCustomerInformationProps {
   data: {

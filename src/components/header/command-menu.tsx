@@ -1,50 +1,50 @@
 import React, { Fragment } from "react";
 import { useRouter } from "@tanstack/router";
-import { useAuth } from "react-oidc-context";
 import {
-  LogOutIcon,
-  SettingsIcon,
-  Users2Icon,
-  CarIcon,
   BarChart4Icon,
   CalendarIcon,
+  CarIcon,
   FileSignatureIcon,
-  User2Icon,
-  LayoutDashboardIcon,
-  SunIcon,
-  MoonIcon,
   LaptopIcon,
+  LayoutDashboardIcon,
+  LogOutIcon,
+  MoonIcon,
+  SettingsIcon,
+  SunIcon,
+  User2Icon,
+  Users2Icon,
 } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
-  CommandInput,
-  CommandList,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
+  CommandList,
   CommandLoading,
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
-
-import { indexRoute } from "@/routes/index";
-import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
-import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 import { useGetGlobalSearch } from "@/hooks/network/module/useGetGlobalSearch";
 
-import { IsMacLike, cn } from "@/utils";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
+import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
+import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
+import { indexRoute } from "@/routes/index";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
+import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
+
+import { cn, IsMacLike } from "@/utils";
 
 export const CommandMenu = () => {
   const router = useRouter();

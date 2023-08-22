@@ -1,38 +1,38 @@
-import { Suspense, lazy, useCallback, useState } from "react";
+import { lazy, Suspense, useCallback, useState } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/router";
-import { PlusCircle, CheckIcon } from "lucide-react";
+import { CheckIcon, PlusCircle } from "lucide-react";
 
 import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Command,
-  CommandInput,
-  CommandList,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
+  CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { indexRoute } from "@/routes";
-
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useFeature } from "@/hooks/internal/useFeature";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
 import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 
-import { cn } from "@/utils";
 import { titleMaker } from "@/utils/title-maker";
+
 import type { apiClient } from "@/api";
+import { indexRoute } from "@/routes";
+import { cn } from "@/utils";
 
 const DefaultDashboardContent = lazy(
   () => import("@/components/dashboard/default-content")

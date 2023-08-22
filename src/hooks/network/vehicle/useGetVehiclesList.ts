@@ -2,10 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchVehiclesList } from "@/api/vehicles";
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { fleetQKeys } from "@/utils/query-key";
+
 import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
 import { VehicleListItemListSchema } from "@/schemas/vehicle";
+
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+import { fleetQKeys } from "@/utils/query-key";
 
 export function useGetVehiclesList(params: {
   page: number;

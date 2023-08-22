@@ -1,23 +1,23 @@
-import { lazy, useMemo, Suspense, type ReactNode, useEffect } from "react";
+import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
 import {
-  useNavigate,
-  useRouter,
-  useParams,
-  useSearch,
   Link,
+  useNavigate,
+  useParams,
+  useRouter,
+  useSearch,
 } from "@tanstack/router";
 import {
+  ChevronRightIcon,
+  CopyIcon,
+  MailPlusIcon,
   MoreVerticalIcon,
   PencilIcon,
   PrinterIcon,
-  MailPlusIcon,
-  CopyIcon,
-  ChevronRightIcon,
 } from "lucide-react";
 
-import ProtectorShield from "@/components/protector-shield";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
-import { Separator } from "@/components/ui/separator";
+import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,19 +28,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LoadingPlaceholder } from "@/components/loading-placeholder";
+
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
 } from "@/routes/reservations/reservation-id-route";
 
-import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
-import { titleMaker } from "@/utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("../components/primary-module/tabs/reservation/summary-content")

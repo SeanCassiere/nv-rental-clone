@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchVehicleSummaryAmounts } from "@/api/summary";
+
 import { fleetQKeys } from "@/utils/query-key";
 
 export function useGetVehicleSummary(params: { vehicleId: string | number }) {

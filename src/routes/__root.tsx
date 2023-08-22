@@ -4,21 +4,21 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth } from "react-oidc-context";
 
 import { HeaderLayout } from "@/components/header/header-layout";
+import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
-
-import { apiClient } from "@/api";
 
 import { UserProfileSchema } from "@/schemas/user";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { clientQKeys, userQKeys } from "@/utils/query-key";
 import {
   UI_APPLICATION_SHOW_ROUTER_DEVTOOLS,
   USER_STORAGE_KEYS,
 } from "@/utils/constants";
+import { clientQKeys, userQKeys } from "@/utils/query-key";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
+
+import { apiClient } from "@/api";
 import { queryClient } from "@/tanstack-query-config";
-import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 
 interface MyRouterContext {
   apiClient: typeof apiClient;

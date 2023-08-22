@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { locationQKeys } from "@/utils/query-key";
+
 import { apiClient } from "@/api";
 
 export function useGetLocationsList(params: { locationIsActive: boolean }) {

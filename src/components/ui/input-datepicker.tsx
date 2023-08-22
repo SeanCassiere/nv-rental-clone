@@ -3,17 +3,19 @@ import { PopoverContentProps } from "@radix-ui/react-popover";
 import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDateInput } from "@/hooks/internal/useDateInput";
+
 import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
+
 import { useFormField } from "./form";
 
 const DEFAULT_DATE_FORMAT = dfnsDateFormat;

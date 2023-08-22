@@ -1,6 +1,4 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
-
-import { fleetRoute } from ".";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 
 import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
@@ -8,9 +6,11 @@ import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesL
 import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
 import { getAuthToken } from "@/utils/authLocal";
-import { fleetQKeys } from "@/utils/query-key";
-import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
 import { APP_DEFAULTS } from "@/utils/constants";
+import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
+import { fleetQKeys } from "@/utils/query-key";
+
+import { fleetRoute } from ".";
 
 export const searchFleetRoute = new Route({
   getParentRoute: () => fleetRoute,

@@ -1,10 +1,11 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { apiClient } from "@/api";
 import type { VehicleTypesListExtraOpts } from "@/api/_vehicle-types.contract";
 
 import { vehicleTypeQKeys } from "@/utils/query-key";
+
+import { apiClient } from "@/api";
 
 export function useGetVehicleTypesList(
   params?: { search?: VehicleTypesListExtraOpts } & Pick<

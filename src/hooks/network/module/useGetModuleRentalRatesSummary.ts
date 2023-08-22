@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchRentalRateSummaryAmounts } from "@/api/summary";
-import { agreementQKeys, reservationQKeys } from "@/utils/query-key";
+
 import { RentalRatesSummarySchema } from "@/schemas/summary";
+
+import { agreementQKeys, reservationQKeys } from "@/utils/query-key";
 
 type TModule = "reservations" | "agreements";
 

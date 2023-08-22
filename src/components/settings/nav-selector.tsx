@@ -2,21 +2,21 @@ import React from "react";
 import { useNavigate, type LinkPropsOptions } from "@tanstack/router";
 import { ChevronRightIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Command,
-  CommandList,
   CommandEmpty,
   CommandGroup,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
-import { Separator } from "@/components/ui/separator";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 
 import { cn } from "@/utils";
 

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
-import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 import { type AgreementDataParsed } from "../../../schemas/agreement";
+import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
 const AgreementStatBlock = ({
   agreement,

@@ -1,18 +1,19 @@
 import React from "react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
-import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
-import { apiClient } from "@/api";
+import { UserProfileSchema } from "@/schemas/user";
 
+import { USER_STORAGE_KEYS } from "@/utils/constants";
 import { userQKeys } from "@/utils/query-key";
 import {
   getLocalStorageForUser,
   setLocalStorageForUser,
 } from "@/utils/user-local-storage";
-import { USER_STORAGE_KEYS } from "@/utils/constants";
-import { UserProfileSchema } from "@/schemas/user";
+
+import { apiClient } from "@/api";
+import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 
 type UseGetUserProfileOptions = Pick<UseQueryOptions, "suspense">;
 

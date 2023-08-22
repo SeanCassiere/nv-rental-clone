@@ -2,17 +2,18 @@ import React from "react";
 
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 
-import { RatesStage } from "./rates-stage";
-import { MiscChargesStage } from "./misc-charges-stage";
+import type { RentalRateParsed } from "@/schemas/rate";
 
 import type { CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
-import type { RentalRateParsed } from "@/schemas/rate";
+
+import { MiscChargesStage } from "./misc-charges-stage";
+import { RatesStage } from "./rates-stage";
 
 export interface RatesAndChargesTabProps {
   durationStageData:

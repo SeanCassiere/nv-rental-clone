@@ -1,22 +1,23 @@
 import { Fragment } from "react";
-import { useTranslation } from "react-i18next";
 import { CircleDollarSignIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
+import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
+
+import { type TVehicleSummarySchema } from "@/schemas/summary/vehicleSummary";
+
 import {
   SummaryHeader,
   SummaryLineItem,
   type TSummaryLineItemProps,
 } from "./common";
-
-import { type TVehicleSummarySchema } from "@/schemas/summary/vehicleSummary";
-
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 export const VehicleSummary = ({
   summaryData,

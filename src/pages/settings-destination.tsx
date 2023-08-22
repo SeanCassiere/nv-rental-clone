@@ -2,8 +2,8 @@ import React from "react";
 import { useParams, type LinkPropsOptions } from "@tanstack/router";
 
 import ProtectorShield from "@/components/protector-shield";
-import { SidebarSettingsNavigation } from "@/components/settings/nav-sidebar";
 import { SelectorSettingsNavigation } from "@/components/settings/nav-selector";
+import { SidebarSettingsNavigation } from "@/components/settings/nav-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -12,9 +12,10 @@ import { usePermission } from "@/hooks/internal/usePermission";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
-import { cn } from "@/utils";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { titleMaker } from "@/utils/title-maker";
+
+import { cn } from "@/utils";
 
 type SettingsNavigationDestination = {
   id: string;

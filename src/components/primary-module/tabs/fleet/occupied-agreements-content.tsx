@@ -7,17 +7,17 @@ import { CommonTable } from "@/components/common/common-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 
-import { type TAgreementListItemParsed } from "@/schemas/agreement";
+import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
+import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+import { type TAgreementListItemParsed } from "@/schemas/agreement";
 
 import { AgreementDateTimeColumns } from "@/utils/columns";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import { sortColOrderByOrderIndex } from "@/utils/ordering";
 
 interface FleetOccupiedAgreementsTabProps {
   vehicleId: string;

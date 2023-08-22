@@ -1,11 +1,13 @@
-import { useMemo, Fragment } from "react";
-import { useTranslation } from "react-i18next";
+import { Fragment, useMemo } from "react";
 import { type TFunction } from "i18next";
 import { CircleDollarSignIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
+
 import {
   SummaryHeader,
   SummaryLineItem,

@@ -1,4 +1,4 @@
-import { lazy, useMemo, useEffect, Suspense, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
 import {
   Link,
   useNavigate,
@@ -7,19 +7,19 @@ import {
   useSearch,
 } from "@tanstack/router";
 import {
+  BanIcon,
+  ChevronRightIcon,
+  MailPlusIcon,
   MoreVerticalIcon,
+  MoveDownLeftIcon,
   PencilIcon,
   PrinterIcon,
-  MailPlusIcon,
-  BanIcon,
-  MoveDownLeftIcon,
-  ChevronRightIcon,
 } from "lucide-react";
 
-import ProtectorShield from "@/components/protector-shield";
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
+import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,19 +29,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LoadingPlaceholder } from "@/components/loading-placeholder";
+
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 
 import {
-  viewAgreementByIdRoute,
-  editAgreementByIdRoute,
   checkinAgreementByIdRoute,
+  editAgreementByIdRoute,
+  viewAgreementByIdRoute,
 } from "@/routes/agreements/agreement-id-route";
 
-import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-
 import { titleMaker } from "@/utils/title-maker";
+
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(

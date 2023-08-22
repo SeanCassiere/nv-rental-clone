@@ -4,10 +4,10 @@ import { useNavigate, useRouter, useSearch } from "@tanstack/router";
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+
 import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 

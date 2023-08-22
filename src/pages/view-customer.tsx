@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo } from "react";
+import { lazy, Suspense, useEffect, useMemo } from "react";
 import {
   Link,
   useNavigate,
@@ -7,16 +7,16 @@ import {
   useSearch,
 } from "@tanstack/router";
 import {
+  ChevronRightIcon,
   MoreVerticalIcon,
   PencilIcon,
-  ChevronRightIcon,
-  PowerOffIcon,
   PowerIcon,
+  PowerOffIcon,
 } from "lucide-react";
 
+import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,18 +26,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 
 import {
   editCustomerByIdRoute,
   viewCustomerByIdRoute,
 } from "@/routes/customers/customer-id-route";
 
-import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { LoadingPlaceholder } from "@/components/loading-placeholder";
-
 import { titleMaker } from "@/utils/title-maker";
+
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(

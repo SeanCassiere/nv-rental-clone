@@ -1,15 +1,16 @@
-import { type CommonAuthParams } from "./fetcher";
-import { type AppPrimaryModuleType } from "@/types/General";
-
-import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
-import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
-import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
+import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
+import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
+import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement/searchResults";
+import type { TCustomerListItemParsed } from "@/schemas/customer/searchResults";
 import type { TReservationListItemParsed } from "@/schemas/reservation/searchResults";
 import type { TVehicleListItemParsed } from "@/schemas/vehicle/searchResults";
-import type { TCustomerListItemParsed } from "@/schemas/customer/searchResults";
+
+import { type AppPrimaryModuleType } from "@/types/General";
+
+import { type CommonAuthParams } from "./fetcher";
 
 export type GlobalSearchReturnType = {
   module: AppPrimaryModuleType;

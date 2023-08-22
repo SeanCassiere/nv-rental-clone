@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { useAuth } from "react-oidc-context";
 import { DotIcon } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import type { ServerMessage } from "@/schemas/dashboard";
+
+import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { tryParseJson } from "@/utils/parse";
 import {
   getLocalStorageForUser,
   setLocalStorageForUser,
 } from "@/utils/user-local-storage";
-import { USER_STORAGE_KEYS } from "@/utils/constants";
-import { tryParseJson } from "@/utils/parse";
 
 const MessageText = ({ message }: { message: ServerMessage }) => (
   <>

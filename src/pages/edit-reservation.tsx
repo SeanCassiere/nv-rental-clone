@@ -4,14 +4,14 @@ import { useNavigate, useParams, useRouter, useSearch } from "@tanstack/router";
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
+import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
+import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
+
 import {
   editReservationByIdRoute,
   viewReservationByIdRoute,
 } from "@/routes/reservations/reservation-id-route";
-
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
-import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { titleMaker } from "@/utils/title-maker";
 

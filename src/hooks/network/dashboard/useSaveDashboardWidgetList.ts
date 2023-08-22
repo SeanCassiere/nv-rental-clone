@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { saveDashboardWidgetItem } from "@/api/dashboard";
-import { dashboardQKeys } from "@/utils/query-key";
+
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
+
+import { dashboardQKeys } from "@/utils/query-key";
 
 export function useSaveDashboardWidgetList() {
   const auth = useAuth();

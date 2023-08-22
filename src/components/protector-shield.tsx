@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
 import { useRouter } from "@tanstack/router";
+import { useAuth } from "react-oidc-context";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 

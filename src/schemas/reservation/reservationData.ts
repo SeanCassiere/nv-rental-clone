@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { RentalRateListItemSchema } from "../rate";
 import { AgreementMiscChargeItem } from "../agreement/agreementData";
+import { RentalRateListItemSchema } from "../rate";
 
 export type ReservationDataParsed = z.infer<typeof ReservationDataSchema>;
 export const ReservationDataSchema = z.object({

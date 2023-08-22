@@ -1,12 +1,14 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
+
+import { VehicleTypeSchemaArray } from "@/schemas/vehicleType";
+
 import {
   StructuredErrorSchema,
   UnauthorizedErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
-import { VehicleTypeSchemaArray } from "@/schemas/vehicleType";
 
 export type VehicleTypesListExtraOpts = Omit<
   z.infer<(typeof rootVehicleTypesContract)["getVehicleTypes"]["query"]>,

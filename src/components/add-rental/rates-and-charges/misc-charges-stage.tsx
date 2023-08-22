@@ -1,33 +1,34 @@
 import {
+  Fragment,
   useCallback,
   useEffect,
   useId,
   useMemo,
   useState,
-  Fragment,
 } from "react";
-import { useTranslation } from "react-i18next";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-
-import type { RatesAndChargesTabProps } from ".";
+import { Switch } from "@/components/ui/switch";
 
 import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 
 import type { MiscChargeListItem } from "@/schemas/misCharges";
 
-import { cn } from "@/utils";
 import {
   localDateTimeToQueryYearMonthDay,
   localDateTimeWithoutSecondsToQueryYearMonthDay,
 } from "@/utils/date";
+
+import { cn } from "@/utils";
+
+import type { RatesAndChargesTabProps } from ".";
 
 interface MiscChargesStageProps {
   durationStageData: RatesAndChargesTabProps["durationStageData"];

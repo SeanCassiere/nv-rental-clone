@@ -1,17 +1,19 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
-import {
-  // PaginationSchema,
-  StructuredErrorSchema,
-  UserAndClientIdAuthSchema,
-} from "./helpers";
+
+import { AgreementStatusListSchema } from "@/schemas/agreement";
 import {
   VehicleDataSchema,
   VehicleLevelListSchema,
   VehicleTypeLookupList,
 } from "@/schemas/vehicle";
-import { AgreementStatusListSchema } from "@/schemas/agreement";
+
+import {
+  // PaginationSchema,
+  StructuredErrorSchema,
+  UserAndClientIdAuthSchema,
+} from "./helpers";
 
 const rootVehicleContract = c.router({
   getVehicleById: {

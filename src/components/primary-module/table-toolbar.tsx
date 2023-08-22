@@ -1,13 +1,13 @@
 import React from "react";
-import { XIcon, SearchIcon } from "lucide-react";
-import { type Table, type ColumnFiltersState } from "@tanstack/react-table";
+import { type ColumnFiltersState, type Table } from "@tanstack/react-table";
+import { SearchIcon, XIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { DataTableViewOptions } from "@/components/ui/data-table";
 import {
   PrimaryModuleTableFacetedFilter,
   type PrimaryModuleTableFacetedFilterItem,
 } from "@/components/primary-module/table-filter";
+import { Button } from "@/components/ui/button";
+import { DataTableViewOptions } from "@/components/ui/data-table";
 
 export interface PrimaryModuleTableToolbarProps<TData> {
   table: Table<TData>;

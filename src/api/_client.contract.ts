@@ -1,19 +1,21 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
+
 import {
-  StructuredErrorSchema,
-  UserAndClientIdAuthSchema,
-  UnauthorizedErrorSchema,
-} from "./helpers";
-import {
+  ClientColumnHeadersListSchema,
   ClientFeatureListSchema,
   ClientProfileSchema,
   ClientScreenSettingListSchema,
-  ClientColumnHeadersListSchema,
-  SaveClientColumnHeaderInfoSchema,
   SaveClientColumnHeaderInfoResponseSchema,
+  SaveClientColumnHeaderInfoSchema,
 } from "@/schemas/client";
+
+import {
+  StructuredErrorSchema,
+  UnauthorizedErrorSchema,
+  UserAndClientIdAuthSchema,
+} from "./helpers";
 
 const rootClientContract = c.router({
   getClientProfile: {

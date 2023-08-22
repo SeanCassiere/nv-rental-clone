@@ -5,14 +5,6 @@ import { z } from "zod";
 
 import SelectVehicleModal from "@/components/Dialogs/SelectVehicleModal";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -21,13 +13,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import type { AgreementRentalInformationSchemaParsed } from "./duration-stage";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 import { useGetVehicleFuelLevelList } from "@/hooks/network/vehicle/useGetVehicleFuelLevelList";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+
+import type { AgreementRentalInformationSchemaParsed } from "./duration-stage";
 
 function AgreementVehicleInformationSchema() {
   return z.object({

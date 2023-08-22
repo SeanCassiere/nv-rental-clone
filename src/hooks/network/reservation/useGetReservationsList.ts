@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchReservationsList } from "@/api/reservations";
-import { ReservationListItemListSchema } from "@/schemas/reservation";
+
 import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
+import { ReservationListItemListSchema } from "@/schemas/reservation";
+
 import { reservationQKeys } from "@/utils/query-key";
 
 export function useGetReservationsList(params: {

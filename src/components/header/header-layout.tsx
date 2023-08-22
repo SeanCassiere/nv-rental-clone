@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "@tanstack/router";
 
-import { indexRoute } from "@/routes";
 import { useGetDashboardMessages } from "@/hooks/network/dashboard/useGetDashboardMessages";
 
 import { UI_APPLICATION_NAME } from "@/utils/constants";
+
+import { indexRoute } from "@/routes";
 
 import { AppNavigation } from "./app-navigation";
 import { BannerNotice } from "./banner-notice";

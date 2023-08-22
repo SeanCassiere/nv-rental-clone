@@ -1,25 +1,26 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
-  useReactTable,
-  getCoreRowModel,
   flexRender,
+  getCoreRowModel,
+  useReactTable,
   type ColumnDef,
   type PaginationState,
 } from "@tanstack/react-table";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+
+import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
 
 import { cn } from "@/utils";
-import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
 
 interface TCommonTableProps<T> {
   data: T[];

@@ -1,7 +1,9 @@
 import React from "react";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+
 import { titleMaker } from "@/utils/title-maker";
+
 import JsURLDecoder from "./JsURLDecoder";
 
 const StylingAreaPage: React.FC = () => {

@@ -1,58 +1,52 @@
 import { useMemo, useState } from "react";
 import {
-  flexRender,
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  type ColumnOrderState,
-  type ColumnDef,
-  type PaginationState,
-  type VisibilityState,
-  type Column,
-  type ColumnFiltersState,
-  type OnChangeFn,
-} from "@tanstack/react-table";
-import {
+  closestCorners,
   DndContext,
-  useSensors,
+  KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  KeyboardSensor,
   useSensor,
-  closestCorners,
+  useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import {
-  SortableContext,
-  useSortable,
   arrayMove,
   horizontalListSortingStrategy,
+  SortableContext,
   sortableKeyboardCoordinates,
+  useSortable,
 } from "@dnd-kit/sortable";
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 import {
-  SortAsc,
-  SortDesc,
-  EyeOff,
-  GripVertical,
-  ChevronsDownUp,
+  flexRender,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable,
+  type Column,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type ColumnOrderState,
+  type OnChangeFn,
+  type PaginationState,
+  type VisibilityState,
+} from "@tanstack/react-table";
+import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronsDownUp,
+  EyeOff,
+  GripVertical,
+  SortAsc,
+  SortDesc,
 } from "lucide-react";
 
+import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
+import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableHead,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,14 +54,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
-import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { type TColumnHeaderItem } from "@/schemas/client/column";
 
-import { cn } from "@/utils";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
+
+import { cn } from "@/utils";
 
 interface PrimaryModuleTableProps<
   TData,

@@ -1,9 +1,9 @@
-import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/router";
+import { useTranslation } from "react-i18next";
 
-import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
-import { type ReservationDataParsed } from "../../../schemas/reservation";
 import { viewAgreementByIdRoute } from "../../../routes/agreements/agreement-id-route";
+import { type ReservationDataParsed } from "../../../schemas/reservation";
+import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
 const ReservationStatBlock = ({
   reservation,

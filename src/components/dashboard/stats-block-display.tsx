@@ -1,27 +1,28 @@
 import { Link, type LinkPropsOptions } from "@tanstack/router";
 import {
-  type LucideIcon,
-  CreditCardIcon,
   ArrowDownLeftIcon,
-  CarIcon,
   BanknoteIcon,
   BellIcon,
+  CarIcon,
+  CreditCardIcon,
+  type LucideIcon,
 } from "lucide-react";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 
-import { indexRoute } from "@/routes";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 
 import type { TDashboardStats } from "@/schemas/dashboard";
 
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
-import { USER_STORAGE_KEYS, APP_DEFAULTS } from "@/utils/constants";
+
+import { indexRoute } from "@/routes";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;

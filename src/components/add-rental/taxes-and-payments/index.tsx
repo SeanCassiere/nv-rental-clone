@@ -2,14 +2,14 @@ import React from "react";
 
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 
-import { TaxesStage } from "./taxes-stage";
 import { PaymentsStage } from "./payments-stage";
+import { TaxesStage } from "./taxes-stage";
 
 export interface TaxesAndPaymentsTabProps {
   durationStageData:

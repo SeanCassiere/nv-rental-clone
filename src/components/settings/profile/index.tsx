@@ -1,9 +1,16 @@
 import React from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -14,17 +21,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -32,7 +28,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
+
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
+import { usePermission } from "@/hooks/internal/usePermission";
+import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
+import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 
 import {
   UpdateUserSchema,
@@ -41,15 +45,10 @@ import {
   type UserLanguageItem,
 } from "@/schemas/user";
 
-import { usePermission } from "@/hooks/internal/usePermission";
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
-import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
-import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+import { locationQKeys, userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
-
-import { locationQKeys, userQKeys } from "@/utils/query-key";
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 
 export default function SettingsProfileTab() {
   const userQuery = useGetUserProfile({

@@ -1,12 +1,12 @@
-import { Route, lazyRouteComponent } from "@tanstack/router";
+import { lazyRouteComponent, Route } from "@tanstack/router";
 import { z } from "zod";
-
-import { customersRoute } from ".";
 
 import { fetchCustomerSummaryAmounts } from "@/api/summary";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { customerQKeys } from "@/utils/query-key";
+
+import { customersRoute } from ".";
 
 export const customerPathIdRoute = new Route({
   getParentRoute: () => customersRoute,

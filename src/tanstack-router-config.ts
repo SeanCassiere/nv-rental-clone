@@ -1,65 +1,56 @@
 import { parseSearchWith, stringifySearchWith } from "@tanstack/router";
 import JSURL from "jsurl2";
 
-import { rootRoute } from "./routes/__root";
-
-// /
-import { indexRoute } from "./routes";
-
-// /logged-out
-import { loggedOutRoute } from "./routes/logged-out";
-
 // /oidc-callback
 import { oidcCallbackRoute } from "@/routes/oidc-callback";
 
-// /styles
-import { stylingRoute } from "./routes/styles";
-
+// /
+import { indexRoute } from "./routes";
+import { rootRoute } from "./routes/__root";
 // /agreements
 import { agreementsRoute } from "./routes/agreements";
-import { searchAgreementsRoute } from "./routes/agreements/search-agreements-route";
 import { addAgreementRoute } from "./routes/agreements/add-agreement-route";
 import {
   agreementPathIdRoute,
-  viewAgreementByIdRoute,
-  editAgreementByIdRoute,
   checkinAgreementByIdRoute,
+  editAgreementByIdRoute,
+  viewAgreementByIdRoute,
 } from "./routes/agreements/agreement-id-route";
-
+import { searchAgreementsRoute } from "./routes/agreements/search-agreements-route";
 // /customers
 import { customersRoute } from "./routes/customers";
-import { searchCustomersRoute } from "./routes/customers/search-customers-route";
 import { addCustomerRoute } from "./routes/customers/add-customer-route";
 import {
   customerPathIdRoute,
-  viewCustomerByIdRoute,
   editCustomerByIdRoute,
+  viewCustomerByIdRoute,
 } from "./routes/customers/customer-id-route";
-
-// /reservations
-import { reservationsRoute } from "./routes/reservations";
-import { searchReservationsRoute } from "./routes/reservations/search-reservations-route";
-import { addReservationRoute } from "./routes/reservations/add-reservation-route";
-import {
-  reservationPathIdRoute,
-  viewReservationByIdRoute,
-  editReservationByIdRoute,
-} from "./routes/reservations/reservation-id-route";
-
+import { searchCustomersRoute } from "./routes/customers/search-customers-route";
 // /fleet
 import { fleetRoute } from "./routes/fleet";
-import { searchFleetRoute } from "./routes/fleet/search-fleet-route";
 import { addFleetRoute } from "./routes/fleet/add-fleet-route";
 import {
+  editFleetByIdRoute,
   fleetPathIdRoute,
   viewFleetByIdRoute,
-  editFleetByIdRoute,
 } from "./routes/fleet/fleet-id-route";
-
+import { searchFleetRoute } from "./routes/fleet/search-fleet-route";
+// /logged-out
+import { loggedOutRoute } from "./routes/logged-out";
+// /reservations
+import { reservationsRoute } from "./routes/reservations";
+import { addReservationRoute } from "./routes/reservations/add-reservation-route";
+import {
+  editReservationByIdRoute,
+  reservationPathIdRoute,
+  viewReservationByIdRoute,
+} from "./routes/reservations/reservation-id-route";
+import { searchReservationsRoute } from "./routes/reservations/search-reservations-route";
 import { settingsRoute } from "./routes/settings";
-import { mainSettingsRoute } from "./routes/settings/main-settings-route";
 import { destinationSettingsRoute } from "./routes/settings/destination-settings-route";
-
+import { mainSettingsRoute } from "./routes/settings/main-settings-route";
+// /styles
+import { stylingRoute } from "./routes/styles";
 import { OIDC_REDIRECT_URI } from "./utils/constants";
 
 export function decodeFromBinary(str: string): string {

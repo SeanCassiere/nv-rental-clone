@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
+import type { AppPrimaryModuleType } from "@/types/General";
+
 import { apiClient } from "@/api";
 
 import { allModulesKeySelector } from "./useGetModuleColumns";
-import type { AppPrimaryModuleType } from "@/types/General";
 
 export function useGetModuleNotes({
   module,

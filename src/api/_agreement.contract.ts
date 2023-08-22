@@ -1,17 +1,19 @@
 import { z } from "zod";
 
 import { c } from "@/api/c";
-import {
-  // PaginationSchema,
-  StructuredErrorSchema,
-  UserAndClientIdAuthSchema,
-} from "./helpers";
+
 import {
   AgreementDataSchema,
   AgreementStatusListSchema,
   AgreementTypeArraySchema,
   GenerateAgreementNumberSchema,
 } from "@/schemas/agreement";
+
+import {
+  // PaginationSchema,
+  StructuredErrorSchema,
+  UserAndClientIdAuthSchema,
+} from "./helpers";
 
 const rootAgreementContract = c.router({
   getAgreementById: {

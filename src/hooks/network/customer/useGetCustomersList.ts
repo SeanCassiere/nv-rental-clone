@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchCustomersList } from "@/api/customers";
-import { CustomerListItemListSchema } from "@/schemas/customer";
+
 import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
+import { CustomerListItemListSchema } from "@/schemas/customer";
+
 import { customerQKeys } from "@/utils/query-key";
 
 export function useGetCustomersList(params: {

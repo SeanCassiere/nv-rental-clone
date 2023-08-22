@@ -1,21 +1,13 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import add from "date-fns/add";
+import differenceInMinutes from "date-fns/differenceInMinutes";
 import isBefore from "date-fns/isBefore";
 import isEqual from "date-fns/isEqual";
-import differenceInMinutes from "date-fns/differenceInMinutes";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -24,15 +16,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   InputDatePicker,
   InputDatePickerSlot,
 } from "@/components/ui/input-datepicker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+import { useDatePreference } from "@/hooks/internal/useDatePreferences";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
-import { useDatePreference } from "@/hooks/internal/useDatePreferences";
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
 const AgreementRentalInformationSchema = z
   .object({
