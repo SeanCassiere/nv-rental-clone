@@ -8,7 +8,7 @@ export function momentToDateFnsFormat(format: string) {
     .replace("YYYY", "yyyy") // 0001 0002 ... 9998 9999
     .replace("YY", "yy") // 00 01 ... 98 99
     .replace("a", "aaa") // am pm
-    .replace("A", "A"); // AM PM
+    .replace("A", "aa"); // AM PM
 }
 
 export const UserProfileSchema = z
