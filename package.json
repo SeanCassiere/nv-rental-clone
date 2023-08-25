@@ -65,7 +65,7 @@
     "@tailwindcss/forms": "^0.5.5",
     "@tailwindcss/typography": "^0.5.9",
     "@types/jsurl2": "^2.1.2",
-    "@types/node": "^20.5.3",
+    "@types/node": "^20.5.6",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
@@ -82,7 +82,7 @@
     "prettier-plugin-tailwindcss": "^0.5.3",
     "tailwindcss": "^3.3.3",
     "tailwindcss-animate": "^1.0.6",
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-eslint": "^1.8.1"
   }
