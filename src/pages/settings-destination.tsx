@@ -27,6 +27,9 @@ type SettingsNavigationDestination = {
 const SettingsProfileTab = React.lazy(
   () => import("@/components/settings/profile")
 );
+const SettingsApplicationTab = React.lazy(
+  () => import("@/components/settings/application")
+);
 const SettingsRuntimeConfigurationTab = React.lazy(
   () => import("@/components/settings/runtime-configuration")
 );
@@ -56,7 +59,7 @@ export default function SettingsCatchAllPage() {
     items.push({
       id: "application",
       title: "Application", // users, locations, taxes,
-      component: <Skeleton className="h-96" />,
+      component: <SettingsApplicationTab />,
       linkProps: {
         to: destinationSettingsRoute.to,
         params: { destination: "application" },
