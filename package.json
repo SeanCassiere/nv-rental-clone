@@ -54,7 +54,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
     "react-i18next": "^13.2.0",
-    "react-oidc-context": "^2.2.2",
+    "react-oidc-context": "^2.3.0",
     "recharts": "^2.7.3",
     "tailwind-merge": "^1.14.0",
     "zod": "^3.22.2"
