@@ -11,8 +11,6 @@ import { HeaderLayout } from "@/components/header/header-layout";
 import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
-import { UserProfileSchema } from "@/schemas/user";
-
 import { getAuthToken } from "@/utils/authLocal";
 import {
   UI_APPLICATION_SHOW_ROUTER_DEVTOOLS,
@@ -21,7 +19,7 @@ import {
 import { clientQKeys, userQKeys } from "@/utils/query-key";
 import { setLocalStorageForUser } from "@/utils/user-local-storage";
 
-import { apiClient } from "@/api";
+import type { apiClient } from "@/api";
 import { queryClient } from "@/tanstack-query-config";
 
 interface MyRouterContext {
@@ -32,7 +30,7 @@ interface MyRouterContext {
 const routerContext = new RouterContext<MyRouterContext>();
 
 export const rootRoute = routerContext.createRootRoute({
-  loader: async () => {
+  loader: async ({ context: { apiClient } }) => {
     const auth = getAuthToken();
 
     if (auth) {
@@ -94,21 +92,14 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: userQKeys.me(),
           queryFn: () =>
-            apiClient
-              .getUserProfileById({
-                params: { userId: auth.profile.navotar_userid },
-                query: {
-                  clientId: auth.profile.navotar_clientid,
-                  userId: auth.profile.navotar_userid,
-                  currentUserId: auth.profile.navotar_userid,
-                },
-              })
-              .then((res) => {
-                if (res.status === 200) {
-                  res.body = UserProfileSchema.parse(res.body);
-                }
-                return res;
-              }),
+            apiClient.getUserProfileById({
+              params: { userId: auth.profile.navotar_userid },
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                currentUserId: auth.profile.navotar_userid,
+              },
+            }),
           staleTime: 1000 * 60 * 1, // 1 minute
         })
       );
