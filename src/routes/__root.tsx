@@ -1,5 +1,9 @@
 import { Suspense } from "react";
-import { Outlet, RouterContext } from "@tanstack/react-router";
+import {
+  Outlet,
+  RouterContext,
+  ScrollRestoration,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth } from "react-oidc-context";
 
@@ -144,6 +148,7 @@ function RootComponent() {
     <>
       {isHeaderShown && <HeaderLayout />}
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
+        <ScrollRestoration />
         {isFreshAuthenticating ? (
           <LoadingPlaceholder />
         ) : (
