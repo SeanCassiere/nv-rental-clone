@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -6,7 +7,6 @@ import {
   type PaginationState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 
 import {
   PrimaryModuleTable,
@@ -231,7 +231,7 @@ function VehiclesSearchPage() {
                 to: searchFleetRoute.to,
                 params: {},
                 search: () => ({
-                  page: pagination.pageIndex + 1,
+                  page: 1,
                   size: pagination.pageSize,
                   filters,
                 }),
