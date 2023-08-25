@@ -3,8 +3,6 @@ import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
-import { UserProfileSchema } from "@/schemas/user";
-
 import { USER_STORAGE_KEYS } from "@/utils/constants";
 import { userQKeys } from "@/utils/query-key";
 import {
@@ -25,23 +23,16 @@ export function useGetUserProfile(useQueryOptions?: UseGetUserProfileOptions) {
   const query = useQuery({
     queryKey: userQKeys.me(),
     queryFn: () =>
-      apiClient
-        .getUserProfileById({
-          params: {
-            userId: auth.user?.profile.navotar_userid || "",
-          },
-          query: {
-            clientId: auth.user?.profile.navotar_clientid || "",
-            userId: auth.user?.profile.navotar_userid || "",
-            currentUserId: auth.user?.profile.navotar_userid || "",
-          },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            res.body = UserProfileSchema.parse(res.body);
-          }
-          return res;
-        }),
+      apiClient.getUserProfileById({
+        params: {
+          userId: auth.user?.profile.navotar_userid || "",
+        },
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+          currentUserId: auth.user?.profile.navotar_userid || "",
+        },
+      }),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1, // 1 minute
     ...queryOptions,

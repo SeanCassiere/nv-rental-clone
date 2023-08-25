@@ -1,10 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import {
-  ClientColumnHeadersListSchema,
-  type TColumnHeaderItem,
-} from "@/schemas/client/column";
+import { type TColumnHeaderItem } from "@/schemas/client/column";
 
 import { getModuleApiName } from "@/utils/columns";
 import {
@@ -66,12 +63,6 @@ export async function fetchModuleColumnsModded(
         userId: params.query.userId || "",
         module: params.query.module,
       },
-    })
-    .then((res) => {
-      if (res.status === 200) {
-        res.body = ClientColumnHeadersListSchema.parse(res.body);
-      }
-      return res;
     })
     .then((data) =>
       mutateColumnAccessors(params.query.module, {
