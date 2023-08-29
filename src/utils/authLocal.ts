@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { OIDC_AUTHORITY, OIDC_CLIENT_ID } from "./constants";
 
-const OidcSessionStorageSchema = z.object({
+const OidcWebStorageSchema = z.object({
   access_token: z.string(),
   expires_at: z.number(),
   profile: z.object({
@@ -14,14 +14,14 @@ const OidcSessionStorageSchema = z.object({
 });
 export function getAuthToken() {
   const key = `oidc.user:${OIDC_AUTHORITY}:${OIDC_CLIENT_ID}`;
-  const sessionItem = sessionStorage.getItem(key);
+  const sessionItem = window.localStorage.getItem(key);
 
   if (!sessionItem) {
     return null;
   }
 
   try {
-    const data = OidcSessionStorageSchema.parse(JSON.parse(sessionItem));
+    const data = OidcWebStorageSchema.parse(JSON.parse(sessionItem));
 
     if (data.expires_at * 1000 < Date.now()) {
       throw new Error("Token expired");

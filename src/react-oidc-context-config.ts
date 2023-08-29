@@ -1,3 +1,4 @@
+import { WebStorageStateStore } from "oidc-client-ts";
 import type { AuthProviderNoUserManagerProps } from "react-oidc-context";
 
 import {
@@ -21,4 +22,5 @@ export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
+  userStore: new WebStorageStateStore({ store: window.localStorage }),
 };
