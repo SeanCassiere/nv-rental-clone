@@ -18,7 +18,10 @@ import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementDa
 import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
 import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
-import { usePostCalculateRentalSummaryAmounts } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
+import {
+  CalculateRentalSummaryHookInput,
+  usePostCalculateRentalSummaryAmounts,
+} from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
 import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
@@ -43,7 +46,6 @@ import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { sortObject } from "@/utils/sortObject";
-import { type CalculateRentalSummaryMiscChargeType } from "@/types/CalculateRentalSummaryAmounts";
 
 import { cn } from "@/utils";
 
@@ -141,7 +143,7 @@ const AddRentalParentForm = ({
 
   const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
   const [selectedMiscCharges, setSelectedMiscCharges] = useState<
-    CalculateRentalSummaryMiscChargeType[]
+    CalculateRentalSummaryHookInput["miscCharges"]
   >([]);
 
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
@@ -177,7 +179,7 @@ const AddRentalParentForm = ({
   }, []);
 
   const handleSetSelectedMiscCharges = useCallback(
-    (charges: CalculateRentalSummaryMiscChargeType[]) => {
+    (charges: CalculateRentalSummaryHookInput["miscCharges"]) => {
       setSelectedMiscCharges(charges);
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
@@ -522,30 +524,29 @@ const AddRentalParentForm = ({
     setSelectedMiscCharges((info) => {
       if (info.length > 0) return info;
 
-      const filledMiscCharges: CalculateRentalSummaryMiscChargeType[] = (
-        data.mischargeList || []
-      ).map((charge) => ({
-        id: charge.miscChargeId ?? 0,
-        locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
-        quantity: charge?.quantity ?? 0,
-        startDate: charge?.startDate ?? originalStartDate.toISOString(),
-        endDate: charge?.endDate ?? originalEndDate.toISOString(),
-        optionId: charge?.optionId ?? 0,
-        isSelected: charge?.isSelected ?? false,
-        value: charge?.value ?? 0,
-        unit: charge?.unit ?? 0,
-        isTaxable: charge?.isTaxable ?? false,
-        minValue: charge.minValue,
-        maxValue: charge.maxValue,
-        hourlyValue: charge.hourlyValue,
-        hourlyQuantity: charge.hourlyQuantity,
-        dailyValue: charge.dailyValue,
-        dailyQuantity: charge.dailyQuantity,
-        weeklyValue: charge.weeklyValue,
-        weeklyQuantity: charge.weeklyQuantity,
-        monthlyValue: charge.monthlyValue,
-        monthlyQuantity: charge.monthlyQuantity,
-      }));
+      const filledMiscCharges: CalculateRentalSummaryHookInput["miscCharges"] =
+        (data.mischargeList || []).map((charge) => ({
+          id: charge.miscChargeId ?? 0,
+          locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
+          quantity: charge?.quantity ?? 0,
+          startDate: charge?.startDate ?? originalStartDate.toISOString(),
+          endDate: charge?.endDate ?? originalEndDate.toISOString(),
+          optionId: charge?.optionId ?? 0,
+          isSelected: charge?.isSelected ?? false,
+          value: charge?.value ?? 0,
+          unit: charge?.unit ?? 0,
+          isTaxable: charge?.isTaxable ?? false,
+          minValue: charge.minValue,
+          maxValue: charge.maxValue,
+          hourlyValue: charge.hourlyValue,
+          hourlyQuantity: charge.hourlyQuantity,
+          dailyValue: charge.dailyValue,
+          dailyQuantity: charge.dailyQuantity,
+          weeklyValue: charge.weeklyValue,
+          weeklyQuantity: charge.weeklyQuantity,
+          monthlyValue: charge.monthlyValue,
+          monthlyQuantity: charge.monthlyQuantity,
+        }));
       return filledMiscCharges;
     });
     startingCompletionStages.miscCharges = true;
@@ -829,7 +830,7 @@ const AddRentalParentForm = ({
     Boolean(commonCustomerInformation) &&
     Boolean(selectedRate);
 
-  const calculatedSummaryData = usePostCalculateRentalSummaryAmounts({
+  const calculateSummaryQuery = usePostCalculateRentalSummaryAmounts({
     input: {
       isCheckin: isCheckin,
       startDate: agreementRentalInformation?.checkoutDate || new Date(),
@@ -862,6 +863,11 @@ const AddRentalParentForm = ({
     enabled:
       module === "agreement" ? agreementConditionsForSummaryCalculation : false,
   });
+
+  const networkSummaryData =
+    calculateSummaryQuery.data?.status === 200
+      ? calculateSummaryQuery.data?.body
+      : undefined;
 
   return (
     <>
@@ -1086,15 +1092,10 @@ const AddRentalParentForm = ({
                   : "add-edit-reservation"
               }
               summaryData={
-                // isEdit && !calculatedSummaryData.data
-                //   ? summaryData
-                //   : calculatedSummaryData.data
-                //   ? calculatedSummaryData.data
-                //   : undefined
                 isEdit && hasEdited
-                  ? calculatedSummaryData.data
-                  : calculatedSummaryData.data
-                  ? calculatedSummaryData.data
+                  ? networkSummaryData
+                  : networkSummaryData
+                  ? networkSummaryData
                   : summaryData ?? undefined
               }
             />
