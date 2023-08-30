@@ -19,7 +19,7 @@ import {
 export const CustomerSummary = ({
   summaryData,
 }: {
-  summaryData: TCustomerSummarySchema;
+  summaryData: TCustomerSummarySchema | undefined;
 }) => {
   const { t } = useTranslation();
 

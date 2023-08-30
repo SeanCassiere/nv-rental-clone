@@ -1,8 +1,6 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { fetchCustomerSummaryAmounts } from "@/api/summary";
-
 import { getAuthToken } from "@/utils/authLocal";
 import { customerQKeys } from "@/utils/query-key";
 
@@ -25,11 +23,14 @@ export const customerPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: summaryKey,
           queryFn: () =>
-            fetchCustomerSummaryAmounts({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              customerId,
+            apiClient.customer.getSummaryForId({
+              params: {
+                customerId,
+              },
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+              },
             }),
         })
       );

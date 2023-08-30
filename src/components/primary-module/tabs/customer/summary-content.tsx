@@ -17,6 +17,10 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
   const customerSummary = useGetCustomerSummary({
     customerId: props.customerId,
   });
+  const summaryData =
+    customerSummary.data?.status === 200
+      ? customerSummary.data?.body
+      : undefined;
 
   return (
     <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
@@ -30,7 +34,7 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-4">
-        <CustomerSummary summaryData={customerSummary.data} />
+        <CustomerSummary summaryData={summaryData} />
       </div>
     </div>
   );
