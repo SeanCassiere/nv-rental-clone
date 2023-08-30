@@ -1,8 +1,6 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { fetchVehicleSummaryAmounts } from "@/api/summary";
-
 import { getAuthToken } from "@/utils/authLocal";
 import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 import { fleetQKeys } from "@/utils/query-key";
@@ -26,12 +24,15 @@ export const fleetPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: summaryKey,
           queryFn: () =>
-            fetchVehicleSummaryAmounts({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              vehicleId,
-              clientDate: new Date(),
+            apiClient.vehicle.getSummaryForId({
+              params: {
+                vehicleId,
+              },
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+                clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+              },
             }),
         })
       );

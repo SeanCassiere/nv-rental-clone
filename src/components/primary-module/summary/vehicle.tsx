@@ -24,7 +24,7 @@ export const VehicleSummary = ({
   vehicleNo,
   vehicleId,
 }: {
-  summaryData: TVehicleSummarySchema;
+  summaryData: TVehicleSummarySchema | undefined;
   vehicleNo?: string;
   vehicleId: string;
 }) => {
@@ -101,7 +101,7 @@ export const VehicleSummary = ({
       label: "Total reservations",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfReservation),
       type: summaryData?.totalNoOfReservation ? "link" : "text",
-      amount: summaryData?.totalNoOfReservation,
+      amount: summaryData?.totalNoOfReservation || null,
       linkProps: {
         to: viewFleetByIdRoute.to,
         search: () => ({
@@ -138,7 +138,7 @@ export const VehicleSummary = ({
       label: "Future reservations",
       primaryTextHighlight: Boolean(summaryData?.futureNoOfReservation),
       type: summaryData?.futureNoOfReservation ? "link" : "text",
-      amount: summaryData?.futureNoOfReservation,
+      amount: summaryData?.futureNoOfReservation || null,
       linkProps: {
         to: searchReservationsRoute.to,
         search: () => ({
@@ -155,7 +155,7 @@ export const VehicleSummary = ({
       label: "Total agreements",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfAgreement),
       type: summaryData?.totalNoOfAgreement ? "link" : "text",
-      amount: summaryData?.totalNoOfAgreement,
+      amount: summaryData?.totalNoOfAgreement || null,
       linkProps: {
         to: viewFleetByIdRoute.to,
         search: () => ({

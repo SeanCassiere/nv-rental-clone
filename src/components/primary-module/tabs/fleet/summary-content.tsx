@@ -21,9 +21,11 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
     vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
   const vehicleSummary = useGetVehicleSummary({ vehicleId: props.vehicleId });
+  const summaryData =
+    vehicleSummary.data?.status === 200 ? vehicleSummary.data.body : undefined;
 
   const agreementData = useGetAgreementData({
-    agreementId: vehicleSummary.data?.currentAgreement,
+    agreementId: summaryData?.currentAgreement || "0",
   });
   const agreement =
     agreementData.data?.status === 200 ? agreementData.data.body : null;
@@ -130,7 +132,7 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
       <div className="flex flex-col gap-4 lg:col-span-4">
         <VehicleSummary
           vehicleId={props.vehicleId}
-          summaryData={vehicleSummary.data}
+          summaryData={summaryData}
           vehicleNo={vehicle?.vehicle.vehicleNo || undefined}
         />
       </div>

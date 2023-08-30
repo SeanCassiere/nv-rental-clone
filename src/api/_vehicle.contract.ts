@@ -3,6 +3,7 @@ import { z } from "zod";
 import { c } from "@/api/c";
 
 import { AgreementStatusListSchema } from "@/schemas/agreement";
+import { VehicleSummarySchema } from "@/schemas/summary";
 import {
   VehicleDataSchema,
   VehicleLevelListSchema,
@@ -12,6 +13,7 @@ import {
 import {
   // PaginationSchema,
   StructuredErrorSchema,
+  UnauthorizedErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
 
@@ -50,6 +52,18 @@ const rootVehicleContract = c.router({
     query: UserAndClientIdAuthSchema,
     responses: {
       200: VehicleLevelListSchema,
+    },
+  },
+  getSummaryForId: {
+    method: "GET",
+    path: "/v3/vehicles/:vehicleId/summary",
+    query: UserAndClientIdAuthSchema.extend({
+      clientTime: z.string(),
+    }),
+    responses: {
+      200: VehicleSummarySchema,
+      401: UnauthorizedErrorSchema,
+      404: StructuredErrorSchema,
     },
   },
 });
