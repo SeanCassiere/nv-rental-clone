@@ -1,9 +1,19 @@
 import format from "date-fns/format";
 
+/**
+ *
+ * @param {Date} date
+ * @returns "yyyy-MM-dd"
+ */
 export function localDateToQueryYearMonthDay(date: Date) {
   return format(date, "yyyy-MM-dd");
 }
 
+/**
+ *
+ * @param {Date} date
+ * @returns "yyyy-MM-dd" + "T" + "HH:mm:ss"
+ */
 export function localDateTimeToQueryYearMonthDay(date: Date) {
   const dateMaker = "yyyy-MM-dd";
   const timeMaker = "HH:mm:ss";
@@ -11,6 +21,11 @@ export function localDateTimeToQueryYearMonthDay(date: Date) {
   return print;
 }
 
+/**
+ *
+ * @param {Date} date
+ * @returns "yyyy-MM-dd" + "T" + "HH:mm"
+ */
 export function localDateTimeWithoutSecondsToQueryYearMonthDay(date: Date) {
   const dateMaker = "yyyy-MM-dd";
   const timeMaker = "HH:mm";
