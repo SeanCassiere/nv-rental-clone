@@ -16,7 +16,7 @@ import {
 } from "./helpers";
 
 const rootUserContract = c.router({
-  getUserProfileById: {
+  getProfileByUserId: {
     method: "GET",
     path: "/v3/users/:userId",
     query: UserAndClientIdAuthSchema.extend({ currentUserId: z.string() }),
@@ -25,7 +25,7 @@ const rootUserContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getUserPermissionByUserId: {
+  getPermissionForUserId: {
     method: "GET",
     path: "/v3/users/:userId/permissions",
     query: ClientIdAuthSchema,
@@ -33,7 +33,7 @@ const rootUserContract = c.router({
       200: StringArraySchema,
     },
   },
-  getUserLanguages: {
+  getLanguages: {
     method: "GET",
     path: "/v3/users/language",
     query: UserAndClientIdAuthSchema,
@@ -41,7 +41,7 @@ const rootUserContract = c.router({
       200: UserLanguageListSchema,
     },
   },
-  updateUserProfileById: {
+  updateProfileByUserId: {
     method: "PUT",
     path: "/v3/users/:userId",
     body: UpdateUserSchema,

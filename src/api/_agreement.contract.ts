@@ -16,7 +16,7 @@ import {
 } from "./helpers";
 
 const rootAgreementContract = c.router({
-  getAgreementById: {
+  getById: {
     method: "GET",
     path: "/v3/agreements/:agreementId",
     query: UserAndClientIdAuthSchema,
@@ -25,7 +25,7 @@ const rootAgreementContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getAgreementStatuses: {
+  getStatuses: {
     method: "GET",
     path: "/v3/agreements/statuses",
     query: UserAndClientIdAuthSchema,
@@ -33,7 +33,7 @@ const rootAgreementContract = c.router({
       200: AgreementStatusListSchema,
     },
   },
-  getAgreementTypes: {
+  getTypes: {
     method: "GET",
     path: "/v3/agreements/types",
     query: UserAndClientIdAuthSchema,
@@ -41,7 +41,7 @@ const rootAgreementContract = c.router({
       200: AgreementTypeArraySchema,
     },
   },
-  getNewAgreementNumber: {
+  generateNewNumber: {
     method: "GET",
     path: "/v3/agreements/generateagreementno",
     query: UserAndClientIdAuthSchema.extend({

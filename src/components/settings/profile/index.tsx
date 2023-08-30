@@ -129,7 +129,7 @@ function ProfileForm(props: {
   });
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: apiClient.updateUserProfileById,
+    mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries(userQKeys.me());
       queryClient.invalidateQueries(

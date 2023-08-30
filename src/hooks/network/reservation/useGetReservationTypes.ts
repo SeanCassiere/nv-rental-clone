@@ -10,8 +10,8 @@ export function useGetReservationTypesList() {
   const query = useQuery({
     queryKey: reservationQKeys.types(),
     queryFn: () =>
-      apiClient
-        .getReservationTypes({
+      apiClient.reservation
+        .getTypes({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

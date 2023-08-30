@@ -13,7 +13,7 @@ export function useGetVehicleExchanges(params: {
   const query = useQuery({
     queryKey: agreementQKeys.exchanges(params.agreementId),
     queryFn: () =>
-      apiClient.getVehicleExchanges({
+      apiClient.exchange.getList({
         query: {
           clientId: auth.user?.profile.navotar_clientid || "",
           userId: auth.user?.profile.navotar_userid || "",

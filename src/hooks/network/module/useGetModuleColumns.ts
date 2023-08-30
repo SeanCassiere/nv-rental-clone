@@ -54,10 +54,10 @@ export function useGetModuleColumns({
 }
 
 export async function fetchModuleColumnsModded(
-  params: Parameters<(typeof apiClient)["getClientColumnHeaderInformation"]>[0]
+  params: Parameters<(typeof apiClient)["client"]["getColumnHeaderInfo"]>[0]
 ) {
-  return await apiClient
-    .getClientColumnHeaderInformation({
+  return await apiClient.client
+    .getColumnHeaderInfo({
       query: {
         clientId: params.query.clientId || "",
         userId: params.query.userId || "",
@@ -112,7 +112,7 @@ const customerColumnHeaderMap: ColumMap = {
 
 export function mutateColumnAccessors(
   type: Parameters<
-    (typeof apiClient)["getClientColumnHeaderInformation"]
+    (typeof apiClient)["client"]["getColumnHeaderInfo"]
   >[0]["query"]["module"],
   data: { status: number; body: TColumnHeaderItem[]; headers: Headers }
 ) {

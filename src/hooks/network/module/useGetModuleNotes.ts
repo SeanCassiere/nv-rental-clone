@@ -19,7 +19,7 @@ export function useGetModuleNotes({
   const query = useQuery({
     queryKey: allModulesKeySelector(module).notes(referenceId),
     queryFn: () =>
-      apiClient.getNotesByReferenceId({
+      apiClient.note.getListForRefId({
         params: {
           referenceType: module,
           referenceId,

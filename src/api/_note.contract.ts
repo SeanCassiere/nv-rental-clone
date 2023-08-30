@@ -11,7 +11,7 @@ import {
 } from "./helpers";
 
 const rootNoteContract = c.router({
-  getNotesByReferenceId: {
+  getListForRefId: {
     method: "GET",
     path: "/v3/:referenceType/:referenceId/note",
     pathParams: z.object({

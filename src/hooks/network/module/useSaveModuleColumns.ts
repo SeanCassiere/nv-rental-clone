@@ -63,7 +63,7 @@ export function useSaveModuleColumns({
 
       const modValues = getModuleApiName(module);
 
-      return await apiClient.saveClientColumnHeaderInformation({
+      return await apiClient.client.saveColumnHeaderInfo({
         body: {
           clientID: auth.user?.profile.navotar_clientid || "",
           userID: auth.user?.profile.navotar_userid || "",

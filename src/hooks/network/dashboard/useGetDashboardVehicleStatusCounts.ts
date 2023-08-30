@@ -22,7 +22,7 @@ export function useGetDashboardVehicleStatusCounts({
       locationId: locationIds,
     }),
     queryFn: () =>
-      apiClient
+      apiClient.dashboard
         .getStatisticsForVehiclesStatuses({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",

@@ -11,7 +11,7 @@ export function useGetClientProfile() {
   const query = useQuery({
     queryKey: clientQKeys.profile(),
     queryFn: () =>
-      apiClient.getClientProfile({
+      apiClient.client.getProfile({
         params: { clientId: auth.user?.profile.navotar_clientid || "" },
       }),
     enabled: auth.isAuthenticated,

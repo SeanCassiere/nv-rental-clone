@@ -17,7 +17,7 @@ export function useGetUserPermissions(
   const query = useQuery({
     queryKey: userQKeys.permissions(userId),
     queryFn: () =>
-      apiClient.getUserPermissionByUserId({
+      apiClient.user.getPermissionForUserId({
         params: { userId },
         query: {
           clientId: auth.user?.profile.navotar_clientid || "",

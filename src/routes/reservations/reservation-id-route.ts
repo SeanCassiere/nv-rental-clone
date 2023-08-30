@@ -40,7 +40,7 @@ export const reservationPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: dataKey,
           queryFn: () =>
-            apiClient.getReservationById({
+            apiClient.reservation.getById({
               query: {
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,

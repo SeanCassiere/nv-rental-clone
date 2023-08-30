@@ -6,7 +6,7 @@ import { apiClient } from "@/api";
 export function useGetMiscCharges(params: {
   enabled?: boolean;
   filters?: Omit<
-    Parameters<(typeof apiClient)["getMiscCharges"]>[0]["query"],
+    Parameters<(typeof apiClient)["miscCharge"]["getList"]>[0]["query"],
     "clientId" | "userId"
   >;
 }) {
@@ -15,7 +15,7 @@ export function useGetMiscCharges(params: {
   const query = useQuery({
     queryKey: ["misc-charges", filters],
     queryFn: () =>
-      apiClient.getMiscCharges({
+      apiClient.miscCharge.getList({
         query: {
           userId: auth.user?.profile.navotar_userid || "",
           clientId: auth.user?.profile.navotar_clientid || "",

@@ -34,11 +34,11 @@ export function useGetDashboardMessages() {
 }
 
 export async function fetchDashboardMessagesListModded(
-  opts: Parameters<(typeof apiClient)["getApplicationMessages"]>[0],
+  opts: Parameters<(typeof apiClient)["dashboard"]["getAdminMessages"]>[0],
   extra: { userId: string }
 ) {
-  return await apiClient
-    .getApplicationMessages(opts)
+  return await apiClient.dashboard
+    .getAdminMessages(opts)
     .then((res) => {
       if (res.status === 200) {
         const allMessages = res.body;

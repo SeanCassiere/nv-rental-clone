@@ -10,8 +10,8 @@ export function useGetAgreementStatusList() {
   const query = useQuery({
     queryKey: agreementQKeys.statuses(),
     queryFn: () =>
-      apiClient
-        .getAgreementStatuses({
+      apiClient.agreement
+        .getStatuses({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

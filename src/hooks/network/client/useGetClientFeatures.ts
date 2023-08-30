@@ -11,7 +11,7 @@ export function useGetClientFeatures() {
   const query = useQuery({
     queryKey: clientQKeys.features(),
     queryFn: () =>
-      apiClient.getClientFeatures({
+      apiClient.client.getFeatures({
         params: { clientId: auth.user?.profile?.navotar_clientid || "" },
         body: {},
       }),

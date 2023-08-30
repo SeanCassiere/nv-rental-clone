@@ -14,8 +14,8 @@ export function useGetNewAgreementNumber(params: {
   const query = useQuery({
     queryKey: agreementQKeys.generateNumber(params.agreementType),
     queryFn: () =>
-      apiClient
-        .getNewAgreementNumber({
+      apiClient.agreement
+        .generateNewNumber({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

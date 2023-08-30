@@ -40,7 +40,7 @@ export const agreementPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: dataKey,
           queryFn: () => {
-            return apiClient.getAgreementById({
+            return apiClient.agreement.getById({
               params: {
                 agreementId,
               },

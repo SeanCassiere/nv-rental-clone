@@ -10,7 +10,7 @@ export function useGetLocationsList(params: { locationIsActive: boolean }) {
   const query = useQuery({
     queryKey: locationQKeys.all(),
     queryFn: () =>
-      apiClient.getLocations({
+      apiClient.location.getList({
         query: {
           clientId: auth.user?.profile.navotar_clientid || "",
           userId: auth.user?.profile.navotar_userid || "",

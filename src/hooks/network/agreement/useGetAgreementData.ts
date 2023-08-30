@@ -10,7 +10,7 @@ export function useGetAgreementData(params: { agreementId: string | number }) {
   const query = useQuery({
     queryKey: agreementQKeys.id(params.agreementId),
     queryFn: () =>
-      apiClient.getAgreementById({
+      apiClient.agreement.getById({
         params: {
           agreementId: String(params.agreementId),
         },

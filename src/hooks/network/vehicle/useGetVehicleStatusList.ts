@@ -10,8 +10,8 @@ export function useGetVehicleStatusList() {
   const query = useQuery({
     queryKey: fleetQKeys.statuses(),
     queryFn: () =>
-      apiClient
-        .getVehicleStatuses({
+      apiClient.vehicle
+        .getStatuses({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

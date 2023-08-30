@@ -147,7 +147,7 @@ function IndexPage() {
 }
 
 type LocationResult = Awaited<
-  ReturnType<(typeof apiClient)["getLocations"]>
+  ReturnType<(typeof apiClient)["location"]["getList"]>
 >["body"];
 
 function LocationPicker({

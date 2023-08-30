@@ -17,7 +17,7 @@ export function useGetSalesStatus({
   const query = useQuery({
     queryKey: dashboardQKeys.salesStatus({ locations }),
     queryFn: () =>
-      apiClient
+      apiClient.dashboard
         .getStatisticsForSales({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",

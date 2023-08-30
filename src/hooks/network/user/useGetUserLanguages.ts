@@ -16,7 +16,7 @@ export function useGetUserLanguages(
   const query = useQuery({
     queryKey: userQKeys.languages(),
     queryFn: () =>
-      apiClient.getUserLanguages({
+      apiClient.user.getLanguages({
         query: {
           clientId: auth.user?.profile.navotar_clientid || "",
           userId: auth.user?.profile.navotar_userid || "",

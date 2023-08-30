@@ -7,7 +7,7 @@ import { TaxListSchema } from "@/schemas/tax";
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
 const rootTaxContract = c.router({
-  getTaxes: {
+  getList: {
     method: "GET",
     path: "/v3/taxes",
     query: UserAndClientIdAuthSchema.extend({

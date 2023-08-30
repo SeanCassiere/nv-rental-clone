@@ -41,7 +41,7 @@ export const fleetPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: dataKey,
           queryFn: () => {
-            apiClient.getVehicleById({
+            apiClient.vehicle.getById({
               params: {
                 vehicleId,
               },

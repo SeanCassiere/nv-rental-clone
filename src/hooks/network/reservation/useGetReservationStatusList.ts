@@ -10,8 +10,8 @@ export function useGetReservationStatusList() {
   const query = useQuery({
     queryKey: reservationQKeys.statuses(),
     queryFn: () =>
-      apiClient
-        .getReservationStatuses({
+      apiClient.reservation
+        .getStatuses({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

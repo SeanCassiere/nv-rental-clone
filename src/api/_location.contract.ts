@@ -7,7 +7,7 @@ import { LocationSchemaArray } from "@/schemas/location";
 import { UserAndClientIdAuthSchema } from "./helpers";
 
 const rootLocationContract = c.router({
-  getLocations: {
+  getList: {
     method: "GET",
     path: "/v3/locations",
     query: UserAndClientIdAuthSchema.extend({

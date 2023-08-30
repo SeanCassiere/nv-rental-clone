@@ -17,7 +17,7 @@ export function useGetDashboardStats({
   const query = useQuery({
     queryKey: dashboardQKeys.stats(clientDate, locationIds),
     queryFn: () =>
-      apiClient
+      apiClient.dashboard
         .getStatisticsForRentals({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",

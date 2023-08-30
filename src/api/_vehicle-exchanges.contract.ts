@@ -11,7 +11,7 @@ import {
 } from "./helpers";
 
 const rootVehiclesExchangesContract = c.router({
-  getVehicleExchanges: {
+  getList: {
     method: "GET",
     path: "/v3/vehicleexchanges",
     query: UserAndClientIdAuthSchema.extend({

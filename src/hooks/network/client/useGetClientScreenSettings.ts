@@ -11,7 +11,7 @@ export function useGetClientScreenSettings() {
   const query = useQuery({
     queryKey: clientQKeys.screenSettings(),
     queryFn: () =>
-      apiClient.getClientScreenSettings({
+      apiClient.client.getScreenSettings({
         params: { clientId: auth?.user?.profile?.navotar_clientid || "" },
       }),
     enabled: auth.isAuthenticated,

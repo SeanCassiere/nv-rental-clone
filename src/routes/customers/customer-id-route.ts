@@ -39,7 +39,7 @@ export const customerPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: dataKey,
           queryFn: () =>
-            apiClient.getCustomerById({
+            apiClient.customer.getById({
               query: {
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,

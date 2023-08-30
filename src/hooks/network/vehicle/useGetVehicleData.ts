@@ -11,7 +11,7 @@ export function useGetVehicleData(params: { vehicleId: string | number }) {
   const query = useQuery({
     queryKey: fleetQKeys.id(params.vehicleId),
     queryFn: () =>
-      apiClient.getVehicleById({
+      apiClient.vehicle.getById({
         params: {
           vehicleId: String(params.vehicleId),
         },

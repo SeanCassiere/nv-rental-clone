@@ -58,7 +58,7 @@ export const indexRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: locationsKey,
           queryFn: async () =>
-            apiClient.getLocations({
+            apiClient.location.getList({
               query: {
                 clientId: auth.profile.navotar_clientid,
                 userId: auth.profile.navotar_userid,

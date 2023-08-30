@@ -41,8 +41,8 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: clientQKeys.profile(),
           queryFn: () =>
-            apiClient
-              .getClientProfile({
+            apiClient.client
+              .getProfile({
                 params: { clientId: auth.profile.navotar_clientid },
               })
               .then((res) => {
@@ -67,7 +67,7 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: clientQKeys.features(),
           queryFn: () =>
-            apiClient.getClientFeatures({
+            apiClient.client.getFeatures({
               params: { clientId: auth.profile.navotar_clientid },
               body: {},
             }),
@@ -80,7 +80,7 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: clientQKeys.screenSettings(),
           queryFn: () =>
-            apiClient.getClientScreenSettings({
+            apiClient.client.getScreenSettings({
               params: { clientId: auth.profile.navotar_clientid },
             }),
           staleTime: 1000 * 60 * 5, // 5 minutes
@@ -92,7 +92,7 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: userQKeys.me(),
           queryFn: () =>
-            apiClient.getUserProfileById({
+            apiClient.user.getProfileByUserId({
               params: { userId: auth.profile.navotar_userid },
               query: {
                 clientId: auth.profile.navotar_clientid,
@@ -109,7 +109,7 @@ export const rootRoute = routerContext.createRootRoute({
         queryClient.ensureQueryData({
           queryKey: userQKeys.permissions(auth.profile.navotar_userid),
           queryFn: () =>
-            apiClient.getUserPermissionByUserId({
+            apiClient.user.getPermissionForUserId({
               params: { userId: auth.profile.navotar_userid },
               query: { clientId: auth.profile.navotar_clientid },
             }),

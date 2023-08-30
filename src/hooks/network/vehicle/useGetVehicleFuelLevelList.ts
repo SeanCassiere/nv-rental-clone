@@ -10,8 +10,8 @@ export function useGetVehicleFuelLevelList() {
   const query = useQuery({
     queryKey: fleetQKeys.fuelLevels(),
     queryFn: () =>
-      apiClient
-        .getVehicleFuelLevels({
+      apiClient.vehicle
+        .getFuelLevels({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

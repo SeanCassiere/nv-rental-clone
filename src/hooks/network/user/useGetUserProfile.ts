@@ -23,7 +23,7 @@ export function useGetUserProfile(useQueryOptions?: UseGetUserProfileOptions) {
   const query = useQuery({
     queryKey: userQKeys.me(),
     queryFn: () =>
-      apiClient.getUserProfileById({
+      apiClient.user.getProfileByUserId({
         params: {
           userId: auth.user?.profile.navotar_userid || "",
         },

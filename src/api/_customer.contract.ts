@@ -14,7 +14,7 @@ import {
 } from "./helpers";
 
 const rootCustomerContract = c.router({
-  getCustomerById: {
+  getById: {
     method: "GET",
     path: "/v3/customers/:customerId",
     query: UserAndClientIdAuthSchema,
@@ -23,7 +23,7 @@ const rootCustomerContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getCustomerTypes: {
+  getTypes: {
     method: "GET",
     path: "/v3/customers/types",
     query: UserAndClientIdAuthSchema,

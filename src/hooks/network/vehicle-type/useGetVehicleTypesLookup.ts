@@ -10,8 +10,8 @@ export function useGetVehicleTypesLookupList() {
   const query = useQuery({
     queryKey: vehicleTypeQKeys.lookup(),
     queryFn: () =>
-      apiClient
-        .getVehicleTypesLookup({
+      apiClient.vehicle
+        .getTypesLookupList({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

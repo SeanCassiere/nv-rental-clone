@@ -16,7 +16,7 @@ import {
 } from "./helpers";
 
 const rootVehicleContract = c.router({
-  getVehicleById: {
+  getById: {
     method: "GET",
     path: "/v3/vehicles/:vehicleId",
     query: UserAndClientIdAuthSchema.extend({
@@ -28,7 +28,7 @@ const rootVehicleContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getVehicleStatuses: {
+  getStatuses: {
     method: "GET",
     path: "/v3/vehicles/statuses",
     query: UserAndClientIdAuthSchema,
@@ -36,7 +36,7 @@ const rootVehicleContract = c.router({
       200: AgreementStatusListSchema,
     },
   },
-  getVehicleTypesLookup: {
+  getTypesLookupList: {
     method: "GET",
     path: "/v3/vehicles/types",
     query: UserAndClientIdAuthSchema,
@@ -44,7 +44,7 @@ const rootVehicleContract = c.router({
       200: VehicleTypeLookupList,
     },
   },
-  getVehicleFuelLevels: {
+  getFuelLevels: {
     method: "GET",
     path: "/v3/vehicles/fuellevels",
     query: UserAndClientIdAuthSchema,

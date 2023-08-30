@@ -15,7 +15,7 @@ import {
 } from "./helpers";
 
 const rootReservationContract = c.router({
-  getReservationById: {
+  getById: {
     method: "GET",
     path: "/v3/reservations/:reservationId",
     query: UserAndClientIdAuthSchema,
@@ -24,7 +24,7 @@ const rootReservationContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getReservationStatuses: {
+  getStatuses: {
     method: "GET",
     path: "/v3/reservations/statuses",
     query: UserAndClientIdAuthSchema,
@@ -32,7 +32,7 @@ const rootReservationContract = c.router({
       200: AgreementStatusListSchema,
     },
   },
-  getReservationTypes: {
+  getTypes: {
     method: "GET",
     path: "/v3/reservations/types",
     query: UserAndClientIdAuthSchema,

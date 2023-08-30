@@ -12,7 +12,7 @@ export function useGetReservationData(params: {
   const query = useQuery({
     queryKey: reservationQKeys.id(params.reservationId),
     queryFn: async () =>
-      apiClient.getReservationById({
+      apiClient.reservation.getById({
         query: {
           clientId: auth.user?.profile.navotar_clientid || "",
           userId: auth.user?.profile.navotar_userid || "",

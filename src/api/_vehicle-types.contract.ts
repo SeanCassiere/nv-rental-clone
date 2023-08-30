@@ -11,12 +11,12 @@ import {
 } from "./helpers";
 
 export type VehicleTypesListExtraOpts = Omit<
-  z.infer<(typeof rootVehicleTypesContract)["getVehicleTypes"]["query"]>,
+  z.infer<(typeof rootVehicleTypesContract)["getList"]["query"]>,
   "clientId" | "userId"
 >;
 
 const rootVehicleTypesContract = c.router({
-  getVehicleTypes: {
+  getList: {
     method: "GET",
     path: "/v3/vehicletypes",
     query: UserAndClientIdAuthSchema.extend({

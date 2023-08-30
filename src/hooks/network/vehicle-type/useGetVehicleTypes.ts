@@ -37,7 +37,7 @@ export function useGetVehicleTypesList(
   const query = useQuery({
     queryKey: vehicleTypeQKeys.all(searchParams),
     queryFn: () =>
-      apiClient.getVehicleTypes({
+      apiClient.vehicleType.getList({
         query: {
           clientId: auth.user?.profile.navotar_clientid || "",
           userId: auth.user?.profile.navotar_userid || "",

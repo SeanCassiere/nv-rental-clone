@@ -10,7 +10,7 @@ export function useGetCustomerData(params: { customerId: string | number }) {
   const query = useQuery({
     queryKey: customerQKeys.id(params.customerId),
     queryFn: () =>
-      apiClient.getCustomerById({
+      apiClient.customer.getById({
         params: {
           customerId: String(params.customerId),
         },

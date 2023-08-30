@@ -7,7 +7,7 @@ import { MiscChargeListItemSchema } from "@/schemas/misCharges";
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
 const rootMiscChargeContract = c.router({
-  getMiscCharges: {
+  getList: {
     method: "GET",
     path: "/v3/misccharges",
     query: UserAndClientIdAuthSchema.extend({

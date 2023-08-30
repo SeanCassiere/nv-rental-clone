@@ -10,8 +10,8 @@ export function useGetCustomerTypesList() {
   const query = useQuery({
     queryKey: customerQKeys.types(),
     queryFn: () =>
-      apiClient
-        .getCustomerTypes({
+      apiClient.customer
+        .getTypes({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

@@ -18,7 +18,7 @@ import {
 } from "./helpers";
 
 const rootClientContract = c.router({
-  getClientProfile: {
+  getProfile: {
     method: "GET",
     path: "/v3/clients/:clientId",
     responses: {
@@ -27,7 +27,7 @@ const rootClientContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getClientFeatures: {
+  getFeatures: {
     method: "POST",
     path: "/v3/clients/:clientId/clientfeatures",
     body: z.object({}).optional(),
@@ -37,7 +37,7 @@ const rootClientContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getClientScreenSettings: {
+  getScreenSettings: {
     method: "GET",
     path: "/v3/clients/:clientId/screensettings",
     responses: {
@@ -46,7 +46,7 @@ const rootClientContract = c.router({
       404: StructuredErrorSchema,
     },
   },
-  getClientColumnHeaderInformation: {
+  getColumnHeaderInfo: {
     method: "GET",
     path: "/v3/clients/columnheaderinformation",
     query: UserAndClientIdAuthSchema.extend({
@@ -57,7 +57,7 @@ const rootClientContract = c.router({
       401: UnauthorizedErrorSchema,
     },
   },
-  saveClientColumnHeaderInformation: {
+  saveColumnHeaderInfo: {
     method: "POST",
     path: "/v3/clients/columnheaderinformation",
     body: SaveClientColumnHeaderInfoSchema,

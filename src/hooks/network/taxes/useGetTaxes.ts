@@ -6,7 +6,7 @@ import { apiClient } from "@/api";
 export function useGetTaxes(params: {
   enabled?: boolean;
   filters?: Omit<
-    Parameters<(typeof apiClient)["getTaxes"]>[0]["query"],
+    Parameters<(typeof apiClient)["tax"]["getList"]>[0]["query"],
     "userId" | "clientId"
   >;
 }) {
@@ -15,7 +15,7 @@ export function useGetTaxes(params: {
   const query = useQuery({
     queryKey: ["taxes", filters],
     queryFn: () =>
-      apiClient.getTaxes({
+      apiClient.tax.getList({
         query: {
           userId: auth.user?.profile.navotar_userid || "",
           clientId: auth.user?.profile.navotar_clientid || "",

@@ -10,8 +10,8 @@ export function useGetAgreementTypesList() {
   const query = useQuery({
     queryKey: agreementQKeys.types(),
     queryFn: () =>
-      apiClient
-        .getAgreementTypes({
+      apiClient.agreement
+        .getTypes({
           query: {
             clientId: auth.user?.profile.navotar_clientid || "",
             userId: auth.user?.profile.navotar_userid || "",

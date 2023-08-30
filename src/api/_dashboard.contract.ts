@@ -23,7 +23,7 @@ const DashboardExtraParams = {
 };
 
 const rootDashboardContract = c.router({
-  getApplicationMessages: {
+  getAdminMessages: {
     method: "GET",
     path: "/v3/messages",
     query: ClientIdAuthSchema,
