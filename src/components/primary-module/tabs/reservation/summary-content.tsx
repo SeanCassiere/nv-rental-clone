@@ -23,6 +23,11 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
     referenceId: props.reservationId,
   });
 
+  const summaryData =
+    rentalRatesSummary.data?.status === 200
+      ? rentalRatesSummary.data?.body
+      : undefined;
+
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
   const canViewVehicleInformation = true;
@@ -99,10 +104,7 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
       </div>
       {/*  */}
       <div className="flex flex-col gap-4 lg:col-span-4">
-        <RentalSummary
-          module="reservations"
-          summaryData={rentalRatesSummary.data}
-        />
+        <RentalSummary module="reservations" summaryData={summaryData} />
       </div>
     </div>
   );

@@ -35,10 +35,14 @@ const EditReservationPage = () => {
   const reservation =
     reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
-  const summaryData = useGetModuleRentalRatesSummary({
+  const rentalRatesSummary = useGetModuleRentalRatesSummary({
     module: "reservations",
     referenceId: reservationId,
   });
+  const summaryData =
+    rentalRatesSummary.data?.status === 200
+      ? rentalRatesSummary.data?.body
+      : undefined;
 
   const handleStageTabClick = useCallback(
     (destination: string) => {
@@ -71,10 +75,10 @@ const EditReservationPage = () => {
   );
 
   useEffect(() => {
-    if (summaryData.status !== "error") return;
+    if (rentalRatesSummary.status !== "error") return;
 
     router.history.go(-1);
-  }, [router.history, summaryData.status]);
+  }, [router.history, rentalRatesSummary.status]);
 
   return (
     <ProtectorShield>
@@ -89,7 +93,7 @@ const EditReservationPage = () => {
           reservation?.reservationview.reservationNumber || undefined
         }
         reservationData={reservation || undefined}
-        summaryData={summaryData.data}
+        summaryData={summaryData}
       />
     </ProtectorShield>
   );

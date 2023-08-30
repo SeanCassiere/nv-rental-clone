@@ -31,6 +31,10 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
     module: "agreements",
     referenceId: props.agreementId,
   });
+  const summaryData =
+    rentalRatesSummary.data?.status === 200
+      ? rentalRatesSummary.data?.body
+      : undefined;
 
   const tabsConfig = useMemo(() => {
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
@@ -156,10 +160,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
       </div>
 
       <div className="flex flex-col gap-4 lg:col-span-4">
-        <RentalSummary
-          module="agreements"
-          summaryData={rentalRatesSummary.data}
-        />
+        <RentalSummary module="agreements" summaryData={summaryData} />
       </div>
     </div>
   );

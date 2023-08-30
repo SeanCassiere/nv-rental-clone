@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchRentalRateSummaryAmounts } from "@/api/summary";
-
 import { RentalRatesSummarySchema } from "@/schemas/summary";
 
 import { agreementQKeys, reservationQKeys } from "@/utils/query-key";
+
+import { apiClient } from "@/api";
 
 type TModule = "reservations" | "agreements";
 
@@ -26,16 +26,19 @@ export function useGetModuleRentalRatesSummary(params: {
   const query = useQuery({
     queryKey: keySelector(params.module).summary(params.referenceId),
     queryFn: () =>
-      fetchRentalRateSummaryAmounts({
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        module: params.module,
-        referenceId: params.referenceId,
+      apiClient.summary.getSummaryForReferenceId({
+        params: {
+          referenceType: params.module,
+          referenceId: params.referenceId,
+        },
+        query: {
+          clientId: auth.user?.profile?.navotar_clientid || "",
+          userId: auth.user?.profile?.navotar_userid || "",
+        },
       }),
 
     enabled: auth.isAuthenticated,
-    initialData: initialRentalSummaryData(),
+    // initialData: initialRentalSummaryData(),
   });
   return query;
 }

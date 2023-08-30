@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { c } from "@/api/c";
 
 import {
@@ -6,9 +8,9 @@ import {
 } from "@/schemas/summary";
 
 import {
-  // PaginationSchema,
   StructuredErrorSchema,
-  // UserAndClientIdAuthSchema,
+  UnauthorizedErrorSchema,
+  UserAndClientIdAuthSchema,
 } from "./helpers";
 
 const rootSummaryContract = c.router({
@@ -19,6 +21,21 @@ const rootSummaryContract = c.router({
     responses: {
       200: RentalRatesSummarySchema,
       404: StructuredErrorSchema,
+    },
+  },
+  getSummaryForReferenceId: {
+    method: "GET",
+    path: "/v3/:referenceType/:referenceId/summary",
+    pathParams: z.object({
+      referenceType: z.enum(["reservations", "agreements"]),
+      referenceId: z.string(),
+    }),
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: RentalRatesSummarySchema,
+      400: StructuredErrorSchema,
+      500: StructuredErrorSchema,
+      401: UnauthorizedErrorSchema,
     },
   },
 });

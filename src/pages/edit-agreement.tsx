@@ -29,7 +29,7 @@ const EditAgreementPage = () => {
   });
   const { agreementId } = useParams({ from: editAgreementByIdRoute.id });
 
-  const summaryData = useGetAgreementData({
+  const agreementData = useGetAgreementData({
     agreementId,
   });
 
@@ -37,6 +37,10 @@ const EditAgreementPage = () => {
     module: "agreements",
     referenceId: agreementId,
   });
+  const summaryData =
+    rentalRatesSummary.data?.status === 200
+      ? rentalRatesSummary.data?.body
+      : undefined;
 
   const handleStageTabClick = useCallback(
     (destination: string) => {
@@ -63,17 +67,17 @@ const EditAgreementPage = () => {
   }, [router]);
 
   const agreement =
-    summaryData.data?.status === 200 ? summaryData.data.body : null;
+    agreementData.data?.status === 200 ? agreementData.data.body : null;
 
   useDocumentTitle(
     titleMaker(`Edit - ${agreement?.agreementNumber || "Loading"} - Agreement`)
   );
 
   useEffect(() => {
-    if (summaryData.status !== "error") return;
+    if (agreementData.status !== "error") return;
 
     router.history.go(-1);
-  }, [router.history, summaryData.status]);
+  }, [router.history, agreementData.status]);
 
   return (
     <ProtectorShield>
@@ -85,7 +89,7 @@ const EditAgreementPage = () => {
         onRentalSaveClick={handleAgreementSaveComplete}
         onRentalCancelClick={handleCancelEditAgreement}
         referenceNumber={agreement?.agreementNumber || undefined}
-        summaryData={rentalRatesSummary.data}
+        summaryData={summaryData}
       />
     </ProtectorShield>
   );

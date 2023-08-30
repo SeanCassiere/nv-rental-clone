@@ -1,8 +1,6 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { fetchRentalRateSummaryAmounts } from "@/api/summary";
-
 import { getAuthToken } from "@/utils/authLocal";
 import { agreementQKeys } from "@/utils/query-key";
 
@@ -25,12 +23,15 @@ export const agreementPathIdRoute = new Route({
         queryClient.ensureQueryData({
           queryKey: summaryKey,
           queryFn: () =>
-            fetchRentalRateSummaryAmounts({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              module: "agreements",
-              referenceId: agreementId,
+            apiClient.summary.getSummaryForReferenceId({
+              params: {
+                referenceType: "agreements",
+                referenceId: agreementId,
+              },
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+              },
             }),
         })
       );
