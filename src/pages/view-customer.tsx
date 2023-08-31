@@ -50,7 +50,7 @@ const ModuleNotesTabContent = lazy(
 
 function CustomerViewPage() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams({ from: viewCustomerByIdRoute.id });
 
   const { tab: tabName = "summary" } = useSearch({
     from: viewCustomerByIdRoute.id,
