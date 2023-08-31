@@ -65,7 +65,7 @@ const ModuleNotesTabContent = lazy(
 
 function VehicleViewPage() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams({ from: viewFleetByIdRoute.id });
 
   const { tab: tabName = "" } = useSearch({ from: viewFleetByIdRoute.id });
 

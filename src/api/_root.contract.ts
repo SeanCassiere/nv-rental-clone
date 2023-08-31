@@ -33,6 +33,7 @@ const contract = c.router(
   },
   {
     strictStatusCodes: true,
+    validateResponseOnClient: true,
   }
 );
 

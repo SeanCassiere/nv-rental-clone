@@ -52,7 +52,7 @@ const ModuleNotesTabContent = lazy(
 
 function ReservationViewPage() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams({ from: viewReservationByIdRoute.id });
 
   const { tab: tabName = "summary" } = useSearch({
     from: viewReservationByIdRoute.id,
