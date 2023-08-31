@@ -1,60 +1,9 @@
-import { initClient, type ApiFetcher } from "@ts-rest/core";
+import { initClient, tsRestFetchApi } from "@ts-rest/core";
 
 import { contract } from "@/api/_root.contract";
 
 import { getAuthToken } from "@/utils/authLocal";
 import { apiBaseUrl } from "@/utils/constants";
-
-const customFetchApi: ApiFetcher = async ({
-  path,
-  method,
-  headers,
-  body,
-  credentials,
-  signal,
-  cache,
-  next,
-  route,
-}) => {
-  const result = await fetch(path, {
-    method,
-    headers,
-    body,
-    credentials,
-    signal,
-    cache,
-    next,
-  } as RequestInit);
-  const contentType = result.headers.get("content-type");
-
-  if (contentType?.includes("application/") && contentType?.includes("json")) {
-    const json = await result.json();
-
-    return {
-      status: result.status,
-      body:
-        result.status in route.responses
-          ? // @ts-expect-error
-            route.responses[result.status]?.parse(json)
-          : json,
-      headers: result.headers,
-    };
-  }
-
-  if (contentType?.includes("text/plain")) {
-    return {
-      status: result.status,
-      body: await result.text(),
-      headers: result.headers,
-    };
-  }
-
-  return {
-    status: result.status,
-    body: await result.blob(),
-    headers: result.headers,
-  };
-};
 
 const apiClient = initClient(contract, {
   baseUrl: apiBaseUrl,
@@ -68,7 +17,10 @@ const apiClient = initClient(contract, {
       args.contentType = "application/json";
       args.headers["Content-Type"] = args.contentType;
     }
-    return customFetchApi(args);
+
+    args.route.validateResponseOnClient = true;
+
+    return tsRestFetchApi(args);
   },
 });
 
