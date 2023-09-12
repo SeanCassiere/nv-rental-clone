@@ -1,12 +1,19 @@
 import { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
 
 import { type TCustomerListItemParsed } from "@/schemas/customer";
 
 import { CommonTable } from "../common/common-table";
-import DarkBgDialog from "../Layout/DarkBgDialog";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -77,35 +84,36 @@ const SelectCustomerModal = (props: SelectVehicleModalProps) => {
   }, [acceptedColumns, props]);
 
   return (
-    <DarkBgDialog
-      show={props.show}
-      setShow={props.setShow}
-      onClose={handleClose}
-      title="Select customer"
-      sizing="5xl"
-      description="Select a customer from the list below"
-    >
-      <CommonTable
-        data={customerListData.data?.data || []}
-        columns={columnDefs}
-        hasPagination
-        paginationMode="server"
-        paginationState={{
-          pageIndex: page - 1,
-          pageSize,
-        }}
-        onPaginationChange={(newState) => {
-          setPage(newState.pageIndex + 1);
-          setPageSize(newState.pageSize);
-        }}
-        totalPages={
-          customerListData.data?.totalRecords
-            ? Math.ceil(customerListData.data?.totalRecords / pageSize) ?? -1
-            : 0
-        }
-        stickyHeader
-      />
-    </DarkBgDialog>
+    <Dialog open={props.show} onOpenChange={props.setShow}>
+      <DialogContent className="max-w-4xl">
+        <DialogHeader>
+          <DialogTitle>Select customer</DialogTitle>
+          <DialogDescription>
+            Select a customer from the list below
+          </DialogDescription>
+        </DialogHeader>
+        <CommonTable
+          data={customerListData.data?.data || []}
+          columns={columnDefs}
+          hasPagination
+          paginationMode="server"
+          paginationState={{
+            pageIndex: page - 1,
+            pageSize,
+          }}
+          onPaginationChange={(newState) => {
+            setPage(newState.pageIndex + 1);
+            setPageSize(newState.pageSize);
+          }}
+          totalPages={
+            customerListData.data?.totalRecords
+              ? Math.ceil(customerListData.data?.totalRecords / pageSize) ?? -1
+              : 0
+          }
+          stickyHeader
+        />
+      </DialogContent>
+    </Dialog>
   );
 };
 
