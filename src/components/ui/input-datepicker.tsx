@@ -36,6 +36,7 @@ interface InputDatePickerProps {
   align?: PopoverContentProps["align"];
   format?: string;
   timeFormat?: string;
+  required?: boolean;
 }
 
 function InputDatePicker({
@@ -47,6 +48,7 @@ function InputDatePicker({
   timeFormat = DEFAULT_TIME_FORMAT,
   disabled,
   readOnly,
+  required,
   onChange,
 }: InputDatePickerProps) {
   const [tabStage, setTabStage] = useState(mode === "time" ? "time" : "date");
@@ -63,6 +65,7 @@ function InputDatePicker({
       : timeFormat,
     disabled,
     readOnly,
+    required,
   });
 
   const useTimeInputHook = useDateInput({

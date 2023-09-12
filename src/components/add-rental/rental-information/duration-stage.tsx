@@ -240,6 +240,7 @@ export const DurationStage = ({
                     mode="datetime"
                     format={dateTimeFormat}
                     timeFormat={timeFormat}
+                    required
                   >
                     <FormControl>
                       <InputDatePickerSlot placeholder="Checkout date" />
@@ -296,6 +297,7 @@ export const DurationStage = ({
                     mode="datetime"
                     format={dateTimeFormat}
                     timeFormat={timeFormat}
+                    required
                   >
                     <FormControl>
                       <InputDatePickerSlot placeholder="Checkin date" />
