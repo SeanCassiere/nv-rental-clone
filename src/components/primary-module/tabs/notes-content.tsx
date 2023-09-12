@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetModuleNotes } from "@/hooks/network/module/useGetModuleNotes";
 
@@ -121,18 +122,22 @@ const ModuleNotesTabContent = ({
 
   return (
     <div className="max-w-full focus:ring-0">
-      {notesQuery.status === "loading" ||
-      notesQuery.status === "error" ||
-      list.length === 0 ? (
-        <CommonEmptyStateContent
-          title={emptyContentLabels[module]?.title ?? ""}
-          subtitle={emptyContentLabels[module]?.subtitle ?? ""}
-          icon={
-            <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-          }
-        />
+      {notesQuery.status === "loading" ? (
+        <Skeleton className="h-56" />
       ) : (
-        <CommonTable columns={colDefs} data={list} />
+        <>
+          {notesQuery.status === "error" || list.length === 0 ? (
+            <CommonEmptyStateContent
+              title={emptyContentLabels[module]?.title ?? ""}
+              subtitle={emptyContentLabels[module]?.subtitle ?? ""}
+              icon={
+                <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+              }
+            />
+          ) : (
+            <CommonTable columns={colDefs} data={list} />
+          )}
+        </>
       )}
     </div>
   );

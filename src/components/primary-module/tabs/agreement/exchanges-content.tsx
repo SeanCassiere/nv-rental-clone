@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetVehicleExchanges } from "@/hooks/network/vehicle-exchange/useGetVehicleExchanges";
 
@@ -97,18 +98,22 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.status === "loading" ||
-      dataList.status === "error" ||
-      dataList.data?.status !== 200 ? (
-        <CommonEmptyStateContent
-          title="No exchanges"
-          subtitle="You haven't made any fleet exchanges for this rental agreement."
-          icon={
-            <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-          }
-        />
+      {dataList.status === "loading" ? (
+        <Skeleton className="h-56" />
       ) : (
-        <CommonTable columns={colDefs} data={list} />
+        <>
+          {dataList.status === "error" || dataList.data?.status !== 200 ? (
+            <CommonEmptyStateContent
+              title="No exchanges"
+              subtitle="You haven't made any fleet exchanges for this rental agreement."
+              icon={
+                <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+              }
+            />
+          ) : (
+            <CommonTable columns={colDefs} data={list} />
+          )}
+        </>
       )}
     </div>
   );
