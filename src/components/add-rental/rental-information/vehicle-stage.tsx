@@ -98,6 +98,12 @@ export const VehicleStage = ({
     vehicleTypesData.data?.status === 200 ? vehicleTypesData.data.body : [];
 
   //
+  const searchFilters = {
+    VehicleTypeId: formVehicleTypeId,
+    CurrentLocationId: checkoutLocation,
+    StartDate: rentalInformation?.checkoutDate,
+    EndDate: rentalInformation?.checkinDate,
+  };
   const vehicleListData = useGetVehiclesList({
     page: 1,
     pageSize: 20,
@@ -105,10 +111,7 @@ export const VehicleStage = ({
       isEdit === false
         ? !!checkoutLocation && !!form.getValues("vehicleTypeId")
         : true,
-    filters: {
-      VehicleTypeId: formVehicleTypeId,
-      CurrentLocationId: checkoutLocation,
-    },
+    filters: searchFilters,
   });
   const vehiclesList = vehicleListData.data?.data || [];
 
@@ -121,11 +124,7 @@ export const VehicleStage = ({
       <SelectVehicleModal
         show={showFleetPicker}
         setShow={setShowFleetPicker}
-        filters={{
-          CurrentLocationId: checkoutLocation,
-          StartDate: rentalInformation?.checkoutDate,
-          EndDate: rentalInformation?.checkinDate,
-        }}
+        filters={searchFilters}
         onSelect={(vehicle) => {
           form.setValue("vehicleTypeId", vehicle.VehicleTypeId, {
             shouldValidate: true,
@@ -137,6 +136,11 @@ export const VehicleStage = ({
             shouldValidate: true,
           });
           form.setValue("odometerOut", vehicle.CurrentOdometer ?? 0, {
+            shouldValidate: true,
+          });
+        }}
+        setVehicleTypeId={(selectedVehicleTypeId) => {
+          form.setValue("vehicleTypeId", selectedVehicleTypeId ?? 0, {
             shouldValidate: true,
           });
         }}
