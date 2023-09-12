@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import SelectCustomerModal from "@/components/Dialogs/SelectCustomerModal";
+import { SelectCustomerDialog } from "@/components/dialog/select-customer";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -108,7 +108,7 @@ export const CustomerStage = ({
 
   return (
     <Form {...form}>
-      <SelectCustomerModal
+      <SelectCustomerDialog
         show={showCustomerPicker}
         setShow={setShowCustomerPicker}
         onSelect={(customer) => {

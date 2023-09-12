@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import { CommonTable } from "@/components/common/common-table";
 import {
   Dialog,
   DialogContent,
@@ -13,8 +14,6 @@ import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersLis
 
 import { type TCustomerListItemParsed } from "@/schemas/customer";
 
-import { CommonTable } from "../common/common-table";
-
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
 interface SelectVehicleModalProps {
@@ -23,13 +22,9 @@ interface SelectVehicleModalProps {
   onSelect?: (customer: TCustomerListItemParsed) => void;
 }
 
-const SelectCustomerModal = (props: SelectVehicleModalProps) => {
+export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-
-  const handleClose = () => {
-    props.setShow(false);
-  };
 
   const acceptedColumns = useMemo(
     () =>
@@ -116,5 +111,3 @@ const SelectCustomerModal = (props: SelectVehicleModalProps) => {
     </Dialog>
   );
 };
-
-export default SelectCustomerModal;

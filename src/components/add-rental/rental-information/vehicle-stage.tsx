@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import SelectVehicleModal from "@/components/Dialogs/SelectVehicleModal";
+import { SelectVehicleDialog } from "@/components/dialog/select-vehicle";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -121,7 +121,7 @@ export const VehicleStage = ({
 
   return (
     <Form {...form}>
-      <SelectVehicleModal
+      <SelectVehicleDialog
         show={showFleetPicker}
         setShow={setShowFleetPicker}
         filters={searchFilters}

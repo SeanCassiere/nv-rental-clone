@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import { CommonTable } from "@/components/common/common-table";
 import {
   Dialog,
   DialogContent,
@@ -12,8 +13,6 @@ import {
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { type TVehicleListItemParsed } from "@/schemas/vehicle";
-
-import { CommonTable } from "../common/common-table";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -30,13 +29,11 @@ interface SelectVehicleModalProps {
   };
 }
 
-const SelectVehicleModal = (props: SelectVehicleModalProps) => {
+export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+
   const checkoutLocation = props.filters?.CurrentLocationId ?? 0;
-  const handleClose = () => {
-    props.setShow(false);
-  };
 
   const acceptedColumns = useMemo(
     () =>
@@ -128,5 +125,3 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
     </Dialog>
   );
 };
-
-export default SelectVehicleModal;
