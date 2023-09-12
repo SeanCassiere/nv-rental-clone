@@ -38,3 +38,11 @@ export const UI_APPLICATION_SHOW_ROUTER_DEVTOOLS =
     : false;
 
 export const IS_LOCAL_DEV = OIDC_REDIRECT_URI.startsWith("http://localhost");
+
+export const SETTINGS_LOCATION_KEYS = {
+  application: "application",
+  profile: "profile",
+  runtimeConfiguration: "runtime-configuration",
+  vehiclesAndCategories: "vehicles-and-categories",
+  ratesAndCharges: "rates-and-charges",
+} as const;

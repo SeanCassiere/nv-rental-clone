@@ -6,6 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
+import { SETTINGS_LOCATION_KEYS } from "@/utils/constants";
+
 const SettingsUsersTab = React.lazy(
   () => import("@/components/settings/application/system-users")
 );
@@ -57,7 +59,12 @@ const SettingsApplicationTab = () => {
   const activeTab = getValueForTabList(tabs, currentTab);
   const onTabChange = React.useCallback(
     (id: string) => {
-      navigate({ search: { tab: id }, replace: true });
+      navigate({
+        params: { destination: SETTINGS_LOCATION_KEYS.application },
+        search: { tab: id },
+        replace: true,
+        resetScroll: false,
+      });
     },
     [navigate]
   );

@@ -8,6 +8,8 @@ import { useFeature } from "@/hooks/internal/useFeature";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
+import { SETTINGS_LOCATION_KEYS } from "@/utils/constants";
+
 const SettingsEmailTemplatesTab = React.lazy(
   () => import("@/components/settings/runtime-configuration/email-templates")
 );
@@ -77,7 +79,12 @@ const SettingsRuntimeConfigurationTab = () => {
   const activeTab = getValueForTabList(tabs, currentTab);
   const onTabChange = React.useCallback(
     (id: string) => {
-      navigate({ search: { tab: id }, replace: true });
+      navigate({
+        params: { destination: SETTINGS_LOCATION_KEYS.runtimeConfiguration },
+        search: { tab: id },
+        replace: true,
+        resetScroll: false,
+      });
     },
     [navigate]
   );

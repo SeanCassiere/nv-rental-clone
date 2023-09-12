@@ -12,7 +12,7 @@ import { usePermission } from "@/hooks/internal/usePermission";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
-import { UI_APPLICATION_NAME } from "@/utils/constants";
+import { SETTINGS_LOCATION_KEYS, UI_APPLICATION_NAME } from "@/utils/constants";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
@@ -44,7 +44,7 @@ export default function SettingsCatchAllPage() {
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
       {
-        id: "profile",
+        id: SETTINGS_LOCATION_KEYS.profile,
         title: "Profile",
         component: <SettingsProfileTab />,
         linkProps: {
@@ -57,7 +57,7 @@ export default function SettingsCatchAllPage() {
     if (!canSeeAdminTab) return items;
 
     items.push({
-      id: "application",
+      id: SETTINGS_LOCATION_KEYS.application,
       title: "Application", // users, locations, taxes,
       component: <SettingsApplicationTab />,
       linkProps: {
@@ -66,7 +66,7 @@ export default function SettingsCatchAllPage() {
       },
     });
     items.push({
-      id: "runtime-configuration",
+      id: SETTINGS_LOCATION_KEYS.runtimeConfiguration,
       title: "Runtime configuration", // email, global documents, id configuration, compatibility, etc.
       component: <SettingsRuntimeConfigurationTab />,
       linkProps: {
@@ -75,7 +75,7 @@ export default function SettingsCatchAllPage() {
       },
     });
     items.push({
-      id: "vehicles-and-categories",
+      id: SETTINGS_LOCATION_KEYS.vehiclesAndCategories,
       title: "Vehicles and categories", // vehicle types, vehicle makes, vehicle models, options, etc.
       component: <Skeleton className="h-96" />,
       linkProps: {
@@ -84,7 +84,7 @@ export default function SettingsCatchAllPage() {
       },
     });
     items.push({
-      id: "rates-and-charges",
+      id: SETTINGS_LOCATION_KEYS.ratesAndCharges,
       title: "Rates and charges", // rates, rules, promotions, miscellaneous charges
       component: <Skeleton className="h-96" />,
       linkProps: {
