@@ -101,7 +101,7 @@ export const VehicleSummary = ({
       label: "Total reservations",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfReservation),
       type: summaryData?.totalNoOfReservation ? "link" : "text",
-      amount: summaryData?.totalNoOfReservation || null,
+      amount: Number(summaryData?.totalNoOfReservation || 0).toString(),
       linkProps: {
         to: viewFleetByIdRoute.to,
         search: () => ({
@@ -138,7 +138,7 @@ export const VehicleSummary = ({
       label: "Future reservations",
       primaryTextHighlight: Boolean(summaryData?.futureNoOfReservation),
       type: summaryData?.futureNoOfReservation ? "link" : "text",
-      amount: summaryData?.futureNoOfReservation || null,
+      amount: Number(summaryData?.futureNoOfReservation || 0).toString(),
       linkProps: {
         to: searchReservationsRoute.to,
         search: () => ({
