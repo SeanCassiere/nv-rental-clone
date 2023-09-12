@@ -5,14 +5,14 @@ import parseISO from "date-fns/parseISO";
 import { FilesIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { CommonTable } from "@/components/common/common-table";
+import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+
 import { useGetVehicleExchanges } from "@/hooks/network/vehicle-exchange/useGetVehicleExchanges";
 
 import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
 
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
-
-import { CommonTable } from "../../../common/common-table";
-import CommonEmptyStateContent from "../../../Layout/CommonEmptyStateContent";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
 type TVehicleExchangeKeyHelp = {
@@ -93,16 +93,22 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
     return columns;
   }, [t]);
 
+  const list = dataList.data?.status === 200 ? dataList.data?.body : [];
+
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.status === "loading" || dataList.data?.status !== 200 ? (
+      {dataList.status === "loading" ||
+      dataList.status === "error" ||
+      dataList.data?.status !== 200 ? (
         <CommonEmptyStateContent
           title="No exchanges"
-          subtitle="You haven't made any vehicle exchanges for this rental agreement."
-          icon={<FilesIcon className="mx-auto h-12 w-12 text-slate-400" />}
+          subtitle="You haven't made any fleet exchanges for this rental agreement."
+          icon={
+            <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+          }
         />
       ) : (
-        <CommonTable columns={colDefs} data={dataList.data?.body || []} />
+        <CommonTable columns={colDefs} data={list} />
       )}
     </div>
   );
