@@ -62,6 +62,11 @@ type AgreementRentalInformationSchemaParsed = RI_TabProps["durationStageData"];
 type AgreementVehicleInformationSchemaParsed = RI_TabProps["vehicleStageData"];
 
 type CommonCustomerInformationSchemaParsed = CI_TabProps["customerStageData"];
+type CommonPaymentInformation = {
+  amountPaid: number;
+  securityDepositValue: number;
+  securityDepositMethod: string;
+};
 
 const StageKeys = {
   rental: "rental-information",
@@ -140,6 +145,12 @@ const AddRentalParentForm = ({
 
   const [commonCustomerInformation, setCommonCustomerInformation] =
     useState<CommonCustomerInformationSchemaParsed | null>(null);
+  const [commonPaymentInformation, setCommonPaymentInformation] =
+    useState<CommonPaymentInformation>({
+      amountPaid: 0,
+      securityDepositValue: 0,
+      securityDepositMethod: "",
+    });
 
   const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
   const [selectedMiscCharges, setSelectedMiscCharges] = useState<
@@ -845,7 +856,7 @@ const AddRentalParentForm = ({
       amountPaid: 0,
       preAdjustment: 0,
       postAdjustment: 0,
-      securityDeposit: 0,
+      securityDeposit: "",
       additionalCharge: 0,
       unTaxableAdditional: 0,
       fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",

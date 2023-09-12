@@ -40,7 +40,7 @@ export const CalculateRentalSummaryInputSchema = z.object({
   amountPaid: z.number(),
   preAdjustment: z.number(),
   postAdjustment: z.number(),
-  securityDeposit: z.number(),
+  securityDeposit: z.string().or(z.number()),
   additionalCharge: z.number(),
   unTaxableAdditional: z.number(),
   agreementId: z.number(),
