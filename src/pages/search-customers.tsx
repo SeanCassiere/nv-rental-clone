@@ -107,7 +107,6 @@ function CustomerSearchPage() {
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"
                       )}
-                      preload="intent"
                     >
                       {value}
                     </Link>

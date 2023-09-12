@@ -87,7 +87,6 @@ const ReservationStatBlock = ({
                 }}
                 search={() => ({ tab: "summary" })}
                 className="focus-within:underline focus-within:underline-offset-4 hover:underline hover:underline-offset-4"
-                preload="intent"
               >
                 {reservation?.reservationview.agreementNumber ?? "-"}
               </Link>

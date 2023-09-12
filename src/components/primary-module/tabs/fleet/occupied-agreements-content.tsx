@@ -83,7 +83,6 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
                     params={{ agreementId: String(agreementId) }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"
-                    preload="intent"
                   >
                     {value as any}
                   </Link>

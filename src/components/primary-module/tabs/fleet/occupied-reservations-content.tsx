@@ -87,7 +87,6 @@ const FleetOccupiedReservationsTab = (
                     params={{ reservationId: String(reservationId) }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"
-                    preload="intent"
                   >
                     {value as any}
                   </Link>
