@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { viewAgreementByIdRoute } from "../../../routes/agreements/agreement-id-route";
-import { type ReservationDataParsed } from "../../../schemas/reservation";
+import { type ReservationDataParsed } from "@/schemas/reservation";
+
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
 const ReservationStatBlock = ({
@@ -81,7 +81,7 @@ const ReservationStatBlock = ({
             header="Agreement no."
             stat={
               <Link
-                to={viewAgreementByIdRoute.to}
+                to="/agreements/$agreementId"
                 params={{
                   agreementId: String(reservation.reservationview.agreementId),
                 }}

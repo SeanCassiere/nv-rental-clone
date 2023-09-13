@@ -13,10 +13,7 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 
-import {
-  editReservationByIdRoute,
-  viewReservationByIdRoute,
-} from "@/routes/reservations/reservation-id-route";
+import { editReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -54,9 +51,9 @@ const EditReservationPage = () => {
     [reservationId, navigate]
   );
 
-  const handleAgreementSaveComplete = useCallback(() => {
+  const handleReservationSaveComplete = useCallback(() => {
     navigate({
-      to: viewReservationByIdRoute.to,
+      to: "/reservations/$reservationId",
       params: { reservationId },
       search: () => ({ tab: "summary" }),
     });
@@ -64,13 +61,15 @@ const EditReservationPage = () => {
 
   const handleCancelEditReservation = useCallback(() => {
     router.navigate({
-      to: "../",
+      to: "..",
     });
   }, [router]);
 
   useDocumentTitle(
     titleMaker(
-      `Edit - ${reservation?.reservationview.reservationNumber} - Agreement`
+      `Edit - ${
+        reservation?.reservationview?.reservationNumber || "Loading"
+      } - Reservation`
     )
   );
 
@@ -87,7 +86,7 @@ const EditReservationPage = () => {
         currentStage={stage}
         module="reservation"
         onStageTabClick={handleStageTabClick}
-        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalSaveClick={handleReservationSaveComplete}
         onRentalCancelClick={handleCancelEditReservation}
         referenceNumber={
           reservation?.reservationview.reservationNumber || undefined

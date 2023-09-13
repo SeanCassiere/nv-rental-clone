@@ -1,13 +1,6 @@
 import React from "react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useRouter, type LinkPropsOptions } from "@tanstack/react-router";
 
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
-import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
-
-import { indexRoute } from "@/routes";
 import { cn } from "@/utils";
 
 export const AppNavigation = () => {
@@ -31,54 +24,58 @@ export const AppNavigation = () => {
     return matching.some((mat) => routes.includes(mat));
   };
 
-  const navigation = [
+  const navigation: {
+    name: string;
+    current: boolean;
+    props: LinkPropsOptions;
+  }[] = [
     {
       name: "Dashboard",
       current: matches(["/"], "="),
       props: {
-        to: indexRoute.to,
+        to: "/",
       },
     },
     {
       name: "Fleet",
       current: matches(["/fleet", "/fleet/$vehicleId"]),
       props: {
-        to: searchFleetRoute.to,
+        to: "/fleet",
       },
     },
     {
       name: "Customers",
       current: matches(["/customers", "/customers/$customerId"]),
       props: {
-        to: searchCustomersRoute.to,
+        to: "/customers",
       },
     },
     {
       name: "Reservations",
       current: matches(["/reservations", "/reservations/$reservationId"]),
       props: {
-        to: searchReservationsRoute.to,
+        to: "/reservations",
       },
     },
     {
       name: "Agreements",
       current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {
-        to: searchAgreementsRoute.to,
+        to: "/agreements",
       },
     },
     {
       name: "Reports",
       current: matches(["/reports", "/reports/$reportId"]),
       props: {
-        to: searchAgreementsRoute.to,
+        to: "/agreements",
       },
     },
     {
       name: "Settings",
       current: matches(["/settings", "/settings/$location"]),
       props: {
-        to: mainSettingsRoute.to,
+        to: "/settings",
       },
     },
   ];

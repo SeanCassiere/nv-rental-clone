@@ -11,8 +11,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetVehicleExchanges } from "@/hooks/network/vehicle-exchange/useGetVehicleExchanges";
 
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
@@ -61,7 +59,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
                 return (
                   <Link
-                    to={viewFleetByIdRoute.to}
+                    to="/fleet/$vehicleId"
                     params={{ vehicleId: `${vehicleId}` }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"

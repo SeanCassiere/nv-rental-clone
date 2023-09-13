@@ -10,9 +10,6 @@ import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-
 import { type TAgreementListItemParsed } from "@/schemas/agreement";
 
 import { AgreementDateTimeColumns } from "@/utils/columns";
@@ -79,7 +76,7 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
                   .AgreementId;
                 return (
                   <Link
-                    to={viewAgreementByIdRoute.to}
+                    to="/agreements/$agreementId"
                     params={{ agreementId: String(agreementId) }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"
@@ -123,7 +120,7 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
             Showing a maximum of {pageSize} records.
           </p>
           <Link
-            to={searchAgreementsRoute.to}
+            to="/agreements"
             search={(prev) => ({
               ...prev,
               filters: { VehicleNo: props.vehicleNo },

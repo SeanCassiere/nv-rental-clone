@@ -26,20 +26,6 @@ import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
-import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-import {
-  checkinAgreementByIdRoute,
-  editAgreementByIdRoute,
-  viewAgreementByIdRoute,
-} from "@/routes/agreements/agreement-id-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
-import {
-  editReservationByIdRoute,
-  viewReservationByIdRoute,
-} from "@/routes/reservations/reservation-id-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-
 import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
@@ -857,10 +843,7 @@ const AddRentalParentForm = ({
           <div className="flex w-full items-center justify-start gap-2">
             {!isEdit && module === "agreement" && (
               <>
-                <Link
-                  to={searchAgreementsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Agreements
                 </Link>
                 <ChevronRightIcon
@@ -868,7 +851,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={addAgreementRoute.to}
+                  to="/agreements/new"
                   search={() => ({ stage })}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -878,10 +861,7 @@ const AddRentalParentForm = ({
             )}
             {isEdit && module === "agreement" && (
               <>
-                <Link
-                  to={searchAgreementsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Agreements
                 </Link>
                 <ChevronRightIcon
@@ -889,7 +869,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewAgreementByIdRoute.to as any}
+                  to="/agreements/$agreementId"
                   params={{ agreementId: String(referenceId) }}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -901,7 +881,7 @@ const AddRentalParentForm = ({
                 />
                 {isCheckin ? (
                   <Link
-                    to={checkinAgreementByIdRoute.to}
+                    to="/agreements/$agreementId/check-in"
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
                     className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
@@ -910,7 +890,7 @@ const AddRentalParentForm = ({
                   </Link>
                 ) : (
                   <Link
-                    to={editAgreementByIdRoute.to}
+                    to="/agreements/$agreementId/edit"
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
                     className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
@@ -922,10 +902,7 @@ const AddRentalParentForm = ({
             )}
             {!isEdit && module === "reservation" && (
               <>
-                <Link
-                  to={searchReservationsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Reservations
                 </Link>
                 <ChevronRightIcon
@@ -933,7 +910,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={addReservationRoute.to}
+                  to="/reservations/new"
                   search={() => ({ stage })}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -943,10 +920,7 @@ const AddRentalParentForm = ({
             )}
             {isEdit && module === "reservation" && (
               <>
-                <Link
-                  to={searchReservationsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Reservations
                 </Link>
                 <ChevronRightIcon
@@ -954,7 +928,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewReservationByIdRoute.to as any}
+                  to="/reservations/$reservationId"
                   params={{ reservationId: String(referenceId) }}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -965,7 +939,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={editReservationByIdRoute.to}
+                  to="/reservations/$reservationId/edit"
                   search={() => ({ stage })}
                   params={{ reservationId: String(referenceId) }}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"

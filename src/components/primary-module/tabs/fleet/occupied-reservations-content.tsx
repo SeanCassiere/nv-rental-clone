@@ -9,9 +9,6 @@ import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-
 import { type TReservationListItemParsed } from "@/schemas/reservation";
 
 import { ReservationDateTimeColumns } from "@/utils/columns";
@@ -83,7 +80,7 @@ const FleetOccupiedReservationsTab = (
                   .id;
                 return (
                   <Link
-                    to={viewReservationByIdRoute.to}
+                    to="/reservations/$reservationId"
                     params={{ reservationId: String(reservationId) }}
                     search={() => ({ tab: "summary" })}
                     className="font-semibold text-slate-800"
@@ -127,7 +124,7 @@ const FleetOccupiedReservationsTab = (
             Showing a maximum of {pageSize} records.
           </p>
           <Link
-            to={searchReservationsRoute.to}
+            to="/reservations"
             search={(prev) => ({
               ...prev,
               filters: { VehicleNo: props.vehicleNo },

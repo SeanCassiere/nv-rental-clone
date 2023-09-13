@@ -26,7 +26,6 @@ import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGe
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
@@ -102,7 +101,7 @@ function VehiclesSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewFleetByIdRoute.to}
+                      to="/fleet/$vehicleId"
                       params={{ vehicleId: String(vehicleId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
@@ -195,7 +194,7 @@ function VehiclesSearchPage() {
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchFleetRoute.to,
+              to: "/fleet",
               params: {},
               search: (current) => ({
                 ...current,
@@ -210,7 +209,7 @@ function VehiclesSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchFleetRoute.to,
+                to: "/fleet",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -227,7 +226,7 @@ function VehiclesSearchPage() {
                 {}
               );
               navigate({
-                to: searchFleetRoute.to,
+                to: "/fleet",
                 params: {},
                 search: () => ({
                   page: 1,

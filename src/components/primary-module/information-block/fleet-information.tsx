@@ -4,8 +4,6 @@ import { CarIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-
 import { cn } from "@/utils";
 
 import {
@@ -69,7 +67,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
           heading: "Vehicle no.",
           value: (
             <Link
-              to={viewFleetByIdRoute.to}
+              to="/fleet/$vehicleId"
               params={{ vehicleId: String(data.vehicleId) }}
               search={() => ({ tab: "summary" })}
               className={cn(

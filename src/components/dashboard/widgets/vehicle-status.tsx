@@ -15,8 +15,6 @@ import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
-import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
-
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
@@ -177,7 +175,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
             return (
               <Link
                 className="mb-1 ml-1.5 inline-block text-sm text-foreground md:text-base"
-                to={searchFleetRoute.to}
+                to="/fleet"
                 onMouseEnter={() => setActiveIdx(dataListIdx)}
                 search={() => ({
                   page: 1,

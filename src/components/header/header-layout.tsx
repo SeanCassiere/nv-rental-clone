@@ -5,8 +5,6 @@ import { useGetDashboardMessages } from "@/hooks/network/dashboard/useGetDashboa
 
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 
-import { indexRoute } from "@/routes";
-
 import { AppNavigation } from "./app-navigation";
 import { BannerNotice } from "./banner-notice";
 import { CommandMenu } from "./command-menu";
@@ -31,7 +29,7 @@ export const HeaderLayout = () => {
       <div className="mx-auto max-w-[1700px] px-1 md:px-5">
         <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
           <div className="mr-2 md:ml-2">
-            <Link to={indexRoute.to}>
+            <Link to="/">
               <img
                 // logo url is set in the global css under the name --logo-url
                 className="h-10 w-10 rounded-full p-1 [content:var(--logo-url)]"
@@ -42,7 +40,7 @@ export const HeaderLayout = () => {
           </div>
           <div className="flex flex-grow items-center">
             <Link
-              to={indexRoute.to}
+              to="/"
               className="hidden items-center rounded p-1 text-lg font-medium leading-3 transition sm:flex"
             >
               {UI_APPLICATION_NAME}

@@ -28,21 +28,13 @@ import {
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 import { useGetGlobalSearch } from "@/hooks/network/module/useGetGlobalSearch";
 
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
-import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
-import { indexRoute } from "@/routes/index";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
-import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { cn, IsMacLike } from "@/utils";
 
@@ -54,6 +46,16 @@ export const CommandMenu = () => {
 
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
+
+  const authValues = useAuthValues();
+
+  const rowCountStr =
+    getLocalStorageForUser(
+      authValues.clientId,
+      authValues.userId,
+      USER_STORAGE_KEYS.tableRowCount
+    ) || APP_DEFAULTS.tableRowCount;
+  const defaultRowCount = parseInt(rowCountStr, 10);
 
   const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =
     useTernaryDarkMode();
@@ -131,7 +133,7 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: viewFleetByIdRoute.to,
+                        to: "/fleet/$vehicleId",
                         params: { vehicleId: item.referenceId },
                         search: () => ({ tab: "summary" }),
                       })
@@ -171,7 +173,7 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: viewCustomerByIdRoute.to,
+                        to: "/customers/$customerId",
                         params: { customerId: item.referenceId },
                         search: () => ({ tab: "summary" }),
                       })
@@ -211,7 +213,7 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: viewReservationByIdRoute.to,
+                        to: "/reservations/$reservationId",
                         params: { reservationId: item.referenceId },
                         search: () => ({ tab: "summary" }),
                       })
@@ -251,7 +253,7 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: viewAgreementByIdRoute.to,
+                        to: "/agreements/$agreementId",
                         params: { agreementId: item.referenceId },
                         search: () => ({ tab: "summary" }),
                       })
@@ -269,8 +271,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchFleetRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/fleet",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -282,8 +284,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchCustomersRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/customers",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -295,8 +297,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchReservationsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/reservations",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -308,8 +310,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchAgreementsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/agreements",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -321,7 +323,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: indexRoute.to,
+                    to: "/",
                   })
                 );
               }}
@@ -333,8 +335,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchAgreementsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/agreements",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -365,7 +367,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: destinationSettingsRoute.to,
+                    to: "/settings/$destination",
                     params: () => ({ destination: "profile" }),
                   })
                 );
@@ -378,7 +380,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: mainSettingsRoute.to,
+                    to: "/settings",
                   })
                 );
               }}

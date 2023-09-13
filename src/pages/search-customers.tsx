@@ -24,7 +24,6 @@ import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomer
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
 import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
@@ -100,7 +99,7 @@ function CustomerSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewCustomerByIdRoute.to}
+                      to="/customers/$customerId"
                       params={{ customerId: String(customerId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
@@ -194,7 +193,7 @@ function CustomerSearchPage() {
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchCustomersRoute.to,
+              to: "/customers",
               params: {},
               search: (current) => ({
                 ...current,
@@ -209,7 +208,7 @@ function CustomerSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchCustomersRoute.to,
+                to: "/customers",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -226,7 +225,7 @@ function CustomerSearchPage() {
                 {}
               );
               navigate({
-                to: searchCustomersRoute.to,
+                to: "/customers",
                 params: {},
                 search: () => ({
                   page: 1,

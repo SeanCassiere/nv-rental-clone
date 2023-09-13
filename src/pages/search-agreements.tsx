@@ -29,8 +29,6 @@ import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns"
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 
 import { type TAgreementListItemParsed } from "@/schemas/agreement";
@@ -113,7 +111,7 @@ function AgreementsSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewAgreementByIdRoute.to}
+                      to="/agreements/$agreementId"
                       params={{ agreementId: String(agreementId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
@@ -199,7 +197,7 @@ function AgreementsSearchPage() {
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={addAgreementRoute.to}
+              to="/agreements/new"
               search={() => ({ stage: "rental-information" })}
               className={cn(buttonVariants({ size: "sm" }), "w-max")}
             >
@@ -231,7 +229,7 @@ function AgreementsSearchPage() {
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchAgreementsRoute.to,
+              to: "/agreements",
               params: {},
               search: (current) => ({
                 ...current,
@@ -246,7 +244,7 @@ function AgreementsSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchAgreementsRoute.to,
+                to: "/agreements",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -263,7 +261,7 @@ function AgreementsSearchPage() {
                 {}
               );
               navigate({
-                to: searchAgreementsRoute.to,
+                to: "/agreements",
                 params: {},
                 search: () => ({
                   page: 1,

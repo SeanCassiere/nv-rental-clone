@@ -5,8 +5,6 @@ import { useTranslation } from "react-i18next";
 
 import { buttonVariants } from "@/components/ui/button";
 
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
-
 import { cn } from "@/utils";
 
 import {
@@ -66,7 +64,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
           heading: "Full name",
           value: (
             <Link
-              to={viewCustomerByIdRoute.to}
+              to="/customers/$customerId"
               params={{ customerId: String(data.customerId) }}
               search={() => ({ tab: "summary" })}
               className={cn(

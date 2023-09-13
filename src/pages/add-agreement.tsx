@@ -7,7 +7,6 @@ import ProtectorShield from "@/components/protector-shield";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -31,7 +30,7 @@ const AddAgreementPage = () => {
   const handleAgreementSaveComplete = useCallback(
     (agreementId: number) => {
       navigate({
-        to: viewAgreementByIdRoute.to,
+        to: "/agreements/$agreementId",
         params: { agreementId: String(agreementId) },
         search: () => ({ tab: "summary" }),
       });

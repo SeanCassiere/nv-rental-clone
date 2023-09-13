@@ -48,7 +48,7 @@ export default function SettingsCatchAllPage() {
         title: "Profile",
         component: <SettingsProfileTab />,
         linkProps: {
-          to: destinationSettingsRoute.to,
+          to: "/settings/$destination",
           params: { destination: "profile" },
         },
       },
@@ -61,7 +61,7 @@ export default function SettingsCatchAllPage() {
       title: "Application", // users, locations, taxes,
       component: <SettingsApplicationTab />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "application" },
       },
     });
@@ -70,7 +70,7 @@ export default function SettingsCatchAllPage() {
       title: "Runtime configuration", // email, global documents, id configuration, compatibility, etc.
       component: <SettingsRuntimeConfigurationTab />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "runtime-configuration" },
       },
     });
@@ -79,7 +79,7 @@ export default function SettingsCatchAllPage() {
       title: "Vehicles and categories", // vehicle types, vehicle makes, vehicle models, options, etc.
       component: <Skeleton className="h-96" />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "vehicles-and-categories" },
       },
     });
@@ -88,7 +88,7 @@ export default function SettingsCatchAllPage() {
       title: "Rates and charges", // rates, rules, promotions, miscellaneous charges
       component: <Skeleton className="h-96" />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "rates-and-charges" },
       },
     });

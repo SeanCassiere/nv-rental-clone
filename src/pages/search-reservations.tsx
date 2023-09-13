@@ -29,8 +29,6 @@ import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetR
 import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 
 import { type TReservationListItemParsed } from "@/schemas/reservation";
@@ -113,7 +111,7 @@ function ReservationsSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewReservationByIdRoute.to}
+                      to="/reservations/$reservationId"
                       params={{ reservationId: String(reservationId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
@@ -201,7 +199,7 @@ function ReservationsSearchPage() {
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={addReservationRoute.to}
+              to="/reservations/new"
               search={() => ({ stage: "rental-information" })}
               className={cn(buttonVariants({ size: "sm" }), "w-max")}
             >
@@ -233,7 +231,7 @@ function ReservationsSearchPage() {
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchReservationsRoute.to,
+              to: "/reservations",
               params: {},
               search: (current) => ({
                 ...current,
@@ -248,7 +246,7 @@ function ReservationsSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchReservationsRoute.to,
+                to: "/reservations",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -265,7 +263,7 @@ function ReservationsSearchPage() {
                 {}
               );
               navigate({
-                to: searchReservationsRoute.to,
+                to: "/reservations",
                 params: {},
                 search: () => ({
                   page: 1,
