@@ -12,6 +12,7 @@ const rootTaxContract = c.router({
     path: "/v3/taxes",
     query: UserAndClientIdAuthSchema.extend({
       LocationId: z.string(),
+      AgreementId: z.string().optional(),
     }),
     responses: {
       200: TaxListSchema,

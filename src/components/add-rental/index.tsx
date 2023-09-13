@@ -62,11 +62,6 @@ type AgreementRentalInformationSchemaParsed = RI_TabProps["durationStageData"];
 type AgreementVehicleInformationSchemaParsed = RI_TabProps["vehicleStageData"];
 
 type CommonCustomerInformationSchemaParsed = CI_TabProps["customerStageData"];
-type CommonPaymentInformation = {
-  amountPaid: number;
-  securityDepositValue: number;
-  securityDepositMethod: string;
-};
 
 const StageKeys = {
   rental: "rental-information",
@@ -145,12 +140,6 @@ const AddRentalParentForm = ({
 
   const [commonCustomerInformation, setCommonCustomerInformation] =
     useState<CommonCustomerInformationSchemaParsed | null>(null);
-  const [commonPaymentInformation, setCommonPaymentInformation] =
-    useState<CommonPaymentInformation>({
-      amountPaid: 0,
-      securityDepositValue: 0,
-      securityDepositMethod: "",
-    });
 
   const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
   const [selectedMiscCharges, setSelectedMiscCharges] = useState<
@@ -495,35 +484,6 @@ const AddRentalParentForm = ({
       };
     });
 
-    setCommonCustomerInformation((info) => {
-      if (info) return info;
-      startingCompletionStages.customer = true;
-      return {
-        address: data?.customerDetails?.address1 || "",
-        city: data?.customerDetails?.city || "",
-        countryId: data?.countryId || 0,
-        customerId: data?.customerDetails?.customerId || 0,
-        dateOfBirth: data?.customerDetails.dateOfbirth || "",
-        email: data?.customerDetails?.email || "",
-        firstName: data?.customerDetails?.firstName || "",
-        lastName: data?.customerDetails?.lastName || "",
-        licenseExpiryDate: data?.customerDetails?.licenseExpiryDate || null,
-        licenseIssueDate: data?.customerDetails?.licenseIssueDate || null,
-        licenseNumber: data?.customerDetails?.licenseNumber || null,
-        bPhone: data?.customerDetails?.bPhone || "",
-        cPhone: data?.customerDetails?.cPhone || "",
-        hPhone: data?.customerDetails?.hPhone || "",
-        stateId: data?.stateId || 0,
-        zipCode: data?.zipCode || "",
-        isTaxSaver:
-          data.customerDetails?.customerType
-            ?.toLowerCase()
-            .includes("taxsaver") ||
-          data?.customerDetails?.isTaxExempt ||
-          false,
-      };
-    });
-
     if (data.rateList && data.rateList[0]) {
       const existingAgreementRateName = data.rateList[0].rateName;
       setRateDetails((info) => {
@@ -815,6 +775,8 @@ const AddRentalParentForm = ({
         module === "agreement"
           ? Number(agreementRentalInformation?.checkoutLocation ?? 0).toString()
           : "0",
+      AgreementId:
+        module === "agreement" && isEdit ? String(referenceId) : undefined,
     },
     enabled:
       module === "agreement" ? taxesAgreementReady : taxesReservationReady,
