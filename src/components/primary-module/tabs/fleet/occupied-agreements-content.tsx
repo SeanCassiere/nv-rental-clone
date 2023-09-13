@@ -107,14 +107,16 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
     return columns;
   }, [columnsData.data, t]);
 
+  const agreementsList =
+    dataList.data?.status === 200 ? dataList.data?.body : [];
+
   if (!props.vehicleNo) return null;
 
   return (
     <div className="max-w-full focus:ring-0">
-      <CommonTable data={dataList.data?.data || []} columns={columnDefs} />
+      <CommonTable data={agreementsList} columns={columnDefs} />
 
-      {dataList.data?.isRequestMade === false ? null : dataList.data?.data
-          .length === 0 ? null : (
+      {dataList.status === "success" && agreementsList.length > 0 && (
         <div className="py-4">
           <p className="text-slate-700">
             Showing a maximum of {pageSize} records.

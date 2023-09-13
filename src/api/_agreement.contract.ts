@@ -4,13 +4,14 @@ import { c } from "@/api/c";
 
 import {
   AgreementDataSchema,
+  AgreementListItemListSchema,
   AgreementStatusListSchema,
   AgreementTypeArraySchema,
   GenerateAgreementNumberSchema,
 } from "@/schemas/agreement";
 
 import {
-  // PaginationSchema,
+  PaginationSchema,
   StructuredErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
@@ -22,6 +23,32 @@ const rootAgreementContract = c.router({
     query: UserAndClientIdAuthSchema,
     responses: {
       200: AgreementDataSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  getList: {
+    method: "GET",
+    path: "/v3/agreements",
+    query: UserAndClientIdAuthSchema.merge(PaginationSchema).extend({
+      currentDate: z.string(),
+      AgreementStatusName: z.string().optional(),
+      Statuses: z.array(z.string()).optional(),
+      IsSearchOverdues: z.string().optional(),
+      StartDate: z.string().optional(),
+      EndDate: z.string().optional(),
+      SortBy: z.string().optional(),
+      SortDirection: z.string().optional(),
+      CustomerId: z.string().optional(),
+      VehicleId: z.string().optional(),
+      VehicleNo: z.string().optional(),
+      VehicleTypeId: z.string().optional(),
+      PickupLocationId: z.string().optional(),
+      ReturnLocationId: z.string().optional(),
+      AgreementTypes: z.string().optional(),
+      Keyword: z.string().optional(),
+    }),
+    responses: {
+      200: AgreementListItemListSchema,
       404: StructuredErrorSchema,
     },
   },

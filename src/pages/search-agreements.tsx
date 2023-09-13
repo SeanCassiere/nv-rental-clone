@@ -38,7 +38,7 @@ import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-par
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -178,6 +178,12 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = agreementsData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const agreementsList =
+    agreementsData.data?.status === 200 ? agreementsData.data.body : [];
+
   useDocumentTitle(titleMaker("Agreements"));
 
   return (
@@ -214,7 +220,7 @@ function AgreementsSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={agreementsData.data?.data || []}
+          data={agreementsList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -222,8 +228,8 @@ function AgreementsSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            agreementsData.data?.totalRecords
-              ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
+            parsedPagination.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}

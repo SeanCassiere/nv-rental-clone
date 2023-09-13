@@ -51,10 +51,12 @@ export async function fetchGlobalSearchList(
     fetchAgreementsListModded({
       clientId,
       userId,
-      accessToken,
-      filters: { Keyword: searchTerm, Statuses: [2, 5, 7] },
       currentDate,
-    }).catch(() => ({ data: [] as TAgreementListItemParsed[] })),
+      page: 1,
+      pageSize: 50,
+      Keyword: searchTerm,
+      Statuses: ["2", "5", "7"],
+    }).catch(() => ({ body: [] as TAgreementListItemParsed[], status: 900 })),
   ] as const;
 
   return await Promise.all(apiCalls)
@@ -115,7 +117,8 @@ export async function fetchGlobalSearchList(
       );
       returnableResults = [...returnableResults, ...reservationResults];
 
-      const agreements = agreementsPromise.data;
+      const agreements =
+        agreementsPromise?.status === 200 ? agreementsPromise.body : [];
       const agreementResults: GlobalSearchReturnType = agreements.map(
         (agreement) => {
           const displayText = String(
