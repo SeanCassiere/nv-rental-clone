@@ -16,10 +16,10 @@ const rootNoteContract = c.router({
     path: "/v3/:referenceType/:referenceId/note",
     pathParams: z.object({
       referenceType: z.enum([
-        "customers",
-        "vehicles",
-        "reservations",
-        "agreements",
+        "customer",
+        "vehicle",
+        "reservation",
+        "agreement",
       ]),
       referenceId: z.string(),
     }),

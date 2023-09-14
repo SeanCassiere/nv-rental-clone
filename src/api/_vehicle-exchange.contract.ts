@@ -13,7 +13,7 @@ import {
 const rootVehiclesExchangesContract = c.router({
   getList: {
     method: "GET",
-    path: "/v3/vehicleexchanges",
+    path: "/v3/vehicleexchange",
     query: UserAndClientIdAuthSchema.extend({
       agreementId: z.string(),
     }),

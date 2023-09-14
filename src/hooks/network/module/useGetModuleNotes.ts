@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
+import { getSingularPrimaryModule } from "@/utils/columns";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 import { apiClient } from "@/api";
@@ -21,7 +22,7 @@ export function useGetModuleNotes({
     queryFn: () =>
       apiClient.note.getListForRefId({
         params: {
-          referenceType: module,
+          referenceType: getSingularPrimaryModule(module),
           referenceId,
         },
         query: {

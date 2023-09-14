@@ -42,3 +42,17 @@ export function getModuleApiName(module: AppPrimaryModuleType) {
       } as const;
   }
 }
+
+export function getSingularPrimaryModule(module: AppPrimaryModuleType) {
+  switch (module) {
+    case "agreements":
+      return "agreement";
+    case "customers":
+      return "customer";
+    case "vehicles":
+      return "vehicle";
+    case "reservations":
+    default:
+      return "reservation";
+  }
+}
