@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
@@ -111,16 +112,21 @@ const FleetOccupiedReservationsTab = (
     return columns;
   }, [columnsData.data, t]);
 
+  const reservationsList =
+    dataList.data?.status === 200 ? dataList.data.body : [];
+
   if (!props.vehicleNo) return null;
 
   return (
     <div className="max-w-full focus:ring-0">
-      <CommonTable data={dataList.data?.data || []} columns={columnDefs} />
+      {dataList.status === "loading" && <Skeleton className="h-56" />}
+      {dataList.status === "success" && (
+        <CommonTable data={reservationsList} columns={columnDefs} />
+      )}
 
-      {dataList.data?.isRequestMade === false ? null : dataList.data?.data
-          .length === 0 ? null : (
+      {dataList.status === "success" && reservationsList.length > 0 && (
         <div className="py-4">
-          <p className="text-slate-700">
+          <p className="text-muted-foreground">
             Showing a maximum of {pageSize} records.
           </p>
           <Link
@@ -129,7 +135,7 @@ const FleetOccupiedReservationsTab = (
               ...prev,
               filters: { VehicleNo: props.vehicleNo },
             })}
-            className="text-slate-600 underline hover:text-slate-800"
+            className="text-muted-foreground underline"
           >
             Need more? Click here to search for reservations.
           </Link>

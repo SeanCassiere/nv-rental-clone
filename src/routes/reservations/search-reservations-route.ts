@@ -58,13 +58,12 @@ export const searchReservationsRoute = new Route({
           queryKey: searchKey,
           queryFn: () =>
             fetchReservationsListModded({
-              page: pageNumber,
-              pageSize: size,
               clientId: auth.profile.navotar_clientid,
               userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              filters: searchFilters,
+              page: pageNumber,
+              pageSize: size,
               clientDate: new Date(),
+              ...searchFilters,
             }),
         })
       );

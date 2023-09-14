@@ -44,10 +44,12 @@ export async function fetchGlobalSearchList(
     fetchReservationsListModded({
       clientId,
       userId,
-      accessToken,
-      filters: { Keyword: searchTerm, Statuses: [2, 6, 7] },
       clientDate: currentDate,
-    }).catch(() => ({ data: [] as TReservationListItemParsed[] })),
+      page: 1,
+      pageSize: 50,
+      Keyword: searchTerm,
+      Statuses: ["2", "6", "7"],
+    }).catch(() => ({ body: [] as TReservationListItemParsed[], status: 900 })),
     fetchAgreementsListModded({
       clientId,
       userId,
@@ -96,7 +98,8 @@ export async function fetchGlobalSearchList(
       });
       returnableResults = [...returnableResults, ...vehicleResults];
 
-      const reservations = reservationsPromise.data;
+      const reservations =
+        reservationsPromise?.status === 200 ? reservationsPromise?.body : [];
       const reservationResults: GlobalSearchReturnType = reservations.map(
         (res) => {
           const displayText = String(

@@ -5,11 +5,12 @@ import { c } from "@/api/c";
 import { AgreementStatusListSchema } from "@/schemas/agreement";
 import {
   ReservationDataSchema,
+  ReservationListItemListSchema,
   ReservationTypeArraySchema,
 } from "@/schemas/reservation";
 
 import {
-  // PaginationSchema,
+  PaginationSchema,
   StructuredErrorSchema,
   UserAndClientIdAuthSchema,
 } from "./helpers";
@@ -21,6 +22,29 @@ const rootReservationContract = c.router({
     query: UserAndClientIdAuthSchema,
     responses: {
       200: ReservationDataSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  getList: {
+    method: "GET",
+    path: "/v3/reservations",
+    query: UserAndClientIdAuthSchema.merge(PaginationSchema).extend({
+      clientDate: z.string(),
+      Statuses: z.array(z.string()).optional(),
+      CreatedDateFrom: z.string().optional(),
+      CreatedDateTo: z.string().optional(),
+      SortDirection: z.string().optional(),
+      CustomerId: z.string().optional(),
+      VehicleId: z.string().optional(),
+      VehicleNo: z.string().optional(),
+      VehicleTypeId: z.string().optional(),
+      CheckoutLocationId: z.string().optional(),
+      CheckinLocationId: z.string().optional(),
+      ReservationTypes: z.string().optional(),
+      Keyword: z.string().optional(),
+    }),
+    responses: {
+      200: ReservationListItemListSchema,
       404: StructuredErrorSchema,
     },
   },

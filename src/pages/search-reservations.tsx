@@ -38,7 +38,7 @@ import { normalizeReservationListSearchParams } from "@/utils/normalize-search-p
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -180,6 +180,12 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = reservationsData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const reservationsList =
+    reservationsData.data?.status === 200 ? reservationsData.data?.body : [];
+
   useDocumentTitle(titleMaker("Reservations"));
 
   return (
@@ -216,7 +222,7 @@ function ReservationsSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={reservationsData.data?.data || []}
+          data={reservationsList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -224,8 +230,8 @@ function ReservationsSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            reservationsData.data?.totalRecords
-              ? Math.ceil(reservationsData.data?.totalRecords / size) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}
