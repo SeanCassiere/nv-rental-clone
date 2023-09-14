@@ -99,8 +99,12 @@ export const VehicleStage = ({
 
   //
   const searchFilters = {
-    VehicleTypeId: Number(formVehicleTypeId || 0).toString(),
-    CurrentLocationId: Number(checkoutLocation || 0).toString(),
+    VehicleTypeId: formVehicleTypeId
+      ? Number(formVehicleTypeId).toString()
+      : undefined,
+    CurrentLocationId: checkoutLocation
+      ? Number(checkoutLocation).toString()
+      : undefined,
     StartDate: rentalInformation?.checkoutDate,
     EndDate: rentalInformation?.checkinDate,
   };

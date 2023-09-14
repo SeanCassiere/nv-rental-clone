@@ -1,32 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchRentalRateTypesForRental } from "@/api/rates";
+import { apiClient } from "@/api";
 
-export function useGetRentalRateTypesForRentals(opts: {
+type QueryParams = Omit<
+  Parameters<(typeof apiClient)["rateType"]["getList"]>[0]["query"],
+  "userId" | "clientId"
+>;
+
+export function useGetRentalRateTypesForRentals(opts?: {
   enabled?: boolean;
-  filters: Omit<
-    Parameters<typeof fetchRentalRateTypesForRental>[0],
-    "userId" | "clientId" | "accessToken"
-  >;
+  filters?: QueryParams;
 }) {
   const auth = useAuth();
 
-  const { enabled, filters } = opts;
+  const { enabled: isEnabled, filters = {} } = opts || {};
 
-  const isEnabled = typeof enabled !== "undefined" ? enabled : true;
+  const enabled = typeof isEnabled !== "undefined" ? isEnabled : true;
 
   const query = useQuery({
-    queryKey: ["rates", "types", JSON.stringify(opts)],
-    queryFn: async () => {
-      return await fetchRentalRateTypesForRental({
-        accessToken: auth.user?.access_token || "",
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        ...filters,
-      });
-    },
-    enabled: auth.isAuthenticated && isEnabled,
+    queryKey: ["rate-types", filters],
+    queryFn: () =>
+      apiClient.rateType.getList({
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+          ...filters,
+        },
+      }),
+    enabled: enabled && auth.isAuthenticated,
   });
 
   return query;

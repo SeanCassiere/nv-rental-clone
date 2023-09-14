@@ -557,7 +557,10 @@ const AddRentalParentForm = ({
   useEffect(() => {
     if (getOptimalRateQuery.status !== "success") return;
 
-    const data = getOptimalRateQuery.data;
+    const data =
+      getOptimalRateQuery.data.status === 200
+        ? getOptimalRateQuery.data.body
+        : null;
 
     if (data && data?.rateName) {
       setRateDetails((values) => {
@@ -610,18 +613,19 @@ const AddRentalParentForm = ({
   useEffect(() => {
     if (getRentalRatesQuery.status !== "success") return;
 
-    const data = getRentalRatesQuery.data;
+    const data =
+      getRentalRatesQuery.data.status === 200
+        ? getRentalRatesQuery.data.body
+        : [];
 
-    if (Array.isArray(data) && data.length > 0) {
+    if (data.length > 0 && data[0]) {
       const rate = data[0];
-      if (rate) {
-        setSelectedRate(rate);
 
-        setCreationStageComplete((prev) => ({
-          ...prev,
-          rates: true,
-        }));
-      }
+      setSelectedRate(rate);
+      setCreationStageComplete((prev) => ({
+        ...prev,
+        rates: true,
+      }));
     }
   }, [getRentalRatesQuery.data, getRentalRatesQuery.status]);
 
@@ -661,10 +665,10 @@ const AddRentalParentForm = ({
     filters: {
       VehicleTypeId: agreementVehicleInformation?.vehicleTypeId
         ? agreementVehicleInformation?.vehicleTypeId.toString()
-        : "0",
+        : undefined,
       CurrentLocationId: agreementRentalInformation?.checkoutLocation
         ? agreementRentalInformation?.checkoutLocation.toString()
-        : "0",
+        : undefined,
     },
   });
 

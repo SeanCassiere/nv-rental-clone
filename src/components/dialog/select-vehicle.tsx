@@ -26,7 +26,7 @@ interface SelectVehicleModalProps {
   filters: {
     StartDate: Date | undefined;
     EndDate: Date | undefined;
-    CurrentLocationId: string;
+    CurrentLocationId: string | undefined;
     VehicleTypeId: string | undefined;
   };
 }

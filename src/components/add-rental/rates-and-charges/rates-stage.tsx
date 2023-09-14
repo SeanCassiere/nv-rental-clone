@@ -65,7 +65,8 @@ export const RatesStage = (props: RatesStageProps) => {
       VehicleTypeId: String(vehicleTypeId),
     },
   });
-  const rateTypesList = rateTypesData.data ?? [];
+  const rateTypesList =
+    rateTypesData.data?.status === 200 ? rateTypesData.data?.body : [];
 
   const form = useForm<RentalRateParsed>({
     resolver: zodResolver(RentalRateSchema),
