@@ -14,7 +14,7 @@ export function useGetDashboardWidgetList() {
       apiClient.dashboard.getWidgets({
         query: {
           clientId: auth.user?.profile?.navotar_clientid || "",
-          userId: auth.user?.profile?.navotar_clientid || "",
+          userId: auth.user?.profile?.navotar_userid || "",
         },
       }),
     enabled: auth.isAuthenticated,
