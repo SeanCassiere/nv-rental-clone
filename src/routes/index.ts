@@ -1,7 +1,6 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
-import { fetchDashboardWidgetList } from "@/api/dashboard";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
@@ -43,11 +42,12 @@ export const indexRoute = new Route({
       promises.push(
         queryClient.ensureQueryData({
           queryKey: widgetsKey,
-          queryFn: async () =>
-            await fetchDashboardWidgetList({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
+          queryFn: () =>
+            apiClient.dashboard.getWidgets({
+              query: {
+                clientId: auth.profile.navotar_clientid,
+                userId: auth.profile.navotar_userid,
+              },
             }),
         })
       );
