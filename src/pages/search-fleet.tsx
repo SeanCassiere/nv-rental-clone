@@ -26,7 +26,6 @@ import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGe
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
@@ -35,7 +34,7 @@ import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-param
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -102,14 +101,13 @@ function VehiclesSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewFleetByIdRoute.to}
+                      to="/fleet/$vehicleId"
                       params={{ vehicleId: String(vehicleId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"
                       )}
-                      preload="intent"
                     >
                       {value}
                     </Link>
@@ -161,6 +159,12 @@ function VehiclesSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = vehiclesData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const vehiclesList =
+    vehiclesData.data?.status === 200 ? vehiclesData.data?.body : [];
+
   useDocumentTitle(titleMaker("Fleet"));
 
   return (
@@ -181,7 +185,7 @@ function VehiclesSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={vehiclesData.data?.data || []}
+          data={vehiclesList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -189,14 +193,14 @@ function VehiclesSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            vehiclesData.data?.totalRecords
-              ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchFleetRoute.to,
+              to: "/fleet",
               params: {},
               search: (current) => ({
                 ...current,
@@ -211,7 +215,7 @@ function VehiclesSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchFleetRoute.to,
+                to: "/fleet",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -228,7 +232,7 @@ function VehiclesSearchPage() {
                 {}
               );
               navigate({
-                to: searchFleetRoute.to,
+                to: "/fleet",
                 params: {},
                 search: () => ({
                   page: 1,

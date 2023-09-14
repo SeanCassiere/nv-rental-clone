@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   Card,
@@ -10,12 +11,14 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EmailTemplatesSettings = () => {
+  const { t } = useTranslation("settings");
+
   return (
     <Card className="shadow-none">
       <CardHeader className="p-4 lg:p-6">
-        <CardTitle className="text-lg">Email templates</CardTitle>
+        <CardTitle className="text-lg">{t("titles.emailTemplates")}</CardTitle>
         <CardDescription className="text-base">
-          Configure the email templates that are used by the system.
+          {t("descriptions.emailTemplates")}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-0 lg:p-6">

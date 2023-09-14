@@ -24,7 +24,6 @@ import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomer
 import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
 import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
@@ -33,7 +32,7 @@ import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-para
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -100,14 +99,13 @@ function CustomerSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewCustomerByIdRoute.to}
+                      to="/customers/$customerId"
                       params={{ customerId: String(customerId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"
                       )}
-                      preload="intent"
                     >
                       {value}
                     </Link>
@@ -160,6 +158,12 @@ function CustomerSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = customersData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const customersList =
+    customersData.data?.status === 200 ? customersData.data?.body : [];
+
   useDocumentTitle(titleMaker("Customers"));
 
   return (
@@ -180,7 +184,7 @@ function CustomerSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={customersData.data?.data || []}
+          data={customersList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -188,14 +192,14 @@ function CustomerSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            customersData.data?.totalRecords
-              ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchCustomersRoute.to,
+              to: "/customers",
               params: {},
               search: (current) => ({
                 ...current,
@@ -210,7 +214,7 @@ function CustomerSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchCustomersRoute.to,
+                to: "/customers",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -227,7 +231,7 @@ function CustomerSearchPage() {
                 {}
               );
               navigate({
-                to: searchCustomersRoute.to,
+                to: "/customers",
                 params: {},
                 search: () => ({
                   page: 1,

@@ -38,3 +38,12 @@ export const UI_APPLICATION_SHOW_ROUTER_DEVTOOLS =
     : false;
 
 export const IS_LOCAL_DEV = OIDC_REDIRECT_URI.startsWith("http://localhost");
+export const APP_VERSION = import.meta.env.APP_VERSION ?? "0.0.0-abcdefg";
+
+export const SETTINGS_LOCATION_KEYS = {
+  application: "application",
+  profile: "profile",
+  runtimeConfiguration: "runtime-configuration",
+  vehiclesAndCategories: "vehicles-and-categories",
+  ratesAndCharges: "rates-and-charges",
+} as const;

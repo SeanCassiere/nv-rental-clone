@@ -59,8 +59,8 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
 
   const widgetList = useGetDashboardWidgetList();
   const widgets = React.useMemo(() => {
-    if (widgetList.data && Array.isArray(widgetList.data)) {
-      return widgetList.data;
+    if (widgetList.data?.status === 200) {
+      return widgetList.data?.body;
     }
     return [];
   }, [widgetList.data]);

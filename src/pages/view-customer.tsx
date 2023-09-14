@@ -32,10 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 
-import {
-  editCustomerByIdRoute,
-  viewCustomerByIdRoute,
-} from "@/routes/customers/customer-id-route";
+import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -87,7 +84,7 @@ function CustomerViewPage() {
 
   const onTabClick = (newTabId: string) => {
     navigate({
-      to: viewCustomerByIdRoute.to,
+      to: "/customers/$customerId",
       search: (others) => ({ ...others, tab: newTabId }),
       params: { customerId },
       replace: true,
@@ -127,12 +124,7 @@ function CustomerViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link
-              className="text-2xl font-semibold leading-6"
-              onClick={() => {
-                router.history.go(-1);
-              }}
-            >
+            <Link to=".." className="text-2xl font-semibold leading-6">
               Customers
             </Link>
             <ChevronRightIcon
@@ -140,7 +132,8 @@ function CustomerViewPage() {
               aria-hidden="true"
             />
             <Link
-              to={viewCustomerByIdRoute.to}
+              to="/customers/$customerId"
+              // @ts-expect-error
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ customerId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
@@ -151,7 +144,7 @@ function CustomerViewPage() {
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={editCustomerByIdRoute.to}
+              to="/customers/$customerId/edit"
               search={() => ({})}
               params={{ customerId: String(customerId) }}
               className={cn(

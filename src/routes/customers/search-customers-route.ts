@@ -62,8 +62,7 @@ export const searchCustomersRoute = new Route({
               pageSize: size,
               clientId: auth.profile.navotar_clientid,
               userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
-              filters: searchFilters,
+              ...searchFilters,
             }),
         })
       );

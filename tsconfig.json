@@ -27,8 +27,9 @@
     "vite.config.ts",
     "tailwind.config.cjs",
     "prettier.config.cjs",
-    "postcss.config.cjs"
+    "postcss.config.cjs",
+    "postbuild.cjs"
   ],
-  "exclude": ["node_modules", "temp", "dist"],
+  "exclude": ["node_modules", "temp", ")dist"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

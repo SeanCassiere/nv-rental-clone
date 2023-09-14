@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import SelectVehicleModal from "@/components/Dialogs/SelectVehicleModal";
+import { SelectVehicleDialog } from "@/components/dialog/select-vehicle";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -28,14 +29,18 @@ import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 
+import i18n from "@/i18next-config";
+
 import type { AgreementRentalInformationSchemaParsed } from "./duration-stage";
+
+const REQUIRED = i18n.t("labels:display.required");
 
 function AgreementVehicleInformationSchema() {
   return z.object({
-    vehicleTypeId: z.coerce.number().min(1, "Required"),
-    vehicleId: z.coerce.number().min(1, "Required"),
-    fuelOut: z.string().min(1, "Required"),
-    odometerOut: z.coerce.number().min(0, "Required"),
+    vehicleTypeId: z.coerce.number().min(1, REQUIRED),
+    vehicleId: z.coerce.number().min(1, REQUIRED),
+    fuelOut: z.string().min(1, REQUIRED),
+    odometerOut: z.coerce.number().min(0, REQUIRED),
   });
 }
 export type AgreementVehicleInformationSchemaParsed = z.infer<
@@ -55,6 +60,8 @@ export const VehicleStage = ({
   isEdit,
   onCompleted,
 }: VehicleStageProps) => {
+  const { t: tl } = useTranslation("labels");
+
   const checkoutLocation = useMemo(
     () => rentalInformation?.checkoutLocation || 0,
     [rentalInformation?.checkoutLocation]
@@ -98,6 +105,16 @@ export const VehicleStage = ({
     vehicleTypesData.data?.status === 200 ? vehicleTypesData.data.body : [];
 
   //
+  const searchFilters = {
+    VehicleTypeId: formVehicleTypeId
+      ? Number(formVehicleTypeId).toString()
+      : undefined,
+    CurrentLocationId: checkoutLocation
+      ? Number(checkoutLocation).toString()
+      : undefined,
+    StartDate: rentalInformation?.checkoutDate,
+    EndDate: rentalInformation?.checkinDate,
+  };
   const vehicleListData = useGetVehiclesList({
     page: 1,
     pageSize: 20,
@@ -105,12 +122,10 @@ export const VehicleStage = ({
       isEdit === false
         ? !!checkoutLocation && !!form.getValues("vehicleTypeId")
         : true,
-    filters: {
-      VehicleTypeId: formVehicleTypeId,
-      CurrentLocationId: checkoutLocation,
-    },
+    filters: searchFilters,
   });
-  const vehiclesList = vehicleListData.data?.data || [];
+  const vehiclesList =
+    vehicleListData.data?.status === 200 ? vehicleListData?.data?.body : [];
 
   //
   const fuelLevelListData = useGetVehicleFuelLevelList();
@@ -118,14 +133,10 @@ export const VehicleStage = ({
 
   return (
     <Form {...form}>
-      <SelectVehicleModal
+      <SelectVehicleDialog
         show={showFleetPicker}
         setShow={setShowFleetPicker}
-        filters={{
-          CurrentLocationId: checkoutLocation,
-          StartDate: rentalInformation?.checkoutDate,
-          EndDate: rentalInformation?.checkinDate,
-        }}
+        filters={searchFilters}
         onSelect={(vehicle) => {
           form.setValue("vehicleTypeId", vehicle.VehicleTypeId, {
             shouldValidate: true,
@@ -137,6 +148,11 @@ export const VehicleStage = ({
             shouldValidate: true,
           });
           form.setValue("odometerOut", vehicle.CurrentOdometer ?? 0, {
+            shouldValidate: true,
+          });
+        }}
+        setVehicleTypeId={(selectedVehicleTypeId) => {
+          form.setValue("vehicleTypeId", selectedVehicleTypeId ?? 0, {
             shouldValidate: true,
           });
         }}
@@ -217,7 +233,7 @@ export const VehicleStage = ({
                     key={`${formVehicleId}-select`}
                     onValueChange={(value) => {
                       field.onChange(value);
-                      const vehicle = vehicleListData.data?.data.find(
+                      const vehicle = vehiclesList.find(
                         (v) => v.VehicleId === parseInt(value ?? "0")
                       );
                       if (vehicle) {
@@ -314,7 +330,7 @@ export const VehicleStage = ({
         </div>
         <div>
           <Button type="submit" disabled={!checkoutLocation}>
-            Save & Continue
+            {tl("buttons.saveAndContinue")}
           </Button>
         </div>
       </form>

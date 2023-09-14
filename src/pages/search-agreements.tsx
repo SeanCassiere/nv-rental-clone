@@ -29,8 +29,6 @@ import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns"
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
 
 import { type TAgreementListItemParsed } from "@/schemas/agreement";
@@ -40,7 +38,7 @@ import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-par
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -113,14 +111,13 @@ function AgreementsSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewAgreementByIdRoute.to}
+                      to="/agreements/$agreementId"
                       params={{ agreementId: String(agreementId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"
                       )}
-                      preload="intent"
                     >
                       {value}
                     </Link>
@@ -181,6 +178,12 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = agreementsData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const agreementsList =
+    agreementsData.data?.status === 200 ? agreementsData.data.body : [];
+
   useDocumentTitle(titleMaker("Agreements"));
 
   return (
@@ -200,7 +203,7 @@ function AgreementsSearchPage() {
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={addAgreementRoute.to}
+              to="/agreements/new"
               search={() => ({ stage: "rental-information" })}
               className={cn(buttonVariants({ size: "sm" }), "w-max")}
             >
@@ -217,7 +220,7 @@ function AgreementsSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={agreementsData.data?.data || []}
+          data={agreementsList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -225,14 +228,14 @@ function AgreementsSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            agreementsData.data?.totalRecords
-              ? Math.ceil(agreementsData.data?.totalRecords / size) ?? -1
+            parsedPagination.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchAgreementsRoute.to,
+              to: "/agreements",
               params: {},
               search: (current) => ({
                 ...current,
@@ -247,7 +250,7 @@ function AgreementsSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchAgreementsRoute.to,
+                to: "/agreements",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -264,7 +267,7 @@ function AgreementsSearchPage() {
                 {}
               );
               navigate({
-                to: searchAgreementsRoute.to,
+                to: "/agreements",
                 params: {},
                 search: () => ({
                   page: 1,

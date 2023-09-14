@@ -1,18 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchAgreementsList } from "@/api/agreements";
-
-import { AgreementListItemListSchema } from "@/schemas/agreement";
-import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
-
 import { agreementQKeys } from "@/utils/query-key";
+
+import { apiClient } from "@/api";
 
 export function useGetAgreementsList(params: {
   page: number;
   pageSize: number;
-  filters: Record<string, any>;
+  filters: Omit<
+    QueryParams,
+    "clientId" | "userId" | "page" | "pageSize" | "currentDate"
+  >;
+  enabled?: boolean;
 }) {
+  const enabled = typeof params.enabled !== "undefined" ? params.enabled : true;
   const auth = useAuth();
   const query = useQuery({
     queryKey: agreementQKeys.search({
@@ -25,37 +27,32 @@ export function useGetAgreementsList(params: {
         pageSize: params.pageSize,
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
         currentDate: new Date(),
-        filters: params.filters,
+        ...params.filters,
       }),
-    enabled: auth.isAuthenticated,
+    enabled: enabled && auth.isAuthenticated,
     keepPreviousData: true,
   });
   return query;
 }
 
-export async function fetchAgreementsListModded(
-  params: Parameters<typeof fetchAgreementsList>[0]
-) {
-  return await fetchAgreementsList({
-    clientId: params.clientId || "",
-    userId: params.userId || "",
-    accessToken: params.accessToken || "",
-    page: params?.page,
-    pageSize: params?.pageSize,
-    currentDate: params.currentDate,
-    filters: params.filters,
-  })
-    .then((res) => {
-      if (res.ok) return res;
-      return { ...res, data: [] };
-    })
-    .then((res) =>
-      validateApiResWithZodSchema(AgreementListItemListSchema, res)
-    )
-    .catch((e) => {
-      console.error(e);
-      throw e;
-    });
+type QueryParams = Omit<
+  Parameters<(typeof apiClient)["agreement"]["getList"]>[0]["query"],
+  "currentDate"
+> & {
+  currentDate: Date;
+};
+
+export async function fetchAgreementsListModded(params: QueryParams) {
+  const { clientId, userId, page, pageSize, currentDate, ...filters } = params;
+  return await apiClient.agreement.getList({
+    query: {
+      clientId: params.clientId,
+      userId: params.userId,
+      page: params.page ?? 1,
+      pageSize: params.pageSize ?? 10,
+      currentDate: params.currentDate.toISOString(),
+      ...filters,
+    },
+  });
 }

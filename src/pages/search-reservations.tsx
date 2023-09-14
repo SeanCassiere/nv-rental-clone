@@ -29,8 +29,6 @@ import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetR
 import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 
 import { type TReservationListItemParsed } from "@/schemas/reservation";
@@ -40,7 +38,7 @@ import { normalizeReservationListSearchParams } from "@/utils/normalize-search-p
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -113,14 +111,13 @@ function ReservationsSearchPage() {
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to={viewReservationByIdRoute.to}
+                      to="/reservations/$reservationId"
                       params={{ reservationId: String(reservationId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"
                       )}
-                      preload="intent"
                     >
                       {value}
                     </Link>
@@ -183,6 +180,12 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = reservationsData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const reservationsList =
+    reservationsData.data?.status === 200 ? reservationsData.data?.body : [];
+
   useDocumentTitle(titleMaker("Reservations"));
 
   return (
@@ -202,7 +205,7 @@ function ReservationsSearchPage() {
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={addReservationRoute.to}
+              to="/reservations/new"
               search={() => ({ stage: "rental-information" })}
               className={cn(buttonVariants({ size: "sm" }), "w-max")}
             >
@@ -219,7 +222,7 @@ function ReservationsSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={reservationsData.data?.data || []}
+          data={reservationsList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -227,14 +230,14 @@ function ReservationsSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            reservationsData.data?.totalRecords
-              ? Math.ceil(reservationsData.data?.totalRecords / size) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
             navigate({
-              to: searchReservationsRoute.to,
+              to: "/reservations",
               params: {},
               search: (current) => ({
                 ...current,
@@ -249,7 +252,7 @@ function ReservationsSearchPage() {
             setColumnFilters,
             onClearFilters: () => {
               navigate({
-                to: searchReservationsRoute.to,
+                to: "/reservations",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -266,7 +269,7 @@ function ReservationsSearchPage() {
                 {}
               );
               navigate({
-                to: searchReservationsRoute.to,
+                to: "/reservations",
                 params: {},
                 search: () => ({
                   page: 1,

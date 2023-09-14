@@ -20,6 +20,7 @@ export function useGetTaxes(params: {
           userId: auth.user?.profile.navotar_userid || "",
           clientId: auth.user?.profile.navotar_clientid || "",
           LocationId: filters.LocationId,
+          AgreementId: filters.AgreementId,
         },
       }),
     enabled: auth.isAuthenticated && enabled,

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import SelectCustomerModal from "@/components/Dialogs/SelectCustomerModal";
+import { SelectCustomerDialog } from "@/components/dialog/select-customer";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,7 +22,9 @@ import {
 
 import { useDatePreference } from "@/hooks/internal/useDatePreferences";
 
-const REQUIRED = "Required" as const;
+import i18n from "@/i18next-config";
+
+const REQUIRED = i18n.t("labels:display.required");
 
 function CommonCustomerInformationSchema() {
   return z
@@ -74,6 +77,7 @@ export const CustomerStage = ({
   // isEdit,
   onCompleted,
 }: CustomerStageProps) => {
+  const { t: tl } = useTranslation("labels");
   const { dateFormat } = useDatePreference();
 
   const [showCustomerPicker, setShowCustomerPicker] = useState(false);
@@ -108,7 +112,7 @@ export const CustomerStage = ({
 
   return (
     <Form {...form}>
-      <SelectCustomerModal
+      <SelectCustomerDialog
         show={showCustomerPicker}
         setShow={setShowCustomerPicker}
         onSelect={(customer) => {
@@ -172,9 +176,13 @@ export const CustomerStage = ({
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First name</FormLabel>
+                  <FormLabel>{tl("display.firstName")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="First name" readOnly {...field} />
+                    <Input
+                      placeholder={tl("display.firstName")}
+                      readOnly
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -187,9 +195,13 @@ export const CustomerStage = ({
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last name</FormLabel>
+                  <FormLabel>{tl("display.lastName")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Last name" readOnly {...field} />
+                    <Input
+                      placeholder={tl("display.lastName")}
+                      readOnly
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -202,7 +214,7 @@ export const CustomerStage = ({
               name="dateOfBirth"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date of birth</FormLabel>
+                  <FormLabel>{tl("display.dateOfBirth")}</FormLabel>
                   <InputDatePicker
                     mode="date"
                     format={dateFormat}
@@ -215,7 +227,9 @@ export const CustomerStage = ({
                     readOnly
                   >
                     <FormControl>
-                      <InputDatePickerSlot placeholder="Date of birth" />
+                      <InputDatePickerSlot
+                        placeholder={tl("display.dateOfBirth")}
+                      />
                     </FormControl>
                   </InputDatePicker>
                   <FormMessage />
@@ -229,10 +243,10 @@ export const CustomerStage = ({
               name="hPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Home phone</FormLabel>
+                  <FormLabel>{tl("display.homePhone")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Home phone"
+                      placeholder={tl("display.homePhone")}
                       readOnly
                       {...field}
                       value={field.value ?? undefined}
@@ -249,10 +263,10 @@ export const CustomerStage = ({
               name="bPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Work phone</FormLabel>
+                  <FormLabel>{tl("display.workPhone")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Work phone"
+                      placeholder={tl("display.workPhone")}
                       readOnly
                       {...field}
                       value={field.value ?? undefined}
@@ -269,10 +283,10 @@ export const CustomerStage = ({
               name="cPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mobile phone</FormLabel>
+                  <FormLabel>{tl("display.mobilePhone")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Mobile phone"
+                      placeholder={tl("display.mobilePhone")}
                       readOnly
                       {...field}
                       value={field.value ?? undefined}
@@ -289,10 +303,10 @@ export const CustomerStage = ({
               name="licenseNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>License no.</FormLabel>
+                  <FormLabel>{tl("display.licenseNo")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="License no."
+                      placeholder={tl("display.licenseNo")}
                       readOnly
                       key={`customer-licenseNumber-${field.value}`}
                       {...field}
@@ -310,9 +324,13 @@ export const CustomerStage = ({
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{tl("display.address")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Address" readOnly {...field} />
+                    <Input
+                      placeholder={tl("display.address")}
+                      readOnly
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -325,9 +343,13 @@ export const CustomerStage = ({
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>{tl("display.city")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="City" readOnly {...field} />
+                    <Input
+                      placeholder={tl("display.city")}
+                      readOnly
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -340,9 +362,13 @@ export const CustomerStage = ({
               name="zipCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Zip</FormLabel>
+                  <FormLabel>{tl("display.zip")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Zip code" readOnly {...field} />
+                    <Input
+                      placeholder={tl("display.zipCode")}
+                      readOnly
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -351,7 +377,7 @@ export const CustomerStage = ({
           </div>
         </div>
         <div>
-          <Button type="submit">Save & Continue</Button>
+          <Button type="submit">{tl("buttons.saveAndContinue")}</Button>
         </div>
       </form>
     </Form>

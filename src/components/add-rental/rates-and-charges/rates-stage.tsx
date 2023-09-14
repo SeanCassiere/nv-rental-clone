@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,6 +54,8 @@ export const RatesStage = (props: RatesStageProps) => {
     hidePromotionCodeFields = false,
   } = props;
 
+  const { t: tl } = useTranslation("labels");
+
   const isSupportingInfoAvailable =
     Boolean(durationStageData) && Boolean(vehicleStageData);
 
@@ -65,7 +68,8 @@ export const RatesStage = (props: RatesStageProps) => {
       VehicleTypeId: String(vehicleTypeId),
     },
   });
-  const rateTypesList = rateTypesData.data ?? [];
+  const rateTypesList =
+    rateTypesData.data?.status === 200 ? rateTypesData.data?.body : [];
 
   const form = useForm<RentalRateParsed>({
     resolver: zodResolver(RentalRateSchema),
@@ -169,7 +173,7 @@ export const RatesStage = (props: RatesStageProps) => {
         )}
         <div className="mt-4">
           <Button type="submit" disabled={!rate}>
-            Save & Continue
+            {tl("buttons.saveAndContinue")}
           </Button>
         </div>
       </form>

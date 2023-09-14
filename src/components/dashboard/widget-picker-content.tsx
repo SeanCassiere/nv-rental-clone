@@ -55,7 +55,9 @@ const WidgetPickerContent = ({
     if (widgetsQuery.status === "success") {
       setWidgetsLocal((local) => {
         if (local.length === 0) {
-          return widgetsQuery.data.sort(sortWidgetsByUserPositionFn);
+          return (
+            widgetsQuery.data?.status === 200 ? widgetsQuery.data.body : []
+          ).sort(sortWidgetsByUserPositionFn);
         }
         return local;
       });

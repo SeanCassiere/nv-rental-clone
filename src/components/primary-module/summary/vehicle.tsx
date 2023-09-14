@@ -5,12 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-
 import { type TVehicleSummarySchema } from "@/schemas/summary/vehicleSummary";
 
 import {
@@ -101,14 +95,13 @@ export const VehicleSummary = ({
       label: "Total reservations",
       primaryTextHighlight: Boolean(summaryData?.totalNoOfReservation),
       type: summaryData?.totalNoOfReservation ? "link" : "text",
-      amount: summaryData?.totalNoOfReservation || null,
+      amount: Number(summaryData?.totalNoOfReservation || 0).toString(),
       linkProps: {
-        to: viewFleetByIdRoute.to,
+        to: "/fleet/$vehicleId",
         search: () => ({
           tab: "reservations",
         }),
         params: { vehicleId: vehicleId },
-        preload: "intent",
       },
     },
 
@@ -128,9 +121,8 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: viewReservationByIdRoute.to,
+        to: "/reservations/$reservationId",
         params: { reservationId: `${summaryData?.currentReservation}` },
-        preload: "intent",
       },
     },
 
@@ -138,16 +130,15 @@ export const VehicleSummary = ({
       label: "Future reservations",
       primaryTextHighlight: Boolean(summaryData?.futureNoOfReservation),
       type: summaryData?.futureNoOfReservation ? "link" : "text",
-      amount: summaryData?.futureNoOfReservation || null,
+      amount: Number(summaryData?.futureNoOfReservation || 0).toString(),
       linkProps: {
-        to: searchReservationsRoute.to,
+        to: "/reservations",
         search: () => ({
           filters: {
             VehicleNo: vehicleNo ?? "",
             Statuses: ["2", "7"],
           },
         }),
-        preload: "intent",
       },
     },
 
@@ -157,12 +148,11 @@ export const VehicleSummary = ({
       type: summaryData?.totalNoOfAgreement ? "link" : "text",
       amount: summaryData?.totalNoOfAgreement || null,
       linkProps: {
-        to: viewFleetByIdRoute.to,
+        to: "/fleet/$vehicleId",
         search: () => ({
           tab: "agreements",
         }),
         params: { vehicleId: vehicleId },
-        preload: "intent",
       },
     },
 
@@ -182,9 +172,8 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: viewAgreementByIdRoute.to,
+        to: "/agreements/$agreementId",
         params: { agreementId: `${summaryData?.currentAgreement}` },
-        preload: "intent",
       },
     },
 
@@ -223,11 +212,10 @@ export const VehicleSummary = ({
         ? summaryData?.pendingPayment
         : "None",
       linkProps: {
-        to: searchAgreementsRoute.to,
+        to: "/agreements",
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
         }),
-        preload: "intent",
       },
     },
 

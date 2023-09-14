@@ -26,9 +26,15 @@ export function localDateTimeToQueryYearMonthDay(date: Date) {
  * @param {Date} date
  * @returns "yyyy-MM-dd" + "T" + "HH:mm"
  */
-export function localDateTimeWithoutSecondsToQueryYearMonthDay(date: Date) {
+export function localDateTimeWithoutSecondsToQueryYearMonthDay(
+  date: Date | string
+) {
+  const dateToUse = typeof date === "string" ? new Date(date) : date;
   const dateMaker = "yyyy-MM-dd";
   const timeMaker = "HH:mm";
-  const print = `${format(date, dateMaker)}T${format(date, timeMaker)}`;
+  const print = `${format(dateToUse, dateMaker)}T${format(
+    dateToUse,
+    timeMaker
+  )}`;
   return print;
 }

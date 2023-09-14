@@ -1,33 +1,41 @@
 import { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import { CommonTable } from "@/components/common/common-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { type TVehicleListItemParsed } from "@/schemas/vehicle";
 
-import { CommonTable } from "../common/common-table";
-import DarkBgDialog from "../Layout/DarkBgDialog";
+import { getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 interface SelectVehicleModalProps {
   show: boolean;
   setShow: (show: boolean) => void;
+  setVehicleTypeId: (vehicleTypeId: number | undefined) => void;
   onSelect?: (vehicle: TVehicleListItemParsed) => void;
   filters: {
     StartDate: Date | undefined;
     EndDate: Date | undefined;
-    CurrentLocationId: number;
+    CurrentLocationId: string | undefined;
+    VehicleTypeId: string | undefined;
   };
 }
 
-const SelectVehicleModal = (props: SelectVehicleModalProps) => {
+export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+
   const checkoutLocation = props.filters?.CurrentLocationId ?? 0;
-  const handleClose = () => {
-    props.setShow(false);
-  };
 
   const acceptedColumns = useMemo(
     () =>
@@ -45,14 +53,22 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
     []
   );
 
+  const { VehicleTypeId, ...filters } = props.filters;
   const vehicleListData = useGetVehiclesList({
     page,
     pageSize,
     enabled: !!checkoutLocation,
     filters: {
-      ...props.filters,
+      ...(VehicleTypeId ? { VehicleTypeId } : {}),
+      ...filters,
     },
   });
+
+  const headers = vehicleListData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const vehiclesList =
+    vehicleListData.data?.status === 200 ? vehicleListData.data?.body : [];
 
   const columnDefs = useMemo(() => {
     const columns: any[] = [];
@@ -85,40 +101,35 @@ const SelectVehicleModal = (props: SelectVehicleModalProps) => {
   }, [acceptedColumns, props]);
 
   return (
-    <DarkBgDialog
-      show={props.show}
-      setShow={props.setShow}
-      onClose={handleClose}
-      title="Select fleet"
-      sizing="5xl"
-      description="Select a fleet from the list below"
-    >
-      {/* <div className="block w-full pt-3 pb-3">
-      </div> */}
-      {/* <div className="sticky top-0"> */}
-      <CommonTable
-        data={vehicleListData.data?.data || []}
-        columns={columnDefs}
-        hasPagination
-        paginationMode="server"
-        paginationState={{
-          pageIndex: page - 1,
-          pageSize,
-        }}
-        onPaginationChange={(newState) => {
-          setPage(newState.pageIndex + 1);
-          setPageSize(newState.pageSize);
-        }}
-        totalPages={
-          vehicleListData.data?.totalRecords
-            ? Math.ceil(vehicleListData.data?.totalRecords / pageSize) ?? -1
-            : 0
-        }
-        stickyHeader
-      />
-      {/* </div> */}
-    </DarkBgDialog>
+    <Dialog open={props.show} onOpenChange={props.setShow}>
+      <DialogContent className="max-w-4xl">
+        <DialogHeader>
+          <DialogTitle>Select fleet</DialogTitle>
+          <DialogDescription>
+            Select a fleet from the list below
+          </DialogDescription>
+        </DialogHeader>
+        <CommonTable
+          data={vehiclesList}
+          columns={columnDefs}
+          hasPagination
+          paginationMode="server"
+          paginationState={{
+            pageIndex: page - 1,
+            pageSize,
+          }}
+          onPaginationChange={(newState) => {
+            setPage(newState.pageIndex + 1);
+            setPageSize(newState.pageSize);
+          }}
+          totalPages={
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / pageSize) ?? -1
+              : 0
+          }
+          stickyHeader
+        />
+      </DialogContent>
+    </Dialog>
   );
 };
-
-export default SelectVehicleModal;

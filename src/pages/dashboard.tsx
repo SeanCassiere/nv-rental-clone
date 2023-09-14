@@ -26,8 +26,6 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useFeature } from "@/hooks/internal/useFeature";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
-import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-
 import { titleMaker } from "@/utils/title-maker";
 
 import type { apiClient } from "@/api";
@@ -100,7 +98,7 @@ function IndexPage() {
               onSelect={setLocations}
             />
             <Link
-              to={addAgreementRoute.to}
+              to="/agreements/new"
               search={{ stage: "rental-information" }}
               className={cn(
                 buttonVariants({ size: "sm" }),

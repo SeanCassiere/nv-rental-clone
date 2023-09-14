@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-const REQUIRED = "Required";
+import i18n from "@/i18next-config";
+
+const REQUIRED = i18n.t("display.required", { ns: "labels" });
 
 export const UpdateUserSchema = z.object({
   clientId: z.number(),

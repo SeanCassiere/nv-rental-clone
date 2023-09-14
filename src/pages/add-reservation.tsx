@@ -7,7 +7,6 @@ import ProtectorShield from "@/components/protector-shield";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
 import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -31,7 +30,7 @@ const AddReservationPage = () => {
   const handleReservationSaveComplete = useCallback(
     (reservationId: number) => {
       navigate({
-        to: viewReservationByIdRoute.to,
+        to: "/reservations/$reservationId",
         params: { reservationId: String(reservationId) },
         search: () => ({ tab: "summary" }),
       });
@@ -41,7 +40,7 @@ const AddReservationPage = () => {
 
   const handleCancelAddReservation = useCallback(() => {
     router.navigate({
-      to: "../",
+      to: "..",
     });
   }, [router]);
 

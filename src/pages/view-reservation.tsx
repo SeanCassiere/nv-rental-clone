@@ -34,10 +34,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 
-import {
-  editReservationByIdRoute,
-  viewReservationByIdRoute,
-} from "@/routes/reservations/reservation-id-route";
+import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -96,7 +93,7 @@ function ReservationViewPage() {
 
   const onTabClick = (newTabId: string) => {
     navigate({
-      to: viewReservationByIdRoute.to,
+      to: "/reservations/$reservationId",
       search: (others) => ({ ...others, tab: newTabId }),
       params: { reservationId },
       replace: true,
@@ -135,12 +132,7 @@ function ReservationViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link
-              className="text-2xl font-semibold leading-6"
-              onClick={() => {
-                router.history.go(-1);
-              }}
-            >
+            <Link to=".." className="text-2xl font-semibold leading-6">
               Reservations
             </Link>
             <ChevronRightIcon
@@ -148,7 +140,8 @@ function ReservationViewPage() {
               aria-hidden="true"
             />
             <Link
-              to={viewReservationByIdRoute.to}
+              to="/reservations/$reservationId"
+              // @ts-expect-error
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ reservationId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
@@ -158,8 +151,8 @@ function ReservationViewPage() {
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
+              to="/reservations/$reservationId/edit"
               search={() => ({ stage: "rental-information" })}
-              to={editReservationByIdRoute.to}
               params={{ reservationId: String(reservationId) }}
               className={cn(
                 buttonVariants({ size: "sm", variant: "secondary" })

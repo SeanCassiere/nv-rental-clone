@@ -34,8 +34,6 @@ import {
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
-
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
 
@@ -97,7 +95,7 @@ export const UserNavigationDropdown = () => {
             <DropdownMenuItem
               onClick={() => {
                 navigate({
-                  to: destinationSettingsRoute.to,
+                  to: "/settings/$destination",
                   params: {
                     destination: "profile",
                   },
@@ -109,7 +107,7 @@ export const UserNavigationDropdown = () => {
             <DropdownMenuItem
               onClick={() => {
                 navigate({
-                  to: destinationSettingsRoute.to,
+                  to: "/settings/$destination",
                   params: {
                     destination: "profile",
                   },

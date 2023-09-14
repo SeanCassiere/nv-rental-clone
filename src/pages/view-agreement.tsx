@@ -35,11 +35,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 
-import {
-  checkinAgreementByIdRoute,
-  editAgreementByIdRoute,
-  viewAgreementByIdRoute,
-} from "@/routes/agreements/agreement-id-route";
+import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -115,7 +111,7 @@ function AgreementViewPage() {
 
   const onTabClick = (newTabId: string) => {
     navigate({
-      to: viewAgreementByIdRoute.to,
+      to: "/agreements/$agreementId",
       search: (others) => ({ ...others, tab: newTabId }),
       params: { agreementId },
       replace: true,
@@ -152,12 +148,7 @@ function AgreementViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link
-              className="text-2xl font-semibold leading-6"
-              onClick={() => {
-                router.history.go(-1);
-              }}
-            >
+            <Link to=".." className="text-2xl font-semibold leading-6">
               Agreements
             </Link>
             <ChevronRightIcon
@@ -165,7 +156,8 @@ function AgreementViewPage() {
               aria-hidden="true"
             />
             <Link
-              to={viewAgreementByIdRoute.to}
+              to="/agreements/$agreementId"
+              // @ts-expect-error
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ agreementId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
@@ -176,7 +168,7 @@ function AgreementViewPage() {
           <div className="flex w-full gap-2 sm:w-max">
             {!isCheckedIn && (
               <Link
-                to={checkinAgreementByIdRoute.to}
+                to="/agreements/$agreementId/check-in"
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
                 className={cn(buttonVariants({ size: "sm" }))}
@@ -187,7 +179,7 @@ function AgreementViewPage() {
             )}
             {isCheckedIn ? (
               <Link
-                to={checkinAgreementByIdRoute.to}
+                to="/agreements/$agreementId/check-in"
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
                 className={cn(
@@ -199,7 +191,7 @@ function AgreementViewPage() {
               </Link>
             ) : (
               <Link
-                to={editAgreementByIdRoute.to}
+                to="/agreements/$agreementId/edit"
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
                 className={cn(

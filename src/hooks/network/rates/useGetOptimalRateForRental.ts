@@ -1,32 +1,42 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchOptimalRateForRental } from "@/api/rates";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+
+import { apiClient } from "@/api";
+
+type QueryParams = Omit<
+  Parameters<(typeof apiClient)["rate"]["getOptimal"]>[0]["query"],
+  "CheckoutDate" | "CheckinDate"
+> & { CheckoutDate: Date; CheckinDate: Date };
 
 export function useGetOptimalRateForRental(opts: {
   enabled?: boolean;
-  filters: Omit<
-    Parameters<typeof fetchOptimalRateForRental>[0],
-    "userId" | "clientId" | "accessToken"
-  >;
+  filters: Omit<QueryParams, "userId" | "clientId">;
 }) {
   const auth = useAuth();
 
-  const { enabled, filters } = opts;
+  const { enabled: isEnabled, filters } = opts;
 
-  const isEnabled = typeof enabled !== "undefined" ? enabled : true;
+  const enabled = typeof isEnabled !== "undefined" ? isEnabled : true;
+
+  const { CheckoutDate, CheckinDate, ...otherFilters } = filters;
 
   const query = useQuery({
-    queryKey: ["rates", "optimal", JSON.stringify(opts)],
-    queryFn: async () => {
-      return await fetchOptimalRateForRental({
-        accessToken: auth.user?.access_token || "",
-        clientId: auth.user?.profile.navotar_clientid || "",
-        userId: auth.user?.profile.navotar_userid || "",
-        ...filters,
-      });
-    },
-    enabled: auth.isAuthenticated && isEnabled,
+    queryKey: ["rates", "optimal", filters],
+    queryFn: () =>
+      apiClient.rate.getOptimal({
+        query: {
+          clientId: auth.user?.profile.navotar_clientid || "",
+          userId: auth.user?.profile.navotar_userid || "",
+          CheckoutDate:
+            localDateTimeWithoutSecondsToQueryYearMonthDay(CheckoutDate),
+          CheckinDate:
+            localDateTimeWithoutSecondsToQueryYearMonthDay(CheckinDate),
+          ...otherFilters,
+        },
+      }),
+    enabled: enabled && auth.isAuthenticated,
   });
 
   return query;

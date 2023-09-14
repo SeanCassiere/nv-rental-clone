@@ -1,0 +1,27 @@
+{
+  "titles": {
+    "page": "Settings - {{pageTitle}}",
+    "settings": "Settings",
+    "profile": "Profile",
+    "application": "Application",
+    "runtime": "Runtime configuration",
+    "vehiclesAndCategories": "Vehicles and categories",
+    "ratesAndCharges": "Rates and charges",
+    "systemUsers": "System users",
+    "permissionsAndRoles": "Permissions and roles",
+    "locations": "Locations",
+    "emailTemplates": "Email templates",
+    "globalDocuments": "Global documents",
+    "idConfiguration": "Number sequencing",
+    "compatibilityConfiguration": "System lists"
+  },
+  "descriptions": {
+    "settings": "Manage and configure your {{appName}} settings.",
+    "profile": "Customize and manage your profile with ease.",
+    "application": "Customize the application settings.",
+    "systemUsers": "Configure the users that have access to system.",
+    "runtime": "Customize and manage your application runtime configuration with ease.",
+    "emailTemplates": "Configure the email templates that are used by the system.",
+    "globalDocuments": "Configure the global documents available for use throughout the system."
+  }
+}

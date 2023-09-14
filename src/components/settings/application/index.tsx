@@ -1,10 +1,13 @@
 import React, { Suspense } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
+
+import { SETTINGS_LOCATION_KEYS } from "@/utils/constants";
 
 const SettingsUsersTab = React.lazy(
   () => import("@/components/settings/application/system-users")
@@ -23,6 +26,8 @@ function getValueForTabList(list: TabListItem[], id: string) {
 }
 
 const SettingsApplicationTab = () => {
+  const { t } = useTranslation("settings");
+
   const navigate = useNavigate({ from: destinationSettingsRoute.id });
 
   const { tab } = useSearch({
@@ -33,40 +38,47 @@ const SettingsApplicationTab = () => {
     const tabItems: TabListItem[] = [
       {
         id: "users",
-        title: "System users",
+        title: t("titles.systemUsers"),
         component: <SettingsUsersTab />,
       },
     ];
 
     tabItems.push({
       id: "permissions",
-      title: "Permissions & Roles",
+      title: t("titles.permissionsAndRoles"),
       component: <Skeleton className="h-96" />,
     });
 
     tabItems.push({
       id: "locations",
-      title: "Locations",
+      title: t("titles.locations"),
       component: <Skeleton className="h-96" />,
     });
 
     return tabItems;
-  }, []);
+  }, [t]);
 
   const currentTab = tab ?? "users";
   const activeTab = getValueForTabList(tabs, currentTab);
   const onTabChange = React.useCallback(
     (id: string) => {
-      navigate({ search: { tab: id }, replace: true });
+      navigate({
+        params: { destination: SETTINGS_LOCATION_KEYS.application },
+        search: { tab: id },
+        replace: true,
+        resetScroll: false,
+      });
     },
     [navigate]
   );
 
   return (
     <>
-      <h2 className="text-xl font-semibold leading-10">Application</h2>
+      <h2 className="text-xl font-semibold leading-10">
+        {t("titles.application")}
+      </h2>
       <p className="text-base text-foreground/80">
-        Customize the application settings.
+        {t("descriptions.application")}
       </p>
       <Tabs
         value={activeTab}

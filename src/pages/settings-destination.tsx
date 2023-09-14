@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams, type LinkPropsOptions } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import ProtectorShield from "@/components/protector-shield";
 import { SelectorSettingsNavigation } from "@/components/settings/nav-selector";
@@ -12,7 +13,7 @@ import { usePermission } from "@/hooks/internal/usePermission";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
-import { UI_APPLICATION_NAME } from "@/utils/constants";
+import { SETTINGS_LOCATION_KEYS, UI_APPLICATION_NAME } from "@/utils/constants";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
@@ -35,6 +36,8 @@ const SettingsRuntimeConfigurationTab = React.lazy(
 );
 
 export default function SettingsCatchAllPage() {
+  const { t } = useTranslation("settings");
+
   const { destination = "profile" } = useParams({
     from: destinationSettingsRoute.id,
   });
@@ -44,11 +47,11 @@ export default function SettingsCatchAllPage() {
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
       {
-        id: "profile",
-        title: "Profile",
+        id: SETTINGS_LOCATION_KEYS.profile,
+        title: t("titles.profile"),
         component: <SettingsProfileTab />,
         linkProps: {
-          to: destinationSettingsRoute.to,
+          to: "/settings/$destination",
           params: { destination: "profile" },
         },
       },
@@ -57,43 +60,43 @@ export default function SettingsCatchAllPage() {
     if (!canSeeAdminTab) return items;
 
     items.push({
-      id: "application",
-      title: "Application", // users, locations, taxes,
+      id: SETTINGS_LOCATION_KEYS.application,
+      title: t("titles.application"), // users, locations, taxes,
       component: <SettingsApplicationTab />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "application" },
       },
     });
     items.push({
-      id: "runtime-configuration",
-      title: "Runtime configuration", // email, global documents, id configuration, compatibility, etc.
+      id: SETTINGS_LOCATION_KEYS.runtimeConfiguration,
+      title: t("titles.runtime"), // email, global documents, id configuration, compatibility, etc.
       component: <SettingsRuntimeConfigurationTab />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "runtime-configuration" },
       },
     });
     items.push({
-      id: "vehicles-and-categories",
-      title: "Vehicles and categories", // vehicle types, vehicle makes, vehicle models, options, etc.
+      id: SETTINGS_LOCATION_KEYS.vehiclesAndCategories,
+      title: t("titles.vehiclesAndCategories"), // vehicle types, vehicle makes, vehicle models, options, etc.
       component: <Skeleton className="h-96" />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "vehicles-and-categories" },
       },
     });
     items.push({
-      id: "rates-and-charges",
-      title: "Rates and charges", // rates, rules, promotions, miscellaneous charges
+      id: SETTINGS_LOCATION_KEYS.ratesAndCharges,
+      title: t("titles.ratesAndCharges"), // rates, rules, promotions, miscellaneous charges
       component: <Skeleton className="h-96" />,
       linkProps: {
-        to: destinationSettingsRoute.to,
+        to: "/settings/$destination",
         params: { destination: "rates-and-charges" },
       },
     });
     return items;
-  }, [canSeeAdminTab]);
+  }, [canSeeAdminTab, t]);
 
   const getNavigationItem = React.useCallback(
     (id: string) => {
@@ -114,7 +117,9 @@ export default function SettingsCatchAllPage() {
   );
 
   useDocumentTitle(
-    titleMaker(`Settings - ${currentDestination?.title || "Unknown"}`)
+    titleMaker(
+      t("titles.page", { pageTitle: currentDestination?.title || "Unknown" })
+    )
   );
 
   return (
@@ -125,10 +130,12 @@ export default function SettingsCatchAllPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6">Settings</h1>
+          <h1 className="text-2xl font-semibold leading-6">
+            {t("titles.settings")}
+          </h1>
         </div>
         <p className={cn("text-base text-foreground/80 [text-wrap:balance]")}>
-          Manage and configure your {UI_APPLICATION_NAME} account.
+          {t("descriptions.settings", { appName: UI_APPLICATION_NAME })}
         </p>
         <Separator className="mt-3.5" />
       </section>

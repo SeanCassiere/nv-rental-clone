@@ -82,9 +82,8 @@ export const searchAgreementsRoute = new Route({
               pageSize: pageSize,
               clientId: auth.profile.navotar_clientid,
               userId: auth.profile.navotar_userid,
-              accessToken: auth.access_token,
               currentDate: new Date(),
-              filters: searchFilters,
+              ...searchFilters,
             }),
         })
       );

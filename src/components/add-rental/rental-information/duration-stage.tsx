@@ -5,6 +5,7 @@ import differenceInMinutes from "date-fns/differenceInMinutes";
 import isBefore from "date-fns/isBefore";
 import isEqual from "date-fns/isEqual";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -34,34 +35,38 @@ import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreem
 import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
+import i18n from "@/i18next-config";
+
+const REQUIRED = i18n.t("labels:display.required");
+
 const AgreementRentalInformationSchema = z
   .object({
-    agreementNumber: z.string().min(1, "Required"),
-    destination: z.string().min(1, "Required"),
-    agreementType: z.string().min(1, "Required"),
+    agreementNumber: z.string().min(1, REQUIRED),
+    destination: z.string().min(1, REQUIRED),
+    agreementType: z.string().min(1, REQUIRED),
     checkoutDate: z.date({
-      invalid_type_error: "Required",
-      required_error: "Required",
+      invalid_type_error: REQUIRED,
+      required_error: REQUIRED,
     }),
     checkinDate: z.date({
-      invalid_type_error: "Required",
-      required_error: "Required",
+      invalid_type_error: REQUIRED,
+      required_error: REQUIRED,
     }),
     checkoutLocation: z.coerce
       .number({
-        required_error: "Required",
-        invalid_type_error: "Required",
+        required_error: REQUIRED,
+        invalid_type_error: REQUIRED,
       })
       .min(1, {
-        message: "Required",
+        message: REQUIRED,
       }),
     checkinLocation: z.coerce
       .number({
-        required_error: "Required",
-        invalid_type_error: "Required",
+        required_error: REQUIRED,
+        invalid_type_error: REQUIRED,
       })
       .min(1, {
-        message: "Required",
+        message: REQUIRED,
       }),
   })
   .superRefine((values, ctx) => {
@@ -91,6 +96,7 @@ export const DurationStage = ({
   onCompleted,
   isEdit,
 }: DurationStageProps) => {
+  const { t: tl } = useTranslation("labels");
   const { dateTimeFormat, timeFormat } = useDatePreference();
 
   const values = {
@@ -240,6 +246,7 @@ export const DurationStage = ({
                     mode="datetime"
                     format={dateTimeFormat}
                     timeFormat={timeFormat}
+                    required
                   >
                     <FormControl>
                       <InputDatePickerSlot placeholder="Checkout date" />
@@ -296,6 +303,7 @@ export const DurationStage = ({
                     mode="datetime"
                     format={dateTimeFormat}
                     timeFormat={timeFormat}
+                    required
                   >
                     <FormControl>
                       <InputDatePickerSlot placeholder="Checkin date" />
@@ -341,7 +349,7 @@ export const DurationStage = ({
           </div>
         </div>
         <div>
-          <Button type="submit">Save & Continue</Button>
+          <Button type="submit">{tl("buttons.saveAndContinue")}</Button>
         </div>
       </form>
     </Form>

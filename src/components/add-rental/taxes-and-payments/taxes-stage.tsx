@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 
@@ -20,6 +21,8 @@ interface TaxesStageProps {
 
 export const TaxesStage = (props: TaxesStageProps) => {
   const { durationStageData, taxes, onSelectedTaxes, onCompleted } = props;
+
+  const { t: tl } = useTranslation("labels");
 
   const isSupportingInfoAvailable = Boolean(durationStageData);
 
@@ -94,7 +97,7 @@ export const TaxesStage = (props: TaxesStageProps) => {
               onCompleted();
             }}
           >
-            Save & Continue
+            {tl("buttons.saveAndContinue")}
           </Button>
         </div>
       </div>

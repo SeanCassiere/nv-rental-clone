@@ -1,12 +1,20 @@
 import { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import { CommonTable } from "@/components/common/common-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
 
 import { type TCustomerListItemParsed } from "@/schemas/customer";
 
-import { CommonTable } from "../common/common-table";
-import DarkBgDialog from "../Layout/DarkBgDialog";
+import { getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -16,13 +24,9 @@ interface SelectVehicleModalProps {
   onSelect?: (customer: TCustomerListItemParsed) => void;
 }
 
-const SelectCustomerModal = (props: SelectVehicleModalProps) => {
+export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-
-  const handleClose = () => {
-    props.setShow(false);
-  };
 
   const acceptedColumns = useMemo(
     () =>
@@ -42,7 +46,7 @@ const SelectCustomerModal = (props: SelectVehicleModalProps) => {
     page,
     pageSize,
     filters: {
-      Active: true,
+      Active: "true",
     },
   });
 
@@ -76,37 +80,42 @@ const SelectCustomerModal = (props: SelectVehicleModalProps) => {
     return columns;
   }, [acceptedColumns, props]);
 
+  const headers = customerListData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const customersList =
+    customerListData.data?.status === 200 ? customerListData.data?.body : [];
+
   return (
-    <DarkBgDialog
-      show={props.show}
-      setShow={props.setShow}
-      onClose={handleClose}
-      title="Select customer"
-      sizing="5xl"
-      description="Select a customer from the list below"
-    >
-      <CommonTable
-        data={customerListData.data?.data || []}
-        columns={columnDefs}
-        hasPagination
-        paginationMode="server"
-        paginationState={{
-          pageIndex: page - 1,
-          pageSize,
-        }}
-        onPaginationChange={(newState) => {
-          setPage(newState.pageIndex + 1);
-          setPageSize(newState.pageSize);
-        }}
-        totalPages={
-          customerListData.data?.totalRecords
-            ? Math.ceil(customerListData.data?.totalRecords / pageSize) ?? -1
-            : 0
-        }
-        stickyHeader
-      />
-    </DarkBgDialog>
+    <Dialog open={props.show} onOpenChange={props.setShow}>
+      <DialogContent className="max-w-4xl">
+        <DialogHeader>
+          <DialogTitle>Select customer</DialogTitle>
+          <DialogDescription>
+            Select a customer from the list below
+          </DialogDescription>
+        </DialogHeader>
+        <CommonTable
+          data={customersList}
+          columns={columnDefs}
+          hasPagination
+          paginationMode="server"
+          paginationState={{
+            pageIndex: page - 1,
+            pageSize,
+          }}
+          onPaginationChange={(newState) => {
+            setPage(newState.pageIndex + 1);
+            setPageSize(newState.pageSize);
+          }}
+          totalPages={
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / pageSize) ?? -1
+              : 0
+          }
+          stickyHeader
+        />
+      </DialogContent>
+    </Dialog>
   );
 };
-
-export default SelectCustomerModal;

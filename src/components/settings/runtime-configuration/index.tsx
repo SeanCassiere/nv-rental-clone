@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFeature } from "@/hooks/internal/useFeature";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
+
+import { SETTINGS_LOCATION_KEYS } from "@/utils/constants";
 
 const SettingsEmailTemplatesTab = React.lazy(
   () => import("@/components/settings/runtime-configuration/email-templates")
@@ -29,6 +32,8 @@ function getValueForTabList(list: TabListItem[], id: string) {
 }
 
 const SettingsRuntimeConfigurationTab = () => {
+  const { t } = useTranslation("settings");
+
   const navigate = useNavigate({ from: destinationSettingsRoute.id });
 
   const { tab } = useSearch({
@@ -46,7 +51,7 @@ const SettingsRuntimeConfigurationTab = () => {
     const tabItems: TabListItem[] = [
       {
         id: "email-templates",
-        title: "Email templates",
+        title: t("titles.emailTemplates"),
         component: <SettingsEmailTemplatesTab />,
       },
     ];
@@ -54,30 +59,35 @@ const SettingsRuntimeConfigurationTab = () => {
     if (showGlobalDocuments) {
       tabItems.push({
         id: "global-documents",
-        title: "Global documents",
+        title: t("titles.globalDocuments"),
         component: <SettingsGlobalDocumentsTab />,
       });
     }
 
     tabItems.push({
       id: "number-sequencing",
-      title: "Number sequencing",
+      title: t("titles.idConfiguration"),
       component: <Skeleton className="h-96" />,
     });
     tabItems.push({
       id: "system-lists",
-      title: "System lists",
+      title: t("titles.compatibilityConfiguration"),
       component: <Skeleton className="h-96" />,
     });
 
     return tabItems;
-  }, [showGlobalDocuments]);
+  }, [showGlobalDocuments, t]);
 
   const currentTab = tab ?? "email-templates";
   const activeTab = getValueForTabList(tabs, currentTab);
   const onTabChange = React.useCallback(
     (id: string) => {
-      navigate({ search: { tab: id }, replace: true });
+      navigate({
+        params: { destination: SETTINGS_LOCATION_KEYS.runtimeConfiguration },
+        search: { tab: id },
+        replace: true,
+        resetScroll: false,
+      });
     },
     [navigate]
   );
@@ -85,10 +95,10 @@ const SettingsRuntimeConfigurationTab = () => {
   return (
     <>
       <h2 className="text-xl font-semibold leading-10">
-        Runtime configuration
+        {t("titles.runtime")}
       </h2>
       <p className="text-base text-foreground/80">
-        Customize and manage your application runtime configuration with ease.
+        {t("descriptions.runtime")}
       </p>
       <Tabs
         value={activeTab}

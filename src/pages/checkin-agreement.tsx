@@ -13,10 +13,7 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
-import {
-  checkinAgreementByIdRoute,
-  viewAgreementByIdRoute,
-} from "@/routes/agreements/agreement-id-route";
+import { checkinAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -54,7 +51,7 @@ const CheckinAgreementPage = () => {
 
   const handleAgreementSaveComplete = useCallback(() => {
     navigate({
-      to: viewAgreementByIdRoute.to,
+      to: "/agreements/$agreementId",
       params: { agreementId },
       search: () => ({ tab: "summary" }),
     });
@@ -62,7 +59,7 @@ const CheckinAgreementPage = () => {
 
   const handleCancelEditAgreement = useCallback(() => {
     router.navigate({
-      to: "../",
+      to: "..",
     });
   }, [router]);
 

@@ -5,7 +5,8 @@ import { FilesIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
-import CommonEmptyStateContent from "@/components/Layout/CommonEmptyStateContent";
+import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetModuleNotes } from "@/hooks/network/module/useGetModuleNotes";
 
@@ -117,19 +118,26 @@ const ModuleNotesTabContent = ({
     return columns;
   }, [module, t]);
 
+  const list = notesQuery.data?.status === 200 ? notesQuery.data.body : [];
+
   return (
     <div className="max-w-full focus:ring-0">
-      {notesQuery.status === "loading" || notesQuery.data?.status !== 200 ? (
-        <CommonEmptyStateContent
-          title={emptyContentLabels[module]?.title ?? ""}
-          subtitle={emptyContentLabels[module]?.subtitle ?? ""}
-          icon={<FilesIcon className="mx-auto h-12 w-12 text-foreground/80" />}
-        />
+      {notesQuery.status === "loading" ? (
+        <Skeleton className="h-56" />
       ) : (
-        <CommonTable
-          data={notesQuery.data?.status === 200 ? notesQuery.data.body : []}
-          columns={colDefs}
-        />
+        <>
+          {notesQuery.status === "error" || list.length === 0 ? (
+            <CommonEmptyStateContent
+              title={emptyContentLabels[module]?.title ?? ""}
+              subtitle={emptyContentLabels[module]?.subtitle ?? ""}
+              icon={
+                <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+              }
+            />
+          ) : (
+            <CommonTable columns={colDefs} data={list} />
+          )}
+        </>
       )}
     </div>
   );

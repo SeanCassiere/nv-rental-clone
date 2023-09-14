@@ -4,6 +4,8 @@ import { c } from "@/api/c";
 
 import {
   DashboardStatsSchema,
+  DashboardWidgetItemListSchema,
+  DashboardWidgetItemParsed,
   SalesStatusParse,
   ServerMessageListSchema,
   VehicleStatusCountListSchema,
@@ -63,6 +65,31 @@ const rootDashboardContract = c.router({
       200: SalesStatusParse,
       401: UnauthorizedErrorSchema,
       404: StructuredErrorSchema,
+    },
+  },
+  getWidgets: {
+    method: "GET",
+    path: "/v3/dashboard",
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: DashboardWidgetItemListSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  saveWidget: {
+    method: "POST",
+    path: "/v3/dashboard",
+    body: c.type<
+      Omit<DashboardWidgetItemParsed, "widgetScale"> & {
+        widgetScale: string;
+        clientID: number;
+        userID: number;
+      }
+    >(),
+    responses: {
+      200: z.any(),
+      201: z.any(),
+      400: StructuredErrorSchema,
     },
   },
 });

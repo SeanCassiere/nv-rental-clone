@@ -1,18 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchCustomersList } from "@/api/customers";
-
-import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
-import { CustomerListItemListSchema } from "@/schemas/customer";
-
 import { customerQKeys } from "@/utils/query-key";
+
+import { apiClient } from "@/api";
 
 export function useGetCustomersList(params: {
   page: number;
   pageSize: number;
-  filters: any;
+  filters: Omit<QueryParams, "clientId" | "userId" | "page" | "pageSize">;
+  enabled?: boolean;
 }) {
+  const enabled = typeof params.enabled !== "undefined" ? params.enabled : true;
   const auth = useAuth();
   const query = useQuery({
     queryKey: customerQKeys.search({
@@ -25,33 +24,27 @@ export function useGetCustomersList(params: {
         pageSize: params.pageSize,
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        filters: params.filters,
+        ...params.filters,
       }),
-    enabled: auth.isAuthenticated,
+    enabled: enabled && auth.isAuthenticated,
     keepPreviousData: true,
   });
   return query;
 }
 
-export async function fetchCustomersListModded(
-  params: Parameters<typeof fetchCustomersList>[0]
-) {
-  return await fetchCustomersList({
-    clientId: params.clientId || "",
-    userId: params.userId || "",
-    accessToken: params.accessToken || "",
-    page: params?.page,
-    pageSize: params?.pageSize,
-    filters: params.filters,
-  })
-    .then((res) => {
-      if (res.ok) return res;
-      return { ...res, data: [] };
-    })
-    .then((res) => validateApiResWithZodSchema(CustomerListItemListSchema, res))
-    .catch((e) => {
-      console.error(e);
-      throw e;
-    });
+type QueryParams = Parameters<
+  (typeof apiClient)["customer"]["getList"]
+>[0]["query"];
+
+export async function fetchCustomersListModded(params: QueryParams) {
+  const { clientId, userId, page = 1, pageSize = 10, ...filters } = params;
+  return await apiClient.customer.getList({
+    query: {
+      clientId: clientId,
+      userId: userId,
+      page: page,
+      pageSize: pageSize,
+      ...filters,
+    },
+  });
 }

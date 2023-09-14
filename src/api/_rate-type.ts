@@ -2,23 +2,23 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { TaxListSchema } from "@/schemas/tax";
+import { RentalRateTypeListSchema } from "@/schemas/rate";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
-const rootTaxContract = c.router({
+const rootRateTypeContract = c.router({
   getList: {
     method: "GET",
-    path: "/v3/taxes",
+    path: "/v3/ratetypes",
     query: UserAndClientIdAuthSchema.extend({
-      LocationId: z.string(),
-      AgreementId: z.string().optional(),
+      VehicleTypeId: z.string().optional(),
+      LocationId: z.string().optional(),
     }),
     responses: {
-      200: TaxListSchema,
+      200: RentalRateTypeListSchema,
       404: StructuredErrorSchema,
     },
   },
 });
 
-export { rootTaxContract };
+export { rootRateTypeContract };

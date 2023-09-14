@@ -28,21 +28,17 @@ import {
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-import { useGetGlobalSearch } from "@/hooks/network/module/useGetGlobalSearch";
+import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
+import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
+import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
+import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
-import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
-import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
-import { indexRoute } from "@/routes/index";
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
-import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
+import type { GlobalSearchReturnType } from "@/types/search";
 
 import { cn, IsMacLike } from "@/utils";
 
@@ -55,12 +51,121 @@ export const CommandMenu = () => {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
 
+  const authValues = useAuthValues();
+
+  const rowCountStr =
+    getLocalStorageForUser(
+      authValues.clientId,
+      authValues.userId,
+      USER_STORAGE_KEYS.tableRowCount
+    ) || APP_DEFAULTS.tableRowCount;
+  const defaultRowCount = parseInt(rowCountStr, 10);
+
   const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =
     useTernaryDarkMode();
 
   const searchTerm = useDebounce(text, 350);
 
-  const search = useGetGlobalSearch({ searchTerm });
+  // customers
+  const customersQuery = useGetCustomersList({
+    page: 1,
+    pageSize: 50,
+    filters: {
+      Keyword: searchTerm,
+    },
+    enabled: Boolean(searchTerm),
+  });
+  const customersList =
+    customersQuery.data?.status === 200 ? customersQuery.data?.body : [];
+  const customers: GlobalSearchReturnType = customersList.map((customer) => {
+    const displayText = `${customer.FullName}`;
+    return {
+      module: "customers",
+      referenceId: `${customer.id}`,
+      displayText,
+      fullDisplayText: `Customers > ${displayText}`,
+    };
+  });
+
+  // vehicles
+  const vehiclesQuery = useGetVehiclesList({
+    page: 1,
+    pageSize: 50,
+    filters: {
+      LicenseNo: searchTerm,
+    },
+    enabled: Boolean(searchTerm),
+  });
+  const vehiclesList =
+    vehiclesQuery.data?.status === 200 ? vehiclesQuery.data?.body : [];
+  const vehicles: GlobalSearchReturnType = vehiclesList.map((vehicle) => {
+    const displayText = `${vehicle.LicenseNo} ${vehicle.Year} ${vehicle.VehicleMakeName} ${vehicle.ModelName}`;
+    return {
+      module: "vehicles",
+      referenceId: `${vehicle.id}`,
+      displayText,
+      fullDisplayText: `Vehicles > ${displayText}`,
+    };
+  });
+
+  // reservations
+  const reservationsQuery = useGetReservationsList({
+    page: 1,
+    pageSize: 50,
+    filters: {
+      Keyword: searchTerm,
+      Statuses: ["2", "6", "7"],
+    },
+    enabled: Boolean(searchTerm),
+  });
+  const reservationsList =
+    reservationsQuery.data?.status === 200 ? reservationsQuery.data?.body : [];
+  const reservations: GlobalSearchReturnType = reservationsList.map((res) => {
+    const displayText = String(
+      res.ReservationNumber +
+        " | " +
+        String(res.FirstName + " " + res.LastName).trim() +
+        " - " +
+        String(res.VehicleType) +
+        (res.LicenseNo ? " - " + String(res.LicenseNo) : "")
+    ).trim();
+    return {
+      module: "reservations",
+      referenceId: `${res.id}`,
+      displayText,
+      fullDisplayText: `Reservations > ${displayText}`,
+    };
+  });
+
+  // agreements
+  const agreementsQuery = useGetAgreementsList({
+    page: 1,
+    pageSize: 50,
+    filters: {
+      Keyword: searchTerm,
+      Statuses: ["2", "5", "7"],
+    },
+    enabled: Boolean(searchTerm),
+  });
+  const agreementsList =
+    agreementsQuery.data?.status === 200 ? agreementsQuery.data?.body : [];
+  const agreements: GlobalSearchReturnType = agreementsList.map((agreement) => {
+    const displayText = String(
+      agreement.AgreementNumber +
+        " | " +
+        String(agreement.FullName).trim() +
+        " - " +
+        String(agreement.VehicleType) +
+        " - " +
+        String(agreement.LicenseNo)
+    ).trim();
+    return {
+      module: "agreements",
+      referenceId: `${agreement.id}`,
+      displayText,
+      fullDisplayText: `Agreements > ${displayText}`,
+    };
+  });
 
   const run = React.useCallback((command: () => unknown) => {
     command();
@@ -105,163 +210,117 @@ export const CommandMenu = () => {
           <CommandEmpty>No results found.</CommandEmpty>
 
           <CommandGroup
-            heading={
-              search.data &&
-              search.data.filter((i) => i.module === "vehicles").length > 0
-                ? "Fleet results"
-                : undefined
-            }
+            heading={vehicles.length > 0 ? "Fleet results" : undefined}
           >
-            {search.isLoading && (
+            {searchTerm.length > 0 && vehiclesQuery.isLoading && (
               <CommandLoading>
                 <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
               </CommandLoading>
             )}
-            {[
-              ...(search.data &&
-              search.data.filter((i) => i.module === "vehicles").length > 0
-                ? search.data
-                : []),
-            ]
-              .filter((i) => i.module === "vehicles")
-              .map((item, idx) => (
-                <CommandItem
-                  key={`${item.fullDisplayText}_${idx}`}
-                  value={item.fullDisplayText}
-                  onSelect={() => {
-                    run(() =>
-                      navigate({
-                        to: viewFleetByIdRoute.to,
-                        params: { vehicleId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
-                      })
-                    );
-                  }}
-                >
-                  <CarIcon className="mr-2 h-4 w-4 text-primary/70" />
-                  {item.displayText}
-                </CommandItem>
-              ))}
+            {vehicles.map((item, idx) => (
+              <CommandItem
+                key={`${item.fullDisplayText}_${idx}`}
+                value={item.fullDisplayText}
+                onSelect={() => {
+                  run(() =>
+                    navigate({
+                      to: "/fleet/$vehicleId",
+                      params: { vehicleId: item.referenceId },
+                      search: () => ({ tab: "summary" }),
+                    })
+                  );
+                }}
+              >
+                <CarIcon className="mr-2 h-4 w-4 text-primary/70" />
+                {item.displayText}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+
+          <CommandGroup
+            heading={customers.length > 0 ? "Customer results" : undefined}
+          >
+            {searchTerm.length > 0 && customersQuery.isLoading && (
+              <CommandLoading>
+                <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
+              </CommandLoading>
+            )}
+            {customers.map((item, idx) => (
+              <CommandItem
+                key={`${item.fullDisplayText}_${idx}`}
+                value={item.fullDisplayText}
+                onSelect={() => {
+                  run(() =>
+                    navigate({
+                      to: "/customers/$customerId",
+                      params: { customerId: item.referenceId },
+                      search: () => ({ tab: "summary" }),
+                    })
+                  );
+                }}
+              >
+                <Users2Icon className="mr-2 h-4 w-4 text-primary/70" />
+                {item.displayText}
+              </CommandItem>
+            ))}
           </CommandGroup>
 
           <CommandGroup
             heading={
-              search.data &&
-              search.data.filter((i) => i.module === "customers").length > 0
-                ? "Customer results"
-                : undefined
+              reservations.length > 0 ? "Reservation results" : undefined
             }
           >
-            {search.isLoading && (
+            {searchTerm.length > 0 && reservationsQuery.isLoading && (
               <CommandLoading>
                 <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
               </CommandLoading>
             )}
-            {[
-              ...(search.data &&
-              search.data.filter((i) => i.module === "customers").length > 0
-                ? search.data
-                : []),
-            ]
-              .filter((i) => i.module === "customers")
-              .map((item, idx) => (
-                <CommandItem
-                  key={`${item.fullDisplayText}_${idx}`}
-                  value={item.fullDisplayText}
-                  onSelect={() => {
-                    run(() =>
-                      navigate({
-                        to: viewCustomerByIdRoute.to,
-                        params: { customerId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
-                      })
-                    );
-                  }}
-                >
-                  <Users2Icon className="mr-2 h-4 w-4 text-primary/70" />
-                  {item.displayText}
-                </CommandItem>
-              ))}
+            {reservations.map((item, idx) => (
+              <CommandItem
+                key={`${item.fullDisplayText}_${idx}`}
+                value={item.fullDisplayText}
+                onSelect={() => {
+                  run(() =>
+                    navigate({
+                      to: "/reservations/$reservationId",
+                      params: { reservationId: item.referenceId },
+                      search: () => ({ tab: "summary" }),
+                    })
+                  );
+                }}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4 text-primary/70" />
+                {item.displayText}
+              </CommandItem>
+            ))}
           </CommandGroup>
 
           <CommandGroup
-            heading={
-              search.data &&
-              search.data.filter((i) => i.module === "reservations").length > 0
-                ? "Reservation results"
-                : undefined
-            }
+            heading={agreements.length > 0 ? "Agreement results" : undefined}
           >
-            {search.isLoading && (
+            {searchTerm.length > 0 && agreementsQuery.isLoading && (
               <CommandLoading>
                 <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
               </CommandLoading>
             )}
-            {[
-              ...(search.data &&
-              search.data.filter((i) => i.module === "reservations").length > 0
-                ? search.data
-                : []),
-            ]
-              .filter((i) => i.module === "reservations")
-              .map((item, idx) => (
-                <CommandItem
-                  key={`${item.fullDisplayText}_${idx}`}
-                  value={item.fullDisplayText}
-                  onSelect={() => {
-                    run(() =>
-                      navigate({
-                        to: viewReservationByIdRoute.to,
-                        params: { reservationId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
-                      })
-                    );
-                  }}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 text-primary/70" />
-                  {item.displayText}
-                </CommandItem>
-              ))}
-          </CommandGroup>
-
-          <CommandGroup
-            heading={
-              search.data &&
-              search.data.filter((i) => i.module === "agreements").length > 0
-                ? "Agreement results"
-                : undefined
-            }
-          >
-            {search.isLoading && (
-              <CommandLoading>
-                <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
-              </CommandLoading>
-            )}
-            {[
-              ...(search.data &&
-              search.data.filter((i) => i.module === "agreements").length > 0
-                ? search.data
-                : []),
-            ]
-              .filter((i) => i.module === "agreements")
-              .map((item, idx) => (
-                <CommandItem
-                  key={`${item.fullDisplayText}_${idx}`}
-                  value={item.fullDisplayText}
-                  onSelect={() => {
-                    run(() =>
-                      navigate({
-                        to: viewAgreementByIdRoute.to,
-                        params: { agreementId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
-                      })
-                    );
-                  }}
-                >
-                  <FileSignatureIcon className="mr-2 h-4 w-4 text-primary/70" />
-                  {item.displayText}
-                </CommandItem>
-              ))}
+            {agreements.map((item, idx) => (
+              <CommandItem
+                key={`${item.fullDisplayText}_${idx}`}
+                value={item.fullDisplayText}
+                onSelect={() => {
+                  run(() =>
+                    navigate({
+                      to: "/agreements/$agreementId",
+                      params: { agreementId: item.referenceId },
+                      search: () => ({ tab: "summary" }),
+                    })
+                  );
+                }}
+              >
+                <FileSignatureIcon className="mr-2 h-4 w-4 text-primary/70" />
+                {item.displayText}
+              </CommandItem>
+            ))}
           </CommandGroup>
 
           <CommandGroup heading="Go to">
@@ -269,8 +328,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchFleetRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/fleet",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -282,8 +341,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchCustomersRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/customers",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -295,8 +354,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchReservationsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/reservations",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -308,8 +367,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchAgreementsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/agreements",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -321,7 +380,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: indexRoute.to,
+                    to: "/",
                   })
                 );
               }}
@@ -333,8 +392,8 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: searchAgreementsRoute.to,
-                    search: () => ({ page: 1, size: 10 }),
+                    to: "/agreements",
+                    search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
               }}
@@ -365,7 +424,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: destinationSettingsRoute.to,
+                    to: "/settings/$destination",
                     params: () => ({ destination: "profile" }),
                   })
                 );
@@ -378,7 +437,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: mainSettingsRoute.to,
+                    to: "/settings",
                   })
                 );
               }}

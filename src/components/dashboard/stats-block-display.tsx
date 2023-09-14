@@ -13,16 +13,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-
 import type { TDashboardStats } from "@/schemas/dashboard";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
-
-import { indexRoute } from "@/routes";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;
@@ -53,7 +48,7 @@ const DashboardStatsBlock = ({
             icon={CreditCardIcon}
             value={formatDisplayValue(statistics?.todaysReservationCount)}
             linkProps={{
-              to: searchReservationsRoute.to,
+              to: "/reservations",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -63,7 +58,6 @@ const DashboardStatsBlock = ({
                   CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
                 },
               }),
-              preload: "intent",
             }}
           />
         </li>
@@ -73,7 +67,7 @@ const DashboardStatsBlock = ({
             icon={ArrowDownLeftIcon}
             value={formatDisplayValue(statistics?.todaysArrivalsCount)}
             linkProps={{
-              to: searchAgreementsRoute.to,
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -83,7 +77,6 @@ const DashboardStatsBlock = ({
                   IsSearchOverdues: "false",
                 },
               }),
-              preload: "intent",
             }}
           />
         </li>
@@ -93,13 +86,12 @@ const DashboardStatsBlock = ({
             icon={CarIcon}
             value={formatDisplayValue(statistics?.openAgreement)}
             linkProps={{
-              to: searchAgreementsRoute.to,
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
                 filters: { Statuses: ["2"] },
               }),
-              preload: "intent",
             }}
           />
         </li>
@@ -109,13 +101,12 @@ const DashboardStatsBlock = ({
             icon={CreditCardIcon}
             value={formatDisplayValue(statistics?.overDues)}
             linkProps={{
-              to: searchAgreementsRoute.to,
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
                 filters: { Statuses: ["2"], IsSearchOverdues: "true" },
               }),
-              preload: "intent",
             }}
           />
         </li>
@@ -125,13 +116,12 @@ const DashboardStatsBlock = ({
             icon={BanknoteIcon}
             value={formatDisplayValue(statistics?.pendingPayment)}
             linkProps={{
-              to: searchAgreementsRoute.to,
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
                 filters: { Statuses: ["5"] },
               }),
-              preload: "intent",
             }}
           />
         </li>
@@ -141,7 +131,7 @@ const DashboardStatsBlock = ({
             icon={BellIcon}
             value={formatDisplayValue(statistics?.serviceAlerts)}
             linkProps={{
-              to: indexRoute.id,
+              to: "/",
             }}
           />
         </li>

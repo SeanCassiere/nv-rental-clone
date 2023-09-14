@@ -1,18 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { fetchVehiclesList } from "@/api/vehicles";
-
-import { validateApiResWithZodSchema } from "@/schemas/apiFetcher";
-import { VehicleListItemListSchema } from "@/schemas/vehicle";
-
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fleetQKeys } from "@/utils/query-key";
+
+import { apiClient } from "@/api";
 
 export function useGetVehiclesList(params: {
   page: number;
   pageSize: number;
-  filters: any;
+  filters: Omit<QueryParams, "clientId" | "userId" | "page" | "pageSize">;
   enabled?: boolean;
 }) {
   const enabled = typeof params.enabled !== "undefined" ? params.enabled : true;
@@ -28,8 +25,7 @@ export function useGetVehiclesList(params: {
         pageSize: params.pageSize,
         clientId: auth.user?.profile.navotar_clientid || "",
         userId: auth.user?.profile.navotar_userid || "",
-        accessToken: auth.user?.access_token || "",
-        filters: params.filters,
+        ...params.filters,
       }),
     enabled: enabled && auth.isAuthenticated,
     keepPreviousData: true,
@@ -37,40 +33,40 @@ export function useGetVehiclesList(params: {
   return query;
 }
 
-export async function fetchVehiclesListModded(
-  params: Parameters<typeof fetchVehiclesList>[0]
-) {
-  return await fetchVehiclesList({
-    clientId: params.clientId || "",
-    userId: params.userId || "",
-    accessToken: params.accessToken || "",
-    page: params?.page,
-    pageSize: params?.pageSize,
-    filters: {
-      ...params.filters,
-      ...("StartDate" in params.filters
+type QueryParams = Omit<
+  Parameters<(typeof apiClient)["vehicle"]["getList"]>[0]["query"],
+  "StartDate" | "EndDate"
+> & {
+  StartDate?: Date;
+  EndDate?: Date;
+};
+
+export async function fetchVehiclesListModded(params: QueryParams) {
+  const {
+    clientId,
+    userId,
+    page = 1,
+    pageSize = 10,
+    StartDate,
+    EndDate,
+    ...filters
+  } = params;
+  return await apiClient.vehicle.getList({
+    query: {
+      clientId: clientId,
+      userId: userId,
+      page: page,
+      pageSize: pageSize,
+      ...(StartDate
         ? {
-            StartDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-              params.filters.StartDate
-            ),
+            StartDate:
+              localDateTimeWithoutSecondsToQueryYearMonthDay(StartDate),
           }
         : {}),
-      ...("EndDate" in params.filters
-        ? {
-            EndDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-              params.filters.EndDate
-            ),
-          }
+      ...(EndDate
+        ? { EndDate: localDateTimeWithoutSecondsToQueryYearMonthDay(EndDate) }
         : {}),
+      ...filters,
     },
-  })
-    .then((res) => {
-      if (res.ok) return res;
-      return { ...res, data: [] };
-    })
-    .then((res) => validateApiResWithZodSchema(VehicleListItemListSchema, res))
-    .catch((e) => {
-      console.error(e);
-      throw e;
-    });
+  });
 }

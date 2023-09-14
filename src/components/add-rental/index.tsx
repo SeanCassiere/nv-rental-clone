@@ -26,20 +26,6 @@ import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
-import { addAgreementRoute } from "@/routes/agreements/add-agreement-route";
-import {
-  checkinAgreementByIdRoute,
-  editAgreementByIdRoute,
-  viewAgreementByIdRoute,
-} from "@/routes/agreements/agreement-id-route";
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
-import {
-  editReservationByIdRoute,
-  viewReservationByIdRoute,
-} from "@/routes/reservations/reservation-id-route";
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
-
 import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
@@ -484,35 +470,6 @@ const AddRentalParentForm = ({
       };
     });
 
-    setCommonCustomerInformation((info) => {
-      if (info) return info;
-      startingCompletionStages.customer = true;
-      return {
-        address: data?.customerDetails?.address1 || "",
-        city: data?.customerDetails?.city || "",
-        countryId: data?.countryId || 0,
-        customerId: data?.customerDetails?.customerId || 0,
-        dateOfBirth: data?.customerDetails.dateOfbirth || "",
-        email: data?.customerDetails?.email || "",
-        firstName: data?.customerDetails?.firstName || "",
-        lastName: data?.customerDetails?.lastName || "",
-        licenseExpiryDate: data?.customerDetails?.licenseExpiryDate || null,
-        licenseIssueDate: data?.customerDetails?.licenseIssueDate || null,
-        licenseNumber: data?.customerDetails?.licenseNumber || null,
-        bPhone: data?.customerDetails?.bPhone || "",
-        cPhone: data?.customerDetails?.cPhone || "",
-        hPhone: data?.customerDetails?.hPhone || "",
-        stateId: data?.stateId || 0,
-        zipCode: data?.zipCode || "",
-        isTaxSaver:
-          data.customerDetails?.customerType
-            ?.toLowerCase()
-            .includes("taxsaver") ||
-          data?.customerDetails?.isTaxExempt ||
-          false,
-      };
-    });
-
     if (data.rateList && data.rateList[0]) {
       const existingAgreementRateName = data.rateList[0].rateName;
       setRateDetails((info) => {
@@ -600,7 +557,10 @@ const AddRentalParentForm = ({
   useEffect(() => {
     if (getOptimalRateQuery.status !== "success") return;
 
-    const data = getOptimalRateQuery.data;
+    const data =
+      getOptimalRateQuery.data.status === 200
+        ? getOptimalRateQuery.data.body
+        : null;
 
     if (data && data?.rateName) {
       setRateDetails((values) => {
@@ -653,18 +613,19 @@ const AddRentalParentForm = ({
   useEffect(() => {
     if (getRentalRatesQuery.status !== "success") return;
 
-    const data = getRentalRatesQuery.data;
+    const data =
+      getRentalRatesQuery.data.status === 200
+        ? getRentalRatesQuery.data.body
+        : [];
 
-    if (Array.isArray(data) && data.length > 0) {
+    if (data.length > 0 && data[0]) {
       const rate = data[0];
-      if (rate) {
-        setSelectedRate(rate);
 
-        setCreationStageComplete((prev) => ({
-          ...prev,
-          rates: true,
-        }));
-      }
+      setSelectedRate(rate);
+      setCreationStageComplete((prev) => ({
+        ...prev,
+        rates: true,
+      }));
     }
   }, [getRentalRatesQuery.data, getRentalRatesQuery.status]);
 
@@ -702,8 +663,12 @@ const AddRentalParentForm = ({
     enabled:
       module === "agreement" ? agreementConditionsForFetchingVehicles : false,
     filters: {
-      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
-      CurrentLocationId: agreementRentalInformation?.checkoutLocation ?? 0,
+      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId
+        ? agreementVehicleInformation?.vehicleTypeId.toString()
+        : undefined,
+      CurrentLocationId: agreementRentalInformation?.checkoutLocation
+        ? agreementRentalInformation?.checkoutLocation.toString()
+        : undefined,
     },
   });
 
@@ -804,6 +769,8 @@ const AddRentalParentForm = ({
         module === "agreement"
           ? Number(agreementRentalInformation?.checkoutLocation ?? 0).toString()
           : "0",
+      AgreementId:
+        module === "agreement" && isEdit ? String(referenceId) : undefined,
     },
     enabled:
       module === "agreement" ? taxesAgreementReady : taxesReservationReady,
@@ -845,7 +812,7 @@ const AddRentalParentForm = ({
       amountPaid: 0,
       preAdjustment: 0,
       postAdjustment: 0,
-      securityDeposit: 0,
+      securityDeposit: "",
       additionalCharge: 0,
       unTaxableAdditional: 0,
       fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
@@ -884,10 +851,7 @@ const AddRentalParentForm = ({
           <div className="flex w-full items-center justify-start gap-2">
             {!isEdit && module === "agreement" && (
               <>
-                <Link
-                  to={searchAgreementsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Agreements
                 </Link>
                 <ChevronRightIcon
@@ -895,7 +859,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={addAgreementRoute.to}
+                  to="/agreements/new"
                   search={() => ({ stage })}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -905,10 +869,7 @@ const AddRentalParentForm = ({
             )}
             {isEdit && module === "agreement" && (
               <>
-                <Link
-                  to={searchAgreementsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Agreements
                 </Link>
                 <ChevronRightIcon
@@ -916,7 +877,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewAgreementByIdRoute.to as any}
+                  to="/agreements/$agreementId"
                   params={{ agreementId: String(referenceId) }}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -928,7 +889,7 @@ const AddRentalParentForm = ({
                 />
                 {isCheckin ? (
                   <Link
-                    to={checkinAgreementByIdRoute.to}
+                    to="/agreements/$agreementId/check-in"
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
                     className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
@@ -937,7 +898,7 @@ const AddRentalParentForm = ({
                   </Link>
                 ) : (
                   <Link
-                    to={editAgreementByIdRoute.to}
+                    to="/agreements/$agreementId/edit"
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
                     className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
@@ -949,10 +910,7 @@ const AddRentalParentForm = ({
             )}
             {!isEdit && module === "reservation" && (
               <>
-                <Link
-                  to={searchReservationsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Reservations
                 </Link>
                 <ChevronRightIcon
@@ -960,7 +918,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={addReservationRoute.to}
+                  to="/reservations/new"
                   search={() => ({ stage })}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -970,10 +928,7 @@ const AddRentalParentForm = ({
             )}
             {isEdit && module === "reservation" && (
               <>
-                <Link
-                  to={searchReservationsRoute.to as any}
-                  className="text-2xl font-semibold leading-6"
-                >
+                <Link to=".." className="text-2xl font-semibold leading-6">
                   Reservations
                 </Link>
                 <ChevronRightIcon
@@ -981,7 +936,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={viewReservationByIdRoute.to as any}
+                  to="/reservations/$reservationId"
                   params={{ reservationId: String(referenceId) }}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >
@@ -992,7 +947,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to={editReservationByIdRoute.to}
+                  to="/reservations/$reservationId/edit"
                   search={() => ({ stage })}
                   params={{ reservationId: String(referenceId) }}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"

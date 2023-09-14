@@ -34,10 +34,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
 
-import {
-  editFleetByIdRoute,
-  viewFleetByIdRoute,
-} from "@/routes/fleet/fleet-id-route";
+import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
@@ -75,7 +72,7 @@ function VehicleViewPage() {
 
   const onTabClick = (newTabId: string) => {
     navigate({
-      to: viewFleetByIdRoute.to,
+      to: "/fleet/$vehicleId",
       search: (others) => ({ ...others, tab: newTabId }),
       params: { vehicleId },
       replace: true,
@@ -155,12 +152,7 @@ function VehicleViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link
-              className="text-2xl font-semibold leading-6"
-              onClick={() => {
-                router.history.go(-1);
-              }}
-            >
+            <Link to=".." className="text-2xl font-semibold leading-6">
               Fleet
             </Link>
             <ChevronRightIcon
@@ -168,7 +160,8 @@ function VehicleViewPage() {
               aria-hidden="true"
             />
             <Link
-              to={viewFleetByIdRoute.to}
+              to="/fleet/$vehicleId"
+              // @ts-expect-error
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ vehicleId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
@@ -178,7 +171,7 @@ function VehicleViewPage() {
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to={editFleetByIdRoute.to}
+              to="/fleet/$vehicleId/edit"
               params={{ vehicleId: String(vehicleId) }}
               className={cn(
                 buttonVariants({ size: "sm", variant: "secondary" })

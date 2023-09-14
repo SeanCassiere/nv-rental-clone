@@ -26,7 +26,7 @@ export type CalculateRentalSummaryHookInput = {
   amountPaid: number;
   preAdjustment: number;
   postAdjustment: number;
-  securityDeposit: number;
+  securityDeposit: string | number;
   additionalCharge: number;
   unTaxableAdditional: number;
   fuelLevelOut: string;
@@ -112,8 +112,8 @@ export function usePostCalculateRentalSummaryAmounts(opts: {
         writeOffAmount: input.writeOffAmount,
         customerId: input.customerId,
         isCheckin: input.isCheckin,
-        odometerOut: 0,
-        odometerIn: 0,
+        odometerOut: input.odometerOut,
+        odometerIn: input.odometerIn,
       };
 
       return apiClient.summary.getLiveCalculationsForRental({ body });
