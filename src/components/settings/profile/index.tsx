@@ -2,6 +2,7 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -51,6 +52,8 @@ import { locationQKeys, userQKeys } from "@/utils/query-key";
 import { apiClient } from "@/api";
 
 export default function SettingsProfileTab() {
+  const { t } = useTranslation("settings");
+
   const userQuery = useGetUserProfile({
     suspense: true,
   });
@@ -62,9 +65,9 @@ export default function SettingsProfileTab() {
   return (
     <Card className="shadow-none lg:w-[600px]">
       <CardHeader className="p-4 lg:p-6">
-        <CardTitle className="text-xl">Profile</CardTitle>
+        <CardTitle className="text-xl">{t("titles.profile")}</CardTitle>
         <CardDescription className="text-base text-foreground/80">
-          Customize and manage your profile with ease.
+          {t("descriptions.profile")}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-0 lg:p-6">
@@ -96,6 +99,11 @@ function ProfileForm(props: {
   languages: UserLanguageItem[];
 }) {
   const { user, languages } = props;
+
+  const { t: tConfig } = useTranslation("settings");
+  const { t: tMessages } = useTranslation("messages");
+  const { t: tLabels } = useTranslation("labels");
+
   const auth = useAuthValues();
   const queryClient = useQueryClient();
 
@@ -139,13 +147,17 @@ function ProfileForm(props: {
 
       if (data.status >= 200 && data.status < 300) {
         toast({
-          title: "Profile updated",
-          description: "Your profile has been updated successfully.",
+          title: tMessages("labelUpdated", {
+            label: tConfig("titles.profile"),
+          }),
+          description: tMessages("labelUpdatedSuccess", {
+            label: tConfig("titles.profile"),
+          }),
         });
       } else {
         toast({
-          title: "Something went wrong",
-          description: "Please try again later.",
+          title: tMessages("somethingWentWrong"),
+          description: tMessages("pleaseTryAgain"),
           variant: "destructive",
         });
       }
@@ -153,8 +165,8 @@ function ProfileForm(props: {
     onError: (err) => {
       if (err instanceof Error) {
         toast({
-          title: "Something went wrong",
-          description: err?.message || "Please try again later.",
+          title: tMessages("somethingWentWrong"),
+          description: err?.message || tMessages("pleaseTryAgain"),
           variant: "destructive",
         });
       }
@@ -186,12 +198,12 @@ function ProfileForm(props: {
           name="userName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>{tLabels("display.username")}</FormLabel>
               <FormControl>
                 <Input {...field} disabled />
               </FormControl>
               <FormDescription>
-                This is your username and cannot be changed.
+                {tMessages("usernameCannotBeChanged")}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -203,12 +215,12 @@ function ProfileForm(props: {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{tLabels("display.email")}</FormLabel>
               <FormControl>
                 <Input {...field} disabled={isDisabled} />
               </FormControl>
               <FormDescription>
-                The email address associated with your account.
+                {tMessages("emailAssociatedWithAccount")}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -220,7 +232,7 @@ function ProfileForm(props: {
             name="firstName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>First name</FormLabel>
+                <FormLabel>{tLabels("display.firstName")}</FormLabel>
                 <FormControl>
                   <Input {...field} disabled={isDisabled} />
                 </FormControl>
@@ -233,7 +245,7 @@ function ProfileForm(props: {
             name="lastName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Last name</FormLabel>
+                <FormLabel>{tLabels("display.lastName")}</FormLabel>
                 <FormControl>
                   <Input {...field} disabled={isDisabled} />
                 </FormControl>
@@ -248,7 +260,7 @@ function ProfileForm(props: {
             name="language"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Language</FormLabel>
+                <FormLabel>{tLabels("display.language")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -256,7 +268,9 @@ function ProfileForm(props: {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select your localization" />
+                      <SelectValue
+                        placeholder={tMessages("selectYourLocalization")}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -277,8 +291,10 @@ function ProfileForm(props: {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>
-                  Phone no.{" "}
-                  <span className="text-xs text-foreground/70">(optional)</span>
+                  {tLabels("display.phoneNo")}&nbsp;
+                  <span className="text-xs text-foreground/70">
+                    {tLabels("display.bracketOptional")}
+                  </span>
                 </FormLabel>
                 <FormControl>
                   <Input {...field} disabled={isDisabled} />
@@ -294,9 +310,11 @@ function ProfileForm(props: {
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
-                <FormLabel>Receive emails?</FormLabel>
+                <FormLabel>
+                  {tLabels("display.youReceiveEmailsQuestion")}
+                </FormLabel>
                 <FormDescription>
-                  You'll be copied on emails that are sent from the system.
+                  {tMessages("receiveReservationEmails")}
                 </FormDescription>
               </div>
               <FormControl>
@@ -311,7 +329,7 @@ function ProfileForm(props: {
         />
         <Separator className="mt-0.5" />
         <Button type="submit" className="w-full lg:w-max" disabled={isDisabled}>
-          Save profile details
+          {tLabels("buttons.saveProfileDetails")}
         </Button>
       </form>
     </Form>

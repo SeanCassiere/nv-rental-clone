@@ -42,7 +42,7 @@ const App = () => {
     <>
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>
-          <Suspense fallback={<p>root suspense loading...</p>}>
+          <Suspense fallback={<LoadingPlaceholder />}>
             <RouterProvider router={router} defaultPreload="intent" />
           </Suspense>
           <ReactQueryDevtools initialIsOpen={false} />

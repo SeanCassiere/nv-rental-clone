@@ -1,0 +1,27 @@
+{
+  "display": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "username": "Username",
+    "email": "Email",
+    "language": "Language",
+    "phoneNo": "Phone no.",
+    "dateOfBirth": "Date of birth",
+    "homePhone": "Home phone",
+    "workPhone": "Work phone",
+    "mobilePhone": "Mobile phone",
+    "licenseNo": "License no.",
+    "address": "Address",
+    "city": "City",
+    "zip": "Zip",
+    "zipCode": "Zip code",
+    "youReceiveEmailsQuestion": "Do you want to receive emails?",
+    "bracketOptional": "(optional)",
+    "bracketRequired": "(required)",
+    "required": "Required"
+  },
+  "buttons": {
+    "saveProfileDetails": "Save profile details",
+    "saveAndContinue": "Save and continue"
+  }
+}

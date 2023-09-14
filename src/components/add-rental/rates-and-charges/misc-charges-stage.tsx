@@ -50,6 +50,8 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
     onCompleted,
   } = props;
 
+  const { t: tl } = useTranslation("labels");
+
   const isSupportingInfoAvailable =
     Boolean(durationStageData) && Boolean(vehicleStageData);
 
@@ -132,7 +134,7 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
             onCompleted();
           }}
         >
-          Save & Continue
+          {tl("buttons.saveAndContinue")}
         </Button>
       </div>
     </div>

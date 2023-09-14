@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, type LinkPropsOptions } from "@tanstack/react-router";
 import { ChevronRightIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,8 @@ export const SelectorSettingsNavigation = ({
   currentId,
   currentTitle,
 }: SelectorSettingsNavigationProps) => {
+  const { t } = useTranslation("messages");
+
   const navigate = useNavigate();
 
   const [open, setOpen] = React.useState(false);
@@ -66,7 +69,7 @@ export const SelectorSettingsNavigation = ({
         <PopoverContent align="start" className="w-[calc(100vw-10%)] p-0">
           <Command>
             <CommandList>
-              <CommandEmpty>No results found</CommandEmpty>
+              <CommandEmpty>{t("notFound")}</CommandEmpty>
               <CommandGroup>
                 {items.map((item, idx) => {
                   const isSelected =
