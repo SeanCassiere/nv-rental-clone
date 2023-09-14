@@ -34,7 +34,7 @@ import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-param
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
@@ -159,6 +159,12 @@ function VehiclesSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = vehiclesData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const vehiclesList =
+    vehiclesData.data?.status === 200 ? vehiclesData.data?.body : [];
+
   useDocumentTitle(titleMaker("Fleet"));
 
   return (
@@ -179,7 +185,7 @@ function VehiclesSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={vehiclesData.data?.data || []}
+          data={vehiclesList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -187,8 +193,8 @@ function VehiclesSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            vehiclesData.data?.totalRecords
-              ? Math.ceil(vehiclesData.data?.totalRecords / size) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}

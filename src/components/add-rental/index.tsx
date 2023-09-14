@@ -659,8 +659,12 @@ const AddRentalParentForm = ({
     enabled:
       module === "agreement" ? agreementConditionsForFetchingVehicles : false,
     filters: {
-      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
-      CurrentLocationId: agreementRentalInformation?.checkoutLocation ?? 0,
+      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId
+        ? agreementVehicleInformation?.vehicleTypeId.toString()
+        : "0",
+      CurrentLocationId: agreementRentalInformation?.checkoutLocation
+        ? agreementRentalInformation?.checkoutLocation.toString()
+        : "0",
     },
   });
 

@@ -38,9 +38,10 @@ export async function fetchGlobalSearchList(
     fetchVehiclesListModded({
       clientId,
       userId,
-      accessToken,
-      filters: { LicenseNo: searchTerm },
-    }).catch(() => ({ data: [] as TVehicleListItemParsed[] })),
+      page: 1,
+      pageSize: 50,
+      LicenseNo: searchTerm,
+    }).catch(() => ({ body: [] as TVehicleListItemParsed[], status: 900 })),
     fetchReservationsListModded({
       clientId,
       userId,
@@ -86,7 +87,8 @@ export async function fetchGlobalSearchList(
       );
       returnableResults = [...returnableResults, ...customerResults];
 
-      const vehicles = vehiclesPromise.data;
+      const vehicles =
+        vehiclesPromise?.status === 200 ? vehiclesPromise?.body : [];
       const vehicleResults: GlobalSearchReturnType = vehicles.map((vehicle) => {
         const displayText = `${vehicle.LicenseNo} ${vehicle.Year} ${vehicle.VehicleMakeName} ${vehicle.ModelName}`;
         return {

@@ -99,8 +99,8 @@ export const VehicleStage = ({
 
   //
   const searchFilters = {
-    VehicleTypeId: formVehicleTypeId,
-    CurrentLocationId: checkoutLocation,
+    VehicleTypeId: Number(formVehicleTypeId || 0).toString(),
+    CurrentLocationId: Number(checkoutLocation || 0).toString(),
     StartDate: rentalInformation?.checkoutDate,
     EndDate: rentalInformation?.checkinDate,
   };
@@ -113,7 +113,8 @@ export const VehicleStage = ({
         : true,
     filters: searchFilters,
   });
-  const vehiclesList = vehicleListData.data?.data || [];
+  const vehiclesList =
+    vehicleListData.data?.status === 200 ? vehicleListData?.data?.body : [];
 
   //
   const fuelLevelListData = useGetVehicleFuelLevelList();
@@ -221,7 +222,7 @@ export const VehicleStage = ({
                     key={`${formVehicleId}-select`}
                     onValueChange={(value) => {
                       field.onChange(value);
-                      const vehicle = vehicleListData.data?.data.find(
+                      const vehicle = vehiclesList.find(
                         (v) => v.VehicleId === parseInt(value ?? "0")
                       );
                       if (vehicle) {

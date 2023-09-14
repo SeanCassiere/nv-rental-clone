@@ -14,6 +14,8 @@ import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { type TVehicleListItemParsed } from "@/schemas/vehicle";
 
+import { getXPaginationFromHeaders } from "@/utils";
+
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
 interface SelectVehicleModalProps {
@@ -24,8 +26,8 @@ interface SelectVehicleModalProps {
   filters: {
     StartDate: Date | undefined;
     EndDate: Date | undefined;
-    CurrentLocationId: number;
-    VehicleTypeId: number | undefined;
+    CurrentLocationId: string;
+    VehicleTypeId: string | undefined;
   };
 }
 
@@ -61,6 +63,12 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
       ...filters,
     },
   });
+
+  const headers = vehicleListData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const vehiclesList =
+    vehicleListData.data?.status === 200 ? vehicleListData.data?.body : [];
 
   const columnDefs = useMemo(() => {
     const columns: any[] = [];
@@ -102,7 +110,7 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
           </DialogDescription>
         </DialogHeader>
         <CommonTable
-          data={vehicleListData.data?.data || []}
+          data={vehiclesList}
           columns={columnDefs}
           hasPagination
           paginationMode="server"
@@ -115,8 +123,8 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
             setPageSize(newState.pageSize);
           }}
           totalPages={
-            vehicleListData.data?.totalRecords
-              ? Math.ceil(vehicleListData.data?.totalRecords / pageSize) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / pageSize) ?? -1
               : 0
           }
           stickyHeader

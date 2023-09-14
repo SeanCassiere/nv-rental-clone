@@ -7,11 +7,12 @@ import { VehicleSummarySchema } from "@/schemas/summary";
 import {
   VehicleDataSchema,
   VehicleLevelListSchema,
+  VehicleListItemListSchema,
   VehicleTypeLookupList,
 } from "@/schemas/vehicle";
 
 import {
-  // PaginationSchema,
+  PaginationSchema,
   StructuredErrorSchema,
   UnauthorizedErrorSchema,
   UserAndClientIdAuthSchema,
@@ -27,6 +28,27 @@ const rootVehicleContract = c.router({
     }),
     responses: {
       200: VehicleDataSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  getList: {
+    method: "GET",
+    path: "/v3/vehicles",
+    query: UserAndClientIdAuthSchema.merge(PaginationSchema).extend({
+      Active: z.string().optional(),
+      SortDirection: z.string().optional(),
+      LicenseNo: z.string().optional(),
+      VehicleNo: z.string().optional(),
+      VehicleId: z.string().optional(),
+      VehicleStatus: z.string().optional(),
+      VehicleTypeId: z.string().optional(),
+      OwningLocationId: z.string().optional(),
+      CurrentLocationId: z.string().optional(),
+      StartDate: z.string().optional(),
+      EndDate: z.string().optional(),
+    }),
+    responses: {
+      200: VehicleListItemListSchema,
       404: StructuredErrorSchema,
     },
   },

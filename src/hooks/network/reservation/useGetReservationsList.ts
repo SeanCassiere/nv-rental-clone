@@ -61,25 +61,4 @@ export async function fetchReservationsListModded(params: QueryParams) {
       ...filters,
     },
   });
-
-  // return await fetchReservationsList({
-  //   clientId: params.clientId || "",
-  //   userId: params.userId || "",
-  //   accessToken: params.accessToken || "",
-  //   page: params.page,
-  //   pageSize: params.pageSize,
-  //   clientDate: params.clientDate,
-  //   filters: params.filters,
-  // })
-  //   .then((res) => {
-  //     if (res.ok) return res;
-  //     return { ...res, data: [] };
-  //   })
-  //   .then((res) =>
-  //     validateApiResWithZodSchema(ReservationListItemListSchema, res)
-  //   )
-  //   .catch((e) => {
-  //     console.error(e);
-  //     throw e;
-  //   });
 }
