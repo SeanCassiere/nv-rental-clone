@@ -32,7 +32,7 @@ import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-para
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -158,6 +158,12 @@ function CustomerSearchPage() {
     [columnsData.data, saveColumnsMutation]
   );
 
+  const headers = customersData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const customersList =
+    customersData.data?.status === 200 ? customersData.data?.body : [];
+
   useDocumentTitle(titleMaker("Customers"));
 
   return (
@@ -178,7 +184,7 @@ function CustomerSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={customersData.data?.data || []}
+          data={customersList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           rawColumnsData={
@@ -186,8 +192,8 @@ function CustomerSearchPage() {
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            customersData.data?.totalRecords
-              ? Math.ceil(customersData.data?.totalRecords / size) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
           pagination={pagination}

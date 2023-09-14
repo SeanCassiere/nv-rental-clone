@@ -14,6 +14,8 @@ import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersLis
 
 import { type TCustomerListItemParsed } from "@/schemas/customer";
 
+import { getXPaginationFromHeaders } from "@/utils";
+
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
 interface SelectVehicleModalProps {
@@ -44,7 +46,7 @@ export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
     page,
     pageSize,
     filters: {
-      Active: true,
+      Active: "true",
     },
   });
 
@@ -78,6 +80,12 @@ export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
     return columns;
   }, [acceptedColumns, props]);
 
+  const headers = customerListData.data?.headers ?? new Headers();
+  const parsedPagination = getXPaginationFromHeaders(headers);
+
+  const customersList =
+    customerListData.data?.status === 200 ? customerListData.data?.body : [];
+
   return (
     <Dialog open={props.show} onOpenChange={props.setShow}>
       <DialogContent className="max-w-4xl">
@@ -88,7 +96,7 @@ export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
           </DialogDescription>
         </DialogHeader>
         <CommonTable
-          data={customerListData.data?.data || []}
+          data={customersList}
           columns={columnDefs}
           hasPagination
           paginationMode="server"
@@ -101,8 +109,8 @@ export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
             setPageSize(newState.pageSize);
           }}
           totalPages={
-            customerListData.data?.totalRecords
-              ? Math.ceil(customerListData.data?.totalRecords / pageSize) ?? -1
+            parsedPagination?.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / pageSize) ?? -1
               : 0
           }
           stickyHeader

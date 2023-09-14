@@ -1,12 +1,16 @@
+import { z } from "zod";
+
 import { c } from "@/api/c";
 
 import {
   CustomerDataSchema,
+  CustomerListItemListSchema,
   CustomerTypeArraySchema,
 } from "@/schemas/customer";
 import { CustomerSummarySchema } from "@/schemas/summary";
 
 import {
+  PaginationSchema,
   StructuredErrorSchema,
   UnauthorizedErrorSchema,
   UserAndClientIdAuthSchema,
@@ -20,6 +24,22 @@ const rootCustomerContract = c.router({
     responses: {
       200: CustomerDataSchema,
       401: UnauthorizedErrorSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  getList: {
+    method: "GET",
+    path: "/v3/customers",
+    query: UserAndClientIdAuthSchema.merge(PaginationSchema).extend({
+      Active: z.string().optional(),
+      SortDirection: z.string().optional(),
+      CustomerTypes: z.array(z.string()).optional(),
+      Keyword: z.string().optional(),
+      DateOfbirth: z.string().optional(),
+      Phone: z.string().optional(),
+    }),
+    responses: {
+      200: CustomerListItemListSchema,
       404: StructuredErrorSchema,
     },
   },

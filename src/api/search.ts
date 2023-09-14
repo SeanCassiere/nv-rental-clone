@@ -32,9 +32,10 @@ export async function fetchGlobalSearchList(
     fetchCustomersListModded({
       clientId,
       userId,
-      accessToken,
-      filters: { Keyword: searchTerm },
-    }).catch(() => ({ data: [] as TCustomerListItemParsed[] })),
+      page: 1,
+      pageSize: 50,
+      Keyword: searchTerm,
+    }).catch(() => ({ body: [] as TCustomerListItemParsed[], status: 900 })),
     fetchVehiclesListModded({
       clientId,
       userId,
@@ -73,7 +74,8 @@ export async function fetchGlobalSearchList(
         agreementsPromise,
       ] = results;
 
-      const customers = customersPromise.data;
+      const customers =
+        customersPromise.status === 200 ? customersPromise.body : [];
       const customerResults: GlobalSearchReturnType = customers.map(
         (customer) => {
           const displayText = `${customer.FullName}`;
