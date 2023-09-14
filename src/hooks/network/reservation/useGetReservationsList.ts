@@ -13,7 +13,9 @@ export function useGetReservationsList(params: {
     QueryParams,
     "clientId" | "userId" | "page" | "pageSize" | "clientDate"
   >;
+  enabled?: boolean;
 }) {
+  const enabled = typeof params.enabled !== "undefined" ? params.enabled : true;
   const auth = useAuth();
   const query = useQuery({
     queryKey: reservationQKeys.search({
@@ -28,7 +30,7 @@ export function useGetReservationsList(params: {
         pageSize: params.pageSize,
         clientDate: new Date(),
       }),
-    enabled: auth.isAuthenticated,
+    enabled: enabled && auth.isAuthenticated,
     keepPreviousData: true,
   });
   return query;

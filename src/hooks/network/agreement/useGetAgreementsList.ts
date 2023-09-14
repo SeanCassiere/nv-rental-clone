@@ -12,7 +12,9 @@ export function useGetAgreementsList(params: {
     QueryParams,
     "clientId" | "userId" | "page" | "pageSize" | "currentDate"
   >;
+  enabled?: boolean;
 }) {
+  const enabled = typeof params.enabled !== "undefined" ? params.enabled : true;
   const auth = useAuth();
   const query = useQuery({
     queryKey: agreementQKeys.search({
@@ -28,7 +30,7 @@ export function useGetAgreementsList(params: {
         currentDate: new Date(),
         ...params.filters,
       }),
-    enabled: auth.isAuthenticated,
+    enabled: enabled && auth.isAuthenticated,
     keepPreviousData: true,
   });
   return query;

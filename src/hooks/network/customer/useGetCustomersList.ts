@@ -9,7 +9,9 @@ export function useGetCustomersList(params: {
   page: number;
   pageSize: number;
   filters: Omit<QueryParams, "clientId" | "userId" | "page" | "pageSize">;
+  enabled?: boolean;
 }) {
+  const enabled = typeof params.enabled !== "undefined" ? params.enabled : true;
   const auth = useAuth();
   const query = useQuery({
     queryKey: customerQKeys.search({
@@ -24,7 +26,7 @@ export function useGetCustomersList(params: {
         userId: auth.user?.profile.navotar_userid || "",
         ...params.filters,
       }),
-    enabled: auth.isAuthenticated,
+    enabled: enabled && auth.isAuthenticated,
     keepPreviousData: true,
   });
   return query;
