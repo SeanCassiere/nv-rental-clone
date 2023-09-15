@@ -200,7 +200,7 @@ export const CommandMenu = () => {
           <span className="text-xs">{IsMacLike ? "⌘" : "Ctrl"}</span>+ K
         </kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={open} onOpenChange={setOpen} loop>
         <CommandInput
           placeholder="Search..."
           value={text}
