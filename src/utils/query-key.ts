@@ -102,6 +102,11 @@ export const userQKeys = {
   languages: () => [userQKeys.rootKey, "languages"],
   permissions: (userId: string) => [userQKeys.rootKey, userId, "permissions"],
   profile: (userId: string) => [userQKeys.rootKey, userId, "profile"],
+  updatingProfile: (userId: string) => [
+    userQKeys.rootKey,
+    userId,
+    "updating-profile",
+  ],
   userConfigurations: () => [userQKeys.rootKey, "user-configurations"],
   activeUsersCount: () => [userQKeys.rootKey, "active-users-count"],
   maximumUsersCount: () => [userQKeys.rootKey, "maximum-users-count"],

@@ -1,6 +1,11 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useIsMutating,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -69,7 +74,12 @@ export function EditUserDialog({
 
   const formId = React.useId();
 
-  const [disabled, setDisabled] = React.useState(false);
+  const isUpdatingNumber = useIsMutating({
+    mutationKey: userQKeys.updatingProfile(String(props.user?.userID)),
+  });
+  const isUpdating = isUpdatingNumber > 0;
+
+  const disabled = isUpdating;
 
   const currentUsersQuery = useQuery({
     queryKey: userQKeys.activeUsersCount(),
@@ -157,7 +167,6 @@ export function EditUserDialog({
             languages={languages}
             roles={roles}
             setOpen={setOpen}
-            setDisabled={setDisabled}
           />
         )}
         <DialogFooter>
@@ -185,7 +194,6 @@ function EditUserForm(props: {
   languages: UserLanguageItem[];
   roles: RoleListItem[];
   setOpen: (open: boolean) => void;
-  setDisabled: (disabled: boolean) => void;
 }) {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -221,6 +229,7 @@ function EditUserForm(props: {
   });
 
   const updateProfile = useMutation({
+    mutationKey: userQKeys.updatingProfile(String(props.user.userID)),
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
       qc.invalidateQueries(userQKeys.userConfigurations());
@@ -265,12 +274,6 @@ function EditUserForm(props: {
           variant: "destructive",
         });
       }
-    },
-    onMutate: () => {
-      props.setDisabled(true);
-    },
-    onSettled: () => {
-      props.setDisabled(false);
     },
   });
 
