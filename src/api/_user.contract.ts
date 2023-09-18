@@ -62,6 +62,22 @@ const rootUserContract = c.router({
       403: z.any(),
     },
   },
+  sendResetPasswordLink: {
+    method: "POST",
+    path: "/v3/users/sendpasswordresetlink",
+    body: c.type<{
+      clientId: string;
+      clientTime: string;
+      email: string;
+      updatedBy: string;
+      userId: string;
+      userName: string;
+    }>(),
+    responses: {
+      200: z.any(),
+    },
+    strictStatusCodes: false,
+  },
 });
 
 export { rootUserContract };
