@@ -150,15 +150,17 @@ function SystemUser({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Reset password confirmation</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t("titles.resetPasswordConfirmation", { ns: "settings" })}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to reset this password? An email containing
-              a password reset link will be sent to the address associated with
-              this account. Please confirm this action.
+              {t("descriptions.resetPasswordConfirmation", { ns: "settings" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t("buttons.cancel", { ns: "labels" })}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={(evt) => {
                 evt.preventDefault();
@@ -183,7 +185,7 @@ function SystemUser({
               {resetPassword.isLoading && (
                 <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
               )}
-              <span>Send reset link</span>
+              <span>{t("buttons.sendResetLink", { ns: "labels" })}</span>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

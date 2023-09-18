@@ -13,7 +13,8 @@
     "emailTemplates": "Email templates",
     "globalDocuments": "Global documents",
     "idConfiguration": "Number sequencing",
-    "compatibilityConfiguration": "System lists"
+    "compatibilityConfiguration": "System lists",
+    "resetPasswordConfirmation": "Reset password confirmation"
   },
   "descriptions": {
     "settings": "Manage and configure your {{appName}} settings.",
@@ -22,6 +23,7 @@
     "systemUsers": "Configure the users that have access to system.",
     "runtime": "Customize and manage your application runtime configuration with ease.",
     "emailTemplates": "Configure the email templates that are used by the system.",
-    "globalDocuments": "Configure the global documents available for use throughout the system."
+    "globalDocuments": "Configure the global documents available for use throughout the system.",
+    "resetPasswordConfirmation": "Are you sure you want to reset this password? An email containing a password reset link will be sent to the address associated with this account. Please confirm this action."
   }
 }

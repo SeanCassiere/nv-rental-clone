@@ -28,6 +28,7 @@
     "edit": "Edit",
     "saveProfileDetails": "Save profile details",
     "saveAndContinue": "Save and continue",
-    "resetPassword": "Reset password"
+    "resetPassword": "Reset password",
+    "sendResetLink": "Send reset link"
   }
 }
