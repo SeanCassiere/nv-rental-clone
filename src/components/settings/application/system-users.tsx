@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
-import { MoreVerticalIcon } from "lucide-react";
+import { MoreVerticalIcon, PencilIcon, RotateCcwIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
@@ -138,11 +138,15 @@ function UsersList(props: { clientId: string; userId: string }) {
                 <DropdownMenuContent align="end">
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      {t("buttons.edit", { ns: "labels" })}
+                      <PencilIcon className="mr-2 h-3 w-3" />
+                      <span>{t("buttons.edit", { ns: "labels" })}</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-destructive">
-                      {t("buttons.resetPassword", { ns: "labels" })}
+                      <RotateCcwIcon className="mr-2 h-3 w-3" />
+                      <span>
+                        {t("buttons.resetPassword", { ns: "labels" })}
+                      </span>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
