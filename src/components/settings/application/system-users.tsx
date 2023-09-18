@@ -1,10 +1,25 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { useQuery } from "@tanstack/react-query";
-import { MoreVerticalIcon, PencilIcon, RotateCcwIcon } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  Loader2Icon,
+  MoreVerticalIcon,
+  PencilIcon,
+  RotateCcwIcon,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,11 +38,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
 
+import type { TUserConfigurations } from "@/schemas/user";
+
+import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 import { userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
-import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
+import { cn, getAvatarFallbackText, getAvatarUrl, wait } from "@/utils";
 
 const SystemUsersSettings = () => {
   const { t } = useTranslation("settings");
@@ -69,93 +88,178 @@ async function getUsers({
   });
 }
 
-function UsersList(props: { clientId: string; userId: string }) {
-  const { t } = useTranslation();
-
+interface UserListProps {
+  clientId: string;
+  userId: string;
+}
+function UsersList(props: UserListProps) {
   const { data } = useQuery({
     queryKey: userQKeys.userConfigurations(),
-    queryFn: () => getUsers(props),
+    queryFn: () =>
+      getUsers({
+        clientId: props.clientId,
+        userId: props.userId,
+      }),
     suspense: true,
   });
 
-  const list = data?.status === 200 ? data.body : [];
+  const users = (data?.status === 200 ? data.body : []).sort((a, b) =>
+    a.userName.localeCompare(b.userName)
+  );
 
   return (
     <ul role="list" className="divide-y divide-muted">
-      {list.map((user) => (
-        <li
-          key={`user_config_${user.userID}`}
-          className="flex justify-between gap-x-6 py-5"
-        >
-          <div className="flex min-w-0 gap-x-4">
-            <Avatar className="h-12 w-12 flex-none">
-              <AvatarImage
-                src={getAvatarUrl(user?.userName)}
-                alt={user.fullName}
-              />
-              <AvatarFallback>
-                {getAvatarFallbackText(user.fullName)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-auto text-sm">
-              <p className="font-semibold leading-6 text-foreground">
-                {user.userName} ({user.fullName})
-              </p>
-              <p className="mt-1 truncate leading-5 text-muted-foreground">
-                {user.email}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-x-4 text-sm">
-            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-              <p className="leading-6 text-foreground">{user.roleName}</p>
-              <div className="mt-1 flex items-center gap-x-1.5">
-                <div className="flex-none rounded-full bg-background/20 p-1">
-                  <div
-                    className={cn(
-                      "h-2 w-2 rounded-full",
-                      user.isActive ? "bg-emerald-500" : "bg-destructive"
-                    )}
-                  />
-                </div>
-                <p className="leading-5 text-muted-foreground">
-                  {user.isActive
-                    ? t("display.active", { ns: "labels" })
-                    : t("display.inactive", { ns: "labels" })}
-                </p>
-              </div>
-            </div>
-            <div className="flex grow-0 items-center justify-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <MoreVerticalIcon className="h-3 w-3 lg:h-4 lg:w-4" />
-                    <span className="sr-only">
-                      {t("buttons.edit", { ns: "labels" })}
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <PencilIcon className="mr-2 h-3 w-3" />
-                      <span>{t("buttons.edit", { ns: "labels" })}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive">
-                      <RotateCcwIcon className="mr-2 h-3 w-3" />
-                      <span>
-                        {t("buttons.resetPassword", { ns: "labels" })}
-                      </span>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </li>
+      {users.map((user) => (
+        <SystemUser key={`user_config_${user.userID}`} user={user} {...props} />
       ))}
     </ul>
+  );
+}
+
+function SystemUser({
+  user,
+  ...props
+}: { user: TUserConfigurations[number] } & UserListProps) {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+
+  const [showForgotPassword, setShowForgotPassword] = React.useState(false);
+
+  const resetPassword = useMutation({
+    mutationFn: apiClient.user.sendResetPasswordLink,
+    onSuccess: () => {
+      setShowForgotPassword(false);
+    },
+    onError: (err) => {
+      toast({
+        title: t("somethingWentWrong", { ns: "messages" }),
+        description:
+          err instanceof Error && "message" in err
+            ? err?.message
+            : t("pleaseTryAgain", { ns: "messages" }),
+        variant: "destructive",
+      });
+    },
+  });
+
+  return (
+    <>
+      <AlertDialog
+        open={showForgotPassword}
+        onOpenChange={setShowForgotPassword}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t("titles.resetPasswordConfirmation", { ns: "settings" })}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("descriptions.resetPasswordConfirmation", { ns: "settings" })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              {t("buttons.cancel", { ns: "labels" })}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(evt) => {
+                evt.preventDefault();
+
+                if (!user.email) {
+                  setShowForgotPassword(false);
+                  return;
+                }
+
+                resetPassword.mutate({
+                  body: {
+                    clientId: props.clientId,
+                    updatedBy: props.userId,
+                    clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+                    userId: String(user.userID),
+                    email: user.email,
+                    userName: user.userName,
+                  },
+                });
+              }}
+            >
+              {resetPassword.isLoading && (
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <span>{t("buttons.sendResetLink", { ns: "labels" })}</span>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <li className="flex justify-between gap-x-6 py-5">
+        <div className="flex min-w-0 gap-x-4">
+          <Avatar className="h-12 w-12 flex-none">
+            <AvatarImage
+              src={getAvatarUrl(user?.userName)}
+              alt={user.fullName}
+            />
+            <AvatarFallback>
+              {getAvatarFallbackText(user.fullName)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="min-w-0 flex-auto text-sm">
+            <p className="font-semibold leading-6 text-foreground">
+              {user.userName} ({user.fullName})
+            </p>
+            <p className="mt-1 truncate leading-5 text-muted-foreground">
+              {user.email}
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-x-4 text-sm">
+          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+            <p className="leading-6 text-foreground">{user.roleName}</p>
+            <div className="mt-1 flex items-center gap-x-1.5">
+              <div className="flex-none rounded-full bg-background/20 p-1">
+                <div
+                  className={cn(
+                    "h-2 w-2 rounded-full",
+                    user.isActive ? "bg-emerald-500" : "bg-destructive"
+                  )}
+                />
+              </div>
+              <p className="select-none leading-5 text-muted-foreground">
+                {user.isActive
+                  ? t("display.active", { ns: "labels" })
+                  : t("display.inactive", { ns: "labels" })}
+              </p>
+            </div>
+          </div>
+          <div className="flex grow-0 items-center justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <MoreVerticalIcon className="h-3 w-3 lg:h-4 lg:w-4" />
+                  <span className="sr-only">
+                    {t("buttons.edit", { ns: "labels" })}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <PencilIcon className="mr-2 h-3 w-3" />
+                    <span>{t("buttons.edit", { ns: "labels" })}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={() => setShowForgotPassword(true)}
+                  >
+                    <RotateCcwIcon className="mr-2 h-3 w-3" />
+                    <span>{t("buttons.resetPassword", { ns: "labels" })}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </li>
+    </>
   );
 }
 
