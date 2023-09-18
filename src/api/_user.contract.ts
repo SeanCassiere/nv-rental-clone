@@ -78,6 +78,22 @@ const rootUserContract = c.router({
     },
     strictStatusCodes: false,
   },
+  getActiveUsersCount: {
+    method: "GET",
+    path: "/v3/users/activeusers",
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: z.number(),
+    },
+  },
+  getMaximumUsersCount: {
+    method: "GET",
+    path: "/v3/users/maximumuser",
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: z.number(),
+    },
+  },
 });
 
 export { rootUserContract };
