@@ -158,5 +158,5 @@ export const locationQKeys = {
 
 export const roleQKeys = {
   rootKey: "roles",
-  all: () => [locationQKeys.rootKey, "all"],
+  all: () => [roleQKeys.rootKey, "all"],
 };
