@@ -16,6 +16,7 @@
     "zip": "Zip",
     "zipCode": "Zip code",
     "youReceiveEmailsQuestion": "Do you want to receive emails?",
+    "userToReceiveEmailsQuestion": "Should the user receive emails?",
     "bracketOptional": "(optional)",
     "bracketRequired": "(required)",
     "required": "Required",
