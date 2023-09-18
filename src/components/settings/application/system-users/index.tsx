@@ -31,6 +31,7 @@ import { userQKeys } from "@/utils/query-key";
 import { apiClient } from "@/api";
 import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
 
+import { EditUserDialog } from "./edit-user";
 import { ResetPasswordAlertDialog } from "./reset-password";
 
 const SystemUsersSettings = () => {
@@ -89,7 +90,7 @@ function UsersList(props: UserListProps) {
   });
 
   const users = (data?.status === 200 ? data.body : []).sort((a, b) =>
-    a.userName.localeCompare(b.userName)
+    a.fullName.localeCompare(b.fullName)
   );
 
   return (
@@ -108,12 +109,21 @@ function SystemUser({
   const { t } = useTranslation();
 
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
+  const [showEditUser, setShowEditUser] = React.useState(false);
 
   return (
     <>
       <ResetPasswordAlertDialog
         open={showForgotPassword}
         setOpen={setShowForgotPassword}
+        user={user}
+        clientId={props.clientId}
+        userId={props.userId}
+      />
+      <EditUserDialog
+        mode="edit"
+        open={showEditUser}
+        setOpen={setShowEditUser}
         user={user}
         clientId={props.clientId}
         userId={props.userId}
@@ -131,7 +141,7 @@ function SystemUser({
           </Avatar>
           <div className="min-w-0 flex-auto text-sm">
             <p className="font-semibold leading-6 text-foreground">
-              {user.userName} ({user.fullName})
+              {user.fullName} ({user.userName})
             </p>
             <p className="mt-1 truncate leading-5 text-muted-foreground">
               {user.email}
@@ -169,7 +179,7 @@ function SystemUser({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setShowEditUser(true)}>
                     <PencilIcon className="mr-2 h-3 w-3" />
                     <span>{t("buttons.edit", { ns: "labels" })}</span>
                   </DropdownMenuItem>

@@ -20,7 +20,8 @@
     "bracketRequired": "(required)",
     "required": "Required",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "role": "Role"
   },
   "buttons": {
     "save": "Save",
