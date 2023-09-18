@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
@@ -130,7 +130,7 @@ export function EditUserDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-screen overflow-y-scroll md:max-w-xl">
+      <DialogContent className="max-h-screen overflow-y-scroll md:max-h-[calc(100vh-5%)] md:max-w-xl">
         <DialogHeader>
           <DialogTitle>
             {t("titles.editUserProfile", {
@@ -475,6 +475,75 @@ function EditUserForm(props: {
                 ))}
               </div>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="isReservationEmail"
+          render={({ field }) => (
+            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel>
+                  {t("display.userToReceiveEmailsQuestion", { ns: "labels" })}
+                </FormLabel>
+                <FormDescription>
+                  {t("receiveReservationEmails", { ns: "messages" })}
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isDisabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="isActive"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel>
+                  {t("titles.accountActive", { ns: "settings" })}
+                </FormLabel>
+                <FormDescription>
+                  {t("descriptions.accountActive", { ns: "settings" })}
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isDisabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lockOut"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel>
+                  {t("titles.accountLock", { ns: "settings" })}
+                </FormLabel>
+                <FormDescription>
+                  {t("descriptions.accountLock", { ns: "settings" })}
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isDisabled}
+                />
+              </FormControl>
             </FormItem>
           )}
         />
