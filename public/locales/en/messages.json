@@ -11,5 +11,6 @@
   "receiveReservationEmails": "Be copied on emails that are sent from the system.",
   "emailAssociatedWithAccount": "The email address associated with this account.",
   "emailAssociatedWithAccount_me": "The email address associated with your account.",
-  "selectYourLocalization": "Select your localization."
+  "selectYourLocalization": "Select your localization.",
+  "accessibleLocations": "Access is being granted to the following locations."
 }

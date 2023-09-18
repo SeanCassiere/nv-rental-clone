@@ -21,7 +21,8 @@
     "required": "Required",
     "active": "Active",
     "inactive": "Inactive",
-    "role": "Role"
+    "role": "Role",
+    "locations": "Locations"
   },
   "buttons": {
     "save": "Save",
