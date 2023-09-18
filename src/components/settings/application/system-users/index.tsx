@@ -1,25 +1,10 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  Loader2Icon,
-  MoreVerticalIcon,
-  PencilIcon,
-  RotateCcwIcon,
-} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { MoreVerticalIcon, PencilIcon, RotateCcwIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,15 +23,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/use-toast";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 import { userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
-import { cn, getAvatarFallbackText, getAvatarUrl, wait } from "@/utils";
+import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
+
+import { ResetPasswordAlertDialog } from "./reset-password";
 
 const SystemUsersSettings = () => {
   const { t } = useTranslation("settings");
@@ -121,75 +106,18 @@ function SystemUser({
   ...props
 }: { user: TUserConfigurations[number] } & UserListProps) {
   const { t } = useTranslation();
-  const { toast } = useToast();
 
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
 
-  const resetPassword = useMutation({
-    mutationFn: apiClient.user.sendResetPasswordLink,
-    onSuccess: () => {
-      setShowForgotPassword(false);
-    },
-    onError: (err) => {
-      toast({
-        title: t("somethingWentWrong", { ns: "messages" }),
-        description:
-          err instanceof Error && "message" in err
-            ? err?.message
-            : t("pleaseTryAgain", { ns: "messages" }),
-        variant: "destructive",
-      });
-    },
-  });
-
   return (
     <>
-      <AlertDialog
+      <ResetPasswordAlertDialog
         open={showForgotPassword}
-        onOpenChange={setShowForgotPassword}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t("titles.resetPasswordConfirmation", { ns: "settings" })}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("descriptions.resetPasswordConfirmation", { ns: "settings" })}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>
-              {t("buttons.cancel", { ns: "labels" })}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={(evt) => {
-                evt.preventDefault();
-
-                if (!user.email) {
-                  setShowForgotPassword(false);
-                  return;
-                }
-
-                resetPassword.mutate({
-                  body: {
-                    clientId: props.clientId,
-                    updatedBy: props.userId,
-                    clientTime: localDateTimeToQueryYearMonthDay(new Date()),
-                    userId: String(user.userID),
-                    email: user.email,
-                    userName: user.userName,
-                  },
-                });
-              }}
-            >
-              {resetPassword.isLoading && (
-                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              <span>{t("buttons.sendResetLink", { ns: "labels" })}</span>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        setOpen={setShowForgotPassword}
+        user={user}
+        clientId={props.clientId}
+        userId={props.userId}
+      />
       <li className="flex justify-between gap-x-6 py-5">
         <div className="flex min-w-0 gap-x-4">
           <Avatar className="h-12 w-12 flex-none">
