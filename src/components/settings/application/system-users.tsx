@@ -70,6 +70,8 @@ async function getUsers({
 }
 
 function UsersList(props: { clientId: string; userId: string }) {
+  const { t } = useTranslation();
+
   const { data } = useQuery({
     queryKey: userQKeys.userConfigurations(),
     queryFn: () => getUsers(props),
@@ -117,7 +119,9 @@ function UsersList(props: { clientId: string; userId: string }) {
                   />
                 </div>
                 <p className="leading-5 text-muted-foreground">
-                  {user.isActive ? "Active" : "In-active"}
+                  {user.isActive
+                    ? t("display.active", { ns: "labels" })
+                    : t("display.inactive", { ns: "labels" })}
                 </p>
               </div>
             </div>
@@ -126,15 +130,19 @@ function UsersList(props: { clientId: string; userId: string }) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-8 w-8">
                     <MoreVerticalIcon className="h-3 w-3 lg:h-4 lg:w-4" />
-                    <span className="sr-only">Edit</span>
+                    <span className="sr-only">
+                      {t("buttons.edit", { ns: "labels" })}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      {t("buttons.edit", { ns: "labels" })}
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-destructive">
-                      Reset password
+                      {t("buttons.resetPassword", { ns: "labels" })}
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>

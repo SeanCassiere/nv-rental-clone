@@ -18,10 +18,16 @@
     "youReceiveEmailsQuestion": "Do you want to receive emails?",
     "bracketOptional": "(optional)",
     "bracketRequired": "(required)",
-    "required": "Required"
+    "required": "Required",
+    "active": "Active",
+    "inactive": "Inactive"
   },
   "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
     "saveProfileDetails": "Save profile details",
-    "saveAndContinue": "Save and continue"
+    "saveAndContinue": "Save and continue",
+    "resetPassword": "Reset password"
   }
 }
