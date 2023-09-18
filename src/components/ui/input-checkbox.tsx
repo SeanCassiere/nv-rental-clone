@@ -6,6 +6,7 @@ function InputCheckbox(props: {
   label: React.ReactNode;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
+  disabled?: boolean;
 }) {
   const id = React.useId();
 
@@ -15,6 +16,7 @@ function InputCheckbox(props: {
         id={id}
         checked={props.checked}
         onCheckedChange={props.onCheckedChange}
+        disabled={props.disabled}
       />
       <label
         htmlFor={id}
