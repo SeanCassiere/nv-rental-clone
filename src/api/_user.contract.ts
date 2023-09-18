@@ -4,6 +4,7 @@ import { c } from "@/api/c";
 
 import {
   UpdateUserSchema,
+  UserConfigurationsListSchema,
   UserLanguageListSchema,
   UserProfileSchema,
 } from "@/schemas/user";
@@ -16,6 +17,16 @@ import {
 } from "./helpers";
 
 const rootUserContract = c.router({
+  getUserConfigurations: {
+    method: "GET",
+    path: "/v3/users/userconfiguration",
+    query: UserAndClientIdAuthSchema,
+    responses: {
+      200: UserConfigurationsListSchema,
+      401: StructuredErrorSchema,
+      404: StructuredErrorSchema,
+    },
+  },
   getProfileByUserId: {
     method: "GET",
     path: "/v3/users/:userId",

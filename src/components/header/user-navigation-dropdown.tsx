@@ -37,13 +37,7 @@ import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
 
-function getAvatarFallbackText(name: string) {
-  const nameParts = name.split(" ");
-  if (nameParts.length === 1 && nameParts[0]) {
-    return nameParts[0].charAt(0);
-  }
-  return `${nameParts[0]?.charAt(0)}${nameParts[1]?.charAt(0)}`;
-}
+import { getAvatarFallbackText, getAvatarUrl } from "@/utils";
 
 export const UserNavigationDropdown = () => {
   const auth = useAuth();
@@ -56,7 +50,7 @@ export const UserNavigationDropdown = () => {
 
   const fullName = `${user?.firstName || "N"} ${user?.lastName || "A"}`.trim();
 
-  const imgUrl = `https://avatars.dicebear.com/api/miniavs/${user?.userName}.svg?mood[]=happy`;
+  const imgUrl = getAvatarUrl(user?.userName ?? "none");
 
   const handleLogout = () => {
     const client_id = auth.user?.profile.navotar_clientid;
