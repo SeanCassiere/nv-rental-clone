@@ -8,6 +8,7 @@ import { rootNoteContract } from "./_note.contract";
 import { rootRateTypeContract } from "./_rate-type";
 import { rootRateContract } from "./_rate.contract";
 import { rootReservationContract } from "./_reservation.contract";
+import { rootRolesContract } from "./_role.contract";
 import { rootSummaryContract } from "./_summary.contract";
 import { rootTaxContract } from "./_tax.contract";
 import { rootUserContract } from "./_user.contract";
@@ -29,6 +30,7 @@ const contract = c.router(
     summary: rootSummaryContract,
     rate: rootRateContract,
     rateType: rootRateTypeContract,
+    role: rootRolesContract,
     tax: rootTaxContract,
     user: rootUserContract,
     vehicle: rootVehicleContract,
