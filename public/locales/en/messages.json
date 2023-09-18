@@ -6,8 +6,11 @@
   "notFound": "Not found.",
   "pleaseTryAgain": "Please try again later.",
   "somethingWentWrong": "Something went wrong.",
-  "usernameCannotBeChanged": "This is your username and cannot be changed.",
+  "usernameCannotBeChanged": "Username cannot be changed.",
+  "usernameCannotBeChanged_me": "This is your username and cannot be changed.",
   "receiveReservationEmails": "Be copied on emails that are sent from the system.",
-  "emailAssociatedWithAccount": "The email address associated with your account.",
-  "selectYourLocalization": "Select your localization."
+  "emailAssociatedWithAccount": "The email address associated with this account.",
+  "emailAssociatedWithAccount_me": "The email address associated with your account.",
+  "selectYourLocalization": "Select your localization.",
+  "accessibleLocations": "Access is being granted to the following locations."
 }

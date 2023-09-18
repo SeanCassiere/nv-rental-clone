@@ -203,7 +203,7 @@ function ProfileForm(props: {
                 <Input {...field} disabled />
               </FormControl>
               <FormDescription>
-                {tMessages("usernameCannotBeChanged")}
+                {tMessages("usernameCannotBeChanged", { context: "me" })}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -220,7 +220,7 @@ function ProfileForm(props: {
                 <Input {...field} disabled={isDisabled} />
               </FormControl>
               <FormDescription>
-                {tMessages("emailAssociatedWithAccount")}
+                {tMessages("emailAssociatedWithAccount", { context: "me" })}
               </FormDescription>
               <FormMessage />
             </FormItem>

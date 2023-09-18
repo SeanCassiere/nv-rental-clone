@@ -16,17 +16,21 @@
     "zip": "Zip",
     "zipCode": "Zip code",
     "youReceiveEmailsQuestion": "Do you want to receive emails?",
+    "userToReceiveEmailsQuestion": "Should the user receive emails?",
     "bracketOptional": "(optional)",
     "bracketRequired": "(required)",
     "required": "Required",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "role": "Role",
+    "locations": "Locations"
   },
   "buttons": {
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
     "saveProfileDetails": "Save profile details",
+    "saveChanges": "Save changes",
     "saveAndContinue": "Save and continue",
     "resetPassword": "Reset password",
     "sendResetLink": "Send reset link"

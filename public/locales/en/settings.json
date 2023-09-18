@@ -14,7 +14,10 @@
     "globalDocuments": "Global documents",
     "idConfiguration": "Number sequencing",
     "compatibilityConfiguration": "System lists",
-    "resetPasswordConfirmation": "Reset password confirmation"
+    "resetPasswordConfirmation": "Reset password confirmation",
+    "editUserProfile": "Edit user profile",
+    "accountActive": "Active account",
+    "accountLock": "Account lock"
   },
   "descriptions": {
     "settings": "Manage and configure your {{appName}} settings.",
@@ -24,6 +27,10 @@
     "runtime": "Customize and manage your application runtime configuration with ease.",
     "emailTemplates": "Configure the email templates that are used by the system.",
     "globalDocuments": "Configure the global documents available for use throughout the system.",
-    "resetPasswordConfirmation": "Are you sure you want to reset this password? An email containing a password reset link will be sent to the address associated with this account. Please confirm this action."
+    "resetPasswordConfirmation": "Are you sure you want to reset this password? An email containing a password reset link will be sent to the address associated with this account. Please confirm this action.",
+    "remainingUsers": "You currently have {{activeUsers}} active users out of the {{maxUsers}} allowed.",
+    "modifyProfileDetails": "Modify the profile details for this user.",
+    "accountActive": "Mark this checkbox to indicate that the user's account is active",
+    "accountLock": "Check this box to lock the user's account. When the account is locked, the user will not be able to log in or access the system."
   }
 }

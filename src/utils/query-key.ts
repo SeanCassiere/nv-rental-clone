@@ -98,10 +98,18 @@ export const clientQKeys = {
 
 export const userQKeys = {
   rootKey: "users",
-  me: () => [userQKeys.rootKey, "people", "me"],
+  me: () => [userQKeys.rootKey, "me"],
   languages: () => [userQKeys.rootKey, "languages"],
   permissions: (userId: string) => [userQKeys.rootKey, userId, "permissions"],
+  profile: (userId: string) => [userQKeys.rootKey, userId, "profile"],
+  updatingProfile: (userId: string) => [
+    userQKeys.rootKey,
+    userId,
+    "updating-profile",
+  ],
   userConfigurations: () => [userQKeys.rootKey, "user-configurations"],
+  activeUsersCount: () => [userQKeys.rootKey, "active-users-count"],
+  maximumUsersCount: () => [userQKeys.rootKey, "maximum-users-count"],
 };
 
 export const dashboardQKeys = {
@@ -145,5 +153,10 @@ export const vehicleTypeQKeys = {
 
 export const locationQKeys = {
   rootKey: "locations",
+  all: () => [locationQKeys.rootKey, "all"],
+};
+
+export const roleQKeys = {
+  rootKey: "roles",
   all: () => [locationQKeys.rootKey, "all"],
 };
