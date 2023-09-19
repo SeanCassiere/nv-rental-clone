@@ -33,6 +33,7 @@
     "saveChanges": "Save changes",
     "saveAndContinue": "Save and continue",
     "resetPassword": "Reset password",
-    "sendResetLink": "Send reset link"
+    "sendResetLink": "Send reset link",
+    "moreActions": "More actions"
   }
 }

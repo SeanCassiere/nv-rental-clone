@@ -173,7 +173,7 @@ function SystemUser({
                 <Button variant="ghost" size="icon" className="h-8 w-8">
                   <MoreVerticalIcon className="h-3 w-3 lg:h-4 lg:w-4" />
                   <span className="sr-only">
-                    {t("buttons.edit", { ns: "labels" })}
+                    {t("buttons.moreActions", { ns: "labels" })}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
