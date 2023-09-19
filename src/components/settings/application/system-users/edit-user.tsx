@@ -140,7 +140,7 @@ export function EditUserDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-screen overflow-y-scroll md:max-h-[calc(100vh-5%)] md:max-w-xl">
+      <DialogContent className="md:max-w-xl">
         <DialogHeader>
           <DialogTitle>
             {t("titles.editUserProfile", {
@@ -169,7 +169,7 @@ export function EditUserDialog({
             setOpen={setOpen}
           />
         )}
-        <DialogFooter>
+        <DialogFooter className="sticky bottom-0 bg-background md:relative">
           <Button
             variant="outline"
             type="button"
