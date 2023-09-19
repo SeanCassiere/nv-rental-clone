@@ -93,7 +93,11 @@ const SettingsApplicationTab = () => {
           ))}
         </TabsList>
         {tabs.map((item, idx) => (
-          <TabsContent key={`tab_content_${item.id}_${idx}`} value={item.id}>
+          <TabsContent
+            key={`tab_content_${item.id}_${idx}`}
+            value={item.id}
+            className="pt-0.5"
+          >
             <Suspense fallback={<Skeleton className="h-24" />}>
               {item.component}
             </Suspense>

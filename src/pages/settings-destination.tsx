@@ -141,7 +141,7 @@ export default function SettingsCatchAllPage() {
       </section>
       <section
         className={cn(
-          "mx-auto my-4 flex max-w-full flex-col space-y-5 px-2 pb-2 sm:my-6 sm:mb-4 sm:px-4 sm:pb-5 lg:flex-row lg:space-x-12 lg:space-y-0"
+          "mx-auto mb-3.5 flex max-w-full flex-col space-y-5 px-2 sm:mt-4 sm:px-4 lg:flex-row lg:space-x-12 lg:space-y-0"
         )}
       >
         <aside className="shrink-0 border-b pb-4 lg:w-1/5 lg:border-b-0 lg:pb-0">
