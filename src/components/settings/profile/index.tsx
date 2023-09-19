@@ -100,9 +100,7 @@ function ProfileForm(props: {
 }) {
   const { user, languages } = props;
 
-  const { t: tConfig } = useTranslation("settings");
-  const { t: tMessages } = useTranslation("messages");
-  const { t: tLabels } = useTranslation("labels");
+  const { t } = useTranslation();
 
   const auth = useAuthValues();
   const queryClient = useQueryClient();
@@ -147,17 +145,19 @@ function ProfileForm(props: {
 
       if (data.status >= 200 && data.status < 300) {
         toast({
-          title: tMessages("labelUpdated", {
-            label: tConfig("titles.profile"),
+          title: t("labelUpdated", {
+            ns: "messages",
+            label: t("titles.profile", { ns: "settings" }),
           }),
-          description: tMessages("labelUpdatedSuccess", {
-            label: tConfig("titles.profile"),
+          description: t("labelUpdatedSuccess", {
+            ns: "messages",
+            label: t("titles.profile", { ns: "settings" }),
           }),
         });
       } else {
         toast({
-          title: tMessages("somethingWentWrong"),
-          description: tMessages("pleaseTryAgain"),
+          title: t("somethingWentWrong", { ns: "messages" }),
+          description: t("pleaseTryAgain", { ns: "messages" }),
           variant: "destructive",
         });
       }
@@ -165,8 +165,8 @@ function ProfileForm(props: {
     onError: (err) => {
       if (err instanceof Error) {
         toast({
-          title: tMessages("somethingWentWrong"),
-          description: err?.message || tMessages("pleaseTryAgain"),
+          title: t("somethingWentWrong", { ns: "messages" }),
+          description: err?.message || t("pleaseTryAgain", { ns: "messages" }),
           variant: "destructive",
         });
       }
@@ -198,12 +198,19 @@ function ProfileForm(props: {
           name="userName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{tLabels("display.username")}</FormLabel>
+              <FormLabel>{t("display.username", { ns: "labels" })}</FormLabel>
               <FormControl>
-                <Input {...field} disabled />
+                <Input
+                  {...field}
+                  placeholder={t("display.username", { ns: "labels" })}
+                  disabled
+                />
               </FormControl>
               <FormDescription>
-                {tMessages("usernameCannotBeChanged", { context: "me" })}
+                {t("usernameCannotBeChanged", {
+                  context: "me",
+                  ns: "messages",
+                })}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -215,12 +222,19 @@ function ProfileForm(props: {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{tLabels("display.email")}</FormLabel>
+              <FormLabel>{t("display.email", { ns: "labels" })}</FormLabel>
               <FormControl>
-                <Input {...field} disabled={isDisabled} />
+                <Input
+                  {...field}
+                  placeholder={t("display.email", { ns: "labels" })}
+                  disabled={isDisabled}
+                />
               </FormControl>
               <FormDescription>
-                {tMessages("emailAssociatedWithAccount", { context: "me" })}
+                {t("emailAssociatedWithAccount", {
+                  context: "me",
+                  ns: "messages",
+                })}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -232,9 +246,15 @@ function ProfileForm(props: {
             name="firstName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>{tLabels("display.firstName")}</FormLabel>
+                <FormLabel>
+                  {t("display.firstName", { ns: "labels" })}
+                </FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isDisabled} />
+                  <Input
+                    {...field}
+                    placeholder={t("display.firstName", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -245,9 +265,13 @@ function ProfileForm(props: {
             name="lastName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>{tLabels("display.lastName")}</FormLabel>
+                <FormLabel>{t("display.lastName", { ns: "labels" })}</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isDisabled} />
+                  <Input
+                    {...field}
+                    placeholder={t("display.lastName", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -260,7 +284,7 @@ function ProfileForm(props: {
             name="language"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>{tLabels("display.language")}</FormLabel>
+                <FormLabel>{t("display.language", { ns: "labels" })}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -269,7 +293,9 @@ function ProfileForm(props: {
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue
-                        placeholder={tMessages("selectYourLocalization")}
+                        placeholder={t("selectYourLocalization", {
+                          ns: "messages",
+                        })}
                       />
                     </SelectTrigger>
                   </FormControl>
@@ -291,13 +317,17 @@ function ProfileForm(props: {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>
-                  {tLabels("display.phoneNo")}&nbsp;
+                  {t("display.phoneNo", { ns: "labels" })}&nbsp;
                   <span className="text-xs text-foreground/70">
-                    {tLabels("display.bracketOptional")}
+                    {t("display.bracketOptional", { ns: "labels" })}
                   </span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isDisabled} />
+                  <Input
+                    {...field}
+                    placeholder={t("display.phoneNo", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -311,10 +341,10 @@ function ProfileForm(props: {
             <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
-                  {tLabels("display.youReceiveEmailsQuestion")}
+                  {t("display.youReceiveEmailsQuestion", { ns: "labels" })}
                 </FormLabel>
                 <FormDescription>
-                  {tMessages("receiveReservationEmails")}
+                  {t("receiveReservationEmails", { ns: "messages" })}
                 </FormDescription>
               </div>
               <FormControl>
@@ -329,7 +359,7 @@ function ProfileForm(props: {
         />
         <Separator className="mt-0.5" />
         <Button type="submit" className="w-full lg:w-max" disabled={isDisabled}>
-          {tLabels("buttons.saveProfileDetails")}
+          {t("buttons.saveProfileDetails", { ns: "labels" })}
         </Button>
       </form>
     </Form>

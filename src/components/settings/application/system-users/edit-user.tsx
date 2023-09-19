@@ -310,7 +310,11 @@ function EditUserForm(props: {
             <FormItem>
               <FormLabel>{t("display.username", { ns: "labels" })}</FormLabel>
               <FormControl>
-                <Input {...field} disabled />
+                <Input
+                  {...field}
+                  placeholder={t("display.username", { ns: "labels" })}
+                  disabled
+                />
               </FormControl>
               <FormDescription>
                 {t("usernameCannotBeChanged", { ns: "messages" })}
@@ -327,7 +331,11 @@ function EditUserForm(props: {
             <FormItem>
               <FormLabel>{t("display.email", { ns: "labels" })}</FormLabel>
               <FormControl>
-                <Input {...field} disabled={isDisabled} />
+                <Input
+                  {...field}
+                  placeholder={t("display.email", { ns: "labels" })}
+                  disabled={isDisabled}
+                />
               </FormControl>
               <FormDescription>
                 {t("emailAssociatedWithAccount", { ns: "messages" })}
@@ -346,7 +354,11 @@ function EditUserForm(props: {
                   {t("display.firstName", { ns: "labels" })}
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isDisabled} />
+                  <Input
+                    {...field}
+                    placeholder={t("display.firstName", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -359,7 +371,11 @@ function EditUserForm(props: {
               <FormItem className="w-full">
                 <FormLabel>{t("display.lastName", { ns: "labels" })}</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isDisabled} />
+                  <Input
+                    {...field}
+                    placeholder={t("display.lastName", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -411,7 +427,11 @@ function EditUserForm(props: {
                   </span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isDisabled} />
+                  <Input
+                    {...field}
+                    placeholder={t("display.phoneNo", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
