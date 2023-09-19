@@ -55,6 +55,7 @@ import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { roleQKeys, userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
+import { cn } from "@/utils";
 
 interface EditUserDialogProps {
   mode: "new" | "edit";
@@ -151,12 +152,16 @@ export function EditUserDialog({
             {t("descriptions.modifyProfileDetails", {
               ns: "settings",
             })}
-            &nbsp;
-            {t("descriptions.remainingUsers", {
-              ns: "settings",
-              activeUsers: currentUsers.toLocaleString(),
-              maxUsers: maxUsers.toLocaleString(),
-            })}
+            <br />
+            <span
+              className={cn(currentUsers >= maxUsers ? "text-destructive" : "")}
+            >
+              {t("descriptions.remainingUsers", {
+                ns: "settings",
+                activeUsers: currentUsers.toLocaleString(),
+                maxUsers: maxUsers.toLocaleString(),
+              })}
+            </span>
           </DialogDescription>
         </DialogHeader>
         {props.mode === "edit" && user && (
@@ -169,7 +174,7 @@ export function EditUserDialog({
             setOpen={setOpen}
           />
         )}
-        <DialogFooter className="sticky bottom-0 bg-background md:relative">
+        <DialogFooter>
           <Button
             variant="outline"
             type="button"
