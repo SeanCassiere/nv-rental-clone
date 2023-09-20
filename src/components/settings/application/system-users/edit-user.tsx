@@ -175,22 +175,16 @@ export function EditUserDialog({
               : t("descriptions.newProfileDetails", {
                   ns: "settings",
                 })}
-            {props.mode === "new" && (
-              <>
-                <br />
-                <span
-                  className={cn(
-                    currentUsers >= maxUsers ? "text-destructive" : ""
-                  )}
-                >
-                  {t("descriptions.remainingUsers", {
-                    ns: "settings",
-                    activeUsers: currentUsers.toLocaleString(),
-                    maxUsers: maxUsers.toLocaleString(),
-                  })}
-                </span>
-              </>
-            )}
+            <br />
+            <span
+              className={cn(currentUsers >= maxUsers ? "text-destructive" : "")}
+            >
+              {t("descriptions.remainingUsers", {
+                ns: "settings",
+                activeUsers: currentUsers.toLocaleString(),
+                maxUsers: maxUsers.toLocaleString(),
+              })}
+            </span>
           </DialogDescription>
         </DialogHeader>
         {props.mode === "edit" && user && (
