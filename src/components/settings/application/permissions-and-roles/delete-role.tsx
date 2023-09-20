@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -12,33 +12,39 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { buttonVariants } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
-import type { TUserConfigurations } from "@/schemas/user";
-
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
-
 import { apiClient } from "@/api";
+import { rolesStore } from "@/utils";
 
-interface ResetPasswordAlertDialogProps {
+interface DeleteRoleAlertDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   clientId: string;
   userId: string;
-  user: TUserConfigurations[number];
+  roleId: string;
 }
 
-export function ResetPasswordAlertDialog({
+export function DeleteRoleAlertDialog({
   open,
   setOpen,
-  user,
   ...props
-}: ResetPasswordAlertDialogProps) {
+}: DeleteRoleAlertDialogProps) {
   const { t } = useTranslation();
+  const qc = useQueryClient();
   const { toast } = useToast();
 
-  const resetPassword = useMutation({
-    mutationFn: apiClient.user.sendResetPasswordLink,
+  const deleteRole = useMutation({
+    mutationFn: apiClient.role.deleteRole,
+    onMutate: () => {
+      qc.cancelQueries({
+        queryKey: rolesStore.all({
+          clientId: props.clientId,
+          userId: props.userId,
+        }).queryKey,
+      });
+    },
     onSuccess: () => {
       setOpen(false);
     },
@@ -52,6 +58,14 @@ export function ResetPasswordAlertDialog({
         variant: "destructive",
       });
     },
+    onSettled: () => {
+      qc.invalidateQueries({
+        queryKey: rolesStore.all({
+          clientId: props.clientId,
+          userId: props.userId,
+        }).queryKey,
+      });
+    },
   });
 
   return (
@@ -59,10 +73,10 @@ export function ResetPasswordAlertDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t("titles.resetPasswordConfirmation", { ns: "settings" })}
+            {t("titles.deleteUserRole", { ns: "settings" })}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {t("descriptions.resetPasswordConfirmation", { ns: "settings" })}
+            {t("descriptions.deleteUserRole", { ns: "settings" })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -70,30 +84,21 @@ export function ResetPasswordAlertDialog({
             {t("buttons.cancel", { ns: "labels" })}
           </AlertDialogCancel>
           <AlertDialogAction
+            className={buttonVariants({ variant: "destructive" })}
             onClick={(evt) => {
               evt.preventDefault();
 
-              if (!user.email) {
-                setOpen(false);
-                return;
-              }
-
-              resetPassword.mutate({
-                body: {
-                  clientId: props.clientId,
-                  updatedBy: props.userId,
-                  clientTime: localDateTimeToQueryYearMonthDay(new Date()),
-                  userId: String(user.userID),
-                  email: user.email,
-                  userName: user.userName,
+              deleteRole.mutate({
+                params: {
+                  roleId: props.roleId,
                 },
               });
             }}
           >
-            {resetPassword.isLoading && (
+            {deleteRole.isLoading && (
               <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
             )}
-            <span>{t("labels.sendResetLink", { ns: "settings" })}</span>
+            <span>{t("buttons.confirm", { ns: "labels" })}</span>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

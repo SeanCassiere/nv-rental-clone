@@ -1,5 +1,6 @@
 {
   "display": {
+    "name": "Name",
     "firstName": "First name",
     "lastName": "Last name",
     "username": "Username",
@@ -16,26 +17,28 @@
     "city": "City",
     "zip": "Zip",
     "zipCode": "Zip code",
-    "youReceiveEmailsQuestion": "Do you want to receive emails?",
-    "userToReceiveEmailsQuestion": "Should the user receive emails?",
     "bracketOptional": "(optional)",
     "bracketRequired": "(required)",
     "required": "Required",
     "active": "Active",
     "inactive": "Inactive",
     "role": "Role",
-    "locations": "Locations"
+    "locations": "Locations",
+    "allResults": "All results",
+    "noResultsFound": "No results found",
+    "systemGenerated": "System generated",
+    "userGenerated": "User generated",
+    "description": "Description",
+    "copyFromExisting": "Copy from existing"
   },
   "buttons": {
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
+    "confirm": "Confirm",
     "saveProfileDetails": "Save profile details",
     "saveChanges": "Save changes",
     "saveAndContinue": "Save and continue",
-    "resetPassword": "Reset password",
-    "sendResetLink": "Send reset link",
-    "moreActions": "More actions",
-    "addUser": "Add user"
+    "moreActions": "More actions"
   }
 }

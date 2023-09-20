@@ -12,6 +12,9 @@ import { SETTINGS_LOCATION_KEYS } from "@/utils/constants";
 const SettingsUsersTab = React.lazy(
   () => import("@/components/settings/application/system-users")
 );
+const SettingsPermissionsAndRolesTab = React.lazy(
+  () => import("@/components/settings/application/permissions-and-roles")
+);
 
 type TabListItem = {
   id: string;
@@ -46,7 +49,7 @@ const SettingsApplicationTab = () => {
     tabItems.push({
       id: "permissions",
       title: t("titles.permissionsAndRoles"),
-      component: <Skeleton className="h-96" />,
+      component: <SettingsPermissionsAndRolesTab />,
     });
 
     tabItems.push({

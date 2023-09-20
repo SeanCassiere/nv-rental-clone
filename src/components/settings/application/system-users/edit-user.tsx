@@ -52,10 +52,10 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { roleQKeys, userQKeys } from "@/utils/query-key";
+import { userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
-import { cn } from "@/utils";
+import { cn, rolesStore } from "@/utils";
 
 interface EditUserDialogProps {
   mode: "new" | "edit";
@@ -119,14 +119,9 @@ export function EditUserDialog({
     enabled: props.mode === "edit" && props.intendedUserId !== "",
   });
 
-  const rolesQuery = useQuery({
-    queryKey: roleQKeys.all(),
-    queryFn: () =>
-      apiClient.role.getList({
-        query: { clientId: props.clientId, userId: props.userId },
-      }),
-    staleTime: 1000 * 60 * 1, // 1 minute
-  });
+  const rolesQuery = useQuery(
+    rolesStore.all({ clientId: props.clientId, userId: props.userId })
+  );
 
   const languagesQuery = useGetUserLanguages();
 
@@ -528,8 +523,8 @@ function EditUserForm(props: {
               <FormItem className="w-full">
                 <FormLabel>{t("display.role", { ns: "labels" })}</FormLabel>
                 <InputSelect
-                  placeholder={t("selectARole", {
-                    ns: "messages",
+                  placeholder={t("labels.selectARole", {
+                    ns: "settings",
                   })}
                   disabled={isDisabled}
                   defaultValue={String(field.value)}
@@ -588,7 +583,7 @@ function EditUserForm(props: {
             <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
-                  {t("display.userToReceiveEmailsQuestion", { ns: "labels" })}
+                  {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}
                 </FormLabel>
                 <FormDescription>
                   {t("receiveReservationEmails", { ns: "messages" })}
@@ -1021,8 +1016,8 @@ function NewUserForm(props: {
               <FormItem className="w-full">
                 <FormLabel>{t("display.role", { ns: "labels" })}</FormLabel>
                 <InputSelect
-                  placeholder={t("selectARole", {
-                    ns: "messages",
+                  placeholder={t("labels.selectARole", {
+                    ns: "settings",
                   })}
                   disabled={isDisabled}
                   defaultValue={String(field.value)}
@@ -1081,7 +1076,7 @@ function NewUserForm(props: {
             <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
-                  {t("display.userToReceiveEmailsQuestion", { ns: "labels" })}
+                  {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}
                 </FormLabel>
                 <FormDescription>
                   {t("receiveReservationEmails", { ns: "messages" })}

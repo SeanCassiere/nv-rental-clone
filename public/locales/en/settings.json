@@ -18,13 +18,17 @@
     "editUserProfile": "Edit user profile",
     "newUserProfile": "New user profile",
     "accountActive": "Active account",
-    "accountLock": "Account lock"
+    "accountLock": "Account lock",
+    "deleteUserRole": "Delete user role",
+    "newUserRole": "New user role",
+    "editUserRole": "Edit user role"
   },
   "descriptions": {
     "settings": "Manage and configure your {{appName}} settings.",
     "profile": "Customize and manage your profile with ease.",
     "application": "Customize the application settings.",
-    "systemUsers": "Configure the users that have access to system.",
+    "systemUsers": "Configure the users that have access to the system.",
+    "permissionsAndRoles": "Manage user permissions and roles within the system.",
     "runtime": "Customize and manage your application runtime configuration with ease.",
     "emailTemplates": "Configure the email templates that are used by the system.",
     "globalDocuments": "Configure the global documents available for use throughout the system.",
@@ -33,6 +37,21 @@
     "modifyProfileDetails": "Modify the profile details for this user.",
     "newProfileDetails": "Enter the profile details for this user.",
     "accountActive": "Mark this checkbox to indicate that the user's account is active",
-    "accountLock": "Check this box to lock the user's account. When the account is locked, the user will not be able to log in or access the system."
+    "accountLock": "Check this box to lock the user's account. When the account is locked, the user will not be able to log in or access the system.",
+    "deleteUserRole": "Are you sure you want to delete this custom user role from the system? This action cannot be undone, and may impact user access and permissions associated with this role.",
+    "newUserRole": "Create a new user role in the system",
+    "editUserRole": "Edit the user role for the system"
+  },
+  "labels": {
+    "allRoles": "All roles",
+    "addUser": "Add user",
+    "deleteRole": "Delete role",
+    "addUserRole": "Add user role",
+    "resetPassword": "Reset password",
+    "sendResetLink": "Send reset link",
+    "youReceiveEmailsQuestion": "Do you want to receive emails?",
+    "userToReceiveEmailsQuestion": "Should the user receive emails?",
+    "selectARole": "Select a role",
+    "role": "Role"
   }
 }
