@@ -11,7 +11,7 @@ export function buildUpdateUserSchema({ REQUIRED }: { REQUIRED: string }) {
     phone: z.string(),
     email: z.string().min(1, REQUIRED).email(),
     scanAccessKey: z.string(),
-    userRoleID: z.number(),
+    userRoleID: z.number().or(z.string()),
     language: z.string(),
     locationList: z.array(
       z.object({
