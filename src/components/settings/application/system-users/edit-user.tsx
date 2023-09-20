@@ -394,7 +394,8 @@ function EditUserForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.username", { ns: "labels" })}
-                  disabled
+                  readOnly
+                  autoComplete="username"
                 />
               </FormControl>
               <FormDescription>
@@ -416,6 +417,7 @@ function EditUserForm(props: {
                   {...field}
                   placeholder={t("display.email", { ns: "labels" })}
                   disabled={isDisabled}
+                  autoComplete="email"
                 />
               </FormControl>
               <FormDescription>
@@ -439,6 +441,7 @@ function EditUserForm(props: {
                     {...field}
                     placeholder={t("display.firstName", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="given-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -456,6 +459,7 @@ function EditUserForm(props: {
                     {...field}
                     placeholder={t("display.lastName", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="family-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -508,6 +512,7 @@ function EditUserForm(props: {
                     {...field}
                     placeholder={t("display.phoneNo", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="tel"
                   />
                 </FormControl>
                 <FormMessage />
@@ -837,6 +842,7 @@ function NewUserForm(props: {
                   {...field}
                   placeholder={t("display.email", { ns: "labels" })}
                   disabled={isDisabled}
+                  autoComplete="email"
                 />
               </FormControl>
               <FormMessage />
@@ -856,6 +862,8 @@ function NewUserForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.username", { ns: "labels" })}
+                  disabled={isDisabled}
+                  autoComplete="username"
                 />
               </FormControl>
               <FormMessage />
@@ -878,6 +886,7 @@ function NewUserForm(props: {
                     type={showPassword ? "text" : "password"}
                     placeholder={t("display.password", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="new-password"
                   />
                 </FormControl>
                 <Button
@@ -919,6 +928,7 @@ function NewUserForm(props: {
                     {...field}
                     placeholder={t("display.firstName", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="given-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -936,6 +946,7 @@ function NewUserForm(props: {
                     {...field}
                     placeholder={t("display.lastName", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="family-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -988,6 +999,7 @@ function NewUserForm(props: {
                     {...field}
                     placeholder={t("display.phoneNo", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="tel"
                   />
                 </FormControl>
                 <FormMessage />

@@ -204,7 +204,8 @@ function ProfileForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.username", { ns: "labels" })}
-                  disabled
+                  autoComplete="username"
+                  readOnly
                 />
               </FormControl>
               <FormMessage />
@@ -229,6 +230,7 @@ function ProfileForm(props: {
                   {...field}
                   placeholder={t("display.email", { ns: "labels" })}
                   disabled={isDisabled}
+                  autoComplete="email"
                 />
               </FormControl>
               <FormMessage />
@@ -255,6 +257,7 @@ function ProfileForm(props: {
                     {...field}
                     placeholder={t("display.firstName", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="given-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -272,6 +275,7 @@ function ProfileForm(props: {
                     {...field}
                     placeholder={t("display.lastName", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="family-name"
                   />
                 </FormControl>
                 <FormMessage />
@@ -324,6 +328,7 @@ function ProfileForm(props: {
                     {...field}
                     placeholder={t("display.phoneNo", { ns: "labels" })}
                     disabled={isDisabled}
+                    autoComplete="tel"
                   />
                 </FormControl>
                 <FormMessage />
