@@ -7,8 +7,12 @@ import { apiClient } from "@/api";
 
 export function useGetLocationsList(params: {
   query: { withActive: boolean };
+  enabled?: boolean;
 }) {
   const auth = useAuth();
+
+  const enabled = params?.enabled ?? true;
+
   const query = useQuery({
     queryKey: locationQKeys.all(params.query),
     queryFn: () =>
@@ -19,7 +23,7 @@ export function useGetLocationsList(params: {
           withActive: params.query.withActive,
         },
       }),
-    enabled: auth.isAuthenticated,
+    enabled: enabled && auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
   });
   return query;
