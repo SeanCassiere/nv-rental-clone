@@ -621,7 +621,9 @@ function EditUserForm(props: {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={isDisabled}
+                  disabled={
+                    isDisabled || String(props.user.userID) === props.userId
+                  }
                 />
               </FormControl>
             </FormItem>
@@ -644,7 +646,11 @@ function EditUserForm(props: {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={isDisabled}
+                  disabled={
+                    isDisabled ||
+                    (!props.user.lockOut &&
+                      String(props.user.userID) === props.userId)
+                  }
                 />
               </FormControl>
             </FormItem>
