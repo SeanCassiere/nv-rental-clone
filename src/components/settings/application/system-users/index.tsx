@@ -40,7 +40,7 @@ import { EditUserDialog } from "./edit-user";
 import { ResetPasswordAlertDialog } from "./reset-password";
 
 const SystemUsersSettings = () => {
-  const { t } = useTranslation("settings");
+  const { t } = useTranslation();
 
   const auth = useAuth();
 
@@ -61,20 +61,20 @@ const SystemUsersSettings = () => {
         )}
       <Card className="shadow-none">
         <CardHeader className="p-4 lg:p-6">
-          <CardTitle className="flex justify-between text-lg">
-            {t("titles.systemUsers")}
-            <div className="flex items-center justify-end">
-              <Button size="sm" onClick={() => setShowNewUser(true)}>
-                <PlusIcon className="h-4 w-4 sm:mr-2" />
-                <span>{t("buttons.addUser", { ns: "labels" })}</span>
-              </Button>
-            </div>
+          <CardTitle className="text-lg">
+            {t("titles.systemUsers", { ns: "settings" })}
           </CardTitle>
           <CardDescription className="text-base">
-            {t("descriptions.systemUsers")}
+            {t("descriptions.systemUsers", { ns: "settings" })}
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4 pt-0 lg:px-6 lg:pb-5">
+        <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
+          <div className="flex items-center justify-start pb-4">
+            <Button size="sm" onClick={() => setShowNewUser(true)}>
+              <PlusIcon className="h-4 w-4 sm:mr-2" />
+              <span>{t("buttons.addUser", { ns: "labels" })}</span>
+            </Button>
+          </div>
           <Suspense fallback={<Skeleton className="h-72" />}>
             {auth.user?.profile?.navotar_userid &&
             auth.user?.profile?.navotar_clientid ? (

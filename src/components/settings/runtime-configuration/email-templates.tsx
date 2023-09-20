@@ -11,17 +11,19 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EmailTemplatesSettings = () => {
-  const { t } = useTranslation("settings");
+  const { t } = useTranslation();
 
   return (
     <Card className="shadow-none">
       <CardHeader className="p-4 lg:p-6">
-        <CardTitle className="text-lg">{t("titles.emailTemplates")}</CardTitle>
+        <CardTitle className="text-lg">
+          {t("titles.emailTemplates", { ns: "settings" })}
+        </CardTitle>
         <CardDescription className="text-base">
-          {t("descriptions.emailTemplates")}
+          {t("descriptions.emailTemplates", { ns: "settings" })}
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-4 pt-0 lg:p-6">
+      <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
         <Skeleton className="h-72" />
       </CardContent>
     </Card>
