@@ -141,7 +141,7 @@ function ProfileForm(props: {
       queryClient.invalidateQueries(
         userQKeys.permissions(variables.params.userId)
       );
-      queryClient.invalidateQueries(locationQKeys.all());
+      queryClient.invalidateQueries(locationQKeys.all({ withActive: true }));
 
       if (data.status >= 200 && data.status < 300) {
         toast({

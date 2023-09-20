@@ -114,7 +114,9 @@ export const DurationStage = ({
     values: initialData ? values : undefined,
   });
 
-  const locationData = useGetLocationsList({ locationIsActive: true });
+  const locationData = useGetLocationsList({
+    query: { withActive: true },
+  });
   const locationsList =
     locationData.data?.status === 200 ? locationData.data.body : [];
 
