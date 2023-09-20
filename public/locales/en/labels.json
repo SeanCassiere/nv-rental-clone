@@ -23,6 +23,8 @@
     "inactive": "Inactive",
     "role": "Role",
     "locations": "Locations",
+    "allResults": "All results",
+    "noResultsFound": "No results found",
     "systemGenerated": "System generated",
     "userGenerated": "User generated"
   },

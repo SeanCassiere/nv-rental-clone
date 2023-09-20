@@ -9,7 +9,7 @@ type Auth = {
 
 export const rolesStore = createQueryKeys("roles", {
   all: (params: Auth) => ({
-    queryKey: [params],
+    queryKey: [""],
     queryFn: () =>
       apiClient.role.getList({
         query: { clientId: params.clientId, userId: params.userId },

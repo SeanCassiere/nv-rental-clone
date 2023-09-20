@@ -25,5 +25,6 @@
   "selectARole": "Select a role.",
   "accessibleLocations": "Access is being granted to the following locations.",
   "pressToShowPassword": "Press to show password.",
-  "pressToHidePassword": "Press to hide password."
+  "pressToHidePassword": "Press to hide password.",
+  "noResultsWereFoundForThisSearch": "No results were found for this search."
 }

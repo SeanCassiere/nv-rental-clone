@@ -37,6 +37,7 @@
     "accountLock": "Check this box to lock the user's account. When the account is locked, the user will not be able to log in or access the system."
   },
   "labels": {
+    "allRoles": "All roles",
     "addUser": "Add user",
     "deleteRole": "Delete role",
     "addUserRole": "Add user role",
