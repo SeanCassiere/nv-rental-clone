@@ -52,6 +52,16 @@ const rootUserContract = c.router({
       200: UserLanguageListSchema,
     },
   },
+  createdUserProfile: {
+    method: "POST",
+    path: "/v3/users",
+    body: c.type<UpdateUserInput & { password: string }>(),
+    responses: {
+      200: z.any(),
+      400: StructuredErrorSchema,
+      500: StructuredErrorSchema,
+    },
+  },
   updateProfileByUserId: {
     method: "PUT",
     path: "/v3/users/:userId",
@@ -59,7 +69,8 @@ const rootUserContract = c.router({
     responses: {
       200: z.any(),
       401: z.any(),
-      403: z.any(),
+      400: StructuredErrorSchema,
+      500: StructuredErrorSchema,
     },
   },
   sendResetPasswordLink: {

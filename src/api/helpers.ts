@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 const StructuredErrorSchema = z.object({
-  type: z.string().nullable(),
+  type: z.string().nullable().optional(),
   title: z.string().nullable(),
   status: z.number(),
-  traceId: z.string().nullable(),
+  traceId: z.string().nullable().optional(),
 });
 
 const ClientIdAuthSchema = z.object({

@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export function buildUpdateUserSchema({ REQUIRED }: { REQUIRED: string }) {
   return z.object({
-    clientId: z.number(),
-    createdBy: z.number(),
+    clientId: z.number().or(z.string()),
+    createdBy: z.number().or(z.string()),
     createdDate: z.string(),
     userName: z.string().min(1, REQUIRED),
     firstName: z.string().min(1, REQUIRED),

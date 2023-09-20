@@ -302,17 +302,54 @@ function EditUserForm(props: {
         });
 
         props.setOpen(false);
-      } else {
+        return;
+      }
+
+      if (data.status === 400 || data.status == 500) {
+        const body = data.body;
+        const title = (body.title ?? "").toLowerCase();
+
+        if (title.includes("email") && title.includes("is already")) {
+          form.setError("email", {
+            message: t("labelAlreadyTaken", {
+              ns: "messages",
+              label: t("display.email", { ns: "labels" }),
+            }),
+          });
+        }
+
+        if (title.includes("username") && title.includes("is already")) {
+          form.setError("userName", {
+            message: t("labelAlreadyTaken", {
+              ns: "messages",
+              label: t("display.username", { ns: "labels" }),
+            }),
+          });
+        }
+
         toast({
-          title: t("somethingWentWrong", {
+          title: t("inputValidationFailed", {
             ns: "messages",
           }),
-          description: t("pleaseTryAgain", {
+          description: t("somethingFailedValidation", {
             ns: "messages",
           }),
           variant: "destructive",
         });
+        return;
       }
+
+      // should not happen
+      console.error("updateProfile mutation failed\n", data);
+      toast({
+        title: t("somethingWentWrong", {
+          ns: "messages",
+        }),
+        description: t("pleaseTryAgain", {
+          ns: "messages",
+        }),
+        variant: "destructive",
+      });
     },
     onError: (err) => {
       if (err instanceof Error) {
@@ -678,8 +715,11 @@ function NewUserForm(props: {
   const form = useForm<z.infer<typeof createUserSchema>>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
+      clientId: props.clientId,
+      createdBy: props.userId,
+      createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(new Date()),
+      //
       password: "",
-      clientId: Number(props.clientId),
       userName: "",
       firstName: "",
       lastName: "",
@@ -692,17 +732,14 @@ function NewUserForm(props: {
       isActive: true,
       lockOut: false,
       isReservationEmail: false,
-      createdBy: Number(props.userId),
-      createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(new Date()),
     },
   });
 
   const createUser = useMutation({
     mutationKey: userQKeys.updatingProfile(String(props.userId)),
-    mutationFn: apiClient.user.updateProfileByUserId,
-    onSuccess: (data, variables) => {
+    mutationFn: apiClient.user.createdUserProfile,
+    onSuccess: (data) => {
       qc.invalidateQueries(userQKeys.userConfigurations());
-      qc.invalidateQueries(userQKeys.profile(variables.params.userId));
 
       if (data.status >= 200 && data.status < 300) {
         toast({
@@ -717,17 +754,54 @@ function NewUserForm(props: {
         });
 
         props.setOpen(false);
-      } else {
+        return;
+      }
+
+      if (data.status === 400 || data.status == 500) {
+        const body = data.body;
+        const title = (body.title ?? "").toLowerCase();
+
+        if (title.includes("email") && title.includes("is already taken")) {
+          form.setError("email", {
+            message: t("labelAlreadyTaken", {
+              ns: "messages",
+              label: t("display.email", { ns: "labels" }),
+            }),
+          });
+        }
+
+        if (title.includes("username") && title.includes("is already taken")) {
+          form.setError("userName", {
+            message: t("labelAlreadyTaken", {
+              ns: "messages",
+              label: t("display.username", { ns: "labels" }),
+            }),
+          });
+        }
+
         toast({
-          title: t("somethingWentWrong", {
+          title: t("inputValidationFailed", {
             ns: "messages",
           }),
-          description: t("pleaseTryAgain", {
+          description: t("somethingFailedValidation", {
             ns: "messages",
           }),
           variant: "destructive",
         });
+        return;
       }
+
+      // should not happen
+      console.error("createUser mutation failed\n", data);
+      toast({
+        title: t("somethingWentWrong", {
+          ns: "messages",
+        }),
+        description: t("pleaseTryAgain", {
+          ns: "messages",
+        }),
+        variant: "destructive",
+      });
     },
     onError: (err) => {
       if (err instanceof Error) {
@@ -754,7 +828,14 @@ function NewUserForm(props: {
         id={props.formId}
         className="flex grow-0 flex-col gap-4 px-1 py-4"
         onSubmit={form.handleSubmit(async (data) => {
-          console.log("new user data", data);
+          createUser.mutate({
+            body: {
+              ...data,
+              createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+                new Date()
+              ),
+            },
+          });
         })}
       >
         <FormField
