@@ -51,6 +51,7 @@
     "sendResetLink": "Send reset link",
     "youReceiveEmailsQuestion": "Do you want to receive emails?",
     "userToReceiveEmailsQuestion": "Should the user receive emails?",
-    "selectARole": "Select a role"
+    "selectARole": "Select a role",
+    "role": "Role"
   }
 }

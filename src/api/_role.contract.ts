@@ -42,6 +42,37 @@ const rootRolesContract = c.router({
       404: StructuredErrorSchema,
     },
   },
+  createRole: {
+    method: "POST",
+    path: "/v3/roles",
+    body: c.type<{
+      roleName: string;
+      description: string;
+      permissions: number[];
+      clientId: string;
+    }>(),
+    responses: {
+      200: c.type<number>(),
+      201: c.type<any>(),
+      400: StructuredErrorSchema,
+    },
+  },
+  updateRolePermissions: {
+    method: "PUT",
+    path: "/v3/roles/:roleId/permissions",
+    body: c.type<{
+      roleName: string;
+      description: string;
+      addPermissions: number[];
+      deletePermissions: number[];
+      clientId: string;
+    }>(),
+    responses: {
+      200: c.type<any>(),
+      201: c.type<any>(),
+      400: StructuredErrorSchema,
+    },
+  },
   deleteRole: {
     method: "DELETE",
     path: "/v3/roles/:roleId",

@@ -1,7 +1,7 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AccordionItem } from "@radix-ui/react-accordion";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -36,9 +36,11 @@ import {
   InputSelectContent,
   InputSelectTrigger,
 } from "@/components/ui/input-select";
+import { useToast } from "@/components/ui/use-toast";
 
 import type { PermissionListItem, RoleListItem } from "@/schemas/role";
 
+import { apiClient } from "@/api";
 import { rolesStore } from "@/utils";
 
 interface EditRoleDialogProps {
@@ -56,6 +58,8 @@ export function EditRoleDialog({
   ...props
 }: EditRoleDialogProps) {
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const qc = useQueryClient();
 
   const formId = React.useId();
 
@@ -84,8 +88,144 @@ export function EditRoleDialog({
   const roles = rolesQuery.data?.status === 200 ? rolesQuery.data?.body : [];
   const role = roleQuery.data?.status === 200 ? roleQuery.data?.body : null;
 
-  const disabled = false;
-  const isLoading = false;
+  const createRole = useMutation({
+    mutationFn: apiClient.role.createRole,
+    onMutate: () => {
+      qc.cancelQueries({
+        queryKey: rolesStore.all({
+          clientId: props.clientId,
+          userId: props.userId,
+        }).queryKey,
+      });
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({
+        queryKey: rolesStore.all({
+          clientId: props.clientId,
+          userId: props.userId,
+        }).queryKey,
+      });
+
+      if (data.status >= 200 && data.status < 300) {
+        toast({
+          title: t("labelCreated", {
+            ns: "messages",
+            label: t("labels.role", { ns: "settings" }),
+          }),
+          description: t("labelCreatedSuccess", {
+            ns: "messages",
+            label: t("labels.role", { ns: "settings" }),
+          }),
+        });
+
+        setOpen(false);
+        return;
+      }
+
+      toast({
+        title: t("somethingWentWrong", {
+          ns: "messages",
+        }),
+        description: t("pleaseTryAgain", {
+          ns: "messages",
+        }),
+        variant: "destructive",
+      });
+    },
+    onError: (err) => {
+      if (err instanceof Error) {
+        toast({
+          title: t("somethingWentWrong", {
+            ns: "messages",
+          }),
+          description:
+            err?.message ||
+            t("pleaseTryAgain", {
+              ns: "messages",
+            }),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const updateRole = useMutation({
+    mutationFn: apiClient.role.updateRolePermissions,
+    onMutate: () => {
+      qc.cancelQueries({
+        queryKey: rolesStore.all({
+          clientId: props.clientId,
+          userId: props.userId,
+        }).queryKey,
+      });
+      qc.cancelQueries({
+        queryKey: rolesStore.getById({
+          clientId: props.clientId,
+          userId: props.userId,
+          roleId: props.roleId,
+        }).queryKey,
+      });
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({
+        queryKey: rolesStore.all({
+          clientId: props.clientId,
+          userId: props.userId,
+        }).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: rolesStore.getById({
+          clientId: props.clientId,
+          userId: props.userId,
+          roleId: props.roleId,
+        }).queryKey,
+      });
+
+      if (data.status >= 200 && data.status < 300) {
+        toast({
+          title: t("labelUpdated", {
+            ns: "messages",
+            label: t("labels.role", { ns: "settings" }),
+          }),
+          description: t("labelUpdatedSuccess", {
+            ns: "messages",
+            label: t("labels.role", { ns: "settings" }),
+          }),
+        });
+
+        setOpen(false);
+        return;
+      }
+
+      toast({
+        title: t("somethingWentWrong", {
+          ns: "messages",
+        }),
+        description: t("pleaseTryAgain", {
+          ns: "messages",
+        }),
+        variant: "destructive",
+      });
+    },
+    onError: (err) => {
+      if (err instanceof Error) {
+        toast({
+          title: t("somethingWentWrong", {
+            ns: "messages",
+          }),
+          description:
+            err?.message ||
+            t("pleaseTryAgain", {
+              ns: "messages",
+            }),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const disabled = createRole.isLoading || updateRole.isLoading;
+  const isLoading = createRole.isLoading || updateRole.isLoading;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -116,7 +256,14 @@ export function EditRoleDialog({
             clientId={props.clientId}
             userId={props.userId}
             onSubmit={(data) => {
-              console.log(data);
+              createRole.mutate({
+                body: {
+                  roleName: data.name,
+                  description: data.description,
+                  permissions: data.permissions,
+                  clientId: props.clientId,
+                },
+              });
             }}
           />
         )}
@@ -147,11 +294,15 @@ export function EditRoleDialog({
                 (item) => !data.permissions.includes(item)
               );
 
-              console.log({
-                name,
-                description,
-                permissionsAdded,
-                permissionsRemoved,
+              updateRole.mutate({
+                params: { roleId: props.roleId },
+                body: {
+                  roleName: name,
+                  description: description,
+                  addPermissions: permissionsAdded,
+                  deletePermissions: permissionsRemoved,
+                  clientId: props.clientId,
+                },
               });
             }}
           />
