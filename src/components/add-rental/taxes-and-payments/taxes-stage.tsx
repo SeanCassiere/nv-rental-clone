@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
+import { InputCheckbox } from "@/components/ui/input-checkbox";
 
 import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
-
-import { cn } from "@/utils";
 
 import type { TaxesAndPaymentsTabProps } from ".";
 
@@ -22,7 +21,7 @@ interface TaxesStageProps {
 export const TaxesStage = (props: TaxesStageProps) => {
   const { durationStageData, taxes, onSelectedTaxes, onCompleted } = props;
 
-  const { t: tl } = useTranslation("labels");
+  const { t } = useTranslation();
 
   const isSupportingInfoAvailable = Boolean(durationStageData);
 
@@ -54,39 +53,21 @@ export const TaxesStage = (props: TaxesStageProps) => {
           {loadedTaxes
             .sort((tax1, tax2) => tax1.id - tax2.id)
             .map((tax, idx) => (
-              <div
+              <InputCheckbox
                 key={`${tax.id}-${idx}`}
-                className="flex items-center justify-start gap-2"
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedTaxes.includes(tax.id)}
-                  onChange={(evt) => {
-                    const checked = evt.target.checked;
-                    setSelectedTaxes((prev) => {
-                      const withoutId = prev.filter((id) => id !== tax.id);
-                      if (checked) {
-                        return withoutId.concat(tax.id);
-                      }
-                      return withoutId;
-                    });
-                  }}
-                  id={`${tax.id}-${idx}-${tax.name}`}
-                  disabled={mandatoryTaxes.includes(tax.id)}
-                  className="rounded text-teal-500 focus:outline-teal-500 disabled:cursor-not-allowed disabled:text-slate-400"
-                />
-                <label
-                  htmlFor={`${tax.id}-${idx}-${tax.name}`}
-                  className={cn(
-                    "",
-                    mandatoryTaxes.includes(tax.id)
-                      ? "cursor-not-allowed"
-                      : "cursor-pointer"
-                  )}
-                >
-                  {tax.name}
-                </label>
-              </div>
+                checked={selectedTaxes.includes(tax.id)}
+                onCheckedChange={(checked) => {
+                  setSelectedTaxes((prev) => {
+                    const withoutId = prev.filter((id) => id !== tax.id);
+                    if (checked) {
+                      return withoutId.concat(tax.id);
+                    }
+                    return withoutId;
+                  });
+                }}
+                label={tax.name}
+                disabled={mandatoryTaxes.includes(tax.id)}
+              />
             ))}
         </div>
         <div className="mt-4">
@@ -97,7 +78,7 @@ export const TaxesStage = (props: TaxesStageProps) => {
               onCompleted();
             }}
           >
-            {tl("buttons.saveAndContinue")}
+            {t("buttons.saveAndContinue", { ns: "labels" })}
           </Button>
         </div>
       </div>
