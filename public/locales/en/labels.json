@@ -1,5 +1,6 @@
 {
   "display": {
+    "name": "Name",
     "firstName": "First name",
     "lastName": "Last name",
     "username": "Username",
@@ -26,7 +27,9 @@
     "allResults": "All results",
     "noResultsFound": "No results found",
     "systemGenerated": "System generated",
-    "userGenerated": "User generated"
+    "userGenerated": "User generated",
+    "description": "Description",
+    "copyFromExisting": "Copy from existing"
   },
   "buttons": {
     "save": "Save",

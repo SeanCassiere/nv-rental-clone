@@ -523,8 +523,8 @@ function EditUserForm(props: {
               <FormItem className="w-full">
                 <FormLabel>{t("display.role", { ns: "labels" })}</FormLabel>
                 <InputSelect
-                  placeholder={t("selectARole", {
-                    ns: "messages",
+                  placeholder={t("labels.selectARole", {
+                    ns: "settings",
                   })}
                   disabled={isDisabled}
                   defaultValue={String(field.value)}
@@ -1016,8 +1016,8 @@ function NewUserForm(props: {
               <FormItem className="w-full">
                 <FormLabel>{t("display.role", { ns: "labels" })}</FormLabel>
                 <InputSelect
-                  placeholder={t("selectARole", {
-                    ns: "messages",
+                  placeholder={t("labels.selectARole", {
+                    ns: "settings",
                   })}
                   disabled={isDisabled}
                   defaultValue={String(field.value)}

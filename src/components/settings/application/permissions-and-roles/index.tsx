@@ -44,6 +44,7 @@ import { RoleListItem } from "@/schemas/role";
 import { cn, rolesStore } from "@/utils";
 
 import { DeleteRoleAlertDialog } from "./delete-role";
+import { EditRoleDialog } from "./edit-role";
 
 const PermissionsAndRoles = () => {
   const { t } = useTranslation();
@@ -51,58 +52,71 @@ const PermissionsAndRoles = () => {
   const auth = useAuth();
 
   const [filterMode, setFilterMode] = React.useState("all");
+  const [showNew, setShowNew] = React.useState(false);
 
   const clientId = auth.user?.profile?.navotar_clientid;
   const userId = auth.user?.profile?.navotar_userid;
 
   return (
-    <Card className="shadow-none">
-      <CardHeader className="p-4 lg:p-6">
-        <CardTitle className="text-lg">
-          {t("titles.permissionsAndRoles", { ns: "settings" })}
-        </CardTitle>
-        <CardDescription className="text-base">
-          {t("descriptions.permissionsAndRoles", { ns: "settings" })}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
-        <div className="flex items-center justify-start gap-x-2 pb-2">
-          <Button size="sm">
-            <PlusIcon className="h-4 w-4 sm:mr-2" />
-            <span>{t("labels.addUserRole", { ns: "settings" })}</span>
-          </Button>
-        </div>
-        <div className="flex items-center gap-x-2 pb-4">
-          <Select value={filterMode} onValueChange={setFilterMode}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="all">
-                  {t("display.allResults", { ns: "labels" })}
-                </SelectItem>
-                <SelectItem value="system">
-                  {t("display.systemGenerated", { ns: "labels" })}
-                </SelectItem>
-                <SelectItem value="user">
-                  {t("display.userGenerated", { ns: "labels" })}
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <Suspense fallback={<Skeleton className="h-72" />}>
-          {clientId && userId ? (
-            <SystemRolesList
-              filterMode={filterMode}
-              clientId={clientId}
-              userId={userId}
-            />
-          ) : null}
-        </Suspense>
-      </CardContent>
-    </Card>
+    <>
+      {clientId && userId && (
+        <EditRoleDialog
+          mode="new"
+          open={showNew}
+          setOpen={setShowNew}
+          clientId={clientId}
+          userId={userId}
+          roleId={""}
+        />
+      )}
+      <Card className="shadow-none">
+        <CardHeader className="p-4 lg:p-6">
+          <CardTitle className="text-lg">
+            {t("titles.permissionsAndRoles", { ns: "settings" })}
+          </CardTitle>
+          <CardDescription className="text-base">
+            {t("descriptions.permissionsAndRoles", { ns: "settings" })}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
+          <div className="flex items-center justify-start gap-x-2 pb-2">
+            <Button size="sm" onClick={() => setShowNew(true)}>
+              <PlusIcon className="h-4 w-4 sm:mr-2" />
+              <span>{t("labels.addUserRole", { ns: "settings" })}</span>
+            </Button>
+          </div>
+          <div className="flex items-center gap-x-2 pb-4">
+            <Select value={filterMode} onValueChange={setFilterMode}>
+              <SelectTrigger className="w-full md:w-[180px]">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="all">
+                    {t("display.allResults", { ns: "labels" })}
+                  </SelectItem>
+                  <SelectItem value="system">
+                    {t("display.systemGenerated", { ns: "labels" })}
+                  </SelectItem>
+                  <SelectItem value="user">
+                    {t("display.userGenerated", { ns: "labels" })}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <Suspense fallback={<Skeleton className="h-72" />}>
+            {clientId && userId ? (
+              <SystemRolesList
+                filterMode={filterMode}
+                clientId={clientId}
+                userId={userId}
+              />
+            ) : null}
+          </Suspense>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 
@@ -187,10 +201,19 @@ function SystemRole({
 
   const isSystemRole = role.type <= 0; // role.type is less than or equal to 0
 
+  const [showEdit, setShowEdit] = React.useState(false);
   const [showDelete, setShowDelete] = React.useState(false);
 
   return (
     <>
+      <EditRoleDialog
+        mode="edit"
+        open={showEdit}
+        setOpen={setShowEdit}
+        clientId={props.clientId}
+        userId={props.userId}
+        roleId={String(role.userRoleID)}
+      />
       <DeleteRoleAlertDialog
         open={showDelete}
         setOpen={setShowDelete}
@@ -244,9 +267,7 @@ function SystemRole({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem
-                  // onClick={() => setShowEditRole(true)}
-                  >
+                  <DropdownMenuItem onClick={() => setShowEdit(true)}>
                     <PencilIcon className="mr-2 h-3 w-3" />
                     <span>{t("buttons.edit", { ns: "labels" })}</span>
                   </DropdownMenuItem>
