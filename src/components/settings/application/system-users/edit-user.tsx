@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -40,13 +41,13 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
+import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
 
 import { type RoleListItem } from "@/schemas/role";
 import {
-  UpdateUserSchema,
+  buildUpdateUserSchema,
   UserLanguageItem,
-  type TUserConfigurations,
   type TUserProfile,
   type UpdateUserInput,
 } from "@/schemas/user";
@@ -59,11 +60,11 @@ import { cn } from "@/utils";
 
 interface EditUserDialogProps {
   mode: "new" | "edit";
-  user: TUserConfigurations[number];
   open: boolean;
   setOpen: (open: boolean) => void;
   clientId: string;
   userId: string;
+  intendedUserId: string;
 }
 
 export function EditUserDialog({
@@ -76,7 +77,7 @@ export function EditUserDialog({
   const formId = React.useId();
 
   const isUpdatingNumber = useIsMutating({
-    mutationKey: userQKeys.updatingProfile(String(props.user?.userID)),
+    mutationKey: userQKeys.updatingProfile(props.intendedUserId),
   });
   const isUpdating = isUpdatingNumber > 0;
 
@@ -105,7 +106,7 @@ export function EditUserDialog({
   });
 
   const userQuery = useQuery({
-    queryKey: userQKeys.profile(String(props.user.userID)),
+    queryKey: userQKeys.profile(props.intendedUserId),
     queryFn: () =>
       apiClient.user.getProfileByUserId({
         query: {
@@ -113,10 +114,10 @@ export function EditUserDialog({
           userId: props.userId,
           currentUserId: props.userId,
         },
-        params: { userId: String(props.user.userID) },
+        params: { userId: props.intendedUserId },
       }),
     staleTime: 1000 * 60 * 1, // 1 minute
-    enabled: props.mode === "edit",
+    enabled: props.mode === "edit" && props.intendedUserId !== "",
   });
 
   const rolesQuery = useQuery({
@@ -130,6 +131,11 @@ export function EditUserDialog({
 
   const languagesQuery = useGetUserLanguages();
 
+  const locationsQuery = useGetLocationsList({
+    query: { withActive: true },
+    enabled: props.mode === "new",
+  });
+
   const currentUsers =
     currentUsersQuery.data?.status === 200 ? currentUsersQuery.data.body : 0;
   const maxUsers =
@@ -138,30 +144,52 @@ export function EditUserDialog({
   const languages =
     languagesQuery.data?.status === 200 ? languagesQuery.data.body : [];
   const roles = rolesQuery.data?.status === 200 ? rolesQuery.data.body : [];
+  const locations =
+    locationsQuery.data?.status === 200 ? locationsQuery.data.body : [];
+
+  const newUserLocations = locations.map((l) => ({
+    locationId: l.locationId,
+    locationName: l.locationName ?? "",
+    isSelected: true,
+  }));
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="md:max-w-xl">
         <DialogHeader>
           <DialogTitle>
-            {t("titles.editUserProfile", {
-              ns: "settings",
-            })}
+            {props.mode === "edit"
+              ? t("titles.editUserProfile", {
+                  ns: "settings",
+                })
+              : t("titles.newUserProfile", {
+                  ns: "settings",
+                })}
           </DialogTitle>
           <DialogDescription>
-            {t("descriptions.modifyProfileDetails", {
-              ns: "settings",
-            })}
-            <br />
-            <span
-              className={cn(currentUsers >= maxUsers ? "text-destructive" : "")}
-            >
-              {t("descriptions.remainingUsers", {
-                ns: "settings",
-                activeUsers: currentUsers.toLocaleString(),
-                maxUsers: maxUsers.toLocaleString(),
-              })}
-            </span>
+            {props.mode === "edit"
+              ? t("descriptions.modifyProfileDetails", {
+                  ns: "settings",
+                })
+              : t("descriptions.newProfileDetails", {
+                  ns: "settings",
+                })}
+            {props.mode === "new" && (
+              <>
+                <br />
+                <span
+                  className={cn(
+                    currentUsers >= maxUsers ? "text-destructive" : ""
+                  )}
+                >
+                  {t("descriptions.remainingUsers", {
+                    ns: "settings",
+                    activeUsers: currentUsers.toLocaleString(),
+                    maxUsers: maxUsers.toLocaleString(),
+                  })}
+                </span>
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
         {props.mode === "edit" && user && (
@@ -170,6 +198,17 @@ export function EditUserDialog({
             userId={props.userId}
             user={user}
             languages={languages}
+            roles={roles}
+            setOpen={setOpen}
+          />
+        )}
+        {props.mode === "new" && (
+          <NewUserForm
+            formId={formId}
+            userId={props.userId}
+            clientId={props.clientId}
+            languages={languages}
+            locations={newUserLocations}
             roles={roles}
             setOpen={setOpen}
           />
@@ -184,7 +223,9 @@ export function EditUserDialog({
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
           <Button type="submit" form={formId} disabled={disabled}>
-            {t("buttons.saveChanges", { ns: "labels" })}
+            {props.mode === "edit"
+              ? t("buttons.saveChanges", { ns: "labels" })
+              : t("buttons.save", { ns: "labels" })}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -212,8 +253,16 @@ function EditUserForm(props: {
     a.roleName.localeCompare(b.roleName)
   );
 
+  const updateUserSchema = React.useMemo(
+    () =>
+      buildUpdateUserSchema({
+        REQUIRED: t("display.required", { ns: "labels" }),
+      }),
+    [t]
+  );
+
   const form = useForm<UpdateUserInput>({
-    resolver: zodResolver(UpdateUserSchema),
+    resolver: zodResolver(updateUserSchema),
     defaultValues: {
       clientId: props.user.clientId,
       userName: props.user.userName,
@@ -563,6 +612,381 @@ function EditUserForm(props: {
                 </FormLabel>
                 <FormDescription>
                   {t("descriptions.accountLock", { ns: "settings" })}
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isDisabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+
+const MAX_PASSWORD_LENGTH = 35;
+
+function NewUserForm(props: {
+  formId: string;
+  userId: string;
+  clientId: string;
+  languages: UserLanguageItem[];
+  roles: RoleListItem[];
+  locations: TUserProfile["locationList"];
+  setOpen: (open: boolean) => void;
+}) {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const qc = useQueryClient();
+
+  const languagesList = props.languages
+    .filter((item) => item.key)
+    .sort((a, b) => a.key.localeCompare(b.key));
+
+  const rolesList = props.roles.sort((a, b) =>
+    a.roleName.localeCompare(b.roleName)
+  );
+
+  const createUserSchema = React.useMemo(
+    () =>
+      buildUpdateUserSchema({
+        REQUIRED: t("display.required", { ns: "labels" }),
+      }).extend({
+        password: z
+          .string()
+          .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+            message: t("passwordRules", { ns: "messages" }),
+          })
+          .max(MAX_PASSWORD_LENGTH, {
+            message: t("maxLength", {
+              ns: "messages",
+              length: MAX_PASSWORD_LENGTH,
+            }),
+          }),
+      }),
+    [t]
+  );
+
+  const form = useForm<z.infer<typeof createUserSchema>>({
+    resolver: zodResolver(createUserSchema),
+    defaultValues: {
+      password: "",
+      clientId: Number(props.clientId),
+      userName: "",
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+      scanAccessKey: "",
+      userRoleID: 1,
+      language: "en-US",
+      locationList: props.locations,
+      isActive: true,
+      lockOut: false,
+      isReservationEmail: false,
+      createdBy: Number(props.userId),
+      createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(new Date()),
+    },
+  });
+
+  const createUser = useMutation({
+    mutationKey: userQKeys.updatingProfile(String(props.userId)),
+    mutationFn: apiClient.user.updateProfileByUserId,
+    onSuccess: (data, variables) => {
+      qc.invalidateQueries(userQKeys.userConfigurations());
+      qc.invalidateQueries(userQKeys.profile(variables.params.userId));
+
+      if (data.status >= 200 && data.status < 300) {
+        toast({
+          title: t("labelCreated", {
+            ns: "messages",
+            label: t("titles.profile", { ns: "settings" }),
+          }),
+          description: t("labelCreated", {
+            ns: "messages",
+            label: t("titles.profile", { ns: "settings" }),
+          }),
+        });
+
+        props.setOpen(false);
+      } else {
+        toast({
+          title: t("somethingWentWrong", {
+            ns: "messages",
+          }),
+          description: t("pleaseTryAgain", {
+            ns: "messages",
+          }),
+          variant: "destructive",
+        });
+      }
+    },
+    onError: (err) => {
+      if (err instanceof Error) {
+        toast({
+          title: t("somethingWentWrong", {
+            ns: "messages",
+          }),
+          description:
+            err?.message ||
+            t("pleaseTryAgain", {
+              ns: "messages",
+            }),
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
+  const isDisabled = createUser.isLoading;
+
+  return (
+    <Form {...form}>
+      <form
+        id={props.formId}
+        className="flex grow-0 flex-col gap-4 px-1 py-4"
+        onSubmit={form.handleSubmit(async (data) => {
+          console.log("new user data", data);
+        })}
+      >
+        <FormField
+          control={form.control}
+          name="userName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("display.username", { ns: "labels" })}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={t("display.username", { ns: "labels" })}
+                />
+              </FormControl>
+              <FormMessage />
+              <FormDescription>
+                {t("usernameCannotBeChangedLater", { ns: "messages" })}
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <Separator />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("display.email", { ns: "labels" })}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={t("display.email", { ns: "labels" })}
+                  disabled={isDisabled}
+                />
+              </FormControl>
+              <FormMessage />
+              <FormDescription>
+                {t("emailAssociatedWithAccount", { ns: "messages" })}
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("display.password", { ns: "labels" })}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={t("display.password", { ns: "labels" })}
+                  disabled={isDisabled}
+                />
+              </FormControl>
+              <FormMessage />
+              <FormDescription>
+                {t("enterAStrongPassword", { ns: "messages" })}
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>
+                  {t("display.firstName", { ns: "labels" })}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder={t("display.firstName", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>{t("display.lastName", { ns: "labels" })}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder={t("display.lastName", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>{t("display.language", { ns: "labels" })}</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={isDisabled}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t("selectYourLocalization", {
+                          ns: "messages",
+                        })}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {languagesList.map((item, idx) => (
+                      <SelectItem key={`lang_${item}_${idx}`} value={item.key}>
+                        {item.value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>
+                  {t("display.phoneNo", { ns: "labels" })}&nbsp;
+                  <span className="text-xs text-foreground/70">
+                    {t("display.bracketOptional", { ns: "labels" })}
+                  </span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder={t("display.phoneNo", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="userRoleID"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>{t("display.role", { ns: "labels" })}</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={String(field.value)}
+                  disabled={isDisabled}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={t("selectYourLocalization", {
+                          ns: "messages",
+                        })}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {rolesList.map((item, idx) => (
+                      <SelectItem
+                        key={`role_${item}_${idx}`}
+                        value={String(item.userRoleID)}
+                      >
+                        {item.roleName}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="locationList"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>{t("display.locations", { ns: "labels" })}</FormLabel>
+              <FormDescription>
+                {t("accessibleLocations", { ns: "messages" })}
+              </FormDescription>
+              <div className="grid grid-cols-1 gap-4 pt-2 md:grid-cols-2">
+                {field.value.map((location) => (
+                  <InputCheckbox
+                    key={`location_access_${location.locationId}`}
+                    label={location.locationName}
+                    checked={location.isSelected}
+                    onCheckedChange={(checked) => {
+                      const locations = field.value;
+                      const idx = locations.findIndex(
+                        (item) => item.locationId === location.locationId
+                      );
+                      locations[idx]!.isSelected = checked;
+                      field.onChange(locations);
+                    }}
+                    disabled={isDisabled}
+                  />
+                ))}
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="isReservationEmail"
+          render={({ field }) => (
+            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel>
+                  {t("display.userToReceiveEmailsQuestion", { ns: "labels" })}
+                </FormLabel>
+                <FormDescription>
+                  {t("receiveReservationEmails", { ns: "messages" })}
                 </FormDescription>
               </div>
               <FormControl>

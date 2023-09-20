@@ -3,7 +3,7 @@ import { z } from "zod";
 import { c } from "@/api/c";
 
 import {
-  UpdateUserSchema,
+  UpdateUserInput,
   UserConfigurationsListSchema,
   UserLanguageListSchema,
   UserProfileSchema,
@@ -55,7 +55,7 @@ const rootUserContract = c.router({
   updateProfileByUserId: {
     method: "PUT",
     path: "/v3/users/:userId",
-    body: UpdateUserSchema,
+    body: c.type<UpdateUserInput>(),
     responses: {
       200: z.any(),
       401: z.any(),

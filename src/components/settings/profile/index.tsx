@@ -1,4 +1,3 @@
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -40,7 +39,7 @@ import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 
 import {
-  UpdateUserSchema,
+  buildUpdateUserSchema,
   type TUserProfile,
   type UpdateUserInput,
   type UserLanguageItem,
@@ -114,7 +113,11 @@ function ProfileForm(props: {
     .sort((a, b) => a.key.localeCompare(b.key));
 
   const form = useForm<UpdateUserInput>({
-    resolver: zodResolver(UpdateUserSchema),
+    resolver: zodResolver(
+      buildUpdateUserSchema({
+        REQUIRED: t("display.required", { ns: "labels" }),
+      })
+    ),
     defaultValues: {
       clientId: user.clientId,
       userName: user.userName,
@@ -206,13 +209,13 @@ function ProfileForm(props: {
                   disabled
                 />
               </FormControl>
+              <FormMessage />
               <FormDescription>
                 {t("usernameCannotBeChanged", {
                   context: "me",
                   ns: "messages",
                 })}
               </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -230,13 +233,13 @@ function ProfileForm(props: {
                   disabled={isDisabled}
                 />
               </FormControl>
+              <FormMessage />
               <FormDescription>
                 {t("emailAssociatedWithAccount", {
                   context: "me",
                   ns: "messages",
                 })}
               </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />

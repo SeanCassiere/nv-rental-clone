@@ -3,6 +3,7 @@
     "firstName": "First name",
     "lastName": "Last name",
     "username": "Username",
+    "password": "Password",
     "email": "Email",
     "language": "Language",
     "phoneNo": "Phone no.",
