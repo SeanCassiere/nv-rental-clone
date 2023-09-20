@@ -66,7 +66,7 @@ const SystemUsersSettings = () => {
             <div className="flex items-center justify-end">
               <Button size="sm" onClick={() => setShowNewUser(true)}>
                 <PlusIcon className="h-4 w-4 sm:mr-2" />
-                <span>Add user</span>
+                <span>{t("buttons.addUser", { ns: "labels" })}</span>
               </Button>
             </div>
           </CardTitle>
