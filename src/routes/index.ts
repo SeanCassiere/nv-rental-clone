@@ -53,7 +53,7 @@ export const indexRoute = new Route({
       );
 
       // get locations
-      const locationsKey = locationQKeys.all();
+      const locationsKey = locationQKeys.all({ withActive: true });
       promises.push(
         queryClient.ensureQueryData({
           queryKey: locationsKey,

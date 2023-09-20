@@ -52,7 +52,9 @@ function IndexPage() {
     from: indexRoute.id,
   });
 
-  const locationsList = useGetLocationsList({ locationIsActive: true });
+  const locationsList = useGetLocationsList({
+    query: { withActive: true },
+  });
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 

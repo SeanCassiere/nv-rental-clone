@@ -1,7 +1,12 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
-import { MoreVerticalIcon, PencilIcon, RotateCcwIcon } from "lucide-react";
+import {
+  MoreVerticalIcon,
+  PencilIcon,
+  PlusIcon,
+  RotateCcwIcon,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
@@ -39,26 +44,49 @@ const SystemUsersSettings = () => {
 
   const auth = useAuth();
 
+  const [showNewUser, setShowNewUser] = React.useState(false);
+
   return (
-    <Card className="shadow-none">
-      <CardHeader className="p-4 lg:p-6">
-        <CardTitle className="text-lg">{t("titles.systemUsers")}</CardTitle>
-        <CardDescription className="text-base">
-          {t("descriptions.systemUsers")}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-4 pt-0 lg:px-6 lg:pb-5">
-        <Suspense fallback={<Skeleton className="h-72" />}>
-          {auth.user?.profile?.navotar_userid &&
-          auth.user?.profile?.navotar_clientid ? (
-            <UsersList
-              clientId={auth.user?.profile?.navotar_clientid}
-              userId={auth.user?.profile?.navotar_userid}
-            />
-          ) : null}
-        </Suspense>
-      </CardContent>
-    </Card>
+    <>
+      {auth.user?.profile?.navotar_userid &&
+        auth.user?.profile?.navotar_clientid && (
+          <EditUserDialog
+            mode="new"
+            open={showNewUser}
+            setOpen={setShowNewUser}
+            intendedUserId=""
+            clientId={auth.user?.profile?.navotar_clientid}
+            userId={auth.user?.profile?.navotar_userid}
+          />
+        )}
+      <Card className="shadow-none">
+        <CardHeader className="p-4 lg:p-6">
+          <CardTitle className="flex justify-between text-lg">
+            {t("titles.systemUsers")}
+            <div className="flex items-center justify-end">
+              <Button size="sm" onClick={() => setShowNewUser(true)}>
+                <PlusIcon className="h-4 w-4 sm:mr-2" />
+                <span>{t("buttons.addUser", { ns: "labels" })}</span>
+              </Button>
+            </div>
+          </CardTitle>
+          <CardDescription className="text-base">
+            {t("descriptions.systemUsers")}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-4 pt-0 lg:px-6 lg:pb-5">
+          <Suspense fallback={<Skeleton className="h-72" />}>
+            {auth.user?.profile?.navotar_userid &&
+            auth.user?.profile?.navotar_clientid ? (
+              <UsersList
+                clientId={auth.user?.profile?.navotar_clientid}
+                userId={auth.user?.profile?.navotar_userid}
+              />
+            ) : null}
+          </Suspense>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 
@@ -124,7 +152,7 @@ function SystemUser({
         mode="edit"
         open={showEditUser}
         setOpen={setShowEditUser}
-        user={user}
+        intendedUserId={String(user.userID)}
         clientId={props.clientId}
         userId={props.userId}
       />

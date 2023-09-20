@@ -3,6 +3,7 @@
     "firstName": "First name",
     "lastName": "Last name",
     "username": "Username",
+    "password": "Password",
     "email": "Email",
     "language": "Language",
     "phoneNo": "Phone no.",
@@ -34,6 +35,7 @@
     "saveAndContinue": "Save and continue",
     "resetPassword": "Reset password",
     "sendResetLink": "Send reset link",
-    "moreActions": "More actions"
+    "moreActions": "More actions",
+    "addUser": "Add user"
   }
 }

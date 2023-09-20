@@ -16,6 +16,7 @@
     "compatibilityConfiguration": "System lists",
     "resetPasswordConfirmation": "Reset password confirmation",
     "editUserProfile": "Edit user profile",
+    "newUserProfile": "New user profile",
     "accountActive": "Active account",
     "accountLock": "Account lock"
   },
@@ -30,6 +31,7 @@
     "resetPasswordConfirmation": "Are you sure you want to reset this password? An email containing a password reset link will be sent to the address associated with this account. Please confirm this action.",
     "remainingUsers": "You currently have {{activeUsers}} active users out of the {{maxUsers}} allowed.",
     "modifyProfileDetails": "Modify the profile details for this user.",
+    "newProfileDetails": "Enter the profile details for this user.",
     "accountActive": "Mark this checkbox to indicate that the user's account is active",
     "accountLock": "Check this box to lock the user's account. When the account is locked, the user will not be able to log in or access the system."
   }

@@ -153,7 +153,11 @@ export const vehicleTypeQKeys = {
 
 export const locationQKeys = {
   rootKey: "locations",
-  all: () => [locationQKeys.rootKey, "all"],
+  all: (filters: { withActive: boolean }) => [
+    locationQKeys.rootKey,
+    "all",
+    filters,
+  ],
 };
 
 export const roleQKeys = {

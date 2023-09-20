@@ -1,4 +1,3 @@
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -23,12 +22,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  InputSelect,
+  InputSelectContent,
+  InputSelectTrigger,
+} from "@/components/ui/input-select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -40,7 +37,7 @@ import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
 import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 
 import {
-  UpdateUserSchema,
+  buildUpdateUserSchema,
   type TUserProfile,
   type UpdateUserInput,
   type UserLanguageItem,
@@ -114,7 +111,11 @@ function ProfileForm(props: {
     .sort((a, b) => a.key.localeCompare(b.key));
 
   const form = useForm<UpdateUserInput>({
-    resolver: zodResolver(UpdateUserSchema),
+    resolver: zodResolver(
+      buildUpdateUserSchema({
+        REQUIRED: t("display.required", { ns: "labels" }),
+      })
+    ),
     defaultValues: {
       clientId: user.clientId,
       userName: user.userName,
@@ -141,7 +142,7 @@ function ProfileForm(props: {
       queryClient.invalidateQueries(
         userQKeys.permissions(variables.params.userId)
       );
-      queryClient.invalidateQueries(locationQKeys.all());
+      queryClient.invalidateQueries(locationQKeys.all({ withActive: true }));
 
       if (data.status >= 200 && data.status < 300) {
         toast({
@@ -206,13 +207,13 @@ function ProfileForm(props: {
                   disabled
                 />
               </FormControl>
+              <FormMessage />
               <FormDescription>
                 {t("usernameCannotBeChanged", {
                   context: "me",
                   ns: "messages",
                 })}
               </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -230,13 +231,13 @@ function ProfileForm(props: {
                   disabled={isDisabled}
                 />
               </FormControl>
+              <FormMessage />
               <FormDescription>
                 {t("emailAssociatedWithAccount", {
                   context: "me",
                   ns: "messages",
                 })}
               </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -285,28 +286,24 @@ function ProfileForm(props: {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>{t("display.language", { ns: "labels" })}</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                <InputSelect
+                  placeholder={t("selectYourLocalization", {
+                    ns: "messages",
+                  })}
                   disabled={isDisabled}
+                  defaultValue={String(field.value)}
+                  onValueChange={field.onChange}
+                  items={languagesList.map((lang, idx) => ({
+                    id: `role_${idx}_${lang.key}`,
+                    value: String(lang.key),
+                    label: `${lang.value}`,
+                  }))}
                 >
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("selectYourLocalization", {
-                          ns: "messages",
-                        })}
-                      />
-                    </SelectTrigger>
+                    <InputSelectTrigger />
                   </FormControl>
-                  <SelectContent>
-                    {languagesList.map((item, idx) => (
-                      <SelectItem key={`lang_${item}_${idx}`} value={item.key}>
-                        {item.value}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <InputSelectContent />
+                </InputSelect>
                 <FormMessage />
               </FormItem>
             )}
