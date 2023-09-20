@@ -659,9 +659,12 @@ function NewUserForm(props: {
       }).extend({
         password: z
           .string()
-          .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
-            message: t("passwordRules", { ns: "messages" }),
-          })
+          .regex(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+            {
+              message: t("passwordRules", { ns: "messages" }),
+            }
+          )
           .max(MAX_PASSWORD_LENGTH, {
             message: t("maxLength", {
               ns: "messages",
