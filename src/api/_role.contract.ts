@@ -19,6 +19,12 @@ const rootRolesContract = c.router({
       404: StructuredErrorSchema,
     },
   },
+  deleteRole: {
+    method: "DELETE",
+    path: "/v3/roles/:roleId",
+    body: c.type<never>(),
+    responses: {},
+  },
 });
 
 export { rootRolesContract };

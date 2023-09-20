@@ -43,6 +43,8 @@ import { RoleListItem } from "@/schemas/role";
 
 import { cn, rolesStore } from "@/utils";
 
+import { DeleteRoleAlertDialog } from "./delete-role";
+
 const PermissionsAndRoles = () => {
   const { t } = useTranslation();
 
@@ -185,72 +187,83 @@ function SystemRole({
 
   const isSystemRole = role.type <= 0; // role.type is less than or equal to 0
 
+  const [showDelete, setShowDelete] = React.useState(false);
+
   return (
-    <li className="flex justify-between gap-x-6 py-5">
-      <div className="flex min-w-0 gap-x-4">
-        <div className="min-w-0 flex-auto text-sm">
-          <p
-            className={cn(
-              "flex items-baseline font-semibold leading-6",
-              isSystemRole ? "text-muted-foreground" : "text-foreground"
-            )}
-          >
-            {!isSystemRole && <PencilIcon className="mr-2 h-3 w-3" />}
-            {isSystemRole && <Laptop2Icon className="mr-2 h-3 w-3" />}
-            {role.roleName}
-          </p>
-          <p className="mt-1 truncate leading-5 text-muted-foreground">
-            {role.description}
-          </p>
+    <>
+      <DeleteRoleAlertDialog
+        open={showDelete}
+        setOpen={setShowDelete}
+        clientId={props.clientId}
+        userId={props.userId}
+        roleId={String(role.userRoleID)}
+      />
+      <li className="flex justify-between gap-x-6 py-5">
+        <div className="flex min-w-0 gap-x-4">
+          <div className="min-w-0 flex-auto text-sm">
+            <p
+              className={cn(
+                "flex items-baseline font-semibold leading-6",
+                isSystemRole ? "text-muted-foreground" : "text-foreground"
+              )}
+            >
+              {!isSystemRole && <PencilIcon className="mr-2 h-3 w-3" />}
+              {isSystemRole && <Laptop2Icon className="mr-2 h-3 w-3" />}
+              {role.roleName}
+            </p>
+            <p className="mt-1 truncate leading-5 text-muted-foreground">
+              {role.description}
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="flex items-center gap-x-4 text-sm">
-        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-          <p
-            className={cn(
-              "leading-6",
-              isSystemRole ? "text-muted-foreground" : "text-foreground"
-            )}
-          >
-            {role.createdBy}
-          </p>
-        </div>
-        <div className="flex grow-0 items-center justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                disabled={isSystemRole}
-                className="h-8 w-8"
-              >
-                <MoreVerticalIcon className="h-3 w-3 lg:h-4 lg:w-4" />
-                <span className="sr-only">
-                  {t("buttons.moreActions", { ns: "labels" })}
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuGroup>
-                <DropdownMenuItem
-                // onClick={() => setShowEditRole(true)}
+        <div className="flex items-center gap-x-4 text-sm">
+          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+            <p
+              className={cn(
+                "leading-6",
+                isSystemRole ? "text-muted-foreground" : "text-foreground"
+              )}
+            >
+              {role.createdBy}
+            </p>
+          </div>
+          <div className="flex grow-0 items-center justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={isSystemRole}
+                  className="h-8 w-8"
                 >
-                  <PencilIcon className="mr-2 h-3 w-3" />
-                  <span>{t("buttons.edit", { ns: "labels" })}</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-destructive"
-                  // onClick={() => setShowDeleteRole(true)}
-                >
-                  <TrashIcon className="mr-2 h-3 w-3" />
-                  <span>{t("labels.deleteRole", { ns: "settings" })}</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  <MoreVerticalIcon className="h-3 w-3 lg:h-4 lg:w-4" />
+                  <span className="sr-only">
+                    {t("buttons.moreActions", { ns: "labels" })}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                  // onClick={() => setShowEditRole(true)}
+                  >
+                    <PencilIcon className="mr-2 h-3 w-3" />
+                    <span>{t("buttons.edit", { ns: "labels" })}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={() => setShowDelete(true)}
+                  >
+                    <TrashIcon className="mr-2 h-3 w-3" />
+                    <span>{t("labels.deleteRole", { ns: "settings" })}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 }
