@@ -22,12 +22,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  InputSelect,
+  InputSelectContent,
+  InputSelectTrigger,
+} from "@/components/ui/input-select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -288,28 +286,24 @@ function ProfileForm(props: {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>{t("display.language", { ns: "labels" })}</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                <InputSelect
+                  placeholder={t("selectYourLocalization", {
+                    ns: "messages",
+                  })}
                   disabled={isDisabled}
+                  defaultValue={String(field.value)}
+                  onValueChange={field.onChange}
+                  items={languagesList.map((lang, idx) => ({
+                    id: `role_${idx}_${lang.key}`,
+                    value: String(lang.key),
+                    label: `${lang.value}`,
+                  }))}
                 >
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("selectYourLocalization", {
-                          ns: "messages",
-                        })}
-                      />
-                    </SelectTrigger>
+                    <InputSelectTrigger />
                   </FormControl>
-                  <SelectContent>
-                    {languagesList.map((item, idx) => (
-                      <SelectItem key={`lang_${item}_${idx}`} value={item.key}>
-                        {item.value}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <InputSelectContent />
+                </InputSelect>
                 <FormMessage />
               </FormItem>
             )}
