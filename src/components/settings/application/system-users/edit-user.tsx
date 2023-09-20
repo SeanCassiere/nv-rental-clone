@@ -52,10 +52,10 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { roleQKeys, userQKeys } from "@/utils/query-key";
+import { userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
-import { cn } from "@/utils";
+import { cn, rolesStore } from "@/utils";
 
 interface EditUserDialogProps {
   mode: "new" | "edit";
@@ -119,14 +119,9 @@ export function EditUserDialog({
     enabled: props.mode === "edit" && props.intendedUserId !== "",
   });
 
-  const rolesQuery = useQuery({
-    queryKey: roleQKeys.all(),
-    queryFn: () =>
-      apiClient.role.getList({
-        query: { clientId: props.clientId, userId: props.userId },
-      }),
-    staleTime: 1000 * 60 * 1, // 1 minute
-  });
+  const rolesQuery = useQuery(
+    rolesStore.all({ clientId: props.clientId, userId: props.userId })
+  );
 
   const languagesQuery = useGetUserLanguages();
 
