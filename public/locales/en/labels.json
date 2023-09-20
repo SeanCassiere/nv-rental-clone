@@ -16,15 +16,15 @@
     "city": "City",
     "zip": "Zip",
     "zipCode": "Zip code",
-    "youReceiveEmailsQuestion": "Do you want to receive emails?",
-    "userToReceiveEmailsQuestion": "Should the user receive emails?",
     "bracketOptional": "(optional)",
     "bracketRequired": "(required)",
     "required": "Required",
     "active": "Active",
     "inactive": "Inactive",
     "role": "Role",
-    "locations": "Locations"
+    "locations": "Locations",
+    "systemGenerated": "System generated",
+    "userGenerated": "User generated"
   },
   "buttons": {
     "save": "Save",
@@ -33,9 +33,6 @@
     "saveProfileDetails": "Save profile details",
     "saveChanges": "Save changes",
     "saveAndContinue": "Save and continue",
-    "resetPassword": "Reset password",
-    "sendResetLink": "Send reset link",
-    "moreActions": "More actions",
-    "addUser": "Add user"
+    "moreActions": "More actions"
   }
 }

@@ -343,7 +343,7 @@ function ProfileForm(props: {
             <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
-                  {t("display.youReceiveEmailsQuestion", { ns: "labels" })}
+                  {t("labels.youReceiveEmailsQuestion", { ns: "settings" })}
                 </FormLabel>
                 <FormDescription>
                   {t("receiveReservationEmails", { ns: "messages" })}

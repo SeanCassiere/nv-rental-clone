@@ -72,7 +72,7 @@ const SystemUsersSettings = () => {
           <div className="flex items-center justify-start pb-4">
             <Button size="sm" onClick={() => setShowNewUser(true)}>
               <PlusIcon className="h-4 w-4 sm:mr-2" />
-              <span>{t("buttons.addUser", { ns: "labels" })}</span>
+              <span>{t("labels.addUser", { ns: "settings" })}</span>
             </Button>
           </div>
           <Suspense fallback={<Skeleton className="h-72" />}>
@@ -217,7 +217,7 @@ function SystemUser({
                     onClick={() => setShowForgotPassword(true)}
                   >
                     <RotateCcwIcon className="mr-2 h-3 w-3" />
-                    <span>{t("buttons.resetPassword", { ns: "labels" })}</span>
+                    <span>{t("labels.resetPassword", { ns: "settings" })}</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>

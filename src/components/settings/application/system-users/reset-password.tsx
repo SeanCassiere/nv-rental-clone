@@ -93,7 +93,7 @@ export function ResetPasswordAlertDialog({
             {resetPassword.isLoading && (
               <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
             )}
-            <span>{t("buttons.sendResetLink", { ns: "labels" })}</span>
+            <span>{t("labels.sendResetLink", { ns: "settings" })}</span>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

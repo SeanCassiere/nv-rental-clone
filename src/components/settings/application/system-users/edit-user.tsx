@@ -583,7 +583,7 @@ function EditUserForm(props: {
             <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
-                  {t("display.userToReceiveEmailsQuestion", { ns: "labels" })}
+                  {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}
                 </FormLabel>
                 <FormDescription>
                   {t("receiveReservationEmails", { ns: "messages" })}
@@ -1076,7 +1076,7 @@ function NewUserForm(props: {
             <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
-                  {t("display.userToReceiveEmailsQuestion", { ns: "labels" })}
+                  {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}
                 </FormLabel>
                 <FormDescription>
                   {t("receiveReservationEmails", { ns: "messages" })}

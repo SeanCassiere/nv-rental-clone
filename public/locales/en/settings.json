@@ -35,5 +35,14 @@
     "newProfileDetails": "Enter the profile details for this user.",
     "accountActive": "Mark this checkbox to indicate that the user's account is active",
     "accountLock": "Check this box to lock the user's account. When the account is locked, the user will not be able to log in or access the system."
+  },
+  "labels": {
+    "addUser": "Add user",
+    "deleteRole": "Delete role",
+    "addUserRole": "Add user role",
+    "resetPassword": "Reset password",
+    "sendResetLink": "Send reset link",
+    "youReceiveEmailsQuestion": "Do you want to receive emails?",
+    "userToReceiveEmailsQuestion": "Should the user receive emails?"
   }
 }
