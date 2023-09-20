@@ -6,6 +6,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -681,6 +682,8 @@ function NewUserForm(props: {
   const { toast } = useToast();
   const qc = useQueryClient();
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
   const languagesList = props.languages
     .filter((item) => item.key)
     .sort((a, b) => a.key.localeCompare(b.key));
@@ -883,13 +886,32 @@ function NewUserForm(props: {
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t("display.password", { ns: "labels" })}</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder={t("display.password", { ns: "labels" })}
-                  disabled={isDisabled}
-                />
-              </FormControl>
+              <div className="flex justify-between gap-x-1.5">
+                <FormControl>
+                  <Input
+                    {...field}
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t("display.password", { ns: "labels" })}
+                    disabled={isDisabled}
+                  />
+                </FormControl>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? (
+                    <EyeIcon className="h-3 w-3" />
+                  ) : (
+                    <EyeOffIcon className="h-3 w-3" />
+                  )}
+                  <span className="sr-only">
+                    {showPassword
+                      ? t("pressToShowPassword", { ns: "messages" })
+                      : t("pressToHidePassword", { ns: "messages" })}
+                  </span>
+                </Button>
+              </div>
               <FormMessage />
               <FormDescription>
                 {t("enterAStrongPassword", { ns: "messages" })}
