@@ -100,7 +100,7 @@ function ProfileForm(props: {
   const { t } = useTranslation();
 
   const auth = useAuthValues();
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
 
   const { toast } = useToast();
 
@@ -138,11 +138,11 @@ function ProfileForm(props: {
   const { mutate, isLoading } = useMutation({
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries(userQKeys.me());
-      queryClient.invalidateQueries(
-        userQKeys.permissions(variables.params.userId)
-      );
-      queryClient.invalidateQueries(locationQKeys.all({ withActive: true }));
+      qc.invalidateQueries(userQKeys.me());
+      qc.invalidateQueries(userQKeys.activeUsersCount());
+      qc.invalidateQueries(userQKeys.maximumUsersCount());
+      qc.invalidateQueries(userQKeys.permissions(variables.params.userId));
+      qc.invalidateQueries(locationQKeys.all({ withActive: true }));
 
       if (data.status >= 200 && data.status < 300) {
         toast({

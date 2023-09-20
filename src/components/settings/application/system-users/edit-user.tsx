@@ -281,6 +281,8 @@ function EditUserForm(props: {
     onSuccess: (data, variables) => {
       qc.invalidateQueries(userQKeys.userConfigurations());
       qc.invalidateQueries(userQKeys.profile(variables.params.userId));
+      qc.invalidateQueries(userQKeys.activeUsersCount());
+      qc.invalidateQueries(userQKeys.maximumUsersCount());
 
       if (data.status >= 200 && data.status < 300) {
         toast({
@@ -724,6 +726,8 @@ function NewUserForm(props: {
     mutationFn: apiClient.user.createdUserProfile,
     onSuccess: (data) => {
       qc.invalidateQueries(userQKeys.userConfigurations());
+      qc.invalidateQueries(userQKeys.activeUsersCount());
+      qc.invalidateQueries(userQKeys.maximumUsersCount());
 
       if (data.status >= 200 && data.status < 300) {
         toast({
