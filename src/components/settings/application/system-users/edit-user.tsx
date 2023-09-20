@@ -759,26 +759,6 @@ function NewUserForm(props: {
       >
         <FormField
           control={form.control}
-          name="userName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("display.username", { ns: "labels" })}</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder={t("display.username", { ns: "labels" })}
-                />
-              </FormControl>
-              <FormMessage />
-              <FormDescription>
-                {t("usernameCannotBeChangedLater", { ns: "messages" })}
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <Separator />
-        <FormField
-          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
@@ -793,6 +773,25 @@ function NewUserForm(props: {
               <FormMessage />
               <FormDescription>
                 {t("emailAssociatedWithAccount", { ns: "messages" })}
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="userName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("display.username", { ns: "labels" })}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={t("display.username", { ns: "labels" })}
+                />
+              </FormControl>
+              <FormMessage />
+              <FormDescription>
+                {t("usernameCannotBeChangedLater", { ns: "messages" })}
               </FormDescription>
             </FormItem>
           )}
@@ -817,6 +816,7 @@ function NewUserForm(props: {
             </FormItem>
           )}
         />
+        <Separator />
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
