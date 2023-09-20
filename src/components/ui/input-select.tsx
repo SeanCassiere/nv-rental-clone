@@ -8,7 +8,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -74,28 +73,33 @@ function InputSelect({
   );
 }
 
-interface InputSelectTriggerProps {
-  className?: string;
-}
-function InputSelectTrigger({ className }: InputSelectTriggerProps) {
-  const { placeholder, disabled, items, value } = useInputSelectCtx();
+const InputSelectTrigger = React.forwardRef<
+  React.ElementRef<typeof PopoverTrigger>,
+  React.ComponentPropsWithoutRef<typeof PopoverTrigger>
+>(({ className, disabled, ...props }, ref) => {
+  const {
+    placeholder,
+    disabled: _disabled,
+    items,
+    value,
+  } = useInputSelectCtx();
 
   const selected = items.find((item) => item.value === value);
 
   return (
-    <PopoverTrigger disabled={disabled} asChild>
-      <button
-        className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-      >
-        {selected?.label ?? placeholder ?? "Select an option"}
-        <ChevronDown className="h-4 w-4 opacity-50" />
-      </button>
+    <PopoverTrigger
+      className={cn(
+        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      disabled={disabled ?? _disabled}
+      {...props}
+    >
+      {selected?.label ?? placeholder ?? "Select an option"}
+      <ChevronDown className="h-4 w-4 opacity-50" />
     </PopoverTrigger>
   );
-}
+});
 
 function InputSelectContent({
   className,
