@@ -16,6 +16,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+  InputSelect,
+  InputSelectContent,
+  InputSelectTrigger,
+} from "@/components/ui/input-select";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -60,7 +65,7 @@ export const VehicleStage = ({
   isEdit,
   onCompleted,
 }: VehicleStageProps) => {
-  const { t: tl } = useTranslation("labels");
+  const { t } = useTranslation();
 
   const checkoutLocation = useMemo(
     () => rentalInformation?.checkoutLocation || 0,
@@ -188,7 +193,10 @@ export const VehicleStage = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Vehicle type</FormLabel>
-                  <Select
+                  <InputSelect
+                    placeholder="Select vehicle type"
+                    disabled={isEdit}
+                    defaultValue={field.value ? `${field.value}` : undefined}
                     onValueChange={(value) => {
                       const existingVehicleId = formVehicleId;
                       field.onChange(value);
@@ -198,25 +206,17 @@ export const VehicleStage = ({
                         form.setValue("vehicleId", 0);
                       }
                     }}
-                    value={field.value ? `${field.value}` : undefined}
-                    disabled={Boolean(checkoutLocation) ? false : true}
+                    items={vehicleTypesList.map((type, idx) => ({
+                      id: `${type.VehicleTypeId}-${idx}`,
+                      value: `${type.VehicleTypeId}`,
+                      label: `${type.VehicleTypeName}`,
+                    }))}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select vehicle type" />
-                      </SelectTrigger>
+                      <InputSelectTrigger />
                     </FormControl>
-                    <SelectContent>
-                      {vehicleTypesList.map((type, idx) => (
-                        <SelectItem
-                          key={`${type.VehicleTypeId}-${idx}`}
-                          value={`${type.VehicleTypeId}`}
-                        >
-                          {type.VehicleTypeName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <InputSelectContent />
+                  </InputSelect>
                   <FormMessage />
                 </FormItem>
               )}
@@ -229,8 +229,10 @@ export const VehicleStage = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Vehicle</FormLabel>
-                  <Select
-                    key={`${formVehicleId}-select`}
+                  <InputSelect
+                    placeholder="Select vehicle"
+                    disabled={Boolean(formVehicleTypeId) ? false : true}
+                    defaultValue={field.value ? `${field.value}` : undefined}
                     onValueChange={(value) => {
                       field.onChange(value);
                       const vehicle = vehiclesList.find(
@@ -249,27 +251,17 @@ export const VehicleStage = ({
                         );
                       }
                     }}
-                    value={field.value ? `${field.value}` : undefined}
-                    disabled={Boolean(formVehicleTypeId) ? false : true}
+                    items={vehiclesList.map((vehicle, idx) => ({
+                      id: `${vehicle.VehicleId}-${idx}`,
+                      value: `${vehicle.VehicleId}`,
+                      label: `${vehicle.VehicleMakeName} ${vehicle.ModelName} ${vehicle.Year} ${vehicle.VehicleNo} ${vehicle.LicenseNo}`,
+                    }))}
                   >
                     <FormControl>
-                      <SelectTrigger key={`${formVehicleId}-trigger`}>
-                        <SelectValue placeholder="Select vehicle type" />
-                      </SelectTrigger>
+                      <InputSelectTrigger />
                     </FormControl>
-                    <SelectContent>
-                      {vehiclesList.map((vehicle, idx) => (
-                        <SelectItem
-                          key={`${vehicle.VehicleId}-${idx}`}
-                          value={`${vehicle.VehicleId}`}
-                        >
-                          {vehicle.VehicleMakeName}&nbsp;{vehicle.ModelName}
-                          &nbsp;{vehicle.Year}&nbsp;{vehicle.VehicleNo}&nbsp;
-                          {vehicle.LicenseNo}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <InputSelectContent />
+                  </InputSelect>
                   <FormMessage />
                 </FormItem>
               )}
@@ -330,7 +322,7 @@ export const VehicleStage = ({
         </div>
         <div>
           <Button type="submit" disabled={!checkoutLocation}>
-            {tl("buttons.saveAndContinue")}
+            {t("buttons.saveAndContinue", { ns: "labels" })}
           </Button>
         </div>
       </form>

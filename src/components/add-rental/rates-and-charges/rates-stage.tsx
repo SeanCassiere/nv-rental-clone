@@ -15,12 +15,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  InputSelect,
+  InputSelectContent,
+  InputSelectTrigger,
+} from "@/components/ui/input-select";
 
 import { useGetRentalRateTypesForRentals } from "@/hooks/network/rates/useGetRentalRateTypesForRental";
 
@@ -54,7 +52,7 @@ export const RatesStage = (props: RatesStageProps) => {
     hidePromotionCodeFields = false,
   } = props;
 
-  const { t: tl } = useTranslation("labels");
+  const { t } = useTranslation();
 
   const isSupportingInfoAvailable =
     Boolean(durationStageData) && Boolean(vehicleStageData);
@@ -114,32 +112,27 @@ export const RatesStage = (props: RatesStageProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Rate</FormLabel>
-                  <Select
+                  <InputSelect
+                    placeholder="Select agreement type"
+                    disabled={!isSupportingInfoAvailable}
+                    defaultValue={field.value ? `${field.value}` : undefined}
                     onValueChange={(value) => {
                       if (value && value !== "") {
                         field.onChange(value);
                         props.onSelectRateName(value);
                       }
                     }}
-                    value={field.value ? `${field.value}` : undefined}
-                    disabled={!isSupportingInfoAvailable}
+                    items={rateTypesList.map((type, idx) => ({
+                      id: `${type.rateName}-${idx}`,
+                      value: `${type.rateName}`,
+                      label: `${type.rateName}`,
+                    }))}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select rate" />
-                      </SelectTrigger>
+                      <InputSelectTrigger />
                     </FormControl>
-                    <SelectContent>
-                      {rateTypesList.map((rate, idx) => (
-                        <SelectItem
-                          key={`${rate.rateName}-${idx}`}
-                          value={`${rate.rateName}`}
-                        >
-                          {rate.rateName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <InputSelectContent />
+                  </InputSelect>
                   <FormMessage />
                 </FormItem>
               )}
@@ -173,7 +166,7 @@ export const RatesStage = (props: RatesStageProps) => {
         )}
         <div className="mt-4">
           <Button type="submit" disabled={!rate}>
-            {tl("buttons.saveAndContinue")}
+            {t("buttons.saveAndContinue", { ns: "labels" })}
           </Button>
         </div>
       </form>

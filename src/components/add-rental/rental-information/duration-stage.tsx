@@ -23,12 +23,10 @@ import {
   InputDatePickerSlot,
 } from "@/components/ui/input-datepicker";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  InputSelect,
+  InputSelectContent,
+  InputSelectTrigger,
+} from "@/components/ui/input-select";
 
 import { useDatePreference } from "@/hooks/internal/useDatePreferences";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
@@ -96,7 +94,7 @@ export const DurationStage = ({
   onCompleted,
   isEdit,
 }: DurationStageProps) => {
-  const { t: tl } = useTranslation("labels");
+  const { t } = useTranslation();
   const { dateTimeFormat, timeFormat } = useDatePreference();
 
   const values = {
@@ -194,27 +192,22 @@ export const DurationStage = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Agreement type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value ? field.value : undefined}
+                  <InputSelect
+                    placeholder="Select agreement type"
                     disabled={isEdit}
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                    items={agreementTypesList.map((type, idx) => ({
+                      id: `${type.typeId}-${idx}`,
+                      value: `${type.typeName}`,
+                      label: `${type.typeName}`,
+                    }))}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select an agreement type" />
-                      </SelectTrigger>
+                      <InputSelectTrigger />
                     </FormControl>
-                    <SelectContent>
-                      {agreementTypesList.map((type, idx) => (
-                        <SelectItem
-                          key={`${type.typeId}-${idx}`}
-                          value={`${type.typeName}`}
-                        >
-                          {type.typeName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <InputSelectContent />
+                  </InputSelect>
                   <FormMessage />
                 </FormItem>
               )}
@@ -266,27 +259,22 @@ export const DurationStage = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Checkout location</FormLabel>
-                  <Select
+                  <InputSelect
+                    placeholder="Select checkout location"
+                    disabled={isEdit}
+                    defaultValue={field.value ? `${field.value}` : undefined}
                     onValueChange={field.onChange}
-                    value={field.value ? `${field.value}` : undefined}
-                    key={`${field.value}`}
+                    items={locationsList.map((location, idx) => ({
+                      id: `${location.locationId}-${idx}-checkout`,
+                      value: `${location.locationId}`,
+                      label: `${location.locationName}`,
+                    }))}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select checkout location" />
-                      </SelectTrigger>
+                      <InputSelectTrigger />
                     </FormControl>
-                    <SelectContent>
-                      {locationsList.map((location, idx) => (
-                        <SelectItem
-                          key={`${location.locationId}-${idx}-checkout`}
-                          value={`${location.locationId}`}
-                        >
-                          {location.locationName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <InputSelectContent />
+                  </InputSelect>
                   <FormMessage />
                 </FormItem>
               )}
@@ -323,27 +311,22 @@ export const DurationStage = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Checkin location</FormLabel>
-                  <Select
+                  <InputSelect
+                    placeholder="Select checkin location"
+                    disabled={isEdit}
+                    defaultValue={field.value ? `${field.value}` : undefined}
                     onValueChange={field.onChange}
-                    value={field.value ? `${field.value}` : undefined}
-                    key={`${field.value}`}
+                    items={locationsList.map((location, idx) => ({
+                      id: `${location.locationId}-${idx}-checkin`,
+                      value: `${location.locationId}`,
+                      label: `${location.locationName}`,
+                    }))}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select checkin location" />
-                      </SelectTrigger>
+                      <InputSelectTrigger />
                     </FormControl>
-                    <SelectContent>
-                      {locationsList.map((location, idx) => (
-                        <SelectItem
-                          key={`${location.locationId}-${idx}-checkin`}
-                          value={`${location.locationId}`}
-                        >
-                          {location.locationName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <InputSelectContent />
+                  </InputSelect>
                   <FormMessage />
                 </FormItem>
               )}
@@ -351,7 +334,9 @@ export const DurationStage = ({
           </div>
         </div>
         <div>
-          <Button type="submit">{tl("buttons.saveAndContinue")}</Button>
+          <Button type="submit">
+            {t("buttons.saveAndContinue", { ns: "labels" })}
+          </Button>
         </div>
       </form>
     </Form>
