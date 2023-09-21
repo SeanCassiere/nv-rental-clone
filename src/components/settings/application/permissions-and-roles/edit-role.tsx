@@ -36,6 +36,7 @@ import {
   InputSelectContent,
   InputSelectTrigger,
 } from "@/components/ui/input-select";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 import type { PermissionListItem, RoleListItem } from "@/schemas/role";
@@ -429,8 +430,9 @@ function RoleForm(props: {
                 {t("display.description", { ns: "labels" })}
               </FormLabel>
               <FormControl>
-                <Input
+                <Textarea
                   {...field}
+                  className="resize-none"
                   placeholder={t("display.description", { ns: "labels" })}
                   disabled={props.disabled}
                   autoComplete="off"
