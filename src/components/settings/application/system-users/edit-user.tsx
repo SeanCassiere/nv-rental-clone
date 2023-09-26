@@ -116,7 +116,7 @@ export function EditUserDialog({
         params: { userId: props.intendedUserId },
       }),
     staleTime: 1000 * 60 * 1, // 1 minute
-    enabled: props.mode === "edit" && props.intendedUserId !== "",
+    enabled: props.mode === "edit" && props.intendedUserId !== "" && open,
   });
 
   const rolesQuery = useQuery(
