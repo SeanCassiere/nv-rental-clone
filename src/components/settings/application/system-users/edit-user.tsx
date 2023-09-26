@@ -43,7 +43,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
 
-import { type RoleListItem } from "@/schemas/role";
+import type { RoleListItem } from "@/schemas/role";
 import {
   buildUpdateUserSchema,
   UserLanguageItem,
@@ -75,12 +75,10 @@ export function EditUserDialog({
 
   const formId = React.useId();
 
-  const isUpdatingNumber = useIsMutating({
+  const isSubmittingNumber = useIsMutating({
     mutationKey: userQKeys.updatingProfile(props.intendedUserId),
   });
-  const isUpdating = isUpdatingNumber > 0;
-
-  const disabled = isUpdating;
+  const isSubmittingUpdating = isSubmittingNumber > 0;
 
   const currentUsersQuery = useQuery({
     queryKey: userQKeys.activeUsersCount(),
@@ -130,10 +128,12 @@ export function EditUserDialog({
     enabled: props.mode === "new",
   });
 
-  const currentUsers =
+  const currentUsersCount =
     currentUsersQuery.data?.status === 200 ? currentUsersQuery.data.body : 0;
-  const maxUsers =
+  const maxUsersCount =
     maxUsersQuery.data?.status === 200 ? maxUsersQuery.data.body : 0;
+  const isMaxUsersReached = currentUsersCount >= maxUsersCount;
+
   const user = userQuery.data?.status === 200 ? userQuery.data.body : null;
   const languages =
     languagesQuery.data?.status === 200 ? languagesQuery.data.body : [];
@@ -146,6 +146,9 @@ export function EditUserDialog({
     locationName: l.locationName ?? "",
     isSelected: true,
   }));
+
+  const editModeDisabled = isSubmittingUpdating;
+  const createModeDisabled = isSubmittingUpdating || isMaxUsersReached;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -170,12 +173,14 @@ export function EditUserDialog({
                 })}
             <br />
             <span
-              className={cn(currentUsers >= maxUsers ? "text-destructive" : "")}
+              className={cn(
+                currentUsersCount >= maxUsersCount ? "text-destructive" : ""
+              )}
             >
               {t("descriptions.remainingUsers", {
                 ns: "settings",
-                activeUsers: currentUsers.toLocaleString(),
-                maxUsers: maxUsers.toLocaleString(),
+                activeUsers: currentUsersCount.toLocaleString(),
+                maxUsers: maxUsersCount.toLocaleString(),
               })}
             </span>
           </DialogDescription>
@@ -206,12 +211,20 @@ export function EditUserDialog({
             variant="outline"
             type="button"
             onClick={() => setOpen(false)}
-            disabled={disabled}
+            disabled={
+              props.mode === "edit" ? editModeDisabled : createModeDisabled
+            }
           >
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
-          <Button type="submit" form={formId} disabled={disabled}>
-            {isUpdating && (
+          <Button
+            type="submit"
+            form={formId}
+            disabled={
+              props.mode === "edit" ? editModeDisabled : createModeDisabled
+            }
+          >
+            {isSubmittingUpdating && (
               <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
             )}
             {props.mode === "edit"
