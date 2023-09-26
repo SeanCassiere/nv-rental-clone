@@ -6,7 +6,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -211,6 +211,9 @@ export function EditUserDialog({
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
           <Button type="submit" form={formId} disabled={disabled}>
+            {isUpdating && (
+              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            )}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })
               : t("buttons.save", { ns: "labels" })}
