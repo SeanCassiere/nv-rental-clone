@@ -531,58 +531,13 @@ function PermissionSelector({
 
   return (
     <Accordion type="multiple" className="divide-y divide-muted">
-      <AccordionItem value="vehicle">
-        <AccordionTrigger>Vehicle</AccordionTrigger>
+      <AccordionItem value="dashboard">
+        <AccordionTrigger>Dashboard</AccordionTrigger>
         <AccordionContent>
           <ul className="grid gap-2">
-            {vehicle.map((permission, idx) => (
+            {dashboard.map((permission, idx) => (
               <PermissionBox
-                key={`vehicle_perm_${permission.functionID}_${idx}`}
-                selected={props.selected}
-                permission={permission}
-                onSelect={props.onSelect}
-              />
-            ))}
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="customer">
-        <AccordionTrigger>Customer</AccordionTrigger>
-        <AccordionContent>
-          <ul className="grid gap-2">
-            {customer.map((permission, idx) => (
-              <PermissionBox
-                key={`customer_perm_${permission.functionID}_${idx}`}
-                selected={props.selected}
-                permission={permission}
-                onSelect={props.onSelect}
-              />
-            ))}
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="reservation">
-        <AccordionTrigger>Reservation</AccordionTrigger>
-        <AccordionContent>
-          <ul className="grid gap-2">
-            {reservation.map((permission, idx) => (
-              <PermissionBox
-                key={`reservation_perm_${permission.functionID}_${idx}`}
-                selected={props.selected}
-                permission={permission}
-                onSelect={props.onSelect}
-              />
-            ))}
-          </ul>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="agreement">
-        <AccordionTrigger>Agreement</AccordionTrigger>
-        <AccordionContent>
-          <ul className="grid gap-2">
-            {agreement.map((permission, idx) => (
-              <PermissionBox
-                key={`agreement_perm_${permission.functionID}_${idx}`}
+                key={`dashboard_perm_${permission.functionID}_${idx}`}
                 selected={props.selected}
                 permission={permission}
                 onSelect={props.onSelect}
@@ -606,13 +561,58 @@ function PermissionSelector({
           </ul>
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="dashboard">
-        <AccordionTrigger>Dashboard</AccordionTrigger>
+      <AccordionItem value="fleet">
+        <AccordionTrigger>Fleet</AccordionTrigger>
         <AccordionContent>
           <ul className="grid gap-2">
-            {dashboard.map((permission, idx) => (
+            {vehicle.map((permission, idx) => (
               <PermissionBox
-                key={`dashboard_perm_${permission.functionID}_${idx}`}
+                key={`vehicle_perm_${permission.functionID}_${idx}`}
+                selected={props.selected}
+                permission={permission}
+                onSelect={props.onSelect}
+              />
+            ))}
+          </ul>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="customers">
+        <AccordionTrigger>Customers</AccordionTrigger>
+        <AccordionContent>
+          <ul className="grid gap-2">
+            {customer.map((permission, idx) => (
+              <PermissionBox
+                key={`customer_perm_${permission.functionID}_${idx}`}
+                selected={props.selected}
+                permission={permission}
+                onSelect={props.onSelect}
+              />
+            ))}
+          </ul>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="reservations">
+        <AccordionTrigger>Reservations</AccordionTrigger>
+        <AccordionContent>
+          <ul className="grid gap-2">
+            {reservation.map((permission, idx) => (
+              <PermissionBox
+                key={`reservation_perm_${permission.functionID}_${idx}`}
+                selected={props.selected}
+                permission={permission}
+                onSelect={props.onSelect}
+              />
+            ))}
+          </ul>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="agreements">
+        <AccordionTrigger>Agreements</AccordionTrigger>
+        <AccordionContent>
+          <ul className="grid gap-2">
+            {agreement.map((permission, idx) => (
+              <PermissionBox
+                key={`agreement_perm_${permission.functionID}_${idx}`}
                 selected={props.selected}
                 permission={permission}
                 onSelect={props.onSelect}
