@@ -15,8 +15,9 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
+import { roleQKeys } from "@/utils/query-key";
+
 import { apiClient } from "@/api";
-import { rolesStore } from "@/utils";
 
 interface DeleteRoleAlertDialogProps {
   open: boolean;
@@ -39,7 +40,7 @@ export function DeleteRoleAlertDialog({
     mutationFn: apiClient.role.deleteRole,
     onMutate: () => {
       qc.cancelQueries({
-        queryKey: rolesStore.all({
+        queryKey: roleQKeys.all({
           clientId: props.clientId,
           userId: props.userId,
         }).queryKey,
@@ -60,7 +61,7 @@ export function DeleteRoleAlertDialog({
     },
     onSettled: () => {
       qc.invalidateQueries({
-        queryKey: rolesStore.all({
+        queryKey: roleQKeys.all({
           clientId: props.clientId,
           userId: props.userId,
         }).queryKey,

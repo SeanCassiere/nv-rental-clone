@@ -51,10 +51,10 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { userQKeys } from "@/utils/query-key";
+import { roleQKeys, userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
-import { cn, rolesStore } from "@/utils";
+import { cn } from "@/utils";
 
 interface EditUserDialogProps {
   mode: "new" | "edit";
@@ -117,7 +117,7 @@ export function EditUserDialog({
   });
 
   const rolesQuery = useQuery(
-    rolesStore.all({ clientId: props.clientId, userId: props.userId })
+    roleQKeys.all({ clientId: props.clientId, userId: props.userId })
   );
 
   const languagesQuery = useQuery(

@@ -7,10 +7,11 @@ import { apiClient } from "@/api";
 type Pagination = { page: number; pageSize: number };
 type Filters = Record<string, any>;
 type ReferenceId = string | number;
-type Auth = {
-  userId: string;
-  clientId: string;
-};
+type Auth = { userId: string; clientId: string };
+
+function isEnabled(p: Auth) {
+  return !!p.clientId && !!p.userId;
+}
 
 export const agreementQKeys = {
   // search
@@ -213,5 +214,36 @@ export const locationQKeys = {
 
 export const roleQKeys = {
   rootKey: "roles",
-  all: () => [roleQKeys.rootKey, "all"],
+  all: (p: Auth) => {
+    return {
+      queryKey: [roleQKeys.rootKey, "all"],
+      queryFn: () =>
+        apiClient.role.getList({
+          query: { clientId: p.clientId, userId: p.userId },
+        }),
+      staleTime: 1000 * 60 * 1, // 1 minute,
+      enabled: isEnabled(p),
+    } satisfies UseQueryOptions;
+  },
+  getById: (p: Auth & { roleId: string }) => {
+    return {
+      queryKey: [roleQKeys.rootKey, p.roleId],
+      queryFn: () =>
+        apiClient.role.getById({
+          params: { roleId: p.roleId },
+          query: { clientId: p.clientId, userId: p.userId },
+        }),
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      enabled: isEnabled(p),
+    } satisfies UseQueryOptions;
+  },
+  permissionsList: (p: Auth) => ({
+    queryKey: [roleQKeys.rootKey, "permissions"],
+    queryFn: () =>
+      apiClient.role.getPermissions({
+        query: { clientId: p.clientId, userId: p.userId },
+      }),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: isEnabled(p),
+  }),
 };
