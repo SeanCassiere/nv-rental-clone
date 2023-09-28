@@ -60,24 +60,28 @@ export const AppNavigation = () => {
   ];
 
   return (
-    <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0 md:px-10 [&::-webkit-scrollbar]:hidden">
-      {navigation.map((navItem) => (
-        <Link
-          key={`nav_${navItem.name}`}
-          {...navItem.props}
-          className={cn(
-            "whitespace-nowrap border-b pb-4 pt-3 leading-none transition sm:px-4"
-          )}
-          activeProps={{
-            className: cn("border-foreground font-semibold"),
-          }}
-          inactiveProps={{
-            className: cn("border-transparent hover:border-foreground/20"),
-          }}
-        >
-          {navItem.name}
-        </Link>
-      ))}
+    <nav className="-mb-px overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] md:px-10 [&::-webkit-scrollbar]:hidden">
+      <ul className="flex space-x-5 sm:space-x-0.5">
+        {navigation.map((item, idx) => (
+          <li key={`nav_${idx}_${item.name}`}>
+            <Link
+              {...item.props}
+              className={cn(
+                "inline-block whitespace-nowrap border-b pb-4 pt-3 leading-none transition-all sm:px-4",
+                idx + 1 === navigation.length && "mr-4 sm:mr-0"
+              )}
+              activeProps={{
+                className: cn("border-foreground font-semibold"),
+              }}
+              inactiveProps={{
+                className: cn("border-transparent hover:border-foreground/20"),
+              }}
+            >
+              {item.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 };
