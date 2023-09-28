@@ -17,5 +17,6 @@ const data = JSON.stringify(meta);
 
 if (fs.existsSync("dist")) {
   fs.writeFileSync("dist/meta.json", data, { encoding: "utf8" });
-  console.log('Wrote version info to "dist/meta.json"');
+  console.log('postbuild: Wrote application metadata to "dist/meta.json"');
+  console.log("postbuild:", data);
 }
