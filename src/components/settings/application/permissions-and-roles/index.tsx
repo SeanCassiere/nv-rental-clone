@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { t } from "i18next";
 import {
   AlertCircleIcon,
@@ -143,9 +143,8 @@ function SystemRolesList({
   userId: string;
   filterMode: string;
 }) {
-  const rolesQuery = useQuery({
+  const rolesQuery = useSuspenseQuery({
     ...rolesStore.all({ clientId, userId }),
-    suspense: true,
   });
 
   const roles = React.useMemo(
