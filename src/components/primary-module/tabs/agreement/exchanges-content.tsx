@@ -150,7 +150,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.status === "loading" ? (
+      {dataList.status === "pending" ? (
         <Skeleton className="h-56" />
       ) : (
         <>

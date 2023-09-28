@@ -225,8 +225,8 @@ export function EditRoleDialog({
     },
   });
 
-  const disabled = createRole.isLoading || updateRole.isLoading;
-  const isLoading = createRole.isLoading || updateRole.isLoading;
+  const disabled = createRole.isPending || updateRole.isPending;
+  const isPending = createRole.isPending || updateRole.isPending;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -318,7 +318,7 @@ export function EditRoleDialog({
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
           <Button type="submit" form={formId} disabled={disabled}>
-            {isLoading && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })
               : t("buttons.save", { ns: "labels" })}

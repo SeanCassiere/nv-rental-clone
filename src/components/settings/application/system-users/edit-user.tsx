@@ -374,7 +374,7 @@ function EditUserForm(props: {
     },
   });
 
-  const isDisabled = updateProfile.isLoading;
+  const isDisabled = updateProfile.isPending;
 
   return (
     <Form {...form}>
@@ -830,7 +830,7 @@ function NewUserForm(props: {
     },
   });
 
-  const isDisabled = createUser.isLoading;
+  const isDisabled = createUser.isPending;
 
   return (
     <Form {...form}>

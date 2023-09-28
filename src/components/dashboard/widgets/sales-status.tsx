@@ -26,7 +26,7 @@ export function SalesAreaChart({ locations }: { locations: string[] }) {
   const { t } = useTranslation();
   const sales = useGetSalesStatus({ locations, clientDate: new Date() });
 
-  return sales.status === "loading" ? (
+  return sales.status === "pending" ? (
     <WidgetSkeleton />
   ) : (
     <ResponsiveContainer width="100%" height="100%" className="min-h-[250px]">

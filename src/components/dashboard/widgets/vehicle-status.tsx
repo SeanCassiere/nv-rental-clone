@@ -83,7 +83,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
     ) || APP_DEFAULTS.tableRowCount;
   const defaultRowCount = parseInt(rowCountStr, 10);
 
-  return statusCounts.status === "loading" ? (
+  return statusCounts.status === "pending" ? (
     <WidgetSkeleton />
   ) : (
     <ResponsiveContainer className="min-h-[250px]">
