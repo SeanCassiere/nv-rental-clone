@@ -28,7 +28,7 @@ export function useGetVehiclesList(params: {
         ...params.filters,
       }),
     enabled: enabled && auth.isAuthenticated,
-    keepPreviousData: true,
+    // keepPreviousData: true,
   });
   return query;
 }

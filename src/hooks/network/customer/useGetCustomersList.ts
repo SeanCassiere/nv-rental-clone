@@ -27,7 +27,7 @@ export function useGetCustomersList(params: {
         ...params.filters,
       }),
     enabled: enabled && auth.isAuthenticated,
-    keepPreviousData: true,
+    // keepPreviousData: true,
   });
   return query;
 }
