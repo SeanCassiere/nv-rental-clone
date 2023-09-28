@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { localDateToQueryYearMonthDay } from "@/utils/date";
@@ -31,7 +31,7 @@ export function useGetReservationsList(params: {
         clientDate: new Date(),
       }),
     enabled: enabled && auth.isAuthenticated,
-    placeholderData: (prev) => prev,
+    placeholderData: keepPreviousData,
   });
   return query;
 }

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { customerQKeys } from "@/utils/query-key";
@@ -27,7 +27,7 @@ export function useGetCustomersList(params: {
         ...params.filters,
       }),
     enabled: enabled && auth.isAuthenticated,
-    placeholderData: (prev) => prev,
+    placeholderData: keepPreviousData,
   });
   return query;
 }

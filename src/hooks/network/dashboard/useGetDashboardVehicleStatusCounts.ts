@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { localDateToQueryYearMonthDay } from "@/utils/date";
@@ -40,7 +40,7 @@ export function useGetDashboardVehicleStatusCounts({
         .then((res) => (res.status === 200 ? res.body : null)),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
-    placeholderData: (prev) => prev,
+    placeholderData: keepPreviousData,
   });
   return query;
 }
