@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   MoreVerticalIcon,
   PencilIcon,
@@ -107,14 +107,13 @@ interface UserListProps {
   userId: string;
 }
 function UsersList(props: UserListProps) {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: userQKeys.userConfigurations(),
     queryFn: () =>
       getUsers({
         clientId: props.clientId,
         userId: props.userId,
       }),
-    suspense: true,
   });
 
   const users = (data?.status === 200 ? data.body : []).sort((a, b) =>
