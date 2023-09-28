@@ -35,7 +35,7 @@ export function useGetSalesStatus({
         .then((res) => (res.status === 200 ? res.body : [])),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
   return query;
 }

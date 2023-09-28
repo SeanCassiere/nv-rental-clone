@@ -115,7 +115,7 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
 
   return (
     <div className="max-w-full focus:ring-0">
-      {dataList.status === "loading" && <Skeleton className="h-56" />}
+      {dataList.status === "pending" && <Skeleton className="h-56" />}
       {dataList.status === "success" && (
         <CommonTable data={agreementsList} columns={columnDefs} />
       )}

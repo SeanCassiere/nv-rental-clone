@@ -28,7 +28,7 @@ export function useGetVehiclesList(params: {
         ...params.filters,
       }),
     enabled: enabled && auth.isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
   return query;
 }

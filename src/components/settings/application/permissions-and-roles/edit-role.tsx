@@ -41,8 +41,9 @@ import { useToast } from "@/components/ui/use-toast";
 
 import type { PermissionListItem, RoleListItem } from "@/schemas/role";
 
+import { roleQKeys } from "@/utils/query-key";
+
 import { apiClient } from "@/api";
-import { rolesStore } from "@/utils";
 
 interface EditRoleDialogProps {
   mode: "new" | "edit";
@@ -65,23 +66,24 @@ export function EditRoleDialog({
   const formId = React.useId();
 
   const permissionsQuery = useQuery(
-    rolesStore.permissionsList({
+    roleQKeys.permissionsList({
       clientId: props.clientId,
       userId: props.userId,
     })
   );
 
   const rolesQuery = useQuery(
-    rolesStore.all({ clientId: props.clientId, userId: props.userId })
+    roleQKeys.all({ clientId: props.clientId, userId: props.userId })
   );
 
+  const roleQueryOptions = roleQKeys.getById({
+    clientId: props.clientId,
+    userId: props.userId,
+    roleId: props.roleId,
+  });
   const roleQuery = useQuery({
-    ...rolesStore.getById({
-      clientId: props.clientId,
-      userId: props.userId,
-      roleId: props.roleId,
-    }),
-    enabled: props.mode === "edit" && open,
+    ...roleQueryOptions,
+    enabled: roleQueryOptions.enabled && props.mode === "edit" && open,
   });
 
   const permissionsList =
@@ -93,7 +95,7 @@ export function EditRoleDialog({
     mutationFn: apiClient.role.createRole,
     onMutate: () => {
       qc.cancelQueries({
-        queryKey: rolesStore.all({
+        queryKey: roleQKeys.all({
           clientId: props.clientId,
           userId: props.userId,
         }).queryKey,
@@ -101,7 +103,7 @@ export function EditRoleDialog({
     },
     onSuccess: (data) => {
       qc.invalidateQueries({
-        queryKey: rolesStore.all({
+        queryKey: roleQKeys.all({
           clientId: props.clientId,
           userId: props.userId,
         }).queryKey,
@@ -154,13 +156,13 @@ export function EditRoleDialog({
     mutationFn: apiClient.role.updateRolePermissions,
     onMutate: () => {
       qc.cancelQueries({
-        queryKey: rolesStore.all({
+        queryKey: roleQKeys.all({
           clientId: props.clientId,
           userId: props.userId,
         }).queryKey,
       });
       qc.cancelQueries({
-        queryKey: rolesStore.getById({
+        queryKey: roleQKeys.getById({
           clientId: props.clientId,
           userId: props.userId,
           roleId: props.roleId,
@@ -169,13 +171,13 @@ export function EditRoleDialog({
     },
     onSuccess: (data) => {
       qc.invalidateQueries({
-        queryKey: rolesStore.all({
+        queryKey: roleQKeys.all({
           clientId: props.clientId,
           userId: props.userId,
         }).queryKey,
       });
       qc.invalidateQueries({
-        queryKey: rolesStore.getById({
+        queryKey: roleQKeys.getById({
           clientId: props.clientId,
           userId: props.userId,
           roleId: props.roleId,
@@ -225,8 +227,8 @@ export function EditRoleDialog({
     },
   });
 
-  const disabled = createRole.isLoading || updateRole.isLoading;
-  const isLoading = createRole.isLoading || updateRole.isLoading;
+  const disabled = createRole.isPending || updateRole.isPending;
+  const isPending = createRole.isPending || updateRole.isPending;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -318,7 +320,7 @@ export function EditRoleDialog({
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
           <Button type="submit" form={formId} disabled={disabled}>
-            {isLoading && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })
               : t("buttons.save", { ns: "labels" })}
@@ -371,13 +373,14 @@ function RoleForm(props: {
 
   const templateId = form.watch("templateId");
 
+  const roleQueryOptions = roleQKeys.getById({
+    roleId: String(templateId),
+    clientId: props.clientId,
+    userId: props.userId,
+  });
   const roleQuery = useQuery({
-    ...rolesStore.getById({
-      roleId: String(templateId),
-      clientId: props.clientId,
-      userId: props.userId,
-    }),
-    enabled: templateId !== 0,
+    ...roleQueryOptions,
+    enabled: roleQueryOptions.enabled && templateId !== 0,
   });
 
   React.useEffect(() => {

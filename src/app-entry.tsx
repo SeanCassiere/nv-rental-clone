@@ -56,7 +56,11 @@ const App = () => {
             <CacheDocumentFocusChecker />
             <RouterProvider router={router} defaultPreload="intent" />
           </Suspense>
-          <ReactQueryDevtools initialIsOpen={false} />
+          <ReactQueryDevtools
+            initialIsOpen={false}
+            position="bottom"
+            buttonPosition="bottom-left"
+          />
           <TailwindScreenDevTool />
         </AuthProvider>
         <Toaster />

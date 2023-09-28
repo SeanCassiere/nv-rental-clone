@@ -1,4 +1,5 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
@@ -32,9 +33,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 
 import { UI_APPLICATION_NAME } from "@/utils/constants";
+import { userQKeys } from "@/utils/query-key";
 import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
 
 import { getAvatarFallbackText, getAvatarUrl } from "@/utils";
@@ -43,9 +44,14 @@ export const UserNavigationDropdown = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
+  const clientId = auth.user?.profile.navotar_clientid || "";
+  const userId = auth.user?.profile.navotar_userid || "";
+  const authParams = { clientId, userId };
+
   const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
 
-  const userQuery = useGetUserProfile();
+  const userQuery = useQuery(userQKeys.me(authParams));
+
   const user = userQuery.data?.status === 200 ? userQuery.data?.body : null;
 
   const fullName = `${user?.firstName || "N"} ${user?.lastName || "A"}`.trim();

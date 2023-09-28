@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { t } from "i18next";
 import {
   AlertCircleIcon,
@@ -41,7 +41,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { RoleListItem } from "@/schemas/role";
 
-import { cn, rolesStore } from "@/utils";
+import { roleQKeys } from "@/utils/query-key";
+
+import { cn } from "@/utils";
 
 import { DeleteRoleAlertDialog } from "./delete-role";
 import { EditRoleDialog } from "./edit-role";
@@ -143,10 +145,7 @@ function SystemRolesList({
   userId: string;
   filterMode: string;
 }) {
-  const rolesQuery = useQuery({
-    ...rolesStore.all({ clientId, userId }),
-    suspense: true,
-  });
+  const rolesQuery = useSuspenseQuery(roleQKeys.all({ clientId, userId }));
 
   const roles = React.useMemo(
     () =>

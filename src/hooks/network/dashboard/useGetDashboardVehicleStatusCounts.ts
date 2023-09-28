@@ -40,7 +40,7 @@ export function useGetDashboardVehicleStatusCounts({
         .then((res) => (res.status === 200 ? res.body : null)),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
   return query;
 }

@@ -31,7 +31,7 @@ export function useGetReservationsList(params: {
         clientDate: new Date(),
       }),
     enabled: enabled && auth.isAuthenticated,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
   return query;
 }

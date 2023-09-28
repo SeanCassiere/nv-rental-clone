@@ -41,7 +41,6 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
 
 import type { RoleListItem } from "@/schemas/role";
 import {
@@ -52,10 +51,10 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { userQKeys } from "@/utils/query-key";
+import { roleQKeys, userQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
-import { cn, rolesStore } from "@/utils";
+import { cn } from "@/utils";
 
 interface EditUserDialogProps {
   mode: "new" | "edit";
@@ -118,10 +117,12 @@ export function EditUserDialog({
   });
 
   const rolesQuery = useQuery(
-    rolesStore.all({ clientId: props.clientId, userId: props.userId })
+    roleQKeys.all({ clientId: props.clientId, userId: props.userId })
   );
 
-  const languagesQuery = useGetUserLanguages();
+  const languagesQuery = useQuery(
+    userQKeys.languages({ clientId: props.clientId, userId: props.userId })
+  );
 
   const locationsQuery = useGetLocationsList({
     query: { withActive: true },
@@ -290,10 +291,12 @@ function EditUserForm(props: {
     mutationKey: userQKeys.updatingProfile(String(props.user.userID)),
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
-      qc.invalidateQueries(userQKeys.userConfigurations());
-      qc.invalidateQueries(userQKeys.profile(variables.params.userId));
-      qc.invalidateQueries(userQKeys.activeUsersCount());
-      qc.invalidateQueries(userQKeys.maximumUsersCount());
+      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
+      qc.invalidateQueries({
+        queryKey: userQKeys.profile(variables.params.userId),
+      });
+      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
+      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
 
       if (data.status >= 200 && data.status < 300) {
         toast({
@@ -374,7 +377,7 @@ function EditUserForm(props: {
     },
   });
 
-  const isDisabled = updateProfile.isLoading;
+  const isDisabled = updateProfile.isPending;
 
   return (
     <Form {...form}>
@@ -747,9 +750,9 @@ function NewUserForm(props: {
     mutationKey: userQKeys.updatingProfile(String(props.userId)),
     mutationFn: apiClient.user.createdUserProfile,
     onSuccess: (data) => {
-      qc.invalidateQueries(userQKeys.userConfigurations());
-      qc.invalidateQueries(userQKeys.activeUsersCount());
-      qc.invalidateQueries(userQKeys.maximumUsersCount());
+      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
+      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
+      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
 
       if (data.status >= 200 && data.status < 300) {
         toast({
@@ -830,7 +833,7 @@ function NewUserForm(props: {
     },
   });
 
-  const isDisabled = createUser.isLoading;
+  const isDisabled = createUser.isPending;
 
   return (
     <Form {...form}>
