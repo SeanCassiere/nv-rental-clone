@@ -290,10 +290,12 @@ function EditUserForm(props: {
     mutationKey: userQKeys.updatingProfile(String(props.user.userID)),
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
-      qc.invalidateQueries(userQKeys.userConfigurations());
-      qc.invalidateQueries(userQKeys.profile(variables.params.userId));
-      qc.invalidateQueries(userQKeys.activeUsersCount());
-      qc.invalidateQueries(userQKeys.maximumUsersCount());
+      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
+      qc.invalidateQueries({
+        queryKey: userQKeys.profile(variables.params.userId),
+      });
+      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
+      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
 
       if (data.status >= 200 && data.status < 300) {
         toast({
@@ -747,9 +749,9 @@ function NewUserForm(props: {
     mutationKey: userQKeys.updatingProfile(String(props.userId)),
     mutationFn: apiClient.user.createdUserProfile,
     onSuccess: (data) => {
-      qc.invalidateQueries(userQKeys.userConfigurations());
-      qc.invalidateQueries(userQKeys.activeUsersCount());
-      qc.invalidateQueries(userQKeys.maximumUsersCount());
+      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
+      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
+      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
 
       if (data.status >= 200 && data.status < 300) {
         toast({
