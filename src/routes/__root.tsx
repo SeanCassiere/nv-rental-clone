@@ -35,6 +35,10 @@ export const rootRoute = routerContext.createRootRoute({
 
     if (auth) {
       const promises = [];
+      const authParams = {
+        clientId: auth.profile.navotar_clientid,
+        userId: auth.profile.navotar_userid,
+      };
 
       // current client's profile
       promises.push(
@@ -88,33 +92,11 @@ export const rootRoute = routerContext.createRootRoute({
       );
 
       // current user's profile
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: userQKeys.me(),
-          queryFn: () =>
-            apiClient.user.getProfileByUserId({
-              params: { userId: auth.profile.navotar_userid },
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                currentUserId: auth.profile.navotar_userid,
-              },
-            }),
-          staleTime: 1000 * 60 * 1, // 1 minute
-        })
-      );
+      promises.push(queryClient.ensureQueryData(userQKeys.me(authParams)));
 
       // current user's permissions
       promises.push(
-        queryClient.ensureQueryData({
-          queryKey: userQKeys.permissions(auth.profile.navotar_userid),
-          queryFn: () =>
-            apiClient.user.getPermissionForUserId({
-              params: { userId: auth.profile.navotar_userid },
-              query: { clientId: auth.profile.navotar_clientid },
-            }),
-          staleTime: 1000 * 60 * 5, // 5 minutes
-        })
+        queryClient.ensureQueryData(userQKeys.permissions(authParams))
       );
 
       try {

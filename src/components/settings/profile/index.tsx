@@ -1,7 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,14 +32,11 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { usePermission } from "@/hooks/internal/usePermission";
-import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
-import { useGetUserProfile } from "@/hooks/network/user/useGetUserProfile";
 
 import {
   buildUpdateUserSchema,
@@ -50,14 +52,18 @@ import { apiClient } from "@/api";
 
 export default function SettingsProfileTab() {
   const { t } = useTranslation("settings");
+  const auth = useAuth();
 
-  const userQuery = useGetUserProfile({
-    suspense: true,
-  });
+  const clientId = auth.user?.profile?.navotar_clientid || "";
+  const userId = auth.user?.profile?.navotar_userid || "";
+  const authParams = {
+    clientId,
+    userId,
+  };
 
-  const languagesQuery = useGetUserLanguages({
-    suspense: true,
-  });
+  const userQuery = useSuspenseQuery(userQKeys.me(authParams));
+
+  const languagesQuery = useSuspenseQuery(userQKeys.languages(authParams));
 
   return (
     <Card className="shadow-none lg:w-[600px]">
@@ -68,10 +74,6 @@ export default function SettingsProfileTab() {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-0 lg:p-6">
-        {(userQuery.status === "loading" ||
-          languagesQuery.status === "loading") && (
-          <Skeleton className="h-96 w-full lg:max-w-2xl" />
-        )}
         {userQuery.status === "success" &&
           languagesQuery.status === "success" &&
           userQuery.data.status === 200 && (
@@ -83,6 +85,8 @@ export default function SettingsProfileTab() {
                     ? languagesQuery.data.body
                     : []
                 }
+                clientId={clientId}
+                userId={userId}
               />
             </article>
           )}
@@ -94,8 +98,14 @@ export default function SettingsProfileTab() {
 function ProfileForm(props: {
   user: TUserProfile;
   languages: UserLanguageItem[];
+  clientId: string;
+  userId: string;
 }) {
   const { user, languages } = props;
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
 
   const { t } = useTranslation();
 
@@ -135,14 +145,18 @@ function ProfileForm(props: {
     },
   });
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
-      qc.invalidateQueries(userQKeys.me());
-      qc.invalidateQueries(userQKeys.activeUsersCount());
-      qc.invalidateQueries(userQKeys.maximumUsersCount());
-      qc.invalidateQueries(userQKeys.permissions(variables.params.userId));
-      qc.invalidateQueries(locationQKeys.all({ withActive: true }));
+      qc.invalidateQueries({ queryKey: userQKeys.me(authParams).queryKey });
+      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
+      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
+      qc.invalidateQueries({
+        queryKey: userQKeys.permissions(authParams).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: locationQKeys.all({ withActive: true }),
+      });
 
       if (data.status >= 200 && data.status < 300) {
         toast({
@@ -174,7 +188,7 @@ function ProfileForm(props: {
     },
   });
 
-  const isDisabled = canViewAdminTab === false || isLoading;
+  const isDisabled = canViewAdminTab === false || isPending;
 
   return (
     <Form {...form}>

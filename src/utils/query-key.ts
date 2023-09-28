@@ -1,8 +1,16 @@
+import type { UseQueryOptions } from "@tanstack/react-query";
+
 import { localDateToQueryYearMonthDay } from "@/utils/date";
+
+import { apiClient } from "@/api";
 
 type Pagination = { page: number; pageSize: number };
 type Filters = Record<string, any>;
 type ReferenceId = string | number;
+type Auth = {
+  userId: string;
+  clientId: string;
+};
 
 export const agreementQKeys = {
   // search
@@ -98,9 +106,52 @@ export const clientQKeys = {
 
 export const userQKeys = {
   rootKey: "users",
-  me: () => [userQKeys.rootKey, "me"],
-  languages: () => [userQKeys.rootKey, "languages"],
-  permissions: (userId: string) => [userQKeys.rootKey, userId, "permissions"],
+  me: (p: Auth) => {
+    return {
+      queryKey: [userQKeys.rootKey, p.userId, "profile"],
+      queryFn: () =>
+        apiClient.user.getProfileByUserId({
+          params: {
+            userId: p.userId,
+          },
+          query: {
+            clientId: p.clientId,
+            userId: p.userId,
+            currentUserId: p.userId,
+          },
+        }),
+      enabled: !!p.clientId && !!p.userId,
+      staleTime: 1000 * 60 * 1, // 1 minute
+    } satisfies UseQueryOptions;
+  },
+  languages: (p: Auth) => {
+    return {
+      queryKey: [userQKeys.rootKey, "languages"],
+      queryFn: () =>
+        apiClient.user.getLanguages({
+          query: {
+            clientId: p.clientId,
+            userId: p.userId,
+          },
+        }),
+      enabled: !!p.clientId && !!p.userId,
+      staleTime: 1000 * 60 * 1, // 1 minute
+    } satisfies UseQueryOptions;
+  },
+  permissions: (p: Auth) => {
+    return {
+      queryKey: [userQKeys.rootKey, p.userId, "permissions"],
+      queryFn: () =>
+        apiClient.user.getPermissionForUserId({
+          params: { userId: p.userId },
+          query: {
+            clientId: p.clientId,
+          },
+        }),
+      enabled: !!p.clientId && !!p.userId,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    } satisfies UseQueryOptions;
+  },
   profile: (userId: string) => [userQKeys.rootKey, userId, "profile"],
   updatingProfile: (userId: string) => [
     userQKeys.rootKey,

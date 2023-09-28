@@ -41,7 +41,6 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetUserLanguages } from "@/hooks/network/user/useGetUserLanguages";
 
 import type { RoleListItem } from "@/schemas/role";
 import {
@@ -121,7 +120,9 @@ export function EditUserDialog({
     rolesStore.all({ clientId: props.clientId, userId: props.userId })
   );
 
-  const languagesQuery = useGetUserLanguages();
+  const languagesQuery = useQuery(
+    userQKeys.languages({ clientId: props.clientId, userId: props.userId })
+  );
 
   const locationsQuery = useGetLocationsList({
     query: { withActive: true },
