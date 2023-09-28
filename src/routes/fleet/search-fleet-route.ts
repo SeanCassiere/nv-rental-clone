@@ -23,10 +23,15 @@ export const searchFleetRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loader: async ({ search, context: { queryClient } }) => {
+  loaderContext: ({ search }) => {
+    return {
+      search: normalizeVehicleListSearchParams(search),
+    };
+  },
+  loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
-    const { pageNumber, size, searchFilters } =
-      normalizeVehicleListSearchParams(search);
+
+    const { pageNumber, size, searchFilters } = search;
 
     if (auth) {
       const promises = [];

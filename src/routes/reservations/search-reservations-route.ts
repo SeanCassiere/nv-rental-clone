@@ -23,11 +23,15 @@ export const searchReservationsRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loader: async ({ search, context: { queryClient } }) => {
+  loaderContext: ({ search }) => {
+    return {
+      search: normalizeReservationListSearchParams(search),
+    };
+  },
+  loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
-    const { pageNumber, size, searchFilters } =
-      normalizeReservationListSearchParams(search);
+    const { pageNumber, size, searchFilters } = search;
 
     if (auth) {
       const promises = [];

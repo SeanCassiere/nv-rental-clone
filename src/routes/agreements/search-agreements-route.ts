@@ -16,7 +16,7 @@ import { agreementsRoute } from ".";
 export const searchAgreementsRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "/",
-  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
+  validateSearch: AgreementSearchQuerySchema.parse,
   preSearchFilters: [
     (search) => {
       const auth = getAuthToken();
@@ -40,14 +40,15 @@ export const searchAgreementsRoute = new Route({
       };
     },
   ],
-  loader: async ({ search, context: { queryClient } }) => {
+  loaderContext: ({ search }) => {
+    return {
+      search: normalizeAgreementListSearchParams(search),
+    };
+  },
+  loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
-    const {
-      searchFilters,
-      pageNumber,
-      size: pageSize,
-    } = normalizeAgreementListSearchParams(search);
+    const { searchFilters, pageNumber, size: pageSize } = search;
 
     if (auth) {
       const promises = [];
