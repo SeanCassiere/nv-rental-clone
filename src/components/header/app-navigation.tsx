@@ -41,6 +41,7 @@ export const AppNavigation = () => {
       current: matches(["/fleet", "/fleet/$vehicleId"]),
       props: {
         to: "/fleet",
+        search: (current) => ({ ...current, filters: undefined }),
       },
     },
     {
@@ -48,6 +49,7 @@ export const AppNavigation = () => {
       current: matches(["/customers", "/customers/$customerId"]),
       props: {
         to: "/customers",
+        search: (current) => ({ ...current, filters: undefined }),
       },
     },
     {
@@ -55,6 +57,7 @@ export const AppNavigation = () => {
       current: matches(["/reservations", "/reservations/$reservationId"]),
       props: {
         to: "/reservations",
+        search: (current) => ({ ...current, filters: undefined }),
       },
     },
     {
@@ -62,6 +65,7 @@ export const AppNavigation = () => {
       current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {
         to: "/agreements",
+        search: (current) => ({ ...current, filters: undefined }),
       },
     },
     {
