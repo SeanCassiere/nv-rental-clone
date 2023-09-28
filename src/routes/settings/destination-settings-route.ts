@@ -18,6 +18,7 @@ export const destinationSettingsRoute = new Route({
         tab: z.string().optional(),
       })
       .parse(search),
+  preSearchFilters: [(prev) => prev],
 }).update({
   component: lazyRouteComponent(() => import("@/pages/settings-destination")),
 });
