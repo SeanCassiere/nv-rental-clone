@@ -1,4 +1,4 @@
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import type { VehicleTypesListExtraOpts } from "@/api/_vehicle-types.contract";
@@ -8,10 +8,7 @@ import { vehicleTypeQKeys } from "@/utils/query-key";
 import { apiClient } from "@/api";
 
 export function useGetVehicleTypesList(
-  params?: { search?: VehicleTypesListExtraOpts } & Pick<
-    UseQueryOptions,
-    "suspense"
-  >
+  params?: { search?: VehicleTypesListExtraOpts }
 ) {
   const searchParams = params?.search || {};
 
@@ -29,9 +26,6 @@ export function useGetVehicleTypesList(
       : {}),
   };
 
-  const queryOptions = {
-    suspense: params?.suspense,
-  };
 
   const auth = useAuth();
   const query = useQuery({
@@ -46,7 +40,6 @@ export function useGetVehicleTypesList(
       }),
     enabled: auth.isAuthenticated,
     staleTime: 1000 * 60 * 1, // 1 minute
-    ...queryOptions,
   });
   return query;
 }
