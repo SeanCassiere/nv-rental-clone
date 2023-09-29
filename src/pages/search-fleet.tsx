@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -30,7 +30,6 @@ import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
-import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -41,9 +40,8 @@ const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 function VehiclesSearchPage() {
   const navigate = useNavigate();
 
-  const search = useSearch({ from: searchFleetRoute.id });
-  const { pageNumber, size, searchFilters } =
-    normalizeVehicleListSearchParams(search);
+  const routerContext = useRouteContext({ from: searchFleetRoute.id });
+  const { searchFilters, pageNumber, size } = routerContext.search;
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(

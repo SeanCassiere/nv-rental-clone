@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -28,7 +28,6 @@ import { searchCustomersRoute } from "@/routes/customers/search-customers-route"
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
-import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -43,9 +42,8 @@ function CustomerSearchPage() {
 
   const navigate = useNavigate();
 
-  const search = useSearch({ from: searchCustomersRoute.id });
-  const { searchFilters, pageNumber, size } =
-    normalizeCustomerListSearchParams(search);
+  const routeContext = useRouteContext({ from: searchCustomersRoute.id });
+  const { searchFilters, pageNumber, size } = routeContext.search;
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(
