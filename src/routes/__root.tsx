@@ -121,7 +121,7 @@ function RootComponent() {
     <>
       {isHeaderShown && <HeaderLayout />}
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
-        <ScrollRestoration />
+        <ScrollRestoration getKey={(location) => location.pathname} />
         {isFreshAuthenticating ? (
           <LoadingPlaceholder />
         ) : (

@@ -45,7 +45,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
       {
         type: "text",
         accessor: "orgVehicleFuelLevelIn",
-        header: "Fuel status",
+        header: "Fuel status in",
       },
       {
         type: "text",
@@ -60,7 +60,7 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
       {
         type: "text",
         accessor: "newVehicleFuelLevelOut",
-        header: "Fuel status",
+        header: "Fuel status out",
       },
       { type: "date-time", accessor: "exchangeDate", header: "Exchange date" },
       { type: "text", accessor: "createdByName", header: "Created by" },

@@ -58,9 +58,9 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
       pagination: paginationState,
     },
     getCoreRowModel: getCoreRowModel(),
-    onPaginationChange: (paginationUpdaterFn) => {
-      // @ts-expect-error
-      const newPagination = paginationUpdaterFn(paginationState);
+    onPaginationChange: (updater) => {
+      const newPagination =
+        typeof updater === "function" ? updater(paginationState) : updater;
       if (props?.paginationMode === "server") {
         props?.onPaginationChange?.(newPagination);
       } else {

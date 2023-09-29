@@ -23,11 +23,15 @@ export const searchCustomersRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loader: async ({ search, context: { queryClient } }) => {
+  loaderContext: ({ search }) => {
+    return {
+      search: normalizeCustomerListSearchParams(search),
+    };
+  },
+  loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
-    const { pageNumber, size, searchFilters } =
-      normalizeCustomerListSearchParams(search);
+    const { pageNumber, size, searchFilters } = search;
 
     if (auth) {
       const promises = [];

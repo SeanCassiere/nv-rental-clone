@@ -1,100 +1,133 @@
 import React from "react";
-import { Link, useRouter, type LinkPropsOptions } from "@tanstack/react-router";
+import { Link, type LinkPropsOptions } from "@tanstack/react-router";
+
+import { useFeature } from "@/hooks/internal/useFeature";
+
+import { APP_DEFAULTS } from "@/utils/constants";
 
 import { cn } from "@/utils";
 
+type AppNavigationLinks = {
+  name: string;
+  props: Omit<
+    LinkPropsOptions,
+    "children" | "className" | "activeProps" | "inactiveProps"
+  >;
+}[];
+
+const defaultActiveOptions: LinkPropsOptions["activeOptions"] = {
+  exact: false,
+  includeHash: false,
+  includeSearch: false,
+};
+
 export const AppNavigation = () => {
-  const router = useRouter();
-  const routerStore = router.__store.state;
+  const [featureRowCount] = useFeature("DEFAULT_ROW_COUNT");
+  const tableRowCount = React.useMemo(
+    () => parseInt(featureRowCount || APP_DEFAULTS.tableRowCount, 10),
+    [featureRowCount]
+  );
 
-  const matches = (routes: string[], mode: "=" | "~" = "~") => {
-    const matching: string[] = [...routerStore.matches.map((mat) => mat.id)];
-
-    // because this comes out like ['/','/customers','/customers/$customerId'] or ['/','/']
-    // we take out the first element in the array
-    matching.shift();
-
-    if (mode === "=") {
-      // exact match
-      // return matching.some((mat) => mat === routes);
-
-      return routes.some((route) => matching.includes(route as any));
-    }
-    // return matching.some((mat) => mat.includes(routes));
-    return matching.some((mat) => routes.includes(mat));
-  };
-
-  const navigation: {
-    name: string;
-    current: boolean;
-    props: LinkPropsOptions;
-  }[] = [
+  const navigation: AppNavigationLinks = [
     {
       name: "Dashboard",
-      current: matches(["/"], "="),
       props: {
         to: "/",
+        activeOptions: {
+          exact: true,
+        },
       },
     },
     {
       name: "Fleet",
-      current: matches(["/fleet", "/fleet/$vehicleId"]),
       props: {
         to: "/fleet",
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
       name: "Customers",
-      current: matches(["/customers", "/customers/$customerId"]),
       props: {
         to: "/customers",
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
       name: "Reservations",
-      current: matches(["/reservations", "/reservations/$reservationId"]),
       props: {
         to: "/reservations",
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
       name: "Agreements",
-      current: matches(["/agreements", "/agreements/$agreementId"]),
       props: {
         to: "/agreements",
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
       name: "Reports",
-      current: matches(["/reports", "/reports/$reportId"]),
       props: {
-        to: "/agreements",
+        to: "/reports" as any,
       },
     },
     {
       name: "Settings",
-      current: matches(["/settings", "/settings/$location"]),
       props: {
         to: "/settings",
+        activeOptions: defaultActiveOptions,
       },
     },
   ];
 
   return (
-    <nav className="-mb-px flex space-x-5 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0 md:px-10 [&::-webkit-scrollbar]:hidden">
-      {navigation.map((navItem) => (
-        <Link
-          key={`nav_${navItem.name}`}
-          {...navItem.props}
-          className={cn(
-            navItem.current
-              ? "whitespace-nowrap border-b border-foreground pb-4 pt-3 font-semibold leading-none transition sm:px-4"
-              : "whitespace-nowrap border-b border-transparent pb-4 pt-3 leading-none transition hover:border-foreground/20 dark:hover:border-foreground/20 sm:px-4"
-          )}
-        >
-          {navItem.name}
-        </Link>
-      ))}
+    <nav className="-mb-px overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] md:px-10 [&::-webkit-scrollbar]:hidden">
+      <ul className="flex space-x-5 sm:space-x-0.5">
+        {navigation.map((item, idx) => (
+          <li key={`header_app_nav_${idx}`}>
+            <Link
+              {...item.props}
+              className={cn(
+                "inline-block whitespace-nowrap border-b pb-4 pt-3 leading-none transition-all sm:px-4",
+                idx + 1 === navigation.length && "mr-4 sm:mr-0"
+              )}
+              activeProps={{
+                className: cn("border-foreground font-semibold"),
+              }}
+              inactiveProps={{
+                className: cn("border-transparent hover:border-foreground/20"),
+              }}
+            >
+              {item.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 };

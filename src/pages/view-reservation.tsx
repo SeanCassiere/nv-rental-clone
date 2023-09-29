@@ -141,7 +141,6 @@ function ReservationViewPage() {
             />
             <Link
               to="/reservations/$reservationId"
-              // @ts-expect-error
               search={(current) => ({ tab: current?.tab || "summary" })}
               params={{ reservationId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
