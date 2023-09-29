@@ -3,11 +3,22 @@ import { Link, type LinkPropsOptions } from "@tanstack/react-router";
 
 import { cn } from "@/utils";
 
+type AppNavigationLinks = {
+  name: string;
+  props: Omit<
+    LinkPropsOptions,
+    "children" | "className" | "activeProps" | "inactiveProps"
+  >;
+}[];
+
+const defaultActiveOptions: LinkPropsOptions["activeOptions"] = {
+  exact: false,
+  includeHash: false,
+  includeSearch: false,
+};
+
 export const AppNavigation = () => {
-  const navigation: {
-    name: string;
-    props: LinkPropsOptions;
-  }[] = [
+  const navigation: AppNavigationLinks = [
     {
       name: "Dashboard",
       props: {
@@ -22,6 +33,7 @@ export const AppNavigation = () => {
       props: {
         to: "/fleet",
         search: (current) => ({ ...current, filters: undefined }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
@@ -29,6 +41,7 @@ export const AppNavigation = () => {
       props: {
         to: "/customers",
         search: (current) => ({ ...current, filters: undefined }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
@@ -36,6 +49,7 @@ export const AppNavigation = () => {
       props: {
         to: "/reservations",
         search: (current) => ({ ...current, filters: undefined }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
@@ -43,6 +57,7 @@ export const AppNavigation = () => {
       props: {
         to: "/agreements",
         search: (current) => ({ ...current, filters: undefined }),
+        activeOptions: defaultActiveOptions,
       },
     },
     {
@@ -55,6 +70,7 @@ export const AppNavigation = () => {
       name: "Settings",
       props: {
         to: "/settings",
+        activeOptions: defaultActiveOptions,
       },
     },
   ];
@@ -63,7 +79,7 @@ export const AppNavigation = () => {
     <nav className="-mb-px overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] md:px-10 [&::-webkit-scrollbar]:hidden">
       <ul className="flex space-x-5 sm:space-x-0.5">
         {navigation.map((item, idx) => (
-          <li key={`nav_${idx}_${item.name}`}>
+          <li key={`header_app_nav_${idx}`}>
             <Link
               {...item.props}
               className={cn(
