@@ -1,6 +1,10 @@
 import React from "react";
 import { Link, type LinkPropsOptions } from "@tanstack/react-router";
 
+import { useFeature } from "@/hooks/internal/useFeature";
+
+import { APP_DEFAULTS } from "@/utils/constants";
+
 import { cn } from "@/utils";
 
 type AppNavigationLinks = {
@@ -18,6 +22,12 @@ const defaultActiveOptions: LinkPropsOptions["activeOptions"] = {
 };
 
 export const AppNavigation = () => {
+  const [featureRowCount] = useFeature("DEFAULT_ROW_COUNT");
+  const tableRowCount = React.useMemo(
+    () => parseInt(featureRowCount || APP_DEFAULTS.tableRowCount, 10),
+    [featureRowCount]
+  );
+
   const navigation: AppNavigationLinks = [
     {
       name: "Dashboard",
@@ -32,7 +42,12 @@ export const AppNavigation = () => {
       name: "Fleet",
       props: {
         to: "/fleet",
-        search: (current) => ({ ...current, filters: undefined }),
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
         activeOptions: defaultActiveOptions,
       },
     },
@@ -40,7 +55,12 @@ export const AppNavigation = () => {
       name: "Customers",
       props: {
         to: "/customers",
-        search: (current) => ({ ...current, filters: undefined }),
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
         activeOptions: defaultActiveOptions,
       },
     },
@@ -48,7 +68,12 @@ export const AppNavigation = () => {
       name: "Reservations",
       props: {
         to: "/reservations",
-        search: (current) => ({ ...current, filters: undefined }),
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
         activeOptions: defaultActiveOptions,
       },
     },
@@ -56,7 +81,12 @@ export const AppNavigation = () => {
       name: "Agreements",
       props: {
         to: "/agreements",
-        search: (current) => ({ ...current, filters: undefined }),
+        search: (current) => ({
+          ...current,
+          page: 1,
+          size: tableRowCount,
+          filters: undefined,
+        }),
         activeOptions: defaultActiveOptions,
       },
     },
