@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -34,7 +34,6 @@ import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-rou
 import { type TAgreementListItemParsed } from "@/schemas/agreement";
 
 import { AgreementDateTimeColumns } from "@/utils/columns";
-import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -47,9 +46,8 @@ function AgreementsSearchPage() {
 
   const navigate = useNavigate();
 
-  const search = useSearch({ from: searchAgreementsRoute.id });
-  const { searchFilters, pageNumber, size } =
-    normalizeAgreementListSearchParams(search);
+  const routeContext = useRouteContext({ from: searchAgreementsRoute.id });
+  const { searchFilters, pageNumber, size } = routeContext.search;
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(

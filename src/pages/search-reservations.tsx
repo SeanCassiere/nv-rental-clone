@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -34,7 +34,6 @@ import { searchReservationsRoute } from "@/routes/reservations/search-reservatio
 import { type TReservationListItemParsed } from "@/schemas/reservation";
 
 import { ReservationDateTimeColumns } from "@/utils/columns";
-import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -47,9 +46,8 @@ function ReservationsSearchPage() {
 
   const navigate = useNavigate();
 
-  const search = useSearch({ from: searchReservationsRoute.id });
-  const { pageNumber, size, searchFilters } =
-    normalizeReservationListSearchParams(search);
+  const routeContext = useRouteContext({ from: searchReservationsRoute.id });
+  const { searchFilters, pageNumber, size } = routeContext.search;
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(
