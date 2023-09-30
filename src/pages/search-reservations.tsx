@@ -49,6 +49,15 @@ function ReservationsSearchPage() {
   const routeContext = useRouteContext({ from: searchReservationsRoute.id });
   const { searchFilters, pageNumber, size } = routeContext.search;
 
+  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+
+  const startChangingPage = () => {
+    _setTrackTableLoading(true);
+  };
+  const stopChangingPage = () => {
+    _setTrackTableLoading(false);
+  };
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(
       (prev, [key, value]) => [...prev, { id: key, value }],
@@ -225,6 +234,7 @@ function ReservationsSearchPage() {
           data={reservationsList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
+          isLoading={reservationsData.isLoading || _trackTableLoading}
           rawColumnsData={
             columnsData.data.status === 200 ? columnsData.data.body : []
           }
@@ -236,6 +246,7 @@ function ReservationsSearchPage() {
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
+            startChangingPage();
             navigate({
               to: "/reservations",
               params: {},
@@ -245,12 +256,13 @@ function ReservationsSearchPage() {
                 size: newPaginationState.pageSize,
                 filters: searchFilters,
               }),
-            });
+            }).then(stopChangingPage);
           }}
           filters={{
             columnFilters,
             setColumnFilters,
             onClearFilters: () => {
+              startChangingPage();
               navigate({
                 to: "/reservations",
                 params: {},
@@ -258,7 +270,7 @@ function ReservationsSearchPage() {
                   page: 1,
                   size: pagination.pageSize,
                 }),
-              });
+              }).then(stopChangingPage);
             },
             onSearchWithFilters: () => {
               const filters = columnFilters.reduce(
@@ -268,6 +280,7 @@ function ReservationsSearchPage() {
                 }),
                 {}
               );
+              startChangingPage();
               navigate({
                 to: "/reservations",
                 params: {},
@@ -276,7 +289,7 @@ function ReservationsSearchPage() {
                   size: pagination.pageSize,
                   filters,
                 }),
-              });
+              }).then(stopChangingPage);
             },
             filterableColumns: [
               {

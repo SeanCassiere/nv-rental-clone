@@ -78,6 +78,7 @@ interface PrimaryModuleTableProps<
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
   rawColumnsData: TColumnHeaderItem[];
+  isLoading?: boolean;
 
   onColumnOrderChange?: (updatedValues: ColumnOrderState) => void;
 
@@ -231,7 +232,11 @@ export function PrimaryModuleTable<
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody>
+              <TableBody
+                className={cn(
+                  props?.isLoading ? "pointer-events-none [&>*]:opacity-50" : ""
+                )}
+              >
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow

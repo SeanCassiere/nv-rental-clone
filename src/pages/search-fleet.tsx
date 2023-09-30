@@ -43,6 +43,15 @@ function VehiclesSearchPage() {
   const routerContext = useRouteContext({ from: searchFleetRoute.id });
   const { searchFilters, pageNumber, size } = routerContext.search;
 
+  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+
+  const startChangingPage = () => {
+    _setTrackTableLoading(true);
+  };
+  const stopChangingPage = () => {
+    _setTrackTableLoading(false);
+  };
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(
       (prev, [key, value]) => [...prev, { id: key, value }],
@@ -199,6 +208,7 @@ function VehiclesSearchPage() {
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
+            startChangingPage();
             navigate({
               to: "/fleet",
               params: {},
@@ -208,12 +218,13 @@ function VehiclesSearchPage() {
                 size: newPaginationState.pageSize,
                 filters: searchFilters,
               }),
-            });
+            }).then(stopChangingPage);
           }}
           filters={{
             columnFilters,
             setColumnFilters,
             onClearFilters: () => {
+              startChangingPage();
               navigate({
                 to: "/fleet",
                 params: {},
@@ -221,7 +232,7 @@ function VehiclesSearchPage() {
                   page: 1,
                   size: pagination.pageSize,
                 }),
-              });
+              }).then(stopChangingPage);
             },
             onSearchWithFilters: () => {
               const filters = columnFilters.reduce(
@@ -231,6 +242,7 @@ function VehiclesSearchPage() {
                 }),
                 {}
               );
+              startChangingPage();
               navigate({
                 to: "/fleet",
                 params: {},
@@ -239,7 +251,7 @@ function VehiclesSearchPage() {
                   size: pagination.pageSize,
                   filters,
                 }),
-              });
+              }).then(stopChangingPage);
             },
             filterableColumns: [
               {

@@ -45,6 +45,15 @@ function CustomerSearchPage() {
   const routeContext = useRouteContext({ from: searchCustomersRoute.id });
   const { searchFilters, pageNumber, size } = routeContext.search;
 
+  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+
+  const startChangingPage = () => {
+    _setTrackTableLoading(true);
+  };
+  const stopChangingPage = () => {
+    _setTrackTableLoading(false);
+  };
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
     Object.entries(searchFilters).reduce(
       (prev, [key, value]) => [...prev, { id: key, value }],
@@ -185,6 +194,7 @@ function CustomerSearchPage() {
           data={customersList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
+          isLoading={customersData.isLoading || _trackTableLoading}
           rawColumnsData={
             columnsData.data.status === 200 ? columnsData.data.body : []
           }
@@ -196,6 +206,7 @@ function CustomerSearchPage() {
           }
           pagination={pagination}
           onPaginationChange={(newPaginationState) => {
+            startChangingPage();
             navigate({
               to: "/customers",
               params: {},
@@ -205,12 +216,13 @@ function CustomerSearchPage() {
                 size: newPaginationState.pageSize,
                 filters: searchFilters,
               }),
-            });
+            }).then(stopChangingPage);
           }}
           filters={{
             columnFilters,
             setColumnFilters,
             onClearFilters: () => {
+              startChangingPage();
               navigate({
                 to: "/customers",
                 params: {},
@@ -218,7 +230,7 @@ function CustomerSearchPage() {
                   page: 1,
                   size: pagination.pageSize,
                 }),
-              });
+              }).then(stopChangingPage);
             },
             onSearchWithFilters: () => {
               const filters = columnFilters.reduce(
@@ -228,6 +240,7 @@ function CustomerSearchPage() {
                 }),
                 {}
               );
+              startChangingPage();
               navigate({
                 to: "/customers",
                 params: {},
@@ -236,7 +249,7 @@ function CustomerSearchPage() {
                   size: pagination.pageSize,
                   filters,
                 }),
-              });
+              }).then(stopChangingPage);
             },
             filterableColumns: [
               {
