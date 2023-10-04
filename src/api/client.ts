@@ -13,13 +13,6 @@ const apiClient = initClient(contract, {
 
     args.headers["Authorization"] = `Bearer ${auth?.access_token ?? null}`;
 
-    if (!args.contentType) {
-      args.contentType = "application/json";
-      args.headers["Content-Type"] = args.contentType;
-    }
-
-    args.route.validateResponseOnClient = true;
-
     return tsRestFetchApi(args);
   },
 });
