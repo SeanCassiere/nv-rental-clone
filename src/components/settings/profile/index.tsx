@@ -8,6 +8,7 @@ import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +35,6 @@ import {
 } from "@/components/ui/input-select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { usePermission } from "@/hooks/internal/usePermission";
@@ -113,8 +113,6 @@ function ProfileForm(props: {
   const auth = useAuthValues();
   const qc = useQueryClient();
 
-  const { toast } = useToast();
-
   const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
 
   const languagesList = languages
@@ -160,30 +158,28 @@ function ProfileForm(props: {
       });
 
       if (data.status >= 200 && data.status < 300) {
-        toast({
-          title: t("labelUpdated", {
+        toast.success(
+          t("labelUpdated", {
             ns: "messages",
             label: t("titles.profile", { ns: "settings" }),
           }),
-          description: t("labelUpdatedSuccess", {
-            ns: "messages",
-            label: t("titles.profile", { ns: "settings" }),
-          }),
-        });
+          {
+            description: t("labelUpdatedSuccess", {
+              ns: "messages",
+              label: t("titles.profile", { ns: "settings" }),
+            }),
+          }
+        );
       } else {
-        toast({
-          title: t("somethingWentWrong", { ns: "messages" }),
+        toast.error(t("somethingWentWrong", { ns: "messages" }), {
           description: t("pleaseTryAgain", { ns: "messages" }),
-          variant: "destructive",
         });
       }
     },
     onError: (err) => {
       if (err instanceof Error) {
-        toast({
-          title: t("somethingWentWrong", { ns: "messages" }),
+        toast.error(t("somethingWentWrong", { ns: "messages" }), {
           description: err?.message || t("pleaseTryAgain", { ns: "messages" }),
-          variant: "destructive",
         });
       }
     },

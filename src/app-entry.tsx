@@ -7,7 +7,6 @@ import { AuthProvider } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
-import { Toaster } from "@/components/ui/toaster";
 
 import { apiClient } from "@/api";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
@@ -63,7 +62,6 @@ const App = () => {
           />
           <TailwindScreenDevTool />
         </AuthProvider>
-        <Toaster />
       </QueryClientProvider>
     </CacheBuster>
   );

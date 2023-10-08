@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import {
@@ -37,7 +38,6 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 
 import type { PermissionListItem, RoleListItem } from "@/schemas/role";
 
@@ -60,7 +60,6 @@ export function EditRoleDialog({
   ...props
 }: EditRoleDialogProps) {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const qc = useQueryClient();
 
   const formId = React.useId();
@@ -110,44 +109,48 @@ export function EditRoleDialog({
       });
 
       if (data.status >= 200 && data.status < 300) {
-        toast({
-          title: t("labelCreated", {
+        toast.success(
+          t("labelCreated", {
             ns: "messages",
             label: t("labels.role", { ns: "settings" }),
           }),
-          description: t("labelCreatedSuccess", {
-            ns: "messages",
-            label: t("labels.role", { ns: "settings" }),
-          }),
-        });
+          {
+            description: t("labelCreatedSuccess", {
+              ns: "messages",
+              label: t("labels.role", { ns: "settings" }),
+            }),
+          }
+        );
 
         setOpen(false);
         return;
       }
 
-      toast({
-        title: t("somethingWentWrong", {
+      toast.error(
+        t("somethingWentWrong", {
           ns: "messages",
         }),
-        description: t("pleaseTryAgain", {
-          ns: "messages",
-        }),
-        variant: "destructive",
-      });
+        {
+          description: t("pleaseTryAgain", {
+            ns: "messages",
+          }),
+        }
+      );
     },
     onError: (err) => {
       if (err instanceof Error) {
-        toast({
-          title: t("somethingWentWrong", {
+        toast.error(
+          t("somethingWentWrong", {
             ns: "messages",
           }),
-          description:
-            err?.message ||
-            t("pleaseTryAgain", {
-              ns: "messages",
-            }),
-          variant: "destructive",
-        });
+          {
+            description:
+              err?.message ||
+              t("pleaseTryAgain", {
+                ns: "messages",
+              }),
+          }
+        );
       }
     },
   });
@@ -185,44 +188,48 @@ export function EditRoleDialog({
       });
 
       if (data.status >= 200 && data.status < 300) {
-        toast({
-          title: t("labelUpdated", {
+        toast.success(
+          t("labelUpdated", {
             ns: "messages",
             label: t("labels.role", { ns: "settings" }),
           }),
-          description: t("labelUpdatedSuccess", {
-            ns: "messages",
-            label: t("labels.role", { ns: "settings" }),
-          }),
-        });
+          {
+            description: t("labelUpdatedSuccess", {
+              ns: "messages",
+              label: t("labels.role", { ns: "settings" }),
+            }),
+          }
+        );
 
         setOpen(false);
         return;
       }
 
-      toast({
-        title: t("somethingWentWrong", {
+      toast.error(
+        t("somethingWentWrong", {
           ns: "messages",
         }),
-        description: t("pleaseTryAgain", {
-          ns: "messages",
-        }),
-        variant: "destructive",
-      });
+        {
+          description: t("pleaseTryAgain", {
+            ns: "messages",
+          }),
+        }
+      );
     },
     onError: (err) => {
       if (err instanceof Error) {
-        toast({
-          title: t("somethingWentWrong", {
+        toast.error(
+          t("somethingWentWrong", {
             ns: "messages",
           }),
-          description:
-            err?.message ||
-            t("pleaseTryAgain", {
-              ns: "messages",
-            }),
-          variant: "destructive",
-        });
+          {
+            description:
+              err?.message ||
+              t("pleaseTryAgain", {
+                ns: "messages",
+              }),
+          }
+        );
       }
     },
   });
