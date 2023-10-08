@@ -39,7 +39,9 @@ export function ResetPasswordAlertDialog({
   const resetPassword = useMutation({
     mutationFn: apiClient.user.sendResetPasswordLink,
     onSuccess: () => {
-      // show an success toast here
+      toast.success(t("titles.sentResetPassword", { ns: "settings" }), {
+        description: t("descriptions.sentResetPassword", { ns: "settings" }),
+      });
 
       setOpen(false);
     },
