@@ -222,7 +222,7 @@ function SystemRole({
       />
       <li className="flex justify-between gap-x-6 py-5">
         <div className="flex min-w-0 gap-x-4">
-          <div className="min-w-0 flex-auto text-sm">
+          <div className="min-w-0 max-w-xl flex-auto text-sm">
             <p
               className={cn(
                 "flex items-baseline font-semibold leading-6",
