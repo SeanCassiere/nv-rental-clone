@@ -4,6 +4,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
@@ -188,13 +189,16 @@ function ProfileForm(props: {
     },
   });
 
-  const isDisabled = canViewAdminTab === false || isPending;
+  const isSubmitBtnFrozen = isPending;
+  const isFieldsReadonly = canViewAdminTab === false || isSubmitBtnFrozen;
 
   return (
     <Form {...form}>
       <form
         className="flex flex-col gap-5 rounded"
         onSubmit={form.handleSubmit(async (values) => {
+          if (isSubmitBtnFrozen) return;
+
           mutate({
             params: {
               userId: auth.userId,
@@ -243,7 +247,7 @@ function ProfileForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.email", { ns: "labels" })}
-                  disabled={isDisabled}
+                  readOnly={isFieldsReadonly}
                   autoComplete="email"
                 />
               </FormControl>
@@ -270,7 +274,7 @@ function ProfileForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.firstName", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isFieldsReadonly}
                     autoComplete="given-name"
                   />
                 </FormControl>
@@ -288,7 +292,7 @@ function ProfileForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.lastName", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isFieldsReadonly}
                     autoComplete="family-name"
                   />
                 </FormControl>
@@ -308,7 +312,7 @@ function ProfileForm(props: {
                   placeholder={t("selectYourLocalization", {
                     ns: "messages",
                   })}
-                  disabled={isDisabled}
+                  disabled={isFieldsReadonly}
                   defaultValue={String(field.value)}
                   onValueChange={field.onChange}
                   items={languagesList.map((lang, idx) => ({
@@ -341,7 +345,7 @@ function ProfileForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.phoneNo", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isFieldsReadonly}
                     autoComplete="tel"
                   />
                 </FormControl>
@@ -367,14 +371,20 @@ function ProfileForm(props: {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={isDisabled}
+                  disabled={isFieldsReadonly}
                 />
               </FormControl>
             </FormItem>
           )}
         />
         <Separator className="mt-0.5" />
-        <Button type="submit" className="w-full lg:w-max" disabled={isDisabled}>
+        <Button
+          type="submit"
+          className="w-full lg:w-max"
+          disabled={!canViewAdminTab}
+          aria-disabled={!canViewAdminTab || isSubmitBtnFrozen}
+        >
+          {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
           {t("buttons.saveProfileDetails", { ns: "labels" })}
         </Button>
       </form>

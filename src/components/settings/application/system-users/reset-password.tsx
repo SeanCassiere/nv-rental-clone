@@ -66,10 +66,14 @@ export function ResetPasswordAlertDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>
+          <AlertDialogCancel
+            aria-disabled={resetPassword.isPending}
+            disabled={resetPassword.isPending}
+          >
             {t("buttons.cancel", { ns: "labels" })}
           </AlertDialogCancel>
           <AlertDialogAction
+            aria-disabled={resetPassword.isPending}
             onClick={(evt) => {
               evt.preventDefault();
 
@@ -77,6 +81,8 @@ export function ResetPasswordAlertDialog({
                 setOpen(false);
                 return;
               }
+
+              if (resetPassword.isPending) return;
 
               resetPassword.mutate({
                 body: {

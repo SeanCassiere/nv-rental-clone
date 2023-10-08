@@ -215,13 +215,16 @@ export function EditUserDialog({
             disabled={
               props.mode === "edit" ? editModeDisabled : createModeDisabled
             }
+            aria-disabled={
+              props.mode === "edit" ? editModeDisabled : createModeDisabled
+            }
           >
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
           <Button
             type="submit"
             form={formId}
-            disabled={
+            aria-disabled={
               props.mode === "edit" ? editModeDisabled : createModeDisabled
             }
           >
@@ -377,7 +380,7 @@ function EditUserForm(props: {
     },
   });
 
-  const isDisabled = updateProfile.isPending;
+  const isReadonly = updateProfile.isPending;
 
   return (
     <Form {...form}>
@@ -385,6 +388,8 @@ function EditUserForm(props: {
         id={props.formId}
         className="flex grow-0 flex-col gap-4 px-1 py-4"
         onSubmit={form.handleSubmit(async (data) => {
+          if (updateProfile.isPending) return;
+
           updateProfile.mutate({
             params: {
               userId: String(props.user.userID),
@@ -430,7 +435,7 @@ function EditUserForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.email", { ns: "labels" })}
-                  disabled={isDisabled}
+                  readOnly={isReadonly}
                   autoComplete="email"
                 />
               </FormControl>
@@ -454,7 +459,7 @@ function EditUserForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.firstName", { ns: "labels" })}
-                    disabled={isDisabled}
+                    disabled={isReadonly}
                     autoComplete="given-name"
                   />
                 </FormControl>
@@ -472,7 +477,7 @@ function EditUserForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.lastName", { ns: "labels" })}
-                    disabled={isDisabled}
+                    disabled={isReadonly}
                     autoComplete="family-name"
                   />
                 </FormControl>
@@ -492,7 +497,7 @@ function EditUserForm(props: {
                   placeholder={t("selectYourLocalization", {
                     ns: "messages",
                   })}
-                  disabled={isDisabled}
+                  disabled={isReadonly}
                   defaultValue={String(field.value)}
                   onValueChange={field.onChange}
                   items={languagesList.map((lang, idx) => ({
@@ -525,7 +530,7 @@ function EditUserForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.phoneNo", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isReadonly}
                     autoComplete="tel"
                   />
                 </FormControl>
@@ -545,7 +550,7 @@ function EditUserForm(props: {
                   placeholder={t("labels.selectARole", {
                     ns: "settings",
                   })}
-                  disabled={isDisabled}
+                  disabled={isReadonly}
                   defaultValue={String(field.value)}
                   onValueChange={field.onChange}
                   items={rolesList.map((role, idx) => ({
@@ -587,7 +592,7 @@ function EditUserForm(props: {
                       locations[idx]!.isSelected = checked;
                       field.onChange(locations);
                     }}
-                    disabled={isDisabled}
+                    disabled={isReadonly}
                   />
                 ))}
               </div>
@@ -612,7 +617,7 @@ function EditUserForm(props: {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={isDisabled}
+                  disabled={isReadonly}
                 />
               </FormControl>
             </FormItem>
@@ -636,7 +641,7 @@ function EditUserForm(props: {
                   checked={field.value}
                   onCheckedChange={field.onChange}
                   disabled={
-                    isDisabled || String(props.user.userID) === props.userId
+                    isReadonly || String(props.user.userID) === props.userId
                   }
                 />
               </FormControl>
@@ -661,7 +666,7 @@ function EditUserForm(props: {
                   checked={field.value}
                   onCheckedChange={field.onChange}
                   disabled={
-                    isDisabled ||
+                    isReadonly ||
                     (!props.user.lockOut &&
                       String(props.user.userID) === props.userId)
                   }
@@ -833,7 +838,7 @@ function NewUserForm(props: {
     },
   });
 
-  const isDisabled = createUser.isPending;
+  const isReadonly = createUser.isPending;
 
   return (
     <Form {...form}>
@@ -841,6 +846,8 @@ function NewUserForm(props: {
         id={props.formId}
         className="flex grow-0 flex-col gap-4 px-1 py-4"
         onSubmit={form.handleSubmit(async (data) => {
+          if (createUser.isPending) return;
+
           createUser.mutate({
             body: {
               ...data,
@@ -861,7 +868,7 @@ function NewUserForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.email", { ns: "labels" })}
-                  disabled={isDisabled}
+                  readOnly={isReadonly}
                   autoComplete="email"
                 />
               </FormControl>
@@ -882,7 +889,7 @@ function NewUserForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.username", { ns: "labels" })}
-                  disabled={isDisabled}
+                  readOnly={isReadonly}
                   autoComplete="username"
                 />
               </FormControl>
@@ -905,7 +912,7 @@ function NewUserForm(props: {
                     {...field}
                     type={showPassword ? "text" : "password"}
                     placeholder={t("display.password", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isReadonly}
                     autoComplete="new-password"
                   />
                 </FormControl>
@@ -947,7 +954,7 @@ function NewUserForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.firstName", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isReadonly}
                     autoComplete="given-name"
                   />
                 </FormControl>
@@ -965,7 +972,7 @@ function NewUserForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.lastName", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isReadonly}
                     autoComplete="family-name"
                   />
                 </FormControl>
@@ -985,7 +992,7 @@ function NewUserForm(props: {
                   placeholder={t("selectYourLocalization", {
                     ns: "messages",
                   })}
-                  disabled={isDisabled}
+                  disabled={isReadonly}
                   defaultValue={String(field.value)}
                   onValueChange={field.onChange}
                   items={languagesList.map((lang, idx) => ({
@@ -1018,7 +1025,7 @@ function NewUserForm(props: {
                   <Input
                     {...field}
                     placeholder={t("display.phoneNo", { ns: "labels" })}
-                    disabled={isDisabled}
+                    readOnly={isReadonly}
                     autoComplete="tel"
                   />
                 </FormControl>
@@ -1038,7 +1045,7 @@ function NewUserForm(props: {
                   placeholder={t("labels.selectARole", {
                     ns: "settings",
                   })}
-                  disabled={isDisabled}
+                  disabled={isReadonly}
                   defaultValue={String(field.value)}
                   onValueChange={field.onChange}
                   items={rolesList.map((role, idx) => ({
@@ -1080,7 +1087,7 @@ function NewUserForm(props: {
                       locations[idx]!.isSelected = checked;
                       field.onChange(locations);
                     }}
-                    disabled={isDisabled}
+                    disabled={isReadonly}
                   />
                 ))}
               </div>
@@ -1105,7 +1112,7 @@ function NewUserForm(props: {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  disabled={isDisabled}
+                  disabled={isReadonly}
                 />
               </FormControl>
             </FormItem>

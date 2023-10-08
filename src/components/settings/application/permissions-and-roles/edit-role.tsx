@@ -227,7 +227,6 @@ export function EditRoleDialog({
     },
   });
 
-  const disabled = createRole.isPending || updateRole.isPending;
   const isPending = createRole.isPending || updateRole.isPending;
 
   return (
@@ -250,7 +249,7 @@ export function EditRoleDialog({
             formId={formId}
             permissions={permissionsList}
             roles={roles}
-            disabled={disabled}
+            pending={isPending}
             initialData={{
               name: "",
               description: "",
@@ -275,7 +274,7 @@ export function EditRoleDialog({
             formId={formId}
             permissions={permissionsList}
             roles={roles}
-            disabled={disabled}
+            pending={isPending}
             initialData={{
               name: role.roleName,
               description: role.description ?? "",
@@ -297,6 +296,8 @@ export function EditRoleDialog({
                 (item) => !data.permissions.includes(item)
               );
 
+              if (updateRole.isPending) return;
+
               updateRole.mutate({
                 params: { roleId: props.roleId },
                 body: {
@@ -315,11 +316,12 @@ export function EditRoleDialog({
             variant="outline"
             type="button"
             onClick={() => setOpen(false)}
-            disabled={disabled}
+            disabled={isPending}
+            aria-disabled={isPending}
           >
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
-          <Button type="submit" form={formId} disabled={disabled}>
+          <Button type="submit" form={formId} aria-disabled={isPending}>
             {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })
@@ -341,7 +343,7 @@ function RoleForm(props: {
     description: string;
     permissions: number[];
   }) => void;
-  disabled?: boolean;
+  pending?: boolean;
   clientId: string;
   userId: string;
 }) {
@@ -415,7 +417,7 @@ function RoleForm(props: {
                 <Input
                   {...field}
                   placeholder={t("display.name", { ns: "labels" })}
-                  disabled={props.disabled}
+                  readOnly={props.pending}
                   autoComplete="off"
                   autoFocus
                 />
@@ -437,7 +439,7 @@ function RoleForm(props: {
                   {...field}
                   className="resize-none"
                   placeholder={t("display.description", { ns: "labels" })}
-                  disabled={props.disabled}
+                  readOnly={props.pending}
                   autoComplete="off"
                 />
               </FormControl>
@@ -457,7 +459,7 @@ function RoleForm(props: {
                 placeholder={t("labels.selectARole", {
                   ns: "settings",
                 })}
-                disabled={props.disabled}
+                disabled={props.pending}
                 defaultValue={String(shadowTemplateId)}
                 onValueChange={(val) => {
                   field.onChange(Number(val));
