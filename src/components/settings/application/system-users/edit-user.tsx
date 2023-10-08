@@ -149,7 +149,7 @@ export function EditUserDialog({
   }));
 
   const editModeDisabled = isSubmittingUpdating;
-  const createModeDisabled = isMaxUsersReached;
+  const createModeDisabled = isSubmittingUpdating || isMaxUsersReached;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -215,10 +215,19 @@ export function EditUserDialog({
             disabled={
               props.mode === "edit" ? editModeDisabled : createModeDisabled
             }
+            aria-disabled={
+              props.mode === "edit" ? editModeDisabled : createModeDisabled
+            }
           >
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
-          <Button type="submit" form={formId}>
+          <Button
+            type="submit"
+            form={formId}
+            aria-disabled={
+              props.mode === "edit" ? editModeDisabled : createModeDisabled
+            }
+          >
             {isSubmittingUpdating && (
               <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
             )}

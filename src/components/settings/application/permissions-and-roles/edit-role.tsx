@@ -317,10 +317,11 @@ export function EditRoleDialog({
             type="button"
             onClick={() => setOpen(false)}
             disabled={isPending}
+            aria-disabled={isPending}
           >
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
-          <Button type="submit" form={formId}>
+          <Button type="submit" form={formId} aria-disabled={isPending}>
             {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })

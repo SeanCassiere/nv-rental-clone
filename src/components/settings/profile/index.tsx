@@ -382,6 +382,7 @@ function ProfileForm(props: {
           type="submit"
           className="w-full lg:w-max"
           disabled={!canViewAdminTab}
+          aria-disabled={!canViewAdminTab || isSubmitBtnFrozen}
         >
           {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
           {t("buttons.saveProfileDetails", { ns: "labels" })}

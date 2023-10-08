@@ -81,11 +81,15 @@ export function DeleteRoleAlertDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={deleteRole.isPending}>
+          <AlertDialogCancel
+            disabled={deleteRole.isPending}
+            aria-disabled={deleteRole.isPending}
+          >
             {t("buttons.cancel", { ns: "labels" })}
           </AlertDialogCancel>
           <AlertDialogAction
             className={buttonVariants({ variant: "destructive" })}
+            aria-disabled={deleteRole.isPending}
             onClick={(evt) => {
               evt.preventDefault();
 
