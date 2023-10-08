@@ -46,7 +46,12 @@ export function DeleteRoleAlertDialog({
       });
     },
     onSuccess: () => {
-      // show success toast here
+      toast.success(
+        t("labelDeleted", {
+          ns: "messages",
+          label: t("labels.role", { ns: "settings" }),
+        })
+      );
 
       setOpen(false);
     },
