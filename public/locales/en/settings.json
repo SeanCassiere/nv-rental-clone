@@ -15,6 +15,7 @@
     "idConfiguration": "Number sequencing",
     "compatibilityConfiguration": "System lists",
     "resetPasswordConfirmation": "Reset password confirmation",
+    "sentResetPassword": "Reset password email sent",
     "editUserProfile": "Edit user profile",
     "newUserProfile": "New user profile",
     "accountActive": "Active account",

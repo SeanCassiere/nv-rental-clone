@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -13,7 +14,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 
 import { roleQKeys } from "@/utils/query-key";
 
@@ -34,7 +34,6 @@ export function DeleteRoleAlertDialog({
 }: DeleteRoleAlertDialogProps) {
   const { t } = useTranslation();
   const qc = useQueryClient();
-  const { toast } = useToast();
 
   const deleteRole = useMutation({
     mutationFn: apiClient.role.deleteRole,
@@ -47,16 +46,21 @@ export function DeleteRoleAlertDialog({
       });
     },
     onSuccess: () => {
+      toast.success(
+        t("labelDeleted", {
+          ns: "messages",
+          label: t("labels.role", { ns: "settings" }),
+        })
+      );
+
       setOpen(false);
     },
     onError: (err) => {
-      toast({
-        title: t("somethingWentWrong", { ns: "messages" }),
+      toast.error(t("somethingWentWrong", { ns: "messages" }), {
         description:
           err instanceof Error && "message" in err
             ? err?.message
             : t("pleaseTryAgain", { ns: "messages" }),
-        variant: "destructive",
       });
     },
     onSettled: () => {

@@ -9,6 +9,7 @@ import {
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,6 @@ import {
 } from "@/components/ui/input-select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
@@ -250,7 +250,6 @@ function EditUserForm(props: {
   setOpen: (open: boolean) => void;
 }) {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const qc = useQueryClient();
 
   const languagesList = props.languages
@@ -302,16 +301,18 @@ function EditUserForm(props: {
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
 
       if (data.status >= 200 && data.status < 300) {
-        toast({
-          title: t("labelUpdated", {
+        toast.success(
+          t("labelUpdated", {
             ns: "messages",
             label: t("titles.profile", { ns: "settings" }),
           }),
-          description: t("labelUpdatedSuccess", {
-            ns: "messages",
-            label: t("titles.profile", { ns: "settings" }),
-          }),
-        });
+          {
+            description: t("labelUpdatedSuccess", {
+              ns: "messages",
+              label: t("titles.profile", { ns: "settings" }),
+            }),
+          }
+        );
 
         props.setOpen(false);
         return;
@@ -339,43 +340,46 @@ function EditUserForm(props: {
           });
         }
 
-        toast({
-          title: t("inputValidationFailed", {
+        toast.error(
+          t("inputValidationFailed", {
             ns: "messages",
           }),
-          description: t("somethingFailedValidation", {
-            ns: "messages",
-          }),
-          variant: "destructive",
-        });
+          {
+            description: t("somethingFailedValidation", {
+              ns: "messages",
+            }),
+          }
+        );
         return;
       }
 
       // should not happen
       console.error("updateProfile mutation failed\n", data);
-      toast({
-        title: t("somethingWentWrong", {
+      toast.error(
+        t("somethingWentWrong", {
           ns: "messages",
         }),
-        description: t("pleaseTryAgain", {
-          ns: "messages",
-        }),
-        variant: "destructive",
-      });
+        {
+          description: t("pleaseTryAgain", {
+            ns: "messages",
+          }),
+        }
+      );
     },
     onError: (err) => {
       if (err instanceof Error) {
-        toast({
-          title: t("somethingWentWrong", {
+        toast.error(
+          t("somethingWentWrong", {
             ns: "messages",
           }),
-          description:
-            err?.message ||
-            t("pleaseTryAgain", {
-              ns: "messages",
-            }),
-          variant: "destructive",
-        });
+          {
+            description:
+              err?.message ||
+              t("pleaseTryAgain", {
+                ns: "messages",
+              }),
+          }
+        );
       }
     },
   });
@@ -692,7 +696,6 @@ function NewUserForm(props: {
   setOpen: (open: boolean) => void;
 }) {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const qc = useQueryClient();
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -760,16 +763,18 @@ function NewUserForm(props: {
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
 
       if (data.status >= 200 && data.status < 300) {
-        toast({
-          title: t("labelCreated", {
+        toast.success(
+          t("labelCreated", {
             ns: "messages",
             label: t("titles.profile", { ns: "settings" }),
           }),
-          description: t("labelCreated", {
-            ns: "messages",
-            label: t("titles.profile", { ns: "settings" }),
-          }),
-        });
+          {
+            description: t("labelCreated", {
+              ns: "messages",
+              label: t("titles.profile", { ns: "settings" }),
+            }),
+          }
+        );
 
         props.setOpen(false);
         return;
@@ -797,43 +802,46 @@ function NewUserForm(props: {
           });
         }
 
-        toast({
-          title: t("inputValidationFailed", {
+        toast.error(
+          t("inputValidationFailed", {
             ns: "messages",
           }),
-          description: t("somethingFailedValidation", {
-            ns: "messages",
-          }),
-          variant: "destructive",
-        });
+          {
+            description: t("somethingFailedValidation", {
+              ns: "messages",
+            }),
+          }
+        );
         return;
       }
 
       // should not happen
       console.error("createUser mutation failed\n", data);
-      toast({
-        title: t("somethingWentWrong", {
+      toast.error(
+        t("somethingWentWrong", {
           ns: "messages",
         }),
-        description: t("pleaseTryAgain", {
-          ns: "messages",
-        }),
-        variant: "destructive",
-      });
+        {
+          description: t("pleaseTryAgain", {
+            ns: "messages",
+          }),
+        }
+      );
     },
     onError: (err) => {
       if (err instanceof Error) {
-        toast({
-          title: t("somethingWentWrong", {
+        toast.error(
+          t("somethingWentWrong", {
             ns: "messages",
           }),
-          description:
-            err?.message ||
-            t("pleaseTryAgain", {
-              ns: "messages",
-            }),
-          variant: "destructive",
-        });
+          {
+            description:
+              err?.message ||
+              t("pleaseTryAgain", {
+                ns: "messages",
+              }),
+          }
+        );
       }
     },
   });

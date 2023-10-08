@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -12,7 +13,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useToast } from "@/components/ui/use-toast";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
@@ -35,21 +35,20 @@ export function ResetPasswordAlertDialog({
   ...props
 }: ResetPasswordAlertDialogProps) {
   const { t } = useTranslation();
-  const { toast } = useToast();
 
   const resetPassword = useMutation({
     mutationFn: apiClient.user.sendResetPasswordLink,
     onSuccess: () => {
+      toast.success(t("titles.sentResetPassword", { ns: "settings" }));
+
       setOpen(false);
     },
     onError: (err) => {
-      toast({
-        title: t("somethingWentWrong", { ns: "messages" }),
+      toast.error(t("somethingWentWrong", { ns: "messages" }), {
         description:
           err instanceof Error && "message" in err
             ? err?.message
             : t("pleaseTryAgain", { ns: "messages" }),
-        variant: "destructive",
       });
     },
   });
