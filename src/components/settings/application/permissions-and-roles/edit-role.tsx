@@ -113,13 +113,7 @@ export function EditRoleDialog({
           t("labelCreated", {
             ns: "messages",
             label: t("labels.role", { ns: "settings" }),
-          }),
-          {
-            description: t("labelCreatedSuccess", {
-              ns: "messages",
-              label: t("labels.role", { ns: "settings" }),
-            }),
-          }
+          })
         );
 
         setOpen(false);
@@ -192,13 +186,7 @@ export function EditRoleDialog({
           t("labelUpdated", {
             ns: "messages",
             label: t("labels.role", { ns: "settings" }),
-          }),
-          {
-            description: t("labelUpdatedSuccess", {
-              ns: "messages",
-              label: t("labels.role", { ns: "settings" }),
-            }),
-          }
+          })
         );
 
         setOpen(false);

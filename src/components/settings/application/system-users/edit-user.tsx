@@ -305,13 +305,7 @@ function EditUserForm(props: {
           t("labelUpdated", {
             ns: "messages",
             label: t("titles.profile", { ns: "settings" }),
-          }),
-          {
-            description: t("labelUpdatedSuccess", {
-              ns: "messages",
-              label: t("titles.profile", { ns: "settings" }),
-            }),
-          }
+          })
         );
 
         props.setOpen(false);
@@ -767,13 +761,7 @@ function NewUserForm(props: {
           t("labelCreated", {
             ns: "messages",
             label: t("titles.profile", { ns: "settings" }),
-          }),
-          {
-            description: t("labelCreated", {
-              ns: "messages",
-              label: t("titles.profile", { ns: "settings" }),
-            }),
-          }
+          })
         );
 
         props.setOpen(false);

@@ -146,7 +146,7 @@ function ProfileForm(props: {
 
   const { mutate, isPending } = useMutation({
     mutationFn: apiClient.user.updateProfileByUserId,
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: userQKeys.me(authParams).queryKey });
       qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
@@ -162,19 +162,15 @@ function ProfileForm(props: {
           t("labelUpdated", {
             ns: "messages",
             label: t("titles.profile", { ns: "settings" }),
-          }),
-          {
-            description: t("labelUpdatedSuccess", {
-              ns: "messages",
-              label: t("titles.profile", { ns: "settings" }),
-            }),
-          }
+          })
         );
-      } else {
-        toast.error(t("somethingWentWrong", { ns: "messages" }), {
-          description: t("pleaseTryAgain", { ns: "messages" }),
-        });
+
+        return;
       }
+
+      toast.error(t("somethingWentWrong", { ns: "messages" }), {
+        description: t("pleaseTryAgain", { ns: "messages" }),
+      });
     },
     onError: (err) => {
       if (err instanceof Error) {
