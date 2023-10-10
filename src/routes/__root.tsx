@@ -5,15 +5,11 @@ import {
   ScrollRestoration,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { useTranslation } from "react-i18next";
 import { useAuth, type AuthContextProps } from "react-oidc-context";
-import { Toaster } from "sonner";
 
 import { HeaderLayout } from "@/components/header/header-layout";
 import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
-
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
 import { getAuthToken } from "@/utils/authLocal";
 import {
@@ -118,13 +114,9 @@ export const rootRoute = routerContext.createRootRoute({
 
 function RootComponent() {
   const auth = useAuth();
-  const { i18n } = useTranslation();
 
   const isHeaderShown = auth.isAuthenticated;
   const isFreshAuthenticating = auth.isLoading && !auth.isAuthenticated;
-
-  const theme = useTernaryDarkMode();
-  const dir = i18n.dir();
 
   return (
     <>
@@ -145,7 +137,6 @@ function RootComponent() {
           <TanStackRouterDevtools position="top-right" />
         )}
       </main>
-      <Toaster theme={theme.ternaryDarkMode} dir={dir} closeButton richColors />
     </>
   );
 }

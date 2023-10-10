@@ -3,7 +3,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Router, RouterProvider } from "@tanstack/react-router";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
+import { useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
+import { Toaster } from "sonner";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
@@ -20,8 +22,9 @@ import {
 import "./i18next-config";
 
 import { useEventListener } from "@/hooks/internal/useEventListener";
+import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
-import { APP_VERSION, IS_LOCAL_DEV } from "./utils/constants";
+import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 
 export const router = new Router({
   routeTree,
@@ -69,14 +72,21 @@ export default function App() {
 }
 
 function RouterWithAuth() {
+  const { i18n } = useTranslation();
   const auth = useAuth();
+  const theme = useTernaryDarkMode();
+
+  const dir = i18n.dir();
 
   return (
-    <RouterProvider
-      router={router}
-      defaultPreload="intent"
-      context={{ auth }}
-    />
+    <>
+      <RouterProvider
+        router={router}
+        defaultPreload="intent"
+        context={{ auth }}
+      />
+      <Toaster theme={theme.ternaryDarkMode} dir={dir} closeButton richColors />
+    </>
   );
 }
 
