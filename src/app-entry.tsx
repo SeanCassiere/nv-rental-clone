@@ -1,4 +1,4 @@
-import { Suspense, useRef } from "react";
+import * as React from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Router, RouterProvider } from "@tanstack/react-router";
@@ -55,10 +55,10 @@ export default function App() {
     >
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>
-          <Suspense fallback={<LoadingPlaceholder />}>
+          <React.Suspense fallback={<LoadingPlaceholder />}>
             <CacheDocumentFocusChecker />
             <RouterWithAuth />
-          </Suspense>
+          </React.Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
             position="bottom"
@@ -91,7 +91,7 @@ function RouterWithAuth() {
 }
 
 function CacheDocumentFocusChecker() {
-  const documentRef = useRef<Document>(document);
+  const documentRef = React.useRef<Document>(document);
 
   const { checkCacheStatus } = useCacheBuster();
 
