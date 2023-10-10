@@ -3,17 +3,14 @@ import {
   Outlet,
   RouterContext,
   ScrollRestoration,
+  useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
-import { Toaster } from "sonner";
+import { useAuth, type AuthContextProps } from "react-oidc-context";
 
 import { HeaderLayout } from "@/components/header/header-layout";
 import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
-
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
 import { getAuthToken } from "@/utils/authLocal";
 import {
@@ -29,6 +26,7 @@ import { queryClient } from "@/tanstack-query-config";
 interface MyRouterContext {
   apiClient: typeof apiClient;
   queryClient: typeof queryClient;
+  auth: AuthContextProps;
 }
 
 const routerContext = new RouterContext<MyRouterContext>();
@@ -115,24 +113,35 @@ export const rootRoute = routerContext.createRootRoute({
   component: RootComponent,
 });
 
+const exceptionRoutes = ["/oidc-callback", "/styles"] as const;
+
 function RootComponent() {
+  const routerStore = useRouterState();
+  const routerMatches = routerStore.matches.map((route) => route.routeId);
+
+  // check if the routerMatches array contains any of the exception routes
+  const isExceptionRoute = exceptionRoutes.some((route) =>
+    routerMatches.includes(route)
+  );
+
   const auth = useAuth();
-  const { i18n } = useTranslation();
 
-  const isHeaderShown = auth.isAuthenticated;
+  const clientId = auth.user?.profile?.navotar_clientid;
+  const userId = auth.user?.profile?.navotar_userid;
+
+  const isHeaderShown =
+    auth.isAuthenticated && clientId && userId && !isExceptionRoute;
   const isFreshAuthenticating = auth.isLoading && !auth.isAuthenticated;
-
-  const theme = useTernaryDarkMode();
-  const dir = i18n.dir();
 
   return (
     <>
       {isHeaderShown && <HeaderLayout />}
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
         <ScrollRestoration getKey={(location) => location.pathname} />
-        {isFreshAuthenticating ? (
-          <LoadingPlaceholder />
-        ) : (
+        {isExceptionRoute && !isFreshAuthenticating && <Outlet />}
+        {isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
+        {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
+        {!isExceptionRoute && !isFreshAuthenticating && (
           <>
             <HiddenFeatureSetter />
             <Suspense fallback={<LoadingPlaceholder />}>
@@ -144,7 +153,6 @@ function RootComponent() {
           <TanStackRouterDevtools position="top-right" />
         )}
       </main>
-      <Toaster theme={theme.ternaryDarkMode} dir={dir} closeButton richColors />
     </>
   );
 }
