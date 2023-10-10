@@ -1,4 +1,4 @@
-import type { UseQueryOptions } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
 
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 
@@ -108,7 +108,7 @@ export const clientQKeys = {
 export const userQKeys = {
   rootKey: "users",
   me: (p: Auth) => {
-    return {
+    return queryOptions({
       queryKey: [userQKeys.rootKey, p.userId, "profile"],
       queryFn: () =>
         apiClient.user.getProfileByUserId({
@@ -123,10 +123,10 @@ export const userQKeys = {
         }),
       enabled: !!p.clientId && !!p.userId,
       staleTime: 1000 * 60 * 1, // 1 minute
-    } satisfies UseQueryOptions;
+    });
   },
   languages: (p: Auth) => {
-    return {
+    return queryOptions({
       queryKey: [userQKeys.rootKey, "languages"],
       queryFn: () =>
         apiClient.user.getLanguages({
@@ -137,10 +137,10 @@ export const userQKeys = {
         }),
       enabled: !!p.clientId && !!p.userId,
       staleTime: 1000 * 60 * 1, // 1 minute
-    } satisfies UseQueryOptions;
+    });
   },
   permissions: (p: Auth) => {
-    return {
+    return queryOptions({
       queryKey: [userQKeys.rootKey, p.userId, "permissions"],
       queryFn: () =>
         apiClient.user.getPermissionForUserId({
@@ -151,7 +151,7 @@ export const userQKeys = {
         }),
       enabled: !!p.clientId && !!p.userId,
       staleTime: 1000 * 60 * 5, // 5 minutes
-    } satisfies UseQueryOptions;
+    });
   },
   profile: (userId: string) => [userQKeys.rootKey, userId, "profile"],
   updatingProfile: (userId: string) => [
@@ -215,7 +215,7 @@ export const locationQKeys = {
 export const roleQKeys = {
   rootKey: "roles",
   all: (p: Auth) => {
-    return {
+    return queryOptions({
       queryKey: [roleQKeys.rootKey, "all"],
       queryFn: () =>
         apiClient.role.getList({
@@ -223,10 +223,10 @@ export const roleQKeys = {
         }),
       staleTime: 1000 * 60 * 1, // 1 minute,
       enabled: isEnabled(p),
-    } satisfies UseQueryOptions;
+    });
   },
   getById: (p: Auth & { roleId: string }) => {
-    return {
+    return queryOptions({
       queryKey: [roleQKeys.rootKey, p.roleId],
       queryFn: () =>
         apiClient.role.getById({
@@ -235,15 +235,17 @@ export const roleQKeys = {
         }),
       staleTime: 1000 * 60 * 5, // 5 minutes
       enabled: isEnabled(p),
-    } satisfies UseQueryOptions;
+    });
   },
-  permissionsList: (p: Auth) => ({
-    queryKey: [roleQKeys.rootKey, "permissions"],
-    queryFn: () =>
-      apiClient.role.getPermissions({
-        query: { clientId: p.clientId, userId: p.userId },
-      }),
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    enabled: isEnabled(p),
-  }),
+  permissionsList: (p: Auth) => {
+    return queryOptions({
+      queryKey: [roleQKeys.rootKey, "permissions"],
+      queryFn: () =>
+        apiClient.role.getPermissions({
+          query: { clientId: p.clientId, userId: p.userId },
+        }),
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      enabled: isEnabled(p),
+    });
+  },
 };
