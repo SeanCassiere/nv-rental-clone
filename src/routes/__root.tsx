@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
+import { useAuth, type AuthContextProps } from "react-oidc-context";
 import { Toaster } from "sonner";
 
 import { HeaderLayout } from "@/components/header/header-layout";
@@ -29,6 +29,7 @@ import { queryClient } from "@/tanstack-query-config";
 interface MyRouterContext {
   apiClient: typeof apiClient;
   queryClient: typeof queryClient;
+  auth: AuthContextProps;
 }
 
 const routerContext = new RouterContext<MyRouterContext>();

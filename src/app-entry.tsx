@@ -3,7 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Router, RouterProvider } from "@tanstack/react-router";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
-import { AuthProvider } from "react-oidc-context";
+import { AuthProvider, useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
@@ -32,6 +32,7 @@ export const router = new Router({
   context: {
     apiClient,
     queryClient,
+    auth: undefined!, // will be set by an AuthWrapper
   },
 });
 
@@ -41,7 +42,7 @@ declare module "@tanstack/react-router" {
   }
 }
 
-const App = () => {
+export default function App() {
   return (
     <CacheBuster
       isEnabled={!IS_LOCAL_DEV}
@@ -53,7 +54,7 @@ const App = () => {
         <AuthProvider {...reactOidcContextConfig}>
           <Suspense fallback={<LoadingPlaceholder />}>
             <CacheDocumentFocusChecker />
-            <RouterProvider router={router} defaultPreload="intent" />
+            <RouterWithAuth />
           </Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
@@ -65,11 +66,21 @@ const App = () => {
       </QueryClientProvider>
     </CacheBuster>
   );
-};
+}
 
-export default App;
+function RouterWithAuth() {
+  const auth = useAuth();
 
-const CacheDocumentFocusChecker = () => {
+  return (
+    <RouterProvider
+      router={router}
+      defaultPreload="intent"
+      context={{ auth }}
+    />
+  );
+}
+
+function CacheDocumentFocusChecker() {
   const documentRef = useRef<Document>(document);
 
   const { checkCacheStatus } = useCacheBuster();
@@ -86,4 +97,4 @@ const CacheDocumentFocusChecker = () => {
   useEventListener("visibilitychange", onVisibilityChange, documentRef);
 
   return null;
-};
+}
