@@ -113,7 +113,7 @@ export const rootRoute = routerContext.createRootRoute({
   component: RootComponent,
 });
 
-const exceptionRoutes = ["/oidc-callback"] as const;
+const exceptionRoutes = ["/oidc-callback", "/styles"] as const;
 
 function RootComponent() {
   const routerStore = useRouterState();
