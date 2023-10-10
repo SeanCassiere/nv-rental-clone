@@ -3,6 +3,7 @@ import {
   Outlet,
   RouterContext,
   ScrollRestoration,
+  useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth, type AuthContextProps } from "react-oidc-context";
@@ -112,10 +113,24 @@ export const rootRoute = routerContext.createRootRoute({
   component: RootComponent,
 });
 
+const exceptionRoutes = ["/oidc-callback"] as const;
+
 function RootComponent() {
+  const routerStore = useRouterState();
+  const routerMatches = routerStore.matches.map((route) => route.routeId);
+
+  // check if the routerMatches array contains any of the exception routes
+  const isExceptionRoute = exceptionRoutes.some((route) =>
+    routerMatches.includes(route)
+  );
+
   const auth = useAuth();
 
-  const isHeaderShown = auth.isAuthenticated;
+  const clientId = auth.user?.profile?.navotar_clientid;
+  const userId = auth.user?.profile?.navotar_userid;
+
+  const isHeaderShown =
+    auth.isAuthenticated && clientId && userId && !isExceptionRoute;
   const isFreshAuthenticating = auth.isLoading && !auth.isAuthenticated;
 
   return (
@@ -123,9 +138,10 @@ function RootComponent() {
       {isHeaderShown && <HeaderLayout />}
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
         <ScrollRestoration getKey={(location) => location.pathname} />
-        {isFreshAuthenticating ? (
-          <LoadingPlaceholder />
-        ) : (
+        {isExceptionRoute && !isFreshAuthenticating && <Outlet />}
+        {isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
+        {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
+        {!isExceptionRoute && !isFreshAuthenticating && (
           <>
             <HiddenFeatureSetter />
             <Suspense fallback={<LoadingPlaceholder />}>
