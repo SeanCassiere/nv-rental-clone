@@ -1,15 +1,17 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { ChevronRightIcon } from "lucide-react";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+
+import { searchReportsRoute } from "@/routes/reports/search-reports-route";
 
 import type { TReportsListItem } from "@/schemas/report";
 
@@ -23,6 +25,9 @@ export default function SearchReportsPage() {
 
   const clientId = auth.user?.profile?.navotar_clientid || "";
   const userId = auth.user?.profile?.navotar_userid || "";
+  const ALL_KEY = "All";
+
+  const { category = ALL_KEY } = useSearch({ from: searchReportsRoute.id });
 
   useDocumentTitle(titleMaker("Reports"));
 
@@ -44,7 +49,12 @@ export default function SearchReportsPage() {
 
       <React.Suspense fallback={<Skeleton className="h-24" />}>
         {clientId && userId && (
-          <ReportsList clientId={clientId} userId={userId} />
+          <ReportsList
+            clientId={clientId}
+            userId={userId}
+            currentCategory={category}
+            ALL_KEY={ALL_KEY}
+          />
         )}
       </React.Suspense>
     </ProtectorShield>
@@ -54,10 +64,16 @@ export default function SearchReportsPage() {
 function ReportsList({
   clientId,
   userId,
+  ALL_KEY,
+  currentCategory,
 }: {
   clientId: string;
   userId: string;
+  currentCategory: string;
+  ALL_KEY: string;
 }) {
+  const navigate = useNavigate();
+
   const query = useSuspenseQuery(
     reportQKeys.getReports({ auth: { clientId, userId } })
   );
@@ -79,35 +95,76 @@ function ReportsList({
     {} as Record<string, TReportsListItem[]>
   );
 
+  const chips = [ALL_KEY, ...Object.keys(grouped)];
+
   return (
-    <section className="mx-auto mb-6 mt-6 flex max-w-full flex-col gap-5 px-2 pt-1.5 sm:mx-4 sm:px-1">
-      {[...Object.entries(grouped)].map(([category, list], category_idx) => (
-        <div key={`category_${category_idx}_${category}`}>
-          <h4 className="mb-3 text-xl font-medium">{category}</h4>
-          <ul className="grid w-full grid-cols-1 gap-x-3 gap-y-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {list.map((report, report_idx) => (
-              <li
-                key={`${category}_${category_idx}_${report.name}_${report_idx}`}
-              >
-                <Link
-                  to="/reports/$reportId"
-                  params={{ reportId: report.reportId }}
-                >
-                  <Card className="flex h-full flex-col justify-between shadow-none transition-all hover:shadow">
-                    <CardHeader className="flex h-full flex-row items-center justify-between space-y-0 px-5 py-4 sm:px-4 sm:py-3">
-                      <CardTitle className="text-sm font-normal sm:text-base">
-                        {report.name}
-                      </CardTitle>
-                      <ChevronRightIcon className="h-3.5 w-3.5 text-muted-foreground sm:h-4 sm:w-4" />
-                      <span className="sr-only">{report.name} icon</span>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <section className="mx-auto mt-4 flex max-w-full flex-col gap-5 px-2 pt-1.5 sm:mx-4 sm:px-1">
+      <Tabs
+        value={currentCategory}
+        onValueChange={(value) => {
+          navigate({
+            to: "/reports",
+            search: (prev) => ({
+              ...prev,
+              category: value === ALL_KEY ? undefined : value,
+            }),
+          });
+        }}
+      >
+        <TabsList className="mb-4 w-full sm:max-w-max">
+          {chips.map((chip, idx) => (
+            <TabsTrigger key={`tab-trigger-${idx}`} value={chip}>
+              {chip}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {chips.map((chip, idx) => (
+          <TabsContent
+            key={`tab-content-${idx}`}
+            value={chip}
+            className="flex flex-col gap-5"
+          >
+            {[...Object.entries(grouped)]
+              .filter(([category]) =>
+                currentCategory !== ALL_KEY
+                  ? category.includes(currentCategory)
+                  : true
+              )
+              .map(([category, list], category_idx) => (
+                <div key={`category_${category_idx}_${category}`}>
+                  <h4 className="mb-3 text-base font-medium sm:text-xl">
+                    {category}
+                  </h4>
+                  <ul
+                    className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    aria-label={`${category} reports`}
+                  >
+                    {list.map((report, report_idx) => (
+                      <li
+                        key={`${category}_${category_idx}_${report.name}_${report_idx}`}
+                        aria-label={`${report.name}`}
+                      >
+                        <Link
+                          to="/reports/$reportId"
+                          params={{ reportId: report.reportId }}
+                          className="flex items-center justify-between border border-border/50 px-4 py-2.5 outline-none ring-0 transition-all focus-within:ring-0 hover:border-primary hover:text-foreground hover:shadow focus-visible:border-primary focus-visible:text-foreground focus-visible:shadow focus-visible:ring-0"
+                        >
+                          <span className="text-sm sm:text-base">
+                            {report.name}
+                          </span>
+                          <div>
+                            <ChevronRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            <span className="sr-only">{report.name} icon</span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+          </TabsContent>
+        ))}
+      </Tabs>
     </section>
   );
 }
