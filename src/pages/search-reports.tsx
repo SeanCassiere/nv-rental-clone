@@ -136,7 +136,7 @@ function ReportsList({
                       {category}
                     </h4>
                     <ul
-                      className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-x-2 lg:grid-cols-3 xl:grid-cols-4"
+                      className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-x-2 lg:grid-cols-3"
                       aria-label={`${category} reports`}
                     >
                       {list.map((report, report_idx) => (
