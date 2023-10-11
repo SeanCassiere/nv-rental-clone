@@ -249,3 +249,19 @@ export const roleQKeys = {
     });
   },
 };
+
+export const reportQKeys = {
+  getReports: ({ auth }: { auth: Auth }) =>
+    queryOptions({
+      queryKey: ["reports", "list"],
+      queryFn: () =>
+        apiClient.report.getList({
+          query: {
+            clientId: auth.clientId,
+            userId: auth.userId,
+          },
+        }),
+      staleTime: 1000 * 60 * 1, // 1 minutes
+      enabled: isEnabled(auth),
+    }),
+};
