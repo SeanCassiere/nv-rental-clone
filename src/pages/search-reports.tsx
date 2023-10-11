@@ -119,52 +119,52 @@ function ReportsList({
           ))}
         </TabsList>
         {chips.map((chip, idx) => (
-          <TabsContent
-            key={`tab-content-${idx}`}
-            value={chip}
-            className="flex flex-col gap-5"
-          >
-            {[...Object.entries(grouped)]
-              .filter(([category]) =>
-                currentCategory !== ALL_KEY
-                  ? category.includes(currentCategory)
-                  : true
-              )
-              .map(([category, list], category_idx) => (
-                <div
-                  key={`category_${category_idx}_${category}`}
-                  className="sm:mb-3"
-                >
-                  <h4 className="mb-3 text-base font-medium sm:text-xl">
-                    {category}
-                  </h4>
-                  <ul
-                    className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-x-2 lg:grid-cols-3 xl:grid-cols-4"
-                    aria-label={`${category} reports`}
+          <TabsContent key={`tab-content-${idx}`} value={chip}>
+            <div className="mb-6 flex flex-col gap-5">
+              {[...Object.entries(grouped)]
+                .filter(([category]) =>
+                  currentCategory !== ALL_KEY
+                    ? category.includes(currentCategory)
+                    : true
+                )
+                .map(([category, list], category_idx) => (
+                  <div
+                    key={`category_${category_idx}_${category}`}
+                    className="sm:mb-3"
                   >
-                    {list.map((report, report_idx) => (
-                      <li
-                        key={`${category}_${category_idx}_${report.name}_${report_idx}`}
-                        aria-label={`${report.name}`}
-                      >
-                        <Link
-                          to="/reports/$reportId"
-                          params={{ reportId: report.reportId }}
-                          className="flex items-center justify-between rounded border border-border/80 px-5 py-3.5 text-foreground/80 outline-none ring-0 transition-all focus-within:ring-0 hover:text-primary focus-visible:text-primary/80 focus-visible:ring-0 sm:justify-start sm:rounded-none sm:border-transparent sm:border-b-muted sm:px-2 sm:py-1.5 sm:hover:border-b-primary sm:focus-visible:border-b-primary/80"
+                    <h4 className="mb-3 text-base font-medium sm:text-xl">
+                      {category}
+                    </h4>
+                    <ul
+                      className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-x-2 lg:grid-cols-3 xl:grid-cols-4"
+                      aria-label={`${category} reports`}
+                    >
+                      {list.map((report, report_idx) => (
+                        <li
+                          key={`${category}_${category_idx}_${report.name}_${report_idx}`}
+                          aria-label={`${report.name}`}
                         >
-                          <span className="text-sm sm:text-base">
-                            {report.name}
-                          </span>
-                          <div>
-                            <ChevronRightIcon className="ml-1 h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                            <span className="sr-only">{report.name} icon</span>
-                          </div>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                          <Link
+                            to="/reports/$reportId"
+                            params={{ reportId: report.reportId }}
+                            className="flex items-center justify-between rounded border border-border/80 px-5 py-3.5 text-foreground/80 outline-none ring-0 transition-all focus-within:ring-0 hover:text-primary focus-visible:text-primary/80 focus-visible:ring-0 sm:justify-start sm:rounded-none sm:border-transparent sm:border-b-muted sm:px-2 sm:py-1.5 sm:hover:border-b-primary sm:focus-visible:border-b-primary/80"
+                          >
+                            <span className="text-sm sm:text-base">
+                              {report.name}
+                            </span>
+                            <div>
+                              <ChevronRightIcon className="ml-1 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                              <span className="sr-only">
+                                {report.name} icon
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+            </div>
           </TabsContent>
         ))}
       </Tabs>
