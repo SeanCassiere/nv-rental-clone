@@ -30,6 +30,10 @@ import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 import { loggedOutRoute } from "@/routes/logged-out";
 import { oidcCallbackRoute } from "@/routes/oidc-callback";
 import { reportsRoute } from "@/routes/reports";
+import {
+  reportPathIdRoute,
+  viewReportByIdRoute,
+} from "@/routes/reports/report-id-route";
 import { searchReportsRoute } from "@/routes/reports/search-reports-route";
 import { reservationsRoute } from "@/routes/reservations";
 import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
@@ -119,8 +123,10 @@ export const routeTree = rootRoute.addChildren([
     ]),
   ]),
   reportsRoute.addChildren([
-    // /reports
-    searchReportsRoute,
+    searchReportsRoute, // /reports
+    reportPathIdRoute.addChildren([
+      viewReportByIdRoute, // /reports/:reportId
+    ]),
   ]),
   settingsRoute.addChildren([
     mainSettingsRoute, // /settings

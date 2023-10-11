@@ -89,7 +89,10 @@ function ReportsList({
               <li
                 key={`${category}_${category_idx}_${report.name}_${report_idx}`}
               >
-                <Link>
+                <Link
+                  to="/reports/$reportId"
+                  params={{ reportId: report.reportId }}
+                >
                   <Card className="flex h-full flex-col justify-between shadow-none transition-all hover:shadow">
                     <CardHeader className="flex h-full flex-row items-center justify-between space-y-0 px-5 py-4 sm:px-4 sm:py-3">
                       <CardTitle className="text-sm font-normal sm:text-base">
