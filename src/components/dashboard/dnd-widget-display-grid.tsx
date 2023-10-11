@@ -25,9 +25,10 @@ import { cn } from "@/utils";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
 const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));
-const QuickCheckinAgreement = lazy(
+const QuickCheckinAgreementWidget = lazy(
   () => import("./widgets/quick-checkin-agreement")
 );
+const QuickLookupWidget = lazy(() => import("./widgets/quick-lookup"));
 
 interface DashboardDndWidgetGridProps {
   widgets: DashboardWidgetItemParsed[];
@@ -174,7 +175,9 @@ function renderWidgetView(
     case "SalesStatus":
       return <SalesStatusWidget locations={locations} />;
     case "QuickCheckin":
-      return <QuickCheckinAgreement />;
+      return <QuickCheckinAgreementWidget />;
+    case "QuickLookup":
+      return <QuickLookupWidget />;
     default:
       return (
         <>
