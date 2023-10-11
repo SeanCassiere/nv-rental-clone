@@ -34,6 +34,18 @@ import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetR
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import {
+  normalizeAgreementListSearchParams,
+  normalizeCustomerListSearchParams,
+  normalizeReservationListSearchParams,
+  normalizeVehicleListSearchParams,
+} from "@/utils/normalize-search-params";
+import {
+  agreementQKeys,
+  customerQKeys,
+  fleetQKeys,
+  reservationQKeys,
+} from "@/utils/query-key";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickLookupWidget = () => {
@@ -96,15 +108,29 @@ export function QuickLookupForm() {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
-
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+
+        const normalized = normalizeCustomerListSearchParams({
+          page: variables.page,
+          size: variables.pageSize,
+          filters: { Phone: variables.Phone },
+        });
+        const qk = customerQKeys.search({
+          pagination: {
+            page: variables.page,
+            pageSize: variables.pageSize,
+          },
+          filters: normalized.searchFilters,
+        });
+        qc.setQueryData(qk, () => data);
+
         navigate({
           to: "/customers",
           search: () => ({
             page: variables.page,
             pageSize: variables.pageSize,
-            filters: { Phone: variables.Phone },
+            filters: normalized.searchFilters,
           }),
         });
         return;
@@ -114,7 +140,7 @@ export function QuickLookupForm() {
       navigate({
         to: "/customers/$customerId",
         params: { customerId: String(customer.CustomerId) },
-        search: () => ({}),
+        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {
@@ -132,12 +158,27 @@ export function QuickLookupForm() {
 
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+
+        const normalized = normalizeAgreementListSearchParams({
+          page: variables.page,
+          size: variables.pageSize,
+          filters: { AgreementNumber: variables.AgreementNumber },
+        });
+        const qk = agreementQKeys.search({
+          pagination: {
+            page: variables.page,
+            pageSize: variables.pageSize,
+          },
+          filters: normalized.searchFilters,
+        });
+        qc.setQueryData(qk, () => data);
+
         navigate({
           to: "/agreements",
           search: () => ({
             page: variables.page,
             pageSize: variables.pageSize,
-            filters: { AgreementNumber: variables.AgreementNumber },
+            filters: normalized.searchFilters,
           }),
         });
         return;
@@ -147,7 +188,7 @@ export function QuickLookupForm() {
       navigate({
         to: "/agreements/$agreementId",
         params: { agreementId: String(agreement.id) },
-        search: () => ({}),
+        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {
@@ -165,12 +206,27 @@ export function QuickLookupForm() {
 
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+
+        const normalized = normalizeReservationListSearchParams({
+          page: variables.page,
+          size: variables.pageSize,
+          filters: { ReservationNumber: variables.ReservationNumber },
+        });
+        const qk = reservationQKeys.search({
+          pagination: {
+            page: variables.page,
+            pageSize: variables.pageSize,
+          },
+          filters: normalized.searchFilters,
+        });
+        qc.setQueryData(qk, () => data);
+
         navigate({
           to: "/reservations",
           search: () => ({
             page: variables.page,
             pageSize: variables.pageSize,
-            filters: { ReservationNumber: variables.ReservationNumber },
+            filters: normalized.searchFilters,
           }),
         });
         return;
@@ -180,7 +236,7 @@ export function QuickLookupForm() {
       navigate({
         to: "/reservations/$reservationId",
         params: { reservationId: String(reservation.id) },
-        search: () => ({}),
+        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {
@@ -198,12 +254,27 @@ export function QuickLookupForm() {
 
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+
+        const normalized = normalizeVehicleListSearchParams({
+          page: variables.page,
+          size: variables.pageSize,
+          filters: { LicenseNo: variables.LicenseNo },
+        });
+        const qk = fleetQKeys.search({
+          pagination: {
+            page: variables.page,
+            pageSize: variables.pageSize,
+          },
+          filters: normalized.searchFilters,
+        });
+        qc.setQueryData(qk, () => data);
+
         navigate({
           to: "/fleet",
           search: () => ({
             page: variables.page,
             pageSize: variables.pageSize,
-            filters: { LicenseNo: variables.LicenseNo },
+            filters: normalized.searchFilters,
           }),
         });
         return;
@@ -213,7 +284,7 @@ export function QuickLookupForm() {
       navigate({
         to: "/fleet/$vehicleId",
         params: { vehicleId: String(vehicle.id) },
-        search: () => ({}),
+        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {

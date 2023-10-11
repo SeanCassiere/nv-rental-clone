@@ -17,6 +17,7 @@ export const VehicleFiltersSchema = z.object({
   VehicleTypeId: z.coerce.string().optional(),
   OwningLocationId: z.coerce.string().optional(),
   CurrentLocationId: z.coerce.string().optional(),
+  LicenseNo: z.string().optional(),
 });
 
 export const VehicleSearchQuerySchema = z.object({
