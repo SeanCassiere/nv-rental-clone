@@ -109,6 +109,7 @@ export function normalizeReservationListSearchParams(
     CheckinLocationId: filters?.CheckinLocationId || undefined,
     ReservationTypes: filters?.ReservationTypes || undefined,
     Keyword: filters?.Keyword || undefined,
+    ReservationNumber: filters?.ReservationNumber || undefined,
   };
 
   const pageNumber = page || 1;

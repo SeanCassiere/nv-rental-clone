@@ -1,9 +1,11 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -26,6 +28,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
+import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
+import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
+import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
+
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
+
 const QuickLookupWidget = () => {
   return (
     <>
@@ -43,16 +53,27 @@ export default React.memo(QuickLookupWidget);
 
 function buildFormSchema() {
   return z.object({
-    refType: z.string(),
-    vehicleLicenseNo: z.string(),
-    agreementNo: z.string(),
-    reservationNo: z.string(),
-    customerPhoneNo: z.string(),
+    accessor: z.string(),
+    vehicleLicenseNo: z.string().optional(),
+    agreementNo: z.string().optional(),
+    reservationNo: z.string().optional(),
+    customerPhoneNo: z.string().optional(),
   });
 }
 
 export function QuickLookupForm() {
   const { t } = useTranslation();
+  const auth = useAuth();
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
+
+  const rowCountStr =
+    getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.tableRowCount) ||
+    APP_DEFAULTS.tableRowCount;
+  const defaultRowCount = parseInt(rowCountStr, 10);
 
   const form = useForm({
     resolver: zodResolver(buildFormSchema()),
@@ -68,17 +89,205 @@ export function QuickLookupForm() {
 
   const accessor = form.watch("accessor");
 
-  const isSearching = false;
+  const customers = useMutation({
+    mutationFn: fetchCustomersListModded,
+    onSuccess: (data, variables) => {
+      if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
+        toast.error(t("notFound", { ns: "messages" }));
+        return;
+      }
+
+      if (data.body.length > 1) {
+        toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+        navigate({
+          to: "/customers",
+          search: () => ({
+            page: variables.page,
+            pageSize: variables.pageSize,
+            filters: { Phone: variables.Phone },
+          }),
+        });
+        return;
+      }
+
+      const customer = data.body[0];
+      navigate({
+        to: "/customers/$customerId",
+        params: { customerId: String(customer.CustomerId) },
+        search: () => ({}),
+      });
+    },
+    onError: (err) => {
+      toast.error(err?.message ?? t("somethingWentWrong", { ns: "messages" }));
+    },
+  });
+
+  const agreements = useMutation({
+    mutationFn: fetchAgreementsListModded,
+    onSuccess: (data, variables) => {
+      if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
+        toast.error(t("notFound", { ns: "messages" }));
+        return;
+      }
+
+      if (data.body.length > 1) {
+        toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+        navigate({
+          to: "/agreements",
+          search: () => ({
+            page: variables.page,
+            pageSize: variables.pageSize,
+            filters: { AgreementNumber: variables.AgreementNumber },
+          }),
+        });
+        return;
+      }
+
+      const agreement = data.body[0];
+      navigate({
+        to: "/agreements/$agreementId",
+        params: { agreementId: String(agreement.id) },
+        search: () => ({}),
+      });
+    },
+    onError: (err) => {
+      toast.error(err?.message ?? t("somethingWentWrong", { ns: "messages" }));
+    },
+  });
+
+  const reservations = useMutation({
+    mutationFn: fetchReservationsListModded,
+    onSuccess: (data, variables) => {
+      if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
+        toast.error(t("notFound", { ns: "messages" }));
+        return;
+      }
+
+      if (data.body.length > 1) {
+        toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+        navigate({
+          to: "/reservations",
+          search: () => ({
+            page: variables.page,
+            pageSize: variables.pageSize,
+            filters: { ReservationNumber: variables.ReservationNumber },
+          }),
+        });
+        return;
+      }
+
+      const reservation = data.body[0];
+      navigate({
+        to: "/reservations/$reservationId",
+        params: { reservationId: String(reservation.id) },
+        search: () => ({}),
+      });
+    },
+    onError: (err) => {
+      toast.error(err?.message ?? t("somethingWentWrong", { ns: "messages" }));
+    },
+  });
+
+  const vehicles = useMutation({
+    mutationFn: fetchVehiclesListModded,
+    onSuccess: (data, variables) => {
+      if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
+        toast.error(t("notFound", { ns: "messages" }));
+        return;
+      }
+
+      if (data.body.length > 1) {
+        toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
+        navigate({
+          to: "/fleet",
+          search: () => ({
+            page: variables.page,
+            pageSize: variables.pageSize,
+            filters: { LicenseNo: variables.LicenseNo },
+          }),
+        });
+        return;
+      }
+
+      const vehicle = data.body[0];
+      navigate({
+        to: "/fleet/$vehicleId",
+        params: { vehicleId: String(vehicle.id) },
+        search: () => ({}),
+      });
+    },
+    onError: (err) => {
+      toast.error(err?.message ?? t("somethingWentWrong", { ns: "messages" }));
+    },
+  });
+
+  const isSearching =
+    customers.isPending ||
+    agreements.isPending ||
+    reservations.isPending ||
+    vehicles.isPending;
 
   return (
     <Form {...form}>
       <form
         className="grid grid-cols-1 gap-y-2 sm:grid-cols-5 sm:gap-x-4"
-        onSubmit={form.handleSubmit((values) => {
-          console.log(
-            "🚀 ~ file: quick-lookup.tsx:50 ~ onSubmit={form.handleSubmit ~ values:",
-            values
+        onSubmit={form.handleSubmit(async (values) => {
+          if (isSearching) return;
+
+          const { accessor, ...rest } = values;
+          const searchKey = Object.keys(rest).find(
+            (key) => (rest as Record<string, string>)[key]
           );
+          if (!searchKey) return;
+          const searchValue = (rest as Record<string, string>)[searchKey];
+          if (!searchValue) return;
+
+          switch (accessor) {
+            case "customerPhoneNo":
+              customers.mutate({
+                clientId,
+                userId,
+                page: 1,
+                pageSize: defaultRowCount,
+                Phone: searchValue,
+              });
+              break;
+            case "agreementNo":
+              agreements.mutate({
+                clientId,
+                userId,
+                page: 1,
+                pageSize: defaultRowCount,
+                currentDate: new Date(),
+                AgreementNumber: searchValue,
+              });
+              break;
+            case "reservationNo":
+              reservations.mutate({
+                clientId,
+                userId,
+                page: 1,
+                pageSize: defaultRowCount,
+                clientDate: new Date(),
+                ReservationNumber: searchValue,
+              });
+              break;
+            case "vehicleLicenseNo":
+              vehicles.mutate({
+                clientId,
+                userId,
+                page: 1,
+                pageSize: defaultRowCount,
+                LicenseNo: searchValue,
+              });
+              break;
+            default:
+              console.warn(
+                "unknown accessor provided to the QuickLookupForm:",
+                accessor
+              );
+              break;
+          }
         })}
       >
         <FormField
@@ -86,10 +295,7 @@ export function QuickLookupForm() {
           name="accessor"
           render={({ field }) => (
             <FormItem className="col-span-2">
-              <FormLabel className="sr-only">
-                Type
-                {/* {t("display.vehicleNo", { ns: "labels" })} */}
-              </FormLabel>
+              <FormLabel className="sr-only">Type</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
