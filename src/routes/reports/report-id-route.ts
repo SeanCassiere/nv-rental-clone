@@ -1,4 +1,4 @@
-import { Route } from "@tanstack/react-router";
+import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { reportsRoute } from ".";
@@ -17,9 +17,6 @@ export const reportPathIdRoute = new Route({
 export const viewReportByIdRoute = new Route({
   getParentRoute: () => reportPathIdRoute,
   path: "/",
-  component: View,
+}).update({
+  component: lazyRouteComponent(() => import("@/pages/view-report")),
 });
-
-function View() {
-  return "ReportView";
-}
