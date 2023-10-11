@@ -1,6 +1,7 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { getAuthToken } from "@/utils/authLocal";
+import { reportQKeys } from "@/utils/query-key";
 
 import { reportsRoute } from ".";
 
@@ -11,25 +12,20 @@ export const searchReportsRoute = new Route({
     const auth = getAuthToken();
 
     if (auth) {
+      const clientId = auth.profile.navotar_clientid;
+      const userId = auth.profile.navotar_userid;
+
       const promises: Promise<unknown>[] = [];
 
-      // get columns
-      // const columnsKey = reservationQKeys.columns();
-      // promises.push(
-      //   queryClient.ensureQueryData({
-      //     queryKey: columnsKey,
-      //     queryFn: () =>
-      //       fetchModuleColumnsModded({
-      //         query: {
-      //           clientId: auth.profile.navotar_clientid,
-      //           userId: auth.profile.navotar_userid,
-      //           module: "reservation",
-      //         },
-      //       }),
-      //   })
-      // );
+      // get reports list
+      promises.push(
+        queryClient.ensureQueryData(
+          reportQKeys.getReports({ auth: { clientId, userId } })
+        )
+      );
       await Promise.all(promises);
     }
+
     return {};
   },
 }).update({
