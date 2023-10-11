@@ -1,0 +1,7 @@
+{
+  "messages": {
+    "rentalAgreementNotFound": "Rental agreement not found",
+    "foundMultipleMatches": "Found multiple matches for the rental agreement",
+    "enterVehicleOrAgreementNo": "Please enter a vehicle or agreement number"
+  }
+}

@@ -27,6 +27,7 @@ export const AgreementFiltersSchema = z
     ReturnLocationId: z.coerce.string().optional(),
     AgreementTypes: z.coerce.string().optional(),
     Keyword: z.coerce.string().optional(),
+    AgreementNumber: z.string().optional(),
   })
   .superRefine(({ StartDate, EndDate }, ctx) => {
     if (StartDate && EndDate) {

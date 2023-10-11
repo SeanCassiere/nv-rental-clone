@@ -46,6 +46,7 @@ const rootAgreementContract = c.router({
       ReturnLocationId: z.string().optional(),
       AgreementTypes: z.string().optional(),
       Keyword: z.string().optional(),
+      AgreementNumber: z.string().optional(),
     }),
     responses: {
       200: AgreementListItemListSchema,

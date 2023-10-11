@@ -5,6 +5,7 @@ import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { SalesAreaChart } from "@/components/dashboard/widgets/sales-status";
 import { VehicleStatusPieChart } from "@/components/dashboard/widgets/vehicle-status";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
@@ -12,6 +13,8 @@ import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
 import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
 import { cn } from "@/utils";
+
+import { QuickCheckinAgreementForm } from "./widgets/quick-checkin-agreement";
 
 interface V2DashboardContentProps {
   locations: string[];
@@ -23,6 +26,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
   const canViewRentalSummary = usePermission("VIEW_RENTAL_SUMMARY?");
+  const canViewQuickCheckin = usePermission("VIEW_QUICK_CHECKIN");
 
   return (
     <section
@@ -33,14 +37,20 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
       {canViewRentalSummary || canViewVehicleStatus || canViewSalesStatus ? (
         <HeroBlock locations={locations} />
       ) : null}
-      <Card className="shadow-none">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base font-medium">Widget 1</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="">No content</p>
-        </CardContent>
-      </Card>
+      {canViewQuickCheckin && (
+        <Card className="shadow-none">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">
+              Quick rental checkin
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <React.Suspense fallback={<Skeleton className="h-24" />}>
+              <QuickCheckinAgreementForm />
+            </React.Suspense>
+          </CardContent>
+        </Card>
+      )}
       <Card className="shadow-none">
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-medium">Widget 2</CardTitle>
