@@ -93,7 +93,8 @@ export const AppNavigation = () => {
     {
       name: "Reports",
       props: {
-        to: "/reports" as any,
+        to: "/reports",
+        activeOptions: defaultActiveOptions,
       },
     },
     {
