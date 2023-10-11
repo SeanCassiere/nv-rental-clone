@@ -18,6 +18,7 @@ const rootReportContract = c.router({
   getById: {
     method: "GET",
     path: "/v3/reports/:reportId",
+    query: UserAndClientIdAuthSchema,
     responses: {
       200: ReportDetailSchema,
       401: StructuredErrorSchema,
