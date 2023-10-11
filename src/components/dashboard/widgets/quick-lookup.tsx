@@ -332,6 +332,7 @@ export function QuickLookupForm() {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    type="search"
                     placeholder={t("display.phoneNo", { ns: "labels" })}
                     autoComplete="off"
                     {...field}
@@ -353,6 +354,7 @@ export function QuickLookupForm() {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    type="search"
                     placeholder={t("display.reservationNo", { ns: "labels" })}
                     autoComplete="off"
                     {...field}
@@ -374,6 +376,7 @@ export function QuickLookupForm() {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    type="search"
                     placeholder={t("display.agreementNo", { ns: "labels" })}
                     autoComplete="off"
                     {...field}
@@ -395,6 +398,7 @@ export function QuickLookupForm() {
                 </FormLabel>
                 <FormControl>
                   <Input
+                    type="search"
                     placeholder={t("display.licenseNo", { ns: "labels" })}
                     autoComplete="off"
                     {...field}

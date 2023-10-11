@@ -159,6 +159,7 @@ export function QuickCheckinAgreementForm() {
               </FormLabel>
               <FormControl>
                 <Input
+                  type="search"
                   placeholder={t("display.vehicleNo", { ns: "labels" })}
                   autoComplete="off"
                   {...field}
@@ -178,6 +179,7 @@ export function QuickCheckinAgreementForm() {
               </FormLabel>
               <FormControl>
                 <Input
+                  type="search"
                   placeholder={t("display.agreementNo", { ns: "labels" })}
                   autoComplete="off"
                   {...field}
