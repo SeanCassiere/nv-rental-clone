@@ -1,6 +1,10 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -15,6 +19,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
+
+import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { agreementQKeys } from "@/utils/query-key";
+import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickCheckinAgreementWidget = ({
   locations,
@@ -49,6 +59,13 @@ export function QuickCheckinAgreementForm({
 }: {
   locations: string[];
 }) {
+  const auth = useAuth();
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
+
   const form = useForm({
     resolver: zodResolver(buildFormSchema()),
     defaultValues: {
@@ -57,11 +74,62 @@ export function QuickCheckinAgreementForm({
     },
   });
 
+  const rowCountStr =
+    getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.tableRowCount) ||
+    APP_DEFAULTS.tableRowCount;
+  const defaultRowCount = parseInt(rowCountStr, 10);
+
+  const search = useMutation({
+    mutationFn: fetchAgreementsListModded,
+    onSuccess: (data, variables) => {
+      const { clientId, userId, currentDate, page, pageSize, ...filters } =
+        variables;
+      const createdQueryKey = agreementQKeys.search({
+        pagination: { page, pageSize: pageSize },
+        filters: filters,
+      });
+
+      qc.setQueryData(createdQueryKey, () => data);
+
+      if (data.status !== 200 || data.body.length === 0) {
+        toast.error("Rental agreement not found");
+        return;
+      }
+
+      if (data.body.length > 1) {
+        toast.message("Found multiple matches");
+        form.reset();
+        navigate({
+          to: "/agreements",
+          search: () => ({
+            page,
+            pageSize,
+            filters,
+          }),
+        });
+        return;
+      }
+
+      if (!data.body[0]) return;
+
+      const agreement = data.body[0];
+      const agreementId = agreement.id;
+
+      navigate({
+        to: "/agreements/$agreementId/check-in",
+        params: { agreementId: String(agreementId) },
+        search: () => ({ stage: "rental-information" }),
+      });
+    },
+  });
+
   return (
     <Form {...form}>
       <form
         className="grid grid-cols-1 gap-y-2 sm:grid-cols-5 sm:gap-x-4"
         onSubmit={form.handleSubmit(async (values) => {
+          if (search.isPending) return;
+
           // check if any of the values have a string length greater than 0
           // if so, then we can assume that the user has entered some data
           // and we can proceed to the next step
@@ -73,15 +141,16 @@ export function QuickCheckinAgreementForm({
             return;
           }
 
-          console.log(
-            "🚀 ~ file: quick-checkin-agreement.tsx:65 ~ onSubmit={form.handleSubmit ~ values:",
-            values
-          );
-          console.log(
-            "🚀 ~ file: quick-checkin-agreement.tsx:65 ~ onSubmit={form.handleSubmit ~ locations:",
-            locations
-          );
-          //
+          search.mutate({
+            clientId,
+            userId,
+            currentDate: new Date(),
+            page: 1,
+            pageSize: defaultRowCount,
+            Statuses: ["2"],
+            ...(values.vehicleNo && { VehicleNo: values.vehicleNo }),
+            ...(values.agreementNo && { AgreementNumber: values.agreementNo }),
+          });
         })}
       >
         <FormField
@@ -111,6 +180,9 @@ export function QuickCheckinAgreementForm({
           )}
         />
         <Button type="submit" className="mt-2">
+          {search.isPending && (
+            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+          )}
           Checkin
         </Button>
       </form>
