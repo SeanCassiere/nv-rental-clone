@@ -1,6 +1,6 @@
 import { c } from "@/api/c";
 
-import { ReportsListSchema } from "@/schemas/report";
+import { ReportDetailSchema, ReportsListSchema } from "@/schemas/report";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
@@ -11,6 +11,15 @@ const rootReportContract = c.router({
     query: UserAndClientIdAuthSchema,
     responses: {
       200: ReportsListSchema,
+      401: StructuredErrorSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  getById: {
+    method: "GET",
+    path: "/v3/reports/:reportId",
+    responses: {
+      200: ReportDetailSchema,
       401: StructuredErrorSchema,
       404: StructuredErrorSchema,
     },
