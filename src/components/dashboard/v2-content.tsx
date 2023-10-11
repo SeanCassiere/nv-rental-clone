@@ -2,6 +2,8 @@ import React from "react";
 import add from "date-fns/add";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
+import { QuickCheckinAgreementForm } from "@/components/dashboard/widgets/quick-checkin-agreement";
+import { QuickLookupForm } from "@/components/dashboard/widgets/quick-lookup";
 import { SalesAreaChart } from "@/components/dashboard/widgets/sales-status";
 import { VehicleStatusPieChart } from "@/components/dashboard/widgets/vehicle-status";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,8 +16,6 @@ import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardS
 
 import { cn } from "@/utils";
 
-import { QuickCheckinAgreementForm } from "./widgets/quick-checkin-agreement";
-
 interface V2DashboardContentProps {
   locations: string[];
 }
@@ -27,6 +27,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
   const canViewRentalSummary = usePermission("VIEW_RENTAL_SUMMARY?");
   const canViewQuickCheckin = usePermission("VIEW_QUICK_CHECKIN");
+  const canViewQuickLookup = usePermission("VIEW_QUICK_LOOKUP");
 
   return (
     <section
@@ -51,14 +52,18 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
           </CardContent>
         </Card>
       )}
-      <Card className="shadow-none">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base font-medium">Widget 2</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="">No content</p>
-        </CardContent>
-      </Card>
+      {canViewQuickLookup && (
+        <Card className="shadow-none">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">
+              Quick lookup
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <QuickLookupForm />
+          </CardContent>
+        </Card>
+      )}
     </section>
   );
 }

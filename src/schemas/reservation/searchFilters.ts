@@ -16,6 +16,7 @@ export const ReservationFiltersSchema = z
     CheckinLocationId: z.coerce.string().optional(),
     ReservationTypes: z.coerce.string().optional(),
     Keyword: z.coerce.string().optional(),
+    ReservationNumber: z.string().optional(),
   })
   .superRefine(({ CreatedDateFrom, CreatedDateTo }, ctx) => {
     if (CreatedDateFrom && CreatedDateTo) {

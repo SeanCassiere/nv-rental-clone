@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import { agreementQKeys } from "@/utils/query-key";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
@@ -76,15 +77,6 @@ export function QuickCheckinAgreementForm() {
   const search = useMutation({
     mutationFn: fetchAgreementsListModded,
     onSuccess: (data, variables) => {
-      const { clientId, userId, currentDate, page, pageSize, ...filters } =
-        variables;
-      const createdQueryKey = agreementQKeys.search({
-        pagination: { page, pageSize: pageSize },
-        filters: filters,
-      });
-
-      qc.setQueryData(createdQueryKey, () => data);
-
       if (data.status !== 200 || data.body.length === 0) {
         toast.error(t("messages.rentalAgreementNotFound", { ns: "dashboard" }));
         return;
@@ -93,6 +85,20 @@ export function QuickCheckinAgreementForm() {
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
         form.reset();
+
+        const { clientId, userId, currentDate, page, pageSize, ...filters } =
+          variables;
+        const normalized = normalizeAgreementListSearchParams({
+          page,
+          size: pageSize,
+          filters,
+        });
+        const createdQueryKey = agreementQKeys.search({
+          pagination: { page, pageSize: pageSize },
+          filters: normalized.searchFilters,
+        });
+        qc.setQueryData(createdQueryKey, () => data);
+
         navigate({
           to: "/agreements",
           search: () => ({
@@ -159,6 +165,7 @@ export function QuickCheckinAgreementForm() {
               </FormLabel>
               <FormControl>
                 <Input
+                  type="search"
                   placeholder={t("display.vehicleNo", { ns: "labels" })}
                   autoComplete="off"
                   {...field}
@@ -178,6 +185,7 @@ export function QuickCheckinAgreementForm() {
               </FormLabel>
               <FormControl>
                 <Input
+                  type="search"
                   placeholder={t("display.agreementNo", { ns: "labels" })}
                   autoComplete="off"
                   {...field}

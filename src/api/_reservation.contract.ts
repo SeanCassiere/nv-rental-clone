@@ -42,6 +42,7 @@ const rootReservationContract = c.router({
       CheckinLocationId: z.string().optional(),
       ReservationTypes: z.string().optional(),
       Keyword: z.string().optional(),
+      ReservationNumber: z.string().optional(),
     }),
     responses: {
       200: ReservationListItemListSchema,
