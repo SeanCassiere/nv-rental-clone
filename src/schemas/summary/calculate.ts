@@ -52,4 +52,6 @@ export const CalculateRentalSummaryInputSchema = z.object({
   isCheckin: z.boolean(),
   odometerOut: z.number(),
   odometerIn: z.number(),
+  fuelLevelIn: z.string(),
+  fuelLevelOut: z.string(),
 });

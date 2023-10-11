@@ -68,6 +68,17 @@ const defaultCompletionStages: TRentalCompleteStage = {
   payments: true,
   others: true,
 };
+const defaultCheckinCompletionStages: TRentalCompleteStage = {
+  rental: false,
+  customer: true,
+  insurance: true,
+  vehicle: true,
+  rates: true,
+  taxes: true,
+  miscCharges: true,
+  payments: true,
+  others: true,
+};
 
 export type TRentalCompleteStage = {
   rental: boolean;
@@ -116,8 +127,9 @@ const AddRentalParentForm = ({
   const isEdit = Boolean(referenceId);
   const [hasEdited, setHasEdited] = useState(false);
 
-  const [creationStagesComplete, setCreationStageComplete] =
-    useState<TRentalCompleteStage>(defaultCompletionStages);
+  const [creationStagesComplete, setCreationStageComplete] = useState(() =>
+    isCheckin ? defaultCheckinCompletionStages : defaultCompletionStages
+  );
 
   const [agreementRentalInformation, setAgreementRentalInformation] =
     useState<AgreementRentalInformationSchemaParsed | null>(null);
@@ -297,13 +309,15 @@ const AddRentalParentForm = ({
                   data &&
                   prevRentalData.checkoutLocation !== data.checkoutLocation
                 ) {
-                  setCreationStageComplete((prev) => ({
-                    ...prev,
-                    miscCharges: false,
-                    rates: false,
-                    vehicle: false,
-                    taxes: false,
-                  }));
+                  setCreationStageComplete((prev) => {
+                    return {
+                      ...prev,
+                      miscCharges: false,
+                      rates: false,
+                      vehicle: false,
+                      taxes: false,
+                    };
+                  });
                   setAgreementVehicleInformation(null);
                   setRateDetails(["", null]);
                   setSelectedMiscCharges([]);
@@ -674,9 +688,7 @@ const AddRentalParentForm = ({
 
   // fetching the mandatory misc. charges
   const miscChargesAgreementReady =
-    Boolean(agreementRentalInformation) &&
-    Boolean(agreementVehicleInformation) &&
-    isEdit === false;
+    Boolean(agreementRentalInformation) && Boolean(agreementVehicleInformation);
   const miscChargesReservationReady = false;
 
   const getMiscChargesQuery = useGetMiscCharges({
@@ -690,6 +702,9 @@ const AddRentalParentForm = ({
         agreementRentalInformation?.checkinDate ?? new Date()
       ),
       Active: "true",
+      ...(module === "agreement" && referenceNumber
+        ? { AgreementId: String(referenceId) }
+        : {}),
     },
     enabled:
       module === "agreement"
@@ -801,7 +816,7 @@ const AddRentalParentForm = ({
     input: {
       isCheckin: isCheckin,
       startDate: agreementRentalInformation?.checkoutDate || new Date(),
-      endDate: agreementRentalInformation?.checkoutDate || new Date(),
+      endDate: agreementRentalInformation?.checkinDate || new Date(),
       checkoutLocationId: agreementRentalInformation?.checkoutLocation || 0,
       checkinLocationId: agreementRentalInformation?.checkinLocation || 0,
       miscCharges: selectedMiscCharges,
@@ -815,9 +830,9 @@ const AddRentalParentForm = ({
       securityDeposit: "",
       additionalCharge: 0,
       unTaxableAdditional: 0,
-      fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
       takeSize: 0,
-      fuelLevelIn: "",
+      fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
+      fuelLevelIn: agreementVehicleInformation?.fuelOut || "Full", // this should be changed for checkin
       odometerOut: agreementVehicleInformation?.odometerOut || 0,
       odometerIn: 0,
       agreementId: parseInt(referenceId ? String(referenceId) : "0"),

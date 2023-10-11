@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import formatISO from "date-fns/formatISO";
 import { useAuth } from "react-oidc-context";
 
 import type { RentalRateParsed } from "@/schemas/rate";
@@ -69,14 +68,8 @@ export function usePostCalculateRentalSummaryAmounts(opts: {
         locationId: checkoutLocationId,
         locationToId: checkinLocationId,
         vehicleTypeId: input.vehicleTypeId,
-        startDate: formatISO(startDate, {
-          format: "extended",
-          representation: "complete",
-        }),
-        endDate: formatISO(endDate, {
-          format: "extended",
-          representation: "complete",
-        }),
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
         miscCharges: input.miscCharges.map((charge) => ({
           id: charge.id,
           locationMiscChargeId: charge.locationMiscChargeId ?? 0,
@@ -114,6 +107,8 @@ export function usePostCalculateRentalSummaryAmounts(opts: {
         isCheckin: input.isCheckin,
         odometerOut: input.odometerOut,
         odometerIn: input.odometerIn,
+        fuelLevelIn: input.fuelLevelIn,
+        fuelLevelOut: input.fuelLevelOut,
       };
 
       return apiClient.summary.getLiveCalculationsForRental({ body });

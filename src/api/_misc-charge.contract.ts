@@ -16,6 +16,7 @@ const rootMiscChargeContract = c.router({
       CheckinDate: z.string().optional(),
       LocationId: z.number().optional(),
       VehicleTypeId: z.number().optional(),
+      AgreementId: z.string().optional(),
     }),
     responses: {
       200: z.array(MiscChargeListItemSchema.passthrough()),
