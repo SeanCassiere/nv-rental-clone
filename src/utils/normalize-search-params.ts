@@ -42,6 +42,7 @@ export function normalizeAgreementListSearchParams(
     ReturnLocationId: filters?.ReturnLocationId || undefined,
     AgreementTypes: filters?.AgreementTypes || undefined,
     Keyword: filters?.Keyword || undefined,
+    AgreementNumber: filters?.AgreementNumber || undefined,
   };
 
   const pageNumber = page || 1;
