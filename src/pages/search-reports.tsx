@@ -131,12 +131,15 @@ function ReportsList({
                   : true
               )
               .map(([category, list], category_idx) => (
-                <div key={`category_${category_idx}_${category}`}>
+                <div
+                  key={`category_${category_idx}_${category}`}
+                  className="sm:mb-3"
+                >
                   <h4 className="mb-3 text-base font-medium sm:text-xl">
                     {category}
                   </h4>
                   <ul
-                    className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-0 lg:grid-cols-3 xl:grid-cols-4"
+                    className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-x-2 lg:grid-cols-3 xl:grid-cols-4"
                     aria-label={`${category} reports`}
                   >
                     {list.map((report, report_idx) => (
@@ -147,13 +150,13 @@ function ReportsList({
                         <Link
                           to="/reports/$reportId"
                           params={{ reportId: report.reportId }}
-                          className="flex items-center justify-between rounded border border-border/50 px-5 py-3.5 outline-none ring-0 transition-all focus-within:ring-0 hover:border-primary hover:text-foreground hover:shadow focus-visible:border-primary focus-visible:text-foreground focus-visible:shadow focus-visible:ring-0 sm:rounded-none sm:px-4 sm:py-2.5"
+                          className="flex items-center justify-between rounded border border-border/80 px-5 py-3.5 text-foreground/80 outline-none ring-0 transition-all focus-within:ring-0 hover:text-primary focus-visible:text-primary/80 focus-visible:ring-0 sm:justify-start sm:rounded-none sm:border-transparent sm:border-b-muted sm:px-2 sm:py-1.5 sm:hover:border-b-primary sm:focus-visible:border-b-primary/80"
                         >
                           <span className="text-sm sm:text-base">
                             {report.name}
                           </span>
                           <div>
-                            <ChevronRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            <ChevronRightIcon className="ml-1 h-3.5 w-3.5 sm:h-4 sm:w-4" />
                             <span className="sr-only">{report.name} icon</span>
                           </div>
                         </Link>
