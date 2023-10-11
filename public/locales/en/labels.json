@@ -31,7 +31,8 @@
     "description": "Description",
     "copyFromExisting": "Copy from existing",
     "vehicleNo": "Vehicle no.",
-    "agreementNo": "Agreement no."
+    "agreementNo": "Agreement no.",
+    "reservationNo": "Reservation no."
   },
   "buttons": {
     "save": "Save",
@@ -43,6 +44,7 @@
     "saveAndContinue": "Save and continue",
     "moreActions": "More actions",
     "search": "Search",
-    "checkin": "Checkin"
+    "checkin": "Checkin",
+    "lookup": "Lookup"
   }
 }
