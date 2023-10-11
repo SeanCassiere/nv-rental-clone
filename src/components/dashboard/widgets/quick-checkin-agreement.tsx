@@ -158,7 +158,11 @@ export function QuickCheckinAgreementForm() {
                 {t("display.vehicleNo", { ns: "labels" })}
               </FormLabel>
               <FormControl>
-                <Input placeholder="Vehicle no." {...field} />
+                <Input
+                  placeholder={t("display.vehicleNo", { ns: "labels" })}
+                  autoComplete="off"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -173,7 +177,11 @@ export function QuickCheckinAgreementForm() {
                 {t("display.agreementNo", { ns: "labels" })}
               </FormLabel>
               <FormControl>
-                <Input placeholder="Agreement no." {...field} />
+                <Input
+                  placeholder={t("display.agreementNo", { ns: "labels" })}
+                  autoComplete="off"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
