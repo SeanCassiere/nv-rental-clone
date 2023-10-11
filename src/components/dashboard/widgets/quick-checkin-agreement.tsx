@@ -27,11 +27,7 @@ import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { agreementQKeys } from "@/utils/query-key";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
-const QuickCheckinAgreementWidget = ({
-  locations,
-}: {
-  locations: string[];
-}) => {
+const QuickCheckinAgreementWidget = () => {
   return (
     <>
       <CardHeader className="pb-2">
@@ -40,7 +36,7 @@ const QuickCheckinAgreementWidget = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <QuickCheckinAgreementForm locations={locations} />
+        <QuickCheckinAgreementForm />
       </CardContent>
     </>
   );
@@ -55,11 +51,7 @@ function buildFormSchema() {
   });
 }
 
-export function QuickCheckinAgreementForm({
-  locations,
-}: {
-  locations: string[];
-}) {
+export function QuickCheckinAgreementForm() {
   const { t } = useTranslation();
   const auth = useAuth();
   const qc = useQueryClient();

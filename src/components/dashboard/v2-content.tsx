@@ -46,7 +46,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
           </CardHeader>
           <CardContent>
             <React.Suspense fallback={<Skeleton className="h-24" />}>
-              <QuickCheckinAgreementForm locations={locations} />
+              <QuickCheckinAgreementForm />
             </React.Suspense>
           </CardContent>
         </Card>

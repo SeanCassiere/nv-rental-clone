@@ -174,7 +174,7 @@ function renderWidgetView(
     case "SalesStatus":
       return <SalesStatusWidget locations={locations} />;
     case "QuickCheckin":
-      return <QuickCheckinAgreement locations={locations} />;
+      return <QuickCheckinAgreement />;
     default:
       return (
         <>
