@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -59,6 +60,7 @@ export function QuickCheckinAgreementForm({
 }: {
   locations: string[];
 }) {
+  const { t } = useTranslation();
   const auth = useAuth();
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -92,12 +94,12 @@ export function QuickCheckinAgreementForm({
       qc.setQueryData(createdQueryKey, () => data);
 
       if (data.status !== 200 || data.body.length === 0) {
-        toast.error("Rental agreement not found");
+        toast.error(t("messages.rentalAgreementNotFound", { ns: "dashboard" }));
         return;
       }
 
       if (data.body.length > 1) {
-        toast.message("Found multiple matches");
+        toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
         form.reset();
         navigate({
           to: "/agreements",
@@ -137,7 +139,9 @@ export function QuickCheckinAgreementForm({
             (value) => value.length > 0
           );
           if (!hasData) {
-            toast.error('Enter either "Agreement no." or "Vehicle no."');
+            toast.error(
+              t("messages.enterVehicleOrAgreementNo", { ns: "dashboard" })
+            );
             return;
           }
 
@@ -158,7 +162,9 @@ export function QuickCheckinAgreementForm({
           name="vehicleNo"
           render={({ field }) => (
             <FormItem className="col-span-2">
-              <FormLabel className="sr-only">Vehicle no.</FormLabel>
+              <FormLabel className="sr-only">
+                {t("display.vehicleNo", { ns: "labels" })}
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Vehicle no." {...field} />
               </FormControl>
@@ -171,7 +177,9 @@ export function QuickCheckinAgreementForm({
           name="agreementNo"
           render={({ field }) => (
             <FormItem className="col-span-2">
-              <FormLabel className="sr-only">Agreement no.</FormLabel>
+              <FormLabel className="sr-only">
+                {t("display.agreementNo", { ns: "labels" })}
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Agreement no." {...field} />
               </FormControl>
@@ -183,7 +191,7 @@ export function QuickCheckinAgreementForm({
           {search.isPending && (
             <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
           )}
-          Checkin
+          {t("buttons.checkin", { ns: "labels" })}
         </Button>
       </form>
     </Form>

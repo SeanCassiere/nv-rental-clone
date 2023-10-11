@@ -29,7 +29,9 @@
     "systemGenerated": "System generated",
     "userGenerated": "User generated",
     "description": "Description",
-    "copyFromExisting": "Copy from existing"
+    "copyFromExisting": "Copy from existing",
+    "vehicleNo": "Vehicle no.",
+    "agreementNo": "Agreement no."
   },
   "buttons": {
     "save": "Save",
@@ -39,6 +41,8 @@
     "saveProfileDetails": "Save profile details",
     "saveChanges": "Save changes",
     "saveAndContinue": "Save and continue",
-    "moreActions": "More actions"
+    "moreActions": "More actions",
+    "search": "Search",
+    "checkin": "Checkin"
   }
 }

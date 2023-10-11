@@ -1,9 +1,11 @@
+import enDashboard from "../public/locales/en/dashboard.json";
 import enLabels from "../public/locales/en/labels.json";
 import enMessages from "../public/locales/en/messages.json";
 import enSettings from "../public/locales/en/settings.json";
 import enTranslation from "../public/locales/en/translation.json";
 import {
   formatNsResources,
+  i18nextNsDashboard,
   i18nextNsDefault,
   i18nextNsFormat,
   i18nextNsLabels,
@@ -14,6 +16,7 @@ import {
 
 const resources = {
   [i18nextNsFormat]: formatNsResources,
+  [i18nextNsDashboard]: enDashboard,
   [i18nextNsTranslation]: enTranslation,
   [i18nextNsSettings]: enSettings,
   [i18nextNsMessages]: enMessages,

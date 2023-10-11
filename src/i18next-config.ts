@@ -34,6 +34,7 @@ export function getDateFnsLocale(lng?: string) {
 
 export const i18nextNsTranslation = "translation";
 export const i18nextNsSettings = "settings";
+export const i18nextNsDashboard = "dashboard";
 export const i18nextNsMessages = "messages";
 export const i18nextNsLabels = "labels";
 export const i18nextNsFormat = "format"; // do not add this to the list of namespaces to prevent a network fetch
@@ -191,6 +192,7 @@ i18next
     defaultNS: i18nextNsDefault,
     ns: [
       i18nextNsTranslation,
+      i18nextNsDashboard,
       i18nextNsSettings,
       i18nextNsMessages,
       i18nextNsLabels,
