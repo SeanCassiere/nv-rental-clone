@@ -61,6 +61,19 @@ export default function SearchReportsPage() {
   );
 }
 
+const PAYMENT_BREAKDOWN_REPORT_ID = "117";
+const BUSINESS_SUMMARY_REPORT_ID = "116";
+const DAILY_BUSINESS_REPORT_ID = "195";
+
+function tenantReportFilterFn(report: TReportsListItem) {
+  const tenantReports = [
+    PAYMENT_BREAKDOWN_REPORT_ID,
+    BUSINESS_SUMMARY_REPORT_ID,
+    DAILY_BUSINESS_REPORT_ID,
+  ];
+  return !tenantReports.includes(report.reportId);
+}
+
 function ReportsList({
   clientId,
   userId,
@@ -79,8 +92,9 @@ function ReportsList({
   );
 
   const reports = query.data?.status === 200 ? query.data.body : [];
+  const tenantFiltered = reports.filter(tenantReportFilterFn);
 
-  const grouped = reports.reduce(
+  const grouped = tenantFiltered.reduce(
     (grouping, report) => {
       const category = report.reportCategory ?? "Uncategorized";
 
