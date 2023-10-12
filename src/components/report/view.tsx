@@ -55,13 +55,17 @@ export const ViewReport = () => {
       </section>
 
       <div>
-        {isPending && <p>Loading...</p>}
+        {isPending && <p className="mx-4 mt-4">Loading...</p>}
         {resultState.status === "idle" && (
-          <p>Click the Run button to generate the report.</p>
+          <p className="mx-4 mt-4">
+            Click the Run button to generate the report.
+          </p>
         )}
         {resultState.status === "error" && <p>{resultState.error}</p>}
         {resultState.status === "success" && (
-          <pre>{JSON.stringify(resultState.rows, null, 2)}</pre>
+          <pre className="mx-4 mt-4 max-w-xs overflow-x-scroll text-sm sm:max-w-lg">
+            {JSON.stringify(resultState.rows, null, 2)}
+          </pre>
         )}
       </div>
       {/*  */}
