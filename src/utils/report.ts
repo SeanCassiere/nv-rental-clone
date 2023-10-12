@@ -10,8 +10,12 @@ import subDays from "date-fns/subDays";
 import subMonths from "date-fns/subMonths";
 import subWeeks from "date-fns/subWeeks";
 import subYears from "date-fns/subYears";
+import { z } from "zod";
 
 import type { TReportDetail } from "@/schemas/report";
+
+const stringBoolean = (value: unknown) =>
+  z.enum(["0", "1"]).catch("0").parse(value);
 
 /**
  * @param date
@@ -28,6 +32,8 @@ export function makeInitialSearchCriteria(
         case "Date":
           acc[criteria.name] = getInitialDateValue(criteria);
           break;
+        case "CheckBox":
+          acc[criteria.name] = stringBoolean(criteria?.defaultValue);
         default:
           acc[criteria.name] = criteria.defaultValue ?? "";
       }
