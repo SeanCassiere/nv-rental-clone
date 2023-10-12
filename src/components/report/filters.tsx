@@ -39,7 +39,7 @@ export const ReportFilters = () => {
         return (
           <li
             key={key}
-            className="flex h-8 items-center"
+            className="flex h-10 items-center sm:h-8"
             aria-label={displayName}
           >
             {Comp}

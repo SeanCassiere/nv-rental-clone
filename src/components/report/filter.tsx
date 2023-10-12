@@ -37,14 +37,14 @@ export function DateReportFilter(props: ReportFilterProps) {
   }
 
   return (
-    <>
+    <span className="flex w-full justify-between">
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             size="sm"
             className={cn(
-              "h-8 whitespace-nowrap border-dashed",
+              "flex w-full justify-start whitespace-nowrap border-dashed",
               baseState && clearable ? "border-r-0" : ""
             )}
           >
@@ -87,7 +87,7 @@ export function DateReportFilter(props: ReportFilterProps) {
         <Button
           size="sm"
           variant="outline"
-          className="-ml-2 h-8 border-l-0 border-dashed pl-2.5"
+          className="-ml-2 border-l-0 border-dashed pl-2.5"
           onClick={() => {
             setCriteriaValue(props.accessor, "");
           }}
@@ -95,6 +95,6 @@ export function DateReportFilter(props: ReportFilterProps) {
           <XIcon className="h-3 w-3" />
         </Button>
       )}
-    </>
+    </span>
   );
 }
