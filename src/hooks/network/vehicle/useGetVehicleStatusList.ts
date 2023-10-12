@@ -5,7 +5,9 @@ import { fleetQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
 
-export function useGetVehicleStatusList() {
+export function useGetVehicleStatusList(opts?: { enabled?: boolean }) {
+  const { enabled = true } = opts || {};
+
   const auth = useAuth();
   const query = useQuery({
     queryKey: fleetQKeys.statuses(),
@@ -18,7 +20,7 @@ export function useGetVehicleStatusList() {
           },
         })
         .then((res) => (res.status === 200 ? res.body : [])),
-    enabled: auth.isAuthenticated,
+    enabled: auth.isAuthenticated && enabled,
     staleTime: 1000 * 60 * 1,
   });
   return query;

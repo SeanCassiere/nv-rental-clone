@@ -5,7 +5,8 @@ import { vehicleTypeQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
 
-export function useGetVehicleTypesLookupList() {
+export function useGetVehicleTypesLookupList(opts?: { enabled?: boolean }) {
+  const { enabled = true } = opts || {};
   const auth = useAuth();
   const query = useQuery({
     queryKey: vehicleTypeQKeys.lookup(),
@@ -18,7 +19,7 @@ export function useGetVehicleTypesLookupList() {
           },
         })
         .then((res) => (res.status === 200 ? res.body : [])),
-    enabled: auth.isAuthenticated,
+    enabled: auth.isAuthenticated && enabled,
     staleTime: 1000 * 60 * 1, // 5 minute
   });
   return query;
