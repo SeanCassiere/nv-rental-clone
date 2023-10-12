@@ -64,17 +64,13 @@ export const ViewReport = () => {
         <Separator className="mt-3.5" />
       </section>
 
-      <div>
-        {isPending && <p className="mx-4 mt-4">Loading...</p>}
-        {resultState.status === "idle" && (
-          <p className="mx-4 mt-4">
-            Click the Run button to generate the report.
-          </p>
-        )}
-        {resultState.status === "error" && <p>{resultState.error}</p>}
-        {resultState.status === "success" && <PresentationView />}
-      </div>
-      {/*  */}
+      {resultState.status === "idle" && (
+        <p className="mx-2 mt-4 block sm:mx-5">
+          Click the Run button to generate the report.
+        </p>
+      )}
+      {resultState.status === "error" && <p>{resultState.error}</p>}
+      {resultState.status === "success" && <PresentationView />}
     </>
   );
 };
