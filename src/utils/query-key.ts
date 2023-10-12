@@ -266,7 +266,7 @@ export const reportQKeys = {
     }),
   getDetailsById: ({ auth, reportId }: { auth: Auth; reportId: string }) =>
     queryOptions({
-      queryKey: ["reports", reportId, "details"],
+      queryKey: ["reports", reportId],
       queryFn: () =>
         apiClient.report.getById({ params: { reportId }, query: auth }),
       staleTime: 1000 * 60 * 1, // 1 minutes
