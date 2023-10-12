@@ -9,7 +9,9 @@ interface ReportContextProps {
   clientId: string;
   reportId: string;
   report: TReportDetail;
+  initialSearchCriteria: Record<string, string>;
   searchCriteria: Record<string, string>;
+  setCriteriaValue: (accessor: string, value: string) => void;
   filtersList: TReportDetail["searchCriteria"];
   resetSearchCriteria: () => void;
 }
@@ -39,6 +41,13 @@ export function ReportContextProvider(
     setSearchCriteria(initialSearchCriteria);
   }, [initialSearchCriteria]);
 
+  const setCriteriaValue = React.useCallback(
+    (accessor: string, value: string) => {
+      setSearchCriteria((prev) => ({ ...prev, [accessor]: value }));
+    },
+    []
+  );
+
   return (
     <reportContext.Provider
       value={{
@@ -46,9 +55,11 @@ export function ReportContextProvider(
         userId: props.userId,
         reportId: props.reportId,
         report: props.report,
+        initialSearchCriteria: initialSearchCriteria,
         searchCriteria: searchCriteria,
         filtersList: filtersList,
         resetSearchCriteria: resetSearchCriteria,
+        setCriteriaValue: setCriteriaValue,
       }}
     >
       {props.children}

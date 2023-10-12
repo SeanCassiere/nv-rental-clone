@@ -6,9 +6,12 @@ import { Button } from "@/components/ui/button";
 
 import { useReportContext } from "@/hooks/context/view-report";
 
+import { DateReportFilter } from "./filter";
+
 export const ReportFilters = () => {
   const { t } = useTranslation();
-  const { filtersList, resetSearchCriteria } = useReportContext();
+  const { filtersList, resetSearchCriteria, searchCriteria } =
+    useReportContext();
 
   return (
     <ul
@@ -16,14 +19,30 @@ export const ReportFilters = () => {
       aria-label="Report filters"
     >
       {filtersList.map((filter, idx) => {
+        const key = `report_filter_${filter.name}_${idx}`;
+
         const displayName = filter.displayName;
+        const accessor = filter.name;
+
+        let Comp = <>{filter.fieldType}</>;
+
+        if (filter.fieldType === "Date") {
+          Comp = (
+            <DateReportFilter
+              key={key}
+              accessor={accessor}
+              displayName={displayName}
+            />
+          );
+        }
+
         return (
           <li
-            key={`report_filter_${filter.name}_${idx}`}
-            className="flex h-8 items-center border border-border"
+            key={key}
+            className="flex h-8 items-center"
             aria-label={displayName}
           >
-            {displayName}
+            {Comp}
           </li>
         );
       })}
@@ -36,6 +55,9 @@ export const ReportFilters = () => {
           variant="default"
           className="grow px-2 sm:h-8 sm:grow-0 lg:px-3"
           size="sm"
+          onClick={() => {
+            console.log("searchCriteria", searchCriteria);
+          }}
         >
           <PlayIcon className="mr-2 h-3 w-3" />
           {t("buttons.run", { ns: "labels" })}

@@ -17,7 +17,7 @@ import type { TReportDetail } from "@/schemas/report";
  * @param date
  * @returns "yyyy-MM-dd"
  */
-const dateFormat = (date: Date) => format(date, "yyyy-MM-dd");
+export const dateFormat = (date: Date) => format(date, "yyyy-MM-dd");
 
 export function makeInitialSearchCriteria(
   list: TReportDetail["searchCriteria"]
