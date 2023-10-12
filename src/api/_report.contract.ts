@@ -1,6 +1,10 @@
 import { c } from "@/api/c";
 
-import { ReportDetailSchema, ReportsListSchema } from "@/schemas/report";
+import {
+  ReportDetailSchema,
+  ReportResultList,
+  ReportsListSchema,
+} from "@/schemas/report";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
@@ -21,6 +25,20 @@ const rootReportContract = c.router({
     query: UserAndClientIdAuthSchema,
     responses: {
       200: ReportDetailSchema,
+      401: StructuredErrorSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  runReportById: {
+    method: "POST",
+    path: "/v3/reports/:reportId/run",
+    body: c.type<{
+      clientId: string;
+      userId: string;
+      searchCriteria: { name: string; value: string }[];
+    }>(),
+    responses: {
+      200: ReportResultList,
       401: StructuredErrorSchema,
       404: StructuredErrorSchema,
     },

@@ -1,8 +1,11 @@
 import * as React from "react";
+import { useMutation } from "@tanstack/react-query";
 
-import { TReportDetail } from "@/schemas/report";
+import type { TReportDetail, TReportResult } from "@/schemas/report";
 
 import { makeInitialSearchCriteria } from "@/utils/report";
+
+import { apiClient } from "@/api";
 
 interface ReportContextProps {
   userId: string;
@@ -14,9 +17,34 @@ interface ReportContextProps {
   setCriteriaValue: (accessor: string, value: string) => void;
   filtersList: TReportDetail["searchCriteria"];
   resetSearchCriteria: () => void;
+  runReport: () => void;
+  isPending: boolean;
+  resultState: ReturnType<typeof reducer>;
 }
 
 const reportContext = React.createContext<ReportContextProps | null>(null);
+
+type DataState =
+  | { error: null; status: "idle"; rows: null }
+  | { error: string; status: "error"; rows: null }
+  | { error: null; status: "success"; rows: TReportResult[] };
+type ActionType =
+  | { type: "error"; error: string }
+  | { type: "success"; rows: TReportResult[] }
+  | { type: "idle" };
+
+function reducer(state: DataState, action: ActionType): DataState {
+  switch (action.type) {
+    case "idle":
+      return { ...state, error: null, status: "idle", rows: null };
+    case "success":
+      return { ...state, error: null, status: "success", rows: action.rows };
+    case "error":
+      return { ...state, error: action.error, status: "error", rows: null };
+    default:
+      throw new Error("Invalid action type");
+  }
+}
 
 export function ReportContextProvider(
   props: React.PropsWithChildren<
@@ -37,6 +65,12 @@ export function ReportContextProvider(
     () => initialSearchCriteria
   );
 
+  const [state, dispatch] = React.useReducer(reducer, {
+    status: "idle",
+    error: null,
+    rows: null,
+  });
+
   const resetSearchCriteria = React.useCallback(() => {
     setSearchCriteria(initialSearchCriteria);
   }, [initialSearchCriteria]);
@@ -47,6 +81,44 @@ export function ReportContextProvider(
     },
     []
   );
+
+  const _mutation = useMutation({
+    mutationFn: () =>
+      apiClient.report.runReportById({
+        params: { reportId: props.reportId },
+        body: {
+          clientId: props.clientId,
+          userId: props.userId,
+          searchCriteria: Object.entries(searchCriteria).map(
+            ([key, value]) => ({ name: key, value })
+          ),
+        },
+      }),
+    onMutate: () => {},
+    onSuccess: (data) => {
+      if (data.status !== 200) {
+        throw new Error("There was an error running the report");
+      }
+
+      const rows = data.body ?? [];
+
+      dispatch({ type: "success", rows });
+    },
+    onError: (error) => {
+      const message = "Something went wrong. Please try again later.";
+      if (error instanceof Error) {
+        dispatch({ type: "error", error: error?.message ?? message });
+      } else {
+        dispatch({ type: "error", error: message });
+      }
+    },
+  });
+
+  const runReport = React.useCallback(() => {
+    if (_mutation.isPending) return;
+
+    _mutation.mutate();
+  }, [_mutation]);
 
   return (
     <reportContext.Provider
@@ -60,6 +132,9 @@ export function ReportContextProvider(
         filtersList: filtersList,
         resetSearchCriteria: resetSearchCriteria,
         setCriteriaValue: setCriteriaValue,
+        runReport: runReport,
+        isPending: _mutation.isPending,
+        resultState: state,
       }}
     >
       {props.children}

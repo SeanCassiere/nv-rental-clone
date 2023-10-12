@@ -10,8 +10,7 @@ import { DateReportFilter } from "./filter";
 
 export const ReportFilters = () => {
   const { t } = useTranslation();
-  const { filtersList, resetSearchCriteria, searchCriteria } =
-    useReportContext();
+  const { filtersList, resetSearchCriteria, runReport } = useReportContext();
 
   return (
     <ul
@@ -55,9 +54,7 @@ export const ReportFilters = () => {
           variant="default"
           className="h-10 grow px-2 sm:h-8 sm:grow-0 lg:px-3"
           size="sm"
-          onClick={() => {
-            console.log("searchCriteria", searchCriteria);
-          }}
+          onClick={runReport}
         >
           <PlayIcon className="mr-2 h-3 w-3" />
           {t("buttons.run", { ns: "labels" })}

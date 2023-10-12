@@ -13,7 +13,7 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 export const ViewReport = () => {
-  const { report, filtersList } = useReportContext();
+  const { report, filtersList, resultState, isPending } = useReportContext();
 
   const isFiltersAvailable = filtersList.length > 0;
 
@@ -54,6 +54,16 @@ export const ViewReport = () => {
         <Separator className="mt-3.5" />
       </section>
 
+      <div>
+        {isPending && <p>Loading...</p>}
+        {resultState.status === "idle" && (
+          <p>Click the Run button to generate the report.</p>
+        )}
+        {resultState.status === "error" && <p>{resultState.error}</p>}
+        {resultState.status === "success" && (
+          <pre>{JSON.stringify(resultState.rows, null, 2)}</pre>
+        )}
+      </div>
       {/*  */}
     </>
   );
