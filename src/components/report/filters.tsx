@@ -10,10 +10,14 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { useReportContext } from "@/hooks/context/view-report";
+import { useReportLookupLists } from "@/hooks/internal/useReportLookupLists";
 
 export const ReportFilters = () => {
   const { t } = useTranslation();
-  const { filtersList, resetSearchCriteria, runReport } = useReportContext();
+  const { report, filtersList, resetSearchCriteria, runReport } =
+    useReportContext();
+
+  const lookup = useReportLookupLists(report);
 
   return (
     <ul
@@ -61,7 +65,7 @@ export const ReportFilters = () => {
             <DropDownReportFilter
               accessor={accessor}
               displayName={displayName}
-              options={[]}
+              options={lookup.getList(filter.name)}
             />
           );
         }
