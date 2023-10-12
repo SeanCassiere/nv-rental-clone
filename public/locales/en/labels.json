@@ -46,7 +46,7 @@
     "search": "Search",
     "checkin": "Checkin",
     "lookup": "Lookup",
-    "clearFilters": "Clear filters",
+    "resetFilters": "Reset filters",
     "run": "Run"
   }
 }
