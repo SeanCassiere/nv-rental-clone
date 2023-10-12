@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -16,8 +17,6 @@ import { useReportContext } from "@/hooks/context/view-report";
 import { dateFormat } from "@/utils/report";
 
 import { cn } from "@/utils";
-
-import { Input } from "../ui/input";
 
 interface ReportFilterProps {
   accessor: string;
