@@ -1,5 +1,3 @@
-import type { ReportFilterOption } from "@/components/report/filter";
-
 import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
@@ -7,6 +5,8 @@ import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGe
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
 import { TReportDetail } from "@/schemas/report";
+
+import type { ReportFilterOption } from "@/types/report";
 
 type CriteriaList = TReportDetail["searchCriteria"];
 

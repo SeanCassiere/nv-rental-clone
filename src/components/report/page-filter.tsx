@@ -23,6 +23,7 @@ import { Separator } from "@/components/ui/separator";
 import { useReportContext } from "@/hooks/context/view-report";
 
 import { dateFormat } from "@/utils/report";
+import type { ReportFilterOption } from "@/types/report";
 
 import { cn } from "@/utils";
 
@@ -30,11 +31,6 @@ interface ReportFilterProps {
   accessor: string;
   displayName: string;
 }
-
-export type ReportFilterOption = {
-  display: string;
-  value: string;
-};
 
 export function DateReportFilter(props: ReportFilterProps) {
   const { t } = useTranslation();

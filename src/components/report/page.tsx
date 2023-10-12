@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRightIcon } from "lucide-react";
 
-import { ReportFilters } from "@/components/report/filters";
+import { ReportFilters } from "@/components/report/page-filters";
 import { Separator } from "@/components/ui/separator";
 
 import { useReportContext } from "@/hooks/context/view-report";

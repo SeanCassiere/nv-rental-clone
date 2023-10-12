@@ -7,7 +7,7 @@ import {
   DropDownReportFilter,
   ListBoxReportFilter,
   TextBoxReportFilter,
-} from "@/components/report/filter";
+} from "@/components/report/page-filter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
