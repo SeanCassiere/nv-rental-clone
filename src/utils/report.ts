@@ -93,6 +93,9 @@ function getInitialDateValue(
     case "NextDay": // this year, tomorrow
       value = dateFormat(addDays(today, 1));
       break;
+    case "Today": // this year, today
+      value = dateFormat(today);
+      break;
     default:
       value = criteria?.defaultValue ?? "";
       break;
