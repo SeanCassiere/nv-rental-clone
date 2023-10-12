@@ -156,7 +156,7 @@ function ReportsList({
                       {list.map((report, report_idx) => (
                         <li
                           key={`${category}_${category_idx}_${report.name}_${report_idx}`}
-                          aria-label={`${report.name}`}
+                          aria-label={`${report.title}`}
                         >
                           <Link
                             to="/reports/$reportId"
@@ -164,12 +164,12 @@ function ReportsList({
                             className="flex items-center justify-between rounded border border-border/80 px-5 py-3.5 text-foreground/80 outline-none ring-0 transition-all focus-within:ring-0 hover:text-primary focus-visible:text-primary/80 focus-visible:ring-0 sm:justify-start sm:rounded-none sm:border-transparent sm:border-b-muted sm:px-2 sm:py-1.5 sm:hover:border-b-primary sm:focus-visible:border-b-primary/80"
                           >
                             <span className="text-sm sm:text-base">
-                              {report.name}
+                              {report.title}
                             </span>
                             <div>
                               <ChevronRightIcon className="ml-1 h-3.5 w-3.5 sm:h-4 sm:w-4" />
                               <span className="sr-only">
-                                {report.name} icon
+                                {report.title} icon
                               </span>
                             </div>
                           </Link>

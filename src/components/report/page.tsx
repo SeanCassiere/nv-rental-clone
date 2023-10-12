@@ -12,10 +12,20 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
+import DefaultView from "./presentation/default-view";
+import JsonView from "./presentation/json-view";
+
+const customReports: Record<string, () => JSX.Element> = {
+  financialsummary: JsonView,
+};
+
 export const ViewReport = () => {
   const { report, filtersList, resultState, isPending } = useReportContext();
 
   const isFiltersAvailable = filtersList.length > 0;
+
+  const lookup = report.name.replaceAll(" ", "").toLowerCase();
+  const PresentationView = customReports[lookup] ?? DefaultView;
 
   useDocumentTitle(titleMaker(report.name));
 
@@ -39,7 +49,7 @@ export const ViewReport = () => {
               aria-hidden="true"
             />
             <h1 className="inline-block text-2xl font-semibold leading-6">
-              {report.name}
+              {report.title}
             </h1>
           </div>
           {/* put action details here like save and schedule */}
@@ -62,11 +72,7 @@ export const ViewReport = () => {
           </p>
         )}
         {resultState.status === "error" && <p>{resultState.error}</p>}
-        {resultState.status === "success" && (
-          <pre className="mx-4 mt-4 max-w-xs overflow-x-scroll text-sm sm:max-w-lg">
-            {JSON.stringify(resultState.rows, null, 2)}
-          </pre>
-        )}
+        {resultState.status === "success" && <PresentationView />}
       </div>
       {/*  */}
     </>
