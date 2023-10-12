@@ -39,7 +39,7 @@ export default function SearchReportsPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6">Reports</h1>
+          <h1 className="h-full text-2xl font-semibold leading-6">Reports</h1>
         </div>
         <p className={cn("text-base text-foreground/80")}>
           Select and run a report from the list available to you.

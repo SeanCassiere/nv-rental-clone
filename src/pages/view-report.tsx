@@ -2,6 +2,7 @@ import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
+import ProtectorShield from "@/components/protector-shield";
 import { ViewReport } from "@/components/report/view";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -21,30 +22,32 @@ const ViewReportPage: (typeof viewReportByIdRoute)["options"]["component"] = ({
   const userId = auth.user?.profile?.navotar_userid;
 
   return (
-    <React.Suspense fallback={<Skeleton className="h-48" />}>
-      {clientId && userId && reportId ? (
-        <FetchReportLayer
-          clientId={clientId}
-          userId={userId}
-          reportId={reportId}
-        />
-      ) : (
-        <div>
-          <h2>Something is missing</h2>
-          <pre>
-            {JSON.stringify(
-              {
-                clientId: clientId ?? `typeof ${typeof clientId} ${clientId}`,
-                userId: userId ?? `typeof ${typeof userId} ${userId}`,
-                reportId: reportId ?? `typeof ${typeof reportId} ${reportId}`,
-              },
-              null,
-              2
-            )}
-          </pre>
-        </div>
-      )}
-    </React.Suspense>
+    <ProtectorShield>
+      <React.Suspense fallback={<Skeleton className="h-48" />}>
+        {clientId && userId && reportId ? (
+          <FetchReportLayer
+            clientId={clientId}
+            userId={userId}
+            reportId={reportId}
+          />
+        ) : (
+          <div>
+            <h2>Something is missing</h2>
+            <pre>
+              {JSON.stringify(
+                {
+                  clientId: clientId ?? `typeof ${typeof clientId} ${clientId}`,
+                  userId: userId ?? `typeof ${typeof userId} ${userId}`,
+                  reportId: reportId ?? `typeof ${typeof reportId} ${reportId}`,
+                },
+                null,
+                2
+              )}
+            </pre>
+          </div>
+        )}
+      </React.Suspense>
+    </ProtectorShield>
   );
 };
 
