@@ -264,4 +264,12 @@ export const reportQKeys = {
       staleTime: 1000 * 60 * 1, // 1 minutes
       enabled: isEnabled(auth),
     }),
+  getDetailsById: ({ auth, reportId }: { auth: Auth; reportId: string }) =>
+    queryOptions({
+      queryKey: ["reports", reportId, "details"],
+      queryFn: () =>
+        apiClient.report.getById({ params: { reportId }, query: auth }),
+      staleTime: 1000 * 60 * 1, // 1 minutes
+      enabled: isEnabled(auth),
+    }),
 };
