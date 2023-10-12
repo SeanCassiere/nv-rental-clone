@@ -45,6 +45,8 @@
     "moreActions": "More actions",
     "search": "Search",
     "checkin": "Checkin",
-    "lookup": "Lookup"
+    "lookup": "Lookup",
+    "resetFilters": "Reset filters",
+    "run": "Run"
   }
 }
