@@ -2,11 +2,13 @@ import React from "react";
 import { PlayIcon, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import {
+  DateReportFilter,
+  TextBoxReportFilter,
+} from "@/components/report/filter";
 import { Button } from "@/components/ui/button";
 
 import { useReportContext } from "@/hooks/context/view-report";
-
-import { DateReportFilter } from "./filter";
 
 export const ReportFilters = () => {
   const { t } = useTranslation();
@@ -28,6 +30,16 @@ export const ReportFilters = () => {
         if (filter.fieldType === "Date") {
           Comp = (
             <DateReportFilter
+              key={key}
+              accessor={accessor}
+              displayName={displayName}
+            />
+          );
+        }
+
+        if (filter.fieldType === "TextBox") {
+          Comp = (
+            <TextBoxReportFilter
               key={key}
               accessor={accessor}
               displayName={displayName}
