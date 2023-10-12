@@ -54,7 +54,8 @@ export function ReportContextProvider(
   const filtersList = props.report.searchCriteria.filter(
     (s) =>
       (s.defaultValue ?? "").toLowerCase() !== "clientid" &&
-      (s.defaultValue ?? "").toLowerCase() !== "userid"
+      (s.defaultValue ?? "").toLowerCase() !== "userid" &&
+      (s.name ?? "").toLowerCase() !== "customerid"
   );
 
   const initialSearchCriteria = makeInitialSearchCriteria(
