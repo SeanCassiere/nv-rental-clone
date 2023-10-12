@@ -43,13 +43,13 @@ export const ViewReport = () => {
           </div>
           {/* put action details here like save and schedule */}
         </div>
-        {isFiltersAvailable && (
-          <p className={cn("mt-2 w-full text-base text-foreground/80 sm:mt-0")}>
-            Confirm the search criteria and click the Run button to generate the
-            report.
-          </p>
-        )}
-        {!isFiltersAvailable && <Separator className="mt-3.5" />}
+
+        <p className={cn("mt-2 w-full text-base text-foreground/80 sm:mt-0")}>
+          {isFiltersAvailable
+            ? "Confirm the search criteria and click the Run button to generate the report."
+            : "Click the Run button to generate the report."}
+        </p>
+        <Separator className="mt-3.5" />
       </section>
 
       {/*  */}
