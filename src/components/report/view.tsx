@@ -7,30 +7,16 @@ import { Separator } from "@/components/ui/separator";
 import { useReportContext } from "@/hooks/context/view-report";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 
-import { makeInitialSearchCriteria } from "@/utils/report";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
 export const ViewReport = () => {
-  const { report } = useReportContext();
+  const { report, filtersList } = useReportContext();
+
+  const isFiltersAvailable = filtersList.length > 0;
 
   useDocumentTitle(titleMaker(report.name));
-
-  const interactiveSearchCriteria = report.searchCriteria.filter(
-    (s) =>
-      (s.defaultValue ?? "").toLowerCase() !== "clientid" &&
-      (s.defaultValue ?? "").toLowerCase() !== "userid"
-  );
-
-  const initialSearchCriteria = React.useMemo(
-    () => makeInitialSearchCriteria(report.searchCriteria),
-    [report.searchCriteria]
-  );
-  console.log(
-    "🚀 ~ file: view.tsx:27 ~ ViewReport ~ initialSearchCriteria:",
-    initialSearchCriteria
-  );
 
   return (
     <>
@@ -57,15 +43,13 @@ export const ViewReport = () => {
           </div>
           {/* put action details here like save and schedule */}
         </div>
-        {interactiveSearchCriteria.length > 0 && (
+        {isFiltersAvailable && (
           <p className={cn("mt-2 w-full text-base text-foreground/80 sm:mt-0")}>
             Confirm the search criteria and click the Run button to generate the
             report.
           </p>
         )}
-        {interactiveSearchCriteria.length === 0 && (
-          <Separator className="mt-3.5" />
-        )}
+        {!isFiltersAvailable && <Separator className="mt-3.5" />}
       </section>
 
       {/*  */}
