@@ -288,7 +288,6 @@ export function ListBoxReportFilter(
   const baseState = (searchCriteria[props.accessor] ?? "")
     .split(",")
     .filter(Boolean);
-  console.log("baseState", baseState);
 
   return (
     <span className="flex w-full justify-between">
