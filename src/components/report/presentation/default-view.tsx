@@ -3,7 +3,9 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 import { useReportContext } from "@/hooks/context/view-report";
 
-import type { TReportResult } from "@/schemas/report";
+import type { TReportDetail, TReportResult } from "@/schemas/report";
+
+type OutputField = TReportDetail["outputFields"][number];
 
 const KNOWN_REMOVAL_ACCESSORS = [
   "Amounts",
@@ -57,12 +59,19 @@ const DefaultView = () => {
 
     // extra accessors from the normal rows
     const normalRowAccessors = Object.keys(normalRows[0] ?? {});
-    const knownAccessors = report.outputFields.map((field) => field.name);
+    const outputAccessors = report.outputFields.map((field) => field.name);
+    const outputAccessorsLength = outputAccessors.length;
 
     // remove the known accessors from the normal row accessors
-    const additionalAccessors = normalRowAccessors.filter(
-      (accessor) => !knownAccessors.includes(accessor)
-    );
+    const additionalAccessors: OutputField[] = normalRowAccessors
+      .filter((accessor) => !outputAccessors.includes(accessor))
+      .map((accessor, idx) => ({
+        name: accessor,
+        displayName: accessor,
+        isVisible: true,
+        displayOrder: outputAccessorsLength + idx + 1,
+        dataType: "integer",
+      }));
 
     return {
       rows: normalRows,
@@ -71,9 +80,32 @@ const DefaultView = () => {
     };
   }, [data, report.outputFields]);
 
-  console.log("sanitizedRows", sanitizedRows);
+  // create the column definitions
+  const columnDefs = React.useMemo(() => {
+    const columns: ColumnDef<TReportResult>[] = [];
 
-  const columnDefs = React.useMemo(() => {}, []);
+    report.outputFields.forEach((field) => {
+      const col: ColumnDef<TReportResult> = {
+        id: field.name,
+        header: field.displayName,
+        accessorFn: (row) => row[field.name],
+      };
+      columns.push(col);
+    });
+
+    sanitizedRows.additionalAccessors.forEach((field) => {
+      const col: ColumnDef<TReportResult> = {
+        id: field.name,
+        header: field.displayName,
+        accessorFn: (row) => row[field.name],
+      };
+      columns.push(col);
+    });
+
+    return columns;
+  }, [report.outputFields, sanitizedRows.additionalAccessors]);
+
+  console.log("columnDefs", columnDefs);
 
   return (
     <section className="mx-2 mt-4 sm:mx-4 sm:px-1">DefaultReportView</section>
