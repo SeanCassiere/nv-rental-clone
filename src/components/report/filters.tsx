@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import {
   DateReportFilter,
+  DropDownReportFilter,
   TextBoxReportFilter,
 } from "@/components/report/filter";
 import { Button } from "@/components/ui/button";
@@ -29,20 +30,38 @@ export const ReportFilters = () => {
 
         if (filter.fieldType === "Date") {
           Comp = (
-            <DateReportFilter
-              key={key}
-              accessor={accessor}
-              displayName={displayName}
-            />
+            <DateReportFilter accessor={accessor} displayName={displayName} />
           );
         }
 
         if (filter.fieldType === "TextBox") {
           Comp = (
             <TextBoxReportFilter
-              key={key}
               accessor={accessor}
               displayName={displayName}
+            />
+          );
+        }
+
+        if (filter.fieldType === "CheckBox") {
+          Comp = (
+            <DropDownReportFilter
+              accessor={accessor}
+              displayName={displayName}
+              options={[
+                { value: "0", display: "false" },
+                { value: "1", display: "true" },
+              ]}
+            />
+          );
+        }
+
+        if (filter.fieldType === "DropDown") {
+          Comp = (
+            <DropDownReportFilter
+              accessor={accessor}
+              displayName={displayName}
+              options={[]}
             />
           );
         }
