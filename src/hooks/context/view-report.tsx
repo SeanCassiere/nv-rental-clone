@@ -11,6 +11,7 @@ interface ReportContextProps {
   report: TReportDetail;
   searchCriteria: Record<string, string>;
   filtersList: TReportDetail["searchCriteria"];
+  resetSearchCriteria: () => void;
 }
 
 const reportContext = React.createContext<ReportContextProps | null>(null);
@@ -25,9 +26,18 @@ export function ReportContextProvider(
       (s.defaultValue ?? "").toLowerCase() !== "clientid" &&
       (s.defaultValue ?? "").toLowerCase() !== "userid"
   );
-  const [searchCriteria] = React.useState(() =>
-    makeInitialSearchCriteria(props.report.searchCriteria)
+
+  const initialSearchCriteria = makeInitialSearchCriteria(
+    props.report.searchCriteria
   );
+
+  const [searchCriteria, setSearchCriteria] = React.useState(
+    () => initialSearchCriteria
+  );
+
+  const resetSearchCriteria = React.useCallback(() => {
+    setSearchCriteria(initialSearchCriteria);
+  }, [initialSearchCriteria]);
 
   return (
     <reportContext.Provider
@@ -38,6 +48,7 @@ export function ReportContextProvider(
         report: props.report,
         searchCriteria: searchCriteria,
         filtersList: filtersList,
+        resetSearchCriteria: resetSearchCriteria,
       }}
     >
       {props.children}

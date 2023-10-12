@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRightIcon } from "lucide-react";
 
+import { ReportFilters } from "@/components/report/filters";
 import { Separator } from "@/components/ui/separator";
 
 import { useReportContext } from "@/hooks/context/view-report";
@@ -49,6 +50,7 @@ export const ViewReport = () => {
             ? "Confirm the search criteria and click the Run button to generate the report."
             : "Click the Run button to generate the report."}
         </p>
+        {isFiltersAvailable && <ReportFilters />}
         <Separator className="mt-3.5" />
       </section>
 
