@@ -15,11 +15,11 @@ interface ReportContextProps {
 
 const reportContext = React.createContext<ReportContextProps | null>(null);
 
-export const ReportContextProvider = (
+export function ReportContextProvider(
   props: React.PropsWithChildren<
     Pick<ReportContextProps, "userId" | "clientId" | "report" | "reportId">
   >
-) => {
+) {
   const filtersList = props.report.searchCriteria.filter(
     (s) =>
       (s.defaultValue ?? "").toLowerCase() !== "clientid" &&
@@ -43,7 +43,9 @@ export const ReportContextProvider = (
       {props.children}
     </reportContext.Provider>
   );
-};
+}
+
+ReportContextProvider.displayName = "ReportContextProvider";
 
 export const useReportContext = () => {
   const context = React.useContext(reportContext);
