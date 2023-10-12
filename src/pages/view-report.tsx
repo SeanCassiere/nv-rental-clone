@@ -2,7 +2,10 @@ import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
+import { ViewReport } from "@/components/report/view";
 import { Skeleton } from "@/components/ui/skeleton";
+
+import { ReportContextProvider } from "@/hooks/context/view-report";
 
 import { viewReportByIdRoute } from "@/routes/reports/report-id-route";
 
@@ -20,7 +23,11 @@ const ViewReportPage: (typeof viewReportByIdRoute)["options"]["component"] = ({
   return (
     <React.Suspense fallback={<Skeleton className="h-48" />}>
       {clientId && userId && reportId ? (
-        <ViewReport clientId={clientId} userId={userId} reportId={reportId} />
+        <FetchReportLayer
+          clientId={clientId}
+          userId={userId}
+          reportId={reportId}
+        />
       ) : (
         <div>
           <h2>Something is missing</h2>
@@ -43,7 +50,7 @@ const ViewReportPage: (typeof viewReportByIdRoute)["options"]["component"] = ({
 
 export default ViewReportPage;
 
-const ViewReport = ({
+const FetchReportLayer = ({
   clientId,
   userId,
   reportId,
@@ -56,20 +63,24 @@ const ViewReport = ({
     reportQKeys.getDetailsById({ reportId, auth: { clientId, userId } })
   );
 
-  if (query.data.status !== 200) {
-    return (
-      <div>
-        <h2>Something went wrong</h2>
-        <pre>{JSON.stringify(query.data, null, 2)}</pre>
-      </div>
-    );
-  }
-
-  const report = query.data.body;
-
   return (
-    <div>
-      <pre>{JSON.stringify(report, null, 2)}</pre>
-    </div>
+    <>
+      {query.data.status !== 200 && (
+        <div>
+          <h2>Something went wrong</h2>
+          <pre>{JSON.stringify(query.data, null, 2)}</pre>
+        </div>
+      )}
+      {query.data.status === 200 && (
+        <ReportContextProvider
+          clientId={clientId}
+          userId={userId}
+          reportId={reportId}
+          report={query.data.body}
+        >
+          <ViewReport />
+        </ReportContextProvider>
+      )}
+    </>
   );
 };
