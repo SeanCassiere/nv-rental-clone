@@ -53,7 +53,7 @@ export const ReportFilters = () => {
         <Button
           type="button"
           variant="default"
-          className="grow px-2 sm:h-8 sm:grow-0 lg:px-3"
+          className="h-10 grow px-2 sm:h-8 sm:grow-0 lg:px-3"
           size="sm"
           onClick={() => {
             console.log("searchCriteria", searchCriteria);
@@ -66,7 +66,7 @@ export const ReportFilters = () => {
           <Button
             type="button"
             variant="ghost"
-            className="grow px-2 sm:h-8 sm:grow-0 lg:px-3"
+            className="h-10 grow px-2 sm:h-8 sm:grow-0 lg:px-3"
             size="sm"
             onClick={resetSearchCriteria}
           >
