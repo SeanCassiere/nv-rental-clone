@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import {
   DateReportFilter,
   DropDownReportFilter,
+  ListBoxReportFilter,
   TextBoxReportFilter,
 } from "@/components/report/filter";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,16 @@ export const ReportFilters = () => {
                 { value: "0", display: "false" },
                 { value: "1", display: "true" },
               ]}
+            />
+          );
+        }
+
+        if (filter.fieldType === "ListBox") {
+          Comp = (
+            <ListBoxReportFilter
+              accessor={accessor}
+              displayName={displayName}
+              options={lookup.getList(filter.name)}
             />
           );
         }

@@ -273,3 +273,147 @@ export function DropDownReportFilter(
     </span>
   );
 }
+
+export function ListBoxReportFilter(
+  props: ReportFilterProps & { options: ReportFilterOption[] }
+) {
+  const { searchCriteria, initialSearchCriteria, setCriteriaValue } =
+    useReportContext();
+
+  const options = props.options;
+
+  const originalCriteria = initialSearchCriteria[props.accessor];
+  const clearable = (originalCriteria ?? "").length === 0;
+
+  const baseState = (searchCriteria[props.accessor] ?? "")
+    .split(",")
+    .filter(Boolean);
+  console.log("baseState", baseState);
+
+  return (
+    <span className="flex w-full justify-between">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(
+              "flex w-full justify-start whitespace-nowrap border-dashed"
+            )}
+          >
+            <PlusCircleIcon className="mr-2 h-3 w-3" />
+            {props.displayName}
+
+            {baseState.length > 0 && (
+              <>
+                <Separator orientation="vertical" className="mx-2 h-4" />
+                <Badge
+                  variant="secondary"
+                  className="rounded-sm px-1 font-normal lg:hidden"
+                >
+                  {baseState.length}
+                </Badge>
+                <div className="hidden space-x-1 lg:flex">
+                  {baseState.length > 2 ? (
+                    <>
+                      <Badge
+                        variant="secondary"
+                        className="rounded-sm px-1 font-normal"
+                      >
+                        {baseState.length} selected
+                      </Badge>
+                    </>
+                  ) : (
+                    <>
+                      {baseState.map((item, idx) => (
+                        <Badge
+                          key={`${props.accessor}_${item}_${idx}`}
+                          variant="secondary"
+                          className="rounded-sm px-1 font-normal"
+                        >
+                          {options.find((i) => i.value === item)?.display}
+                        </Badge>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className={cn("p-0", "max-w-[250px]")} align="start">
+          <Command>
+            <CommandInput className="h-8" placeholder={props.displayName} />
+            <CommandList>
+              <CommandEmpty>No results found</CommandEmpty>
+              <CommandGroup>
+                {options.map((option, index) => {
+                  const isSelected = baseState.includes(option.value);
+                  return (
+                    <CommandItem
+                      key={`report_filter_${props.accessor}-multi-select-${index}`}
+                      onSelect={() => {
+                        if (isSelected) {
+                          setCriteriaValue(
+                            props.accessor,
+                            baseState
+                              .filter((item) => item !== option.value)
+                              .join(",")
+                          );
+                        } else {
+                          setCriteriaValue(
+                            props.accessor,
+                            [...baseState, option.value].join(",")
+                          );
+                        }
+                      }}
+                    >
+                      <div
+                        className={cn(
+                          "mr-2 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                          isSelected
+                            ? "bg-primary text-primary-foreground"
+                            : "opacity-50 [&_svg]:invisible"
+                        )}
+                      >
+                        <CheckIcon className={cn("h-4 w-4")} />
+                      </div>
+                      <span>{option.display}</span>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+              {/* <CommandSeparator />
+                <CommandGroup>
+                  <CommandItem
+                    onSelect={() => {
+                      if (defaultValue) {
+                        handleSaveValue(defaultValue);
+                      } else {
+                        handleSaveValue([]);
+                      }
+                    }}
+                    className="justify-center"
+                  >
+                    {clearFilterText}
+                  </CommandItem>
+                </CommandGroup> */}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {baseState.length > 0 && clearable && (
+        <Button
+          size="sm"
+          variant="outline"
+          className="-ml-2 border-l-0 border-dashed pl-2.5"
+          onClick={() => {
+            setCriteriaValue(props.accessor, originalCriteria ?? "");
+          }}
+        >
+          <XIcon className="h-3 w-3" />
+        </Button>
+      )}
+    </span>
+  );
+}
