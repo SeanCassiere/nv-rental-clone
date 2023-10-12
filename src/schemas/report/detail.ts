@@ -31,7 +31,7 @@ export const ReportDetailSchema = z.object({
   isExportableToExcel: z.boolean().catch(false),
   isPrintable: z.boolean().catch(false),
   name: z.coerce.string(),
-  title: z.coerce.string(),
+  title: z.string().optional(),
   searchCriteria: z.array(
     z.object({
       searchCriteriaId: z.coerce.string(),

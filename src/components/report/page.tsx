@@ -49,7 +49,7 @@ export const ViewReport = () => {
               aria-hidden="true"
             />
             <h1 className="inline-block text-2xl font-semibold leading-6">
-              {report.title}
+              {report?.title ? report.title : report.name}
             </h1>
           </div>
           {/* put action details here like save and schedule */}
