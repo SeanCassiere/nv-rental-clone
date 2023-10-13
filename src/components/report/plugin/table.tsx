@@ -82,7 +82,6 @@ export const ReportTable = (props: ReportTableProps) => {
               <Plugin table={table} />
             </React.Fragment>
           ))}
-          <button>Columns</button>
         </div>
       )}
       <div
