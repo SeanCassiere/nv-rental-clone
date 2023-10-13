@@ -84,7 +84,7 @@ const DefaultView = () => {
           .map((row) => String(row[accessor.name]))
           .map((item) => item.length);
         const cellSize = Math.max(...rowValues) * 10;
-        const headerSize = accessor.displayName.length * 10;
+        const headerSize = accessor.displayName.length * 10 + 25;
 
         const size = cellSize < headerSize ? headerSize : cellSize;
         const minSize = headerSize < cellSize ? cellSize : headerSize;
