@@ -25,14 +25,19 @@ import {
 
 import { TReportResult } from "@/schemas/report";
 
+import { ReportTablePlugin } from "@/types/report";
+
 import { cn } from "@/utils";
 
 interface ReportTableProps {
   columnDefs: ColumnDef<TReportResult>[];
   rows: TReportResult[];
+  topRowPlugins?: ReportTablePlugin[];
+  topRowPluginsAlignment?: "start" | "end";
 }
 
 export const ReportTable = (props: ReportTableProps) => {
+  const { topRowPlugins = [], topRowPluginsAlignment = "end" } = props;
   const parentRef = React.useRef<HTMLDivElement>(null);
   const tableHeadRef = React.useRef<HTMLTableSectionElement>(null);
 
@@ -51,8 +56,6 @@ export const ReportTable = (props: ReportTableProps) => {
     sortDescFirst: false,
     enableColumnResizing: true,
     enableSorting: true,
-    // debug
-    debugTable: true,
   });
 
   const { rows } = table.getRowModel();
@@ -66,117 +69,142 @@ export const ReportTable = (props: ReportTableProps) => {
   });
 
   return (
-    <div ref={parentRef} className="h-[600px] overflow-auto rounded border">
-      <table
-        className="relative w-full caption-bottom bg-card text-sm [scrollbar-gutter:stable]"
-        style={{
-          width: table.getCenterTotalSize(),
-          height: `${virtualizer.getTotalSize()}px`,
-        }}
-      >
-        <TableHeader ref={tableHeadRef} className="bg-card">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header, header_idx) => {
-                return (
-                  <TableHead
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    style={{ width: header.getSize() }}
-                    className={cn(
-                      "sticky top-0 z-10 border-b bg-muted",
-                      header_idx !== 0 ? "px-2" : "pl-4"
-                    )}
-                  >
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={cn(
-                            "group relative flex h-full items-center justify-start whitespace-nowrap",
-                            header.column.getCanSort()
-                              ? "cursor-pointer select-none"
-                              : ""
-                          )}
-                          onClick={
-                            !header.column.getIsResizing()
-                              ? header.column.getToggleSortingHandler()
-                              : () => {}
-                          }
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: (
-                              <ArrowUpNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                            ),
-                            desc: (
-                              <ArrowDownNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                            ),
-                          }[header.column.getIsSorted() as string] ?? (
-                            <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
-                          )}
-                          {header.column.getCanResize() && (
-                            <span
-                              className={cn(
-                                "absolute right-0 z-20 mr-1 inline-block h-2/4 w-[4px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full sm:w-[2px]",
-                                header.column.getIsResizing()
-                                  ? "h-full opacity-40 sm:w-[4px]"
-                                  : "hover:h-4/6 hover:opacity-40"
-                              )}
-                              onClick={(evt) => evt.stopPropagation()}
-                              onMouseDown={header.getResizeHandler()}
-                              onTouchStart={header.getResizeHandler()}
-                            />
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
+    <div className="grid grid-cols-1 gap-4">
+      {topRowPlugins.length > 0 && (
+        <div
+          className={cn(
+            "flex flex-wrap items-center gap-4",
+            topRowPluginsAlignment === "end" ? "justify-end" : "justify-start"
+          )}
+        >
+          {topRowPlugins.map((Plugin, idx) => (
+            <React.Fragment key={`report_table_top_plugin_${idx}`}>
+              <Plugin table={table} />
+            </React.Fragment>
           ))}
-        </TableHeader>
-        <TableBody>
-          {virtualizer.getVirtualItems().map((virtualRow) => {
-            const row = rows[virtualRow.index] as Row<TReportResult>;
-            return (
-              <TableRow
-                key={row.id}
-                className="absolute left-0 top-0 w-full"
-                style={{
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${virtualRow.start}px)`,
-                }}
-              >
-                {row.getVisibleCells().map((cell, cell_idx) => {
+          <button>Columns</button>
+        </div>
+      )}
+      <div
+        ref={parentRef}
+        className={cn(
+          "overflow-auto rounded border ",
+          topRowPlugins.length > 0
+            ? "h-[550px] sm:h-[520px]"
+            : "h-[600px] sm:h-[550px]"
+        )}
+      >
+        <table
+          className="relative w-full caption-bottom bg-card text-sm [scrollbar-gutter:stable]"
+          style={{
+            width: table.getCenterTotalSize(),
+            height: `${virtualizer.getTotalSize()}px`,
+          }}
+        >
+          <TableHeader ref={tableHeadRef} className="bg-card">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header, header_idx) => {
                   return (
-                    <TableCell
-                      key={cell.id}
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      style={{ width: header.getSize() }}
                       className={cn(
-                        "inline-flex whitespace-nowrap",
-                        // cell_idx !== 0 ? "px-0" : "",
-                        // "pr-6",
-                        cell.column.columnDef.meta?.cellContentAlign === "end"
-                          ? "justify-end pr-6"
-                          : "justify-start"
+                        "sticky top-0 z-10 border-b bg-muted",
+                        header_idx !== 0 ? "px-2" : "pl-4"
                       )}
-                      style={{ width: cell.column.getSize() }}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+                      {header.isPlaceholder ? null : (
+                        <>
+                          <div
+                            className={cn(
+                              "group relative flex h-full items-center justify-start whitespace-nowrap",
+                              header.column.getCanSort()
+                                ? "cursor-pointer select-none"
+                                : ""
+                            )}
+                            onClick={
+                              !header.column.getIsResizing()
+                                ? header.column.getToggleSortingHandler()
+                                : () => {}
+                            }
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: (
+                                <ArrowUpNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
+                              ),
+                              desc: (
+                                <ArrowDownNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
+                              ),
+                            }[header.column.getIsSorted() as string] ?? (
+                              <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
+                            )}
+                            {header.column.getCanResize() && (
+                              <span
+                                className={cn(
+                                  "absolute right-0 z-20 mr-1 inline-block h-2/4 w-[4px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full sm:w-[2px]",
+                                  header.column.getIsResizing()
+                                    ? "h-full opacity-40 sm:w-[4px]"
+                                    : "hover:h-4/6 hover:opacity-40"
+                                )}
+                                onClick={(evt) => evt.stopPropagation()}
+                                onMouseDown={header.getResizeHandler()}
+                                onTouchStart={header.getResizeHandler()}
+                              />
+                            )}
+                          </div>
+                        </>
                       )}
-                    </TableCell>
+                    </TableHead>
                   );
                 })}
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {virtualizer.getVirtualItems().map((virtualRow) => {
+              const row = rows[virtualRow.index] as Row<TReportResult>;
+              return (
+                <TableRow
+                  key={row.id}
+                  className="absolute left-0 top-0 w-full"
+                  style={{
+                    height: `${virtualRow.size}px`,
+                    transform: `translateY(${virtualRow.start}px)`,
+                  }}
+                >
+                  {row.getVisibleCells().map((cell, cell_idx) => {
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          "inline-flex whitespace-nowrap",
+                          // cell_idx !== 0 ? "px-0" : "",
+                          // "pr-6",
+                          cell.column.columnDef.meta?.cellContentAlign === "end"
+                            ? "justify-end pr-6"
+                            : "justify-start"
+                        )}
+                        style={{ width: cell.column.getSize() }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </table>
+      </div>
     </div>
   );
 };

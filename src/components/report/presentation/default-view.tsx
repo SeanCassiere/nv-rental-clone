@@ -4,12 +4,16 @@ import { AlertCircleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
 import { ReportTable } from "@/components/report/plugin/table";
 
 import { useReportContext } from "@/hooks/context/view-report";
 import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatter";
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
+
+import { IS_LOCAL_DEV } from "@/utils/constants";
+import type { ReportTablePlugin } from "@/types/report";
 
 type OutputField = TReportDetail["outputFields"][number];
 
@@ -117,6 +121,15 @@ const DefaultView = () => {
     };
   }, [data, report.outputFields]);
 
+  const topRowPlugins = React.useMemo(() => {
+    const plugins: ReportTablePlugin[] = [];
+
+    if (report.isExportableToExcel && IS_LOCAL_DEV) {
+      plugins.push(ExportToCsv);
+    }
+    return plugins;
+  }, [report.isExportableToExcel]);
+
   // create the column definitions
   const columnDefs = React.useMemo(() => {
     const columns: ColumnDef<TReportResult>[] = [];
@@ -125,8 +138,8 @@ const DefaultView = () => {
       const col: ColumnDef<TReportResult> = {
         id: field.name,
         header: field.displayName,
-        accessorFn: (row) => row[field.name],
-        cell: (cell) => format(report.name, field, cell.getValue() as any),
+        accessorFn: (data) => data[field.name],
+        cell: (info) => format(report.name, field, info.getValue() as any),
         size: field.size,
         minSize: field.minSize,
         maxSize: field.maxSize,
@@ -156,7 +169,11 @@ const DefaultView = () => {
           shrink
         />
       ) : (
-        <ReportTable columnDefs={columnDefs} rows={sanitizedRows.rows} />
+        <ReportTable
+          columnDefs={columnDefs}
+          rows={sanitizedRows.rows}
+          topRowPlugins={topRowPlugins}
+        />
       )}
     </section>
   );
