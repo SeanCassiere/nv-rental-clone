@@ -53,109 +53,99 @@ export const ReportTable = (props: ReportTableProps) => {
   });
 
   return (
-    <div>
-      <div ref={parentRef} className="relative h-[600px] overflow-auto">
-        <table
-          className="relative table table-fixed [scrollbar-gutter:stable]"
-          style={{ width: table.getCenterTotalSize() }}
-        >
-          <thead className="sticky left-0 top-0 z-10 table-header-group bg-background">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="table-row">
-                {headerGroup.headers.map((header) => {
+    <div ref={parentRef} className="relative h-[600px] overflow-auto">
+      <table
+        className="relative table table-fixed [scrollbar-gutter:stable]"
+        style={{ width: table.getCenterTotalSize() }}
+      >
+        <thead className="sticky left-0 right-0 top-0 z-10 table-header-group bg-background">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id} className="table-row">
+              {headerGroup.headers.map((header) => {
+                return (
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    style={{ width: header.getSize() }}
+                    className="table-cell"
+                  >
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={cn(
+                            "group relative flex items-center justify-start whitespace-nowrap",
+                            header.column.getCanSort()
+                              ? "cursor-pointer select-none"
+                              : ""
+                          )}
+                          onClick={
+                            !header.column.getIsResizing()
+                              ? header.column.getToggleSortingHandler()
+                              : () => {}
+                          }
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: (
+                              <ArrowUpNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
+                            ),
+                            desc: (
+                              <ArrowDownNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
+                            ),
+                          }[header.column.getIsSorted() as string] ?? (
+                            <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
+                          )}
+                          <button
+                            className="absolute right-0 h-full w-1 bg-transparent focus:bg-muted-foreground group-hover:bg-muted-foreground/20"
+                            onClick={(evt) => evt.stopPropagation()}
+                            onMouseDown={header.getResizeHandler()}
+                            onTouchStart={header.getResizeHandler()}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </th>
+                );
+              })}
+            </tr>
+          ))}
+        </thead>
+        <tbody className="table-row-group">
+          {virtualizer.getVirtualItems().map((virtualRow, index) => {
+            const row = rows[virtualRow.index] as Row<TReportResult>;
+            return (
+              <tr
+                key={row.id}
+                className="table-row"
+                style={{
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${
+                    virtualRow.start - index * virtualRow.size
+                  }px)`,
+                }}
+              >
+                {row.getVisibleCells().map((cell) => {
                   return (
-                    <th
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      style={{ width: header.getSize() }}
-                      className="table-cell"
+                    <td
+                      key={cell.id}
+                      className="table-cell whitespace-nowrap"
+                      style={{ width: cell.column.getSize() }}
                     >
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={cn(
-                              "group relative flex items-center justify-start whitespace-nowrap",
-                              header.column.getCanSort()
-                                ? "cursor-pointer select-none"
-                                : ""
-                            )}
-                            onClick={
-                              !header.column.getIsResizing()
-                                ? header.column.getToggleSortingHandler()
-                                : () => {}
-                            }
-                          >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                            {{
-                              asc: (
-                                <ArrowUpNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                              ),
-                              desc: (
-                                <ArrowDownNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                              ),
-                            }[header.column.getIsSorted() as string] ?? (
-                              <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
-                            )}
-                            <button
-                              className="absolute right-0 h-full w-1 bg-transparent focus:bg-muted-foreground group-hover:bg-muted-foreground/20"
-                              onClick={(evt) => {
-                                evt.stopPropagation();
-                              }}
-                              onMouseDown={(evt) => {
-                                header.getResizeHandler()(evt);
-                              }}
-                              onTouchStart={(evt) => {
-                                // evt.stopPropagation();
-                                // evt.preventDefault();
-                                header.getResizeHandler()(evt);
-                              }}
-                            />
-                          </div>
-                        </>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
                       )}
-                    </th>
+                    </td>
                   );
                 })}
               </tr>
-            ))}
-          </thead>
-          <tbody className="table-row-group">
-            {virtualizer.getVirtualItems().map((virtualRow, index) => {
-              const row = rows[virtualRow.index] as Row<TReportResult>;
-              return (
-                <tr
-                  key={row.id}
-                  className="table-row"
-                  style={{
-                    height: `${virtualRow.size}px`,
-                    transform: `translateY(${
-                      virtualRow.start - index * virtualRow.size
-                    }px)`,
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <td
-                        key={cell.id}
-                        className="table-cell whitespace-nowrap"
-                        style={{ width: cell.column.getSize() }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
