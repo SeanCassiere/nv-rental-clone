@@ -72,7 +72,11 @@ const DefaultView = () => {
         displayName: accessor,
         isVisible: true,
         displayOrder: outputAccessorsLength + idx + 1,
-        dataType: "integer",
+        dataType: ["name", "note"].some((key) =>
+          accessor.toLowerCase().includes(key)
+        )
+          ? "string"
+          : "integer",
       }));
 
     // combine the output fields with the additional accessors
