@@ -73,16 +73,15 @@ export const ReportTable = (props: ReportTableProps) => {
       {topRowPlugins.length > 0 && (
         <div
           className={cn(
-            "flex flex-wrap items-center gap-4",
+            "flex flex-col flex-wrap items-center gap-2 sm:flex-row",
             topRowPluginsAlignment === "end" ? "justify-end" : "justify-start"
           )}
         >
           {topRowPlugins.map((Plugin, idx) => (
             <React.Fragment key={`report_table_top_plugin_${idx}`}>
-              <Plugin table={table} />
+              <Plugin table={table} align={topRowPluginsAlignment} />
             </React.Fragment>
           ))}
-          <button>Columns</button>
         </div>
       )}
       <div

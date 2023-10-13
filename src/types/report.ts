@@ -9,4 +9,5 @@ export type ReportFilterOption = {
 
 export type ReportTablePlugin = (props: {
   table: Table<TReportResult>;
+  align: "start" | "center" | "end";
 }) => JSX.Element | null;
