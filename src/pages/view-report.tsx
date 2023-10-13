@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
-import { ViewReport } from "@/components/report/view";
+import { ViewReport } from "@/components/report/page";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { ReportContextProvider } from "@/hooks/context/view-report";

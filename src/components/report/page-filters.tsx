@@ -1,5 +1,5 @@
 import React from "react";
-import { PlayIcon, XIcon } from "lucide-react";
+import { Loader2Icon, PlayIcon, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -7,7 +7,7 @@ import {
   DropDownReportFilter,
   ListBoxReportFilter,
   TextBoxReportFilter,
-} from "@/components/report/filter";
+} from "@/components/report/page-filter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
@@ -16,7 +16,7 @@ import { useReportLookupLists } from "@/hooks/internal/useReportLookupLists";
 
 export const ReportFilters = () => {
   const { t } = useTranslation();
-  const { report, filtersList, resetSearchCriteria, runReport } =
+  const { report, filtersList, resetSearchCriteria, runReport, isPending } =
     useReportContext();
 
   const lookup = useReportLookupLists(report);
@@ -109,7 +109,11 @@ export const ReportFilters = () => {
               size="sm"
               onClick={runReport}
             >
-              <PlayIcon className="mr-2 h-3 w-3" />
+              {isPending ? (
+                <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+              ) : (
+                <PlayIcon className="mr-2 h-3 w-3" />
+              )}
               {t("buttons.run", { ns: "labels" })}
             </Button>
             {filtersList.length > 0 && (

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRightIcon } from "lucide-react";
 
-import { ReportFilters } from "@/components/report/filters";
+import { ReportFilters } from "@/components/report/page-filters";
 import { Separator } from "@/components/ui/separator";
 
 import { useReportContext } from "@/hooks/context/view-report";
@@ -12,10 +12,20 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
+import DefaultView from "./presentation/default-view";
+import JsonView from "./presentation/json-view";
+
+const customReports: Record<string, () => JSX.Element> = {
+  financialsummary: JsonView,
+};
+
 export const ViewReport = () => {
   const { report, filtersList, resultState, isPending } = useReportContext();
 
   const isFiltersAvailable = filtersList.length > 0;
+
+  const lookup = report.name.replaceAll(" ", "").toLowerCase();
+  const PresentationView = customReports[lookup] ?? DefaultView;
 
   useDocumentTitle(titleMaker(report.name));
 
@@ -39,7 +49,7 @@ export const ViewReport = () => {
               aria-hidden="true"
             />
             <h1 className="inline-block text-2xl font-semibold leading-6">
-              {report.name}
+              {report?.title ? report.title : report.name}
             </h1>
           </div>
           {/* put action details here like save and schedule */}
@@ -54,21 +64,13 @@ export const ViewReport = () => {
         <Separator className="mt-3.5" />
       </section>
 
-      <div>
-        {isPending && <p className="mx-4 mt-4">Loading...</p>}
-        {resultState.status === "idle" && (
-          <p className="mx-4 mt-4">
-            Click the Run button to generate the report.
-          </p>
-        )}
-        {resultState.status === "error" && <p>{resultState.error}</p>}
-        {resultState.status === "success" && (
-          <pre className="mx-4 mt-4 max-w-xs overflow-x-scroll text-sm sm:max-w-lg">
-            {JSON.stringify(resultState.rows, null, 2)}
-          </pre>
-        )}
-      </div>
-      {/*  */}
+      {resultState.status === "idle" && (
+        <p className="mx-2 mt-4 block sm:mx-5">
+          Click the Run button to generate the report.
+        </p>
+      )}
+      {resultState.status === "error" && <p>{resultState.error}</p>}
+      {resultState.status === "success" && <PresentationView />}
     </>
   );
 };
