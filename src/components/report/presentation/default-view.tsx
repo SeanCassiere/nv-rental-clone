@@ -1,6 +1,8 @@
 import React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 
+import { ReportTable } from "@/components/report/plugin/table";
+
 import { useReportContext } from "@/hooks/context/view-report";
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
@@ -89,6 +91,7 @@ const DefaultView = () => {
         id: field.name,
         header: field.displayName,
         accessorFn: (row) => row[field.name],
+        cell: (row) => row.getValue() ?? "-",
       };
       columns.push(col);
     });
@@ -98,6 +101,7 @@ const DefaultView = () => {
         id: field.name,
         header: field.displayName,
         accessorFn: (row) => row[field.name],
+        cell: (row) => row.getValue() ?? "-",
       };
       columns.push(col);
     });
@@ -108,7 +112,9 @@ const DefaultView = () => {
   console.log("columnDefs", columnDefs);
 
   return (
-    <section className="mx-2 mt-4 sm:mx-4 sm:px-1">DefaultReportView</section>
+    <section className="mx-2 mt-4 sm:mx-4 sm:px-1">
+      <ReportTable columnDefs={columnDefs} rows={sanitizedRows.rows} />
+    </section>
   );
 };
 
