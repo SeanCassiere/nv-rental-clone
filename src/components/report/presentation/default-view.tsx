@@ -139,8 +139,8 @@ const DefaultView = () => {
       const col: ColumnDef<TReportResult> = {
         id: field.name,
         header: field.displayName,
-        accessorFn: (row) => row[field.name],
-        cell: (cell) => format(report.name, field, cell.getValue() as any),
+        accessorFn: (data) => data[field.name],
+        cell: (info) => format(report.name, field, info.getValue() as any),
         size: field.size,
         minSize: field.minSize,
         maxSize: field.maxSize,
