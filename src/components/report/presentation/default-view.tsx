@@ -77,8 +77,8 @@ const DefaultView = () => {
 
     // combine the output fields with the additional accessors
     // and perform any required calculations
-    const outputFields = [...report.outputFields, ...additionalAccessors].map(
-      (accessor) => {
+    const outputFields = [...report.outputFields, ...additionalAccessors]
+      .map((accessor) => {
         // calculate starting, min, and max sizing for the columns
         const rowValues = normalRows
           .map((row) => String(row[accessor.name]))
@@ -96,8 +96,8 @@ const DefaultView = () => {
           minSize,
           maxSize,
         };
-      }
-    );
+      })
+      .sort((a, b) => a.displayOrder - b.displayOrder);
 
     return {
       rows: normalRows,
