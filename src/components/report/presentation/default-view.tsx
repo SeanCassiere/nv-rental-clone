@@ -12,7 +12,6 @@ import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatte
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
 
-import { IS_LOCAL_DEV } from "@/utils/constants";
 import type { ReportTablePlugin } from "@/types/report";
 
 type OutputField = TReportDetail["outputFields"][number];
@@ -124,7 +123,7 @@ const DefaultView = () => {
   const topRowPlugins = React.useMemo(() => {
     const plugins: ReportTablePlugin[] = [];
 
-    if (report.isExportableToExcel && IS_LOCAL_DEV) {
+    if (report.isExportableToExcel) {
       plugins.push(ExportToCsv);
     }
     return plugins;
