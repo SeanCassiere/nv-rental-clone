@@ -10,7 +10,7 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
   const { table } = props;
   const { report } = useReportContext();
 
-  const [userFilename, setUserFilename] = React.useState(
+  const [userFilename] = React.useState(
     sanitizeFilename(report.name ?? "report")
   );
 
