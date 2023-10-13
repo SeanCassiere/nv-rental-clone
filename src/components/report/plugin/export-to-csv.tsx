@@ -1,4 +1,14 @@
 import * as React from "react";
+import { SheetIcon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import { useReportContext } from "@/hooks/context/view-report";
 
@@ -10,11 +20,14 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
   const { table } = props;
   const { report } = useReportContext();
 
-  const [userFilename] = React.useState(
-    sanitizeFilename(report.name ?? "report")
+  const inputId = React.useId();
+
+  const [open, onOpenChange] = React.useState(false);
+  const [userFilename, setUserFilename] = React.useState(
+    report.name ?? "report"
   );
 
-  const onClick = React.useCallback(() => {
+  const download = React.useCallback(() => {
     const columns = table
       .getAllFlatColumns()
       .map((col) => col.columnDef.header || "");
@@ -36,7 +49,47 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
     const filename = `${reportName}-${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}`;
 
     downloadDataToCsv([columns, ...rows], filename);
-  }, [table, userFilename]);
 
-  return <button onClick={onClick}>Export to csv</button>;
+    onOpenChange(false);
+    setUserFilename(report.name ?? "report");
+  }, [table, userFilename, report.name]);
+
+  return (
+    <Popover open={open} onOpenChange={onOpenChange}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" size="sm" className="ml-auto flex h-8">
+          <SheetIcon className="mr-2 h-4 w-4" />
+          Export to CSV
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="center" style={{ maxWidth: "16rem" }}>
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Export to CSV</h4>
+            <p className="text-sm text-muted-foreground">
+              Confirm the filename and click the download button.
+            </p>
+          </div>
+          <div className="grid gap-3">
+            <Label htmlFor={inputId} className="sr-only">
+              Filename
+            </Label>
+            <div className="grid items-center">
+              <Input
+                id={inputId}
+                className="h-8"
+                value={userFilename}
+                onChange={(evt) => {
+                  setUserFilename(evt.target.value);
+                }}
+              />
+            </div>
+            <Button type="button" onClick={download}>
+              Download
+            </Button>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
 };
