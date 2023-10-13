@@ -57,12 +57,16 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="ml-auto flex h-8">
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex h-8 w-full sm:w-fit"
+        >
           <SheetIcon className="mr-2 h-4 w-4" />
           Export to CSV
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="center" style={{ maxWidth: "16rem" }}>
+      <PopoverContent align="center" className="w-full sm:max-w-[16rem]">
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Export to CSV</h4>
