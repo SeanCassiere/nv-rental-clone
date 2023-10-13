@@ -26,6 +26,7 @@ interface ReportTableProps {
 
 export const ReportTable = (props: ReportTableProps) => {
   const parentRef = React.useRef<HTMLDivElement>(null);
+  const tableHeadRef = React.useRef<HTMLTableSectionElement>(null);
 
   const [sorting, onSortingChange] = React.useState<SortingState>([]);
 
@@ -40,6 +41,8 @@ export const ReportTable = (props: ReportTableProps) => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     sortDescFirst: false,
+    enableColumnResizing: true,
+    enableSorting: true,
     // debug
     debugTable: true,
   });
@@ -50,24 +53,29 @@ export const ReportTable = (props: ReportTableProps) => {
     getScrollElement: () => parentRef.current,
     estimateSize: () => 40,
     overscan: 20,
+    paddingStart: tableHeadRef?.current?.clientHeight ?? 0,
+    scrollPaddingStart: tableHeadRef?.current?.clientHeight ?? 0,
   });
 
   return (
-    <div ref={parentRef} className="relative h-[600px] overflow-auto">
+    <div ref={parentRef} className="h-[600px] overflow-auto">
       <table
-        className="relative table table-fixed [scrollbar-gutter:stable]"
-        style={{ width: table.getCenterTotalSize() }}
+        className="relative border-collapse [scrollbar-gutter:stable]"
+        style={{
+          width: table.getCenterTotalSize(),
+          height: `${virtualizer.getTotalSize()}px`,
+        }}
       >
-        <thead className="sticky left-0 right-0 top-0 z-10 table-header-group bg-background">
+        <thead ref={tableHeadRef}>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="table-row">
+            <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
                   <th
                     key={header.id}
                     colSpan={header.colSpan}
                     style={{ width: header.getSize() }}
-                    className="table-cell"
+                    className="sticky top-0 z-10 bg-background"
                   >
                     {header.isPlaceholder ? null : (
                       <>
@@ -113,25 +121,23 @@ export const ReportTable = (props: ReportTableProps) => {
             </tr>
           ))}
         </thead>
-        <tbody className="table-row-group">
+        <tbody>
           {virtualizer.getVirtualItems().map((virtualRow, index) => {
             const row = rows[virtualRow.index] as Row<TReportResult>;
             return (
               <tr
                 key={row.id}
-                className="table-row"
+                className="absolute left-0 top-0 w-full"
                 style={{
                   height: `${virtualRow.size}px`,
-                  transform: `translateY(${
-                    virtualRow.start - index * virtualRow.size
-                  }px)`,
+                  transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <td
                       key={cell.id}
-                      className="table-cell whitespace-nowrap"
+                      className="whitespace-nowrap"
                       style={{ width: cell.column.getSize() }}
                     >
                       {flexRender(
