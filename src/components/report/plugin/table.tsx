@@ -33,10 +33,11 @@ interface ReportTableProps {
   columnDefs: ColumnDef<TReportResult>[];
   rows: TReportResult[];
   topRowPlugins?: ReportTablePlugin[];
+  topRowPluginsAlignment?: "start" | "end";
 }
 
 export const ReportTable = (props: ReportTableProps) => {
-  const { topRowPlugins = [] } = props;
+  const { topRowPlugins = [], topRowPluginsAlignment = "end" } = props;
   const parentRef = React.useRef<HTMLDivElement>(null);
   const tableHeadRef = React.useRef<HTMLTableSectionElement>(null);
 
@@ -70,7 +71,12 @@ export const ReportTable = (props: ReportTableProps) => {
   return (
     <div className="grid grid-cols-1 gap-4">
       {topRowPlugins.length > 0 && (
-        <div className="flex items-center justify-end gap-4">
+        <div
+          className={cn(
+            "flex flex-wrap items-center gap-4",
+            topRowPluginsAlignment === "end" ? "justify-end" : "justify-start"
+          )}
+        >
           {topRowPlugins.map((plugin, idx) => (
             <React.Fragment key={`report_table_top_plugin_${idx}`}>
               {plugin({ table })}
