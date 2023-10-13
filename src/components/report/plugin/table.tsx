@@ -68,7 +68,7 @@ export const ReportTable = (props: ReportTableProps) => {
   });
 
   return (
-    <>
+    <div className="grid grid-cols-1 gap-4">
       {topRowPlugins.length > 0 && (
         <div className="flex items-center justify-end gap-4">
           {topRowPlugins.map((plugin, idx) => (
@@ -76,6 +76,7 @@ export const ReportTable = (props: ReportTableProps) => {
               {plugin({ table })}
             </React.Fragment>
           ))}
+          <button>Columns</button>
         </div>
       )}
       <div ref={parentRef} className="h-[600px] overflow-auto rounded border">
@@ -190,6 +191,6 @@ export const ReportTable = (props: ReportTableProps) => {
           </TableBody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
