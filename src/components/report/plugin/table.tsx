@@ -68,13 +68,13 @@ export const ReportTable = (props: ReportTableProps) => {
   return (
     <div ref={parentRef} className="h-[600px] overflow-auto rounded border">
       <table
-        className="relative w-full caption-bottom border-separate bg-card text-sm [scrollbar-gutter:stable]"
+        className="relative w-full caption-bottom bg-card text-sm [scrollbar-gutter:stable]"
         style={{
           width: table.getCenterTotalSize(),
           height: `${virtualizer.getTotalSize()}px`,
         }}
       >
-        <TableHeader ref={tableHeadRef}>
+        <TableHeader ref={tableHeadRef} className="bg-card">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header, header_idx) => {
@@ -84,7 +84,7 @@ export const ReportTable = (props: ReportTableProps) => {
                     colSpan={header.colSpan}
                     style={{ width: header.getSize() }}
                     className={cn(
-                      "sticky top-0 z-10 border-b bg-card",
+                      "sticky top-0 z-10 border-b bg-muted",
                       header_idx !== 0 ? "px-0" : ""
                     )}
                   >
@@ -92,7 +92,7 @@ export const ReportTable = (props: ReportTableProps) => {
                       <>
                         <div
                           className={cn(
-                            "group relative flex items-center justify-start whitespace-nowrap",
+                            "group relative flex h-full items-center justify-start whitespace-nowrap",
                             header.column.getCanSort()
                               ? "cursor-pointer select-none"
                               : ""
@@ -117,12 +117,19 @@ export const ReportTable = (props: ReportTableProps) => {
                           }[header.column.getIsSorted() as string] ?? (
                             <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
                           )}
-                          <button
-                            className="absolute right-0 h-full w-1 bg-transparent px-1 focus:bg-muted-foreground group-hover:bg-muted-foreground/20"
-                            onClick={(evt) => evt.stopPropagation()}
-                            onMouseDown={header.getResizeHandler()}
-                            onTouchStart={header.getResizeHandler()}
-                          />
+                          {header.column.getCanResize() && (
+                            <span
+                              className={cn(
+                                "absolute right-0 z-20 mr-1 inline-block h-2/4 w-[4px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full sm:w-[2px]",
+                                header.column.getIsResizing()
+                                  ? "h-full opacity-40 sm:w-[4px]"
+                                  : "hover:h-4/6 hover:opacity-40"
+                              )}
+                              onClick={(evt) => evt.stopPropagation()}
+                              onMouseDown={header.getResizeHandler()}
+                              onTouchStart={header.getResizeHandler()}
+                            />
+                          )}
                         </div>
                       </>
                     )}
