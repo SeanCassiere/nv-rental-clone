@@ -130,6 +130,9 @@ const DefaultView = () => {
           field.dataType === "date" || field.dataType === "datetime"
             ? "datetime"
             : "auto",
+        meta: {
+          cellContentAlign: field.dataType === "decimal" ? "end" : undefined,
+        },
       };
       columns.push(col);
     });

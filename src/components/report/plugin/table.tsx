@@ -85,7 +85,7 @@ export const ReportTable = (props: ReportTableProps) => {
                     style={{ width: header.getSize() }}
                     className={cn(
                       "sticky top-0 z-10 border-b bg-muted",
-                      header_idx !== 0 ? "px-0" : ""
+                      header_idx !== 0 ? "px-2" : "pl-4"
                     )}
                   >
                     {header.isPlaceholder ? null : (
@@ -156,8 +156,12 @@ export const ReportTable = (props: ReportTableProps) => {
                     <TableCell
                       key={cell.id}
                       className={cn(
-                        "whitespace-nowrap",
-                        cell_idx !== 0 ? "px-0" : ""
+                        "inline-flex whitespace-nowrap",
+                        // cell_idx !== 0 ? "px-0" : "",
+                        // "pr-6",
+                        cell.column.columnDef.meta?.cellContentAlign === "end"
+                          ? "justify-end pr-6"
+                          : "justify-start"
                       )}
                       style={{ width: cell.column.getSize() }}
                     >
