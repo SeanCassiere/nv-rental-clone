@@ -33,5 +33,5 @@ export function downloadDataToCsv(arr: unknown[][], filename: string) {
 }
 
 export function sanitizeFilename(filename: string) {
-  return filename.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+  return filename.replace(/[^a-z0-9]/gi, "-").toLowerCase();
 }
