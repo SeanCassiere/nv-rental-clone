@@ -11,6 +11,10 @@ import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatte
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
 
+import type { ReportTablePlugin } from "@/types/report";
+
+import { exportToCsv } from "../plugin/export-to-csv";
+
 type OutputField = TReportDetail["outputFields"][number];
 
 const KNOWN_REMOVAL_ACCESSORS = [
@@ -117,6 +121,15 @@ const DefaultView = () => {
     };
   }, [data, report.outputFields]);
 
+  const topRowPlugins = React.useMemo(() => {
+    const plugins: ReportTablePlugin[] = [];
+
+    if (report.isExportableToExcel) {
+      plugins.push(exportToCsv);
+    }
+    return plugins;
+  }, [report.isExportableToExcel]);
+
   // create the column definitions
   const columnDefs = React.useMemo(() => {
     const columns: ColumnDef<TReportResult>[] = [];
@@ -156,7 +169,11 @@ const DefaultView = () => {
           shrink
         />
       ) : (
-        <ReportTable columnDefs={columnDefs} rows={sanitizedRows.rows} />
+        <ReportTable
+          columnDefs={columnDefs}
+          rows={sanitizedRows.rows}
+          topRowPlugins={topRowPlugins}
+        />
       )}
     </section>
   );
