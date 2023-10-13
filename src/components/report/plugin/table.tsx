@@ -79,7 +79,7 @@ export const ReportTable = (props: ReportTableProps) => {
         >
           {topRowPlugins.map((Plugin, idx) => (
             <React.Fragment key={`report_table_top_plugin_${idx}`}>
-              <Plugin table={table} />
+              <Plugin table={table} align={topRowPluginsAlignment} />
             </React.Fragment>
           ))}
         </div>

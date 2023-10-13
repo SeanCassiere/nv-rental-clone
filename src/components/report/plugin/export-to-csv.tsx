@@ -17,7 +17,7 @@ import type { ReportTablePlugin } from "@/types/report";
 import { downloadDataToCsv, sanitizeFilename } from "@/utils";
 
 export const ExportToCsv: ReportTablePlugin = (props) => {
-  const { table } = props;
+  const { table, align } = props;
   const { report } = useReportContext();
 
   const inputId = React.useId();
@@ -66,7 +66,7 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
           Export to CSV
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="center" className="w-full sm:max-w-[16rem]">
+      <PopoverContent align={align} className="w-full sm:max-w-[16rem]">
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Export to CSV</h4>
