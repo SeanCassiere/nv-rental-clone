@@ -15,6 +15,14 @@ import {
   ArrowUpNarrowWideIcon,
 } from "lucide-react";
 
+import {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { TReportResult } from "@/schemas/report";
 
 import { cn } from "@/utils";
@@ -58,24 +66,27 @@ export const ReportTable = (props: ReportTableProps) => {
   });
 
   return (
-    <div ref={parentRef} className="h-[600px] overflow-auto">
+    <div ref={parentRef} className="h-[600px] overflow-auto rounded border">
       <table
-        className="relative border-collapse [scrollbar-gutter:stable]"
+        className="relative w-full caption-bottom border-separate bg-card text-sm [scrollbar-gutter:stable]"
         style={{
           width: table.getCenterTotalSize(),
           height: `${virtualizer.getTotalSize()}px`,
         }}
       >
-        <thead ref={tableHeadRef}>
+        <TableHeader ref={tableHeadRef}>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header, header_idx) => {
                 return (
-                  <th
+                  <TableHead
                     key={header.id}
                     colSpan={header.colSpan}
                     style={{ width: header.getSize() }}
-                    className="sticky top-0 z-10 bg-background"
+                    className={cn(
+                      "sticky top-0 z-10 border-b bg-card",
+                      header_idx !== 0 ? "px-0" : ""
+                    )}
                   >
                     {header.isPlaceholder ? null : (
                       <>
@@ -107,7 +118,7 @@ export const ReportTable = (props: ReportTableProps) => {
                             <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
                           )}
                           <button
-                            className="absolute right-0 h-full w-1 bg-transparent focus:bg-muted-foreground group-hover:bg-muted-foreground/20"
+                            className="absolute right-0 h-full w-1 bg-transparent px-1 focus:bg-muted-foreground group-hover:bg-muted-foreground/20"
                             onClick={(evt) => evt.stopPropagation()}
                             onMouseDown={header.getResizeHandler()}
                             onTouchStart={header.getResizeHandler()}
@@ -115,17 +126,17 @@ export const ReportTable = (props: ReportTableProps) => {
                         </div>
                       </>
                     )}
-                  </th>
+                  </TableHead>
                 );
               })}
-            </tr>
+            </TableRow>
           ))}
-        </thead>
-        <tbody>
-          {virtualizer.getVirtualItems().map((virtualRow, index) => {
+        </TableHeader>
+        <TableBody>
+          {virtualizer.getVirtualItems().map((virtualRow) => {
             const row = rows[virtualRow.index] as Row<TReportResult>;
             return (
-              <tr
+              <TableRow
                 key={row.id}
                 className="absolute left-0 top-0 w-full"
                 style={{
@@ -133,24 +144,27 @@ export const ReportTable = (props: ReportTableProps) => {
                   transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
-                {row.getVisibleCells().map((cell) => {
+                {row.getVisibleCells().map((cell, cell_idx) => {
                   return (
-                    <td
+                    <TableCell
                       key={cell.id}
-                      className="whitespace-nowrap"
+                      className={cn(
+                        "whitespace-nowrap",
+                        cell_idx !== 0 ? "px-0" : ""
+                      )}
                       style={{ width: cell.column.getSize() }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
-                    </td>
+                    </TableCell>
                   );
                 })}
-              </tr>
+              </TableRow>
             );
           })}
-        </tbody>
+        </TableBody>
       </table>
     </div>
   );
