@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { ReportTable } from "@/components/report/plugin/table";
 
 import { useReportContext } from "@/hooks/context/view-report";
+import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatter";
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
 
@@ -26,6 +27,8 @@ const DefaultView = () => {
   }
 
   const data = React.useMemo(() => state.rows ?? [], [state.rows]);
+
+  const format = useReportValueFormatter();
 
   // Extract the summary items from the data
   const sanitizedRows = React.useMemo(() => {
@@ -76,7 +79,7 @@ const DefaultView = () => {
           accessor.toLowerCase().includes(key)
         )
           ? "string"
-          : "integer",
+          : "decimal",
       }));
 
     // combine the output fields with the additional accessors
@@ -88,7 +91,7 @@ const DefaultView = () => {
           .map((row) => String(row[accessor.name]))
           .map((item) => item.length);
         const cellSize = Math.max(...rowValues) * 10;
-        const headerSize = accessor.displayName.length * 10 + 25;
+        const headerSize = Math.max(120, accessor.displayName.length * 10 + 25);
 
         const size = cellSize < headerSize ? headerSize : cellSize;
         const minSize = headerSize < cellSize ? cellSize : headerSize;
@@ -119,16 +122,20 @@ const DefaultView = () => {
         id: field.name,
         header: field.displayName,
         accessorFn: (row) => row[field.name],
-        cell: (row) => row.getValue() ?? "-",
+        cell: (cell) => format(report.name, field, cell.getValue() as any),
         size: field.size,
         minSize: field.minSize,
         maxSize: field.maxSize,
+        sortingFn:
+          field.dataType === "date" || field.dataType === "datetime"
+            ? "datetime"
+            : "auto",
       };
       columns.push(col);
     });
 
     return columns;
-  }, [sanitizedRows.outputFields]);
+  }, [format, report.name, sanitizedRows.outputFields]);
 
   return (
     <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
