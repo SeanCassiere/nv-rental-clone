@@ -39,6 +39,7 @@ export const ReportTable = (props: ReportTableProps) => {
     onSortingChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    sortDescFirst: false,
     // debug
     debugTable: true,
   });
@@ -47,14 +48,17 @@ export const ReportTable = (props: ReportTableProps) => {
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 35,
-    overscan: 10,
+    estimateSize: () => 40,
+    overscan: 20,
   });
 
   return (
     <div>
       <div ref={parentRef} className="relative h-[600px] overflow-auto">
-        <table className="relative table table-fixed">
+        <table
+          className="relative table table-fixed [scrollbar-gutter:stable]"
+          style={{ width: table.getCenterTotalSize() }}
+        >
           <thead className="sticky left-0 top-0 z-10 table-header-group bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="table-row">
@@ -67,30 +71,50 @@ export const ReportTable = (props: ReportTableProps) => {
                       className="table-cell"
                     >
                       {header.isPlaceholder ? null : (
-                        <div
-                          className={cn(
-                            "flex items-center justify-start whitespace-nowrap",
-                            header.column.getCanSort()
-                              ? "cursor-pointer select-none"
-                              : ""
-                          )}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: (
-                              <ArrowUpNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                            ),
-                            desc: (
-                              <ArrowDownNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                            ),
-                          }[header.column.getIsSorted() as string] ?? (
-                            <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
-                          )}
-                        </div>
+                        <>
+                          <div
+                            className={cn(
+                              "group relative flex items-center justify-start whitespace-nowrap",
+                              header.column.getCanSort()
+                                ? "cursor-pointer select-none"
+                                : ""
+                            )}
+                            onClick={
+                              !header.column.getIsResizing()
+                                ? header.column.getToggleSortingHandler()
+                                : () => {}
+                            }
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: (
+                                <ArrowUpNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
+                              ),
+                              desc: (
+                                <ArrowDownNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
+                              ),
+                            }[header.column.getIsSorted() as string] ?? (
+                              <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
+                            )}
+                            <button
+                              className="absolute right-0 h-full w-1 bg-transparent focus:bg-muted-foreground group-hover:bg-muted-foreground/20"
+                              onClick={(evt) => {
+                                evt.stopPropagation();
+                              }}
+                              onMouseDown={(evt) => {
+                                header.getResizeHandler()(evt);
+                              }}
+                              onTouchStart={(evt) => {
+                                // evt.stopPropagation();
+                                // evt.preventDefault();
+                                header.getResizeHandler()(evt);
+                              }}
+                            />
+                          </div>
+                        </>
                       )}
                     </th>
                   );
@@ -117,6 +141,7 @@ export const ReportTable = (props: ReportTableProps) => {
                       <td
                         key={cell.id}
                         className="table-cell whitespace-nowrap"
+                        style={{ width: cell.column.getSize() }}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,

@@ -75,10 +75,34 @@ const DefaultView = () => {
         dataType: "integer",
       }));
 
+    // combine the output fields with the additional accessors
+    // and perform any required calculations
+    const outputFields = [...report.outputFields, ...additionalAccessors].map(
+      (accessor) => {
+        // calculate starting, min, and max sizing for the columns
+        const rowValues = normalRows
+          .map((row) => String(row[accessor.name]))
+          .map((item) => item.length);
+        const cellSize = Math.max(...rowValues) * 10;
+        const headerSize = accessor.displayName.length * 10;
+
+        const size = cellSize < headerSize ? headerSize : cellSize;
+        const minSize = headerSize < cellSize ? cellSize : headerSize;
+        const maxSize = size * 2;
+
+        return {
+          ...accessor,
+          size,
+          minSize,
+          maxSize,
+        };
+      }
+    );
+
     return {
       rows: normalRows,
       summaryItems,
-      additionalAccessors,
+      outputFields,
     };
   }, [data, report.outputFields]);
 
@@ -86,33 +110,24 @@ const DefaultView = () => {
   const columnDefs = React.useMemo(() => {
     const columns: ColumnDef<TReportResult>[] = [];
 
-    report.outputFields.forEach((field) => {
+    sanitizedRows.outputFields.forEach((field) => {
       const col: ColumnDef<TReportResult> = {
         id: field.name,
         header: field.displayName,
         accessorFn: (row) => row[field.name],
         cell: (row) => row.getValue() ?? "-",
-      };
-      columns.push(col);
-    });
-
-    sanitizedRows.additionalAccessors.forEach((field) => {
-      const col: ColumnDef<TReportResult> = {
-        id: field.name,
-        header: field.displayName,
-        accessorFn: (row) => row[field.name],
-        cell: (row) => row.getValue() ?? "-",
+        size: field.size,
+        minSize: field.minSize,
+        maxSize: field.maxSize,
       };
       columns.push(col);
     });
 
     return columns;
-  }, [report.outputFields, sanitizedRows.additionalAccessors]);
-
-  console.log("columnDefs", columnDefs);
+  }, [sanitizedRows.outputFields]);
 
   return (
-    <section className="mx-2 mt-4 sm:mx-4 sm:px-1">
+    <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
       <ReportTable columnDefs={columnDefs} rows={sanitizedRows.rows} />
     </section>
   );
