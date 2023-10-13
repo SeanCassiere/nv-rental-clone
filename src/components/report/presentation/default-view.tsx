@@ -1,6 +1,9 @@
 import React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
+import { AlertCircleIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
+import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
 import { ReportTable } from "@/components/report/plugin/table";
 
 import { useReportContext } from "@/hooks/context/view-report";
@@ -18,6 +21,7 @@ const KNOWN_REMOVAL_ACCESSORS = [
 ];
 
 const DefaultView = () => {
+  const { t } = useTranslation();
   const { resultState: state, report } = useReportContext();
 
   if (state.status !== "success") {
@@ -142,7 +146,18 @@ const DefaultView = () => {
 
   return (
     <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
-      <ReportTable columnDefs={columnDefs} rows={sanitizedRows.rows} />
+      {sanitizedRows.rows.length === 0 ? (
+        <CommonEmptyStateContent
+          title={t("display.noResultsFound", { ns: "labels" })}
+          subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}
+          icon={
+            <AlertCircleIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+          }
+          shrink
+        />
+      ) : (
+        <ReportTable columnDefs={columnDefs} rows={sanitizedRows.rows} />
+      )}
     </section>
   );
 };
