@@ -85,7 +85,15 @@ export const ReportTable = (props: ReportTableProps) => {
           <button>Columns</button>
         </div>
       )}
-      <div ref={parentRef} className="h-[600px] overflow-auto rounded border">
+      <div
+        ref={parentRef}
+        className={cn(
+          "overflow-auto rounded border ",
+          topRowPlugins.length > 0
+            ? "h-[550px] sm:h-[520px]"
+            : "h-[600px] sm:h-[550px]"
+        )}
+      >
         <table
           className="relative w-full caption-bottom bg-card text-sm [scrollbar-gutter:stable]"
           style={{
