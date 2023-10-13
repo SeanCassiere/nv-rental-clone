@@ -4,6 +4,7 @@ import { AlertCircleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
 import { ReportTable } from "@/components/report/plugin/table";
 
 import { useReportContext } from "@/hooks/context/view-report";
@@ -13,8 +14,6 @@ import type { TReportDetail, TReportResult } from "@/schemas/report";
 
 import { IS_LOCAL_DEV } from "@/utils/constants";
 import type { ReportTablePlugin } from "@/types/report";
-
-import { exportToCsv } from "../plugin/export-to-csv";
 
 type OutputField = TReportDetail["outputFields"][number];
 
@@ -126,7 +125,7 @@ const DefaultView = () => {
     const plugins: ReportTablePlugin[] = [];
 
     if (report.isExportableToExcel && IS_LOCAL_DEV) {
-      plugins.push(exportToCsv);
+      plugins.push(ExportToCsv);
     }
     return plugins;
   }, [report.isExportableToExcel]);

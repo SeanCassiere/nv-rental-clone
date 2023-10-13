@@ -2,8 +2,10 @@ import * as React from "react";
 
 import type { ReportTablePlugin } from "@/types/report";
 
-export const exportToCsv: ReportTablePlugin = ({ table }) => {
-  const onClick = () => {
+export const ExportToCsv: ReportTablePlugin = (props) => {
+  const { table } = props;
+
+  const onClick = React.useCallback(() => {
     const start = new Date();
 
     const columns = table
@@ -35,6 +37,7 @@ export const exportToCsv: ReportTablePlugin = ({ table }) => {
     ]);
     console.table([columns, ...rows]);
     console.log("End: Export to csv");
-  };
+  }, [table]);
+
   return <button onClick={onClick}>Export to csv</button>;
 };

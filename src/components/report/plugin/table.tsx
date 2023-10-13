@@ -77,9 +77,9 @@ export const ReportTable = (props: ReportTableProps) => {
             topRowPluginsAlignment === "end" ? "justify-end" : "justify-start"
           )}
         >
-          {topRowPlugins.map((plugin, idx) => (
+          {topRowPlugins.map((Plugin, idx) => (
             <React.Fragment key={`report_table_top_plugin_${idx}`}>
-              {plugin({ table })}
+              <Plugin table={table} />
             </React.Fragment>
           ))}
           <button>Columns</button>
