@@ -137,7 +137,7 @@ const DefaultView = () => {
   const columnDefs = React.useMemo(() => {
     const columns: ColumnDef<TReportResult>[] = [];
 
-    sanitizedRows.outputFields.forEach((field) => {
+    sanitizedRows.outputFields.forEach((field, idx) => {
       const col: ColumnDef<TReportResult> = {
         id: field.name,
         header: field.displayName,
@@ -152,6 +152,7 @@ const DefaultView = () => {
             : "auto",
         meta: {
           cellContentAlign: field.dataType === "decimal" ? "end" : undefined,
+          columnName: field.displayName,
         },
       };
       columns.push(col);
