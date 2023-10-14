@@ -1,14 +1,25 @@
 import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SheetIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
 
 import { useReportContext } from "@/hooks/context/view-report";
 
@@ -16,43 +27,83 @@ import type { ReportTablePlugin } from "@/types/report";
 
 import { downloadDataToCsv, sanitizeFilename } from "@/utils";
 
+const DEFAULT_NAME = "report";
+const ALL = "all";
+const FILTERED = "filtered";
+
 export const ExportToCsv: ReportTablePlugin = (props) => {
   const { table, align } = props;
   const { report } = useReportContext();
 
-  const inputId = React.useId();
+  const columnFilters = table.getState().columnFilters;
+  const globalFilter = table.getState().globalFilter;
+
+  const isFiltered = React.useMemo(() => {
+    const hasColumnFilters = columnFilters.length > 0;
+    const hasGlobalFilter = (globalFilter || "") !== "";
+    return hasColumnFilters || hasGlobalFilter;
+  }, [columnFilters, globalFilter]);
 
   const [open, onOpenChange] = React.useState(false);
-  const [userFilename, setUserFilename] = React.useState(
-    report.name ?? "report"
+
+  const form = useForm({
+    resolver: zodResolver(z.object({ filename: z.string(), mode: z.string() })),
+    values: {
+      filename: report.name || DEFAULT_NAME,
+      mode: isFiltered ? FILTERED : ALL,
+    },
+  });
+
+  const download = React.useCallback(
+    ({ userFilename, mode }: { userFilename: string; mode: string }) => {
+      const columns = table
+        .getAllFlatColumns()
+        .map((col) => col.columnDef.header || "");
+
+      let rows: any[][] = [];
+
+      if (mode === "all") {
+        const allRows = table.getCoreRowModel().rows.map((row) =>
+          row.getAllCells().reduce((acc, info) => {
+            const cellGetter = info.column.columnDef.cell;
+            const value =
+              typeof cellGetter === "function"
+                ? cellGetter(info.getContext())
+                : info.getValue();
+            acc.push(value);
+            return acc;
+          }, [] as any[])
+        );
+        rows = allRows;
+      }
+
+      if (mode === "filtered") {
+        const filteredRows = table.getRowModel().rows.map((row) =>
+          row.getVisibleCells().reduce((acc, info) => {
+            const cellGetter = info.column.columnDef.cell;
+            const value =
+              typeof cellGetter === "function"
+                ? cellGetter(info.getContext())
+                : info.getValue();
+            acc.push(value);
+            return acc;
+          }, [] as any[])
+        );
+        rows = filteredRows;
+      }
+
+      const now = new Date();
+
+      const reportName = sanitizeFilename(userFilename || DEFAULT_NAME);
+      const filename = `${reportName}-${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}`;
+
+      downloadDataToCsv([columns, ...rows], filename);
+
+      onOpenChange(false);
+      form.setValue("filename", report.name || DEFAULT_NAME);
+    },
+    [table, form, report.name]
   );
-
-  const download = React.useCallback(() => {
-    const columns = table
-      .getAllFlatColumns()
-      .map((col) => col.columnDef.header || "");
-    const rows = table.getRowModel().rows.map((row) =>
-      row.getVisibleCells().reduce((acc, info) => {
-        const cellGetter = info.column.columnDef.cell;
-        const value =
-          typeof cellGetter === "function"
-            ? cellGetter(info.getContext())
-            : info.getValue();
-        acc.push(value);
-        return acc;
-      }, [] as any[])
-    );
-
-    const now = new Date();
-
-    const reportName = sanitizeFilename(userFilename);
-    const filename = `${reportName}-${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}`;
-
-    downloadDataToCsv([columns, ...rows], filename);
-
-    onOpenChange(false);
-    setUserFilename(report.name ?? "report");
-  }, [table, userFilename, report.name]);
 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
@@ -67,32 +118,66 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent align={align} className="w-full sm:max-w-[16rem]">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Export to CSV</h4>
-            <p className="text-sm text-muted-foreground">
-              Confirm the filename and click the download button.
-            </p>
-          </div>
-          <div className="grid gap-3">
-            <Label htmlFor={inputId} className="sr-only">
-              Filename
-            </Label>
-            <div className="grid items-center">
-              <Input
-                id={inputId}
-                className="h-8"
-                value={userFilename}
-                onChange={(evt) => {
-                  setUserFilename(evt.target.value);
+        <Form {...form}>
+          <form
+            className="grid gap-4"
+            onSubmit={form.handleSubmit((values) => {
+              download({ userFilename: values.filename, mode: values.mode });
+            })}
+          >
+            <div className="space-y-2">
+              <h4 className="font-medium leading-none">Export to CSV</h4>
+              <p className="text-sm text-muted-foreground">
+                Confirm the filename and click the download button.
+              </p>
+            </div>
+            <div className="grid gap-3">
+              <FormField
+                control={form.control}
+                name="filename"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel className="sr-only">Filename</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Filename..."
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
                 }}
               />
+              {isFiltered && (
+                <FormField
+                  control={form.control}
+                  name="mode"
+                  render={({ field }) => (
+                    <FormItem className="flex w-full items-center gap-4 space-y-0">
+                      <FormControl>
+                        <Switch
+                          checked={field.value === FILTERED}
+                          onCheckedChange={(checked) =>
+                            field.onChange(checked ? FILTERED : ALL)
+                          }
+                        />
+                      </FormControl>
+                      <FormLabel className="m-0 flex items-center">
+                        {field.value === "filtered"
+                          ? "Filtered rows"
+                          : "All rows"}
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              )}
+              <Button type="submit">Download</Button>
             </div>
-            <Button type="button" onClick={download}>
-              Download
-            </Button>
-          </div>
-        </div>
+          </form>
+        </Form>
       </PopoverContent>
     </Popover>
   );
