@@ -7,6 +7,7 @@ import {
   type ColumnDef,
   type Row,
   type SortingState,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
@@ -23,9 +24,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { TReportResult } from "@/schemas/report";
+import type { TReportResult } from "@/schemas/report";
 
-import { ReportTablePlugin } from "@/types/report";
+import type { ReportTablePlugin } from "@/types/report";
 
 import { cn } from "@/utils";
 
@@ -42,15 +43,19 @@ export const ReportTable = (props: ReportTableProps) => {
   const tableHeadRef = React.useRef<HTMLTableSectionElement>(null);
 
   const [sorting, onSortingChange] = React.useState<SortingState>([]);
+  const [columnVisibility, onColumnVisibilityChange] =
+    React.useState<VisibilityState>({});
 
   const table = useReactTable({
     data: props.rows,
     columns: props.columnDefs,
     state: {
       sorting,
+      columnVisibility,
     },
     columnResizeMode: "onChange",
     onSortingChange,
+    onColumnVisibilityChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     sortDescFirst: false,
@@ -177,14 +182,12 @@ export const ReportTable = (props: ReportTableProps) => {
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
                 >
-                  {row.getVisibleCells().map((cell, cell_idx) => {
+                  {row.getVisibleCells().map((cell) => {
                     return (
                       <TableCell
                         key={cell.id}
                         className={cn(
                           "inline-flex whitespace-nowrap",
-                          // cell_idx !== 0 ? "px-0" : "",
-                          // "pr-6",
                           cell.column.columnDef.meta?.cellContentAlign === "end"
                             ? "justify-end pr-6"
                             : "justify-start"
