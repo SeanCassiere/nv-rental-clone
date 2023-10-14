@@ -165,10 +165,6 @@ const DefaultView = () => {
 
     return { columns, visibility };
   }, [format, report.name, sanitizedRows.outputFields]);
-  console.log(
-    "🚀 ~ file: default-view.tsx:168 ~ tableDefs ~ tableDefs.visibility:",
-    tableDefs.visibility
-  );
 
   return (
     <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
