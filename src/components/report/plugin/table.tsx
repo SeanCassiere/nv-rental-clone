@@ -28,6 +28,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { useReportContext } from "@/hooks/context/view-report";
 
@@ -127,7 +134,7 @@ export const ReportTable = (props: ReportTableProps) => {
       <div
         ref={parentRef}
         className={cn(
-          "overflow-auto rounded border ",
+          "relative overflow-auto rounded border",
           topRowPlugins.length > 0
             ? "h-[550px] sm:h-[520px]"
             : "h-[600px] sm:h-[550px]"
@@ -135,13 +142,15 @@ export const ReportTable = (props: ReportTableProps) => {
       >
         {isPending ? (
           <Skeleton
-            className={cn("w-full rounded-b-none bg-primary/50")}
+            className={cn(
+              "absolute left-0 top-0 w-full rounded-b-none bg-primary/50"
+            )}
             aria-label="Report loading"
             style={{ height: "3px" }}
           />
         ) : (
           <div
-            className="w-full bg-muted"
+            className="absolute left-0 top-0 w-full bg-muted"
             aria-label="Report loaded"
             style={{ height: "3px" }}
           />
@@ -184,22 +193,54 @@ export const ReportTable = (props: ReportTableProps) => {
                           </div>
                           <div className="flex w-full justify-start whitespace-nowrap pb-2">
                             {header.column.getCanSort() && (
-                              <button
-                                onClick={header.column.getToggleSortingHandler()}
-                                aria-label="Toggle sorting"
-                                className="flex items-center justify-start"
-                              >
-                                {{
-                                  asc: (
-                                    <ArrowUpNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
-                                  ),
-                                  desc: (
-                                    <ArrowDownNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
-                                  ),
-                                }[header.column.getIsSorted() as string] ?? (
-                                  <ArrowUpDownIcon className="h-3.5 w-3.5 text-foreground/30" />
-                                )}
-                              </button>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <button
+                                      onClick={header.column.getToggleSortingHandler()}
+                                      aria-label="Toggle sorting"
+                                      className="flex items-center justify-start"
+                                    >
+                                      {{
+                                        asc: (
+                                          <ArrowUpNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                                        ),
+                                        desc: (
+                                          <ArrowDownNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                                        ),
+                                      }[
+                                        header.column.getIsSorted() as string
+                                      ] ?? (
+                                        <ArrowUpDownIcon className="h-3.5 w-3.5 text-foreground/30" />
+                                      )}
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipPortal>
+                                    <TooltipContent>
+                                      <p>
+                                        {header.column.getIsSorted() === "asc"
+                                          ? "Sorted " +
+                                            (header.column.columnDef?.meta
+                                              ?.columnName ??
+                                              header.column.id) +
+                                            " column in ascending"
+                                          : header.column.getIsSorted() ===
+                                            "desc"
+                                          ? "Sorted " +
+                                            (header.column.columnDef?.meta
+                                              ?.columnName ??
+                                              header.column.id) +
+                                            " column in descending"
+                                          : "Sort " +
+                                            (header.column.columnDef?.meta
+                                              ?.columnName ??
+                                              header.column.id) +
+                                            " column in ascending"}
+                                      </p>
+                                    </TooltipContent>
+                                  </TooltipPortal>
+                                </Tooltip>
+                              </TooltipProvider>
                             )}
                           </div>
                           {header.column.getCanResize() && (
@@ -258,6 +299,21 @@ export const ReportTable = (props: ReportTableProps) => {
             })}
           </TableBody>
         </table>
+        {isPending ? (
+          <Skeleton
+            className={cn(
+              "absolute bottom-0 left-0 w-full rounded-b-none bg-primary/50"
+            )}
+            aria-label="Report loading"
+            style={{ height: "3px" }}
+          />
+        ) : (
+          <div
+            className="absolute bottom-0 left-0 w-full"
+            aria-label="Report loaded"
+            style={{ height: "3px" }}
+          />
+        )}
       </div>
     </div>
   );
