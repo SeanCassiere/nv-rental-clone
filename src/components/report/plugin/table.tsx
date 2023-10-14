@@ -307,48 +307,6 @@ function ReportTableColumnHeader<TData, TValue>(
                   </TooltipPortal>
                 </Tooltip>
               )}
-              {header.column.getCanSort() && (
-                <Tooltip delayDuration={250}>
-                  <TooltipTrigger asChild>
-                    <button
-                      onClick={header.column.getToggleSortingHandler()}
-                      aria-label="Toggle sorting"
-                      className="flex items-center justify-start"
-                    >
-                      {{
-                        asc: (
-                          <ArrowUpNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
-                        ),
-                        desc: (
-                          <ArrowDownNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
-                        ),
-                      }[header.column.getIsSorted() as string] ?? (
-                        <ArrowUpDownIcon className="h-3.5 w-3.5 text-foreground/30" />
-                      )}
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipPortal>
-                    <TooltipContent>
-                      <p>
-                        {header.column.getIsSorted() === "asc"
-                          ? "Sorted " +
-                            (header.column.columnDef?.meta?.columnName ??
-                              header.column.id) +
-                            " column in ascending"
-                          : header.column.getIsSorted() === "desc"
-                          ? "Sorted " +
-                            (header.column.columnDef?.meta?.columnName ??
-                              header.column.id) +
-                            " column in descending"
-                          : "Sort " +
-                            (header.column.columnDef?.meta?.columnName ??
-                              header.column.id) +
-                            " column in ascending"}
-                      </p>
-                    </TooltipContent>
-                  </TooltipPortal>
-                </Tooltip>
-              )}
             </div>
             {header.column.getCanResize() && (
               <span
