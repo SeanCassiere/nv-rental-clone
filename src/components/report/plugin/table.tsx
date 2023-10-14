@@ -9,6 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
+  type Header,
   type Row,
   type SortingState,
   type VisibilityState,
@@ -28,6 +29,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { useReportContext } from "@/hooks/context/view-report";
 
@@ -38,15 +46,17 @@ import type { ReportTablePlugin } from "@/types/report";
 
 import { cn } from "@/utils";
 
-interface ReportTableProps {
-  columnDefinitions: ColumnDef<TReportResult>[];
+interface ReportTableProps<TData, TValue> {
+  columnDefinitions: ColumnDef<TData, TValue>[];
   columnVisibility?: VisibilityState;
-  rows: TReportResult[];
+  rows: TData[];
   topRowPlugins?: ReportTablePlugin[];
   topRowPluginsAlignment?: "start" | "end";
 }
 
-export const ReportTable = (props: ReportTableProps) => {
+export function ReportTable<TData, TValue>(
+  props: ReportTableProps<TData, TValue>
+) {
   const { topRowPlugins = [], topRowPluginsAlignment = "end" } = props;
   const { isPending } = useReportContext();
 
@@ -127,7 +137,7 @@ export const ReportTable = (props: ReportTableProps) => {
       <div
         ref={parentRef}
         className={cn(
-          "overflow-auto rounded border ",
+          "relative overflow-auto rounded border",
           topRowPlugins.length > 0
             ? "h-[550px] sm:h-[520px]"
             : "h-[600px] sm:h-[550px]"
@@ -135,13 +145,15 @@ export const ReportTable = (props: ReportTableProps) => {
       >
         {isPending ? (
           <Skeleton
-            className={cn("w-full rounded-b-none bg-primary/50")}
+            className={cn(
+              "absolute left-0 top-0 w-full rounded-b-none bg-primary/50"
+            )}
             aria-label="Report loading"
             style={{ height: "3px" }}
           />
         ) : (
           <div
-            className="w-full bg-muted"
+            className="absolute left-0 top-0 w-full bg-muted"
             aria-label="Report loaded"
             style={{ height: "3px" }}
           />
@@ -159,66 +171,13 @@ export const ReportTable = (props: ReportTableProps) => {
           <TableHeader ref={tableHeadRef} className="bg-card">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header, header_idx) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      style={{ width: header.getSize() }}
-                      className={cn(
-                        "sticky top-0 z-10 border-b bg-muted px-0 py-0"
-                      )}
-                    >
-                      {header.isPlaceholder ? null : (
-                        <div
-                          className={cn(
-                            "relative flex h-full flex-col items-center justify-start gap-2 pr-4",
-                            header_idx === 0 ? "pl-4" : "pl-2"
-                          )}
-                        >
-                          <div className="flex w-full justify-start whitespace-nowrap pt-2">
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </div>
-                          <div className="flex w-full justify-start whitespace-nowrap pb-2">
-                            {header.column.getCanSort() && (
-                              <button
-                                onClick={header.column.getToggleSortingHandler()}
-                                aria-label="Toggle sorting"
-                                className="flex items-center justify-start"
-                              >
-                                {{
-                                  asc: (
-                                    <ArrowUpNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
-                                  ),
-                                  desc: (
-                                    <ArrowDownNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
-                                  ),
-                                }[header.column.getIsSorted() as string] ?? (
-                                  <ArrowUpDownIcon className="h-3.5 w-3.5 text-foreground/30" />
-                                )}
-                              </button>
-                            )}
-                          </div>
-                          {header.column.getCanResize() && (
-                            <span
-                              className={cn(
-                                "absolute right-0 top-1/4 z-20 mr-1 inline-block h-2/4 w-[3px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full focus:h-full sm:w-[2px]",
-                                header.column.getIsResizing()
-                                  ? "top-0 h-full w-[4px] opacity-40 sm:w-[3px]"
-                                  : "top-1/4 hover:h-2/4 hover:opacity-40"
-                              )}
-                              onMouseDown={header.getResizeHandler()}
-                              onTouchStart={header.getResizeHandler()}
-                            />
-                          )}
-                        </div>
-                      )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header, index) => (
+                  <ReportTableColumnHeader
+                    key={header.id}
+                    header={header}
+                    index={index}
+                  />
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -258,7 +217,112 @@ export const ReportTable = (props: ReportTableProps) => {
             })}
           </TableBody>
         </table>
+        {isPending ? (
+          <Skeleton
+            className={cn(
+              "absolute bottom-0 left-0 w-full rounded-b-none bg-primary/50"
+            )}
+            aria-label="Report loading"
+            style={{ height: "3px" }}
+          />
+        ) : (
+          <div
+            className="absolute bottom-0 left-0 w-full"
+            aria-label="Report loaded"
+            style={{ height: "3px" }}
+          />
+        )}
       </div>
     </div>
   );
-};
+}
+
+interface ReportTableColumnHeaderProps<TData, TValue> {
+  header: Header<TData, TValue>;
+  index: number;
+}
+
+function ReportTableColumnHeader<TData, TValue>(
+  props: ReportTableColumnHeaderProps<TData, TValue>
+) {
+  const { header, index } = props;
+
+  return (
+    <TableHead
+      colSpan={header.colSpan}
+      style={{ width: header.getSize() }}
+      className={cn("sticky top-0 z-10 border-b bg-muted px-0 py-0")}
+    >
+      <TooltipProvider>
+        {header.isPlaceholder ? null : (
+          <div
+            className={cn(
+              "relative flex h-full flex-col items-center justify-start gap-2 pr-4",
+              index === 0 ? "pl-4" : "pl-2"
+            )}
+          >
+            <div className="flex w-full justify-start whitespace-nowrap pt-2">
+              {flexRender(header.column.columnDef.header, header.getContext())}
+            </div>
+            <div className="flex w-full justify-start gap-2 whitespace-nowrap pb-2">
+              {header.column.getCanSort() && (
+                <Tooltip delayDuration={250}>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={header.column.getToggleSortingHandler()}
+                      aria-label="Toggle sorting"
+                      className="flex items-center justify-start"
+                    >
+                      {{
+                        asc: (
+                          <ArrowUpNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                        ),
+                        desc: (
+                          <ArrowDownNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                        ),
+                      }[header.column.getIsSorted() as string] ?? (
+                        <ArrowUpDownIcon className="h-3.5 w-3.5 text-foreground/30" />
+                      )}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipPortal>
+                    <TooltipContent>
+                      <p>
+                        {header.column.getIsSorted() === "asc"
+                          ? "Sorted " +
+                            (header.column.columnDef?.meta?.columnName ??
+                              header.column.id) +
+                            " column in ascending"
+                          : header.column.getIsSorted() === "desc"
+                          ? "Sorted " +
+                            (header.column.columnDef?.meta?.columnName ??
+                              header.column.id) +
+                            " column in descending"
+                          : "Sort " +
+                            (header.column.columnDef?.meta?.columnName ??
+                              header.column.id) +
+                            " column in ascending"}
+                      </p>
+                    </TooltipContent>
+                  </TooltipPortal>
+                </Tooltip>
+              )}
+            </div>
+            {header.column.getCanResize() && (
+              <span
+                className={cn(
+                  "absolute right-0 top-1/4 z-20 mr-1 inline-block h-2/4 w-[3px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full focus:h-full sm:w-[2px]",
+                  header.column.getIsResizing()
+                    ? "top-0 h-full w-[4px] opacity-40 sm:w-[3px]"
+                    : "top-1/4 hover:h-2/4 hover:opacity-40"
+                )}
+                onMouseDown={header.getResizeHandler()}
+                onTouchStart={header.getResizeHandler()}
+              />
+            )}
+          </div>
+        )}
+      </TooltipProvider>
+    </TableHead>
+  );
+}
