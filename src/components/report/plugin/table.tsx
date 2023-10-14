@@ -31,7 +31,8 @@ import type { ReportTablePlugin } from "@/types/report";
 import { cn } from "@/utils";
 
 interface ReportTableProps {
-  columnDefs: ColumnDef<TReportResult>[];
+  columnDefinitions: ColumnDef<TReportResult>[];
+  columnVisibility?: VisibilityState;
   rows: TReportResult[];
   topRowPlugins?: ReportTablePlugin[];
   topRowPluginsAlignment?: "start" | "end";
@@ -44,11 +45,11 @@ export const ReportTable = (props: ReportTableProps) => {
 
   const [sorting, onSortingChange] = React.useState<SortingState>([]);
   const [columnVisibility, onColumnVisibilityChange] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>(props?.columnVisibility ?? {});
 
   const table = useReactTable({
     data: props.rows,
-    columns: props.columnDefs,
+    columns: props.columnDefinitions,
     state: {
       sorting,
       columnVisibility,

@@ -1,5 +1,5 @@
 import React from "react";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { AlertCircleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -134,10 +134,12 @@ const DefaultView = () => {
   }, [report.isExportableToExcel]);
 
   // create the column definitions
-  const columnDefs = React.useMemo(() => {
+  const tableDefs = React.useMemo(() => {
     const columns: ColumnDef<TReportResult>[] = [];
+    const visibility: VisibilityState = {};
 
     sanitizedRows.outputFields.forEach((field, idx) => {
+      // building the column definition
       const col: ColumnDef<TReportResult> = {
         id: field.name,
         header: field.displayName,
@@ -156,10 +158,17 @@ const DefaultView = () => {
         },
       };
       columns.push(col);
+
+      // building the visibility state
+      visibility[field.name] = field.isVisible;
     });
 
-    return columns;
+    return { columns, visibility };
   }, [format, report.name, sanitizedRows.outputFields]);
+  console.log(
+    "🚀 ~ file: default-view.tsx:168 ~ tableDefs ~ tableDefs.visibility:",
+    tableDefs.visibility
+  );
 
   return (
     <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
@@ -174,7 +183,8 @@ const DefaultView = () => {
         />
       ) : (
         <ReportTable
-          columnDefs={columnDefs}
+          columnDefinitions={tableDefs.columns}
+          columnVisibility={tableDefs.visibility}
           rows={sanitizedRows.rows}
           topRowPlugins={topRowPlugins}
         />
