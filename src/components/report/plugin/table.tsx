@@ -74,6 +74,19 @@ export const ReportTable = (props: ReportTableProps) => {
     scrollPaddingStart: tableHeadRef?.current?.clientHeight ?? 0,
   });
 
+  React.useEffect(() => {
+    if (props.columnVisibility) {
+      onColumnVisibilityChange(props.columnVisibility);
+      return;
+    }
+
+    onColumnVisibilityChange({});
+  }, [props.columnVisibility]);
+
+  React.useEffect(() => {
+    onSortingChange([]);
+  }, [props.rows]);
+
   return (
     <div className="grid grid-cols-1 gap-4">
       {topRowPlugins.length > 0 && (
