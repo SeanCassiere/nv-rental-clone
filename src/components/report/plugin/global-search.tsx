@@ -10,16 +10,15 @@ import type { ReportTablePlugin } from "@/types/report";
 export const GlobalFilter: ReportTablePlugin = (props) => {
   const { table } = props;
 
-  const [input, setInput] = React.useState(
-    () => table.getState().globalFilter ?? ""
-  );
+  const filterValue = table.getState().globalFilter ?? "";
+
+  const [input, setInput] = React.useState(() => filterValue);
 
   const searchValue = useDebounce(input, 250);
 
   React.useEffect(() => {
-    const value = table.getState().globalFilter ?? "";
-    setInput(value);
-  }, [table]);
+    setInput(filterValue);
+  }, [table, filterValue]);
 
   React.useEffect(() => {
     table.setGlobalFilter(searchValue);

@@ -118,6 +118,10 @@ export function ReportTable<TData, TValue>(
     onSortingChange([]);
   }, [props.rows]);
 
+  React.useEffect(() => {
+    onGlobalFilterChange("");
+  }, [props.rows]);
+
   return (
     <div className="grid grid-cols-1 gap-4">
       {topRowPlugins.length > 0 && (
