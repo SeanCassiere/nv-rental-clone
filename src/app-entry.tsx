@@ -3,12 +3,18 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Router, RouterProvider } from "@tanstack/react-router";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
-import { useTranslation } from "react-i18next";
+import { I18nextProvider, useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
+
+import { GlobalDialogProvider } from "@/hooks/context/modals";
+import { useEventListener } from "@/hooks/internal/useEventListener";
+import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+
+import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 
 import { apiClient } from "@/api";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
@@ -19,13 +25,7 @@ import {
   stringifySearchFn,
 } from "@/tanstack-router-config";
 
-import "./i18next-config";
-
-import { GlobalDialogProvider } from "@/hooks/context/modals";
-import { useEventListener } from "@/hooks/internal/useEventListener";
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-
-import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
+import i18n from "./i18next-config";
 
 export const router = new Router({
   routeTree,
@@ -56,12 +56,14 @@ export default function App() {
     >
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>
-          <GlobalDialogProvider>
-            <React.Suspense fallback={<LoadingPlaceholder />}>
-              <CacheDocumentFocusChecker />
-              <RouterWithAuth />
-            </React.Suspense>
-          </GlobalDialogProvider>
+          <React.Suspense fallback={<LoadingPlaceholder />}>
+            <I18nextProvider i18n={i18n}>
+              <GlobalDialogProvider>
+                <CacheDocumentFocusChecker />
+                <RouterWithAuth />
+              </GlobalDialogProvider>
+            </I18nextProvider>
+          </React.Suspense>
           <ReactQueryDevtools
             initialIsOpen={false}
             position="bottom"
