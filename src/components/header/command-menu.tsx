@@ -169,7 +169,7 @@ export const CommandMenu = () => {
   const run = React.useCallback((command: () => unknown, close = true) => {
     command();
     setText("");
-    if (!close) {
+    if (close) {
       setOpen(false);
     }
   }, []);
