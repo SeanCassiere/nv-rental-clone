@@ -16,6 +16,7 @@ import {
   ArrowUpNarrowWideIcon,
 } from "lucide-react";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   TableBody,
   TableCell,
@@ -23,6 +24,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import { useReportContext } from "@/hooks/context/view-report";
 
 import type { TReportResult } from "@/schemas/report";
 
@@ -40,6 +43,8 @@ interface ReportTableProps {
 
 export const ReportTable = (props: ReportTableProps) => {
   const { topRowPlugins = [], topRowPluginsAlignment = "end" } = props;
+  const { isPending } = useReportContext();
+
   const parentRef = React.useRef<HTMLDivElement>(null);
   const tableHeadRef = React.useRef<HTMLTableSectionElement>(null);
 
@@ -112,8 +117,24 @@ export const ReportTable = (props: ReportTableProps) => {
             : "h-[600px] sm:h-[550px]"
         )}
       >
+        {isPending ? (
+          <Skeleton
+            className={cn("w-full rounded-b-none bg-primary/50")}
+            aria-label="Report loading"
+            style={{ height: "3px" }}
+          />
+        ) : (
+          <div
+            className="w-full bg-muted"
+            aria-label="Report loaded"
+            style={{ height: "3px" }}
+          />
+        )}
         <table
-          className="relative w-full caption-bottom bg-card text-sm [scrollbar-gutter:stable]"
+          className={cn(
+            "relative w-full caption-bottom bg-card text-sm transition-opacity [scrollbar-gutter:stable]",
+            isPending ? "opacity-50" : "opacity-100"
+          )}
           style={{
             width: table.getCenterTotalSize(),
             height: `${virtualizer.getTotalSize()}px`,
@@ -221,6 +242,7 @@ export const ReportTable = (props: ReportTableProps) => {
             })}
           </TableBody>
         </table>
+        S
       </div>
     </div>
   );
