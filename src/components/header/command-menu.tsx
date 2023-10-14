@@ -14,7 +14,6 @@ import {
   User2Icon,
   Users2Icon,
 } from "lucide-react";
-import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -46,8 +45,6 @@ import { cn, IsMacLike } from "@/utils";
 export const CommandMenu = () => {
   const router = useRouter();
   const navigate = router.navigate;
-
-  const auth = useAuth();
 
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
@@ -169,10 +166,10 @@ export const CommandMenu = () => {
     };
   });
 
-  const run = React.useCallback((command: () => unknown, noClose = false) => {
+  const run = React.useCallback((command: () => unknown, close = true) => {
     command();
     setText("");
-    if (!noClose) {
+    if (!close) {
       setOpen(false);
     }
   }, []);
@@ -451,7 +448,7 @@ export const CommandMenu = () => {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                run(() => setShowLogout(true), true);
+                run(() => setShowLogout(true), false);
               }}
             >
               <LogOutIcon className="mr-2 h-4 w-4 text-primary/70" />
