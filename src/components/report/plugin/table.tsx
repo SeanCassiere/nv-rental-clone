@@ -266,7 +266,7 @@ function ReportTableColumnHeader<TData, TValue>(
           <div className="flex w-full justify-start whitespace-nowrap pb-2">
             {header.column.getCanSort() && (
               <TooltipProvider>
-                <Tooltip>
+                <Tooltip delayDuration={250}>
                   <TooltipTrigger asChild>
                     <button
                       onClick={header.column.getToggleSortingHandler()}
