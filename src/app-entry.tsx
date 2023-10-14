@@ -21,6 +21,7 @@ import {
 
 import "./i18next-config";
 
+import { GlobalDialogProvider } from "@/hooks/context/modals";
 import { useEventListener } from "@/hooks/internal/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
@@ -55,10 +56,12 @@ export default function App() {
     >
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>
-          <React.Suspense fallback={<LoadingPlaceholder />}>
-            <CacheDocumentFocusChecker />
-            <RouterWithAuth />
-          </React.Suspense>
+          <GlobalDialogProvider>
+            <React.Suspense fallback={<LoadingPlaceholder />}>
+              <CacheDocumentFocusChecker />
+              <RouterWithAuth />
+            </React.Suspense>
+          </GlobalDialogProvider>
           <ReactQueryDevtools
             initialIsOpen={false}
             position="bottom"

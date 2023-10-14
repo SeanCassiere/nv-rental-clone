@@ -27,7 +27,9 @@ import {
   viewFleetByIdRoute,
 } from "@/routes/fleet/fleet-id-route";
 import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
+import { indexRoute } from "@/routes/index";
 import { loggedOutRoute } from "@/routes/logged-out";
+import { logoutRoute } from "@/routes/logout";
 import { oidcCallbackRoute } from "@/routes/oidc-callback";
 import { reportsRoute } from "@/routes/reports";
 import {
@@ -49,8 +51,6 @@ import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
 import { stylingRoute } from "@/routes/styles";
 
 import { OIDC_REDIRECT_URI } from "@/utils/constants";
-
-import { indexRoute } from "@/routes";
 
 export function decodeFromBinary(str: string): string {
   return decodeURIComponent(
@@ -82,6 +82,7 @@ export const stringifySearchFn = stringifySearchWith((value) =>
 
 export const routeTree = rootRoute.addChildren([
   indexRoute, // /
+  logoutRoute, // /logout
   loggedOutRoute, // /logged-out
   oidcCallbackRoute, // /oidc-callback
   ...(!OIDC_REDIRECT_URI.startsWith("https://") ? [stylingRoute] : []),

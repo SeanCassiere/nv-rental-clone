@@ -14,7 +14,6 @@ import {
   User2Icon,
   Users2Icon,
 } from "lucide-react";
-import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
@@ -46,8 +46,6 @@ export const CommandMenu = () => {
   const router = useRouter();
   const navigate = router.navigate;
 
-  const auth = useAuth();
-
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
 
@@ -63,6 +61,7 @@ export const CommandMenu = () => {
 
   const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =
     useTernaryDarkMode();
+  const { setShowLogout } = useGlobalDialogContext();
 
   const searchTerm = useDebounce(text, 350);
 
@@ -167,10 +166,12 @@ export const CommandMenu = () => {
     };
   });
 
-  const run = React.useCallback((command: () => unknown) => {
+  const run = React.useCallback((command: () => unknown, close = true) => {
     command();
     setText("");
-    setOpen(false);
+    if (close) {
+      setOpen(false);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -447,7 +448,7 @@ export const CommandMenu = () => {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                run(auth.signoutRedirect);
+                run(() => setShowLogout(true), false);
               }}
             >
               <LogOutIcon className="mr-2 h-4 w-4 text-primary/70" />
