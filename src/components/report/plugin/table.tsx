@@ -2,6 +2,10 @@ import React from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
@@ -29,6 +33,7 @@ import { useReportContext } from "@/hooks/context/view-report";
 
 import type { TReportResult } from "@/schemas/report";
 
+import { fuzzyFilter } from "@/utils/table";
 import type { ReportTablePlugin } from "@/types/report";
 
 import { cn } from "@/utils";
@@ -48,6 +53,7 @@ export const ReportTable = (props: ReportTableProps) => {
   const parentRef = React.useRef<HTMLDivElement>(null);
   const tableHeadRef = React.useRef<HTMLTableSectionElement>(null);
 
+  const [globalFilter, onGlobalFilterChange] = React.useState("");
   const [sorting, onSortingChange] = React.useState<SortingState>([]);
   const [columnVisibility, onColumnVisibilityChange] =
     React.useState<VisibilityState>(props?.columnVisibility ?? {});
@@ -56,13 +62,23 @@ export const ReportTable = (props: ReportTableProps) => {
     data: props.rows,
     columns: props.columnDefinitions,
     state: {
-      sorting,
       columnVisibility,
+      globalFilter,
+      sorting,
     },
+    filterFns: {
+      fuzzy: fuzzyFilter,
+    },
+    globalFilterFn: fuzzyFilter,
     columnResizeMode: "onChange",
-    onSortingChange,
     onColumnVisibilityChange,
+    onGlobalFilterChange,
+    onSortingChange,
     getCoreRowModel: getCoreRowModel(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     sortDescFirst: false,
     enableColumnResizing: true,
@@ -242,7 +258,6 @@ export const ReportTable = (props: ReportTableProps) => {
             })}
           </TableBody>
         </table>
-        S
       </div>
     </div>
   );
