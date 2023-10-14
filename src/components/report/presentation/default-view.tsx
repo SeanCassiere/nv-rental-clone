@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
 import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
 import { ReportTable } from "@/components/report/plugin/table";
+import { ViewColumns } from "@/components/report/plugin/view-columns";
 
 import { useReportContext } from "@/hooks/context/view-report";
 import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatter";
@@ -126,6 +127,9 @@ const DefaultView = () => {
     if (report.isExportableToExcel) {
       plugins.push(ExportToCsv);
     }
+
+    plugins.push(ViewColumns); // this comes in last so it's on the right
+
     return plugins;
   }, [report.isExportableToExcel]);
 
