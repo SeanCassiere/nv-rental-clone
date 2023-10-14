@@ -261,7 +261,7 @@ export const reportQKeys = {
             userId: auth.userId,
           },
         }),
-      staleTime: 1000 * 60 * 1, // 1 minutes
+      staleTime: 1000 * 60 * 2, // 2 minutes
       enabled: isEnabled(auth),
     }),
   getDetailsById: ({ auth, reportId }: { auth: Auth; reportId: string }) =>
