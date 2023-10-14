@@ -8,6 +8,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth, type AuthContextProps } from "react-oidc-context";
 
+import { LogoutDialog } from "@/components/common/logout-dialog";
 import { HeaderLayout } from "@/components/header/header-layout";
 import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -135,6 +136,7 @@ function RootComponent() {
 
   return (
     <>
+      <LogoutDialog />
       {isHeaderShown && <HeaderLayout />}
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
         <ScrollRestoration getKey={(location) => location.pathname} />

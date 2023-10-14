@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/command";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
@@ -63,6 +64,7 @@ export const CommandMenu = () => {
 
   const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =
     useTernaryDarkMode();
+  const { setShowLogout } = useGlobalDialogContext();
 
   const searchTerm = useDebounce(text, 350);
 
@@ -167,10 +169,12 @@ export const CommandMenu = () => {
     };
   });
 
-  const run = React.useCallback((command: () => unknown) => {
+  const run = React.useCallback((command: () => unknown, noClose = false) => {
     command();
     setText("");
-    setOpen(false);
+    if (!noClose) {
+      setOpen(false);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -447,7 +451,7 @@ export const CommandMenu = () => {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                run(auth.signoutRedirect);
+                run(() => setShowLogout(true), true);
               }}
             >
               <LogOutIcon className="mr-2 h-4 w-4 text-primary/70" />
