@@ -1,11 +1,12 @@
 import React from "react";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { AlertCircleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
 import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
 import { ReportTable } from "@/components/report/plugin/table";
+import { ViewColumns } from "@/components/report/plugin/view-columns";
 
 import { useReportContext } from "@/hooks/context/view-report";
 import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatter";
@@ -126,14 +127,19 @@ const DefaultView = () => {
     if (report.isExportableToExcel) {
       plugins.push(ExportToCsv);
     }
+
+    plugins.push(ViewColumns); // this comes in last so it's on the right
+
     return plugins;
   }, [report.isExportableToExcel]);
 
   // create the column definitions
-  const columnDefs = React.useMemo(() => {
+  const tableDefs = React.useMemo(() => {
     const columns: ColumnDef<TReportResult>[] = [];
+    const visibility: VisibilityState = {};
 
-    sanitizedRows.outputFields.forEach((field) => {
+    sanitizedRows.outputFields.forEach((field, idx) => {
+      // building the column definition
       const col: ColumnDef<TReportResult> = {
         id: field.name,
         header: field.displayName,
@@ -148,12 +154,16 @@ const DefaultView = () => {
             : "auto",
         meta: {
           cellContentAlign: field.dataType === "decimal" ? "end" : undefined,
+          columnName: field.displayName,
         },
       };
       columns.push(col);
+
+      // building the visibility state
+      visibility[field.name] = field.isVisible;
     });
 
-    return columns;
+    return { columns, visibility };
   }, [format, report.name, sanitizedRows.outputFields]);
 
   return (
@@ -169,7 +179,8 @@ const DefaultView = () => {
         />
       ) : (
         <ReportTable
-          columnDefs={columnDefs}
+          columnDefinitions={tableDefs.columns}
+          columnVisibility={tableDefs.visibility}
           rows={sanitizedRows.rows}
           topRowPlugins={topRowPlugins}
         />

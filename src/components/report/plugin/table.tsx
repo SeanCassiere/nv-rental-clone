@@ -7,6 +7,7 @@ import {
   type ColumnDef,
   type Row,
   type SortingState,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
@@ -23,14 +24,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { TReportResult } from "@/schemas/report";
+import type { TReportResult } from "@/schemas/report";
 
-import { ReportTablePlugin } from "@/types/report";
+import type { ReportTablePlugin } from "@/types/report";
 
 import { cn } from "@/utils";
 
 interface ReportTableProps {
-  columnDefs: ColumnDef<TReportResult>[];
+  columnDefinitions: ColumnDef<TReportResult>[];
+  columnVisibility?: VisibilityState;
   rows: TReportResult[];
   topRowPlugins?: ReportTablePlugin[];
   topRowPluginsAlignment?: "start" | "end";
@@ -42,15 +44,19 @@ export const ReportTable = (props: ReportTableProps) => {
   const tableHeadRef = React.useRef<HTMLTableSectionElement>(null);
 
   const [sorting, onSortingChange] = React.useState<SortingState>([]);
+  const [columnVisibility, onColumnVisibilityChange] =
+    React.useState<VisibilityState>(props?.columnVisibility ?? {});
 
   const table = useReactTable({
     data: props.rows,
-    columns: props.columnDefs,
+    columns: props.columnDefinitions,
     state: {
       sorting,
+      columnVisibility,
     },
     columnResizeMode: "onChange",
     onSortingChange,
+    onColumnVisibilityChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     sortDescFirst: false,
@@ -110,54 +116,55 @@ export const ReportTable = (props: ReportTableProps) => {
                       colSpan={header.colSpan}
                       style={{ width: header.getSize() }}
                       className={cn(
-                        "sticky top-0 z-10 border-b bg-muted",
-                        header_idx !== 0 ? "px-2" : "pl-4"
+                        "sticky top-0 z-10 border-b bg-muted px-0 py-0"
                       )}
                     >
                       {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={cn(
-                              "group relative flex h-full items-center justify-start whitespace-nowrap",
-                              header.column.getCanSort()
-                                ? "cursor-pointer select-none"
-                                : ""
-                            )}
-                            onClick={
-                              !header.column.getIsResizing()
-                                ? header.column.getToggleSortingHandler()
-                                : () => {}
-                            }
-                          >
+                        <div
+                          className={cn(
+                            "relative flex h-full flex-col items-center justify-start gap-2 pr-4",
+                            header_idx === 0 ? "pl-4" : "pl-2"
+                          )}
+                        >
+                          <div className="flex w-full justify-start whitespace-nowrap pt-2">
                             {flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                            {{
-                              asc: (
-                                <ArrowUpNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                              ),
-                              desc: (
-                                <ArrowDownNarrowWideIcon className="ml-2 h-3.5 w-3.5 text-foreground" />
-                              ),
-                            }[header.column.getIsSorted() as string] ?? (
-                              <ArrowUpDownIcon className="ml-2 h-3.5 w-3.5 text-foreground/30" />
-                            )}
-                            {header.column.getCanResize() && (
-                              <span
-                                className={cn(
-                                  "absolute right-0 z-20 mr-1 inline-block h-2/4 w-[4px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full sm:w-[2px]",
-                                  header.column.getIsResizing()
-                                    ? "h-full opacity-40 sm:w-[4px]"
-                                    : "hover:h-4/6 hover:opacity-40"
+                          </div>
+                          <div className="flex w-full justify-start whitespace-nowrap pb-2">
+                            {header.column.getCanSort() && (
+                              <button
+                                onClick={header.column.getToggleSortingHandler()}
+                                aria-label="Toggle sorting"
+                                className="flex items-center justify-start"
+                              >
+                                {{
+                                  asc: (
+                                    <ArrowUpNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                                  ),
+                                  desc: (
+                                    <ArrowDownNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                                  ),
+                                }[header.column.getIsSorted() as string] ?? (
+                                  <ArrowUpDownIcon className="h-3.5 w-3.5 text-foreground/30" />
                                 )}
-                                onClick={(evt) => evt.stopPropagation()}
-                                onMouseDown={header.getResizeHandler()}
-                                onTouchStart={header.getResizeHandler()}
-                              />
+                              </button>
                             )}
                           </div>
-                        </>
+                          {header.column.getCanResize() && (
+                            <span
+                              className={cn(
+                                "absolute right-0 top-1/4 z-20 mr-1 inline-block h-2/4 w-[3px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full focus:h-full sm:w-[2px]",
+                                header.column.getIsResizing()
+                                  ? "top-0 h-full w-[4px] opacity-40 sm:w-[3px]"
+                                  : "top-1/4 hover:h-2/4 hover:opacity-40"
+                              )}
+                              onMouseDown={header.getResizeHandler()}
+                              onTouchStart={header.getResizeHandler()}
+                            />
+                          )}
+                        </div>
                       )}
                     </TableHead>
                   );
@@ -177,14 +184,12 @@ export const ReportTable = (props: ReportTableProps) => {
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
                 >
-                  {row.getVisibleCells().map((cell, cell_idx) => {
+                  {row.getVisibleCells().map((cell) => {
                     return (
                       <TableCell
                         key={cell.id}
                         className={cn(
                           "inline-flex whitespace-nowrap",
-                          // cell_idx !== 0 ? "px-0" : "",
-                          // "pr-6",
                           cell.column.columnDef.meta?.cellContentAlign === "end"
                             ? "justify-end pr-6"
                             : "justify-start"

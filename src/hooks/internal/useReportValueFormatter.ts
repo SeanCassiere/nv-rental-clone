@@ -6,13 +6,22 @@ import { TReportDetail, TReportResult } from "@/schemas/report";
 type OutputField = TReportDetail["outputFields"][number];
 type Candidate = TReportResult[number];
 
+const BLANK = "-";
+
 export function useReportValueFormatter() {
   const { t } = useTranslation();
 
   const formatter = React.useCallback(
     (_: string, outputField: OutputField, candidate: Candidate) => {
-      if (typeof candidate === "undefined" || candidate === null) {
-        return "-";
+      const isNumber =
+        outputField.dataType === "int" ||
+        outputField.dataType === "decimal" ||
+        outputField.dataType === "integer";
+
+      const isEmpty = typeof candidate === "undefined" || candidate === null;
+
+      if (isEmpty && !isNumber) {
+        return BLANK;
       }
 
       switch (outputField.dataType) {
@@ -20,10 +29,10 @@ export function useReportValueFormatter() {
         case "date":
           return t("intlDate", { ns: "format", value: candidate });
         case "decimal":
-          return t("intlCurrency", { ns: "format", value: candidate });
+          return t("intlCurrency", { ns: "format", value: candidate ?? 0 });
         case "string":
           if (String(candidate).length === 0) {
-            return "-";
+            return BLANK;
           }
           return candidate;
         default:
