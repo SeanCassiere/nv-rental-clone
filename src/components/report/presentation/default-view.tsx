@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
 import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
+import { GlobalFilter } from "@/components/report/plugin/global-search";
 import { ReportTable } from "@/components/report/plugin/table";
 import { ViewColumns } from "@/components/report/plugin/view-columns";
 
@@ -123,6 +124,8 @@ const DefaultView = () => {
 
   const topRowPlugins = React.useMemo(() => {
     const plugins: ReportTablePlugin[] = [];
+
+    plugins.push(GlobalFilter);
 
     if (report.isExportableToExcel) {
       plugins.push(ExportToCsv);
