@@ -26,14 +26,14 @@ export const GlobalFilter: ReportTablePlugin = (props) => {
   }, [table, searchValue]);
 
   return (
-    <div>
+    <div className="w-full sm:w-60">
       <Label className="sr-only">Global filter</Label>
       <Input
         type="search"
         placeholder="Filter..."
         value={input}
         onChange={(evt) => setInput(evt.target.value)}
-        className="h-8 w-full sm:w-60"
+        className="h-8"
       />
     </div>
   );
