@@ -90,16 +90,17 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
       <PieChart margin={{ top: 10, left: 35, right: 0, bottom: 0 }}>
         <Pie
           activeIndex={activeIdx}
-          activeShape={({
-            cx,
-            cy,
-            innerRadius,
-            outerRadius,
-            startAngle,
-            endAngle,
-            fill,
-            payload,
-          }) => {
+          activeShape={(opts) => {
+            const {
+              cx,
+              cy = 0,
+              innerRadius,
+              outerRadius = 0,
+              startAngle,
+              endAngle,
+              fill,
+            } = opts;
+
             return (
               <g>
                 <text
@@ -109,7 +110,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
                   textAnchor="middle"
                   className="fill-foreground text-2xl font-semibold opacity-90 lg:text-3xl"
                 >
-                  {payload.total}
+                  {opts.value || "0"}
                 </text>
                 <text
                   x={cx}
@@ -118,7 +119,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
                   textAnchor="middle"
                   className="fill-foreground text-sm font-normal opacity-90 lg:text-xl"
                 >
-                  {String(payload.name)
+                  {String(opts.name || "")
                     .replace(/([A-Z])/g, " $1")
                     .trim()}
                 </text>
