@@ -26,7 +26,7 @@ export const ViewColumns: ReportTablePlugin = (props) => {
           className="flex h-8 w-full sm:w-fit"
         >
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
-          Columns
+          View
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
