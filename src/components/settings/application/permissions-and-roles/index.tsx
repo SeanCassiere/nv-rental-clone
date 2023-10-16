@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
-import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { EmptyState } from "@/components/layouts/empty-state";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -163,13 +163,9 @@ function SystemRolesList({
     <ul role="list" className="divide-y divide-muted">
       {roles.length === 0 ? (
         <li>
-          <CommonEmptyStateContent
+          <EmptyState
             title={t("display.noResultsFound", { ns: "labels" })}
             subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}
-            icon={
-              <AlertCircleIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-            }
-            shrink
           />
         </li>
       ) : (

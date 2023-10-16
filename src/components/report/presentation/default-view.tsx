@@ -1,9 +1,9 @@
 import React from "react";
 import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
-import { FolderXIcon } from "lucide-react";
+import { FolderXIcon, Loader2Icon, PlayIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { EmptyState } from "@/components/layouts/empty-state";
 import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
 import { GlobalFilter } from "@/components/report/plugin/global-search";
 import { ReportTable } from "@/components/report/plugin/table";
@@ -27,7 +27,12 @@ const KNOWN_REMOVAL_ACCESSORS = [
 
 const DefaultView = () => {
   const { t } = useTranslation();
-  const { resultState: state, report } = useReportContext();
+  const {
+    resultState: state,
+    report,
+    runReport,
+    isPending,
+  } = useReportContext();
 
   if (state.status !== "success") {
     throw new Error(
@@ -172,13 +177,23 @@ const DefaultView = () => {
   return (
     <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
       {sanitizedRows.rows.length === 0 ? (
-        <CommonEmptyStateContent
+        <EmptyState
           title={t("display.noResultsFound", { ns: "labels" })}
           subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}
-          icon={
-            <FolderXIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-          }
-          shrink
+          icon={FolderXIcon}
+          buttonOptions={{
+            content: (
+              <>
+                {isPending ? (
+                  <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                ) : (
+                  <PlayIcon className="mr-2 h-3 w-3" />
+                )}
+                Try again
+              </>
+            ),
+            onClick: runReport,
+          }}
         />
       ) : (
         <ReportTable
