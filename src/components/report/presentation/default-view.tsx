@@ -178,7 +178,6 @@ const DefaultView = () => {
           icon={
             <FolderXIcon className="mx-auto h-12 w-12 text-muted-foreground" />
           }
-          shrink
         />
       ) : (
         <ReportTable

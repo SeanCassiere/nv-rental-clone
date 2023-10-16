@@ -73,7 +73,6 @@ export const ViewReport = () => {
             icon={
               <FolderIcon className="mx-auto h-12 w-12 text-muted-foreground" />
             }
-            shrink
           />
         </section>
       )}
@@ -88,7 +87,6 @@ export const ViewReport = () => {
             icon={
               <AlertCircleIcon className="mx-auto h-12 w-12 text-muted-foreground" />
             }
-            shrink
           />
         </section>
       )}
