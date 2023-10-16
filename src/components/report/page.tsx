@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import { AlertCircleIcon, ChevronRightIcon, FolderIcon } from "lucide-react";
 
+import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
 import { ReportFilters } from "@/components/report/page-filters";
 import { Separator } from "@/components/ui/separator";
 
@@ -12,7 +13,6 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
-import { CommonEmptyStateContent } from "../layouts/common-empty-state";
 import DefaultView from "./presentation/default-view";
 import JsonView from "./presentation/json-view";
 
