@@ -1,6 +1,6 @@
 import React from "react";
 import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
-import { FolderXIcon } from "lucide-react";
+import { FolderXIcon, Loader2Icon, PlayIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
@@ -27,7 +27,12 @@ const KNOWN_REMOVAL_ACCESSORS = [
 
 const DefaultView = () => {
   const { t } = useTranslation();
-  const { resultState: state, report } = useReportContext();
+  const {
+    resultState: state,
+    report,
+    runReport,
+    isPending,
+  } = useReportContext();
 
   if (state.status !== "success") {
     throw new Error(
@@ -176,6 +181,19 @@ const DefaultView = () => {
           title={t("display.noResultsFound", { ns: "labels" })}
           subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}
           icon={FolderXIcon}
+          buttonOptions={{
+            content: (
+              <>
+                {isPending ? (
+                  <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                ) : (
+                  <PlayIcon className="mr-2 h-3 w-3" />
+                )}
+                Try again
+              </>
+            ),
+            onClick: runReport,
+          }}
         />
       ) : (
         <ReportTable

@@ -151,10 +151,12 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
   return (
     <div className="max-w-full focus:ring-0">
       {dataList.status === "pending" ? (
-        <Skeleton className="h-56" />
+        <Skeleton className="h-[450px]" />
       ) : (
         <>
-          {dataList.status === "error" || dataList.data?.status !== 200 ? (
+          {dataList.status === "error" ||
+          dataList.data?.status !== 200 ||
+          dataList?.data.body?.length === 0 ? (
             <EmptyState
               title="No exchanges"
               subtitle="You haven't made any fleet exchanges for this rental agreement."

@@ -123,7 +123,7 @@ const ModuleNotesTabContent = ({
   return (
     <div className="max-w-full focus:ring-0">
       {notesQuery.status === "pending" ? (
-        <Skeleton className="h-56" />
+        <Skeleton className="h-[450px]" />
       ) : (
         <>
           {notesQuery.status === "error" || list.length === 0 ? (

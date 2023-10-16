@@ -1,6 +1,12 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import { AlertCircleIcon, ChevronRightIcon, FolderIcon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  ChevronRightIcon,
+  FolderIcon,
+  Loader2Icon,
+  PlayIcon,
+} from "lucide-react";
 
 import { EmptyState } from "@/components/layouts/empty-state";
 import { ReportFilters } from "@/components/report/page-filters";
@@ -21,7 +27,8 @@ const customReports: Record<string, () => JSX.Element> = {
 };
 
 export const ViewReport = () => {
-  const { report, filtersList, resultState } = useReportContext();
+  const { report, filtersList, resultState, isPending, runReport } =
+    useReportContext();
 
   const isFiltersAvailable = filtersList.length > 0;
 
@@ -71,6 +78,19 @@ export const ViewReport = () => {
             title="Report is ready to run."
             subtitle="Click the Run button to generate the report."
             icon={FolderIcon}
+            buttonOptions={{
+              content: (
+                <>
+                  {isPending ? (
+                    <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                  ) : (
+                    <PlayIcon className="mr-2 h-3 w-3" />
+                  )}
+                  Run report
+                </>
+              ),
+              onClick: runReport,
+            }}
           />
         </section>
       )}

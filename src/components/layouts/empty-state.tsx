@@ -1,12 +1,9 @@
 import * as React from "react";
 import { AlertCircleIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 
 import { cn } from "@/utils";
-
-type ButtonOnClick = NonNullable<Parameters<typeof Button>[0]["onClick"]>;
-type ButtonClassName = Parameters<typeof Button>[0]["className"];
 
 export const EmptyState = ({
   title,
@@ -21,8 +18,9 @@ export const EmptyState = ({
   extraContent?: React.ReactNode;
   buttonOptions?: {
     content: React.ReactNode;
-    onClick: ButtonOnClick;
-    className?: ButtonClassName;
+    onClick: NonNullable<ButtonProps["onClick"]>;
+    variant?: ButtonProps["variant"];
+    className?: ButtonProps["className"];
   };
 }) => {
   const RenderedIcon = Icon ?? AlertCircleIcon;
@@ -38,6 +36,7 @@ export const EmptyState = ({
         {buttonOptions ? (
           <Button
             size="sm"
+            variant={buttonOptions?.variant}
             className={cn("relative", buttonOptions?.className)}
             onClick={buttonOptions.onClick}
           >
