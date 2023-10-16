@@ -1,10 +1,17 @@
 import React from "react";
 import add from "date-fns/add";
-import { LockIcon, SettingsIcon, UnlockIcon } from "lucide-react";
+import {
+  LayoutDashboardIcon,
+  LockIcon,
+  PlusIcon,
+  SettingsIcon,
+  UnlockIcon,
+} from "lucide-react";
 
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import WidgetPickerContent from "@/components/dashboard/widget-picker-content";
+import { EmptyState } from "@/components/layouts/empty-state";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -74,6 +81,8 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
     [saveDashboardWidgetsMutation]
   );
 
+  const isEmpty = widgets.every((widget) => widget.isDeleted);
+
   return (
     <section
       className={cn(
@@ -137,12 +146,32 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
           </DialogContent>
         </Dialog>
       </div>
-      <DashboardDndWidgetGrid
-        widgets={widgets}
-        selectedLocationIds={locations}
-        onWidgetSortingEnd={handleWidgetSortingEnd}
-        isLocked={isWidgetsLocked}
-      />
+
+      {isEmpty ? (
+        <EmptyState
+          title="No widgets selected"
+          subtitle="You can customize your dashboard by selecting widgets from the widget picker."
+          icon={LayoutDashboardIcon}
+          buttonOptions={{
+            content: (
+              <>
+                <PlusIcon className="mr-2 h-4 w-4" />
+                Add now
+              </>
+            ),
+            onClick: () => {
+              onShowWidgetPicker(true);
+            },
+          }}
+        />
+      ) : (
+        <DashboardDndWidgetGrid
+          widgets={widgets}
+          selectedLocationIds={locations}
+          onWidgetSortingEnd={handleWidgetSortingEnd}
+          isLocked={isWidgetsLocked}
+        />
+      )}
     </section>
   );
 };
