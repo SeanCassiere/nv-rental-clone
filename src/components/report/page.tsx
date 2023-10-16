@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronRightIcon } from "lucide-react";
+import { AlertCircleIcon, ChevronRightIcon, FolderIcon } from "lucide-react";
 
 import { ReportFilters } from "@/components/report/page-filters";
 import { Separator } from "@/components/ui/separator";
@@ -12,6 +12,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
+import { CommonEmptyStateContent } from "../layouts/common-empty-state";
 import DefaultView from "./presentation/default-view";
 import JsonView from "./presentation/json-view";
 
@@ -20,7 +21,7 @@ const customReports: Record<string, () => JSX.Element> = {
 };
 
 export const ViewReport = () => {
-  const { report, filtersList, resultState, isPending } = useReportContext();
+  const { report, filtersList, resultState } = useReportContext();
 
   const isFiltersAvailable = filtersList.length > 0;
 
@@ -65,11 +66,32 @@ export const ViewReport = () => {
       </section>
 
       {resultState.status === "idle" && (
-        <p className="mx-2 mt-4 block sm:mx-5">
-          Click the Run button to generate the report.
-        </p>
+        <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
+          <CommonEmptyStateContent
+            title="Report is ready to run."
+            subtitle="Click the Run button to generate the report."
+            icon={
+              <FolderIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+            }
+            shrink
+          />
+        </section>
       )}
-      {resultState.status === "error" && <p>{resultState.error}</p>}
+      {resultState.status === "error" && (
+        <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
+          <CommonEmptyStateContent
+            title="Something went wrong"
+            subtitle={
+              resultState?.error ??
+              "Something went wrong, please try again later."
+            }
+            icon={
+              <AlertCircleIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+            }
+            shrink
+          />
+        </section>
+      )}
       {resultState.status === "success" && <PresentationView />}
     </>
   );

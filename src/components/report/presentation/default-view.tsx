@@ -1,6 +1,6 @@
 import React from "react";
 import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
-import { AlertCircleIcon } from "lucide-react";
+import { FolderXIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
@@ -176,7 +176,7 @@ const DefaultView = () => {
           title={t("display.noResultsFound", { ns: "labels" })}
           subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}
           icon={
-            <AlertCircleIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+            <FolderXIcon className="mx-auto h-12 w-12 text-muted-foreground" />
           }
           shrink
         />
