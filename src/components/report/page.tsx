@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import { AlertCircleIcon, ChevronRightIcon, FolderIcon } from "lucide-react";
 
-import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { EmptyState } from "@/components/layouts/empty-state";
 import { ReportFilters } from "@/components/report/page-filters";
 import { Separator } from "@/components/ui/separator";
 
@@ -67,26 +67,22 @@ export const ViewReport = () => {
 
       {resultState.status === "idle" && (
         <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
-          <CommonEmptyStateContent
+          <EmptyState
             title="Report is ready to run."
             subtitle="Click the Run button to generate the report."
-            icon={
-              <FolderIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-            }
+            icon={FolderIcon}
           />
         </section>
       )}
       {resultState.status === "error" && (
         <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
-          <CommonEmptyStateContent
+          <EmptyState
             title="Something went wrong"
             subtitle={
               resultState?.error ??
               "Something went wrong, please try again later."
             }
-            icon={
-              <AlertCircleIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-            }
+            icon={AlertCircleIcon}
           />
         </section>
       )}

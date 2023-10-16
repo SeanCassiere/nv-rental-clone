@@ -6,7 +6,7 @@ import { FilesIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
-import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { EmptyState } from "@/components/layouts/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -155,12 +155,10 @@ const AgreementExchangesTab = ({ referenceId }: { referenceId: string }) => {
       ) : (
         <>
           {dataList.status === "error" || dataList.data?.status !== 200 ? (
-            <CommonEmptyStateContent
+            <EmptyState
               title="No exchanges"
               subtitle="You haven't made any fleet exchanges for this rental agreement."
-              icon={
-                <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-              }
+              icon={FilesIcon}
             />
           ) : (
             <CommonTable columns={colDefs} data={list} />

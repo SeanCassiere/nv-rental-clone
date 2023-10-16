@@ -5,7 +5,7 @@ import { FilesIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
-import { CommonEmptyStateContent } from "@/components/layouts/common-empty-state";
+import { EmptyState } from "@/components/layouts/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGetModuleNotes } from "@/hooks/network/module/useGetModuleNotes";
@@ -127,12 +127,10 @@ const ModuleNotesTabContent = ({
       ) : (
         <>
           {notesQuery.status === "error" || list.length === 0 ? (
-            <CommonEmptyStateContent
+            <EmptyState
               title={emptyContentLabels[module]?.title ?? ""}
               subtitle={emptyContentLabels[module]?.subtitle ?? ""}
-              icon={
-                <FilesIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-              }
+              icon={FilesIcon}
             />
           ) : (
             <CommonTable columns={colDefs} data={list} />
