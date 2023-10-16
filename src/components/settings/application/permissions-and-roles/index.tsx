@@ -166,7 +166,6 @@ function SystemRolesList({
           <EmptyState
             title={t("display.noResultsFound", { ns: "labels" })}
             subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}
-            icon={AlertCircleIcon}
           />
         </li>
       ) : (

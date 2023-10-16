@@ -102,7 +102,6 @@ export const ViewReport = () => {
               resultState?.error ??
               "Something went wrong, please try again later."
             }
-            icon={AlertCircleIcon}
           />
         </section>
       )}
