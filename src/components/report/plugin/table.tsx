@@ -312,7 +312,6 @@ function ReportTableColumnHeader<TData, TValue>(
           <div
             className={cn(
               "relative flex h-full w-full flex-col items-center justify-start gap-2 px-4"
-              // index === 0 ? "pl-4" : "pl-2"
             )}
           >
             <div className="flex w-full justify-start whitespace-nowrap pt-2">
