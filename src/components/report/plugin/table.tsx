@@ -8,13 +8,18 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  type Cell,
   type ColumnDef,
   type Header,
   type Row,
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import {
+  useVirtualizer,
+  type VirtualItem,
+  type Virtualizer,
+} from "@tanstack/react-virtual";
 import {
   ArrowDownNarrowWideIcon,
   ArrowUpDownIcon,
@@ -38,8 +43,6 @@ import {
 } from "@/components/ui/tooltip";
 
 import { useReportContext } from "@/hooks/context/view-report";
-
-import type { TReportResult } from "@/schemas/report";
 
 import { fuzzyFilter } from "@/utils/table";
 import type { ReportTablePlugin } from "@/types/report";
@@ -95,14 +98,35 @@ export function ReportTable<TData, TValue>(
     enableSorting: true,
   });
 
+  const columns = React.useMemo(
+    () => table.getVisibleLeafColumns(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getVisibleLeafColumns()]
+  );
+
+  const getColumnWidth = React.useCallback(
+    (index: number) => columns[index]?.getSize() ?? 32,
+    [columns]
+  );
+
+  const columnVirtualizer = useVirtualizer({
+    horizontal: true,
+    getScrollElement: () => tableHeadRef.current,
+    estimateSize: getColumnWidth,
+    count: columns.length,
+    overscan: 5,
+  });
+  const virtualColumns = columnVirtualizer.getVirtualItems();
+
   const { rows } = table.getRowModel();
-  const virtualizer = useVirtualizer({
+  const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 40,
-    overscan: 20,
-    paddingStart: tableHeadRef?.current?.clientHeight ?? 0,
-    scrollPaddingStart: tableHeadRef?.current?.clientHeight ?? 0,
+    overscan: 50,
+    paddingStart: tableHeadRef?.current?.getBoundingClientRect()?.height ?? 0,
+    scrollPaddingStart:
+      tableHeadRef?.current?.getBoundingClientRect()?.height ?? 0,
   });
 
   React.useEffect(() => {
@@ -164,50 +188,70 @@ export function ReportTable<TData, TValue>(
         )}
         <table
           className={cn(
-            "relative w-full caption-bottom bg-card text-sm transition-opacity [scrollbar-gutter:stable]",
+            "relative w-full caption-bottom border-collapse bg-card text-sm transition-opacity [scrollbar-gutter:stable]",
             isPending ? "opacity-50" : "opacity-100"
           )}
           style={{
-            width: table.getCenterTotalSize(),
-            height: `${virtualizer.getTotalSize()}px`,
+            width: `${table.getCenterTotalSize()}px`,
+            height: `${rowVirtualizer.getTotalSize()}px`,
           }}
         >
-          <TableHeader ref={tableHeadRef} className="bg-card">
+          <TableHeader ref={tableHeadRef} className="w-full bg-card">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header, index) => (
-                  <ReportTableColumnHeader
-                    key={header.id}
-                    header={header}
-                    index={index}
-                  />
-                ))}
+              <TableRow
+                key={headerGroup.id}
+                className="h-full w-full"
+                style={{ width: `${columnVirtualizer.getTotalSize()}px` }}
+              >
+                {virtualColumns.map((virtualColumn) => {
+                  const header = headerGroup.headers[
+                    virtualColumn.index
+                  ] as Header<TData, TValue>;
+
+                  return (
+                    <ReportTableColumnHeader
+                      key={`head_${virtualColumn.key}`}
+                      header={header}
+                      columnVirtualizer={columnVirtualizer}
+                      virtualColumn={virtualColumn}
+                    />
+                  );
+                })}
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {virtualizer.getVirtualItems().map((virtualRow) => {
-              const row = rows[virtualRow.index] as Row<TReportResult>;
+          <TableBody className="w-full">
+            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+              const row = rows[virtualRow.index] as Row<TData>;
+
               return (
                 <TableRow
                   key={row.id}
-                  className="absolute left-0 top-0 w-full"
+                  className="absolute top-0 w-full"
                   style={{
                     height: `${virtualRow.size}px`,
+                    width: `${columnVirtualizer.getTotalSize()}px`,
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
                 >
-                  {row.getVisibleCells().map((cell) => {
+                  {virtualColumns.map((virtualColumn) => {
+                    const cell = row.getVisibleCells()[
+                      virtualColumn.index
+                    ] as Cell<TData, TValue>;
+
                     return (
                       <TableCell
-                        key={cell.id}
+                        key={`cell_${virtualColumn.key}`}
                         className={cn(
-                          "inline-flex whitespace-nowrap",
+                          "absolute top-0 inline-flex whitespace-nowrap",
                           cell.column.columnDef.meta?.cellContentAlign === "end"
                             ? "justify-end pr-6"
                             : "justify-start"
                         )}
-                        style={{ width: cell.column.getSize() }}
+                        style={{
+                          width: `${virtualColumn.size}px`,
+                          transform: `translateX(${virtualColumn.start}px)`,
+                        }}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -243,26 +287,31 @@ export function ReportTable<TData, TValue>(
 
 interface ReportTableColumnHeaderProps<TData, TValue> {
   header: Header<TData, TValue>;
-  index: number;
+  virtualColumn: VirtualItem;
+  columnVirtualizer: Virtualizer<HTMLTableSectionElement, Element>;
 }
 
 function ReportTableColumnHeader<TData, TValue>(
   props: ReportTableColumnHeaderProps<TData, TValue>
 ) {
-  const { header, index } = props;
+  const { header, virtualColumn, columnVirtualizer } = props;
 
   return (
     <TableHead
+      data-index={virtualColumn.index}
+      ref={columnVirtualizer.measureElement}
       colSpan={header.colSpan}
-      style={{ width: header.getSize() }}
       className={cn("sticky top-0 z-10 border-b bg-muted px-0 py-0")}
+      style={{
+        width: `${header.getSize()}px`,
+        minWidth: `${header.column.columnDef.minSize ?? 32}px`,
+      }}
     >
       <TooltipProvider>
         {header.isPlaceholder ? null : (
           <div
             className={cn(
-              "relative flex h-full flex-col items-center justify-start gap-2 pr-4",
-              index === 0 ? "pl-4" : "pl-2"
+              "relative flex h-full w-full flex-col items-center justify-start gap-2 px-4"
             )}
           >
             <div className="flex w-full justify-start whitespace-nowrap pt-2">
