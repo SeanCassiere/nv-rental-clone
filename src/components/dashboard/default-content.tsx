@@ -81,7 +81,9 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
     [saveDashboardWidgetsMutation]
   );
 
-  const isEmpty = widgets.every((widget) => widget.isDeleted);
+  const isEmpty =
+    widgetList.status !== "pending" &&
+    widgets.every((widget) => widget.isDeleted);
 
   return (
     <section
