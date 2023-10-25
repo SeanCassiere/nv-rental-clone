@@ -54,7 +54,7 @@
     "oidc-client-ts": "^2.3.0",
     "react": "18.2.0",
     "react-cache-buster": "^0.1.8",
-    "react-day-picker": "^8.9.0",
+    "react-day-picker": "^8.9.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.47.0",
     "react-i18next": "^13.3.1",
