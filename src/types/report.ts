@@ -7,7 +7,7 @@ export type ReportFilterOption = {
   value: string;
 };
 
-export type ReportTablePlugin = (props: {
-  table: Table<TReportResult>;
+export type ReportTablePlugin = <TData>(props: {
+  table: Table<TData>;
   align: "start" | "center" | "end";
 }) => JSX.Element | null;
