@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
   Sector,
 } from "recharts";
+import type { PieSectorDataItem } from "recharts/types/polar/Pie";
 
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -90,7 +91,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
       <PieChart margin={{ top: 10, left: 35, right: 0, bottom: 0 }}>
         <Pie
           activeIndex={activeIdx}
-          activeShape={(opts) => {
+          activeShape={(opts: PieSectorDataItem) => {
             const {
               cx,
               cy = 0,
