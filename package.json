@@ -48,7 +48,7 @@
     "date-fns": "^2.30.0",
     "i18next": "^23.6.0",
     "i18next-browser-languagedetector": "^7.1.0",
-    "i18next-http-backend": "^2.2.2",
+    "i18next-http-backend": "^2.3.1",
     "jsurl2": "^2.1.0",
     "lucide-react": "^0.288.0",
     "oidc-client-ts": "^2.3.0",
