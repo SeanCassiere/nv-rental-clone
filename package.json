@@ -59,7 +59,7 @@
     "react-hook-form": "^7.47.0",
     "react-i18next": "^13.3.1",
     "react-oidc-context": "^2.3.1",
-    "recharts": "^2.9.0",
+    "recharts": "^2.9.2",
     "sonner": "^1.0.3",
     "tailwind-merge": "^2.0.0",
     "zod": "^3.22.4"
