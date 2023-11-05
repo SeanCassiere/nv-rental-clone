@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -34,6 +34,7 @@ import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-rou
 import { type TAgreementListItemParsed } from "@/schemas/agreement";
 
 import { AgreementDateTimeColumns } from "@/utils/columns";
+import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -46,8 +47,11 @@ function AgreementsSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeContext = useRouteContext({ from: searchAgreementsRoute.id });
-  const { searchFilters, pageNumber, size } = routeContext.search;
+  const routeSearch = useSearch({ from: searchAgreementsRoute.id });
+  const { searchFilters, pageNumber, size } = useMemo(
+    () => normalizeAgreementListSearchParams(routeSearch),
+    [routeSearch]
+  );
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 

@@ -11,10 +11,10 @@ import { rootRoute } from "./__root";
 export const logoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "logout",
-  loader: async ({ context, preload }) => {
+  load: async ({ meta, preload }) => {
     if (preload) return {};
 
-    const { auth } = context;
+    const { auth } = meta;
 
     if (!auth.isAuthenticated) {
       router.navigate({ to: "/logged-out" });
@@ -29,7 +29,7 @@ export const logoutRoute = new Route({
 
     await auth.signoutRedirect();
 
-    return {};
+    return;
   },
   component: LoadingPlaceholder,
 });

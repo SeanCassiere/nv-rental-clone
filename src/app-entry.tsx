@@ -33,7 +33,7 @@ export const router = new Router({
   parseSearch: parseSearchFn,
   stringifySearch: stringifySearchFn,
   defaultPendingComponent: LoadingPlaceholder,
-  context: {
+  meta: {
     apiClient,
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
@@ -88,7 +88,7 @@ function RouterWithAuth() {
       <RouterProvider
         router={router}
         defaultPreload="intent"
-        context={{ auth }}
+        meta={{ auth } as any}
       />
       <Toaster theme={theme.ternaryDarkMode} dir={dir} closeButton richColors />
     </>

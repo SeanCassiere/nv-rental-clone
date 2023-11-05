@@ -13,7 +13,7 @@ export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
-  loader: async ({ context: { queryClient, apiClient } }) => {
+  load: async ({ meta: { queryClient, apiClient } }) => {
     const auth = getAuthToken();
     if (auth) {
       const promises = [];
@@ -70,7 +70,7 @@ export const indexRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
 }).update({
   component: lazyRouteComponent(() => import("@/pages/dashboard")),

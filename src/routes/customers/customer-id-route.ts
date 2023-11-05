@@ -9,9 +9,9 @@ import { customersRoute } from ".";
 export const customerPathIdRoute = new Route({
   getParentRoute: () => customersRoute,
   path: "$customerId",
-  loader: async ({
+  load: async ({
     params: { customerId },
-    context: { queryClient, apiClient },
+    meta: { queryClient, apiClient },
   }) => {
     const auth = getAuthToken();
 
@@ -59,7 +59,7 @@ export const customerPathIdRoute = new Route({
         console.error("route prefetch failed for /customers/:id", error);
       }
     }
-    return {};
+    return;
   },
   parseParams: (params) => ({
     customerId: z.string().parse(params.customerId),

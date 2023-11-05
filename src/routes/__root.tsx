@@ -1,10 +1,5 @@
 import { Suspense } from "react";
-import {
-  Outlet,
-  RouterContext,
-  ScrollRestoration,
-  useRouterState,
-} from "@tanstack/react-router";
+import { Outlet, RouterMeta, useRouterState } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth, type AuthContextProps } from "react-oidc-context";
 
@@ -30,10 +25,10 @@ interface MyRouterContext {
   auth: AuthContextProps;
 }
 
-const routerContext = new RouterContext<MyRouterContext>();
+const routerContext = new RouterMeta<MyRouterContext>();
 
 export const rootRoute = routerContext.createRootRoute({
-  loader: async ({ context: { apiClient } }) => {
+  load: async ({ meta: { apiClient } }) => {
     const auth = getAuthToken();
 
     if (auth) {
@@ -109,7 +104,7 @@ export const rootRoute = routerContext.createRootRoute({
       }
     }
 
-    return {};
+    return;
   },
   component: RootComponent,
 });
@@ -139,7 +134,7 @@ function RootComponent() {
       <LogoutDialog />
       {isHeaderShown && <HeaderLayout />}
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
-        <ScrollRestoration getKey={(location) => location.pathname} />
+        {/* <ScrollRestoration getKey={(location) => location.pathname} /> */}
         {isExceptionRoute && !isFreshAuthenticating && <Outlet />}
         {isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
         {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}

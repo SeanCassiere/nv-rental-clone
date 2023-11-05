@@ -9,9 +9,9 @@ import { agreementsRoute } from ".";
 export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "$agreementId",
-  loader: async ({
+  load: async ({
     params: { agreementId },
-    context: { queryClient, apiClient },
+    meta: { queryClient, apiClient },
   }) => {
     const auth = getAuthToken();
 
@@ -60,7 +60,7 @@ export const agreementPathIdRoute = new Route({
         console.error(e);
       }
     }
-    return {};
+    return;
   },
   parseParams: (params) => ({
     agreementId: z.string().parse(params.agreementId),

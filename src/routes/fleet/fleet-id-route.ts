@@ -10,10 +10,7 @@ import { fleetRoute } from ".";
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
-  loader: async ({
-    params: { vehicleId },
-    context: { queryClient, apiClient },
-  }) => {
+  load: async ({ params: { vehicleId }, meta: { queryClient, apiClient } }) => {
     const auth = getAuthToken();
 
     if (auth) {
@@ -60,7 +57,7 @@ export const fleetPathIdRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
   parseParams: (params) => ({
     vehicleId: z.string().parse(params.vehicleId),

@@ -23,12 +23,13 @@ export const searchCustomersRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loaderContext: ({ search }) => {
-    return {
-      search: normalizeCustomerListSearchParams(search),
-    };
-  },
-  loader: async ({ context: { queryClient, search } }) => {
+  // loaderContext: ({ search }) => {
+  //   return {
+  //     search: normalizeCustomerListSearchParams(search),
+  //   };
+  // },
+  load: async ({ meta: { queryClient }, search: unsafe_search }) => {
+    const search = normalizeCustomerListSearchParams(unsafe_search);
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } = search;
@@ -73,7 +74,7 @@ export const searchCustomersRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
 }).update({
   component: lazyRouteComponent(() => import("@/pages/search-customers")),

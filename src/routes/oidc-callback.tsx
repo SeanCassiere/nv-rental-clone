@@ -22,10 +22,12 @@ export const oidcCallbackRoute = new Route({
     redirect: z.string().optional(),
   }),
   path: "oidc-callback",
-  loaderContext: ({ search }) => ({ redirectPath: search.redirect ?? null }),
-  loader: async ({ context, preload }) => {
-    if (preload) return {};
-    const { redirectPath, auth } = context;
+  // loaderContext: ({ search }) => ({ redirectPath: search.redirect ?? null }),
+  load: async ({ meta, preload, search }) => {
+    if (preload) return;
+
+    const redirectPath = search?.redirect ?? null;
+    const { auth } = meta;
 
     const routerLocation = router.state.location;
 
@@ -71,7 +73,7 @@ export const oidcCallbackRoute = new Route({
 
     router.navigate({ to: (pathname as any) ?? "/", search: searchParamsObj });
 
-    return {};
+    return;
   },
   component: LoadingPlaceholder,
 });

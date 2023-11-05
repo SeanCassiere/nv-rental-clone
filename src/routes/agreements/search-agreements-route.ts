@@ -40,12 +40,13 @@ export const searchAgreementsRoute = new Route({
       };
     },
   ],
-  loaderContext: ({ search }) => {
-    return {
-      search: normalizeAgreementListSearchParams(search),
-    };
-  },
-  loader: async ({ context: { queryClient, search } }) => {
+  // loaderContext: ({ search }) => {
+  //   return {
+  //     search: normalizeAgreementListSearchParams(search),
+  //   };
+  // },
+  load: async ({ meta: { queryClient }, search: unsafe_search }) => {
+    const search = normalizeAgreementListSearchParams(unsafe_search);
     const auth = getAuthToken();
 
     const { searchFilters, pageNumber, size: pageSize } = search;
@@ -91,7 +92,7 @@ export const searchAgreementsRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
 }).update({
   component: lazyRouteComponent(() => import("@/pages/search-agreements")),
