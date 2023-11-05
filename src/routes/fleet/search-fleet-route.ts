@@ -23,13 +23,10 @@ export const searchFleetRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  // loaderContext: ({ search }) => {
-  //   return {
-  //     search: normalizeVehicleListSearchParams(search),
-  //   };
-  // },
-  load: async ({ meta: { queryClient }, search: unsafe_search }) => {
-    const search = normalizeVehicleListSearchParams(unsafe_search);
+  beforeLoad: ({ search }) => ({
+    search: normalizeVehicleListSearchParams(search),
+  }),
+  load: async ({ meta: { queryClient, search } }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } = search;

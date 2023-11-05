@@ -40,13 +40,10 @@ export const searchAgreementsRoute = new Route({
       };
     },
   ],
-  // loaderContext: ({ search }) => {
-  //   return {
-  //     search: normalizeAgreementListSearchParams(search),
-  //   };
-  // },
-  load: async ({ meta: { queryClient }, search: unsafe_search }) => {
-    const search = normalizeAgreementListSearchParams(unsafe_search);
+  beforeLoad: ({ search }) => ({
+    search: normalizeAgreementListSearchParams(search),
+  }),
+  load: async ({ meta: { queryClient, search } }) => {
     const auth = getAuthToken();
 
     const { searchFilters, pageNumber, size: pageSize } = search;

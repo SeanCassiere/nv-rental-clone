@@ -23,11 +23,9 @@ export const searchCustomersRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  // loaderContext: ({ search }) => {
-  //   return {
-  //     search: normalizeCustomerListSearchParams(search),
-  //   };
-  // },
+  beforeLoad: ({ search }) => ({
+    search: normalizeCustomerListSearchParams(search),
+  }),
   load: async ({ meta: { queryClient }, search: unsafe_search }) => {
     const search = normalizeCustomerListSearchParams(unsafe_search);
     const auth = getAuthToken();

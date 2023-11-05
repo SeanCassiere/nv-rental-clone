@@ -23,8 +23,10 @@ export const searchReservationsRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  load: async ({ meta: { queryClient }, search: unsafe_search }) => {
-    const search = normalizeReservationListSearchParams(unsafe_search);
+  beforeLoad: ({ search }) => ({
+    search: normalizeReservationListSearchParams(search),
+  }),
+  load: async ({ meta: { queryClient, search } }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } = search;

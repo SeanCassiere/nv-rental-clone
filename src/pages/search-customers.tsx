@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteMeta } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -28,7 +28,6 @@ import { searchCustomersRoute } from "@/routes/customers/search-customers-route"
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
-import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -43,11 +42,8 @@ function CustomerSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeSearch = useSearch({ from: searchCustomersRoute.id });
-  const { searchFilters, pageNumber, size } = useMemo(
-    () => normalizeCustomerListSearchParams(routeSearch),
-    [routeSearch]
-  );
+  const routeMeta = useRouteMeta({ from: searchCustomersRoute.id });
+  const { searchFilters, pageNumber, size } = routeMeta.search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
