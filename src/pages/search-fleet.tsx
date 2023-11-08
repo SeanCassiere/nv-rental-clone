@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useRouteMeta } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -40,8 +40,8 @@ const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 function VehiclesSearchPage() {
   const navigate = useNavigate();
 
-  const routeMeta = useRouteMeta({ from: searchFleetRoute.id });
-  const { searchFilters, pageNumber, size } = routeMeta.search;
+  const routeCtx = useRouteContext({ from: searchFleetRoute.id });
+  const { searchFilters, pageNumber, size } = routeCtx.search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 

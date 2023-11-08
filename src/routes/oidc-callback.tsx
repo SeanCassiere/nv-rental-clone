@@ -1,4 +1,4 @@
-import { Route } from "@tanstack/react-router";
+import { redirect, Route } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
 
@@ -23,13 +23,13 @@ export const oidcCallbackRoute = new Route({
   }),
   path: "oidc-callback",
   // loaderContext: ({ search }) => ({ redirectPath: search.redirect ?? null }),
-  load: async ({ meta, preload, search }) => {
+  load: async ({ context, preload, search }) => {
     if (preload) return;
 
     const redirectPath = search?.redirect ?? null;
-    const { auth } = meta;
+    const { auth } = context;
 
-    const routerLocation = router.state.location;
+    // const routerLocation = router.state.location;
 
     const isAuthParams = hasAuthParams({
       ancestorOrigins: window.location.ancestorOrigins,
@@ -41,10 +41,14 @@ export const oidcCallbackRoute = new Route({
       replace: window.location.replace,
       assign: window.location.assign,
       reload: window.location.reload,
-      pathname: routerLocation.pathname,
-      hash: routerLocation.hash,
-      href: routerLocation.href,
-      search: routerLocation.searchStr,
+      // pathname: routerLocation.pathname,
+      // hash: routerLocation.hash,
+      // href: routerLocation.href,
+      // search: routerLocation.searchStr,
+      pathname: window.location.pathname,
+      hash: window.location.hash,
+      href: window.location.href,
+      search: window.location.search,
     });
 
     // if there are no auth params, begin the sign-in process
@@ -71,9 +75,13 @@ export const oidcCallbackRoute = new Route({
     );
     const searchParamsObj = Object.fromEntries(searchParams.entries());
 
-    router.navigate({ to: (pathname as any) ?? "/", search: searchParamsObj });
+    // router.navigate({ to: (pathname as any) ?? "/", search: searchParamsObj });
+    throw redirect({
+      to: (pathname as any) ?? "/",
+      search: searchParamsObj,
+    });
 
-    return;
+    // return;
   },
   component: LoadingPlaceholder,
 });

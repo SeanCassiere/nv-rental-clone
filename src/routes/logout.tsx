@@ -1,23 +1,24 @@
-import { Route } from "@tanstack/react-router";
+import { redirect, Route } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
-
-import { router } from "@/app-entry";
 
 import { rootRoute } from "./__root";
 
 export const logoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "logout",
-  load: async ({ meta, preload }) => {
+  load: async ({ context, preload }) => {
     if (preload) return {};
 
-    const { auth } = meta;
+    const { auth } = context;
 
     if (!auth.isAuthenticated) {
-      router.navigate({ to: "/logged-out" });
+      // router.navigate({ to: "/logged-out" });
+      throw redirect({
+        to: "/logged-out",
+      });
     }
 
     const clientId = auth.user?.profile.navotar_clientid || "";

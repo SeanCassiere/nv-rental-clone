@@ -11,7 +11,7 @@ export const reservationPathIdRoute = new Route({
   path: "$reservationId",
   load: async ({
     params: { reservationId },
-    meta: { queryClient, apiClient },
+    context: { queryClient, apiClient },
   }) => {
     const auth = getAuthToken();
 

@@ -10,7 +10,10 @@ import { fleetRoute } from ".";
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
-  load: async ({ params: { vehicleId }, meta: { queryClient, apiClient } }) => {
+  load: async ({
+    params: { vehicleId },
+    context: { queryClient, apiClient },
+  }) => {
     const auth = getAuthToken();
 
     if (auth) {

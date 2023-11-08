@@ -43,7 +43,7 @@ export const searchAgreementsRoute = new Route({
   beforeLoad: ({ search }) => ({
     search: normalizeAgreementListSearchParams(search),
   }),
-  load: async ({ meta: { queryClient, search } }) => {
+  load: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
     const { searchFilters, pageNumber, size: pageSize } = search;

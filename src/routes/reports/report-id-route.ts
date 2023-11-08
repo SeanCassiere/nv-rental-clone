@@ -19,7 +19,7 @@ export const reportPathIdRoute = new Route({
 export const viewReportByIdRoute = new Route({
   getParentRoute: () => reportPathIdRoute,
   path: "/",
-  load: async ({ meta: { queryClient, auth }, params: { reportId } }) => {
+  load: async ({ context: { queryClient, auth }, params: { reportId } }) => {
     const clientId = auth?.user?.profile?.navotar_clientid;
     const userId = auth?.user?.profile?.navotar_userid;
 

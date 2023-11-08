@@ -13,7 +13,7 @@ export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
-  load: async ({ meta: { queryClient, apiClient } }) => {
+  load: async ({ context: { queryClient, apiClient } }) => {
     const auth = getAuthToken();
     if (auth) {
       const promises = [];

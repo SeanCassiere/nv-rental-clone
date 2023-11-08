@@ -1,5 +1,9 @@
 import { Suspense } from "react";
-import { Outlet, RouterMeta, useRouterState } from "@tanstack/react-router";
+import {
+  Outlet,
+  rootRouteWithContext,
+  useRouterState,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth, type AuthContextProps } from "react-oidc-context";
 
@@ -25,87 +29,87 @@ interface MyRouterContext {
   auth: AuthContextProps;
 }
 
-const routerContext = new RouterMeta<MyRouterContext>();
+const routerRootWithContext = rootRouteWithContext<MyRouterContext>();
 
-export const rootRoute = routerContext.createRootRoute({
-  load: async ({ meta: { apiClient } }) => {
-    const auth = getAuthToken();
+export const rootRoute = routerRootWithContext({
+  // load: async ({ meta: { apiClient } }) => {
+  //   const auth = getAuthToken();
 
-    if (auth) {
-      const promises = [];
-      const authParams = {
-        clientId: auth.profile.navotar_clientid,
-        userId: auth.profile.navotar_userid,
-      };
+  //   if (auth) {
+  //     const promises = [];
+  //     const authParams = {
+  //       clientId: auth.profile.navotar_clientid,
+  //       userId: auth.profile.navotar_userid,
+  //     };
 
-      // current client's profile
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: clientQKeys.profile(),
-          queryFn: () =>
-            apiClient.client
-              .getProfile({
-                params: { clientId: auth.profile.navotar_clientid },
-              })
-              .then((res) => {
-                if (res.status === 200) {
-                  const currency = res.body.currency || "USD";
+  //     // current client's profile
+  //     promises.push(
+  //       queryClient.ensureQueryData({
+  //         queryKey: clientQKeys.profile(),
+  //         queryFn: () =>
+  //           apiClient.client
+  //             .getProfile({
+  //               params: { clientId: auth.profile.navotar_clientid },
+  //             })
+  //             .then((res) => {
+  //               if (res.status === 200) {
+  //                 const currency = res.body.currency || "USD";
 
-                  setLocalStorageForUser(
-                    auth.profile.navotar_clientid,
-                    auth.profile.navotar_userid,
-                    USER_STORAGE_KEYS.currency,
-                    currency
-                  );
-                }
-                return res;
-              }),
-          staleTime: 1000 * 30, // 30 seconds
-        })
-      );
+  //                 setLocalStorageForUser(
+  //                   auth.profile.navotar_clientid,
+  //                   auth.profile.navotar_userid,
+  //                   USER_STORAGE_KEYS.currency,
+  //                   currency
+  //                 );
+  //               }
+  //               return res;
+  //             }),
+  //         staleTime: 1000 * 30, // 30 seconds
+  //       })
+  //     );
 
-      // current client's feature configurations
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: clientQKeys.features(),
-          queryFn: () =>
-            apiClient.client.getFeatures({
-              params: { clientId: auth.profile.navotar_clientid },
-              body: {},
-            }),
-          staleTime: 1000 * 60 * 5, // 5 minutes
-        })
-      );
+  //     // current client's feature configurations
+  //     promises.push(
+  //       queryClient.ensureQueryData({
+  //         queryKey: clientQKeys.features(),
+  //         queryFn: () =>
+  //           apiClient.client.getFeatures({
+  //             params: { clientId: auth.profile.navotar_clientid },
+  //             body: {},
+  //           }),
+  //         staleTime: 1000 * 60 * 5, // 5 minutes
+  //       })
+  //     );
 
-      // current client screen settings configurations
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: clientQKeys.screenSettings(),
-          queryFn: () =>
-            apiClient.client.getScreenSettings({
-              params: { clientId: auth.profile.navotar_clientid },
-            }),
-          staleTime: 1000 * 60 * 5, // 5 minutes
-        })
-      );
+  //     // current client screen settings configurations
+  //     promises.push(
+  //       queryClient.ensureQueryData({
+  //         queryKey: clientQKeys.screenSettings(),
+  //         queryFn: () =>
+  //           apiClient.client.getScreenSettings({
+  //             params: { clientId: auth.profile.navotar_clientid },
+  //           }),
+  //         staleTime: 1000 * 60 * 5, // 5 minutes
+  //       })
+  //     );
 
-      // current user's profile
-      promises.push(queryClient.ensureQueryData(userQKeys.me(authParams)));
+  //     // current user's profile
+  //     promises.push(queryClient.ensureQueryData(userQKeys.me(authParams)));
 
-      // current user's permissions
-      promises.push(
-        queryClient.ensureQueryData(userQKeys.permissions(authParams))
-      );
+  //     // current user's permissions
+  //     promises.push(
+  //       queryClient.ensureQueryData(userQKeys.permissions(authParams))
+  //     );
 
-      try {
-        await Promise.all(promises);
-      } catch (error) {
-        console.log("error fetching data in the root route", error);
-      }
-    }
+  //     try {
+  //       await Promise.all(promises);
+  //     } catch (error) {
+  //       console.log("error fetching data in the root route", error);
+  //     }
+  //   }
 
-    return;
-  },
+  //   return;
+  // },
   component: RootComponent,
 });
 

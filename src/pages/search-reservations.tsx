@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useRouteMeta } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -46,8 +46,8 @@ function ReservationsSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeMeta = useRouteMeta({ from: searchReservationsRoute.id });
-  const { searchFilters, pageNumber, size } = routeMeta.search;
+  const routeCtx = useRouteContext({ from: searchReservationsRoute.id });
+  const { searchFilters, pageNumber, size } = routeCtx.search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 

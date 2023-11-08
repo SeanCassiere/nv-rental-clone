@@ -26,7 +26,7 @@ export const searchCustomersRoute = new Route({
   beforeLoad: ({ search }) => ({
     search: normalizeCustomerListSearchParams(search),
   }),
-  load: async ({ meta: { queryClient }, search: unsafe_search }) => {
+  load: async ({ context: { queryClient }, search: unsafe_search }) => {
     const search = normalizeCustomerListSearchParams(unsafe_search);
     const auth = getAuthToken();
 
