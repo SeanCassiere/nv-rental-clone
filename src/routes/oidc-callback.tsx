@@ -1,12 +1,10 @@
-import { redirect, Route } from "@tanstack/react-router";
+import { Route, typedNavigate } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
-
-import { router } from "@/app-entry";
 
 import { rootRoute } from "./__root";
 
@@ -23,11 +21,13 @@ export const oidcCallbackRoute = new Route({
   }),
   path: "oidc-callback",
   // loaderContext: ({ search }) => ({ redirectPath: search.redirect ?? null }),
-  load: async ({ context, preload, search, location }) => {
+  load: async ({ context, preload, search, location, navigate }) => {
     if (preload) return;
 
     const redirectPath = search?.redirect ?? null;
     const { auth } = context;
+
+    const routerNavigate = typedNavigate(navigate);
 
     const routerLocation = location;
 
@@ -71,13 +71,12 @@ export const oidcCallbackRoute = new Route({
     );
     const searchParamsObj = Object.fromEntries(searchParams.entries());
 
-    // router.navigate({ to: (pathname as any) ?? "/", search: searchParamsObj });
-    throw redirect({
+    await routerNavigate({
       to: (pathname as any) ?? "/",
       search: searchParamsObj,
     });
 
-    // return;
+    return;
   },
   component: LoadingPlaceholder,
 });
