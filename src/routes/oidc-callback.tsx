@@ -23,13 +23,13 @@ export const oidcCallbackRoute = new Route({
   }),
   path: "oidc-callback",
   // loaderContext: ({ search }) => ({ redirectPath: search.redirect ?? null }),
-  load: async ({ context, preload, search }) => {
+  load: async ({ context, preload, search, location }) => {
     if (preload) return;
 
     const redirectPath = search?.redirect ?? null;
     const { auth } = context;
 
-    // const routerLocation = router.state.location;
+    const routerLocation = location;
 
     const isAuthParams = hasAuthParams({
       ancestorOrigins: window.location.ancestorOrigins,
@@ -41,14 +41,10 @@ export const oidcCallbackRoute = new Route({
       replace: window.location.replace,
       assign: window.location.assign,
       reload: window.location.reload,
-      // pathname: routerLocation.pathname,
-      // hash: routerLocation.hash,
-      // href: routerLocation.href,
-      // search: routerLocation.searchStr,
-      pathname: window.location.pathname,
-      hash: window.location.hash,
-      href: window.location.href,
-      search: window.location.search,
+      pathname: routerLocation.pathname,
+      hash: routerLocation.hash,
+      href: routerLocation.href,
+      search: routerLocation.searchStr,
     });
 
     // if there are no auth params, begin the sign-in process
