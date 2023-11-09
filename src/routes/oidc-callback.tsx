@@ -9,9 +9,10 @@ import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 import { rootRoute } from "./__root";
 
 function removeTrailingSlash(path: string) {
-  const pathParts = path.split("?");
-  const pathWithoutSlash = pathParts[0]?.replace(/\/$/, "");
-  return pathWithoutSlash + (pathParts[1] ? `?${pathParts[1]}` : "");
+  // const pathParts = path.split("?");
+  // const pathWithoutSlash = pathParts[0]?.replace(/\/$/, "");
+  // return pathWithoutSlash + (pathParts[1] ? `?${pathParts[1]}` : "");
+  return path.replace(/\/\?/, "?").replace(/\/$/, "");
 }
 
 export const oidcCallbackRoute = new Route({
