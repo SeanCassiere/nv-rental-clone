@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import {
   Outlet,
   rootRouteWithContext,
+  ScrollRestoration,
   useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
@@ -138,7 +139,7 @@ function RootComponent() {
       <LogoutDialog />
       {isHeaderShown && <HeaderLayout />}
       <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
-        {/* <ScrollRestoration getKey={(location) => location.pathname} /> */}
+        <ScrollRestoration getKey={(location) => location.pathname} />
         {isExceptionRoute && !isFreshAuthenticating && <Outlet />}
         {isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
         {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
