@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, type LinkPropsOptions } from "@tanstack/react-router";
+import { useNavigate, type LinkOptions } from "@tanstack/react-router";
 import { ChevronRightIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -25,7 +25,7 @@ interface SelectorSettingsNavigationProps {
   items: {
     id: string;
     title: string;
-    linkProps: LinkPropsOptions;
+    linkProps: LinkOptions;
   }[];
   currentId: string;
   currentTitle: string;
