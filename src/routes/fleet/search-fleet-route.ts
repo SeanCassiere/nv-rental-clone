@@ -73,6 +73,5 @@ export const searchFleetRoute = new Route({
     }
     return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/search-fleet")),
 });

@@ -74,6 +74,5 @@ export const searchReservationsRoute = new Route({
     }
     return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/search-reservations")),
 });

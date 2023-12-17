@@ -11,6 +11,5 @@ export const searchReportsRoute = new Route({
     category: z.string().optional(),
   }),
   preSearchFilters: [(curr) => ({ category: curr?.category })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/search-reports")),
 });

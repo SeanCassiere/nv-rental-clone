@@ -72,6 +72,5 @@ export const indexRoute = new Route({
     }
     return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/dashboard")),
 });

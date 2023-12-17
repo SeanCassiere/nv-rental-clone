@@ -91,6 +91,5 @@ export const searchAgreementsRoute = new Route({
     }
     return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/search-agreements")),
 });

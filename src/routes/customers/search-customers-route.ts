@@ -74,6 +74,5 @@ export const searchCustomersRoute = new Route({
     }
     return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/search-customers")),
 });

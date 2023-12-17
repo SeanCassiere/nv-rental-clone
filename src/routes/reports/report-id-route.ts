@@ -46,6 +46,5 @@ export const viewReportByIdRoute = new Route({
 
     return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/view-report")),
 });

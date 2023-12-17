@@ -80,7 +80,6 @@ export const viewFleetByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/view-fleet")),
 });
 
