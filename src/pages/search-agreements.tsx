@@ -128,7 +128,7 @@ function AgreementsSearchPage() {
                         "p-0 text-base"
                       )}
                     >
-                      {value}
+                      {value || "-"}
                     </Link>
                   </PrimaryModuleTableCellWrap>
                 );

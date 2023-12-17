@@ -30,6 +30,7 @@ import { searchFleetRoute } from "@/routes/fleet/search-fleet-route";
 import { indexRoute } from "@/routes/index";
 import { loggedOutRoute } from "@/routes/logged-out";
 import { logoutRoute } from "@/routes/logout";
+import { notFoundRoute } from "@/routes/not-found";
 import { oidcCallbackRoute } from "@/routes/oidc-callback";
 import { reportsRoute } from "@/routes/reports";
 import {
@@ -133,4 +134,5 @@ export const routeTree = rootRoute.addChildren([
     mainSettingsRoute, // /settings
     destinationSettingsRoute, // /settings/destinations
   ]),
+  notFoundRoute, // catch-all
 ]);
