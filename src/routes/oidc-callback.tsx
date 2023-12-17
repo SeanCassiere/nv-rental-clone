@@ -6,28 +6,42 @@ import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
-import { router } from "@/app-entry";
-
 import { rootRoute } from "./__root";
 
 function removeTrailingSlash(path: string) {
-  const pathParts = path.split("?");
-  const pathWithoutSlash = pathParts[0]?.replace(/\/$/, "");
-  return pathWithoutSlash + (pathParts[1] ? `?${pathParts[1]}` : "");
+  // const pathParts = path.split("?");
+  // const pathWithoutSlash = pathParts[0]?.replace(/\/$/, "");
+  // return pathWithoutSlash + (pathParts[1] ? `?${pathParts[1]}` : "");
+  return path.replace(/\/\?/, "?").replace(/\/$/, "");
 }
 
 export const oidcCallbackRoute = new Route({
   getParentRoute: () => rootRoute,
   validateSearch: z.object({
     redirect: z.string().optional(),
+    code: z.string().optional(),
+    scope: z.string().optional(),
+    state: z.string().optional(),
+    session_state: z.string().optional(),
   }),
   path: "oidc-callback",
-  loaderContext: ({ search }) => ({ redirectPath: search.redirect ?? null }),
-  loader: async ({ context, preload }) => {
-    if (preload) return {};
-    const { redirectPath, auth } = context;
+  loaderDeps: ({ search }) => ({
+    redirect: search?.redirect,
+    code: search?.code,
+    scope: search?.scope,
+    state: search?.state,
+    session_state: search?.session_state,
+  }),
+  beforeLoad: ({ search }) => ({ search }),
+  loader: async ({ context, preload, location, navigate }) => {
+    const locationPathname = location.pathname;
+    if (preload || !locationPathname.includes("oidc-callback")) return;
 
-    const routerLocation = router.state.location;
+    const { search } = context;
+    const redirectPath = search?.redirect ?? null;
+    const { auth } = context;
+
+    const routerLocation = location;
 
     const isAuthParams = hasAuthParams({
       ancestorOrigins: window.location.ancestorOrigins,
@@ -69,9 +83,12 @@ export const oidcCallbackRoute = new Route({
     );
     const searchParamsObj = Object.fromEntries(searchParams.entries());
 
-    router.navigate({ to: (pathname as any) ?? "/", search: searchParamsObj });
+    await navigate({
+      to: (pathname as any) ?? "/",
+      search: searchParamsObj,
+    });
 
-    return {};
+    return;
   },
   component: LoadingPlaceholder,
 });

@@ -40,11 +40,14 @@ export const searchAgreementsRoute = new Route({
       };
     },
   ],
-  loaderContext: ({ search }) => {
-    return {
-      search: normalizeAgreementListSearchParams(search),
-    };
-  },
+  beforeLoad: ({ search }) => ({
+    search: normalizeAgreementListSearchParams(search),
+  }),
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    size: search.size,
+    filters: search.filters,
+  }),
   loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
@@ -91,8 +94,7 @@ export const searchAgreementsRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/search-agreements")),
 });

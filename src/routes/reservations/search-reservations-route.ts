@@ -23,11 +23,14 @@ export const searchReservationsRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  loaderContext: ({ search }) => {
-    return {
-      search: normalizeReservationListSearchParams(search),
-    };
-  },
+  beforeLoad: ({ search }) => ({
+    search: normalizeReservationListSearchParams(search),
+  }),
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    size: search.size,
+    filters: search.filters,
+  }),
   loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
@@ -74,8 +77,7 @@ export const searchReservationsRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/search-reservations")),
 });

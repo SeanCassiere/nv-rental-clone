@@ -60,7 +60,7 @@ export const reservationPathIdRoute = new Route({
         console.log("route prefetch failed for /reservations/:id", error);
       }
     }
-    return {};
+    return;
   },
   parseParams: (params) => ({
     reservationId: z.string().parse(params.reservationId),
@@ -80,7 +80,6 @@ export const viewReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/view-reservation")),
 });
 
@@ -94,6 +93,5 @@ export const editReservationByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/edit-reservation")),
 });

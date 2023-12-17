@@ -60,7 +60,7 @@ export const agreementPathIdRoute = new Route({
         console.error(e);
       }
     }
-    return {};
+    return;
   },
   parseParams: (params) => ({
     agreementId: z.string().parse(params.agreementId),
@@ -80,7 +80,6 @@ export const viewAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/view-agreement")),
 });
 
@@ -94,7 +93,6 @@ export const editAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/edit-agreement")),
 });
 
@@ -108,6 +106,5 @@ export const checkinAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/checkin-agreement")),
 });

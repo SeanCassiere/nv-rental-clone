@@ -40,8 +40,8 @@ const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 function VehiclesSearchPage() {
   const navigate = useNavigate();
 
-  const routerContext = useRouteContext({ from: searchFleetRoute.id });
-  const { searchFilters, pageNumber, size } = routerContext.search;
+  const routeCtx = useRouteContext({ from: searchFleetRoute.id });
+  const { searchFilters, pageNumber, size } = routeCtx.search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 

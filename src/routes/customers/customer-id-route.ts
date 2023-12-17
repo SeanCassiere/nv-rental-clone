@@ -59,7 +59,7 @@ export const customerPathIdRoute = new Route({
         console.error("route prefetch failed for /customers/:id", error);
       }
     }
-    return {};
+    return;
   },
   parseParams: (params) => ({
     customerId: z.string().parse(params.customerId),
@@ -75,7 +75,6 @@ export const viewCustomerByIdRoute = new Route({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/view-customer")),
 });
 

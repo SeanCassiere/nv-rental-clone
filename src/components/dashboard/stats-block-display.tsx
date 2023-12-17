@@ -1,4 +1,4 @@
-import { Link, type LinkPropsOptions } from "@tanstack/react-router";
+import { Link, type LinkOptions } from "@tanstack/react-router";
 import {
   ArrowDownLeftIcon,
   BanknoteIcon,
@@ -149,7 +149,7 @@ const StatBlock = ({
   title: string;
   value: string | null;
   icon: LucideIcon;
-  linkProps: LinkPropsOptions;
+  linkProps: LinkOptions;
 }) => {
   return (
     <Card className="flex h-full flex-col justify-between">

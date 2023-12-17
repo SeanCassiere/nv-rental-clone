@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import {
   Outlet,
-  RouterContext,
+  rootRouteWithContext,
   ScrollRestoration,
   useRouterState,
 } from "@tanstack/react-router";
@@ -30,9 +30,9 @@ interface MyRouterContext {
   auth: AuthContextProps;
 }
 
-const routerContext = new RouterContext<MyRouterContext>();
+const routerRootWithContext = rootRouteWithContext<MyRouterContext>();
 
-export const rootRoute = routerContext.createRootRoute({
+export const rootRoute = routerRootWithContext({
   loader: async ({ context: { apiClient } }) => {
     const auth = getAuthToken();
 
@@ -105,11 +105,11 @@ export const rootRoute = routerContext.createRootRoute({
       try {
         await Promise.all(promises);
       } catch (error) {
-        console.log("error fetching data in the root route", error);
+        console.log("error in rootRoute.loader", error);
       }
     }
 
-    return {};
+    return;
   },
   component: RootComponent,
 });
@@ -121,8 +121,8 @@ function RootComponent() {
   const routerMatches = routerStore.matches.map((route) => route.routeId);
 
   // check if the routerMatches array contains any of the exception routes
-  const isExceptionRoute = exceptionRoutes.some((route) =>
-    routerMatches.includes(route)
+  const isExceptionRoute = exceptionRoutes.some((routeId) =>
+    routerMatches.includes(routeId)
   );
 
   const auth = useAuth();

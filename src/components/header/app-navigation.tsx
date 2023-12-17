@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, type LinkPropsOptions } from "@tanstack/react-router";
+import { Link, type LinkOptions } from "@tanstack/react-router";
 
 import { useFeature } from "@/hooks/internal/useFeature";
 
@@ -10,12 +10,12 @@ import { cn } from "@/utils";
 type AppNavigationLinks = {
   name: string;
   props: Omit<
-    LinkPropsOptions,
+    LinkOptions,
     "children" | "className" | "activeProps" | "inactiveProps"
   >;
 }[];
 
-const defaultActiveOptions: LinkPropsOptions["activeOptions"] = {
+const defaultActiveOptions: LinkOptions["activeOptions"] = {
   exact: false,
   includeHash: false,
   includeSearch: false,

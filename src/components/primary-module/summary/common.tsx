@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link, type LinkPropsOptions } from "@tanstack/react-router";
+import { Link, type LinkOptions } from "@tanstack/react-router";
 
 import {
   Accordion,
@@ -30,7 +30,7 @@ export type TSummaryLineItemProps = {
   id: string;
   label: string;
   type?: "text" | "link";
-  linkProps?: LinkPropsOptions;
+  linkProps?: LinkOptions;
   amount: string | number | null;
   shown?: boolean;
   redHighlight?: boolean;

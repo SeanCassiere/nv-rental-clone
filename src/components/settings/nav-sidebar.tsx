@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, type LinkPropsOptions } from "@tanstack/react-router";
+import { Link, type LinkOptions } from "@tanstack/react-router";
 
 import { buttonVariants } from "@/components/ui/button";
 
@@ -9,7 +9,7 @@ interface SidebarSettingsNavigationProps {
   items: {
     id: string;
     title: string;
-    linkProps: LinkPropsOptions;
+    linkProps: LinkOptions;
   }[];
   currentId: string;
 }

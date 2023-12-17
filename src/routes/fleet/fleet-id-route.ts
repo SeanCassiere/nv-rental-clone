@@ -60,7 +60,7 @@ export const fleetPathIdRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
   parseParams: (params) => ({
     vehicleId: z.string().parse(params.vehicleId),
@@ -80,7 +80,6 @@ export const viewFleetByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-}).update({
   component: lazyRouteComponent(() => import("@/pages/view-fleet")),
 });
 

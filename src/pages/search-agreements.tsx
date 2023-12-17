@@ -46,8 +46,8 @@ function AgreementsSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeContext = useRouteContext({ from: searchAgreementsRoute.id });
-  const { searchFilters, pageNumber, size } = routeContext.search;
+  const routeCtx = useRouteContext({ from: searchAgreementsRoute.id });
+  const { searchFilters, pageNumber, size } = routeCtx.search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 

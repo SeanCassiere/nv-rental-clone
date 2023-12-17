@@ -70,8 +70,7 @@ export const indexRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
-}).update({
   component: lazyRouteComponent(() => import("@/pages/dashboard")),
 });

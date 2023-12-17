@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, type LinkPropsOptions } from "@tanstack/react-router";
+import { useParams, type LinkOptions } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import ProtectorShield from "@/components/protector-shield";
@@ -22,7 +22,7 @@ type SettingsNavigationDestination = {
   id: string;
   title: string;
   component: React.ReactNode;
-  linkProps: LinkPropsOptions;
+  linkProps: LinkOptions;
 };
 
 const SettingsProfileTab = React.lazy(

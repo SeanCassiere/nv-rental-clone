@@ -23,6 +23,6 @@ export const reportsRoute = new Route({
 
       await Promise.all(promises);
     }
-    return {};
+    return;
   },
 });
