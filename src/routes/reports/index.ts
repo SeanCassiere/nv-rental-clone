@@ -7,7 +7,7 @@ import { reportQKeys } from "@/utils/query-key";
 export const reportsRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "reports",
-  load: async ({ context: { auth, queryClient } }) => {
+  loader: async ({ context: { auth, queryClient } }) => {
     const clientId = auth.user?.profile?.navotar_clientid || "";
     const userId = auth.user?.profile?.navotar_userid || "";
 

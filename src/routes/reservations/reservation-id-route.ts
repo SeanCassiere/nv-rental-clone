@@ -9,7 +9,7 @@ import { reservationsRoute } from ".";
 export const reservationPathIdRoute = new Route({
   getParentRoute: () => reservationsRoute,
   path: "$reservationId",
-  load: async ({
+  loader: async ({
     params: { reservationId },
     context: { queryClient, apiClient },
   }) => {

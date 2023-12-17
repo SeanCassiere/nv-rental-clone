@@ -26,7 +26,12 @@ export const searchFleetRoute = new Route({
   beforeLoad: ({ search }) => ({
     search: normalizeVehicleListSearchParams(search),
   }),
-  load: async ({ context: { queryClient, search } }) => {
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    size: search.size,
+    filters: search.filters,
+  }),
+  loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } = search;

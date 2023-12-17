@@ -33,7 +33,7 @@ interface MyRouterContext {
 const routerRootWithContext = rootRouteWithContext<MyRouterContext>();
 
 export const rootRoute = routerRootWithContext({
-  load: async ({ context: { apiClient } }) => {
+  loader: async ({ context: { apiClient } }) => {
     const auth = getAuthToken();
 
     if (auth) {

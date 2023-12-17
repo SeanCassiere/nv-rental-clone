@@ -1,4 +1,4 @@
-import { Route, typedNavigate } from "@tanstack/react-router";
+import { Route } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
@@ -9,15 +9,13 @@ import { rootRoute } from "./__root";
 export const logoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "logout",
-  load: async ({ context, preload, navigate }) => {
-    if (preload) return {};
+  loader: async ({ context, preload, navigate }) => {
+    if (preload) return;
 
     const { auth } = context;
 
-    const routerNavigate = typedNavigate(navigate);
-
     if (!auth.isAuthenticated) {
-      await routerNavigate({
+      await navigate({
         to: "/logged-out",
       });
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
@@ -12,11 +13,9 @@ import { viewReportByIdRoute } from "@/routes/reports/report-id-route";
 
 import { reportQKeys } from "@/utils/query-key";
 
-const ViewReportPage: (typeof viewReportByIdRoute)["options"]["component"] = ({
-  useParams,
-}) => {
+const ViewReportPage = () => {
   const auth = useAuth();
-  const { reportId } = useParams();
+  const { reportId } = useParams({ from: viewReportByIdRoute.id });
 
   const clientId = auth.user?.profile?.navotar_clientid;
   const userId = auth.user?.profile?.navotar_userid;

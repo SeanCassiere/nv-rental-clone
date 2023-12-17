@@ -9,7 +9,7 @@ import { agreementsRoute } from ".";
 export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "$agreementId",
-  load: async ({
+  loader: async ({
     params: { agreementId },
     context: { queryClient, apiClient },
   }) => {

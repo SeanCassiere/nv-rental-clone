@@ -26,8 +26,12 @@ export const searchCustomersRoute = new Route({
   beforeLoad: ({ search }) => ({
     search: normalizeCustomerListSearchParams(search),
   }),
-  load: async ({ context: { queryClient }, search: unsafe_search }) => {
-    const search = normalizeCustomerListSearchParams(unsafe_search);
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    size: search.size,
+    filters: search.filters,
+  }),
+  loader: async ({ context: { queryClient, search } }) => {
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } = search;
