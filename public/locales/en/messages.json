@@ -7,6 +7,7 @@
   "labelUpdatedFail": "{{label}} update failed",
   "labelNotFound": "{{label}} not found",
   "labelAlreadyTaken": "{{label}} already taken",
+  "labelError": "{{label}} error",
   "notFound": "Not found.",
   "pleaseTryAgain": "Please try again later.",
   "somethingWentWrong": "Something went wrong.",
@@ -25,5 +26,9 @@
   "accessibleLocations": "Access is being granted to the following locations.",
   "pressToShowPassword": "Press to show password.",
   "pressToHidePassword": "Press to hide password.",
-  "noResultsWereFoundForThisSearch": "No results were found for this search."
+  "noResultsWereFoundForThisSearch": "No results were found for this search.",
+  "pageNotFound": "Page not found.",
+  "sorryCouldNotFindThatPage": "Sorry, we couldn’t find the page you’re looking for.",
+  "goBack": "Go back",
+  "goBack_dashboard": "Go back to dashboard"
 }
