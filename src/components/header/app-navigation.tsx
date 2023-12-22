@@ -21,14 +21,18 @@ const defaultActiveOptions: LinkOptions["activeOptions"] = {
   includeSearch: false,
 };
 
-export const AppNavigation = () => {
+type Props = React.JSX.IntrinsicElements["nav"];
+
+export const AppNavigation = (props: Props) => {
+  const { className = "", ...navProps } = props;
+
   const [featureRowCount] = useFeature("DEFAULT_ROW_COUNT");
   const tableRowCount = React.useMemo(
     () => parseInt(featureRowCount || APP_DEFAULTS.tableRowCount, 10),
     [featureRowCount]
   );
 
-  const navigation: AppNavigationLinks = [
+  const links: AppNavigationLinks = [
     {
       name: "Dashboard",
       props: {
@@ -107,15 +111,15 @@ export const AppNavigation = () => {
   ];
 
   return (
-    <nav className="-mb-px overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] md:px-10 [&::-webkit-scrollbar]:hidden">
-      <ul className="flex space-x-5 sm:space-x-0.5">
-        {navigation.map((item, idx) => (
+    <nav className={cn(className)} {...navProps}>
+      <ul className="relative -mb-px flex space-x-5 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0.5 [&::-webkit-scrollbar]:hidden">
+        {links.map((item, idx) => (
           <li key={`header_app_nav_${idx}`}>
             <Link
               {...item.props}
               className={cn(
                 "inline-block whitespace-nowrap border-b pb-4 pt-3 leading-none transition-all sm:px-4",
-                idx + 1 === navigation.length && "mr-4 sm:mr-0"
+                idx + 1 === links.length && "mr-4 sm:mr-0"
               )}
               activeProps={{
                 className: cn("border-foreground font-semibold"),
