@@ -18,7 +18,7 @@ export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   silent_redirect_uri: OIDC_SILENT_REDIRECT_URI,
   response_type: "code",
   response_mode: "query" as const,
-  scope: "openid profile Api",
+  scope: "openid profile Api email",
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
