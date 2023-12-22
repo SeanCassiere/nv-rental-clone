@@ -54,7 +54,7 @@ export const HeaderLayout = () => {
           </div>
         </div>
       </header>
-      <AppNavigation className="mx-auto w-full max-w-[1700px] border-b bg-background px-1 md:sticky md:top-0 md:z-20 md:px-5" />
+      <AppNavigation className="mx-auto w-full max-w-[1700px] border-b bg-background shadow-sm md:sticky md:top-0 md:z-20 md:px-10 md:pt-2" />
     </>
   );
 };
