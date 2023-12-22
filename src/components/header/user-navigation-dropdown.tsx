@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { ChevronDownIcon } from "lucide-react";
 import { useAuth } from "react-oidc-context";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -53,11 +54,17 @@ export const UserNavigationDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
+        <Button
+          variant="ghost"
+          className="group relative h-10 w-10 rounded-full"
+        >
+          <Avatar>
             <AvatarImage src={user ? imgUrl : undefined} alt={fullName} />
             <AvatarFallback>{getAvatarFallbackText(fullName)}</AvatarFallback>
           </Avatar>
+          <span className="absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-background bg-muted transition-colors">
+            <ChevronDownIcon className="h-2.5 w-2.5 md:h-3 md:w-3" />
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>

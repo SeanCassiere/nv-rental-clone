@@ -8,6 +8,7 @@
 export function getAvatarUrl(username: string | undefined) {
   const url = new URL("https://api.dicebear.com/7.x/miniavs/svg");
   url.searchParams.append("seed", username ?? "none");
+  url.searchParams.append("scale", "85");
   url.searchParams.append("eyes", "happy");
   return url.toString();
 }
