@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { Link } from "@tanstack/react-router";
-import parseISO from "date-fns/parseISO";
+import { parseISO } from "date-fns";
 import { ChevronRightIcon, PlayIcon } from "lucide-react";
 
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
@@ -1065,8 +1065,8 @@ const AddRentalParentForm = ({
                 isEdit && hasEdited
                   ? networkSummaryData
                   : networkSummaryData
-                  ? networkSummaryData
-                  : summaryData ?? undefined
+                    ? networkSummaryData
+                    : summaryData ?? undefined
               }
             />
           </div>

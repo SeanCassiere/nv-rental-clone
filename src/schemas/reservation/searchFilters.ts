@@ -1,5 +1,4 @@
-import isBefore from "date-fns/isBefore";
-import parse from "date-fns/parse";
+import { isBefore, parse } from "date-fns";
 import { z } from "zod";
 
 export const ReservationFiltersSchema = z
