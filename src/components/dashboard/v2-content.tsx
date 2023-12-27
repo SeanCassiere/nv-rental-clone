@@ -1,5 +1,5 @@
 import React from "react";
-import add from "date-fns/add";
+import { add } from "date-fns";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { QuickCheckinAgreementForm } from "@/components/dashboard/widgets/quick-checkin-agreement";

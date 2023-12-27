@@ -1,9 +1,9 @@
-import type { Locale } from "date-fns";
-import dateFnsFormat from "date-fns/format";
-import enNZLocale from "date-fns/locale/en-NZ";
-import enUSLocale from "date-fns/locale/en-US";
-import enLocale from "date-fns/locale/en-US";
-import ruLocale from "date-fns/locale/ru";
+import { format as dateFnsFormat, type Locale } from "date-fns";
+import {
+  enNZ as enNZLocale,
+  enUS as enUSLocale,
+  ru as ruLocale,
+} from "date-fns/locale";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
@@ -20,7 +20,7 @@ export const dfnsDateFormat = "dd/MM/yyyy";
 
 // START: locales for date-fns
 const dateFnsLocales: Record<string, Locale> = {
-  en: enLocale,
+  en: enUSLocale,
   "en-US": enUSLocale,
   "en-NZ": enNZLocale,
   ru: ruLocale,

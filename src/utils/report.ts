@@ -1,15 +1,17 @@
-import addDays from "date-fns/addDays";
-import addMonths from "date-fns/addMonths";
-import addYears from "date-fns/addYears";
-import endOfMonth from "date-fns/endOfMonth";
-import endOfYear from "date-fns/endOfYear";
-import format from "date-fns/format";
-import startOfMonth from "date-fns/startOfMonth";
-import startOfYear from "date-fns/startOfYear";
-import subDays from "date-fns/subDays";
-import subMonths from "date-fns/subMonths";
-import subWeeks from "date-fns/subWeeks";
-import subYears from "date-fns/subYears";
+import {
+  addDays,
+  addMonths,
+  addYears,
+  endOfMonth,
+  endOfYear,
+  format,
+  startOfMonth,
+  startOfYear,
+  subDays,
+  subMonths,
+  subWeeks,
+  subYears,
+} from "date-fns";
 import { z } from "zod";
 
 import type { TReportDetail } from "@/schemas/report";

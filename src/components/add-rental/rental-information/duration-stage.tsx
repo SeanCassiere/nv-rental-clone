@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import add from "date-fns/add";
-import differenceInMinutes from "date-fns/differenceInMinutes";
-import isBefore from "date-fns/isBefore";
-import isEqual from "date-fns/isEqual";
+import { add, differenceInMinutes, isBefore, isEqual } from "date-fns";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";

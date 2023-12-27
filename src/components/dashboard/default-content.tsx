@@ -1,5 +1,5 @@
 import React from "react";
-import add from "date-fns/add";
+import { add } from "date-fns";
 import {
   LayoutDashboardIcon,
   LockIcon,

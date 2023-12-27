@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import isAfter from "date-fns/isAfter";
-import isBefore from "date-fns/isBefore";
+import { isAfter, isBefore } from "date-fns";
 import { useAuth } from "react-oidc-context";
 
 import { USER_STORAGE_KEYS } from "@/utils/constants";
