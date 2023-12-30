@@ -1,4 +1,4 @@
-import { Link, Route } from "@tanstack/react-router";
+import { Link, NotFoundRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { cn } from "@/utils";
@@ -38,8 +38,7 @@ const NotFoundPage = () => {
   );
 };
 
-export const notFoundRoute = new Route({
+export const notFoundRoute = new NotFoundRoute({
   getParentRoute: () => rootRoute,
-  path: "*",
   component: NotFoundPage,
 });
