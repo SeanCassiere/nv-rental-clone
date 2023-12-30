@@ -39,8 +39,8 @@ export const ReservationFiltersSchema = z
   });
 
 export const ReservationSearchQuerySchema = z.object({
-  page: z.coerce.number().min(1).default(1),
-  size: z.coerce.number().min(1).default(10),
+  page: z.coerce.number().min(1).default(1).optional(),
+  size: z.coerce.number().min(1).default(10).optional(),
   filters: ReservationFiltersSchema.optional(),
 });
 export type TReservationSearchQuery = z.infer<
