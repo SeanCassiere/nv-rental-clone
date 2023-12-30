@@ -80,6 +80,38 @@ export const viewAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
+  beforeLoad: (ctx) => ({ viewTab: ctx.search?.tab || "" }),
+  loaderDeps: (ctx) => ({ tab: ctx.search?.tab }),
+  loader: async ({
+    context: { queryClient, viewTab },
+    params: { agreementId },
+  }) => {
+    const auth = getAuthToken();
+
+    if (!auth) return;
+    const profile = {
+      clientId: auth.profile.navotar_clientid,
+      userId: auth.profile.navotar_userid,
+    };
+
+    const promises = [];
+
+    switch (viewTab.toLowerCase()) {
+      case "exchanges":
+        promises.push(
+          queryClient.ensureQueryData(
+            agreementQKeys.viewExchanges({ agreementId, auth: profile })
+          )
+        );
+        break;
+      default:
+        break;
+    }
+
+    await Promise.all(promises);
+
+    return;
+  },
   component: lazyRouteComponent(() => import("@/pages/view-agreement")),
 });
 

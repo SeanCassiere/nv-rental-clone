@@ -72,7 +72,12 @@ function AgreementViewPage() {
   const agreementId = params.agreementId || "";
 
   const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: ReactNode }[] = [];
+    const tabs: {
+      id: string;
+      label: string;
+      component: ReactNode;
+      preloadFn?: () => void;
+    }[] = [];
 
     tabs.push({
       id: "summary",
@@ -85,26 +90,81 @@ function AgreementViewPage() {
       component: (
         <ModuleNotesTabContent module="agreements" referenceId={agreementId} />
       ),
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "notes",
+          }),
+        }),
     });
     tabs.push({
       id: "payments",
       label: "Payments",
       component: "Payments Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "payments",
+          }),
+        }),
     });
     tabs.push({
       id: "invoices",
       label: "Invoices",
       component: "Invoices Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "invoices",
+          }),
+        }),
     });
     tabs.push({
       id: "documents",
       label: "Documents",
       component: "Documents Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "documents",
+          }),
+        }),
     });
     tabs.push({
       id: "charges",
       label: "Charges",
       component: "Charges Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "charges",
+          }),
+        }),
     });
     tabs.push({
       id: "exchanges",
@@ -116,9 +176,20 @@ function AgreementViewPage() {
           userId={userId}
         />
       ),
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "exchanges",
+          }),
+        }),
     });
     return tabs;
-  }, [agreementId, clientId, userId]);
+  }, [router, agreementId, clientId, userId]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
@@ -260,7 +331,12 @@ function AgreementViewPage() {
         <Tabs value={tabName} onValueChange={onTabClick}>
           <TabsList className="w-full sm:max-w-max">
             {tabsConfig.map((tab, idx) => (
-              <TabsTrigger key={`tab-trigger-${idx}`} value={tab.id}>
+              <TabsTrigger
+                key={`tab-trigger-${idx}`}
+                value={tab.id}
+                onMouseEnter={tab?.preloadFn}
+                onTouchStart={tab?.preloadFn}
+              >
                 {tab.label}
               </TabsTrigger>
             ))}
