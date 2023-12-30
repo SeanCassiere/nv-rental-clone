@@ -19,7 +19,7 @@ const defaultActiveOptions: LinkOptions["activeOptions"] = {
   exact: false,
   includeHash: false,
   includeSearch: false,
-};
+} as const;
 
 type Props = React.JSX.IntrinsicElements["nav"];
 
@@ -112,14 +112,13 @@ export const AppNavigation = (props: Props) => {
 
   return (
     <nav className={cn(className)} {...navProps}>
-      <ul className="relative mx-auto -mb-px flex max-w-[1700px] space-x-5 overflow-x-auto pl-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0.5 md:px-12 [&::-webkit-scrollbar]:hidden">
+      <ul className="relative mx-auto -mb-px flex max-w-[1700px] space-x-5 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0.5 md:px-12 [&::-webkit-scrollbar]:hidden">
         {links.map((item, idx) => (
           <li key={`header_app_nav_${idx}`}>
             <Link
               {...item.props}
               className={cn(
-                "inline-block whitespace-nowrap border-b pb-4 pt-3 leading-none transition-all sm:px-4",
-                idx + 1 === links.length && "mr-4 sm:mr-0"
+                "inline-block whitespace-nowrap border-b pb-4 pt-3 leading-none transition-all sm:px-4"
               )}
               activeProps={{
                 className: cn("border-foreground font-semibold"),
