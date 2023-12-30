@@ -112,7 +112,7 @@ export const AppNavigation = (props: Props) => {
 
   return (
     <nav className={cn(className)} {...navProps}>
-      <ul className="relative -mb-px flex space-x-5 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0.5 [&::-webkit-scrollbar]:hidden">
+      <ul className="relative mx-auto -mb-px flex max-w-[1700px] space-x-5 overflow-x-auto pl-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0.5 md:px-12 [&::-webkit-scrollbar]:hidden">
         {links.map((item, idx) => (
           <li key={`header_app_nav_${idx}`}>
             <Link
