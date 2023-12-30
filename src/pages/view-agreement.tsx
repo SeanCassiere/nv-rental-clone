@@ -15,6 +15,7 @@ import {
   PencilIcon,
   PrinterIcon,
 } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
@@ -53,6 +54,10 @@ const AgreementExchangesTab = lazy(
 
 function AgreementViewPage() {
   const router = useRouter();
+  const auth = useAuth();
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
 
   const { tab: tabName = "summary" } = useSearch({
     from: viewAgreementByIdRoute.id,
@@ -104,10 +109,16 @@ function AgreementViewPage() {
     tabs.push({
       id: "exchanges",
       label: "Exchanges",
-      component: <AgreementExchangesTab referenceId={agreementId} />,
+      component: (
+        <AgreementExchangesTab
+          referenceId={agreementId}
+          clientId={clientId}
+          userId={userId}
+        />
+      ),
     });
     return tabs;
-  }, [agreementId]);
+  }, [agreementId, clientId, userId]);
 
   const onTabClick = (newTabId: string) => {
     navigate({

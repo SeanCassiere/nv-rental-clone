@@ -36,7 +36,25 @@ export const agreementQKeys = {
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [agreementQKeys.viewKey, id, "summary"],
   notes: (id: ReferenceId) => [agreementQKeys.viewKey, id, "notes"],
-  exchanges: (id: ReferenceId) => [agreementQKeys.viewKey, id, "exchanges"],
+  viewExchanges: ({
+    agreementId,
+    auth,
+  }: {
+    agreementId: ReferenceId;
+    auth: Auth;
+  }) =>
+    queryOptions({
+      queryKey: [agreementQKeys.viewKey, agreementId, "exchanges"],
+      queryFn: () =>
+        apiClient.vehicleExchange.getList({
+          query: {
+            clientId: auth.clientId,
+            userId: auth.userId,
+            agreementId: `${agreementId}`,
+          },
+        }),
+      enabled: isEnabled(auth),
+    }),
 };
 
 export const reservationQKeys = {
