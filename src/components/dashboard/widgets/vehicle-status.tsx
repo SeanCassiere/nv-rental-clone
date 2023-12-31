@@ -155,6 +155,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
           paddingAngle={5}
           dataKey="total"
           onMouseEnter={(_, idx) => setActiveIdx(idx)}
+          isAnimationActive={false}
         >
           {dataList.map((_, idx) => (
             <Cell

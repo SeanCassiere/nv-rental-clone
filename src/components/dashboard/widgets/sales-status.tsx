@@ -96,6 +96,7 @@ export function SalesAreaChart({ locations }: { locations: string[] }) {
               "--theme-primary": "hsl(var(--primary))",
             } as React.CSSProperties
           }
+          isAnimationActive={false}
         />
         <Line
           type="monotone"
@@ -111,6 +112,7 @@ export function SalesAreaChart({ locations }: { locations: string[] }) {
               "--theme-primary": `hsl(var(--primary))`,
             } as React.CSSProperties
           }
+          isAnimationActive={false}
         />
       </LineChart>
     </ResponsiveContainer>
