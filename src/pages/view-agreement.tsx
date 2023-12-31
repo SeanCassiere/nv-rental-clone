@@ -52,6 +52,14 @@ const AgreementExchangesTab = lazy(
   () => import("../components/primary-module/tabs/agreement/exchanges-content")
 );
 
+type TabListItem = {
+  id: string;
+  label: string;
+  component: ReactNode;
+  preloadFn?: () => void;
+  suspenseComponent?: ReactNode;
+};
+
 function AgreementViewPage() {
   const router = useRouter();
   const auth = useAuth();
@@ -72,12 +80,7 @@ function AgreementViewPage() {
   const agreementId = params.agreementId || "";
 
   const tabsConfig = useMemo(() => {
-    const tabs: {
-      id: string;
-      label: string;
-      component: ReactNode;
-      preloadFn?: () => void;
-    }[] = [];
+    const tabs: TabListItem[] = [];
 
     tabs.push({
       id: "summary",
@@ -347,7 +350,9 @@ function AgreementViewPage() {
               value={tab.id}
               className="min-h-[250px]"
             >
-              <Suspense fallback={<LoadingPlaceholder />}>
+              <Suspense
+                fallback={tab?.suspenseComponent || <LoadingPlaceholder />}
+              >
                 {tab.component}
               </Suspense>
             </TabsContent>
