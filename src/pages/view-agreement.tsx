@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
@@ -86,12 +87,18 @@ function AgreementViewPage() {
       id: "summary",
       label: "Summary",
       component: <SummaryTab agreementId={agreementId} />,
+      suspenseComponent: <LoadingPlaceholder />,
     });
     tabs.push({
       id: "notes",
       label: "Notes",
       component: (
-        <ModuleNotesTabContent module="agreements" referenceId={agreementId} />
+        <ModuleNotesTabContent
+          module="agreements"
+          referenceId={agreementId}
+          clientId={clientId}
+          userId={userId}
+        />
       ),
       preloadFn: () =>
         router.preloadRoute({
@@ -351,7 +358,9 @@ function AgreementViewPage() {
               className="min-h-[250px]"
             >
               <Suspense
-                fallback={tab?.suspenseComponent || <LoadingPlaceholder />}
+                fallback={
+                  tab?.suspenseComponent || <Skeleton className="h-[450px]" />
+                }
               >
                 {tab.component}
               </Suspense>

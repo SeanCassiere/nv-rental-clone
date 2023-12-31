@@ -96,11 +96,21 @@ export const viewAgreementByIdRoute = new Route({
 
     const promises = [];
 
-    switch (viewTab.toLowerCase()) {
+    switch (viewTab.trim().toLowerCase()) {
       case "exchanges":
         promises.push(
           queryClient.ensureQueryData(
             agreementQKeys.viewExchanges({ agreementId, auth: profile })
+          )
+        );
+        break;
+      case "notes":
+        promises.push(
+          queryClient.ensureQueryData(
+            agreementQKeys.viewNotes({
+              agreementId,
+              auth: profile,
+            })
           )
         );
         break;
