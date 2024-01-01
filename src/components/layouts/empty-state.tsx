@@ -26,7 +26,7 @@ export const EmptyState = ({
   const RenderedIcon = Icon ?? AlertCircleIcon;
 
   return (
-    <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed">
+    <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed bg-card">
       <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
         <RenderedIcon className="h-10 w-10 text-muted-foreground" />
 

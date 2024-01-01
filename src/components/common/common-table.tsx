@@ -83,12 +83,12 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden overflow-y-auto rounded border border-slate-200",
+        "relative w-full overflow-hidden overflow-y-auto rounded border",
         props.stickyHeader ? "mr-2 max-h-[650px]" : ""
       )}
     >
       {/* <div className="overflow-x-auto"> */}
-      <Table className="table-auto overflow-x-auto">
+      <Table className="table-auto overflow-x-auto bg-card">
         <TableHeader
           className={cn(props.stickyHeader ? "sticky top-0 z-10" : "")}
         >
