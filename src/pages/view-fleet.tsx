@@ -172,9 +172,7 @@ function VehicleViewPage() {
             <Link
               to="/fleet/$vehicleId/edit"
               params={{ vehicleId: String(vehicleId) }}
-              className={cn(
-                buttonVariants({ size: "sm", variant: "secondary" })
-              )}
+              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
               <PencilIcon className="mr-2 h-4 w-4" />
               <span className="inline-block">Edit</span>
@@ -186,10 +184,10 @@ function VehicleViewPage() {
                   size="sm"
                   type="button"
                   className="flex items-center justify-center gap-2"
-                  variant="secondary"
+                  variant="outline"
                 >
                   <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
-                  <span className="inline-block">More</span>
+                  <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">

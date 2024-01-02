@@ -146,9 +146,7 @@ function CustomerViewPage() {
               to="/customers/$customerId/edit"
               search={() => ({})}
               params={{ customerId: String(customerId) }}
-              className={cn(
-                buttonVariants({ size: "sm", variant: "secondary" })
-              )}
+              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
               <PencilIcon className="h-4 w-4 sm:mr-2" />
               <span className="inline-block">Edit</span>
@@ -160,10 +158,10 @@ function CustomerViewPage() {
                   size="sm"
                   type="button"
                   className="flex items-center justify-center gap-2"
-                  variant="secondary"
+                  variant="outline"
                 >
                   <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
-                  <span className="inline-block">More</span>
+                  <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">

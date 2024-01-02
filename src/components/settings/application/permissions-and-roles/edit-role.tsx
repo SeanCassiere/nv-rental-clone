@@ -308,7 +308,7 @@ export function EditRoleDialog({
         )}
         <DialogFooter>
           <Button
-            variant="outline"
+            variant="ghost"
             type="button"
             onClick={() => setOpen(false)}
             disabled={isPending}

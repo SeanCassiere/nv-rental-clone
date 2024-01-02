@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import {
-  AlertCircleIcon,
   ChevronRightIcon,
   FolderIcon,
   Loader2Icon,
@@ -47,7 +46,7 @@ export const ViewReport = () => {
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
           <div className="flex h-full w-full flex-col gap-2 sm:flex-row sm:items-center">
             <Link
-              to=".."
+              to="/reports"
               className="inline-block text-xl font-semibold leading-6 text-foreground/75 sm:text-2xl sm:text-foreground"
             >
               Reports
