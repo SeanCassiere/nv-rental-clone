@@ -14,6 +14,7 @@ import {
   PowerIcon,
   PowerOffIcon,
 } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
@@ -64,7 +65,12 @@ function VehicleViewPage() {
   const router = useRouter();
   const params = useParams({ from: viewFleetByIdRoute.id });
 
+  const auth = useAuth();
+
   const { tab: tabName = "" } = useSearch({ from: viewFleetByIdRoute.id });
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
 
   const navigate = useNavigate();
 
@@ -97,7 +103,12 @@ function VehicleViewPage() {
       id: "notes",
       label: "Notes",
       component: (
-        <ModuleNotesTabContent module="vehicles" referenceId={vehicleId} />
+        <ModuleNotesTabContent
+          module="vehicles"
+          referenceId={vehicleId}
+          clientId={clientId}
+          userId={userId}
+        />
       ),
     });
     tabs.push({
@@ -127,7 +138,7 @@ function VehicleViewPage() {
     });
 
     return tabs;
-  }, [vehicleId, vehicle]);
+  }, [vehicleId, vehicle, clientId, userId]);
 
   useDocumentTitle(
     titleMaker((vehicle?.vehicle.vehicleNo || "Loading") + " - Fleet")

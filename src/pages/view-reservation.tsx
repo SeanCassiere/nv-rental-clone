@@ -14,6 +14,7 @@ import {
   PencilIcon,
   PrinterIcon,
 } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
@@ -50,10 +51,14 @@ const ModuleNotesTabContent = lazy(
 function ReservationViewPage() {
   const router = useRouter();
   const params = useParams({ from: viewReservationByIdRoute.id });
+  const auth = useAuth();
 
   const { tab: tabName = "summary" } = useSearch({
     from: viewReservationByIdRoute.id,
   });
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
 
   const navigate = useNavigate();
 
@@ -74,6 +79,8 @@ function ReservationViewPage() {
         <ModuleNotesTabContent
           module="reservations"
           referenceId={reservationId}
+          clientId={clientId}
+          userId={userId}
         />
       ),
     });
@@ -89,7 +96,7 @@ function ReservationViewPage() {
     });
 
     return tabs;
-  }, [reservationId]);
+  }, [reservationId, clientId, userId]);
 
   const onTabClick = (newTabId: string) => {
     navigate({

@@ -13,6 +13,7 @@ import {
   PowerIcon,
   PowerOffIcon,
 } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import ProtectorShield from "@/components/protector-shield";
@@ -48,10 +49,14 @@ const ModuleNotesTabContent = lazy(
 function CustomerViewPage() {
   const router = useRouter();
   const params = useParams({ from: viewCustomerByIdRoute.id });
+  const auth = useAuth();
 
   const { tab: tabName = "summary" } = useSearch({
     from: viewCustomerByIdRoute.id,
   });
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
 
   const navigate = useNavigate();
 
@@ -70,7 +75,12 @@ function CustomerViewPage() {
       id: "notes",
       label: "Notes",
       component: (
-        <ModuleNotesTabContent module="customers" referenceId={customerId} />
+        <ModuleNotesTabContent
+          module="customers"
+          referenceId={customerId}
+          clientId={clientId}
+          userId={userId}
+        />
       ),
     });
     tabs.push({
@@ -80,7 +90,7 @@ function CustomerViewPage() {
     });
 
     return tabs;
-  }, [customerId]);
+  }, [customerId, clientId, userId]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
