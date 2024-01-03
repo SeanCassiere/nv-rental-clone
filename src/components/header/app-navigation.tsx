@@ -40,6 +40,7 @@ export const AppNavigation = (props: Props) => {
         activeOptions: {
           exact: true,
         },
+        params: false,
       },
     },
     {
@@ -53,6 +54,7 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
+        params: false,
       },
     },
     {
@@ -66,6 +68,7 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
+        params: false,
       },
     },
     {
@@ -79,6 +82,7 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
+        params: false,
       },
     },
     {
@@ -92,6 +96,7 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
+        params: false,
       },
     },
     {
@@ -99,6 +104,7 @@ export const AppNavigation = (props: Props) => {
       props: {
         to: "/reports",
         activeOptions: defaultActiveOptions,
+        params: false,
       },
     },
     {
@@ -106,6 +112,7 @@ export const AppNavigation = (props: Props) => {
       props: {
         to: "/settings",
         activeOptions: defaultActiveOptions,
+        params: false,
       },
     },
   ];

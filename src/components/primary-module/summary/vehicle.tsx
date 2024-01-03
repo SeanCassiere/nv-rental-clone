@@ -139,6 +139,7 @@ export const VehicleSummary = ({
             Statuses: ["2", "7"],
           },
         }),
+        params: false,
       },
     },
 
@@ -216,6 +217,7 @@ export const VehicleSummary = ({
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
         }),
+        params: false,
       },
     },
 

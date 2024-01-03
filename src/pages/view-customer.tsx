@@ -143,7 +143,12 @@ function CustomerViewPage() {
             />
             <Link
               to="/customers/$customerId"
-              search={(current) => ({ tab: current?.tab || "summary" })}
+              search={(current) => ({
+                tab:
+                  "tab" in current && typeof current.tab === "string"
+                    ? current.tab
+                    : "summary",
+              })}
               params={{ customerId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
