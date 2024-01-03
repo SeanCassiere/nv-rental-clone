@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Cell,
@@ -13,6 +13,7 @@ import type { PieSectorDataItem } from "recharts/types/polar/Pie";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
+import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
@@ -21,19 +22,28 @@ import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
 
+function nameMaker(index: number) {
+  return `--pie-hsl-color-${index}`;
+}
+
+function hslVarNameMaker(index: number) {
+  return `hsl(var(${nameMaker(index)}))`;
+}
+
 // generated from https://www.learnui.design/tools/data-color-picker.html#divergent
-const PIE_CHART_COLORS = [
-  "#16a34a",
-  "#62b458",
-  "#91c56a",
-  "#b9d682",
-  "#dee89d",
-  "#fffabb",
-  "#f8d993",
-  "#f2b673",
-  "#ec915d",
-  "#e26952",
-  "#de425b",
+const SYSTEM_PIE_CHART_COLORS: [string, string, string][] = [
+  // --css-var-name light-mode-hsl dark-mode-hsl
+  [nameMaker(1), "25 95% 53%", "21 90% 48%"],
+  [nameMaker(2), "11 100% 69%", "5 100% 69%"],
+  [nameMaker(3), "358 100% 79%", "352 100% 78%"],
+  [nameMaker(4), "343 100% 84%", "339 100% 86%"],
+  [nameMaker(5), "329 100% 89%", "325 100% 93%"],
+  [nameMaker(6), "31, 100% 95%", "300 100% 100%"],
+  [nameMaker(7), "302 70% 83%", "293 59% 89%"],
+  [nameMaker(8), "292 70% 75%", "285 62% 78%"],
+  [nameMaker(9), "282 74% 69%", "278 65% 69%"],
+  [nameMaker(10), "27, 79% 63%", "271 67% 59%"],
+  [nameMaker(11), "262 83% 58%", "263 70% 50%"],
 ];
 
 const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
@@ -53,6 +63,8 @@ export default VehicleStatusWidget;
 
 export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
   const [activeIdx, setActiveIdx] = React.useState(0);
+
+  const theme = useTernaryDarkMode();
 
   const vehicleTypeId = "0";
   const statusCounts = useGetDashboardVehicleStatusCounts({
@@ -84,10 +96,34 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
     ) || APP_DEFAULTS.tableRowCount;
   const defaultRowCount = parseInt(rowCountStr, 10);
 
+  const pieChartColors: React.CSSProperties = useMemo(() => {
+    // if dark mode is the currently selected theme, or if it is system preference and it is dark
+    if (
+      theme.ternaryDarkMode === "dark" ||
+      (theme.ternaryDarkMode === "system" && theme.isDarkMode)
+    ) {
+      return SYSTEM_PIE_CHART_COLORS.reduce(
+        (acc, [key, _, value]) => {
+          acc[key] = value;
+          return acc;
+        },
+        {} as { [key: string]: string }
+      );
+    }
+
+    return SYSTEM_PIE_CHART_COLORS.reduce(
+      (acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      },
+      {} as { [key: string]: string }
+    );
+  }, [theme.isDarkMode, theme.ternaryDarkMode]);
+
   return statusCounts.status === "pending" ? (
     <WidgetSkeleton />
   ) : (
-    <ResponsiveContainer className="min-h-[250px]">
+    <ResponsiveContainer className="min-h-[250px]" style={pieChartColors}>
       <PieChart margin={{ top: 10, left: 35, right: 0, bottom: 0 }}>
         <Pie
           activeIndex={activeIdx}
@@ -159,9 +195,11 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
         >
           {dataList.map((_, idx) => (
             <Cell
-              stroke="hsl(var(--border)/0.5)"
               key={`vehicle-status-pie-cell-${idx}`}
-              fill={PIE_CHART_COLORS[idx % PIE_CHART_COLORS.length]}
+              stroke="hsl(var(--border)/0.5)"
+              fill={hslVarNameMaker(
+                (idx + 1) % (SYSTEM_PIE_CHART_COLORS.length + 1)
+              )}
             />
           ))}
         </Pie>
@@ -177,7 +215,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
             const dataListIdx = getDataListIndexForName(value);
             return (
               <Link
-                className="mb-1 ml-1.5 inline-block text-sm text-foreground md:text-base"
+                className="mb-1 ml-1.5 inline-block border-b border-transparent text-sm text-foreground focus-within:border-foreground hover:border-foreground focus-visible:border-foreground md:text-base"
                 to="/fleet"
                 onMouseEnter={() => setActiveIdx(dataListIdx)}
                 search={() => ({
