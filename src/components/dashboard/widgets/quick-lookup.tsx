@@ -480,7 +480,7 @@ export function QuickLookupForm() {
             )}
           />
         )}
-        <Button type="submit" className="mt-2">
+        <Button variant="outline" type="submit" className="mt-2">
           {isSearching && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
           {t("buttons.lookup", { ns: "labels" })}
         </Button>

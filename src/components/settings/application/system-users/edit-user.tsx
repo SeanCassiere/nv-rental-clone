@@ -209,7 +209,7 @@ export function EditUserDialog({
         )}
         <DialogFooter>
           <Button
-            variant="outline"
+            variant="ghost"
             type="button"
             onClick={() => setOpen(false)}
             disabled={
@@ -914,7 +914,7 @@ function NewUserForm(props: {
                 </FormControl>
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (

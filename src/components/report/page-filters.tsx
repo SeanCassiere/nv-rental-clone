@@ -104,7 +104,7 @@ export const ReportFilters = () => {
           >
             <Button
               type="button"
-              variant="default"
+              variant="outline"
               className="h-10 grow px-2 sm:h-8 sm:grow-0 lg:px-3"
               size="sm"
               onClick={runReport}

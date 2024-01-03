@@ -13,6 +13,7 @@ import {
   PowerIcon,
   PowerOffIcon,
 } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import ProtectorShield from "@/components/protector-shield";
@@ -48,10 +49,14 @@ const ModuleNotesTabContent = lazy(
 function CustomerViewPage() {
   const router = useRouter();
   const params = useParams({ from: viewCustomerByIdRoute.id });
+  const auth = useAuth();
 
   const { tab: tabName = "summary" } = useSearch({
     from: viewCustomerByIdRoute.id,
   });
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
 
   const navigate = useNavigate();
 
@@ -70,7 +75,12 @@ function CustomerViewPage() {
       id: "notes",
       label: "Notes",
       component: (
-        <ModuleNotesTabContent module="customers" referenceId={customerId} />
+        <ModuleNotesTabContent
+          module="customers"
+          referenceId={customerId}
+          clientId={clientId}
+          userId={userId}
+        />
       ),
     });
     tabs.push({
@@ -80,7 +90,7 @@ function CustomerViewPage() {
     });
 
     return tabs;
-  }, [customerId]);
+  }, [customerId, clientId, userId]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
@@ -133,7 +143,12 @@ function CustomerViewPage() {
             />
             <Link
               to="/customers/$customerId"
-              search={(current) => ({ tab: current?.tab || "summary" })}
+              search={(current) => ({
+                tab:
+                  "tab" in current && typeof current.tab === "string"
+                    ? current.tab
+                    : "summary",
+              })}
               params={{ customerId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
@@ -146,9 +161,7 @@ function CustomerViewPage() {
               to="/customers/$customerId/edit"
               search={() => ({})}
               params={{ customerId: String(customerId) }}
-              className={cn(
-                buttonVariants({ size: "sm", variant: "secondary" })
-              )}
+              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
               <PencilIcon className="h-4 w-4 sm:mr-2" />
               <span className="inline-block">Edit</span>
@@ -160,10 +173,10 @@ function CustomerViewPage() {
                   size="sm"
                   type="button"
                   className="flex items-center justify-center gap-2"
-                  variant="secondary"
+                  variant="outline"
                 >
                   <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
-                  <span className="inline-block">More</span>
+                  <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">

@@ -21,8 +21,8 @@ export const VehicleFiltersSchema = z.object({
 });
 
 export const VehicleSearchQuerySchema = z.object({
-  page: z.coerce.number().min(1).default(1),
-  size: z.coerce.number().min(1).default(10),
+  page: z.coerce.number().min(1).default(1).optional(),
+  size: z.coerce.number().min(1).default(10).optional(),
   filters: VehicleFiltersSchema.optional(),
 });
 export type TVehicleSearchQuery = z.infer<typeof VehicleSearchQuerySchema>;

@@ -15,6 +15,7 @@ import {
   PencilIcon,
   PrinterIcon,
 } from "lucide-react";
+import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
@@ -30,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
@@ -51,8 +53,20 @@ const AgreementExchangesTab = lazy(
   () => import("../components/primary-module/tabs/agreement/exchanges-content")
 );
 
+type TabListItem = {
+  id: string;
+  label: string;
+  component: ReactNode;
+  preloadFn?: () => void;
+  suspenseComponent?: ReactNode;
+};
+
 function AgreementViewPage() {
   const router = useRouter();
+  const auth = useAuth();
+
+  const clientId = auth?.user?.profile?.navotar_clientid || "";
+  const userId = auth?.user?.profile?.navotar_userid || "";
 
   const { tab: tabName = "summary" } = useSearch({
     from: viewAgreementByIdRoute.id,
@@ -67,47 +81,125 @@ function AgreementViewPage() {
   const agreementId = params.agreementId || "";
 
   const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: ReactNode }[] = [];
+    const tabs: TabListItem[] = [];
 
     tabs.push({
       id: "summary",
       label: "Summary",
       component: <SummaryTab agreementId={agreementId} />,
+      suspenseComponent: <LoadingPlaceholder />,
     });
     tabs.push({
       id: "notes",
       label: "Notes",
       component: (
-        <ModuleNotesTabContent module="agreements" referenceId={agreementId} />
+        <ModuleNotesTabContent
+          module="agreements"
+          referenceId={agreementId}
+          clientId={clientId}
+          userId={userId}
+        />
       ),
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "notes",
+          }),
+        }),
     });
     tabs.push({
       id: "payments",
       label: "Payments",
       component: "Payments Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "payments",
+          }),
+        }),
     });
     tabs.push({
       id: "invoices",
       label: "Invoices",
       component: "Invoices Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "invoices",
+          }),
+        }),
     });
     tabs.push({
       id: "documents",
       label: "Documents",
       component: "Documents Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "documents",
+          }),
+        }),
     });
     tabs.push({
       id: "charges",
       label: "Charges",
       component: "Charges Tab",
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "charges",
+          }),
+        }),
     });
     tabs.push({
       id: "exchanges",
       label: "Exchanges",
-      component: <AgreementExchangesTab referenceId={agreementId} />,
+      component: (
+        <AgreementExchangesTab
+          referenceId={agreementId}
+          clientId={clientId}
+          userId={userId}
+        />
+      ),
+      preloadFn: () =>
+        router.preloadRoute({
+          to: viewAgreementByIdRoute.id,
+          params: {
+            agreementId,
+          },
+          search: (current) => ({
+            ...current,
+            tab: "exchanges",
+          }),
+        }),
     });
     return tabs;
-  }, [agreementId]);
+  }, [router, agreementId, clientId, userId]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
@@ -157,7 +249,12 @@ function AgreementViewPage() {
             />
             <Link
               to="/agreements/$agreementId"
-              search={(current) => ({ tab: current?.tab || "summary" })}
+              search={(current) => ({
+                tab:
+                  "tab" in current && typeof current.tab === "string"
+                    ? current.tab
+                    : "summary",
+              })}
               params={{ agreementId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
@@ -182,7 +279,7 @@ function AgreementViewPage() {
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
                 className={cn(
-                  buttonVariants({ size: "sm", variant: "secondary" })
+                  buttonVariants({ size: "sm", variant: "outline" })
                 )}
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
@@ -194,7 +291,7 @@ function AgreementViewPage() {
                 search={() => ({ stage: "rental-information" })}
                 params={{ agreementId: String(agreementId) }}
                 className={cn(
-                  buttonVariants({ size: "sm", variant: "secondary" })
+                  buttonVariants({ size: "sm", variant: "outline" })
                 )}
               >
                 <PencilIcon className="mr-2 h-4 w-4" />
@@ -207,10 +304,10 @@ function AgreementViewPage() {
                   size="sm"
                   type="button"
                   className="flex items-center justify-center gap-2"
-                  variant="secondary"
+                  variant="outline"
                 >
                   <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
-                  <span className="inline-block">More</span>
+                  <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
@@ -249,7 +346,12 @@ function AgreementViewPage() {
         <Tabs value={tabName} onValueChange={onTabClick}>
           <TabsList className="w-full sm:max-w-max">
             {tabsConfig.map((tab, idx) => (
-              <TabsTrigger key={`tab-trigger-${idx}`} value={tab.id}>
+              <TabsTrigger
+                key={`tab-trigger-${idx}`}
+                value={tab.id}
+                onMouseEnter={tab?.preloadFn}
+                onTouchStart={tab?.preloadFn}
+              >
                 {tab.label}
               </TabsTrigger>
             ))}
@@ -260,7 +362,11 @@ function AgreementViewPage() {
               value={tab.id}
               className="min-h-[250px]"
             >
-              <Suspense fallback={<LoadingPlaceholder />}>
+              <Suspense
+                fallback={
+                  tab?.suspenseComponent || <Skeleton className="h-[450px]" />
+                }
+              >
                 {tab.component}
               </Suspense>
             </TabsContent>

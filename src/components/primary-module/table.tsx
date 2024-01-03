@@ -196,7 +196,6 @@ export function PrimaryModuleTable<
   return (
     <div className="space-y-4">
       <PrimaryModuleTableToolbar
-        // key={`toolbar_${JSON.stringify(columnFilters)}`}
         table={table}
         filterableColumns={filterableColumns}
         onClearFilters={onClearFilters}

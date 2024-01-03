@@ -58,6 +58,7 @@ const DashboardStatsBlock = ({
                   CreatedDateTo: localDateToQueryYearMonthDay(new Date()),
                 },
               }),
+              params: false,
             }}
           />
         </li>
@@ -77,6 +78,7 @@ const DashboardStatsBlock = ({
                   IsSearchOverdues: "false",
                 },
               }),
+              params: false,
             }}
           />
         </li>
@@ -92,6 +94,7 @@ const DashboardStatsBlock = ({
                 size: defaultRowCount,
                 filters: { Statuses: ["2"] },
               }),
+              params: false,
             }}
           />
         </li>
@@ -107,6 +110,7 @@ const DashboardStatsBlock = ({
                 size: defaultRowCount,
                 filters: { Statuses: ["2"], IsSearchOverdues: "true" },
               }),
+              params: false,
             }}
           />
         </li>
@@ -122,6 +126,7 @@ const DashboardStatsBlock = ({
                 size: defaultRowCount,
                 filters: { Statuses: ["5"] },
               }),
+              params: false,
             }}
           />
         </li>
@@ -132,6 +137,7 @@ const DashboardStatsBlock = ({
             value={formatDisplayValue(statistics?.serviceAlerts)}
             linkProps={{
               to: "/",
+              params: false,
             }}
           />
         </li>

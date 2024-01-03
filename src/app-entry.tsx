@@ -14,6 +14,8 @@ import { GlobalDialogProvider } from "@/hooks/context/modals";
 import { useEventListener } from "@/hooks/internal/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
+import { notFoundRoute } from "@/routes/not-found";
+
 import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 
 import { apiClient } from "@/api";
@@ -29,7 +31,9 @@ import i18n from "./i18next-config";
 
 export const router = new Router({
   routeTree,
+  notFoundRoute,
   defaultPreload: "intent",
+  defaultPreloadStaleTime: 0,
   parseSearch: parseSearchFn,
   stringifySearch: stringifySearchFn,
   defaultPendingComponent: LoadingPlaceholder,

@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { parseISO } from "date-fns";
 import { FilesIcon } from "lucide-react";
@@ -6,12 +7,15 @@ import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
 import { EmptyState } from "@/components/layouts/empty-state";
-import { Skeleton } from "@/components/ui/skeleton";
-
-import { useGetModuleNotes } from "@/hooks/network/module/useGetModuleNotes";
 
 import type { TNoteDataParsed } from "@/schemas/note";
 
+import {
+  agreementQKeys,
+  customerQKeys,
+  fleetQKeys,
+  reservationQKeys,
+} from "@/utils/query-key";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 const columnHelper = createColumnHelper<TNoteDataParsed>();
@@ -70,12 +74,16 @@ const emptyContentLabels: Record<
 const ModuleNotesTabContent = ({
   module,
   referenceId,
+  clientId,
+  userId,
 }: {
   module: AppPrimaryModuleType;
   referenceId: string;
+  clientId: string;
+  userId: string;
 }) => {
   const { t } = useTranslation();
-  const notesQuery = useGetModuleNotes({ module, referenceId });
+  const auth = { clientId, userId };
 
   const colDefs = useMemo(() => {
     const columns: ColumnDef<TNoteDataParsed>[] = [];
@@ -118,26 +126,135 @@ const ModuleNotesTabContent = ({
     return columns;
   }, [module, t]);
 
-  const list = notesQuery.data?.status === 200 ? notesQuery.data.body : [];
+  let RenderComponent;
+
+  switch (module) {
+    case "agreements":
+      RenderComponent = AgreementDisplay;
+      break;
+    case "reservations":
+      RenderComponent = ReservationDisplay;
+      break;
+    case "customers":
+      RenderComponent = CustomerDisplay;
+      break;
+    case "vehicles":
+      RenderComponent = FleetDisplay;
+      break;
+    default:
+      throw new Error("Module not supported");
+  }
 
   return (
     <div className="max-w-full focus:ring-0">
-      {notesQuery.status === "pending" ? (
-        <Skeleton className="h-[450px]" />
-      ) : (
-        <>
-          {notesQuery.status === "error" || list.length === 0 ? (
-            <EmptyState
-              title={emptyContentLabels[module]?.title ?? ""}
-              subtitle={emptyContentLabels[module]?.subtitle ?? ""}
-              icon={FilesIcon}
-            />
-          ) : (
-            <CommonTable columns={colDefs} data={list} />
-          )}
-        </>
-      )}
+      <RenderComponent
+        referenceId={referenceId}
+        colDefs={colDefs}
+        auth={auth}
+      />
     </div>
+  );
+};
+
+interface ModuleDisplayProps {
+  colDefs: ColumnDef<TNoteDataParsed>[];
+  referenceId: string;
+  auth: { clientId: string; userId: string };
+}
+
+const AgreementDisplay = ({
+  referenceId,
+  colDefs,
+  auth,
+}: ModuleDisplayProps) => {
+  const query = useSuspenseQuery(
+    agreementQKeys.viewNotes({
+      agreementId: referenceId,
+      auth,
+    })
+  );
+
+  const list = query.data?.status === 200 ? query.data.body : [];
+
+  return query.status === "error" || list.length === 0 ? (
+    <EmptyState
+      title={emptyContentLabels.agreements?.title ?? ""}
+      subtitle={emptyContentLabels.agreements?.subtitle ?? ""}
+      icon={FilesIcon}
+    />
+  ) : (
+    <CommonTable columns={colDefs} data={list} />
+  );
+};
+
+const ReservationDisplay = ({
+  referenceId,
+  colDefs,
+  auth,
+}: ModuleDisplayProps) => {
+  const query = useSuspenseQuery(
+    reservationQKeys.viewNotes({
+      reservationId: referenceId,
+      auth,
+    })
+  );
+
+  const list = query.data?.status === 200 ? query.data.body : [];
+
+  return query.status === "error" || list.length === 0 ? (
+    <EmptyState
+      title={emptyContentLabels.reservations?.title ?? ""}
+      subtitle={emptyContentLabels.reservations?.subtitle ?? ""}
+      icon={FilesIcon}
+    />
+  ) : (
+    <CommonTable columns={colDefs} data={list} />
+  );
+};
+
+const CustomerDisplay = ({
+  referenceId,
+  colDefs,
+  auth,
+}: ModuleDisplayProps) => {
+  const query = useSuspenseQuery(
+    customerQKeys.viewNotes({
+      customerId: referenceId,
+      auth,
+    })
+  );
+
+  const list = query.data?.status === 200 ? query.data.body : [];
+
+  return query.status === "error" || list.length === 0 ? (
+    <EmptyState
+      title={emptyContentLabels.customers?.title ?? ""}
+      subtitle={emptyContentLabels.customers?.subtitle ?? ""}
+      icon={FilesIcon}
+    />
+  ) : (
+    <CommonTable columns={colDefs} data={list} />
+  );
+};
+
+const FleetDisplay = ({ referenceId, colDefs, auth }: ModuleDisplayProps) => {
+  const query = useSuspenseQuery(
+    fleetQKeys.viewNotes({
+      fleetId: referenceId,
+      auth,
+    })
+  );
+
+  const list = query.data?.status === 200 ? query.data.body : [];
+
+  return query.status === "error" || list.length === 0 ? (
+    <EmptyState
+      title={emptyContentLabels.vehicles?.title ?? ""}
+      subtitle={emptyContentLabels.vehicles?.subtitle ?? ""}
+      icon={FilesIcon}
+    />
+  ) : (
+    <CommonTable columns={colDefs} data={list} />
   );
 };
 
