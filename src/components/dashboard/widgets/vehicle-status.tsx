@@ -215,7 +215,7 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
             const dataListIdx = getDataListIndexForName(value);
             return (
               <Link
-                className="mb-1 ml-1.5 inline-block text-sm text-foreground md:text-base"
+                className="mb-1 ml-1.5 inline-block border-b border-transparent text-sm text-foreground focus-within:border-foreground hover:border-foreground focus-visible:border-foreground md:text-base"
                 to="/fleet"
                 onMouseEnter={() => setActiveIdx(dataListIdx)}
                 search={() => ({
