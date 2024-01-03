@@ -29,7 +29,7 @@ export function useTernaryDarkMode(): UseTernaryDarkModeOutput {
   const [ternaryDarkMode, setTernaryDarkMode] =
     useLocalStorage<TernaryDarkMode>(
       `${clientId}:${userId}:${USER_STORAGE_KEYS.theme}`,
-      "light"
+      "system"
     );
   const [isDarkMode, setDarkMode] = useState<boolean>(isDarkOS);
 
