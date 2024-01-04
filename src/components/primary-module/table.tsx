@@ -264,7 +264,7 @@ export function PrimaryModuleTable<
             </Table>
           </DndContext>
         </div>
-        {/* pagination */}S
+        {/* pagination */}
       </div>
       <div className="flex flex-1 justify-between px-2 sm:hidden">
         <Button
