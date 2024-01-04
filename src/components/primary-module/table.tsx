@@ -62,6 +62,8 @@ import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
 
 import { cn } from "@/utils";
 
+import { Separator } from "../ui/separator";
+
 interface PrimaryModuleTableProps<
   TData,
   TValue,
@@ -193,6 +195,7 @@ export function PrimaryModuleTable<
         onClearFilters={onClearFilters}
         onSearchWithFilters={onSearchWithFilters}
       />
+      <Separator className="mt-3.5" />
       <div className="overflow-hidden rounded border">
         <div className="overflow-x-auto bg-background">
           <DndContext
@@ -261,7 +264,7 @@ export function PrimaryModuleTable<
             </Table>
           </DndContext>
         </div>
-        {/* pagination */}
+        {/* pagination */}S
       </div>
       <div className="flex flex-1 justify-between px-2 sm:hidden">
         <Button

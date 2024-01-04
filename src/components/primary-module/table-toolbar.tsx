@@ -6,6 +6,7 @@ import {
   type PrimaryModuleTableFacetedFilterItem,
 } from "@/components/primary-module/table-filter";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { DataTableViewOptions } from "@/components/ui/data-table";
 import { icons } from "@/components/ui/icons";
 
@@ -25,10 +26,10 @@ export function PrimaryModuleTableToolbar<TData>({
   const tableColumnFilters = table.getState().columnFilters;
   const isFiltered = tableColumnFilters.length > 0;
 
-  const searchableColumns = filterableColumns.filter(
-    (t) => t.type === "text" && t.size === "large"
-  );
-  const isSingleSearchableColumn = searchableColumns.length === 1;
+  // const searchableColumns = filterableColumns.filter(
+  //   (t) => t.type === "text" && t.size === "large"
+  // );
+  // const isSingleSearchableColumn = searchableColumns.length === 1;
 
   const handleReset = () => {
     const f = table.getState().columnFilters;
@@ -51,43 +52,46 @@ export function PrimaryModuleTableToolbar<TData>({
   };
 
   return (
-    <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-      <div className="flex flex-1 flex-wrap items-start justify-start gap-2">
-        {filterableColumns.length &&
-          filterableColumns.map((column) => (
-            <PrimaryModuleTableFacetedFilter
-              key={`faceted_filter_${column.id}`}
-              table={table}
-              data={column}
-              isLargeSearchFullWidth={isSingleSearchableColumn}
-            />
-          ))}
+    <Card className="mt-4 border-none shadow-none">
+      <CardTitle className="sr-only">Table filters</CardTitle>
+      <CardContent className="flex flex-col justify-between gap-2 px-2 py-2 sm:flex-row sm:items-end">
+        <div className="flex flex-1 flex-wrap items-start justify-start gap-2">
+          {filterableColumns.length &&
+            filterableColumns.map((column) => (
+              <PrimaryModuleTableFacetedFilter
+                key={`faceted_filter_${column.id}`}
+                table={table}
+                data={column}
+                // isLargeSearchFullWidth={isSingleSearchableColumn}
+              />
+            ))}
 
-        <div className="inline-flex justify-start gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onSearchWithFilters}
-            className="h-8 px-2 lg:px-3"
-          >
-            <icons.Search className="mr-2 h-3 w-3" />
-            Search
-          </Button>
-
-          {isFiltered && (
+          <div className="inline-flex justify-start gap-2">
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
-              onClick={handleReset}
+              onClick={onSearchWithFilters}
               className="h-8 px-2 lg:px-3"
             >
-              <icons.X className="mr-2 h-3 w-3" />
-              Clear
+              <icons.Search className="mr-2 h-3 w-3" />
+              Search
             </Button>
-          )}
+
+            {isFiltered && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleReset}
+                className="h-8 px-2 lg:px-3"
+              >
+                <icons.X className="mr-2 h-3 w-3" />
+                Clear
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-      <DataTableViewOptions table={table} />
-    </div>
+        <DataTableViewOptions table={table} />
+      </CardContent>
+    </Card>
   );
 }

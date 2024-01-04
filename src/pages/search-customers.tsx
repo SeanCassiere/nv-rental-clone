@@ -16,7 +16,6 @@ import {
 } from "@/components/primary-module/table";
 import ProtectorShield from "@/components/protector-shield";
 import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
@@ -186,7 +185,6 @@ function CustomerSearchPage() {
         <p className={cn("text-base text-foreground/80")}>
           Search through your customers and view details.
         </p>
-        <Separator className="mt-3.5" />
       </section>
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
