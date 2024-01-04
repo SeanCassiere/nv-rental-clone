@@ -1,5 +1,4 @@
 import React from "react";
-import { Loader2Icon, PlayIcon, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -10,6 +9,7 @@ import {
 } from "@/components/report/page-filter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { icons } from "@/components/ui/icons";
 
 import { useReportContext } from "@/hooks/context/view-report";
 import { useReportLookupLists } from "@/hooks/internal/useReportLookupLists";
@@ -110,9 +110,9 @@ export const ReportFilters = () => {
               onClick={runReport}
             >
               {isPending ? (
-                <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                <icons.Loading className="mr-2 h-3 w-3 animate-spin" />
               ) : (
-                <PlayIcon className="mr-2 h-3 w-3" />
+                <icons.Play className="mr-2 h-3 w-3" />
               )}
               {t("buttons.run", { ns: "labels" })}
             </Button>
@@ -124,7 +124,7 @@ export const ReportFilters = () => {
                 size="sm"
                 onClick={resetSearchCriteria}
               >
-                <XIcon className="mr-2 h-3 w-3" />
+                <icons.X className="mr-2 h-3 w-3" />
                 {t("buttons.resetFilters", { ns: "labels" })}
               </Button>
             )}

@@ -3,14 +3,13 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { parseISO } from "date-fns";
-import { FilesIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
 import { EmptyState } from "@/components/layouts/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { icons } from "@/components/ui/icons";
 
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
 
@@ -170,7 +169,7 @@ const AgreementExchangesTab = ({
         <EmptyState
           title="No exchanges"
           subtitle="You haven't made any fleet exchanges for this rental agreement."
-          icon={FilesIcon}
+          icon={icons.Files}
         />
       ) : (
         <CommonTable columns={colDefs} data={list} />

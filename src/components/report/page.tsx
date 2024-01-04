@@ -1,14 +1,9 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import {
-  ChevronRightIcon,
-  FolderIcon,
-  Loader2Icon,
-  PlayIcon,
-} from "lucide-react";
 
 import { EmptyState } from "@/components/layouts/empty-state";
 import { ReportFilters } from "@/components/report/page-filters";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
 import { useReportContext } from "@/hooks/context/view-report";
@@ -51,7 +46,7 @@ export const ViewReport = () => {
             >
               Reports
             </Link>
-            <ChevronRightIcon
+            <icons.ChevronRight
               className="hidden h-4 w-4 flex-shrink-0 sm:inline-block"
               aria-hidden="true"
             />
@@ -76,14 +71,14 @@ export const ViewReport = () => {
           <EmptyState
             title="Report is ready to run."
             subtitle="Click the Run button to generate the report."
-            icon={FolderIcon}
+            icon={icons.Folder}
             buttonOptions={{
               content: (
                 <>
                   {isPending ? (
-                    <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                    <icons.Loading className="mr-2 h-3 w-3 animate-spin" />
                   ) : (
-                    <PlayIcon className="mr-2 h-3 w-3" />
+                    <icons.Play className="mr-2 h-3 w-3" />
                   )}
                   Run report
                 </>

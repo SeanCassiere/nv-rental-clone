@@ -1,4 +1,3 @@
-import { CheckIcon, PlusCircleIcon, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -58,7 +58,7 @@ export function DateReportFilter(props: ReportFilterProps) {
               baseState && clearable ? "border-r-0" : ""
             )}
           >
-            <PlusCircleIcon className="mr-2 h-3 w-3" />
+            <icons.PlusCircle className="mr-2 h-3 w-3" />
             {props.displayName}
 
             {baseState && (
@@ -102,7 +102,7 @@ export function DateReportFilter(props: ReportFilterProps) {
             setCriteriaValue(props.accessor, "");
           }}
         >
-          <XIcon className="h-3 w-3" />
+          <icons.X className="h-3 w-3" />
         </Button>
       )}
     </span>
@@ -129,7 +129,7 @@ export function TextBoxReportFilter(props: ReportFilterProps) {
               "flex w-full justify-start whitespace-nowrap border-dashed"
             )}
           >
-            <PlusCircleIcon className="mr-2 h-3 w-3" />
+            <icons.PlusCircle className="mr-2 h-3 w-3" />
             {props.displayName}
 
             {baseState && (
@@ -167,7 +167,7 @@ export function TextBoxReportFilter(props: ReportFilterProps) {
             setCriteriaValue(props.accessor, "");
           }}
         >
-          <XIcon className="h-3 w-3" />
+          <icons.X className="h-3 w-3" />
         </Button>
       )}
     </span>
@@ -204,7 +204,7 @@ export function DropDownReportFilter(
               "flex w-full justify-start whitespace-nowrap border-dashed"
             )}
           >
-            <PlusCircleIcon className="mr-2 h-3 w-3" />
+            <icons.PlusCircle className="mr-2 h-3 w-3" />
             {props.displayName}
 
             {selectedOption && (
@@ -243,7 +243,7 @@ export function DropDownReportFilter(
                             : "opacity-50 [&_svg]:invisible"
                         )}
                       >
-                        <CheckIcon className={cn("h-4 w-4")} />
+                        <icons.Check className={cn("h-4 w-4")} />
                       </div>
                       <span>{option.display}</span>
                     </CommandItem>
@@ -263,7 +263,7 @@ export function DropDownReportFilter(
             setCriteriaValue(props.accessor, originalCriteria ?? "");
           }}
         >
-          <XIcon className="h-3 w-3" />
+          <icons.X className="h-3 w-3" />
         </Button>
       )}
     </span>
@@ -296,7 +296,7 @@ export function ListBoxReportFilter(
               "flex w-full justify-start whitespace-nowrap border-dashed"
             )}
           >
-            <PlusCircleIcon className="mr-2 h-3 w-3" />
+            <icons.PlusCircle className="mr-2 h-3 w-3" />
             {props.displayName}
 
             {baseState.length > 0 && (
@@ -371,7 +371,7 @@ export function ListBoxReportFilter(
                             : "opacity-50 [&_svg]:invisible"
                         )}
                       >
-                        <CheckIcon className={cn("h-4 w-4")} />
+                        <icons.Check className={cn("h-4 w-4")} />
                       </div>
                       <span>{option.display}</span>
                     </CommandItem>
@@ -406,7 +406,7 @@ export function ListBoxReportFilter(
             setCriteriaValue(props.accessor, originalCriteria ?? "");
           }}
         >
-          <XIcon className="h-3 w-3" />
+          <icons.X className="h-3 w-3" />
         </Button>
       )}
     </span>

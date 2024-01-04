@@ -2,11 +2,11 @@ import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { parseISO } from "date-fns";
-import { FilesIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
 import { EmptyState } from "@/components/layouts/empty-state";
+import { icons } from "@/components/ui/icons";
 
 import type { TNoteDataParsed } from "@/schemas/note";
 
@@ -17,6 +17,8 @@ import {
   reservationQKeys,
 } from "@/utils/query-key";
 import type { AppPrimaryModuleType } from "@/types/General";
+
+const EmptyIcon = icons.Files;
 
 const columnHelper = createColumnHelper<TNoteDataParsed>();
 
@@ -180,7 +182,7 @@ const AgreementDisplay = ({
     <EmptyState
       title={emptyContentLabels.agreements?.title ?? ""}
       subtitle={emptyContentLabels.agreements?.subtitle ?? ""}
-      icon={FilesIcon}
+      icon={EmptyIcon}
     />
   ) : (
     <CommonTable columns={colDefs} data={list} />
@@ -205,7 +207,7 @@ const ReservationDisplay = ({
     <EmptyState
       title={emptyContentLabels.reservations?.title ?? ""}
       subtitle={emptyContentLabels.reservations?.subtitle ?? ""}
-      icon={FilesIcon}
+      icon={EmptyIcon}
     />
   ) : (
     <CommonTable columns={colDefs} data={list} />
@@ -230,7 +232,7 @@ const CustomerDisplay = ({
     <EmptyState
       title={emptyContentLabels.customers?.title ?? ""}
       subtitle={emptyContentLabels.customers?.subtitle ?? ""}
-      icon={FilesIcon}
+      icon={EmptyIcon}
     />
   ) : (
     <CommonTable columns={colDefs} data={list} />
@@ -251,7 +253,7 @@ const FleetDisplay = ({ referenceId, colDefs, auth }: ModuleDisplayProps) => {
     <EmptyState
       title={emptyContentLabels.vehicles?.title ?? ""}
       subtitle={emptyContentLabels.vehicles?.subtitle ?? ""}
-      icon={FilesIcon}
+      icon={EmptyIcon}
     />
   ) : (
     <CommonTable columns={colDefs} data={list} />
