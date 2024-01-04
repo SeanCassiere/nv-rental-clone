@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +14,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -26,18 +27,17 @@ import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
 import { userQKeys } from "@/utils/query-key";
 
-import { getAvatarFallbackText, getAvatarUrl } from "@/utils";
+import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/utils";
 
 export const UserNavigationDropdown = () => {
   const auth = useAuth();
-  const navigate = useNavigate();
 
   const clientId = auth.user?.profile.navotar_clientid || "";
   const userId = auth.user?.profile.navotar_userid || "";
   const authParams = { clientId, userId };
 
   const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
-  const { setShowLogout } = useGlobalDialogContext();
+  const { setShowLogout, setShowCommandMenu } = useGlobalDialogContext();
 
   const userQuery = useQuery(userQKeys.me(authParams));
 
@@ -49,6 +49,10 @@ export const UserNavigationDropdown = () => {
 
   const handleLogout = () => {
     setShowLogout(true);
+  };
+
+  const handleSearch = () => {
+    setShowCommandMenu(true);
   };
 
   return (
@@ -96,6 +100,13 @@ export const UserNavigationDropdown = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuItem onClick={handleSearch}>
+            <icons.Search className="mr-2 h-4 w-4" />
+            <span>Find something</span>
+            <DropdownMenuShortcut>
+              {IsMacLike ? "⌘" : "Ctrl"} + K
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               {(() => {
