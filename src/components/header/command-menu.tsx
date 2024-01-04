@@ -59,7 +59,7 @@ export const CommandMenu = () => {
     filters: {
       Keyword: searchTerm,
     },
-    enabled: Boolean(searchTerm),
+    enabled: showCommandMenu && Boolean(searchTerm),
   });
   const customersList =
     customersQuery.data?.status === 200 ? customersQuery.data?.body : [];
@@ -80,7 +80,7 @@ export const CommandMenu = () => {
     filters: {
       LicenseNo: searchTerm,
     },
-    enabled: Boolean(searchTerm),
+    enabled: showCommandMenu,
   });
   const vehiclesList =
     vehiclesQuery.data?.status === 200 ? vehiclesQuery.data?.body : [];
@@ -102,7 +102,7 @@ export const CommandMenu = () => {
       Keyword: searchTerm,
       Statuses: ["2", "6", "7"],
     },
-    enabled: Boolean(searchTerm),
+    enabled: showCommandMenu,
   });
   const reservationsList =
     reservationsQuery.data?.status === 200 ? reservationsQuery.data?.body : [];
@@ -131,7 +131,7 @@ export const CommandMenu = () => {
       Keyword: searchTerm,
       Statuses: ["2", "5", "7"],
     },
-    enabled: Boolean(searchTerm),
+    enabled: showCommandMenu,
   });
   const agreementsList =
     agreementsQuery.data?.status === 200 ? agreementsQuery.data?.body : [];
@@ -205,117 +205,155 @@ export const CommandMenu = () => {
           <CommandEmpty>No results found.</CommandEmpty>
 
           <CommandGroup
-            heading={vehicles.length > 0 ? "Fleet results" : undefined}
+            heading={
+              text.length > 0 && vehicles.length > 0
+                ? "Fleet results"
+                : undefined
+            }
+            className={
+              text.length === 0 || vehicles.length === 0
+                ? "p-0 [&_[cmdk-group-heading]]:py-0"
+                : undefined
+            }
           >
-            {searchTerm.length > 0 && vehiclesQuery.isLoading && (
+            {text.length > 0 && vehiclesQuery.isLoading ? (
               <CommandLoading>
                 <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
               </CommandLoading>
-            )}
-            {vehicles.map((item, idx) => (
-              <CommandItem
-                key={`${item.fullDisplayText}_${idx}`}
-                value={item.fullDisplayText}
-                onSelect={() => {
-                  run(() =>
-                    navigate({
-                      to: "/fleet/$vehicleId",
-                      params: { vehicleId: item.referenceId },
-                      search: () => ({ tab: "summary" }),
-                    })
-                  );
-                }}
-              >
-                <icons.Car className="mr-2 h-4 w-4 text-primary/70" />
-                {item.displayText}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-
-          <CommandGroup
-            heading={customers.length > 0 ? "Customer results" : undefined}
-          >
-            {searchTerm.length > 0 && customersQuery.isLoading && (
-              <CommandLoading>
-                <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
-              </CommandLoading>
-            )}
-            {customers.map((item, idx) => (
-              <CommandItem
-                key={`${item.fullDisplayText}_${idx}`}
-                value={item.fullDisplayText}
-                onSelect={() => {
-                  run(() =>
-                    navigate({
-                      to: "/customers/$customerId",
-                      params: { customerId: item.referenceId },
-                      search: () => ({ tab: "summary" }),
-                    })
-                  );
-                }}
-              >
-                <icons.Users className="mr-2 h-4 w-4 text-primary/70" />
-                {item.displayText}
-              </CommandItem>
-            ))}
+            ) : null}
+            {Boolean(text) &&
+              vehicles.map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
+                    run(() =>
+                      navigate({
+                        to: "/fleet/$vehicleId",
+                        params: { vehicleId: item.referenceId },
+                        search: () => ({ tab: "summary" }),
+                      })
+                    );
+                  }}
+                >
+                  <icons.Car className="mr-2 h-4 w-4 text-primary/70" />
+                  {item.displayText}
+                </CommandItem>
+              ))}
           </CommandGroup>
 
           <CommandGroup
             heading={
-              reservations.length > 0 ? "Reservation results" : undefined
+              text.length > 0 && customers.length > 0
+                ? "Customer results"
+                : undefined
+            }
+            className={
+              text.length === 0 || customers.length === 0
+                ? "p-0 [&_[cmdk-group-heading]]:py-0"
+                : undefined
             }
           >
-            {searchTerm.length > 0 && reservationsQuery.isLoading && (
+            {text.length > 0 && customersQuery.isLoading ? (
               <CommandLoading>
                 <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
               </CommandLoading>
-            )}
-            {reservations.map((item, idx) => (
-              <CommandItem
-                key={`${item.fullDisplayText}_${idx}`}
-                value={item.fullDisplayText}
-                onSelect={() => {
-                  run(() =>
-                    navigate({
-                      to: "/reservations/$reservationId",
-                      params: { reservationId: item.referenceId },
-                      search: () => ({ tab: "summary" }),
-                    })
-                  );
-                }}
-              >
-                <icons.Calendar className="mr-2 h-4 w-4 text-primary/70" />
-                {item.displayText}
-              </CommandItem>
-            ))}
+            ) : null}
+            {Boolean(text) &&
+              customers.map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
+                    run(() =>
+                      navigate({
+                        to: "/customers/$customerId",
+                        params: { customerId: item.referenceId },
+                        search: () => ({ tab: "summary" }),
+                      })
+                    );
+                  }}
+                >
+                  <icons.Users className="mr-2 h-4 w-4 text-primary/70" />
+                  {item.displayText}
+                </CommandItem>
+              ))}
           </CommandGroup>
 
           <CommandGroup
-            heading={agreements.length > 0 ? "Agreement results" : undefined}
+            heading={
+              text.length > 0 && reservations.length > 0
+                ? "Reservation results"
+                : undefined
+            }
+            className={
+              text.length === 0 || reservations.length === 0
+                ? "p-0 [&_[cmdk-group-heading]]:py-0"
+                : undefined
+            }
           >
-            {searchTerm.length > 0 && agreementsQuery.isLoading && (
+            {text.length > 0 && reservationsQuery.isLoading ? (
               <CommandLoading>
                 <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
               </CommandLoading>
-            )}
-            {agreements.map((item, idx) => (
-              <CommandItem
-                key={`${item.fullDisplayText}_${idx}`}
-                value={item.fullDisplayText}
-                onSelect={() => {
-                  run(() =>
-                    navigate({
-                      to: "/agreements/$agreementId",
-                      params: { agreementId: item.referenceId },
-                      search: () => ({ tab: "summary" }),
-                    })
-                  );
-                }}
-              >
-                <icons.FileSignature className="mr-2 h-4 w-4 text-primary/70" />
-                {item.displayText}
-              </CommandItem>
-            ))}
+            ) : null}
+            {Boolean(text) &&
+              reservations.map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
+                    run(() =>
+                      navigate({
+                        to: "/reservations/$reservationId",
+                        params: { reservationId: item.referenceId },
+                        search: () => ({ tab: "summary" }),
+                      })
+                    );
+                  }}
+                >
+                  <icons.Calendar className="mr-2 h-4 w-4 text-primary/70" />
+                  {item.displayText}
+                </CommandItem>
+              ))}
+          </CommandGroup>
+
+          <CommandGroup
+            heading={
+              text.length > 0 && agreements.length > 0
+                ? "Agreement results"
+                : undefined
+            }
+            className={
+              text.length === 0 || agreements.length === 0
+                ? "p-0 [&_[cmdk-group-heading]]:py-0"
+                : undefined
+            }
+          >
+            {text.length > 0 && agreementsQuery.isLoading ? (
+              <CommandLoading>
+                <Skeleton className="mx-2 mt-1 h-4 rounded-sm" />
+              </CommandLoading>
+            ) : null}
+            {Boolean(text) &&
+              agreements.map((item, idx) => (
+                <CommandItem
+                  key={`${item.fullDisplayText}_${idx}`}
+                  value={item.fullDisplayText}
+                  onSelect={() => {
+                    run(() =>
+                      navigate({
+                        to: "/agreements/$agreementId",
+                        params: { agreementId: item.referenceId },
+                        search: () => ({ tab: "summary" }),
+                      })
+                    );
+                  }}
+                >
+                  <icons.FileSignature className="mr-2 h-4 w-4 text-primary/70" />
+                  {item.displayText}
+                </CommandItem>
+              ))}
           </CommandGroup>
 
           <CommandGroup heading="Go to">
