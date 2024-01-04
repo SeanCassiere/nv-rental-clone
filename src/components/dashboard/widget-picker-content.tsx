@@ -18,7 +18,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { EyeIcon, EyeOffIcon, MenuIcon } from "lucide-react";
 
 import {
   reorderBasedOnWidgetIdPositions,
@@ -26,6 +25,7 @@ import {
 } from "@/components/dashboard/dnd-widget-display-grid";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
+import { icons } from "@/components/ui/icons";
 
 import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 
@@ -198,7 +198,7 @@ const WidgetOption = ({
             {...listeners}
             {...attributes}
           >
-            <MenuIcon className="h-4 w-4" />
+            <icons.Menu className="h-4 w-4" />
           </button>
           <span className="select-none">{widget.widgetName}</span>
         </div>
@@ -210,9 +210,9 @@ const WidgetOption = ({
             }}
           >
             {widget.isDeleted ? (
-              <EyeOffIcon className="h-4 w-4" />
+              <icons.EyeOff className="h-4 w-4" />
             ) : (
-              <EyeIcon className="h-4 w-4" />
+              <icons.EyeOn className="h-4 w-4" />
             )}
           </button>
         </div>

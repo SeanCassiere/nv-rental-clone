@@ -2,7 +2,6 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { Loader2Icon, SearchIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
@@ -19,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -482,9 +482,9 @@ export function QuickLookupForm() {
         )}
         <Button variant="outline" type="submit" className="mt-2">
           {isSearching ? (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            <SearchIcon className="mr-2 h-4 w-4" />
+            <icons.Search className="mr-2 h-4 w-4" />
           )}
           {t("buttons.lookup", { ns: "labels" })}
         </Button>
