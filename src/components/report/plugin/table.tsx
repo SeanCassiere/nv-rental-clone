@@ -20,12 +20,8 @@ import {
   type VirtualItem,
   type Virtualizer,
 } from "@tanstack/react-virtual";
-import {
-  ArrowDownNarrowWideIcon,
-  ArrowUpDownIcon,
-  ArrowUpNarrowWideIcon,
-} from "lucide-react";
 
+import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   TableBody,
@@ -328,13 +324,13 @@ function ReportTableColumnHeader<TData, TValue>(
                     >
                       {{
                         asc: (
-                          <ArrowUpNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                          <icons.SortAsc className="h-3.5 w-3.5 text-foreground" />
                         ),
                         desc: (
-                          <ArrowDownNarrowWideIcon className="h-3.5 w-3.5 text-foreground" />
+                          <icons.SortDesc className="h-3.5 w-3.5 text-foreground" />
                         ),
                       }[header.column.getIsSorted() as string] ?? (
-                        <ArrowUpDownIcon className="h-3.5 w-3.5 text-foreground/30" />
+                        <icons.SortUnsorted className="h-3.5 w-3.5 text-foreground/30" />
                       )}
                     </button>
                   </TooltipTrigger>
@@ -347,14 +343,14 @@ function ReportTableColumnHeader<TData, TValue>(
                               header.column.id) +
                             " column in ascending"
                           : header.column.getIsSorted() === "desc"
-                          ? "Sorted " +
-                            (header.column.columnDef?.meta?.columnName ??
-                              header.column.id) +
-                            " column in descending"
-                          : "Sort " +
-                            (header.column.columnDef?.meta?.columnName ??
-                              header.column.id) +
-                            " column in ascending"}
+                            ? "Sorted " +
+                              (header.column.columnDef?.meta?.columnName ??
+                                header.column.id) +
+                              " column in descending"
+                            : "Sort " +
+                              (header.column.columnDef?.meta?.columnName ??
+                                header.column.id) +
+                              " column in ascending"}
                       </p>
                     </TooltipContent>
                   </TooltipPortal>

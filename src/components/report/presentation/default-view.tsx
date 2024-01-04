@@ -1,6 +1,5 @@
 import React from "react";
 import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
-import { FolderXIcon, Loader2Icon, PlayIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
@@ -8,6 +7,7 @@ import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
 import { GlobalFilter } from "@/components/report/plugin/global-search";
 import { ReportTable } from "@/components/report/plugin/table";
 import { ViewColumns } from "@/components/report/plugin/view-columns";
+import { icons } from "@/components/ui/icons";
 
 import { useReportContext } from "@/hooks/context/view-report";
 import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatter";
@@ -180,14 +180,14 @@ const DefaultView = () => {
         <EmptyState
           title={t("display.noResultsFound", { ns: "labels" })}
           subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}
-          icon={FolderXIcon}
+          icon={icons.FolderEmpty}
           buttonOptions={{
             content: (
               <>
                 {isPending ? (
-                  <Loader2Icon className="mr-2 h-3 w-3 animate-spin" />
+                  <icons.Loading className="mr-2 h-3 w-3 animate-spin" />
                 ) : (
-                  <PlayIcon className="mr-2 h-3 w-3" />
+                  <icons.Play className="mr-2 h-3 w-3" />
                 )}
                 Try again
               </>

@@ -2,7 +2,6 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AccordionItem } from "@radix-ui/react-accordion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -30,6 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { InputCheckbox } from "@/components/ui/input-checkbox";
 import {
@@ -317,7 +317,9 @@ export function EditRoleDialog({
             {t("buttons.cancel", { ns: "labels" })}
           </Button>
           <Button type="submit" form={formId} aria-disabled={isPending}>
-            {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && (
+              <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
+            )}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })
               : t("buttons.save", { ns: "labels" })}

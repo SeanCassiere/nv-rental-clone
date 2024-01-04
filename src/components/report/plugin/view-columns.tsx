@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Columns as MixerHorizontalIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import type { ReportTablePlugin } from "@/types/report";
@@ -25,7 +25,7 @@ export const ViewColumns: ReportTablePlugin = (props) => {
           size="sm"
           className="flex h-8 w-full sm:w-fit"
         >
-          <MixerHorizontalIcon className="mr-2 h-4 w-4" />
+          <icons.Columns className="mr-2 h-4 w-4" />
           View
         </Button>
       </DropdownMenuTrigger>
