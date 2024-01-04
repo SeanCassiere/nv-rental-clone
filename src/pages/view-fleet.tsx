@@ -6,14 +6,6 @@ import {
   useRouter,
   useSearch,
 } from "@tanstack/react-router";
-import {
-  ChevronRightIcon,
-  CopyIcon,
-  MoreVerticalIcon,
-  PencilIcon,
-  PowerIcon,
-  PowerOffIcon,
-} from "lucide-react";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -29,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -166,7 +159,7 @@ function VehicleViewPage() {
             <Link to=".." className="text-2xl font-semibold leading-6">
               Fleet
             </Link>
-            <ChevronRightIcon
+            <icons.ChevronRight
               className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
@@ -190,7 +183,7 @@ function VehicleViewPage() {
               params={{ vehicleId: String(vehicleId) }}
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
-              <PencilIcon className="mr-2 h-4 w-4" />
+              <icons.Edit className="mr-2 h-4 w-4" />
               <span className="inline-block">Edit</span>
             </Link>
 
@@ -202,7 +195,7 @@ function VehicleViewPage() {
                   className="flex items-center justify-center gap-2"
                   variant="outline"
                 >
-                  <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
+                  <icons.More className="mr-0.5 h-4 w-4" />
                   <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -211,17 +204,17 @@ function VehicleViewPage() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <CopyIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <icons.Copy className="mr-2 h-4 w-4 sm:mr-4" />
                     <span>Copy and create</span>
                   </DropdownMenuItem>
                   {vehicle?.vehicle.active ? (
                     <DropdownMenuItem>
-                      <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <icons.Deactivate className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Deactivate</span>
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem>
-                      <PowerIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <icons.Activate className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Activate</span>
                     </DropdownMenuItem>
                   )}
