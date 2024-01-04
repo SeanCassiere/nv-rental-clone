@@ -1,10 +1,10 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { ChevronRightIcon } from "lucide-react";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -167,7 +167,7 @@ function ReportsList({
                               {report.title}
                             </span>
                             <div>
-                              <ChevronRightIcon className="ml-1 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                              <icons.ChevronRight className="ml-1 h-3.5 w-3.5 sm:h-4 sm:w-4" />
                               <span className="sr-only">
                                 {report.title} icon
                               </span>

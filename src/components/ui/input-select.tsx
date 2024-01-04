@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CheckIcon, ChevronDown } from "lucide-react";
 
 import {
   Command,
@@ -9,6 +8,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { icons } from "@/components/ui/icons";
 import {
   Popover,
   PopoverContent,
@@ -96,7 +96,7 @@ const InputSelectTrigger = React.forwardRef<
       {...props}
     >
       {selected?.label ?? placeholder ?? "Select an option"}
-      <ChevronDown className="h-4 w-4 opacity-50" />
+      <icons.ChevronDown className="h-4 w-4 opacity-50" />
     </PopoverTrigger>
   );
 });
@@ -145,7 +145,7 @@ function InputSelectContent({
                         : "opacity-50 [&_svg]:invisible"
                     )}
                   >
-                    <CheckIcon className={cn("h-4 w-4")} />
+                    <icons.Check className={cn("h-4 w-4")} />
                   </div>
                   <span>{label}</span>
                 </CommandItem>

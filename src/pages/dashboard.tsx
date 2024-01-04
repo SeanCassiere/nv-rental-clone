@@ -1,6 +1,5 @@
 import { lazy, Suspense, useCallback, useState } from "react";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { CheckIcon, PlusCircle } from "lucide-react";
 
 import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +13,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import { icons } from "@/components/ui/icons";
 import {
   Popover,
   PopoverContent,
@@ -171,7 +171,7 @@ function LocationPicker({
             variant="outline"
             className="h-8 whitespace-nowrap border-dashed"
           >
-            <PlusCircle className="mr-2 h-3 w-3" />
+            <icons.PlusCircle className="mr-2 h-3 w-3" />
             Locations
             <Separator orientation="vertical" className="mx-2 h-4" />
             <Badge
@@ -235,7 +235,7 @@ function LocationPicker({
                         : "opacity-50 [&_svg]:invisible"
                     )}
                   >
-                    <CheckIcon className={cn("h-4 w-4")} />
+                    <icons.Check className={cn("h-4 w-4")} />
                   </div>
                   <span>All</span>
                 </CommandItem>
@@ -266,7 +266,7 @@ function LocationPicker({
                             : "opacity-50 [&_svg]:invisible"
                         )}
                       >
-                        <CheckIcon className={cn("h-4 w-4")} />
+                        <icons.Check className={cn("h-4 w-4")} />
                       </div>
                       <span>{location.locationName}</span>
                     </CommandItem>
