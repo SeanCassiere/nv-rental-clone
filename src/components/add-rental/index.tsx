@@ -7,10 +7,10 @@ import {
 } from "react";
 import { Link } from "@tanstack/react-router";
 import { parseISO } from "date-fns";
-import { ChevronRightIcon, PlayIcon } from "lucide-react";
 
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Button } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -869,7 +869,7 @@ const AddRentalParentForm = ({
                 <Link to=".." className="text-2xl font-semibold leading-6">
                   Agreements
                 </Link>
-                <ChevronRightIcon
+                <icons.ChevronRight
                   className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
@@ -887,7 +887,7 @@ const AddRentalParentForm = ({
                 <Link to=".." className="text-2xl font-semibold leading-6">
                   Agreements
                 </Link>
-                <ChevronRightIcon
+                <icons.ChevronRight
                   className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
@@ -898,7 +898,7 @@ const AddRentalParentForm = ({
                 >
                   {referenceNumber ?? "-"}
                 </Link>
-                <ChevronRightIcon
+                <icons.ChevronRight
                   className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
@@ -928,7 +928,7 @@ const AddRentalParentForm = ({
                 <Link to=".." className="text-2xl font-semibold leading-6">
                   Reservations
                 </Link>
-                <ChevronRightIcon
+                <icons.ChevronRight
                   className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
@@ -946,7 +946,7 @@ const AddRentalParentForm = ({
                 <Link to=".." className="text-2xl font-semibold leading-6">
                   Reservations
                 </Link>
-                <ChevronRightIcon
+                <icons.ChevronRight
                   className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
@@ -957,7 +957,7 @@ const AddRentalParentForm = ({
                 >
                   {referenceNumber ?? "-"}
                 </Link>
-                <ChevronRightIcon
+                <icons.ChevronRight
                   className="h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
@@ -996,7 +996,7 @@ const AddRentalParentForm = ({
                   )
                 }
               >
-                <PlayIcon className="mr-2 h-3 w-3" />
+                <icons.Play className="mr-2 h-3 w-3" />
                 <span>{isEdit ? "Save" : "Create"}</span>
               </Button>
             ) : null}
@@ -1013,7 +1013,7 @@ const AddRentalParentForm = ({
                   )
                 }
               >
-                <PlayIcon className="mr-2 h-3 w-3" />
+                <icons.Play className="mr-2 h-3 w-3" />
                 <span>{isEdit ? "Save" : "Create"}</span>
               </Button>
             ) : null}

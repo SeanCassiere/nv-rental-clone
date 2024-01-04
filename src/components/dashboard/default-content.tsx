@@ -1,12 +1,5 @@
 import React from "react";
 import { add } from "date-fns";
-import {
-  LayoutDashboardIcon,
-  LockIcon,
-  PlusIcon,
-  SettingsIcon,
-  UnlockIcon,
-} from "lucide-react";
 
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
@@ -21,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { icons } from "@/components/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
@@ -116,9 +110,9 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
           onClick={() => setIsWidgetsLocked((prev) => !prev)}
         >
           {isWidgetsLocked ? (
-            <LockIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+            <icons.Lock className="h-5 w-5 sm:h-4 sm:w-4" />
           ) : (
-            <UnlockIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+            <icons.Unlock className="h-5 w-5 sm:h-4 sm:w-4" />
           )}
           <span className="sr-only">
             {isWidgetsLocked ? "Locked widgets" : "Unlocked widgets"}
@@ -131,7 +125,7 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
               size="sm"
               variant={!showWidgetsPicker ? "outline" : "secondary"}
             >
-              <SettingsIcon className="h-5 w-5 sm:h-4 sm:w-4" />
+              <icons.Settings className="h-5 w-5 sm:h-4 sm:w-4" />
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -153,11 +147,11 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
         <EmptyState
           title="No widgets selected"
           subtitle="You can customize your dashboard by selecting widgets from the widget picker."
-          icon={LayoutDashboardIcon}
+          icon={icons.DashboardLayout}
           buttonOptions={{
             content: (
               <>
-                <PlusIcon className="mr-2 h-4 w-4" />
+                <icons.Plus className="mr-2 h-4 w-4" />
                 Add now
               </>
             ),

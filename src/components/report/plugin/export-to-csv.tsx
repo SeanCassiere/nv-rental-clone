@@ -1,6 +1,5 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SheetIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -13,6 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -113,7 +113,7 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
           size="sm"
           className="flex h-8 w-full sm:w-fit"
         >
-          <SheetIcon className="mr-2 h-4 w-4" />
+          <icons.Sheet className="mr-2 h-4 w-4" />
           Export to CSV
         </Button>
       </PopoverTrigger>

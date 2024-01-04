@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -14,6 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
 
 import { roleQKeys } from "@/utils/query-key";
 
@@ -107,7 +107,7 @@ export function DeleteRoleAlertDialog({
             }}
           >
             {deleteRole.isPending && (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
             )}
             <span>{t("buttons.confirm", { ns: "labels" })}</span>
           </AlertDialogAction>

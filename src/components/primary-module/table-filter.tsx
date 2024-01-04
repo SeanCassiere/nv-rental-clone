@@ -1,6 +1,5 @@
 import React from "react";
 import { type Table } from "@tanstack/react-table";
-import { CheckIcon, PlusCircle, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +14,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -135,7 +135,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
               type === "date" && baseState?.value ? "border-r-0" : ""
             )}
           >
-            <PlusCircle className="mr-2 h-3 w-3" />
+            <icons.PlusCircle className="mr-2 h-3 w-3" />
             {title}
             {type === "select" &&
               baseState?.value !== "" &&
@@ -248,7 +248,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                               : "opacity-50 [&_svg]:invisible"
                           )}
                         >
-                          <CheckIcon className={cn("h-4 w-4")} />
+                          <icons.Check className={cn("h-4 w-4")} />
                         </div>
                         <span>{option.label}</span>
                       </CommandItem>
@@ -302,7 +302,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                               : "opacity-50 [&_svg]:invisible"
                           )}
                         >
-                          <CheckIcon className={cn("h-4 w-4")} />
+                          <icons.Check className={cn("h-4 w-4")} />
                         </div>
                         <span>{option.label}</span>
                       </CommandItem>
@@ -369,7 +369,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                 handleSaveValue(undefined);
               }}
             >
-              <XIcon className="h-3 w-3" />
+              <icons.X className="h-3 w-3" />
             </Button>
           </>
         )}

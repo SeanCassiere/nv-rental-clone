@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -13,6 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { icons } from "@/components/ui/icons";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
@@ -96,7 +96,7 @@ export function ResetPasswordAlertDialog({
             }}
           >
             {resetPassword.isPending && (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
             )}
             <span>{t("labels.sendResetLink", { ns: "settings" })}</span>
           </AlertDialogAction>

@@ -6,7 +6,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -30,6 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { InputCheckbox } from "@/components/ui/input-checkbox";
 import {
@@ -229,7 +229,7 @@ export function EditUserDialog({
             }
           >
             {isSubmittingUpdating && (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
             )}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })
@@ -918,9 +918,9 @@ function NewUserForm(props: {
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (
-                    <EyeIcon className="h-3 w-3" />
+                    <icons.EyeOn className="h-3 w-3" />
                   ) : (
-                    <EyeOffIcon className="h-3 w-3" />
+                    <icons.EyeOff className="h-3 w-3" />
                   )}
                   <span className="sr-only">
                     {showPassword

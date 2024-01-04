@@ -1,8 +1,8 @@
 import { Fragment } from "react";
-import { CircleDollarSignIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
 import { type TVehicleSummarySchema } from "@/schemas/summary/vehicleSummary";
@@ -245,7 +245,7 @@ export const VehicleSummary = ({
     <Card>
       <SummaryHeader
         title="Summary"
-        icon={<CircleDollarSignIcon className="h-6 w-6" />}
+        icon={<icons.DollarSign className="h-6 w-6" />}
       />
       <CardContent className="px-0 py-0">
         <ul className="flex flex-col">

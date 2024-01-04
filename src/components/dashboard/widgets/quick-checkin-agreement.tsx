@@ -2,7 +2,6 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowDownLeftIcon, Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
@@ -19,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
@@ -196,9 +196,9 @@ export function QuickCheckinAgreementForm() {
           )}
         />
         <Button variant="outline" type="submit" className="mt-2">
-          <ArrowDownLeftIcon className="mr-2 h-5 w-5" />
+          <icons.ArrowDownLeft className="mr-2 h-5 w-5" />
           {search.isPending && (
-            <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+            <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
           )}
           {t("buttons.checkin", { ns: "labels" })}
         </Button>

@@ -6,15 +6,6 @@ import {
   useRouter,
   useSearch,
 } from "@tanstack/react-router";
-import {
-  BanIcon,
-  ChevronRightIcon,
-  MailPlusIcon,
-  MoreVerticalIcon,
-  MoveDownLeftIcon,
-  PencilIcon,
-  PrinterIcon,
-} from "lucide-react";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -30,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -243,7 +235,7 @@ function AgreementViewPage() {
             <Link to=".." className="text-2xl font-semibold leading-6">
               Agreements
             </Link>
-            <ChevronRightIcon
+            <icons.ChevronRight
               className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
@@ -269,7 +261,7 @@ function AgreementViewPage() {
                 params={{ agreementId: String(agreementId) }}
                 className={cn(buttonVariants({ size: "sm" }))}
               >
-                <MoveDownLeftIcon className="mr-2 h-4 w-4" />
+                <icons.Checkin className="mr-2 h-4 w-4" />
                 <span className="inline-block">Checkin</span>
               </Link>
             )}
@@ -282,7 +274,7 @@ function AgreementViewPage() {
                   buttonVariants({ size: "sm", variant: "outline" })
                 )}
               >
-                <PencilIcon className="mr-2 h-4 w-4" />
+                <icons.Edit className="mr-2 h-4 w-4" />
                 <span className="inline-block">Edit</span>
               </Link>
             ) : (
@@ -294,7 +286,7 @@ function AgreementViewPage() {
                   buttonVariants({ size: "sm", variant: "outline" })
                 )}
               >
-                <PencilIcon className="mr-2 h-4 w-4" />
+                <icons.Edit className="mr-2 h-4 w-4" />
                 <span className="inline-block">Edit</span>
               </Link>
             )}
@@ -306,7 +298,7 @@ function AgreementViewPage() {
                   className="flex items-center justify-center gap-2"
                   variant="outline"
                 >
-                  <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
+                  <icons.More className="mr-0.5 h-4 w-4" />
                   <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -315,15 +307,15 @@ function AgreementViewPage() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <PrinterIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <icons.Print className="mr-2 h-4 w-4 sm:mr-4" />
                     <span>Print</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <MailPlusIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <icons.MailPlus className="mr-2 h-4 w-4 sm:mr-4" />
                     <span>Email</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <BanIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                    <icons.Clear className="mr-2 h-4 w-4 sm:mr-4" />
                     <span>Void</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>

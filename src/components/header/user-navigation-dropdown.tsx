@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { ChevronDownIcon } from "lucide-react";
 import { useAuth } from "react-oidc-context";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,6 +19,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 
 import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
@@ -63,7 +63,7 @@ export const UserNavigationDropdown = () => {
             <AvatarFallback>{getAvatarFallbackText(fullName)}</AvatarFallback>
           </Avatar>
           <span className="absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-background bg-muted transition-colors">
-            <ChevronDownIcon className="h-2.5 w-2.5 md:h-3 md:w-3" />
+            <icons.ChevronDown className="h-2.5 w-2.5 md:h-3 md:w-3" />
           </span>
         </Button>
       </DropdownMenuTrigger>

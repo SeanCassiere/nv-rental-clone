@@ -7,7 +7,6 @@ import {
   type PaginationState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { PlusIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -18,6 +17,7 @@ import {
 import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
@@ -218,7 +218,7 @@ function ReservationsSearchPage() {
               search={() => ({ stage: "rental-information" })}
               className={cn(buttonVariants({ size: "sm" }), "w-max")}
             >
-              <PlusIcon className="h-4 w-4 sm:mr-2" />
+              <icons.Plus className="h-4 w-4 sm:mr-2" />
               <span>New Reservation</span>
             </Link>
           </div>

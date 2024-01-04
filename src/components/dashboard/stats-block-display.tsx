@@ -1,14 +1,7 @@
 import { Link, type LinkOptions } from "@tanstack/react-router";
-import {
-  ArrowDownLeftIcon,
-  BanknoteIcon,
-  BellIcon,
-  CarIcon,
-  CreditCardIcon,
-  type LucideIcon,
-} from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { icons, type LucideIcon } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
@@ -45,7 +38,7 @@ const DashboardStatsBlock = ({
         <li>
           <StatBlock
             title="Reservation"
-            icon={CreditCardIcon}
+            icon={icons.CreditCard}
             value={formatDisplayValue(statistics?.todaysReservationCount)}
             linkProps={{
               to: "/reservations",
@@ -65,7 +58,7 @@ const DashboardStatsBlock = ({
         <li>
           <StatBlock
             title="Return"
-            icon={ArrowDownLeftIcon}
+            icon={icons.ArrowDownLeft}
             value={formatDisplayValue(statistics?.todaysArrivalsCount)}
             linkProps={{
               to: "/agreements",
@@ -85,7 +78,7 @@ const DashboardStatsBlock = ({
         <li>
           <StatBlock
             title="On rent"
-            icon={CarIcon}
+            icon={icons.Car}
             value={formatDisplayValue(statistics?.openAgreement)}
             linkProps={{
               to: "/agreements",
@@ -101,7 +94,7 @@ const DashboardStatsBlock = ({
         <li>
           <StatBlock
             title="Overdue"
-            icon={CreditCardIcon}
+            icon={icons.CreditCard}
             value={formatDisplayValue(statistics?.overDues)}
             linkProps={{
               to: "/agreements",
@@ -117,7 +110,7 @@ const DashboardStatsBlock = ({
         <li>
           <StatBlock
             title="Pending payment"
-            icon={BanknoteIcon}
+            icon={icons.Banknote}
             value={formatDisplayValue(statistics?.pendingPayment)}
             linkProps={{
               to: "/agreements",
@@ -133,7 +126,7 @@ const DashboardStatsBlock = ({
         <li>
           <StatBlock
             title="Service alert"
-            icon={BellIcon}
+            icon={icons.Bell}
             value={formatDisplayValue(statistics?.serviceAlerts)}
             linkProps={{
               to: "/",

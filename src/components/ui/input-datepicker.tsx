@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { PopoverContentProps } from "@radix-ui/react-popover";
-import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -59,10 +59,10 @@ function InputDatePicker({
     format: format
       ? format
       : mode === "date"
-      ? DEFAULT_DATE_FORMAT
-      : mode === "datetime"
-      ? DEFAULT_DATE_TIME_FORMAT
-      : timeFormat,
+        ? DEFAULT_DATE_FORMAT
+        : mode === "datetime"
+          ? DEFAULT_DATE_TIME_FORMAT
+          : timeFormat,
     disabled,
     readOnly,
     required,
@@ -141,7 +141,7 @@ function InputDatePickerSlot({
           variant="outline"
           disabled={ctx.inputProps.disabled || ctx.inputProps.readOnly}
         >
-          <CalendarIcon className="h-3.5 w-3.5" />
+          <icons.Calendar className="h-3.5 w-3.5" />
         </Button>
       </PopoverTrigger>
     </div>

@@ -1,12 +1,6 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  MoreVerticalIcon,
-  PencilIcon,
-  PlusIcon,
-  RotateCcwIcon,
-} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
@@ -27,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TUserConfigurations } from "@/schemas/user";
@@ -71,7 +66,7 @@ const SystemUsersSettings = () => {
         <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
           <div className="flex items-center justify-start pb-4">
             <Button size="sm" onClick={() => setShowNewUser(true)}>
-              <PlusIcon className="h-4 w-4 sm:mr-2" />
+              <icons.Plus className="h-4 w-4 sm:mr-2" />
               <span>{t("labels.addUser", { ns: "settings" })}</span>
             </Button>
           </div>
@@ -198,7 +193,7 @@ function SystemUser({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVerticalIcon className="h-3 w-3 lg:h-4 lg:w-4" />
+                  <icons.More className="h-3 w-3 lg:h-4 lg:w-4" />
                   <span className="sr-only">
                     {t("buttons.moreActions", { ns: "labels" })}
                   </span>
@@ -207,7 +202,7 @@ function SystemUser({
               <DropdownMenuContent align="end">
                 <DropdownMenuGroup>
                   <DropdownMenuItem onClick={() => setShowEditUser(true)}>
-                    <PencilIcon className="mr-2 h-3 w-3" />
+                    <icons.Edit className="mr-2 h-3 w-3" />
                     <span>{t("buttons.edit", { ns: "labels" })}</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -215,7 +210,7 @@ function SystemUser({
                     className="text-destructive"
                     onClick={() => setShowForgotPassword(true)}
                   >
-                    <RotateCcwIcon className="mr-2 h-3 w-3" />
+                    <icons.RotateBackwards className="mr-2 h-3 w-3" />
                     <span>{t("labels.resetPassword", { ns: "settings" })}</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>

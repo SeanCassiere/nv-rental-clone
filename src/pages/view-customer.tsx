@@ -6,13 +6,6 @@ import {
   useRouter,
   useSearch,
 } from "@tanstack/react-router";
-import {
-  ChevronRightIcon,
-  MoreVerticalIcon,
-  PencilIcon,
-  PowerIcon,
-  PowerOffIcon,
-} from "lucide-react";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -27,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -137,7 +131,7 @@ function CustomerViewPage() {
             <Link to=".." className="text-2xl font-semibold leading-6">
               Customers
             </Link>
-            <ChevronRightIcon
+            <icons.ChevronRight
               className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
@@ -163,7 +157,7 @@ function CustomerViewPage() {
               params={{ customerId: String(customerId) }}
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
-              <PencilIcon className="h-4 w-4 sm:mr-2" />
+              <icons.Edit className="h-4 w-4 sm:mr-2" />
               <span className="inline-block">Edit</span>
             </Link>
 
@@ -175,7 +169,7 @@ function CustomerViewPage() {
                   className="flex items-center justify-center gap-2"
                   variant="outline"
                 >
-                  <MoreVerticalIcon className="mr-0.5 h-4 w-4" />
+                  <icons.More className="mr-0.5 h-4 w-4" />
                   <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -185,12 +179,12 @@ function CustomerViewPage() {
                 <DropdownMenuGroup>
                   {customer?.active ? (
                     <DropdownMenuItem>
-                      <PowerOffIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <icons.Deactivate className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Deactivate</span>
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem>
-                      <PowerIcon className="mr-2 h-4 w-4 sm:mr-4" />
+                      <icons.Activate className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Activate</span>
                     </DropdownMenuItem>
                   )}

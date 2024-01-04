@@ -1,19 +1,5 @@
 import React, { Fragment } from "react";
 import { useRouter } from "@tanstack/react-router";
-import {
-  BarChart4Icon,
-  CalendarIcon,
-  CarIcon,
-  FileSignatureIcon,
-  LaptopIcon,
-  LayoutDashboardIcon,
-  LogOutIcon,
-  MoonIcon,
-  SettingsIcon,
-  SunIcon,
-  User2Icon,
-  Users2Icon,
-} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +11,7 @@ import {
   CommandList,
   CommandLoading,
 } from "@/components/ui/command";
+import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useGlobalDialogContext } from "@/hooks/context/modals";
@@ -232,7 +219,7 @@ export const CommandMenu = () => {
                   );
                 }}
               >
-                <CarIcon className="mr-2 h-4 w-4 text-primary/70" />
+                <icons.Car className="mr-2 h-4 w-4 text-primary/70" />
                 {item.displayText}
               </CommandItem>
             ))}
@@ -260,7 +247,7 @@ export const CommandMenu = () => {
                   );
                 }}
               >
-                <Users2Icon className="mr-2 h-4 w-4 text-primary/70" />
+                <icons.Users className="mr-2 h-4 w-4 text-primary/70" />
                 {item.displayText}
               </CommandItem>
             ))}
@@ -290,7 +277,7 @@ export const CommandMenu = () => {
                   );
                 }}
               >
-                <CalendarIcon className="mr-2 h-4 w-4 text-primary/70" />
+                <icons.Calendar className="mr-2 h-4 w-4 text-primary/70" />
                 {item.displayText}
               </CommandItem>
             ))}
@@ -318,7 +305,7 @@ export const CommandMenu = () => {
                   );
                 }}
               >
-                <FileSignatureIcon className="mr-2 h-4 w-4 text-primary/70" />
+                <icons.FileSignature className="mr-2 h-4 w-4 text-primary/70" />
                 {item.displayText}
               </CommandItem>
             ))}
@@ -335,7 +322,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <CarIcon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.Car className="mr-2 h-4 w-4 text-primary/70" />
               Fleet
             </CommandItem>
             <CommandItem
@@ -348,7 +335,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <Users2Icon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.Users className="mr-2 h-4 w-4 text-primary/70" />
               Customers
             </CommandItem>
             <CommandItem
@@ -361,7 +348,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <CalendarIcon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.Calendar className="mr-2 h-4 w-4 text-primary/70" />
               Reservations
             </CommandItem>
             <CommandItem
@@ -374,7 +361,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <FileSignatureIcon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.FileSignature className="mr-2 h-4 w-4 text-primary/70" />
               Agreements
             </CommandItem>
             <CommandItem
@@ -386,7 +373,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <LayoutDashboardIcon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.DashboardLayout className="mr-2 h-4 w-4 text-primary/70" />
               Dashboard
             </CommandItem>
             <CommandItem
@@ -399,7 +386,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <BarChart4Icon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.BarChart className="mr-2 h-4 w-4 text-primary/70" />
               Reports
             </CommandItem>
           </CommandGroup>
@@ -411,13 +398,13 @@ export const CommandMenu = () => {
               }}
             >
               {ternaryDarkMode === "system" && (
-                <LaptopIcon className="mr-2 h-4 w-4 text-primary/70" />
+                <icons.System className="mr-2 h-4 w-4 text-primary/70" />
               )}
               {ternaryDarkMode === "light" && (
-                <SunIcon className="mr-2 h-4 w-4 text-primary/70" />
+                <icons.Sun className="mr-2 h-4 w-4 text-primary/70" />
               )}
               {ternaryDarkMode === "dark" && (
-                <MoonIcon className="mr-2 h-4 w-4 text-primary/70" />
+                <icons.Moon className="mr-2 h-4 w-4 text-primary/70" />
               )}
               Toggle theme (to {nextToggleTernaryDarkMode})
             </CommandItem>
@@ -431,7 +418,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <User2Icon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.User className="mr-2 h-4 w-4 text-primary/70" />
               Profile
             </CommandItem>
             <CommandItem
@@ -443,7 +430,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <SettingsIcon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.Settings className="mr-2 h-4 w-4 text-primary/70" />
               Settings
             </CommandItem>
             <CommandItem
@@ -451,7 +438,7 @@ export const CommandMenu = () => {
                 run(() => setShowLogout(true), false);
               }}
             >
-              <LogOutIcon className="mr-2 h-4 w-4 text-primary/70" />
+              <icons.Logout className="mr-2 h-4 w-4 text-primary/70" />
               Logout
             </CommandItem>
           </CommandGroup>

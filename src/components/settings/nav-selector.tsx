@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate, type LinkOptions } from "@tanstack/react-router";
-import { ChevronRightIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { icons } from "@/components/ui/icons";
 import {
   Popover,
   PopoverContent,
@@ -53,7 +53,7 @@ export const SelectorSettingsNavigation = ({
             onClick={() => setOpen(true)}
           >
             <span className="flex">
-              <ChevronRightIcon className="mr-2 h-5 w-5 text-primary" />
+              <icons.ChevronRight className="mr-2 h-5 w-5 text-primary" />
               <Separator orientation="vertical" className="mx-2 h-5" />
             </span>
             <span>
@@ -92,7 +92,7 @@ export const SelectorSettingsNavigation = ({
                             : "opacity-50 [&_svg]:invisible"
                         )}
                       >
-                        <ChevronRightIcon className="h-4 w-4" />
+                        <icons.ChevronRight className="h-4 w-4" />
                       </div>
                       <span>{item.title}</span>
                     </CommandItem>

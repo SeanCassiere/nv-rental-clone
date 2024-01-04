@@ -7,11 +7,11 @@ import {
   useState,
 } from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -408,7 +408,7 @@ function MiscChargeItem(props: {
                     "flex h-6 w-6 items-center justify-center p-0 [&[data-state=open]>svg]:rotate-180"
                   )}
                 >
-                  <ChevronDown className="h-3 w-3 shrink-0 transition-transform duration-200" />
+                  <icons.ChevronDown className="h-3 w-3 shrink-0 transition-transform duration-200" />
                 </AccordionPrimitive.Trigger>
               )}
             </div>
