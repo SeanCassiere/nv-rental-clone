@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { UserIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { buttonVariants } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
 
 import { cn } from "@/utils";
 
@@ -184,7 +184,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
   return (
     <InformationBlockCard
       identifier="customer-information"
-      icon={<UserIcon className="h-5 w-5" />}
+      icon={<icons.Users className="h-5 w-5" />}
       title={title}
       blocks={infoBlocks}
       numberPerBlock={3}

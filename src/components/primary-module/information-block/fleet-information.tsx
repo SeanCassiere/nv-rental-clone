@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { CarIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
 
 import { cn } from "@/utils";
 
@@ -271,7 +271,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
   return (
     <InformationBlockCard
       identifier="vehicle-information"
-      icon={<CarIcon className="h-5 w-5" />}
+      icon={<icons.Car className="h-5 w-5" />}
       title={title}
       blocks={infoBlocks}
       numberPerBlock={3}

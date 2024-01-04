@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { DotIcon } from "lucide-react";
 import { useAuth } from "react-oidc-context";
+
+import { icons } from "@/components/ui/icons";
 
 import type { ServerMessage } from "@/schemas/dashboard";
 
@@ -16,7 +17,7 @@ const MessageText = ({ message }: { message: ServerMessage }) => (
     <strong className="font-semibold text-white">
       {message.title}
       {message.description && (
-        <DotIcon className="mb-1 hidden h-3 w-3 sm:mx-0.5 sm:inline sm:h-5 sm:w-5" />
+        <icons.Dot className="mb-1 hidden h-3 w-3 sm:mx-0.5 sm:inline sm:h-5 sm:w-5" />
       )}
     </strong>
     {message.description && (

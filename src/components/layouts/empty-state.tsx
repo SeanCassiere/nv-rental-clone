@@ -1,7 +1,7 @@
 import * as React from "react";
-import { AlertCircleIcon } from "lucide-react";
 
 import { Button, type ButtonProps } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
 
 import { cn } from "@/utils";
 
@@ -23,7 +23,7 @@ export const EmptyState = ({
     className?: ButtonProps["className"];
   };
 }) => {
-  const RenderedIcon = Icon ?? AlertCircleIcon;
+  const RenderedIcon = Icon ?? icons.Alert;
 
   return (
     <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed bg-card">

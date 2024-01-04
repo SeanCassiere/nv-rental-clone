@@ -1,6 +1,5 @@
 import React from "react";
 import { type ColumnFiltersState, type Table } from "@tanstack/react-table";
-import { SearchIcon, XIcon } from "lucide-react";
 
 import {
   PrimaryModuleTableFacetedFilter,
@@ -8,6 +7,7 @@ import {
 } from "@/components/primary-module/table-filter";
 import { Button } from "@/components/ui/button";
 import { DataTableViewOptions } from "@/components/ui/data-table";
+import { icons } from "@/components/ui/icons";
 
 export interface PrimaryModuleTableToolbarProps<TData> {
   table: Table<TData>;
@@ -70,7 +70,7 @@ export function PrimaryModuleTableToolbar<TData>({
             onClick={onSearchWithFilters}
             className="h-8 px-2 lg:px-3"
           >
-            <SearchIcon className="mr-2 h-3 w-3" />
+            <icons.Search className="mr-2 h-3 w-3" />
             Search
           </Button>
 
@@ -81,7 +81,7 @@ export function PrimaryModuleTableToolbar<TData>({
               onClick={handleReset}
               className="h-8 px-2 lg:px-3"
             >
-              <XIcon className="mr-2 h-3 w-3" />
+              <icons.X className="mr-2 h-3 w-3" />
               Clear
             </Button>
           )}

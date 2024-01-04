@@ -34,15 +34,6 @@ import {
   type PaginationState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsDownUp,
-  EyeOff,
-  GripVertical,
-  SortAsc,
-  SortDesc,
-} from "lucide-react";
 
 import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
@@ -54,6 +45,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 import {
   Table,
   TableBody,
@@ -296,7 +288,10 @@ export function PrimaryModuleTable<
             disabled={!table.getCanPreviousPage()}
             className="rounded-l px-2 tabular-nums"
           >
-            <ChevronLeftIcon className="mr-1 h-3.5 w-3.5" aria-hidden="true" />
+            <icons.ChevronLeft
+              className="mr-1 h-3.5 w-3.5"
+              aria-hidden="true"
+            />
             <span className="text-sm">Previous</span>
           </Button>
           {pageNumbers.map((pageNum, idx) => {
@@ -327,7 +322,10 @@ export function PrimaryModuleTable<
             className="rounded-r px-2 tabular-nums"
           >
             <span className="ml-1.5 text-sm">Next</span>
-            <ChevronRightIcon className="ml-1 h-3.5 w-3.5" aria-hidden="true" />
+            <icons.ChevronRight
+              className="ml-1 h-3.5 w-3.5"
+              aria-hidden="true"
+            />
           </Button>
         </nav>
       </div>
@@ -389,16 +387,16 @@ export function PrimaryModuleTableColumnHeader<TData, TValue>({
             {column.getCanSort() ? (
               <>
                 {column.getIsSorted() === "desc" ? (
-                  <SortDesc className="ml-2 h-3 w-3" />
+                  <icons.SortDesc className="ml-2 h-3 w-3" />
                 ) : column.getIsSorted() === "asc" ? (
-                  <SortAsc className="ml-2 h-3 w-3" />
+                  <icons.SortAsc className="ml-2 h-3 w-3" />
                 ) : (
-                  <ChevronsDownUp className="ml-2 h-3 w-3" />
+                  <icons.ChevronsDownUp className="ml-2 h-3 w-3" />
                 )}
               </>
             ) : (
               <>
-                <ChevronsDownUp className="ml-2 h-3 w-3" />
+                <icons.ChevronsDownUp className="ml-2 h-3 w-3" />
               </>
             )}
           </Button>
@@ -407,18 +405,18 @@ export function PrimaryModuleTableColumnHeader<TData, TValue>({
           {column.getCanSort() && (
             <>
               <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-                <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                <icons.SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 Asc
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-                <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                <icons.SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 Desc
               </DropdownMenuItem>
               <DropdownMenuSeparator />
             </>
           )}
           <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            <icons.EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Hide
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -430,7 +428,7 @@ export function PrimaryModuleTableColumnHeader<TData, TValue>({
         {...listeners}
         {...attributes}
       >
-        <GripVertical className="h-3 w-3" />
+        <icons.GripVertical className="h-3 w-3" />
       </Button>
     </div>
   );
