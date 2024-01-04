@@ -33,7 +33,6 @@ export const CommandMenu = () => {
   const router = useRouter();
   const navigate = router.navigate;
 
-  const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
 
   const authValues = useAuthValues();
@@ -48,7 +47,8 @@ export const CommandMenu = () => {
 
   const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =
     useTernaryDarkMode();
-  const { setShowLogout } = useGlobalDialogContext();
+  const { showCommandMenu, setShowCommandMenu, setShowLogout } =
+    useGlobalDialogContext();
 
   const searchTerm = useDebounce(text, 350);
 
@@ -153,25 +153,28 @@ export const CommandMenu = () => {
     };
   });
 
-  const run = React.useCallback((command: () => unknown, close = true) => {
-    command();
-    setText("");
-    if (close) {
-      setOpen(false);
-    }
-  }, []);
+  const run = React.useCallback(
+    (command: () => unknown, close = true) => {
+      command();
+      setText("");
+      if (close) {
+        setShowCommandMenu(false);
+      }
+    },
+    [setShowCommandMenu]
+  );
 
   React.useEffect(() => {
     const keyDownFn = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+        setShowCommandMenu((open) => !open);
       }
     };
 
     document.addEventListener("keydown", keyDownFn);
     return () => document.removeEventListener("keydown", keyDownFn);
-  }, []);
+  }, [setShowCommandMenu]);
 
   return (
     <Fragment>
@@ -180,7 +183,7 @@ export const CommandMenu = () => {
         className={cn(
           "relative w-52 items-center justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64"
         )}
-        onClick={() => setOpen(true)}
+        onClick={() => setShowCommandMenu(true)}
       >
         <span className="hidden lg:inline-flex">Search application...</span>
         <span className="inline-flex lg:hidden">Search...</span>
@@ -188,7 +191,11 @@ export const CommandMenu = () => {
           <span className="text-xs">{IsMacLike ? "⌘" : "Ctrl"}</span>+ K
         </kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen} loop>
+      <CommandDialog
+        open={showCommandMenu}
+        onOpenChange={setShowCommandMenu}
+        loop
+      >
         <CommandInput
           placeholder="Search..."
           value={text}
