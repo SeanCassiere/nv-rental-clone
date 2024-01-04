@@ -4,7 +4,6 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
@@ -27,6 +26,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   InputSelect,
@@ -376,7 +376,7 @@ function ProfileForm(props: {
           disabled={!canViewAdminTab}
           aria-disabled={!canViewAdminTab || isSubmitBtnFrozen}
         >
-          {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+          {isPending && <icons.Loading className="mr-2 h-4 w-4 animate-spin" />}
           {t("buttons.saveProfileDetails", { ns: "labels" })}
         </Button>
       </form>

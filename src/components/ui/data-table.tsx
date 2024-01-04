@@ -1,15 +1,5 @@
 import React from "react";
 import { type Column, type Table } from "@tanstack/react-table";
-import {
-  Check as CheckIcon,
-  CircleDashed,
-  Cross as Cross2Icon,
-  EyeOff,
-  Columns as MixerHorizontalIcon,
-  PlusCircle as PlusCircledIcon,
-  SortAsc,
-  SortDesc,
-} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { icons } from "@/components/ui/icons";
 import {
   Popover,
   PopoverContent,
@@ -46,6 +37,15 @@ interface DataTableColumnHeaderProps<TData, TValue>
   column: Column<TData, TValue>;
   title: string;
 }
+
+const CheckIcon = icons.Plus;
+const CircleDashed = icons.Plus;
+const Cross2Icon = icons.Plus;
+const EyeOff = icons.Plus;
+const MixerHorizontalIcon = icons.Plus;
+const PlusCircledIcon = icons.Plus;
+const SortAsc = icons.Plus;
+const SortDesc = icons.Plus;
 
 export function DataTableColumnHeader<TData, TValue>({
   column,
