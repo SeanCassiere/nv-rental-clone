@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -78,35 +78,40 @@ export const UserNavigationDropdown = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={() => {
-              navigate({
-                to: "/settings/$destination",
-                params: {
-                  destination: "profile",
-                },
-              });
-            }}
-          >
-            Profile
+          <DropdownMenuItem asChild>
+            <Link
+              to="/settings/$destination"
+              params={{ destination: "profile" }}
+            >
+              <icons.User className="mr-2 h-4 w-4" />
+              Profile
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              navigate({
-                to: "/settings/$destination",
-                params: {
-                  destination: "profile",
-                },
-              });
-            }}
-          >
-            Settings
+          <DropdownMenuItem asChild>
+            <Link to="/settings">
+              <icons.Settings className="mr-2 h-4 w-4" />
+              Settings
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger>
+              {(() => {
+                switch (ternaryDarkMode) {
+                  case "system":
+                    return <icons.System className="mr-2 h-4 w-4" />;
+                  case "dark":
+                    return <icons.Moon className="mr-2 h-4 w-4" />;
+                  case "light":
+                    return <icons.Sun className="mr-2 h-4 w-4" />;
+                  default:
+                    return null;
+                }
+              })()}
+              Theme
+            </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent alignOffset={0} sideOffset={4}>
                 <DropdownMenuRadioGroup
@@ -117,20 +122,44 @@ export const UserNavigationDropdown = () => {
                     }
                   }}
                 >
-                  <DropdownMenuRadioItem value="system">
-                    System
+                  <DropdownMenuRadioItem
+                    value="system"
+                    onSelect={(evt) => evt.preventDefault()}
+                  >
+                    <span className="inline-flex w-full justify-between">
+                      System
+                      <icons.System className="ml-2 h-3.5 w-3.5" />
+                    </span>
                   </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="light">
-                    Light
+                  <DropdownMenuRadioItem
+                    value="light"
+                    onSelect={(evt) => evt.preventDefault()}
+                  >
+                    <span className="inline-flex w-full justify-between">
+                      Light
+                      <icons.Sun className="ml-2 h-3.5 w-3.5" />
+                    </span>
                   </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="dark">
-                    Dark
+                  <DropdownMenuRadioItem
+                    value="dark"
+                    onSelect={(evt) => evt.preventDefault()}
+                  >
+                    <span className="inline-flex w-full justify-between">
+                      Dark
+                      <icons.Moon className="ml-2 h-3.5 w-3.5" />
+                    </span>
                   </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-          <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={handleLogout}>
+            <icons.Logout className="mr-2 h-4 w-4" />
+            Log out
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
