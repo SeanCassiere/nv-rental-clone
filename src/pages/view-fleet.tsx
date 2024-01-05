@@ -195,7 +195,7 @@ function VehicleViewPage() {
                   className="flex items-center justify-center gap-2"
                   variant="outline"
                 >
-                  <icons.More className="mr-0.5 h-4 w-4" />
+                  <icons.More className="h-4 w-4" />
                   <span className="sr-only inline-block">More</span>
                 </Button>
               </DropdownMenuTrigger>
