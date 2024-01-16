@@ -31,7 +31,7 @@ import { type ReservationDataParsed } from "@/schemas/reservation";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { sortObject } from "@/utils/sortObject";
+import { sortObjectKeys } from "@/utils/sort";
 
 import { cn } from "@/utils";
 
@@ -108,7 +108,7 @@ interface TAddRentalParentFormProps {
 function DummyComponent(data: any) {
   return (
     <pre className="max-h-[600px] overflow-y-auto text-xs">
-      <code>{JSON.stringify(sortObject(data), null, 2)}</code>
+      <code>{JSON.stringify(sortObjectKeys(data), null, 2)}</code>
     </pre>
   );
 }

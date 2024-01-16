@@ -3,7 +3,7 @@ import { CustomerSummary } from "@/components/primary-module/summary/customer";
 import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 import { useGetCustomerSummary } from "@/hooks/network/customer/useGetCustomerSummary";
 
-import { sortObject } from "@/utils/sortObject";
+import { sortObjectKeys } from "@/utils/sort";
 
 type CustomerSummaryTabProps = {
   customerId: string;
@@ -28,7 +28,9 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
         <div className="max-h-[500px] overflow-x-scroll bg-slate-50">
           <h2>Customer data</h2>
           <code className="text-xs">
-            <pre>{JSON.stringify(sortObject(customerData.data), null, 2)}</pre>
+            <pre>
+              {JSON.stringify(sortObjectKeys(customerData.data), null, 2)}
+            </pre>
           </code>
         </div>
       </div>
