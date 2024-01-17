@@ -21,11 +21,11 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 
-import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
-
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
-import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
-import { agreementQKeys } from "@/utils/query-key";
+import {
+  fetchAgreementsListFn,
+  fetchAgreementsListOptions,
+} from "@/utils/query/agreement";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickCheckinAgreementWidget = () => {
@@ -75,7 +75,7 @@ export function QuickCheckinAgreementForm() {
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   const search = useMutation({
-    mutationFn: fetchAgreementsListModded,
+    mutationFn: fetchAgreementsListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0) {
         toast.error(t("messages.rentalAgreementNotFound", { ns: "dashboard" }));
@@ -86,25 +86,15 @@ export function QuickCheckinAgreementForm() {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
         form.reset();
 
-        const { clientId, userId, currentDate, page, pageSize, ...filters } =
-          variables;
-        const normalized = normalizeAgreementListSearchParams({
-          page,
-          size: pageSize,
-          filters,
-        });
-        const createdQueryKey = agreementQKeys.search({
-          pagination: { page, pageSize: pageSize },
-          filters: normalized.searchFilters,
-        });
-        qc.setQueryData(createdQueryKey, () => data);
+        const qk = fetchAgreementsListOptions(variables).queryKey;
+        qc.setQueryData(qk, () => data);
 
         navigate({
           to: "/agreements",
           search: () => ({
-            page,
-            pageSize,
-            filters,
+            page: variables.pagination.page,
+            pageSize: variables.pagination.pageSize,
+            filters: variables.filters,
           }),
         });
         return;
@@ -144,14 +134,22 @@ export function QuickCheckinAgreementForm() {
           }
 
           search.mutate({
-            clientId,
-            userId,
-            currentDate: new Date(),
-            page: 1,
-            pageSize: defaultRowCount,
-            Statuses: ["2"],
-            ...(values.vehicleNo && { VehicleNo: values.vehicleNo }),
-            ...(values.agreementNo && { AgreementNumber: values.agreementNo }),
+            auth: {
+              clientId,
+              userId,
+            },
+            filters: {
+              currentDate: new Date(),
+              Statuses: ["2"],
+              ...(values.vehicleNo && { VehicleNo: values.vehicleNo }),
+              ...(values.agreementNo && {
+                AgreementNumber: values.agreementNo,
+              }),
+            },
+            pagination: {
+              page: 1,
+              pageSize: defaultRowCount,
+            },
           });
         })}
       >

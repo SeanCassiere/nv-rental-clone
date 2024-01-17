@@ -1,4 +1,4 @@
-export type Pagination = { page: number; pageSize: number };
+export type Pagination = { pagination: { page: number; pageSize: number } };
 export type RefId = string | number;
 export type Auth = { auth: { userId: string; clientId: string } };
 

@@ -1,10 +1,17 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+import { sortObjectKeys } from "../sort";
+import {
+  isEnabled,
+  rootKey,
+  type Auth,
+  type Pagination,
+  type RefId,
+} from "./helpers";
 
 const SEGMENT = "agreements";
 
@@ -27,6 +34,59 @@ export function fetchAgreementsSearchColumnsOptions(options: Auth) {
           })
         ),
     enabled: isEnabled(options),
+  });
+}
+
+export function fetchAgreementsListOptions(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["agreement"]["getList"]>[0]["query"],
+      "currentDate" | "clientId" | "userId" | "page" | "pageSize"
+    > & {
+      currentDate: Date;
+    };
+    enabled?: boolean;
+  } & Pagination &
+    Auth
+) {
+  const { enabled = true } = options;
+  const { currentDate, ...filters } = options.filters;
+  return queryOptions({
+    queryKey: [
+      rootKey(options),
+      SEGMENT,
+      "list",
+      sortObjectKeys(options.pagination),
+      sortObjectKeys(filters),
+    ],
+    queryFn: () => fetchAgreementsListFn(options),
+    enabled: isEnabled(options) && enabled,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function fetchAgreementsListFn(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["agreement"]["getList"]>[0]["query"],
+      "currentDate" | "clientId" | "userId" | "page" | "pageSize"
+    > & {
+      currentDate: Date;
+    };
+  } & Pagination &
+    Auth
+) {
+  const { currentDate, ...filters } = options.filters;
+
+  return apiClient.agreement.getList({
+    query: {
+      clientId: options.auth.clientId,
+      userId: options.auth.userId,
+      page: options.pagination.page || 1,
+      pageSize: options.pagination.pageSize || 10,
+      currentDate: currentDate.toISOString(),
+      ...filters,
+    },
   });
 }
 

@@ -22,7 +22,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
@@ -33,7 +32,10 @@ import type { TAgreementListItemParsed } from "@/schemas/agreement";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
+import {
+  fetchAgreementsListOptions,
+  fetchAgreementStatusesOptions,
+} from "@/utils/query/agreement";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -75,11 +77,19 @@ function AgreementsSearchPage() {
     [pageNumber, size]
   );
 
-  const agreementsData = useGetAgreementsList({
-    page: pageNumber,
-    pageSize: size,
-    filters: searchFilters,
-  });
+  const agreementsData = useQuery(
+    fetchAgreementsListOptions({
+      auth: authParams,
+      pagination: {
+        page: pageNumber,
+        pageSize: size,
+      },
+      filters: {
+        ...searchFilters,
+        currentDate: new Date(),
+      },
+    })
+  );
 
   const agreementStatusList = useQuery(
     fetchAgreementStatusesOptions({ auth: authParams })

@@ -28,24 +28,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
 import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import {
-  normalizeAgreementListSearchParams,
   normalizeCustomerListSearchParams,
   normalizeReservationListSearchParams,
   normalizeVehicleListSearchParams,
 } from "@/utils/normalize-search-params";
+import { customerQKeys, fleetQKeys, reservationQKeys } from "@/utils/query-key";
 import {
-  agreementQKeys,
-  customerQKeys,
-  fleetQKeys,
-  reservationQKeys,
-} from "@/utils/query-key";
+  fetchAgreementsListFn,
+  fetchAgreementsListOptions,
+} from "@/utils/query/agreement";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickLookupWidget = () => {
@@ -149,36 +146,25 @@ export function QuickLookupForm() {
   });
 
   const agreements = useMutation({
-    mutationFn: fetchAgreementsListModded,
+    mutationFn: fetchAgreementsListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
 
+      const searchQueryKey = fetchAgreementsListOptions(variables).queryKey;
+      qc.setQueryData(searchQueryKey, () => data);
+
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
-
-        const normalized = normalizeAgreementListSearchParams({
-          page: variables.page,
-          size: variables.pageSize,
-          filters: { AgreementNumber: variables.AgreementNumber },
-        });
-        const qk = agreementQKeys.search({
-          pagination: {
-            page: variables.page,
-            pageSize: variables.pageSize,
-          },
-          filters: normalized.searchFilters,
-        });
-        qc.setQueryData(qk, () => data);
 
         navigate({
           to: "/agreements",
           search: () => ({
-            page: variables.page,
-            pageSize: variables.pageSize,
-            filters: normalized.searchFilters,
+            page: variables.pagination.page,
+            pageSize: variables.pagination.pageSize,
+            filters: variables.filters,
           }),
         });
         return;
@@ -325,12 +311,18 @@ export function QuickLookupForm() {
               break;
             case "agreementNo":
               agreements.mutate({
-                clientId,
-                userId,
-                page: 1,
-                pageSize: defaultRowCount,
-                currentDate: new Date(),
-                AgreementNumber: searchValue,
+                auth: {
+                  clientId,
+                  userId,
+                },
+                pagination: {
+                  page: 1,
+                  pageSize: defaultRowCount,
+                },
+                filters: {
+                  currentDate: new Date(),
+                  AgreementNumber: searchValue,
+                },
               });
               break;
             case "reservationNo":

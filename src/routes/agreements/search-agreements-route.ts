@@ -1,14 +1,15 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
-
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
 import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
-import { agreementQKeys } from "@/utils/query-key";
-import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
+import {
+  fetchAgreementsListOptions,
+  fetchAgreementsSearchColumnsOptions,
+} from "@/utils/query/agreement";
+import { sortObjectKeys } from "@/utils/sort";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { agreementsRoute } from ".";
@@ -42,54 +43,44 @@ export const searchAgreementsRoute = new Route({
   ],
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
+    const parsedSearch = normalizeAgreementListSearchParams(search);
+
     return {
       authParams: auth,
       searchColumnsOptions: fetchAgreementsSearchColumnsOptions({
         auth,
       }),
-      search: normalizeAgreementListSearchParams(search),
+      searchListOptions: fetchAgreementsListOptions({
+        auth,
+        pagination: {
+          page: parsedSearch.pageNumber,
+          pageSize: parsedSearch.size,
+        },
+        filters: {
+          ...parsedSearch.searchFilters,
+          currentDate: new Date(),
+        },
+      }),
+      search: parsedSearch,
     };
   },
   loaderDeps: ({ search }) => ({
     page: search.page,
     size: search.size,
-    filters: search.filters,
+    filters: sortObjectKeys(search.filters),
   }),
   loader: async ({ context }) => {
-    const { queryClient, search, searchColumnsOptions } = context;
+    const { queryClient, searchColumnsOptions, searchListOptions } = context;
 
-    const auth = getAuthToken();
+    const promises = [];
 
-    const { searchFilters, pageNumber, size: pageSize } = search;
+    // get columns
+    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
 
-    if (auth) {
-      const promises = [];
+    // get list
+    promises.push(queryClient.ensureQueryData(searchListOptions));
 
-      // get columns
-      promises.push(queryClient.ensureQueryData(searchColumnsOptions));
-
-      // get list
-      const searchKey = agreementQKeys.search({
-        pagination: { page: pageNumber, pageSize: pageSize },
-        filters: searchFilters,
-      });
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: searchKey,
-          queryFn: () =>
-            fetchAgreementsListModded({
-              page: pageNumber,
-              pageSize: pageSize,
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              currentDate: new Date(),
-              ...searchFilters,
-            }),
-        })
-      );
-
-      await Promise.all(promises);
-    }
+    await Promise.all(promises);
     return;
   },
   component: lazyRouteComponent(() => import("@/pages/search-agreements")),

@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
+import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,12 +20,13 @@ import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
 import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
 import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { fetchAgreementsListOptions } from "@/utils/query/agreement";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
 
@@ -32,6 +35,8 @@ import { cn, IsMacLike } from "@/utils";
 export const CommandMenu = () => {
   const router = useRouter();
   const navigate = router.navigate;
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
   const [text, setText] = React.useState("");
 
@@ -124,15 +129,21 @@ export const CommandMenu = () => {
   });
 
   // agreements
-  const agreementsQuery = useGetAgreementsList({
-    page: 1,
-    pageSize: 50,
-    filters: {
-      Keyword: searchTerm,
-      Statuses: ["2", "5", "7"],
-    },
-    enabled: showCommandMenu,
-  });
+  const agreementsQuery = useQuery(
+    fetchAgreementsListOptions({
+      auth: authParams,
+      pagination: {
+        page: 1,
+        pageSize: 50,
+      },
+      filters: {
+        currentDate: new Date(),
+        Keyword: searchTerm,
+        Statuses: ["2", "5", "7"],
+      },
+      enabled: showCommandMenu,
+    })
+  );
   const agreementsList =
     agreementsQuery.data?.status === 200 ? agreementsQuery.data?.body : [];
   const agreements: GlobalSearchReturnType = agreementsList.map((agreement) => {

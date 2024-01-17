@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -10,8 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
-
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
@@ -20,7 +18,10 @@ import {
   sortColumnsByOrderIndex,
 } from "@/utils/columns";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
-import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
+import {
+  fetchAgreementsListOptions,
+  fetchAgreementsSearchColumnsOptions,
+} from "@/utils/query/agreement";
 
 interface FleetOccupiedAgreementsTabProps {
   vehicleId: string;
@@ -58,11 +59,19 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
     fetchAgreementsSearchColumnsOptions({ auth: authParams })
   );
 
-  const dataList = useGetAgreementsList({
-    page: items.pageNumber,
-    pageSize: items.size,
-    filters: items.searchFilters,
-  });
+  const dataList = useQuery(
+    fetchAgreementsListOptions({
+      auth: authParams,
+      pagination: {
+        page: items.pageNumber,
+        pageSize: items.size,
+      },
+      filters: {
+        ...items.searchFilters,
+        currentDate: new Date(),
+      },
+    })
+  );
 
   const columnDefs = useMemo(() => {
     const columns: ColumnDef<TAgreementListItemParsed>[] = [];
