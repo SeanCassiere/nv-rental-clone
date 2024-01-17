@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -24,19 +25,18 @@ import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreements
 import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
-
-import { type TAgreementListItemParsed } from "@/schemas/agreement";
+import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
+
+const routeApi = new RouteApi({ id: "/agreements/" });
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -45,8 +45,8 @@ function AgreementsSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeCtx = useRouteContext({ from: searchAgreementsRoute.id });
-  const { searchFilters, pageNumber, size } = routeCtx.search;
+  const { searchColumnsOptions, search } = routeApi.useRouteContext();
+  const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -93,7 +93,7 @@ function AgreementsSearchPage() {
   const agreementTypesList = useGetAgreementTypesList();
   const agreementTypes = agreementTypesList.data ?? [];
 
-  const columnsData = useGetModuleColumns({ module: "agreements" });
+  const columnsData = useSuspenseQuery(searchColumnsOptions);
 
   const columnDefs = useMemo(
     () =>

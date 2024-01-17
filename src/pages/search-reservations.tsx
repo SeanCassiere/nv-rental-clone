@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -21,14 +22,11 @@ import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
 import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
-
-import { searchReservationsRoute } from "@/routes/reservations/search-reservations-route";
 
 import { type TReservationListItemParsed } from "@/schemas/reservation";
 
@@ -38,6 +36,8 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
+const routeApi = new RouteApi({ id: "/reservations/" });
+
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
 function ReservationsSearchPage() {
@@ -45,8 +45,8 @@ function ReservationsSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeCtx = useRouteContext({ from: searchReservationsRoute.id });
-  const { searchFilters, pageNumber, size } = routeCtx.search;
+  const { searchColumnsOptions, search } = routeApi.useRouteContext();
+  const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -93,8 +93,7 @@ function ReservationsSearchPage() {
   const reservationTypesList = useGetReservationTypesList();
   const reservationTypes = reservationTypesList.data ?? [];
 
-  const columnsData = useGetModuleColumns({ module: "reservations" });
-
+  const columnsData = useSuspenseQuery(searchColumnsOptions);
   const columnDefs = useMemo(
     () =>
       (columnsData.data.status === 200 ? columnsData.data.body : [])

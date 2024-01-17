@@ -24,7 +24,7 @@ import { setLocalStorageForUser } from "@/utils/user-local-storage";
 import type { apiClient } from "@/api";
 import { queryClient } from "@/tanstack-query-config";
 
-interface MyRouterContext {
+export interface MyRouterContext {
   apiClient: typeof apiClient;
   queryClient: typeof queryClient;
   auth: AuthContextProps;

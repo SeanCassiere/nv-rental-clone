@@ -22,7 +22,6 @@ function isEnabled({ auth }: Auth) {
 export const agreementQKeys = {
   // search
   rootKey: "agreements",
-  columns: () => [agreementQKeys.rootKey, "columns"],
   search: (opts: { pagination: Pagination; filters: Filters }) => [
     agreementQKeys.rootKey,
     "list",
@@ -91,7 +90,6 @@ export const agreementQKeys = {
 export const reservationQKeys = {
   // search
   rootKey: "reservations",
-  columns: () => [reservationQKeys.rootKey, "columns"],
   search: (opts: { pagination: Pagination; filters: Filters }) => [
     reservationQKeys.rootKey,
     "list",
@@ -133,7 +131,6 @@ export const reservationQKeys = {
 export const customerQKeys = {
   // search
   rootKey: "customers",
-  columns: () => [customerQKeys.rootKey, "columns"],
   search: (opts: { pagination: Pagination; filters: Filters }) => [
     customerQKeys.rootKey,
     "list",
@@ -170,7 +167,6 @@ export const customerQKeys = {
 export const fleetQKeys = {
   // search
   rootKey: "fleet",
-  columns: () => [fleetQKeys.rootKey, "columns"],
   search: (opts: { pagination: Pagination; filters: Filters }) => [
     fleetQKeys.rootKey,
     "list",

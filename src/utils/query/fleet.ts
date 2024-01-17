@@ -6,20 +6,20 @@ import { apiClient } from "@/api";
 
 import { isEnabled, rootKey, type Auth } from "./helpers";
 
-export function fetchAgreementsSearchColumnsOptions(options: Auth) {
+export function fetchFleetSearchColumnsOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), "agreements", "columns"],
+    queryKey: [rootKey(options), "fleet", "columns"],
     queryFn: () =>
       apiClient.client
         .getColumnHeaderInfo({
           query: {
             clientId: options.auth.clientId,
             userId: options.auth.userId,
-            module: "agreement",
+            module: "vehicle",
           },
         })
         .then((data) =>
-          mutateColumnAccessors("agreement", {
+          mutateColumnAccessors("vehicle", {
             ...data,
             body: data.status === 200 ? data.body : [],
           })

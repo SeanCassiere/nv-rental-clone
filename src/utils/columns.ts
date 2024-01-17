@@ -465,3 +465,10 @@ function sortColumnsByColumnSettingId(
 ) {
   return column1.columnHeaderSettingID - column2.columnHeaderSettingID;
 }
+
+export function sortColumnsByOrderIndex(
+  col1: TColumnHeaderItem,
+  col2: TColumnHeaderItem
+) {
+  return col1.orderIndex - col2.orderIndex;
+}

@@ -1,11 +1,10 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { fetchAgreementsListModded } from "@/hooks/network/agreement/useGetAgreementsList";
-import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
-import { getAuthToken } from "@/utils/auth";
+import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import { agreementQKeys } from "@/utils/query-key";
@@ -41,9 +40,13 @@ export const searchAgreementsRoute = new Route({
       };
     },
   ],
-  beforeLoad: ({ context: { auth }, search }) => {
+  beforeLoad: ({ context, search }) => {
+    const auth = getAuthFromRouterContext(context);
     return {
-      agreementSearchColumnOptions: fetchAgreementsSearchColumnsOptions(),
+      authParams: auth,
+      searchColumnsOptions: fetchAgreementsSearchColumnsOptions({
+        auth,
+      }),
       search: normalizeAgreementListSearchParams(search),
     };
   },
@@ -52,7 +55,9 @@ export const searchAgreementsRoute = new Route({
     size: search.size,
     filters: search.filters,
   }),
-  loader: async ({ context: { queryClient, search } }) => {
+  loader: async ({ context }) => {
+    const { queryClient, search, searchColumnsOptions } = context;
+
     const auth = getAuthToken();
 
     const { searchFilters, pageNumber, size: pageSize } = search;
@@ -61,20 +66,7 @@ export const searchAgreementsRoute = new Route({
       const promises = [];
 
       // get columns
-      const columnsKey = agreementQKeys.columns();
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: columnsKey,
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                module: "agreement",
-              },
-            }),
-        })
-      );
+      promises.push(queryClient.ensureQueryData(searchColumnsOptions));
 
       // get list
       const searchKey = agreementQKeys.search({

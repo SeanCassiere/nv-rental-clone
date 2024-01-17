@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import type { MyRouterContext } from "@/routes/__root";
+
 import { OIDC_AUTHORITY, OIDC_CLIENT_ID } from "./constants";
 
 const OidcWebStorageSchema = z.object({
@@ -35,4 +37,27 @@ export function getAuthToken() {
 
     return null;
   }
+}
+
+export function getAuthFromAuthHook(auth: MyRouterContext["auth"]) {
+  let clientId = "";
+  let userId = "";
+  let accessToken = "";
+
+  if (
+    auth.user &&
+    auth.user.profile.navotar_clientid &&
+    auth.user.profile.navotar_userid &&
+    auth.user.access_token
+  ) {
+    clientId = auth.user.profile.navotar_clientid;
+    userId = auth.user.profile.navotar_userid;
+    accessToken = auth.user.access_token;
+  }
+
+  return { clientId, userId, accessToken };
+}
+
+export function getAuthFromRouterContext(context: MyRouterContext) {
+  return getAuthFromAuthHook(context.auth);
 }
