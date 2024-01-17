@@ -1,6 +1,10 @@
-import { useGetClientScreenSettings } from "@/hooks/network/client/useGetClientScreenSettings";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "react-oidc-context";
 
 import type { TClientScreenSetting } from "@/schemas/client";
+
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchScreenSettingsForClientOptions } from "@/utils/query/client";
 
 type ListOfSettings = TClientScreenSetting[];
 type SingleScreenSetting = TClientScreenSetting | null;
@@ -25,7 +29,12 @@ function useScreenSetting(
   sectionName?: string,
   fieldName?: string
 ): ListOfSettings | SingleScreenSetting {
-  const settingsQuery = useGetClientScreenSettings();
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
+  const settingsQuery = useQuery(
+    fetchScreenSettingsForClientOptions({ auth: authParams })
+  );
 
   if (settingsQuery.status !== "success") {
     if (screenName && sectionName && fieldName) {

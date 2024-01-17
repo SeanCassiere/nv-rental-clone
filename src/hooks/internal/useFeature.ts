@@ -1,4 +1,8 @@
-import { useGetClientFeatures } from "@/hooks/network/client/useGetClientFeatures";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "react-oidc-context";
+
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchFeaturesForClientOptions } from "@/utils/query/client";
 
 type FeatureValue = string | null;
 type IsFeaturePresent = boolean;
@@ -7,7 +11,12 @@ export function useFeature(
   featureName: string,
   defaultValue: string | null = null
 ): [FeatureValue, IsFeaturePresent] {
-  const features = useGetClientFeatures();
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
+  const features = useQuery(
+    fetchFeaturesForClientOptions({ auth: authParams })
+  );
 
   if (features.status !== "success") {
     return [defaultValue, false];

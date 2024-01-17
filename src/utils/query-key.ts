@@ -87,13 +87,6 @@ export const fleetQKeys = {
   summary: (id: ReferenceId) => [fleetQKeys.viewKey, id, "summary"],
 };
 
-export const clientQKeys = {
-  rootKey: "client",
-  profile: () => [clientQKeys.rootKey, "profile"],
-  features: () => [clientQKeys.rootKey, "features"],
-  screenSettings: () => [clientQKeys.rootKey, "screen-settings"],
-};
-
 export const userQKeys = {
   rootKey: "users",
   me: (opts: Auth) => {
