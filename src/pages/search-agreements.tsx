@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -9,6 +9,7 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import {
   PrimaryModuleTable,
@@ -22,7 +23,6 @@ import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
-import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
 import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
@@ -30,8 +30,10 @@ import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGe
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -42,8 +44,9 @@ const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
   const { searchColumnsOptions, search } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
@@ -78,7 +81,9 @@ function AgreementsSearchPage() {
     filters: searchFilters,
   });
 
-  const agreementStatusList = useGetAgreementStatusList();
+  const agreementStatusList = useQuery(
+    fetchAgreementStatusesOptions({ auth: authParams })
+  );
   const agreementStatuses = agreementStatusList.data ?? [];
 
   const vehicleTypesList = useGetVehicleTypesLookupList();
