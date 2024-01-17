@@ -23,7 +23,6 @@ import {
   CalculateRentalSummaryHookInput,
   usePostCalculateRentalSummaryAmounts,
 } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
@@ -34,6 +33,7 @@ import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { cn } from "@/utils";
@@ -787,18 +787,23 @@ const AddRentalParentForm = ({
   // fetch taxes for the rental
   const taxesAgreementReady = Boolean(agreementRentalInformation);
   const taxesReservationReady = false;
-  const getTaxesQuery = useGetTaxes({
-    filters: {
-      LocationId:
-        module === "agreement"
-          ? Number(agreementRentalInformation?.checkoutLocation ?? 0).toString()
-          : "0",
-      AgreementId:
-        module === "agreement" && isEdit ? String(referenceId) : undefined,
-    },
-    enabled:
-      module === "agreement" ? taxesAgreementReady : taxesReservationReady,
-  });
+  const getTaxesQuery = useQuery(
+    fetchTaxesListOptions({
+      auth: authParams,
+      enabled:
+        module === "agreement" ? taxesAgreementReady : taxesReservationReady,
+      filters: {
+        LocationId:
+          module === "agreement"
+            ? Number(
+                agreementRentalInformation?.checkoutLocation ?? 0
+              ).toString()
+            : "0",
+        AgreementId:
+          module === "agreement" && isEdit ? String(referenceId) : undefined,
+      },
+    })
+  );
 
   useEffect(() => {
     if (getTaxesQuery.status !== "success") return;

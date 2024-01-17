@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import { InputCheckbox } from "@/components/ui/input-checkbox";
 
-import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchTaxesListOptions } from "@/utils/query/tax";
 
 import type { TaxesAndPaymentsTabProps } from ".";
 
@@ -20,20 +23,24 @@ interface TaxesStageProps {
 
 export const TaxesStage = (props: TaxesStageProps) => {
   const { durationStageData, taxes, onSelectedTaxes, onCompleted } = props;
-
   const { t } = useTranslation();
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
   const isSupportingInfoAvailable = Boolean(durationStageData);
 
   const [selectedTaxes, setSelectedTaxes] =
     useState<TaxesStageProps["taxes"]>(taxes);
 
-  const taxesData = useGetTaxes({
-    filters: {
-      LocationId: Number(durationStageData?.checkoutLocation ?? 0).toString(),
-    },
-    enabled: isSupportingInfoAvailable,
-  });
+  const taxesData = useQuery(
+    fetchTaxesListOptions({
+      auth: authParams,
+      enabled: isSupportingInfoAvailable,
+      filters: {
+        LocationId: Number(durationStageData?.checkoutLocation ?? 0).toString(),
+      },
+    })
+  );
 
   const loadedTaxes = taxesData.data?.status === 200 ? taxesData.data.body : [];
 
