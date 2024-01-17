@@ -1,7 +1,7 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 import { fleetQKeys } from "@/utils/query-key";
 

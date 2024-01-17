@@ -34,7 +34,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { RoleListItem } from "@/schemas/role";
 
-import { roleQKeys } from "@/utils/query-key";
+import { fetchRolesListOptions } from "@/utils/query/role";
 
 import { cn } from "@/utils";
 
@@ -142,7 +142,9 @@ function SystemRolesList({
     clientId,
     userId,
   };
-  const rolesQuery = useSuspenseQuery(roleQKeys.all({ auth: authParams }));
+  const rolesQuery = useSuspenseQuery(
+    fetchRolesListOptions({ auth: authParams })
+  );
 
   const roles = React.useMemo(
     () =>

@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { add, differenceInMinutes, isBefore, isEqual } from "date-fns";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -26,9 +28,13 @@ import {
 } from "@/components/ui/input-select";
 
 import { useDatePreference } from "@/hooks/internal/useDatePreferences";
-import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
-import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
+
+import { getAuthFromAuthHook } from "@/utils/auth";
+import {
+  fetchAgreementTypesOptions,
+  fetchGenerateAgreementNumberOptions,
+} from "@/utils/query/agreement";
 
 import i18n from "@/i18next-config";
 
@@ -93,6 +99,8 @@ export const DurationStage = ({
 }: DurationStageProps) => {
   const { t } = useTranslation();
   const { dateTimeFormat, timeFormat } = useDatePreference();
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
   const values = {
     agreementNumber: initialData?.agreementNumber ?? "",
@@ -115,14 +123,21 @@ export const DurationStage = ({
   const locationsList =
     locationData.data?.status === 200 ? locationData.data.body : [];
 
-  const agreementTypeData = useGetAgreementTypesList();
+  const agreementTypeData = useQuery(
+    fetchAgreementTypesOptions({
+      auth: authParams,
+    })
+  );
   const agreementTypesList = agreementTypeData.data ?? [];
 
   const currentAgreementType = form.watch("agreementType");
-  const agreementNumberQuery = useGetNewAgreementNumber({
-    agreementType: currentAgreementType,
-    enabled: isEdit === false,
-  });
+  const agreementNumberQuery = useQuery(
+    fetchGenerateAgreementNumberOptions({
+      auth: authParams,
+      agreementType: currentAgreementType,
+      enabled: isEdit === false,
+    })
+  );
 
   const form_checkoutDate = form.watch("checkoutDate");
   const form_checkinDate = form.watch("checkinDate");

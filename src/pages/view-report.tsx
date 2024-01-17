@@ -1,6 +1,6 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "@tanstack/react-router";
+import { RouteApi, useParams } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
@@ -11,7 +11,7 @@ import { ReportContextProvider } from "@/hooks/context/view-report";
 
 import { viewReportByIdRoute } from "@/routes/reports/report-id-route";
 
-import { reportQKeys } from "@/utils/query-key";
+const routeApi = new RouteApi({ id: "/reports/$reportId/" });
 
 const ViewReportPage = () => {
   const auth = useAuth();
@@ -61,9 +61,9 @@ const FetchReportLayer = ({
   userId: string;
   reportId: string;
 }) => {
-  const query = useSuspenseQuery(
-    reportQKeys.getDetailsById({ reportId, auth: { clientId, userId } })
-  );
+  const { searchReportByIdOptions } = routeApi.useRouteContext();
+
+  const query = useSuspenseQuery(searchReportByIdOptions);
 
   return (
     <>

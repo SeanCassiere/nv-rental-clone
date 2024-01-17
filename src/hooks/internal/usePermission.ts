@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { userQKeys } from "@/utils/query-key";
+import { fetchPermissionsByUserIdOptions } from "@/utils/query/user";
 
 export function usePermission(
   permission: string,
@@ -13,7 +13,12 @@ export function usePermission(
   const userId = auth.user?.profile.navotar_userid || "";
   const authParams = { clientId, userId };
 
-  const permissions = useQuery(userQKeys.permissions({ auth: authParams }));
+  const permissions = useQuery(
+    fetchPermissionsByUserIdOptions({
+      auth: authParams,
+      userId: authParams.userId,
+    })
+  );
 
   if (permissions.status !== "success") {
     return defaultValue;

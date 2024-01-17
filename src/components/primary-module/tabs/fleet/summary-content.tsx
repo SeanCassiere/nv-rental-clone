@@ -1,19 +1,26 @@
 import { useMemo, useState, type ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "react-oidc-context";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
 import FleetInformation from "@/components/primary-module/information-block/fleet-information";
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
 import { useGetVehicleSummary } from "@/hooks/network/vehicle/useGetVehicleSummary";
+
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 
 type FleetSummaryTabProps = {
   vehicleId: string;
 };
 
 const FleetSummaryTab = (props: FleetSummaryTabProps) => {
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
   const vehicleData = useGetVehicleData({
     vehicleId: props.vehicleId,
   });
@@ -24,9 +31,12 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   const summaryData =
     vehicleSummary.data?.status === 200 ? vehicleSummary.data.body : undefined;
 
-  const agreementData = useGetAgreementData({
-    agreementId: summaryData?.currentAgreement || "0",
-  });
+  const agreementData = useQuery(
+    fetchAgreementByIdOptions({
+      auth: authParams,
+      agreementId: summaryData?.currentAgreement || "0",
+    })
+  );
   const agreement =
     agreementData.data?.status === 200 ? agreementData.data.body : null;
 

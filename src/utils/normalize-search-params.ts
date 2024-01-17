@@ -3,7 +3,7 @@ import { type TCustomerSearchQuery } from "@/schemas/customer";
 import { type TReservationSearchQuery } from "@/schemas/reservation";
 import { type TVehicleSearchQuery } from "@/schemas/vehicle";
 
-import { getAuthToken } from "./authLocal";
+import { getAuthToken } from "./auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "./constants";
 import { getLocalStorageForUser } from "./user-local-storage";
 

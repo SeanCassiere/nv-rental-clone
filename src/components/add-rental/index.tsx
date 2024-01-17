@@ -5,8 +5,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { parseISO } from "date-fns";
+import { useAuth } from "react-oidc-context";
 
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Button } from "@/components/ui/button";
@@ -14,7 +16,6 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
 import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
@@ -22,7 +23,6 @@ import {
   CalculateRentalSummaryHookInput,
   usePostCalculateRentalSummaryAmounts,
 } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-import { useGetTaxes } from "@/hooks/network/taxes/useGetTaxes";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
@@ -30,7 +30,10 @@ import { type RentalRateParsed } from "@/schemas/rate";
 import { type ReservationDataParsed } from "@/schemas/reservation";
 import { type TRentalRatesSummarySchema } from "@/schemas/summary";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { cn } from "@/utils";
@@ -125,6 +128,9 @@ const AddRentalParentForm = ({
   isCheckin = false,
 }: TAddRentalParentFormProps) => {
   const isEdit = Boolean(referenceId);
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
   const [hasEdited, setHasEdited] = useState(false);
 
   const [creationStagesComplete, setCreationStageComplete] = useState(() =>
@@ -412,10 +418,13 @@ const AddRentalParentForm = ({
   ]);
 
   // fetching existing agreement data and set it to state
-  const getAgreementQuery = useGetAgreementData({
-    agreementId:
-      module === "agreement" && isEdit && referenceId ? referenceId : 0,
-  });
+  const getAgreementQuery = useQuery(
+    fetchAgreementByIdOptions({
+      auth: authParams,
+      agreementId:
+        module === "agreement" && isEdit && referenceId ? referenceId : 0,
+    })
+  );
 
   useEffect(() => {
     if (getAgreementQuery.status !== "success" || !getAgreementQuery.data)
@@ -778,18 +787,23 @@ const AddRentalParentForm = ({
   // fetch taxes for the rental
   const taxesAgreementReady = Boolean(agreementRentalInformation);
   const taxesReservationReady = false;
-  const getTaxesQuery = useGetTaxes({
-    filters: {
-      LocationId:
-        module === "agreement"
-          ? Number(agreementRentalInformation?.checkoutLocation ?? 0).toString()
-          : "0",
-      AgreementId:
-        module === "agreement" && isEdit ? String(referenceId) : undefined,
-    },
-    enabled:
-      module === "agreement" ? taxesAgreementReady : taxesReservationReady,
-  });
+  const getTaxesQuery = useQuery(
+    fetchTaxesListOptions({
+      auth: authParams,
+      enabled:
+        module === "agreement" ? taxesAgreementReady : taxesReservationReady,
+      filters: {
+        LocationId:
+          module === "agreement"
+            ? Number(
+                agreementRentalInformation?.checkoutLocation ?? 0
+              ).toString()
+            : "0",
+        AgreementId:
+          module === "agreement" && isEdit ? String(referenceId) : undefined,
+      },
+    })
+  );
 
   useEffect(() => {
     if (getTaxesQuery.status !== "success") return;

@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -8,6 +9,7 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import {
   PrimaryModuleTable,
@@ -20,33 +22,36 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
-import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
-import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { searchAgreementsRoute } from "@/routes/agreements/search-agreements-route";
+import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
-import { type TAgreementListItemParsed } from "@/schemas/agreement";
-
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import {
+  fetchAgreementsListOptions,
+  fetchAgreementStatusesOptions,
+  fetchAgreementTypesOptions,
+} from "@/utils/query/agreement";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
+
+const routeApi = new RouteApi({ id: "/agreements/" });
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
-  const routeCtx = useRouteContext({ from: searchAgreementsRoute.id });
-  const { searchFilters, pageNumber, size } = routeCtx.search;
+  const { searchColumnsOptions, search } = routeApi.useRouteContext();
+  const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -72,13 +77,23 @@ function AgreementsSearchPage() {
     [pageNumber, size]
   );
 
-  const agreementsData = useGetAgreementsList({
-    page: pageNumber,
-    pageSize: size,
-    filters: searchFilters,
-  });
+  const agreementsData = useQuery(
+    fetchAgreementsListOptions({
+      auth: authParams,
+      pagination: {
+        page: pageNumber,
+        pageSize: size,
+      },
+      filters: {
+        ...searchFilters,
+        currentDate: new Date(),
+      },
+    })
+  );
 
-  const agreementStatusList = useGetAgreementStatusList();
+  const agreementStatusList = useQuery(
+    fetchAgreementStatusesOptions({ auth: authParams })
+  );
   const agreementStatuses = agreementStatusList.data ?? [];
 
   const vehicleTypesList = useGetVehicleTypesLookupList();
@@ -90,10 +105,12 @@ function AgreementsSearchPage() {
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 
-  const agreementTypesList = useGetAgreementTypesList();
+  const agreementTypesList = useQuery(
+    fetchAgreementTypesOptions({ auth: authParams })
+  );
   const agreementTypes = agreementTypesList.data ?? [];
 
-  const columnsData = useGetModuleColumns({ module: "agreements" });
+  const columnsData = useSuspenseQuery(searchColumnsOptions);
 
   const columnDefs = useMemo(
     () =>

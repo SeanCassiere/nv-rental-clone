@@ -1,14 +1,14 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
-import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { customerQKeys } from "@/utils/query-key";
+import { fetchCustomersSearchColumnsOptions } from "@/utils/query/customer";
 
 import { customersRoute } from ".";
 
@@ -23,15 +23,22 @@ export const searchCustomersRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  beforeLoad: ({ search }) => ({
-    search: normalizeCustomerListSearchParams(search),
-  }),
+  beforeLoad: ({ context, search }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      searchColumnsOptions: fetchCustomersSearchColumnsOptions({ auth }),
+      search: normalizeCustomerListSearchParams(search),
+    };
+  },
   loaderDeps: ({ search }) => ({
     page: search.page,
     size: search.size,
     filters: search.filters,
   }),
-  loader: async ({ context: { queryClient, search } }) => {
+  loader: async ({ context }) => {
+    const { queryClient, searchColumnsOptions, search } = context;
+
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } = search;
@@ -40,20 +47,7 @@ export const searchCustomersRoute = new Route({
       const promises = [];
 
       // get columns
-      const columnsKey = customerQKeys.columns();
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: columnsKey,
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                module: "customer",
-              },
-            }),
-        })
-      );
+      promises.push(queryClient.ensureQueryData(searchColumnsOptions));
 
       // get search
       const searchKey = customerQKeys.search({

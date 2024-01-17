@@ -1,4 +1,6 @@
-import { useGetAgreementStatusList } from "@/hooks/network/agreement/useGetAgreementStatusList";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "react-oidc-context";
+
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
@@ -6,6 +8,8 @@ import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleSt
 
 import { TReportDetail } from "@/schemas/report";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
 import type { ReportFilterOption } from "@/types/report";
 
 type CriteriaList = TReportDetail["searchCriteria"];
@@ -15,6 +19,9 @@ function confirmRequirement(criteria: CriteriaList, lookup: string) {
 }
 
 export function useReportLookupLists(report: TReportDetail) {
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
   // 1. BEGIN - lookup for locations
   const findLocations = confirmRequirement(report.searchCriteria, "LocationId");
   const locationsQuery = useGetLocationsList({
@@ -34,9 +41,12 @@ export function useReportLookupLists(report: TReportDetail) {
     report.searchCriteria,
     "AgreementStatus"
   );
-  const agreementStatusesQuery = useGetAgreementStatusList({
-    enabled: findAgreementStatuses,
-  });
+  const agreementStatusesQuery = useQuery(
+    fetchAgreementStatusesOptions({
+      auth: authParams,
+      enabled: findAgreementStatuses,
+    })
+  );
   const agreementStatusesList = agreementStatusesQuery.data ?? [];
   const agreementStatusOptions: ReportFilterOption[] =
     agreementStatusesList.map((status) => ({

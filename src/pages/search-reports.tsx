@@ -1,6 +1,6 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, RouteApi, useNavigate, useSearch } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
@@ -15,10 +15,11 @@ import { searchReportsRoute } from "@/routes/reports/search-reports-route";
 
 import type { TReportsListItem } from "@/schemas/report";
 
-import { reportQKeys } from "@/utils/query-key";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
+
+const routeApi = new RouteApi({ id: "/reports/" });
 
 export default function SearchReportsPage() {
   const auth = useAuth();
@@ -49,12 +50,7 @@ export default function SearchReportsPage() {
 
       <React.Suspense fallback={<Skeleton className="h-24" />}>
         {clientId && userId && (
-          <ReportsList
-            clientId={clientId}
-            userId={userId}
-            currentCategory={category}
-            ALL_KEY={ALL_KEY}
-          />
+          <ReportsList currentCategory={category} ALL_KEY={ALL_KEY} />
         )}
       </React.Suspense>
     </ProtectorShield>
@@ -75,21 +71,16 @@ function tenantReportFilterFn(report: TReportsListItem) {
 }
 
 function ReportsList({
-  clientId,
-  userId,
   ALL_KEY,
   currentCategory,
 }: {
-  clientId: string;
-  userId: string;
   currentCategory: string;
   ALL_KEY: string;
 }) {
   const navigate = useNavigate();
 
-  const query = useSuspenseQuery(
-    reportQKeys.getReports({ auth: { clientId, userId } })
-  );
+  const { searchListOptions } = routeApi.useRouteContext();
+  const query = useSuspenseQuery(searchListOptions);
 
   const reports = query.data?.status === 200 ? query.data.body : [];
   const tenantFiltered = reports.filter(tenantReportFilterFn);

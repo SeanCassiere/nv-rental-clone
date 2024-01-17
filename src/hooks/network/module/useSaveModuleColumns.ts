@@ -4,11 +4,26 @@ import { useAuth } from "react-oidc-context";
 import type { TColumnHeaderItem } from "@/schemas/client/column";
 
 import { getModuleApiName } from "@/utils/columns";
+import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
+import { fetchCustomersSearchColumnsOptions } from "@/utils/query/customer";
+import { fetchFleetSearchColumnsOptions } from "@/utils/query/fleet";
+import { fetchReservationsSearchColumnsOptions } from "@/utils/query/reservation";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 import { apiClient } from "@/api";
 
-import { allModulesKeySelector } from "./useGetModuleColumns";
+const allModulesKeySelector = (module: AppPrimaryModuleType) => {
+  switch (module) {
+    case "reservations":
+      return fetchReservationsSearchColumnsOptions;
+    case "agreements":
+      return fetchAgreementsSearchColumnsOptions;
+    case "customers":
+      return fetchCustomersSearchColumnsOptions;
+    case "vehicles":
+      return fetchFleetSearchColumnsOptions;
+  }
+};
 
 export function useSaveModuleColumns({
   module,
@@ -76,7 +91,12 @@ export function useSaveModuleColumns({
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: allModulesKeySelector(module).columns(),
+        queryKey: allModulesKeySelector(module)({
+          auth: {
+            clientId: auth.user?.profile.navotar_clientid || "",
+            userId: auth.user?.profile.navotar_userid || "",
+          },
+        }).queryKey,
       });
     },
   });

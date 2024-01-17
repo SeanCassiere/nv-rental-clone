@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -20,10 +21,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
 import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomerTypes";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-
-import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
@@ -31,6 +29,8 @@ import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
+
+const routeApi = new RouteApi({ id: "/customers/" });
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
@@ -41,8 +41,8 @@ function CustomerSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeCtx = useRouteContext({ from: searchCustomersRoute.id });
-  const { searchFilters, pageNumber, size } = routeCtx.search;
+  const { search, searchColumnsOptions } = routeApi.useRouteContext();
+  const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -76,7 +76,7 @@ function CustomerSearchPage() {
   const customerTypesList = useGetCustomerTypesList();
   const customerTypes = customerTypesList.data ?? [];
 
-  const columnsData = useGetModuleColumns({ module: "customers" });
+  const columnsData = useSuspenseQuery(searchColumnsOptions);
 
   const columnDefs = useMemo(
     () =>

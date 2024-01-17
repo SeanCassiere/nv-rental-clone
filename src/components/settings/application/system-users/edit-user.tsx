@@ -51,7 +51,9 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { roleQKeys, userQKeys } from "@/utils/query-key";
+import { userQKeys } from "@/utils/query-key";
+import { fetchRolesListOptions } from "@/utils/query/role";
+import { fetchLanguagesForUsersOptions } from "@/utils/query/user";
 
 import { apiClient } from "@/api";
 import { cn } from "@/utils";
@@ -121,9 +123,11 @@ export function EditUserDialog({
     enabled: props.mode === "edit" && props.intendedUserId !== "" && open,
   });
 
-  const rolesQuery = useQuery(roleQKeys.all({ auth: authParams }));
+  const rolesQuery = useQuery(fetchRolesListOptions({ auth: authParams }));
 
-  const languagesQuery = useQuery(userQKeys.languages({ auth: authParams }));
+  const languagesQuery = useQuery(
+    fetchLanguagesForUsersOptions({ auth: authParams })
+  );
 
   const locationsQuery = useGetLocationsList({
     query: { withActive: true },

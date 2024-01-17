@@ -1,14 +1,14 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleColumns";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 
 import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { reservationQKeys } from "@/utils/query-key";
+import { fetchReservationsSearchColumnsOptions } from "@/utils/query/reservation";
 
 import { reservationsRoute } from ".";
 
@@ -23,15 +23,21 @@ export const searchReservationsRoute = new Route({
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],
-  beforeLoad: ({ search }) => ({
-    search: normalizeReservationListSearchParams(search),
-  }),
+  beforeLoad: ({ context, search }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      searchColumnsOptions: fetchReservationsSearchColumnsOptions({ auth }),
+      search: normalizeReservationListSearchParams(search),
+    };
+  },
   loaderDeps: ({ search }) => ({
     page: search.page,
     size: search.size,
     filters: search.filters,
   }),
-  loader: async ({ context: { queryClient, search } }) => {
+  loader: async ({ context }) => {
+    const { queryClient, search, searchColumnsOptions } = context;
     const auth = getAuthToken();
 
     const { pageNumber, size, searchFilters } = search;
@@ -40,20 +46,7 @@ export const searchReservationsRoute = new Route({
       const promises = [];
 
       // get columns
-      const columnsKey = reservationQKeys.columns();
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: columnsKey,
-          queryFn: () =>
-            fetchModuleColumnsModded({
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                module: "reservation",
-              },
-            }),
-        })
-      );
+      promises.push(queryClient.ensureQueryData(searchColumnsOptions));
 
       // get search
       const searchKey = reservationQKeys.search({

@@ -1,34 +1,28 @@
 import { useCallback, useEffect } from "react";
-import {
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { checkinAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
+const routeApi = new RouteApi({ id: "/agreements/$agreementId/check-in" });
+
 const CheckinAgreementPage = () => {
   const navigate = useNavigate({ from: checkinAgreementByIdRoute.id });
   const router = useRouter();
 
-  const { stage = "rental-information" } = useSearch({
-    from: checkinAgreementByIdRoute.id,
-  });
-  const { agreementId } = useParams({ from: checkinAgreementByIdRoute.id });
+  const routeContext = routeApi.useRouteContext();
+  const { stage = "rental-information" } = routeApi.useSearch();
+  const { agreementId } = routeApi.useParams();
 
-  const agreementData = useGetAgreementData({
-    agreementId,
-  });
+  const agreementData = useQuery(routeContext.viewAgreementOptions);
 
   const rentalRatesSummary = useGetModuleRentalRatesSummary({
     module: "agreements",

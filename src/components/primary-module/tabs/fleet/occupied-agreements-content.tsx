@@ -1,21 +1,27 @@
 import { useMemo } from "react";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import { CommonTable } from "@/components/common/common-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGetAgreementsList } from "@/hooks/network/agreement/useGetAgreementsList";
-import { useGetModuleColumns } from "@/hooks/network/module/useGetModuleColumns";
+import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
-import { type TAgreementListItemParsed } from "@/schemas/agreement";
-
-import { AgreementDateTimeColumns } from "@/utils/columns";
+import { getAuthFromAuthHook } from "@/utils/auth";
+import {
+  AgreementDateTimeColumns,
+  sortColumnsByOrderIndex,
+} from "@/utils/columns";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import {
+  fetchAgreementsListOptions,
+  fetchAgreementsSearchColumnsOptions,
+} from "@/utils/query/agreement";
 
 interface FleetOccupiedAgreementsTabProps {
   vehicleId: string;
@@ -39,25 +45,39 @@ const pageSize = 50;
 
 const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
   const { t } = useTranslation();
+  const auth = useAuth();
+
+  const authParams = getAuthFromAuthHook(auth);
+
   const items = normalizeAgreementListSearchParams({
     page: 1,
     size: pageSize,
     filters: { VehicleNo: props.vehicleNo },
   });
 
-  const columnsData = useGetModuleColumns({ module: "agreements" });
+  const columnsData = useSuspenseQuery(
+    fetchAgreementsSearchColumnsOptions({ auth: authParams })
+  );
 
-  const dataList = useGetAgreementsList({
-    page: items.pageNumber,
-    pageSize: items.size,
-    filters: items.searchFilters,
-  });
+  const dataList = useQuery(
+    fetchAgreementsListOptions({
+      auth: authParams,
+      pagination: {
+        page: items.pageNumber,
+        pageSize: items.size,
+      },
+      filters: {
+        ...items.searchFilters,
+        currentDate: new Date(),
+      },
+    })
+  );
 
   const columnDefs = useMemo(() => {
     const columns: ColumnDef<TAgreementListItemParsed>[] = [];
 
     (columnsData.data.status === 200 ? columnsData.data.body : [])
-      .sort(sortColOrderByOrderIndex)
+      .sort(sortColumnsByOrderIndex)
       .forEach((column) => {
         if (acceptedColumns.includes(column.columnHeader) === false) return;
 

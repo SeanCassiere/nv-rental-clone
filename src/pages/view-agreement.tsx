@@ -1,11 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -27,10 +22,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 
 import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
@@ -45,6 +40,8 @@ const AgreementExchangesTab = lazy(
   () => import("../components/primary-module/tabs/agreement/exchanges-content")
 );
 
+const routeApi = new RouteApi({ id: "/agreements/$agreementId/" });
+
 type TabListItem = {
   id: string;
   label: string;
@@ -56,21 +53,15 @@ type TabListItem = {
 function AgreementViewPage() {
   const router = useRouter();
   const auth = useAuth();
-
-  const clientId = auth?.user?.profile?.navotar_clientid || "";
-  const userId = auth?.user?.profile?.navotar_userid || "";
-
-  const { tab: tabName = "summary" } = useSearch({
-    from: viewAgreementByIdRoute.id,
-  });
+  const authParams = getAuthFromAuthHook(auth);
 
   const navigate = useNavigate();
 
-  const params = useParams({
-    from: viewAgreementByIdRoute.id,
-  });
+  const routeContext = routeApi.useRouteContext();
+  const routeParams = routeApi.useParams();
+  const { tab: tabName = "summary" } = routeApi.useSearch();
 
-  const agreementId = params.agreementId || "";
+  const agreementId = routeParams.agreementId;
 
   const tabsConfig = useMemo(() => {
     const tabs: TabListItem[] = [];
@@ -88,8 +79,8 @@ function AgreementViewPage() {
         <ModuleNotesTabContent
           module="agreements"
           referenceId={agreementId}
-          clientId={clientId}
-          userId={userId}
+          clientId={authParams.clientId}
+          userId={authParams.userId}
         />
       ),
       preloadFn: () =>
@@ -171,13 +162,7 @@ function AgreementViewPage() {
     tabs.push({
       id: "exchanges",
       label: "Exchanges",
-      component: (
-        <AgreementExchangesTab
-          referenceId={agreementId}
-          clientId={clientId}
-          userId={userId}
-        />
-      ),
+      component: <AgreementExchangesTab />,
       preloadFn: () =>
         router.preloadRoute({
           to: viewAgreementByIdRoute.id,
@@ -191,7 +176,7 @@ function AgreementViewPage() {
         }),
     });
     return tabs;
-  }, [router, agreementId, clientId, userId]);
+  }, [router, agreementId, authParams]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
@@ -202,9 +187,7 @@ function AgreementViewPage() {
     });
   };
 
-  const agreementQuery = useGetAgreementData({
-    agreementId,
-  });
+  const agreementQuery = useQuery(routeContext.viewAgreementOptions);
   const agreement =
     agreementQuery.data?.status === 200 ? agreementQuery.data.body : null;
   const isCheckedIn = agreement?.returnDate ? true : false;
