@@ -13,7 +13,7 @@ export function usePermission(
   const userId = auth.user?.profile.navotar_userid || "";
   const authParams = { clientId, userId };
 
-  const permissions = useQuery(userQKeys.permissions(authParams));
+  const permissions = useQuery(userQKeys.permissions({ auth: authParams }));
 
   if (permissions.status !== "success") {
     return defaultValue;

@@ -35,13 +35,17 @@ export function DeleteRoleAlertDialog({
   const { t } = useTranslation();
   const qc = useQueryClient();
 
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
+
   const deleteRole = useMutation({
     mutationFn: apiClient.role.deleteRole,
     onMutate: () => {
       qc.cancelQueries({
         queryKey: roleQKeys.all({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
         }).queryKey,
       });
     },
@@ -66,8 +70,7 @@ export function DeleteRoleAlertDialog({
     onSettled: () => {
       qc.invalidateQueries({
         queryKey: roleQKeys.all({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
         }).queryKey,
       });
     },

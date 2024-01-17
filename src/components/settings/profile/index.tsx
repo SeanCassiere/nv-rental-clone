@@ -62,9 +62,11 @@ export default function SettingsProfileTab() {
     userId,
   };
 
-  const userQuery = useSuspenseQuery(userQKeys.me(authParams));
+  const userQuery = useSuspenseQuery(userQKeys.me({ auth: authParams }));
 
-  const languagesQuery = useSuspenseQuery(userQKeys.languages(authParams));
+  const languagesQuery = useSuspenseQuery(
+    userQKeys.languages({ auth: authParams })
+  );
 
   return (
     <Card className="shadow-none lg:w-[600px]">
@@ -147,11 +149,13 @@ function ProfileForm(props: {
   const { mutate, isPending } = useMutation({
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data) => {
-      qc.invalidateQueries({ queryKey: userQKeys.me(authParams).queryKey });
+      qc.invalidateQueries({
+        queryKey: userQKeys.me({ auth: authParams }).queryKey,
+      });
       qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
       qc.invalidateQueries({
-        queryKey: userQKeys.permissions(authParams).queryKey,
+        queryKey: userQKeys.permissions({ auth: authParams }).queryKey,
       });
       qc.invalidateQueries({
         queryKey: locationQKeys.all({ withActive: true }),

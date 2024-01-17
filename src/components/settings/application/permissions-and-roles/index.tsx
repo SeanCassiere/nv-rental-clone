@@ -138,7 +138,11 @@ function SystemRolesList({
   userId: string;
   filterMode: string;
 }) {
-  const rolesQuery = useSuspenseQuery(roleQKeys.all({ clientId, userId }));
+  const authParams = {
+    clientId,
+    userId,
+  };
+  const rolesQuery = useSuspenseQuery(roleQKeys.all({ auth: authParams }));
 
   const roles = React.useMemo(
     () =>

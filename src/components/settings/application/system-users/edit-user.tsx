@@ -74,6 +74,11 @@ export function EditUserDialog({
 
   const formId = React.useId();
 
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
+
   const isSubmittingNumber = useIsMutating({
     mutationKey: userQKeys.updatingProfile(props.intendedUserId),
   });
@@ -116,13 +121,9 @@ export function EditUserDialog({
     enabled: props.mode === "edit" && props.intendedUserId !== "" && open,
   });
 
-  const rolesQuery = useQuery(
-    roleQKeys.all({ clientId: props.clientId, userId: props.userId })
-  );
+  const rolesQuery = useQuery(roleQKeys.all({ auth: authParams }));
 
-  const languagesQuery = useQuery(
-    userQKeys.languages({ clientId: props.clientId, userId: props.userId })
-  );
+  const languagesQuery = useQuery(userQKeys.languages({ auth: authParams }));
 
   const locationsQuery = useGetLocationsList({
     query: { withActive: true },

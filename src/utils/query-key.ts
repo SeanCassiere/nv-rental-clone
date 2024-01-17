@@ -4,26 +4,31 @@ import { localDateToQueryYearMonthDay } from "@/utils/date";
 
 import { apiClient } from "@/api";
 
+import { sortObjectKeys } from "./sort";
+
 type Pagination = { page: number; pageSize: number };
 type Filters = Record<string, any>;
 type ReferenceId = string | number;
-type Auth = { userId: string; clientId: string };
+type Auth = { auth: { userId: string; clientId: string } };
 
-function isEnabled(p: Auth) {
-  return !!p.clientId && !!p.userId;
+function rootKey({ auth }: Auth) {
+  return `${auth.clientId}:${auth.userId}`;
+}
+
+function isEnabled({ auth }: Auth) {
+  return !!auth.clientId && !!auth.userId;
 }
 
 export const agreementQKeys = {
   // search
   rootKey: "agreements",
   columns: () => [agreementQKeys.rootKey, "columns"],
-  search: ({
-    filters,
-    pagination,
-  }: {
-    pagination: Pagination;
-    filters: Filters;
-  }) => [agreementQKeys.rootKey, pagination, filters],
+  search: (opts: { pagination: Pagination; filters: Filters }) => [
+    agreementQKeys.rootKey,
+    "list",
+    sortObjectKeys(opts.pagination),
+    sortObjectKeys(opts.filters),
+  ],
   statuses: () => [agreementQKeys.rootKey, "statuses"],
   types: () => [agreementQKeys.rootKey, "types"],
   generateNumber: (type: string) => [
@@ -35,45 +40,51 @@ export const agreementQKeys = {
   viewKey: "view-agreement",
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [agreementQKeys.viewKey, id, "summary"],
-  viewNotes: ({
-    agreementId,
-    auth,
-  }: {
-    agreementId: ReferenceId;
-    auth: Auth;
-  }) =>
+  viewNotes: (
+    opts: {
+      agreementId: ReferenceId;
+    } & Auth
+  ) =>
     queryOptions({
-      queryKey: [agreementQKeys.viewKey, agreementId, "notes"],
+      queryKey: [
+        rootKey(opts),
+        agreementQKeys.viewKey,
+        opts.agreementId,
+        "notes",
+      ],
       queryFn: () =>
         apiClient.note.getListForRefId({
           params: {
             referenceType: "agreement",
-            referenceId: String(agreementId),
+            referenceId: String(opts.agreementId),
           },
           query: {
-            clientId: auth.clientId,
+            clientId: opts.auth.clientId,
           },
         }),
-      enabled: isEnabled(auth),
+      enabled: isEnabled(opts),
     }),
-  viewExchanges: ({
-    agreementId,
-    auth,
-  }: {
-    agreementId: ReferenceId;
-    auth: Auth;
-  }) =>
+  viewExchanges: (
+    opts: {
+      agreementId: ReferenceId;
+    } & Auth
+  ) =>
     queryOptions({
-      queryKey: [agreementQKeys.viewKey, agreementId, "exchanges"],
+      queryKey: [
+        rootKey(opts),
+        agreementQKeys.viewKey,
+        opts.agreementId,
+        "exchanges",
+      ],
       queryFn: () =>
         apiClient.vehicleExchange.getList({
           query: {
-            clientId: auth.clientId,
-            userId: auth.userId,
-            agreementId: `${agreementId}`,
+            clientId: opts.auth.clientId,
+            userId: opts.auth.userId,
+            agreementId: `${opts.agreementId}`,
           },
         }),
-      enabled: isEnabled(auth),
+      enabled: isEnabled(opts),
     }),
 };
 
@@ -81,39 +92,41 @@ export const reservationQKeys = {
   // search
   rootKey: "reservations",
   columns: () => [reservationQKeys.rootKey, "columns"],
-  search: ({
-    filters,
-    pagination,
-  }: {
-    pagination: Pagination;
-    filters: Filters;
-  }) => [reservationQKeys.rootKey, pagination, filters],
+  search: (opts: { pagination: Pagination; filters: Filters }) => [
+    reservationQKeys.rootKey,
+    "list",
+    sortObjectKeys(opts.pagination),
+    sortObjectKeys(opts.filters),
+  ],
   statuses: () => [reservationQKeys.rootKey, "statuses"],
   types: () => [reservationQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-reservation",
   id: (id: ReferenceId) => [reservationQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
-  viewNotes: ({
-    reservationId,
-    auth,
-  }: {
-    reservationId: ReferenceId;
-    auth: Auth;
-  }) =>
+  viewNotes: (
+    opts: {
+      reservationId: ReferenceId;
+    } & Auth
+  ) =>
     queryOptions({
-      queryKey: [reservationQKeys.viewKey, reservationId, "notes"],
+      queryKey: [
+        rootKey(opts),
+        reservationQKeys.viewKey,
+        opts.reservationId,
+        "notes",
+      ],
       queryFn: () =>
         apiClient.note.getListForRefId({
           params: {
             referenceType: "reservation",
-            referenceId: String(reservationId),
+            referenceId: String(opts.reservationId),
           },
           query: {
-            clientId: auth.clientId,
+            clientId: opts.auth.clientId,
           },
         }),
-      enabled: isEnabled(auth),
+      enabled: isEnabled(opts),
     }),
 };
 
@@ -121,32 +134,36 @@ export const customerQKeys = {
   // search
   rootKey: "customers",
   columns: () => [customerQKeys.rootKey, "columns"],
-  search: ({
-    filters,
-    pagination,
-  }: {
-    pagination: Pagination;
-    filters: Filters;
-  }) => [customerQKeys.rootKey, pagination, filters],
+  search: (opts: { pagination: Pagination; filters: Filters }) => [
+    customerQKeys.rootKey,
+    "list",
+    sortObjectKeys(opts.pagination),
+    sortObjectKeys(opts.filters),
+  ],
   types: () => [customerQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-customer",
   id: (id: ReferenceId) => [customerQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [customerQKeys.viewKey, id, "summary"],
-  viewNotes: ({ customerId, auth }: { customerId: ReferenceId; auth: Auth }) =>
+  viewNotes: (opts: { customerId: ReferenceId } & Auth) =>
     queryOptions({
-      queryKey: [customerQKeys.viewKey, customerId, "notes"],
+      queryKey: [
+        rootKey(opts),
+        customerQKeys.viewKey,
+        opts.customerId,
+        "notes",
+      ],
       queryFn: () =>
         apiClient.note.getListForRefId({
           params: {
             referenceType: "customer",
-            referenceId: String(customerId),
+            referenceId: String(opts.customerId),
           },
           query: {
-            clientId: auth.clientId,
+            clientId: opts.auth.clientId,
           },
         }),
-      enabled: isEnabled(auth),
+      enabled: isEnabled(opts),
     }),
 };
 
@@ -154,33 +171,32 @@ export const fleetQKeys = {
   // search
   rootKey: "fleet",
   columns: () => [fleetQKeys.rootKey, "columns"],
-  search: ({
-    filters,
-    pagination,
-  }: {
-    pagination: Pagination;
-    filters: Filters;
-  }) => [fleetQKeys.rootKey, pagination, filters],
+  search: (opts: { pagination: Pagination; filters: Filters }) => [
+    fleetQKeys.rootKey,
+    "list",
+    sortObjectKeys(opts.pagination),
+    sortObjectKeys(opts.filters),
+  ],
   statuses: () => [fleetQKeys.rootKey, "statuses"],
   fuelLevels: () => [fleetQKeys.rootKey, "fuel-levels"],
   // view by ID
   viewKey: "view-fleet",
   id: (id: ReferenceId) => [fleetQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [fleetQKeys.viewKey, id, "summary"],
-  viewNotes: ({ fleetId, auth }: { fleetId: ReferenceId; auth: Auth }) =>
+  viewNotes: (opts: { fleetId: ReferenceId } & Auth) =>
     queryOptions({
-      queryKey: [fleetQKeys.viewKey, fleetId, "notes"],
+      queryKey: [rootKey(opts), fleetQKeys.viewKey, opts.fleetId, "notes"],
       queryFn: () =>
         apiClient.note.getListForRefId({
           params: {
             referenceType: "vehicle",
-            referenceId: String(fleetId),
+            referenceId: String(opts.fleetId),
           },
           query: {
-            clientId: auth.clientId,
+            clientId: opts.auth.clientId,
           },
         }),
-      enabled: isEnabled(auth),
+      enabled: isEnabled(opts),
     }),
 };
 
@@ -193,49 +209,54 @@ export const clientQKeys = {
 
 export const userQKeys = {
   rootKey: "users",
-  me: (p: Auth) => {
+  me: (opts: Auth) => {
     return queryOptions({
-      queryKey: [userQKeys.rootKey, p.userId, "profile"],
+      queryKey: [rootKey(opts), userQKeys.rootKey, opts.auth.userId, "profile"],
       queryFn: () =>
         apiClient.user.getProfileByUserId({
           params: {
-            userId: p.userId,
+            userId: opts.auth.userId,
           },
           query: {
-            clientId: p.clientId,
-            userId: p.userId,
-            currentUserId: p.userId,
+            clientId: opts.auth.clientId,
+            userId: opts.auth.userId,
+            currentUserId: opts.auth.userId,
           },
         }),
-      enabled: !!p.clientId && !!p.userId,
+      enabled: !!opts.auth.clientId && !!opts.auth.userId,
       staleTime: 1000 * 60 * 1, // 1 minute
     });
   },
-  languages: (p: Auth) => {
+  languages: (opts: Auth) => {
     return queryOptions({
-      queryKey: [userQKeys.rootKey, "languages"],
+      queryKey: [rootKey(opts), userQKeys.rootKey, "languages"],
       queryFn: () =>
         apiClient.user.getLanguages({
           query: {
-            clientId: p.clientId,
-            userId: p.userId,
+            clientId: opts.auth.clientId,
+            userId: opts.auth.userId,
           },
         }),
-      enabled: !!p.clientId && !!p.userId,
+      enabled: !!opts.auth.clientId && !!opts.auth.userId,
       staleTime: 1000 * 60 * 1, // 1 minute
     });
   },
-  permissions: (p: Auth) => {
+  permissions: (opts: Auth) => {
     return queryOptions({
-      queryKey: [userQKeys.rootKey, p.userId, "permissions"],
+      queryKey: [
+        rootKey(opts),
+        userQKeys.rootKey,
+        opts.auth.userId,
+        "permissions",
+      ],
       queryFn: () =>
         apiClient.user.getPermissionForUserId({
-          params: { userId: p.userId },
+          params: { userId: opts.auth.userId },
           query: {
-            clientId: p.clientId,
+            clientId: opts.auth.clientId,
           },
         }),
-      enabled: !!p.clientId && !!p.userId,
+      enabled: !!opts.auth.clientId && !!opts.auth.userId,
       staleTime: 1000 * 60 * 5, // 5 minutes
     });
   },
@@ -256,26 +277,23 @@ export const dashboardQKeys = {
   stats: (date: Date, locations: string[]) => [
     dashboardQKeys.rootKey,
     "statistics",
-    `locations-[${locations.join(",")}]`,
+    `locations-[${locations.sort().join(",")}]`,
     localDateToQueryYearMonthDay(date),
   ],
   messages: () => [dashboardQKeys.rootKey, "messages"],
-  salesStatus: ({ locations }: { locations: string[] }) => [
+  salesStatus: (opts: { locations: string[] }) => [
     dashboardQKeys.rootKey,
     "sales-status",
-    `locations-[${locations.join(",")}]`,
+    `locations-[${opts.locations.sort().join(",")}]`,
   ],
-  vehicleStatusCounts: ({
-    locationId,
-    vehicleType,
-  }: {
+  vehicleStatusCounts: (opts: {
     locationId: string[];
     vehicleType: string | number;
   }) => [
     dashboardQKeys.rootKey,
     "vehicle-status-counts",
-    `location-[${locationId.join(",")}]`,
-    `vehicle-type-${vehicleType}`,
+    `location-[${opts.locationId.sort().join(",")}]`,
+    `vehicle-type-${opts.vehicleType}`,
   ],
 };
 
@@ -300,62 +318,65 @@ export const locationQKeys = {
 
 export const roleQKeys = {
   rootKey: "roles",
-  all: (p: Auth) => {
+  all: (opts: Auth) => {
     return queryOptions({
-      queryKey: [roleQKeys.rootKey, "all"],
+      queryKey: [rootKey(opts), roleQKeys.rootKey, "all"],
       queryFn: () =>
         apiClient.role.getList({
-          query: { clientId: p.clientId, userId: p.userId },
+          query: { clientId: opts.auth.clientId, userId: opts.auth.userId },
         }),
       staleTime: 1000 * 60 * 1, // 1 minute,
-      enabled: isEnabled(p),
+      enabled: isEnabled(opts),
     });
   },
-  getById: (p: Auth & { roleId: string }) => {
+  getById: (opts: { roleId: string } & Auth) => {
     return queryOptions({
-      queryKey: [roleQKeys.rootKey, p.roleId],
+      queryKey: [rootKey(opts), roleQKeys.rootKey, opts.roleId],
       queryFn: () =>
         apiClient.role.getById({
-          params: { roleId: p.roleId },
-          query: { clientId: p.clientId, userId: p.userId },
+          params: { roleId: opts.roleId },
+          query: { clientId: opts.auth.clientId, userId: opts.auth.userId },
         }),
       staleTime: 1000 * 60 * 5, // 5 minutes
-      enabled: isEnabled(p),
+      enabled: isEnabled(opts),
     });
   },
-  permissionsList: (p: Auth) => {
+  permissionsList: (opts: Auth) => {
     return queryOptions({
-      queryKey: [roleQKeys.rootKey, "permissions"],
+      queryKey: [rootKey(opts), roleQKeys.rootKey, "permissions"],
       queryFn: () =>
         apiClient.role.getPermissions({
-          query: { clientId: p.clientId, userId: p.userId },
+          query: { clientId: opts.auth.clientId, userId: opts.auth.userId },
         }),
       staleTime: 1000 * 60 * 5, // 5 minutes
-      enabled: isEnabled(p),
+      enabled: isEnabled(opts),
     });
   },
 };
 
 export const reportQKeys = {
-  getReports: ({ auth }: { auth: Auth }) =>
+  getReports: (opts: Auth) =>
     queryOptions({
-      queryKey: ["reports", "list"],
+      queryKey: [rootKey(opts), "reports", "list"],
       queryFn: () =>
         apiClient.report.getList({
           query: {
-            clientId: auth.clientId,
-            userId: auth.userId,
+            clientId: opts.auth.clientId,
+            userId: opts.auth.userId,
           },
         }),
       staleTime: 1000 * 60 * 2, // 2 minutes
-      enabled: isEnabled(auth),
+      enabled: isEnabled(opts),
     }),
-  getDetailsById: ({ auth, reportId }: { auth: Auth; reportId: string }) =>
+  getDetailsById: (opts: { reportId: string } & Auth) =>
     queryOptions({
-      queryKey: ["reports", reportId],
+      queryKey: [rootKey(opts), "reports", opts.reportId],
       queryFn: () =>
-        apiClient.report.getById({ params: { reportId }, query: auth }),
+        apiClient.report.getById({
+          params: { reportId: opts.reportId },
+          query: opts.auth,
+        }),
       staleTime: 1000 * 60 * 1, // 1 minutes
-      enabled: isEnabled(auth),
+      enabled: isEnabled(opts),
     }),
 };

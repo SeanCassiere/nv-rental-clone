@@ -95,11 +95,13 @@ export const rootRoute = routerRootWithContext({
       );
 
       // current user's profile
-      promises.push(queryClient.ensureQueryData(userQKeys.me(authParams)));
+      promises.push(
+        queryClient.ensureQueryData(userQKeys.me({ auth: authParams }))
+      );
 
       // current user's permissions
       promises.push(
-        queryClient.ensureQueryData(userQKeys.permissions(authParams))
+        queryClient.ensureQueryData(userQKeys.permissions({ auth: authParams }))
       );
 
       try {

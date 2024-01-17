@@ -39,7 +39,7 @@ export const UserNavigationDropdown = () => {
   const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
   const { setShowLogout, setShowCommandMenu } = useGlobalDialogContext();
 
-  const userQuery = useQuery(userQKeys.me(authParams));
+  const userQuery = useQuery(userQKeys.me({ auth: authParams }));
 
   const user = userQuery.data?.status === 200 ? userQuery.data?.body : null;
 

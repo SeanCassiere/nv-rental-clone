@@ -64,20 +64,21 @@ export function EditRoleDialog({
 
   const formId = React.useId();
 
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
+
   const permissionsQuery = useQuery(
     roleQKeys.permissionsList({
-      clientId: props.clientId,
-      userId: props.userId,
+      auth: authParams,
     })
   );
 
-  const rolesQuery = useQuery(
-    roleQKeys.all({ clientId: props.clientId, userId: props.userId })
-  );
+  const rolesQuery = useQuery(roleQKeys.all({ auth: authParams }));
 
   const roleQueryOptions = roleQKeys.getById({
-    clientId: props.clientId,
-    userId: props.userId,
+    auth: authParams,
     roleId: props.roleId,
   });
   const roleQuery = useQuery({
@@ -95,16 +96,14 @@ export function EditRoleDialog({
     onMutate: () => {
       qc.cancelQueries({
         queryKey: roleQKeys.all({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
         }).queryKey,
       });
     },
     onSuccess: (data) => {
       qc.invalidateQueries({
         queryKey: roleQKeys.all({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
         }).queryKey,
       });
 
@@ -154,14 +153,12 @@ export function EditRoleDialog({
     onMutate: () => {
       qc.cancelQueries({
         queryKey: roleQKeys.all({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
         }).queryKey,
       });
       qc.cancelQueries({
         queryKey: roleQKeys.getById({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
           roleId: props.roleId,
         }).queryKey,
       });
@@ -169,14 +166,12 @@ export function EditRoleDialog({
     onSuccess: (data) => {
       qc.invalidateQueries({
         queryKey: roleQKeys.all({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
         }).queryKey,
       });
       qc.invalidateQueries({
         queryKey: roleQKeys.getById({
-          clientId: props.clientId,
-          userId: props.userId,
+          auth: authParams,
           roleId: props.roleId,
         }).queryKey,
       });
@@ -346,6 +341,11 @@ function RoleForm(props: {
 }) {
   const { t } = useTranslation();
 
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
+
   const [shadowTemplateId, setShadowTemplateId] = React.useState(0);
   const required = t("display.required", { ns: "labels" });
 
@@ -374,8 +374,7 @@ function RoleForm(props: {
 
   const roleQueryOptions = roleQKeys.getById({
     roleId: String(templateId),
-    clientId: props.clientId,
-    userId: props.userId,
+    auth: authParams,
   });
   const roleQuery = useQuery({
     ...roleQueryOptions,
