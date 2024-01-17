@@ -244,30 +244,3 @@ export const roleQKeys = {
     });
   },
 };
-
-export const reportQKeys = {
-  getReports: (opts: Auth) =>
-    queryOptions({
-      queryKey: [rootKey(opts), "reports", "list"],
-      queryFn: () =>
-        apiClient.report.getList({
-          query: {
-            clientId: opts.auth.clientId,
-            userId: opts.auth.userId,
-          },
-        }),
-      staleTime: 1000 * 60 * 2, // 2 minutes
-      enabled: isEnabled(opts),
-    }),
-  getDetailsById: (opts: { reportId: string } & Auth) =>
-    queryOptions({
-      queryKey: [rootKey(opts), "reports", opts.reportId],
-      queryFn: () =>
-        apiClient.report.getById({
-          params: { reportId: opts.reportId },
-          query: opts.auth,
-        }),
-      staleTime: 1000 * 60 * 1, // 1 minutes
-      enabled: isEnabled(opts),
-    }),
-};
