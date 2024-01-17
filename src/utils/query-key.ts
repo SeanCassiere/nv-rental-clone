@@ -15,10 +15,6 @@ function rootKey({ auth }: Auth) {
   return `${auth.clientId}:${auth.userId}`;
 }
 
-function isEnabled({ auth }: Auth) {
-  return !!auth.clientId && !!auth.userId;
-}
-
 export const agreementQKeys = {
   // search
   rootKey: "agreements",
