@@ -171,13 +171,7 @@ function AgreementViewPage() {
     tabs.push({
       id: "exchanges",
       label: "Exchanges",
-      component: (
-        <AgreementExchangesTab
-          referenceId={agreementId}
-          clientId={clientId}
-          userId={userId}
-        />
-      ),
+      component: <AgreementExchangesTab />,
       preloadFn: () =>
         router.preloadRoute({
           to: viewAgreementByIdRoute.id,

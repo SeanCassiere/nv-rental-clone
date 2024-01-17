@@ -39,52 +39,6 @@ export const agreementQKeys = {
   viewKey: "view-agreement",
   id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [agreementQKeys.viewKey, id, "summary"],
-  viewNotes: (
-    opts: {
-      agreementId: ReferenceId;
-    } & Auth
-  ) =>
-    queryOptions({
-      queryKey: [
-        rootKey(opts),
-        agreementQKeys.viewKey,
-        opts.agreementId,
-        "notes",
-      ],
-      queryFn: () =>
-        apiClient.note.getListForRefId({
-          params: {
-            referenceType: "agreement",
-            referenceId: String(opts.agreementId),
-          },
-          query: {
-            clientId: opts.auth.clientId,
-          },
-        }),
-      enabled: isEnabled(opts),
-    }),
-  viewExchanges: (
-    opts: {
-      agreementId: ReferenceId;
-    } & Auth
-  ) =>
-    queryOptions({
-      queryKey: [
-        rootKey(opts),
-        agreementQKeys.viewKey,
-        opts.agreementId,
-        "exchanges",
-      ],
-      queryFn: () =>
-        apiClient.vehicleExchange.getList({
-          query: {
-            clientId: opts.auth.clientId,
-            userId: opts.auth.userId,
-            agreementId: `${opts.agreementId}`,
-          },
-        }),
-      enabled: isEnabled(opts),
-    }),
 };
 
 export const reservationQKeys = {
@@ -102,30 +56,6 @@ export const reservationQKeys = {
   viewKey: "view-reservation",
   id: (id: ReferenceId) => [reservationQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
-  viewNotes: (
-    opts: {
-      reservationId: ReferenceId;
-    } & Auth
-  ) =>
-    queryOptions({
-      queryKey: [
-        rootKey(opts),
-        reservationQKeys.viewKey,
-        opts.reservationId,
-        "notes",
-      ],
-      queryFn: () =>
-        apiClient.note.getListForRefId({
-          params: {
-            referenceType: "reservation",
-            referenceId: String(opts.reservationId),
-          },
-          query: {
-            clientId: opts.auth.clientId,
-          },
-        }),
-      enabled: isEnabled(opts),
-    }),
 };
 
 export const customerQKeys = {
@@ -142,26 +72,6 @@ export const customerQKeys = {
   viewKey: "view-customer",
   id: (id: ReferenceId) => [customerQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [customerQKeys.viewKey, id, "summary"],
-  viewNotes: (opts: { customerId: ReferenceId } & Auth) =>
-    queryOptions({
-      queryKey: [
-        rootKey(opts),
-        customerQKeys.viewKey,
-        opts.customerId,
-        "notes",
-      ],
-      queryFn: () =>
-        apiClient.note.getListForRefId({
-          params: {
-            referenceType: "customer",
-            referenceId: String(opts.customerId),
-          },
-          query: {
-            clientId: opts.auth.clientId,
-          },
-        }),
-      enabled: isEnabled(opts),
-    }),
 };
 
 export const fleetQKeys = {
@@ -179,21 +89,6 @@ export const fleetQKeys = {
   viewKey: "view-fleet",
   id: (id: ReferenceId) => [fleetQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [fleetQKeys.viewKey, id, "summary"],
-  viewNotes: (opts: { fleetId: ReferenceId } & Auth) =>
-    queryOptions({
-      queryKey: [rootKey(opts), fleetQKeys.viewKey, opts.fleetId, "notes"],
-      queryFn: () =>
-        apiClient.note.getListForRefId({
-          params: {
-            referenceType: "vehicle",
-            referenceId: String(opts.fleetId),
-          },
-          query: {
-            clientId: opts.auth.clientId,
-          },
-        }),
-      enabled: isEnabled(opts),
-    }),
 };
 
 export const clientQKeys = {

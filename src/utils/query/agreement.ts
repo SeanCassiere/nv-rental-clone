@@ -4,11 +4,13 @@ import { mutateColumnAccessors } from "@/utils/columns";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth } from "./helpers";
+import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+
+const SEGMENT = "agreements";
 
 export function fetchAgreementsSearchColumnsOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), "agreements", "columns"],
+    queryKey: [rootKey(options), SEGMENT, "columns"],
     queryFn: () =>
       apiClient.client
         .getColumnHeaderInfo({
@@ -24,6 +26,42 @@ export function fetchAgreementsSearchColumnsOptions(options: Auth) {
             body: data.status === 200 ? data.body : [],
           })
         ),
+    enabled: isEnabled(options),
+  });
+}
+
+export function fetchNotesForAgreementById(
+  options: { agreementId: RefId } & Auth
+) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, options.agreementId, "notes"],
+    queryFn: () =>
+      apiClient.note.getListForRefId({
+        params: {
+          referenceType: "agreement",
+          referenceId: String(options.agreementId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
+
+export function fetchExchangesForAgreementById(
+  options: { agreementId: RefId } & Auth
+) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, options.agreementId, "exchanges"],
+    queryFn: () =>
+      apiClient.vehicleExchange.getList({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+          agreementId: String(options.agreementId),
+        },
+      }),
     enabled: isEnabled(options),
   });
 }

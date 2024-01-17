@@ -10,12 +10,10 @@ import { icons } from "@/components/ui/icons";
 
 import type { TNoteDataParsed } from "@/schemas/note";
 
-import {
-  agreementQKeys,
-  customerQKeys,
-  fleetQKeys,
-  reservationQKeys,
-} from "@/utils/query-key";
+import { fetchNotesForAgreementById } from "@/utils/query/agreement";
+import { fetchNotesForCustomerById } from "@/utils/query/customer";
+import { fetchNotesForFleetById } from "@/utils/query/fleet";
+import { fetchNotesForReservationById } from "@/utils/query/reservation";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 const EmptyIcon = icons.Files;
@@ -170,10 +168,7 @@ const AgreementDisplay = ({
   auth,
 }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    agreementQKeys.viewNotes({
-      agreementId: referenceId,
-      auth,
-    })
+    fetchNotesForAgreementById({ auth, agreementId: referenceId })
   );
 
   const list = query.data?.status === 200 ? query.data.body : [];
@@ -195,7 +190,7 @@ const ReservationDisplay = ({
   auth,
 }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    reservationQKeys.viewNotes({
+    fetchNotesForReservationById({
       reservationId: referenceId,
       auth,
     })
@@ -220,7 +215,7 @@ const CustomerDisplay = ({
   auth,
 }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    customerQKeys.viewNotes({
+    fetchNotesForCustomerById({
       customerId: referenceId,
       auth,
     })
@@ -241,7 +236,7 @@ const CustomerDisplay = ({
 
 const FleetDisplay = ({ referenceId, colDefs, auth }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    fleetQKeys.viewNotes({
+    fetchNotesForFleetById({
       fleetId: referenceId,
       auth,
     })

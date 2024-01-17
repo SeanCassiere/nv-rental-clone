@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, RouteApi } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { parseISO } from "date-fns";
 import { useTranslation } from "react-i18next";
@@ -13,8 +13,6 @@ import { icons } from "@/components/ui/icons";
 
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
 
-import { agreementQKeys } from "@/utils/query-key";
-
 import { cn } from "@/utils";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
@@ -24,23 +22,13 @@ type TVehicleExchangeKeyHelp = {
   header: string;
 };
 
-const AgreementExchangesTab = ({
-  referenceId,
-  clientId,
-  userId,
-}: {
-  referenceId: string;
-  clientId: string;
-  userId: string;
-}) => {
+const routeApi = new RouteApi({ id: "/agreements/$agreementId/" });
+
+const AgreementExchangesTab = () => {
   const { t } = useTranslation();
 
-  const dataList = useSuspenseQuery(
-    agreementQKeys.viewExchanges({
-      agreementId: referenceId,
-      auth: { clientId, userId },
-    })
-  );
+  const { viewAgreementExchangesOptions } = routeApi.useRouteContext();
+  const dataList = useSuspenseQuery(viewAgreementExchangesOptions);
 
   const agreementExchangeColumns = useMemo(() => {
     const cols: TVehicleExchangeKeyHelp[] = [

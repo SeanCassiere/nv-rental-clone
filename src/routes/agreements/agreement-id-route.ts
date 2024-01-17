@@ -1,8 +1,12 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthToken } from "@/utils/auth";
+import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { agreementQKeys } from "@/utils/query-key";
+import {
+  fetchExchangesForAgreementById,
+  fetchNotesForAgreementById,
+} from "@/utils/query/agreement";
 
 import { agreementsRoute } from ".";
 
@@ -80,39 +84,39 @@ export const viewAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  beforeLoad: (ctx) => ({ viewTab: ctx.search?.tab || "" }),
-  loaderDeps: (ctx) => ({ tab: ctx.search?.tab }),
-  loader: async ({
-    context: { queryClient, viewTab },
-    params: { agreementId },
-  }) => {
-    const auth = getAuthToken();
-
-    if (!auth) return;
-    const profile = {
-      clientId: auth.profile.navotar_clientid,
-      userId: auth.profile.navotar_userid,
+  beforeLoad: ({ context, search, params: { agreementId } }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      viewAgreementExchangesOptions: fetchExchangesForAgreementById({
+        auth,
+        agreementId,
+      }),
+      viewAgreementNotesOptions: fetchNotesForAgreementById({
+        auth,
+        agreementId,
+      }),
+      viewTab: search?.tab || "",
     };
-
+  },
+  loaderDeps: (ctx) => ({ tab: ctx.search?.tab }),
+  loader: async ({ context }) => {
+    const {
+      queryClient,
+      viewAgreementExchangesOptions,
+      viewAgreementNotesOptions,
+      viewTab,
+    } = context;
     const promises = [];
 
     switch (viewTab.trim().toLowerCase()) {
       case "exchanges":
         promises.push(
-          queryClient.ensureQueryData(
-            agreementQKeys.viewExchanges({ agreementId, auth: profile })
-          )
+          queryClient.ensureQueryData(viewAgreementExchangesOptions)
         );
         break;
       case "notes":
-        promises.push(
-          queryClient.ensureQueryData(
-            agreementQKeys.viewNotes({
-              agreementId,
-              auth: profile,
-            })
-          )
-        );
+        promises.push(queryClient.ensureQueryData(viewAgreementNotesOptions));
         break;
       default:
         break;
