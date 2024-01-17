@@ -7,7 +7,7 @@ import { apiClient } from "@/api";
 
 import { isEnabled, rootKey, type Auth } from "./helpers";
 
-const SEGMENT = "CLIENT";
+const SEGMENT = "client";
 
 export function fetchClientProfileOptions(options: Auth) {
   return queryOptions({

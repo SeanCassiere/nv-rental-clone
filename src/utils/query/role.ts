@@ -4,7 +4,7 @@ import { apiClient } from "@/api";
 
 import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
 
-const SEGMENT = "ROLE";
+const SEGMENT = "role";
 
 export function fetchRolesListOptions(options: Auth) {
   return queryOptions({
