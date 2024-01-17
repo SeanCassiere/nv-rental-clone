@@ -1,4 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "react-oidc-context";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
 import FleetInformation from "@/components/primary-module/information-block/fleet-information";
@@ -6,22 +8,30 @@ import RentalInformation from "@/components/primary-module/information-block/ren
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetAgreementData } from "@/hooks/network/agreement/useGetAgreementData";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
+
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 
 type AgreementSummaryTabProps = {
   agreementId: string;
 };
 
 const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
 
   const [currentTab, setCurrentTab] = useState("vehicle");
 
-  const agreementQuery = useGetAgreementData({
-    agreementId: props.agreementId,
-  });
+  const agreementQuery = useQuery(
+    fetchAgreementByIdOptions({
+      auth: authParams,
+      agreementId: props.agreementId,
+    })
+  );
   const agreement =
     agreementQuery.data?.status === 200 ? agreementQuery.data.body : null;
 

@@ -6,7 +6,7 @@ import { apiClient } from "@/api";
 
 import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
 
-const SEGMENT = "AGREEMENTS";
+const SEGMENT = "agreements";
 
 export function fetchAgreementsSearchColumnsOptions(options: Auth) {
   return queryOptions({
@@ -27,6 +27,27 @@ export function fetchAgreementsSearchColumnsOptions(options: Auth) {
           })
         ),
     enabled: isEnabled(options),
+  });
+}
+
+export function fetchAgreementByIdOptions(
+  options: { agreementId: RefId } & Auth
+) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, options.agreementId],
+    queryFn: () =>
+      apiClient.agreement.getById({
+        params: {
+          agreementId: String(options.agreementId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    enabled:
+      isEnabled(options) &&
+      Boolean(options.agreementId && options.agreementId !== "0"),
   });
 }
 

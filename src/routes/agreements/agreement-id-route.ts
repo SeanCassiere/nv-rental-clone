@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { agreementQKeys } from "@/utils/query-key";
 import {
+  fetchAgreementByIdOptions,
   fetchExchangesForAgreementById,
   fetchNotesForAgreementById,
 } from "@/utils/query/agreement";
@@ -37,24 +38,6 @@ export const agreementPathIdRoute = new Route({
                 userId: auth.profile.navotar_userid,
               },
             }),
-        })
-      );
-
-      const dataKey = agreementQKeys.id(agreementId);
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: dataKey,
-          queryFn: () => {
-            return apiClient.agreement.getById({
-              params: {
-                agreementId,
-              },
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-              },
-            });
-          },
         })
       );
 
@@ -96,6 +79,10 @@ export const viewAgreementByIdRoute = new Route({
         auth,
         agreementId,
       }),
+      viewAgreementOptions: fetchAgreementByIdOptions({
+        auth,
+        agreementId,
+      }),
       viewTab: search?.tab || "",
     };
   },
@@ -105,9 +92,12 @@ export const viewAgreementByIdRoute = new Route({
       queryClient,
       viewAgreementExchangesOptions,
       viewAgreementNotesOptions,
+      viewAgreementOptions,
       viewTab,
     } = context;
     const promises = [];
+
+    promises.push(queryClient.ensureQueryData(viewAgreementOptions));
 
     switch (viewTab.trim().toLowerCase()) {
       case "exchanges":
@@ -139,6 +129,26 @@ export const editAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
+  beforeLoad: ({ context, params: { agreementId } }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      viewAgreementOptions: fetchAgreementByIdOptions({
+        auth,
+        agreementId,
+      }),
+    };
+  },
+  loader: async ({ context }) => {
+    const { queryClient, viewAgreementOptions } = context;
+    const promises = [];
+
+    promises.push(queryClient.ensureQueryData(viewAgreementOptions));
+
+    await Promise.all(promises);
+
+    return;
+  },
   component: lazyRouteComponent(() => import("@/pages/edit-agreement")),
 });
 
@@ -152,5 +162,25 @@ export const checkinAgreementByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
+  beforeLoad: ({ context, params: { agreementId } }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      viewAgreementOptions: fetchAgreementByIdOptions({
+        auth,
+        agreementId,
+      }),
+    };
+  },
+  loader: async ({ context }) => {
+    const { queryClient, viewAgreementOptions } = context;
+    const promises = [];
+
+    promises.push(queryClient.ensureQueryData(viewAgreementOptions));
+
+    await Promise.all(promises);
+
+    return;
+  },
   component: lazyRouteComponent(() => import("@/pages/checkin-agreement")),
 });
