@@ -48,6 +48,11 @@ import {
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { locationQKeys, userQKeys } from "@/utils/query-key";
+import {
+  fetchLanguagesForUsersOptions,
+  fetchPermissionsByUserIdOptions,
+  fetchUserByIdOptions,
+} from "@/utils/query/user";
 
 import { apiClient } from "@/api";
 
@@ -62,10 +67,12 @@ export default function SettingsProfileTab() {
     userId,
   };
 
-  const userQuery = useSuspenseQuery(userQKeys.me({ auth: authParams }));
+  const userQuery = useSuspenseQuery(
+    fetchUserByIdOptions({ auth: authParams, userId: authParams.userId })
+  );
 
   const languagesQuery = useSuspenseQuery(
-    userQKeys.languages({ auth: authParams })
+    fetchLanguagesForUsersOptions({ auth: authParams })
   );
 
   return (
@@ -148,14 +155,20 @@ function ProfileForm(props: {
 
   const { mutate, isPending } = useMutation({
     mutationFn: apiClient.user.updateProfileByUserId,
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       qc.invalidateQueries({
-        queryKey: userQKeys.me({ auth: authParams }).queryKey,
+        queryKey: fetchUserByIdOptions({
+          auth: authParams,
+          userId: variables.params.userId,
+        }).queryKey,
       });
       qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
       qc.invalidateQueries({
-        queryKey: userQKeys.permissions({ auth: authParams }).queryKey,
+        queryKey: fetchPermissionsByUserIdOptions({
+          auth: authParams,
+          userId: variables.params.userId,
+        }).queryKey,
       });
       qc.invalidateQueries({
         queryKey: locationQKeys.all({ withActive: true }),

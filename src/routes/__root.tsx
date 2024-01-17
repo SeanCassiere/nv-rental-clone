@@ -15,12 +15,15 @@ import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
 import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
-import { userQKeys } from "@/utils/query-key";
 import {
   fetchClientProfileOptions,
   fetchFeaturesForClientOptions,
   fetchScreenSettingsForClientOptions,
 } from "@/utils/query/client";
+import {
+  fetchPermissionsByUserIdOptions,
+  fetchUserByIdOptions,
+} from "@/utils/query/user";
 
 import type { apiClient } from "@/api";
 import type { queryClient } from "@/tanstack-query-config";
@@ -56,10 +59,18 @@ export const rootRoute = routerRootWithContext({
     );
 
     // current user's profile
-    promises.push(queryClient.ensureQueryData(userQKeys.me({ auth })));
+    promises.push(
+      queryClient.ensureQueryData(
+        fetchUserByIdOptions({ auth, userId: auth.userId })
+      )
+    );
 
     // current user's permissions
-    promises.push(queryClient.ensureQueryData(userQKeys.permissions({ auth })));
+    promises.push(
+      queryClient.ensureQueryData(
+        fetchPermissionsByUserIdOptions({ auth, userId: auth.userId })
+      )
+    );
 
     try {
       await Promise.all(promises);

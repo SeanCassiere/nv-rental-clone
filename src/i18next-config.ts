@@ -50,7 +50,7 @@ export const formatNsResources = {
 // Using language codes from https://github.com/ladjs/i18n-locales
 const en = "en";
 const languagesCore = [en];
-const languagesExtensions = ["en-US"]; // i.e: "en-GB", "en-US", etc...
+const languagesExtensions = ["en-US", "en-GB"]; // i.e: "en-GB", "en-US", etc...
 export const supportedLanguages = [...languagesCore, ...languagesExtensions];
 
 i18next
@@ -207,3 +207,14 @@ for (const lang of supportedLanguages) {
 }
 
 export default i18next;
+
+export function i18nextChangeLanguage(language: string) {
+  const coreLang = language.split("-")[0];
+  if (!coreLang) return;
+
+  if (!languagesCore.includes(coreLang)) return;
+
+  i18next.loadLanguages([language, coreLang], () => {
+    i18next.changeLanguage(language);
+  });
+}

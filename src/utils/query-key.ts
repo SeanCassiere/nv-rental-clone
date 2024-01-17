@@ -1,19 +1,10 @@
-import { queryOptions } from "@tanstack/react-query";
-
 import { localDateToQueryYearMonthDay } from "@/utils/date";
-
-import { apiClient } from "@/api";
 
 import { sortObjectKeys } from "./sort";
 
 type Pagination = { page: number; pageSize: number };
 type Filters = Record<string, any>;
 type ReferenceId = string | number;
-type Auth = { auth: { userId: string; clientId: string } };
-
-function rootKey({ auth }: Auth) {
-  return `${auth.clientId}:${auth.userId}`;
-}
 
 export const agreementQKeys = {
   // search
@@ -89,57 +80,6 @@ export const fleetQKeys = {
 
 export const userQKeys = {
   rootKey: "users",
-  me: (opts: Auth) => {
-    return queryOptions({
-      queryKey: [rootKey(opts), userQKeys.rootKey, opts.auth.userId, "profile"],
-      queryFn: () =>
-        apiClient.user.getProfileByUserId({
-          params: {
-            userId: opts.auth.userId,
-          },
-          query: {
-            clientId: opts.auth.clientId,
-            userId: opts.auth.userId,
-            currentUserId: opts.auth.userId,
-          },
-        }),
-      enabled: !!opts.auth.clientId && !!opts.auth.userId,
-      staleTime: 1000 * 60 * 1, // 1 minute
-    });
-  },
-  languages: (opts: Auth) => {
-    return queryOptions({
-      queryKey: [rootKey(opts), userQKeys.rootKey, "languages"],
-      queryFn: () =>
-        apiClient.user.getLanguages({
-          query: {
-            clientId: opts.auth.clientId,
-            userId: opts.auth.userId,
-          },
-        }),
-      enabled: !!opts.auth.clientId && !!opts.auth.userId,
-      staleTime: 1000 * 60 * 1, // 1 minute
-    });
-  },
-  permissions: (opts: Auth) => {
-    return queryOptions({
-      queryKey: [
-        rootKey(opts),
-        userQKeys.rootKey,
-        opts.auth.userId,
-        "permissions",
-      ],
-      queryFn: () =>
-        apiClient.user.getPermissionForUserId({
-          params: { userId: opts.auth.userId },
-          query: {
-            clientId: opts.auth.clientId,
-          },
-        }),
-      enabled: !!opts.auth.clientId && !!opts.auth.userId,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    });
-  },
   profile: (userId: string) => [userQKeys.rootKey, userId, "profile"],
   updatingProfile: (userId: string) => [
     userQKeys.rootKey,

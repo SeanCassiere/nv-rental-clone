@@ -25,7 +25,7 @@ import { icons } from "@/components/ui/icons";
 import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
-import { userQKeys } from "@/utils/query-key";
+import { fetchUserByIdOptions } from "@/utils/query/user";
 
 import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/utils";
 
@@ -39,7 +39,9 @@ export const UserNavigationDropdown = () => {
   const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
   const { setShowLogout, setShowCommandMenu } = useGlobalDialogContext();
 
-  const userQuery = useQuery(userQKeys.me({ auth: authParams }));
+  const userQuery = useQuery(
+    fetchUserByIdOptions({ auth: authParams, userId: authParams.userId })
+  );
 
   const user = userQuery.data?.status === 200 ? userQuery.data?.body : null;
 

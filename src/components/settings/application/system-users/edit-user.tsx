@@ -53,6 +53,7 @@ import {
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { userQKeys } from "@/utils/query-key";
 import { fetchRolesListOptions } from "@/utils/query/role";
+import { fetchLanguagesForUsersOptions } from "@/utils/query/user";
 
 import { apiClient } from "@/api";
 import { cn } from "@/utils";
@@ -124,7 +125,9 @@ export function EditUserDialog({
 
   const rolesQuery = useQuery(fetchRolesListOptions({ auth: authParams }));
 
-  const languagesQuery = useQuery(userQKeys.languages({ auth: authParams }));
+  const languagesQuery = useQuery(
+    fetchLanguagesForUsersOptions({ auth: authParams })
+  );
 
   const locationsQuery = useGetLocationsList({
     query: { withActive: true },
