@@ -4,7 +4,7 @@ import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useG
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
 
 import { rootRoute } from "./__root";

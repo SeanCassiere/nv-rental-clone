@@ -5,7 +5,7 @@ import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetR
 
 import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { reservationQKeys } from "@/utils/query-key";

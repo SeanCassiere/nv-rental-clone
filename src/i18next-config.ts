@@ -9,7 +9,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-import { getAuthToken } from "./utils/authLocal";
+import { getAuthToken } from "./utils/auth";
 import { IS_LOCAL_DEV, USER_STORAGE_KEYS } from "./utils/constants";
 import { getLocalStorageForUser } from "./utils/user-local-storage";
 

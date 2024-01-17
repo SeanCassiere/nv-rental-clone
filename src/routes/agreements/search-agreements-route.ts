@@ -5,10 +5,11 @@ import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleCol
 
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import { agreementQKeys } from "@/utils/query-key";
+import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { agreementsRoute } from ".";
@@ -40,9 +41,12 @@ export const searchAgreementsRoute = new Route({
       };
     },
   ],
-  beforeLoad: ({ search }) => ({
-    search: normalizeAgreementListSearchParams(search),
-  }),
+  beforeLoad: ({ context: { auth }, search }) => {
+    return {
+      agreementSearchColumnOptions: fetchAgreementsSearchColumnsOptions(),
+      search: normalizeAgreementListSearchParams(search),
+    };
+  },
   loaderDeps: ({ search }) => ({
     page: search.page,
     size: search.size,

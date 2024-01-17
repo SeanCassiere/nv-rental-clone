@@ -2,7 +2,7 @@ import { initClient, tsRestFetchApi } from "@ts-rest/core";
 
 import { contract } from "@/api/_root.contract";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import { apiBaseUrl } from "@/utils/constants";
 
 const apiClient = initClient(contract, {

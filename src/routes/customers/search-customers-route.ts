@@ -5,7 +5,7 @@ import { fetchModuleColumnsModded } from "@/hooks/network/module/useGetModuleCol
 
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import { customerQKeys } from "@/utils/query-key";

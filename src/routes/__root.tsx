@@ -13,7 +13,7 @@ import { HeaderLayout } from "@/components/header/header-layout";
 import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import {
   UI_APPLICATION_SHOW_ROUTER_DEVTOOLS,
   USER_STORAGE_KEYS,

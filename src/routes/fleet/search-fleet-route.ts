@@ -5,7 +5,7 @@ import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesL
 
 import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
-import { getAuthToken } from "@/utils/authLocal";
+import { getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
 import { fleetQKeys } from "@/utils/query-key";
