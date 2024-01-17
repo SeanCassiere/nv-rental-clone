@@ -22,7 +22,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetAgreementTypesList } from "@/hooks/network/agreement/useGetAgreementTypes";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
@@ -35,6 +34,7 @@ import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import {
   fetchAgreementsListOptions,
   fetchAgreementStatusesOptions,
+  fetchAgreementTypesOptions,
 } from "@/utils/query/agreement";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -105,7 +105,9 @@ function AgreementsSearchPage() {
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 
-  const agreementTypesList = useGetAgreementTypesList();
+  const agreementTypesList = useQuery(
+    fetchAgreementTypesOptions({ auth: authParams })
+  );
   const agreementTypes = agreementTypesList.data ?? [];
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);

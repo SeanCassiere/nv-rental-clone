@@ -110,6 +110,23 @@ export function fetchAgreementStatusesOptions(
   });
 }
 
+export function fetchAgreementTypesOptions(options: Auth) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, "types"],
+    queryFn: () =>
+      apiClient.agreement
+        .getTypes({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : [])),
+    enabled: isEnabled(options),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
 export function fetchAgreementByIdOptions(
   options: { agreementId: RefId } & Auth
 ) {
