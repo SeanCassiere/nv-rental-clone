@@ -41,7 +41,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 import type { PermissionListItem, RoleListItem } from "@/schemas/role";
 
-import { roleQKeys } from "@/utils/query-key";
+import {
+  fetchRoleByIdOptions,
+  fetchRolePermissionsListOptions,
+  fetchRolesListOptions,
+} from "@/utils/query/role";
 
 import { apiClient } from "@/api";
 
@@ -70,17 +74,18 @@ export function EditRoleDialog({
   };
 
   const permissionsQuery = useQuery(
-    roleQKeys.permissionsList({
+    fetchRolePermissionsListOptions({
       auth: authParams,
     })
   );
 
-  const rolesQuery = useQuery(roleQKeys.all({ auth: authParams }));
+  const rolesQuery = useQuery(fetchRolesListOptions({ auth: authParams }));
 
-  const roleQueryOptions = roleQKeys.getById({
+  const roleQueryOptions = fetchRoleByIdOptions({
     auth: authParams,
     roleId: props.roleId,
   });
+
   const roleQuery = useQuery({
     ...roleQueryOptions,
     enabled: roleQueryOptions.enabled && props.mode === "edit" && open,
@@ -95,14 +100,14 @@ export function EditRoleDialog({
     mutationFn: apiClient.role.createRole,
     onMutate: () => {
       qc.cancelQueries({
-        queryKey: roleQKeys.all({
+        queryKey: fetchRolesListOptions({
           auth: authParams,
         }).queryKey,
       });
     },
     onSuccess: (data) => {
       qc.invalidateQueries({
-        queryKey: roleQKeys.all({
+        queryKey: fetchRolesListOptions({
           auth: authParams,
         }).queryKey,
       });
@@ -152,12 +157,12 @@ export function EditRoleDialog({
     mutationFn: apiClient.role.updateRolePermissions,
     onMutate: () => {
       qc.cancelQueries({
-        queryKey: roleQKeys.all({
+        queryKey: fetchRolesListOptions({
           auth: authParams,
         }).queryKey,
       });
       qc.cancelQueries({
-        queryKey: roleQKeys.getById({
+        queryKey: fetchRoleByIdOptions({
           auth: authParams,
           roleId: props.roleId,
         }).queryKey,
@@ -165,12 +170,12 @@ export function EditRoleDialog({
     },
     onSuccess: (data) => {
       qc.invalidateQueries({
-        queryKey: roleQKeys.all({
+        queryKey: fetchRolesListOptions({
           auth: authParams,
         }).queryKey,
       });
       qc.invalidateQueries({
-        queryKey: roleQKeys.getById({
+        queryKey: fetchRoleByIdOptions({
           auth: authParams,
           roleId: props.roleId,
         }).queryKey,
@@ -341,10 +346,13 @@ function RoleForm(props: {
 }) {
   const { t } = useTranslation();
 
-  const authParams = {
-    clientId: props.clientId,
-    userId: props.userId,
-  };
+  const authParams = React.useMemo(
+    () => ({
+      clientId: props.clientId,
+      userId: props.userId,
+    }),
+    [props.clientId, props.userId]
+  );
 
   const [shadowTemplateId, setShadowTemplateId] = React.useState(0);
   const required = t("display.required", { ns: "labels" });
@@ -372,10 +380,15 @@ function RoleForm(props: {
 
   const templateId = form.watch("templateId");
 
-  const roleQueryOptions = roleQKeys.getById({
-    roleId: String(templateId),
-    auth: authParams,
-  });
+  const roleQueryOptions = React.useMemo(
+    () =>
+      fetchRoleByIdOptions({
+        roleId: String(templateId),
+        auth: authParams,
+      }),
+    [authParams, templateId]
+  );
+
   const roleQuery = useQuery({
     ...roleQueryOptions,
     enabled: roleQueryOptions.enabled && templateId !== 0,

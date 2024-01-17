@@ -15,7 +15,7 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { roleQKeys } from "@/utils/query-key";
+import { fetchRolesListOptions } from "@/utils/query/role";
 
 import { apiClient } from "@/api";
 
@@ -44,7 +44,7 @@ export function DeleteRoleAlertDialog({
     mutationFn: apiClient.role.deleteRole,
     onMutate: () => {
       qc.cancelQueries({
-        queryKey: roleQKeys.all({
+        queryKey: fetchRolesListOptions({
           auth: authParams,
         }).queryKey,
       });
@@ -69,7 +69,7 @@ export function DeleteRoleAlertDialog({
     },
     onSettled: () => {
       qc.invalidateQueries({
-        queryKey: roleQKeys.all({
+        queryKey: fetchRolesListOptions({
           auth: authParams,
         }).queryKey,
       });
