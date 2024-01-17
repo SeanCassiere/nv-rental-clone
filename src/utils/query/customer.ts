@@ -6,7 +6,7 @@ import { apiClient } from "@/api";
 
 import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
 
-const SEGMENT = "customers";
+const SEGMENT = "CUSTOMERS";
 
 export function fetchCustomersSearchColumnsOptions(options: Auth) {
   return queryOptions({
