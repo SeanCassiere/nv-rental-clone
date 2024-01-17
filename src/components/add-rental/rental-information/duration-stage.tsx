@@ -28,11 +28,13 @@ import {
 } from "@/components/ui/input-select";
 
 import { useDatePreference } from "@/hooks/internal/useDatePreferences";
-import { useGetNewAgreementNumber } from "@/hooks/network/agreement/useGetNewAgreementNumber";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchAgreementTypesOptions } from "@/utils/query/agreement";
+import {
+  fetchAgreementTypesOptions,
+  fetchGenerateAgreementNumberOptions,
+} from "@/utils/query/agreement";
 
 import i18n from "@/i18next-config";
 
@@ -129,10 +131,13 @@ export const DurationStage = ({
   const agreementTypesList = agreementTypeData.data ?? [];
 
   const currentAgreementType = form.watch("agreementType");
-  const agreementNumberQuery = useGetNewAgreementNumber({
-    agreementType: currentAgreementType,
-    enabled: isEdit === false,
-  });
+  const agreementNumberQuery = useQuery(
+    fetchGenerateAgreementNumberOptions({
+      auth: authParams,
+      agreementType: currentAgreementType,
+      enabled: isEdit === false,
+    })
+  );
 
   const form_checkoutDate = form.watch("checkoutDate");
   const form_checkinDate = form.watch("checkinDate");

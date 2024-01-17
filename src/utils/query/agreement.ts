@@ -183,3 +183,30 @@ export function fetchExchangesForAgreementById(
     enabled: isEnabled(options),
   });
 }
+
+export function fetchGenerateAgreementNumberOptions(
+  options: { enabled: boolean; agreementType: string } & Auth
+) {
+  return queryOptions({
+    queryKey: [
+      rootKey(options),
+      SEGMENT,
+      "generate_number",
+      new Date().toISOString().slice(0, 16),
+      options.agreementType,
+    ],
+    queryFn: () =>
+      apiClient.agreement
+        .generateNewNumber({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            agreementType: options.agreementType,
+          },
+        })
+        .then((res) =>
+          res.status === 200 ? res.body : { agreementNo: "NONE" }
+        ),
+    enabled: isEnabled(options) && options.enabled,
+  });
+}
