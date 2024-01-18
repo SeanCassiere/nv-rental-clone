@@ -7,7 +7,9 @@ import {
   useState,
 } from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -17,14 +19,14 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 
-import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
-
 import type { MiscChargeListItem } from "@/schemas/misCharges";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import {
   localDateTimeToQueryYearMonthDay,
   localDateTimeWithoutSecondsToQueryYearMonthDay,
 } from "@/utils/date";
+import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
 
 import { cn } from "@/utils";
 
@@ -49,6 +51,9 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
     onSelectedMiscCharges,
     onCompleted,
   } = props;
+  const auth = useAuth();
+
+  const authParams = getAuthFromAuthHook(auth);
 
   const { t: tl } = useTranslation("labels");
 
@@ -60,24 +65,27 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
 
   const selectedChargeIds = charges.map((charge) => `${charge.id}`);
 
-  const miscCharges = useGetMiscCharges({
-    filters: {
-      VehicleTypeId: vehicleStageData?.vehicleTypeId ?? 0,
-      LocationId: durationStageData?.checkoutLocation ?? 0,
-      CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-        durationStageData?.checkoutDate ?? new Date()
-      ),
-      CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-        durationStageData?.checkinDate ?? new Date()
-      ),
-      Active: "true",
-    },
-    enabled:
-      Boolean(durationStageData?.checkinDate) &&
-      Boolean(durationStageData?.checkoutDate) &&
-      Boolean(durationStageData?.checkoutLocation) &&
-      Boolean(vehicleStageData?.vehicleTypeId),
-  });
+  const miscCharges = useQuery(
+    fetchMiscChargesListOptions({
+      auth: authParams,
+      filters: {
+        VehicleTypeId: vehicleStageData?.vehicleTypeId ?? 0,
+        LocationId: durationStageData?.checkoutLocation ?? 0,
+        CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+          durationStageData?.checkoutDate ?? new Date()
+        ),
+        CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+          durationStageData?.checkinDate ?? new Date()
+        ),
+        Active: "true",
+      },
+      enabled:
+        Boolean(durationStageData?.checkinDate) &&
+        Boolean(durationStageData?.checkoutDate) &&
+        Boolean(durationStageData?.checkoutLocation) &&
+        Boolean(vehicleStageData?.vehicleTypeId),
+    })
+  );
 
   const handleAddMiscCharge = (
     charge: RatesAndChargesTabProps["miscCharges"][number]

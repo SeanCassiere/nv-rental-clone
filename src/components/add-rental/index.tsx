@@ -16,7 +16,6 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
 import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
 import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
 import {
@@ -31,6 +30,7 @@ import type { TRentalRatesSummarySchema } from "@/schemas/summary";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
@@ -705,26 +705,29 @@ const AddRentalParentForm = ({
     Boolean(agreementRentalInformation) && Boolean(agreementVehicleInformation);
   const miscChargesReservationReady = false;
 
-  const getMiscChargesQuery = useGetMiscCharges({
-    filters: {
-      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
-      LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
-      CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-        agreementRentalInformation?.checkoutDate ?? new Date()
-      ),
-      CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-        agreementRentalInformation?.checkinDate ?? new Date()
-      ),
-      Active: "true",
-      ...(module === "agreement" && referenceNumber
-        ? { AgreementId: String(referenceId) }
-        : {}),
-    },
-    enabled:
-      module === "agreement"
-        ? miscChargesAgreementReady
-        : miscChargesReservationReady,
-  });
+  const getMiscChargesQuery = useQuery(
+    fetchMiscChargesListOptions({
+      auth: authParams,
+      filters: {
+        VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
+        LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
+        CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+          agreementRentalInformation?.checkoutDate ?? new Date()
+        ),
+        CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+          agreementRentalInformation?.checkinDate ?? new Date()
+        ),
+        Active: "true",
+        ...(module === "agreement" && referenceNumber
+          ? { AgreementId: String(referenceId) }
+          : {}),
+      },
+      enabled:
+        module === "agreement"
+          ? miscChargesAgreementReady
+          : miscChargesReservationReady,
+    })
+  );
 
   useEffect(() => {
     if (getMiscChargesQuery.status !== "success") return;
