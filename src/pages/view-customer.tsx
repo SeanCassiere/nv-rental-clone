@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Link,
+  RouteApi,
   useNavigate,
   useParams,
   useRouter,
@@ -25,10 +27,8 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 
-import { viewCustomerByIdRoute } from "@/routes/customers/customer-id-route";
-
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
@@ -40,21 +40,19 @@ const ModuleNotesTabContent = lazy(
   () => import("../components/primary-module/tabs/notes-content")
 );
 
+const routeApi = new RouteApi({ id: "/customers/$customerId/" });
+
 function CustomerViewPage() {
   const router = useRouter();
-  const params = useParams({ from: viewCustomerByIdRoute.id });
   const auth = useAuth();
 
-  const { tab: tabName = "summary" } = useSearch({
-    from: viewCustomerByIdRoute.id,
-  });
+  const authParams = getAuthFromAuthHook(auth);
 
-  const clientId = auth?.user?.profile?.navotar_clientid || "";
-  const userId = auth?.user?.profile?.navotar_userid || "";
+  const routeContext = routeApi.useRouteContext();
+  const { customerId } = routeApi.useParams();
+  const { tab: tabName = "summary" } = routeApi.useSearch();
 
   const navigate = useNavigate();
-
-  const customerId = params.customerId || "";
 
   const tabsConfig = useMemo(() => {
     const tabs: { id: string; label: string; component: React.ReactNode }[] =
@@ -72,8 +70,8 @@ function CustomerViewPage() {
         <ModuleNotesTabContent
           module="customers"
           referenceId={customerId}
-          clientId={clientId}
-          userId={userId}
+          clientId={authParams.clientId}
+          userId={authParams.userId}
         />
       ),
     });
@@ -84,7 +82,7 @@ function CustomerViewPage() {
     });
 
     return tabs;
-  }, [customerId, clientId, userId]);
+  }, [customerId, authParams]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
@@ -95,9 +93,7 @@ function CustomerViewPage() {
     });
   };
 
-  const customerQuery = useGetCustomerData({
-    customerId,
-  });
+  const customerQuery = useQuery(routeContext.viewCustomerOptions);
   const customer =
     customerQuery.data?.status === 200 ? customerQuery.data.body : null;
 

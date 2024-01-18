@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useAuth } from "react-oidc-context";
 
 import { CommonTable } from "@/components/common/common-table";
 import {
@@ -10,9 +12,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
+import type { TCustomerListItemParsed } from "@/schemas/customer";
 
-import { type TCustomerListItemParsed } from "@/schemas/customer";
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
 
 import { getXPaginationFromHeaders } from "@/utils";
 
@@ -25,6 +28,10 @@ interface SelectVehicleModalProps {
 }
 
 export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
+  const auth = useAuth();
+
+  const authParams = getAuthFromAuthHook(auth);
+
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
@@ -42,13 +49,18 @@ export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
     []
   );
 
-  const customerListData = useGetCustomersList({
-    page,
-    pageSize,
-    filters: {
-      Active: "true",
-    },
-  });
+  const customerListData = useQuery(
+    fetchCustomersSearchListOptions({
+      auth: authParams,
+      pagination: {
+        page,
+        pageSize,
+      },
+      filters: {
+        Active: "true",
+      },
+    })
+  );
 
   const columnDefs = useMemo(() => {
     const columns: any[] = [];

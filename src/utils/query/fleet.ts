@@ -30,7 +30,9 @@ export function fetchFleetSearchColumnsOptions(options: Auth) {
   });
 }
 
-export function fetchNotesForFleetById(options: { fleetId: RefId } & Auth) {
+export function fetchNotesForFleetByIdOptions(
+  options: { fleetId: RefId } & Auth
+) {
   return queryOptions({
     queryKey: [rootKey(options), SEGMENT, options.fleetId, "notes"],
     queryFn: () =>

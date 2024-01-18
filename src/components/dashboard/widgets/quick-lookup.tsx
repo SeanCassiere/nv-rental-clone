@@ -28,21 +28,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
 import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import {
-  normalizeCustomerListSearchParams,
   normalizeReservationListSearchParams,
   normalizeVehicleListSearchParams,
 } from "@/utils/normalize-search-params";
-import { customerQKeys, fleetQKeys, reservationQKeys } from "@/utils/query-key";
+import { fleetQKeys, reservationQKeys } from "@/utils/query-key";
 import {
-  fetchAgreementsListFn,
-  fetchAgreementsListOptions,
+  fetchAgreementsSearchListFn,
+  fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
+import {
+  fetchCustomersSearchListFn,
+  fetchCustomersSearchListOptions,
+} from "@/utils/query/customer";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickLookupWidget = () => {
@@ -76,12 +79,14 @@ export function QuickLookupForm() {
   const qc = useQueryClient();
   const navigate = useNavigate();
 
-  const clientId = auth?.user?.profile?.navotar_clientid || "";
-  const userId = auth?.user?.profile?.navotar_userid || "";
+  const authParams = getAuthFromAuthHook(auth);
 
   const rowCountStr =
-    getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.tableRowCount) ||
-    APP_DEFAULTS.tableRowCount;
+    getLocalStorageForUser(
+      authParams.clientId,
+      authParams.userId,
+      USER_STORAGE_KEYS.tableRowCount
+    ) || APP_DEFAULTS.tableRowCount;
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   const form = useForm({
@@ -99,35 +104,25 @@ export function QuickLookupForm() {
   const accessor = form.watch("accessor");
 
   const customers = useMutation({
-    mutationFn: fetchCustomersListModded,
+    mutationFn: fetchCustomersSearchListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
+
+      const searchQuery = fetchCustomersSearchListOptions(variables).queryKey;
+      qc.setQueryData(searchQuery, () => data);
+
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
-
-        const normalized = normalizeCustomerListSearchParams({
-          page: variables.page,
-          size: variables.pageSize,
-          filters: { Phone: variables.Phone },
-        });
-        const qk = customerQKeys.search({
-          pagination: {
-            page: variables.page,
-            pageSize: variables.pageSize,
-          },
-          filters: normalized.searchFilters,
-        });
-        qc.setQueryData(qk, () => data);
 
         navigate({
           to: "/customers",
           search: () => ({
-            page: variables.page,
-            pageSize: variables.pageSize,
-            filters: normalized.searchFilters,
+            page: variables.pagination.page,
+            pageSize: variables.pagination.pageSize,
+            filters: variables.filters,
           }),
         });
         return;
@@ -146,14 +141,15 @@ export function QuickLookupForm() {
   });
 
   const agreements = useMutation({
-    mutationFn: fetchAgreementsListFn,
+    mutationFn: fetchAgreementsSearchListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
 
-      const searchQueryKey = fetchAgreementsListOptions(variables).queryKey;
+      const searchQueryKey =
+        fetchAgreementsSearchListOptions(variables).queryKey;
       qc.setQueryData(searchQueryKey, () => data);
 
       if (data.body.length > 1) {
@@ -302,19 +298,19 @@ export function QuickLookupForm() {
           switch (accessor) {
             case "customerPhoneNo":
               customers.mutate({
-                clientId,
-                userId,
-                page: 1,
-                pageSize: defaultRowCount,
-                Phone: searchValue,
+                auth: authParams,
+                pagination: {
+                  page: 1,
+                  pageSize: defaultRowCount,
+                },
+                filters: {
+                  Phone: searchValue,
+                },
               });
               break;
             case "agreementNo":
               agreements.mutate({
-                auth: {
-                  clientId,
-                  userId,
-                },
+                auth: authParams,
                 pagination: {
                   page: 1,
                   pageSize: defaultRowCount,
@@ -327,8 +323,8 @@ export function QuickLookupForm() {
               break;
             case "reservationNo":
               reservations.mutate({
-                clientId,
-                userId,
+                clientId: authParams.clientId,
+                userId: authParams.userId,
                 page: 1,
                 pageSize: defaultRowCount,
                 clientDate: new Date(),
@@ -337,8 +333,8 @@ export function QuickLookupForm() {
               break;
             case "vehicleLicenseNo":
               vehicles.mutate({
-                clientId,
-                userId,
+                clientId: authParams.clientId,
+                userId: authParams.userId,
                 page: 1,
                 pageSize: defaultRowCount,
                 LicenseNo: searchValue,

@@ -7,25 +7,7 @@ type Filters = Record<string, any>;
 type ReferenceId = string | number;
 
 export const agreementQKeys = {
-  // search
-  rootKey: "agreements",
-  search: (opts: { pagination: Pagination; filters: Filters }) => [
-    agreementQKeys.rootKey,
-    "list",
-    sortObjectKeys(opts.pagination),
-    sortObjectKeys(opts.filters),
-  ],
-  statuses: () => [agreementQKeys.rootKey, "statuses"],
-  types: () => [agreementQKeys.rootKey, "types"],
-  generateNumber: (type: string) => [
-    agreementQKeys.rootKey,
-    "generate-number",
-    type,
-  ],
-  // view by ID
-  viewKey: "view-agreement",
-  id: (id: ReferenceId) => [agreementQKeys.viewKey, id, "data"],
-  summary: (id: ReferenceId) => [agreementQKeys.viewKey, id, "summary"],
+  summary: (id: ReferenceId) => ["agreements", id, "summary"],
 };
 
 export const reservationQKeys = {
@@ -43,22 +25,6 @@ export const reservationQKeys = {
   viewKey: "view-reservation",
   id: (id: ReferenceId) => [reservationQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
-};
-
-export const customerQKeys = {
-  // search
-  rootKey: "customers",
-  search: (opts: { pagination: Pagination; filters: Filters }) => [
-    customerQKeys.rootKey,
-    "list",
-    sortObjectKeys(opts.pagination),
-    sortObjectKeys(opts.filters),
-  ],
-  types: () => [customerQKeys.rootKey, "types"],
-  // view by ID
-  viewKey: "view-customer",
-  id: (id: ReferenceId) => [customerQKeys.viewKey, id, "data"],
-  summary: (id: ReferenceId) => [customerQKeys.viewKey, id, "summary"],
 };
 
 export const fleetQKeys = {

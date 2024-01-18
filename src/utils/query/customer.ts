@@ -1,12 +1,21 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+import { sortObjectKeys } from "../sort";
+import {
+  isEnabled,
+  rootKey,
+  type Auth,
+  type Pagination,
+  type RefId,
+} from "./helpers";
 
 const SEGMENT = "customers";
+
+type CustomerId = { customerId: RefId };
 
 export function fetchCustomersSearchColumnsOptions(options: Auth) {
   return queryOptions({
@@ -30,9 +39,86 @@ export function fetchCustomersSearchColumnsOptions(options: Auth) {
   });
 }
 
-export function fetchNotesForCustomerById(
-  options: { customerId: RefId } & Auth
+export function fetchCustomersSearchListOptions(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["customer"]["getList"]>[0]["query"],
+      "clientId" | "userId" | "page" | "pageSize"
+    >;
+    enabled?: boolean;
+  } & Pagination &
+    Auth
 ) {
+  const { enabled = true } = options;
+  return queryOptions({
+    queryKey: [
+      rootKey(options),
+      SEGMENT,
+      "list",
+      sortObjectKeys(options.pagination),
+      sortObjectKeys(options.filters),
+    ],
+    queryFn: () => fetchCustomersSearchListFn(options),
+    enabled: isEnabled(options) && enabled,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function fetchCustomersSearchListFn(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["customer"]["getList"]>[0]["query"],
+      "clientId" | "userId" | "page" | "pageSize"
+    >;
+  } & Pagination &
+    Auth
+) {
+  return apiClient.customer.getList({
+    query: {
+      clientId: options.auth.clientId,
+      userId: options.auth.userId,
+      page: options.pagination.page || 1,
+      pageSize: options.pagination.pageSize || 10,
+      ...options.filters,
+    },
+  });
+}
+
+export function fetchCustomerTypesOptions(options: Auth) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, "types"],
+    queryFn: () =>
+      apiClient.customer
+        .getTypes({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : [])),
+    enabled: isEnabled(options),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
+export function fetchSummaryForCustomerByIdOptions(options: CustomerId & Auth) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, options.customerId, "summary"],
+    queryFn: () =>
+      apiClient.customer.getSummaryForId({
+        params: {
+          customerId: String(options.customerId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
+
+export function fetchNotesForCustomerByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: [rootKey(options), SEGMENT, options.customerId, "notes"],
     queryFn: () =>
@@ -43,6 +129,23 @@ export function fetchNotesForCustomerById(
         },
         query: {
           clientId: options.auth.clientId,
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
+
+export function fetchCustomerByIdOptions(options: CustomerId & Auth) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, options.customerId],
+    queryFn: () =>
+      apiClient.customer.getById({
+        params: {
+          customerId: String(options.customerId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
         },
       }),
     enabled: isEnabled(options),

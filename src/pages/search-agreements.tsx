@@ -32,7 +32,7 @@ import { getAuthFromAuthHook } from "@/utils/auth";
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import {
-  fetchAgreementsListOptions,
+  fetchAgreementsSearchListOptions,
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
 } from "@/utils/query/agreement";
@@ -78,7 +78,7 @@ function AgreementsSearchPage() {
   );
 
   const agreementsData = useQuery(
-    fetchAgreementsListOptions({
+    fetchAgreementsSearchListOptions({
       auth: authParams,
       pagination: {
         page: pageNumber,

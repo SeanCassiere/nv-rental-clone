@@ -23,8 +23,8 @@ import { Input } from "@/components/ui/input";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import {
-  fetchAgreementsListFn,
-  fetchAgreementsListOptions,
+  fetchAgreementsSearchListFn,
+  fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
@@ -75,7 +75,7 @@ export function QuickCheckinAgreementForm() {
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   const search = useMutation({
-    mutationFn: fetchAgreementsListFn,
+    mutationFn: fetchAgreementsSearchListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0) {
         toast.error(t("messages.rentalAgreementNotFound", { ns: "dashboard" }));
@@ -86,7 +86,7 @@ export function QuickCheckinAgreementForm() {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
         form.reset();
 
-        const qk = fetchAgreementsListOptions(variables).queryKey;
+        const qk = fetchAgreementsSearchListOptions(variables).queryKey;
         qc.setQueryData(qk, () => data);
 
         navigate({

@@ -1,14 +1,14 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { fetchCustomersListModded } from "@/hooks/network/customer/useGetCustomersList";
-
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
-import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
+import { getAuthFromRouterContext } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
-import { customerQKeys } from "@/utils/query-key";
-import { fetchCustomersSearchColumnsOptions } from "@/utils/query/customer";
+import {
+  fetchCustomersSearchColumnsOptions,
+  fetchCustomersSearchListOptions,
+} from "@/utils/query/customer";
 
 import { customersRoute } from ".";
 
@@ -25,10 +25,19 @@ export const searchCustomersRoute = new Route({
   ],
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
+    const parsedSearch = normalizeCustomerListSearchParams(search);
     return {
       authParams: auth,
       searchColumnsOptions: fetchCustomersSearchColumnsOptions({ auth }),
-      search: normalizeCustomerListSearchParams(search),
+      searchListOptions: fetchCustomersSearchListOptions({
+        auth,
+        pagination: {
+          page: parsedSearch.pageNumber,
+          pageSize: parsedSearch.size,
+        },
+        filters: parsedSearch.searchFilters,
+      }),
+      search: parsedSearch,
     };
   },
   loaderDeps: ({ search }) => ({
@@ -37,39 +46,17 @@ export const searchCustomersRoute = new Route({
     filters: search.filters,
   }),
   loader: async ({ context }) => {
-    const { queryClient, searchColumnsOptions, search } = context;
+    const { queryClient, searchColumnsOptions, searchListOptions } = context;
 
-    const auth = getAuthToken();
+    const promises = [];
 
-    const { pageNumber, size, searchFilters } = search;
+    // get columns
+    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
 
-    if (auth) {
-      const promises = [];
+    // get search
+    promises.push(queryClient.ensureQueryData(searchListOptions));
 
-      // get columns
-      promises.push(queryClient.ensureQueryData(searchColumnsOptions));
-
-      // get search
-      const searchKey = customerQKeys.search({
-        pagination: { page: pageNumber, pageSize: size },
-        filters: searchFilters,
-      });
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: searchKey,
-          queryFn: () =>
-            fetchCustomersListModded({
-              page: pageNumber,
-              pageSize: size,
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              ...searchFilters,
-            }),
-        })
-      );
-
-      await Promise.all(promises);
-    }
+    await Promise.all(promises);
     return;
   },
   component: lazyRouteComponent(() => import("@/pages/search-customers")),

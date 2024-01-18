@@ -6,8 +6,8 @@ import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import {
-  fetchAgreementsListOptions,
   fetchAgreementsSearchColumnsOptions,
+  fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
 import { sortObjectKeys } from "@/utils/sort";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
@@ -50,7 +50,7 @@ export const searchAgreementsRoute = new Route({
       searchColumnsOptions: fetchAgreementsSearchColumnsOptions({
         auth,
       }),
-      searchListOptions: fetchAgreementsListOptions({
+      searchListOptions: fetchAgreementsSearchListOptions({
         auth,
         pagination: {
           page: parsedSearch.pageNumber,

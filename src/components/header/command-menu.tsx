@@ -20,13 +20,13 @@ import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
 import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
-import { fetchAgreementsListOptions } from "@/utils/query/agreement";
+import { fetchAgreementsSearchListOptions } from "@/utils/query/agreement";
+import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
 
@@ -58,14 +58,19 @@ export const CommandMenu = () => {
   const searchTerm = useDebounce(text, 350);
 
   // customers
-  const customersQuery = useGetCustomersList({
-    page: 1,
-    pageSize: 50,
-    filters: {
-      Keyword: searchTerm,
-    },
-    enabled: showCommandMenu && Boolean(searchTerm),
-  });
+  const customersQuery = useQuery(
+    fetchCustomersSearchListOptions({
+      auth: authParams,
+      pagination: {
+        page: 1,
+        pageSize: 50,
+      },
+      filters: {
+        Keyword: searchTerm,
+      },
+      enabled: showCommandMenu && Boolean(searchTerm),
+    })
+  );
   const customersList =
     customersQuery.data?.status === 200 ? customersQuery.data?.body : [];
   const customers: GlobalSearchReturnType = customersList.map((customer) => {
@@ -130,7 +135,7 @@ export const CommandMenu = () => {
 
   // agreements
   const agreementsQuery = useQuery(
-    fetchAgreementsListOptions({
+    fetchAgreementsSearchListOptions({
       auth: authParams,
       pagination: {
         page: 1,
