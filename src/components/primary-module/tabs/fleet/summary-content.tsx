@@ -7,11 +7,12 @@ import FleetInformation from "@/components/primary-module/information-block/flee
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetVehicleSummary } from "@/hooks/network/vehicle/useGetVehicleSummary";
-
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
-import { fetchFleetByIdOptions } from "@/utils/query/fleet";
+import {
+  fetchFleetByIdOptions,
+  fetchSummaryForFleetByIdOptions,
+} from "@/utils/query/fleet";
 
 type FleetSummaryTabProps = {
   vehicleId: string;
@@ -27,7 +28,12 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   const vehicle =
     vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
-  const vehicleSummary = useGetVehicleSummary({ vehicleId: props.vehicleId });
+  const vehicleSummary = useQuery(
+    fetchSummaryForFleetByIdOptions({
+      auth: authParams,
+      fleetId: props.vehicleId,
+    })
+  );
   const summaryData =
     vehicleSummary.data?.status === 200 ? vehicleSummary.data.body : undefined;
 

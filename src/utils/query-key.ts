@@ -10,10 +10,6 @@ export const reservationQKeys = {
   summary: (id: ReferenceId) => ["reservations", id, "summary"],
 };
 
-export const fleetQKeys = {
-  summary: (id: ReferenceId) => ["fleet", id, "summary"],
-};
-
 export const dashboardQKeys = {
   rootKey: "dashboard",
   widgets: () => [dashboardQKeys.rootKey, "widgets"],

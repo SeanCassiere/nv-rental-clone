@@ -160,6 +160,24 @@ export function fetchFleetByIdOptions(options: FleetId & Auth) {
   });
 }
 
+export function fetchSummaryForFleetByIdOptions(options: FleetId & Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, options.fleetId, "summary"]),
+    queryFn: () =>
+      apiClient.vehicle.getSummaryForId({
+        params: {
+          vehicleId: String(options.fleetId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+          clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
+
 export function fetchNotesForFleetByIdOptions(options: FleetId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.fleetId, "notes"]),

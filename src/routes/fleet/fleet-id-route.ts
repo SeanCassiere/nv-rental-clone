@@ -2,9 +2,10 @@ import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
-import { fleetQKeys } from "@/utils/query-key";
-import { fetchFleetByIdOptions } from "@/utils/query/fleet";
+import {
+  fetchFleetByIdOptions,
+  fetchSummaryForFleetByIdOptions,
+} from "@/utils/query/fleet";
 
 import { fleetRoute } from ".";
 
@@ -33,33 +34,21 @@ export const viewFleetByIdRoute = new Route({
     const auth = getAuthFromRouterContext(context);
     return {
       authParams: auth,
+      viewFleetSummaryOptions: fetchSummaryForFleetByIdOptions({
+        auth,
+        fleetId: vehicleId,
+      }),
       viewFleetOptions: fetchFleetByIdOptions({ auth, fleetId: vehicleId }),
       viewTab: search?.tab || "",
     };
   },
-  loader: async ({ context, params: { vehicleId } }) => {
-    const { queryClient, viewFleetOptions, apiClient, authParams } = context;
+  loader: async ({ context }) => {
+    const { queryClient, viewFleetOptions, viewFleetSummaryOptions } = context;
 
     const promises = [];
 
     // get summary
-    const summaryKey = fleetQKeys.summary(vehicleId);
-    promises.push(
-      queryClient.ensureQueryData({
-        queryKey: summaryKey,
-        queryFn: () =>
-          apiClient.vehicle.getSummaryForId({
-            params: {
-              vehicleId,
-            },
-            query: {
-              clientId: authParams.clientId,
-              userId: authParams.userId,
-              clientTime: localDateTimeToQueryYearMonthDay(new Date()),
-            },
-          }),
-      })
-    );
+    promises.push(queryClient.ensureQueryData(viewFleetSummaryOptions));
 
     // get vehicle
     promises.push(queryClient.ensureQueryData(viewFleetOptions));
