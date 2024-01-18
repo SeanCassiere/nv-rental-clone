@@ -21,6 +21,10 @@ const SEGMENT = "vehicles";
 
 type VehicleId = { vehicleId: RefId };
 
+/**
+ *
+ * @api `/clients/columnheaderinformation?module=vehicle`
+ */
 export function fetchVehiclesSearchColumnsOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "columns"]),
@@ -43,6 +47,10 @@ export function fetchVehiclesSearchColumnsOptions(options: Auth) {
   });
 }
 
+/**
+ *
+ * @api `/vehicles`
+ */
 export function fetchVehiclesSearchListOptions(
   options: {
     filters: Omit<
@@ -104,6 +112,10 @@ export function fetchVehiclesSearchListFn(
   });
 }
 
+/**
+ *
+ * @api `/vehicles/statuses`
+ */
 export function fetchVehicleStatusesOptions(
   options: { enabled?: boolean } & Auth
 ) {
@@ -124,6 +136,10 @@ export function fetchVehicleStatusesOptions(
   });
 }
 
+/**
+ *
+ * @api `/vehicles/fuellevels`
+ */
 export function fetchVehicleFuelLevelsOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "fuel_levels"]),
@@ -141,6 +157,10 @@ export function fetchVehicleFuelLevelsOptions(options: Auth) {
   });
 }
 
+/**
+ *
+ * @api `/vehicles/$vehicleId`
+ */
 export function fetchVehicleByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId]),
@@ -160,6 +180,10 @@ export function fetchVehicleByIdOptions(options: VehicleId & Auth) {
   });
 }
 
+/**
+ *
+ * @api `/vehicles/$vehicleId/summary`
+ */
 export function fetchSummaryForVehicleByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "summary"]),
@@ -178,6 +202,10 @@ export function fetchSummaryForVehicleByIdOptions(options: VehicleId & Auth) {
   });
 }
 
+/**
+ *
+ * @api `/vehicle/$vehicleId/note`
+ */
 export function fetchNotesForVehicleByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "notes"]),
