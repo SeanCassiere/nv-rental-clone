@@ -51,7 +51,6 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { userQKeys } from "@/utils/query-key";
 import { fetchRolesListOptions } from "@/utils/query/role";
 import {
   fetchActiveUsersCountOptions,
@@ -59,6 +58,7 @@ import {
   fetchMaximumUsersCountOptions,
   fetchUserByIdOptions,
   fetchUserConfigurationOptions,
+  makeUpdatingUserKey,
 } from "@/utils/query/user";
 
 import { apiClient } from "@/api";
@@ -88,7 +88,10 @@ export function EditUserDialog({
   };
 
   const isSubmittingNumber = useIsMutating({
-    mutationKey: userQKeys.updatingProfile(props.intendedUserId),
+    mutationKey: makeUpdatingUserKey({
+      auth: authParams,
+      userId: props.intendedUserId,
+    }),
   });
   const isSubmittingUpdating = isSubmittingNumber > 0;
 
@@ -294,7 +297,10 @@ function EditUserForm(props: {
   });
 
   const updateProfile = useMutation({
-    mutationKey: userQKeys.updatingProfile(String(props.user.userID)),
+    mutationKey: makeUpdatingUserKey({
+      auth: authParams,
+      userId: props.user.userID,
+    }),
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
       qc.invalidateQueries({
@@ -766,7 +772,10 @@ function NewUserForm(props: {
   });
 
   const createUser = useMutation({
-    mutationKey: userQKeys.updatingProfile(String(props.userId)),
+    mutationKey: makeUpdatingUserKey({
+      auth: authParams,
+      userId: props.userId,
+    }),
     mutationFn: apiClient.user.createdUserProfile,
     onSuccess: (data) => {
       qc.invalidateQueries({
