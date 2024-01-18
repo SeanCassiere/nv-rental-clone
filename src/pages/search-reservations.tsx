@@ -21,13 +21,13 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 
 import type { TReservationListItemParsed } from "@/schemas/reservation";
 
 import { ReservationDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
   fetchReservationStatusesOptions,
   fetchReservationTypesOptions,
@@ -86,9 +86,12 @@ function ReservationsSearchPage() {
   );
   const vehicleTypes = vehicleTypesList.data ?? [];
 
-  const locationsList = useGetLocationsList({
-    query: { withActive: true },
-  });
+  const locationsList = useQuery(
+    fetchLocationsListOptions({
+      auth: authParams,
+      filters: { withActive: true },
+    })
+  );
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 

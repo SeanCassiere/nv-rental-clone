@@ -1,5 +1,7 @@
 import { lazy, Suspense, useCallback, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
@@ -24,8 +26,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useFeature } from "@/hooks/internal/useFeature";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 import { titleMaker } from "@/utils/title-maker";
 
 import type { apiClient } from "@/api";
@@ -41,6 +44,9 @@ const V2DashboardContent = lazy(
 
 function IndexPage() {
   const navigate = useNavigate({ from: indexRoute.id });
+  const auth = useAuth();
+
+  const authParams = getAuthFromAuthHook(auth);
 
   const [currentLocationIds, setCurrentLocationIds] = useState<string[]>([]);
 
@@ -52,9 +58,12 @@ function IndexPage() {
     from: indexRoute.id,
   });
 
-  const locationsList = useGetLocationsList({
-    query: { withActive: true },
-  });
+  const locationsList = useQuery(
+    fetchLocationsListOptions({
+      auth: authParams,
+      filters: { withActive: true },
+    })
+  );
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 

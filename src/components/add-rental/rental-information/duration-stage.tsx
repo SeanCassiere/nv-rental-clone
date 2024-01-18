@@ -28,13 +28,13 @@ import {
 } from "@/components/ui/input-select";
 
 import { useDatePreference } from "@/hooks/internal/useDatePreferences";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import {
   fetchAgreementGeneratedNumberOptions,
   fetchAgreementTypesOptions,
 } from "@/utils/query/agreement";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 
 import i18n from "@/i18next-config";
 
@@ -117,9 +117,12 @@ export const DurationStage = ({
     values: initialData ? values : undefined,
   });
 
-  const locationData = useGetLocationsList({
-    query: { withActive: true },
-  });
+  const locationData = useQuery(
+    fetchLocationsListOptions({
+      auth: authParams,
+      filters: { withActive: true },
+    })
+  );
   const locationsList =
     locationData.data?.status === 200 ? locationData.data.body : [];
 

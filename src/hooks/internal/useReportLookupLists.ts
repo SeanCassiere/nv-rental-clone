@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-
 import type { TReportDetail } from "@/schemas/report";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
 import {
   fetchVehiclesStatusesOptions,
@@ -26,10 +25,13 @@ export function useReportLookupLists(report: TReportDetail) {
 
   // 1. BEGIN - lookup for locations
   const findLocations = confirmRequirement(report.searchCriteria, "LocationId");
-  const locationsQuery = useGetLocationsList({
-    query: { withActive: true },
-    enabled: findLocations,
-  });
+  const locationsQuery = useQuery(
+    fetchLocationsListOptions({
+      auth: authParams,
+      filters: { withActive: true },
+      enabled: findLocations,
+    })
+  );
   const locationsList =
     locationsQuery.data?.status === 200 ? locationsQuery.data.body : [];
   const locationOptions: ReportFilterOption[] = locationsList.map((loc) => ({

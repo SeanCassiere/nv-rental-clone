@@ -40,8 +40,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-
 import type { RoleListItem } from "@/schemas/role";
 import {
   buildUpdateUserSchema,
@@ -51,6 +49,7 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 import { fetchRolesListOptions } from "@/utils/query/role";
 import {
   fetchActiveUsersCountOptions,
@@ -121,10 +120,13 @@ export function EditUserDialog({
     fetchLanguagesForUsersOptions({ auth: authParams })
   );
 
-  const locationsQuery = useGetLocationsList({
-    query: { withActive: true },
-    enabled: props.mode === "new",
-  });
+  const locationsQuery = useQuery(
+    fetchLocationsListOptions({
+      auth: authParams,
+      filters: { withActive: true },
+      enabled: props.mode === "new",
+    })
+  );
 
   const currentUsersCount =
     currentUsersCountQuery.data?.status === 200
