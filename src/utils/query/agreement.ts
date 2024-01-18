@@ -1,10 +1,10 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
+import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
 
-import { sortObjectKeys } from "../sort";
 import {
   isEnabled,
   makeQueryKey,
@@ -17,6 +17,10 @@ const SEGMENT = "agreements";
 
 type AgreementId = { agreementId: RefId };
 
+/**
+ *
+ * @api `/clients/columnheaderinformation?module=agreement`
+ */
 export function fetchAgreementsSearchColumnsOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "columns"]),
@@ -39,6 +43,10 @@ export function fetchAgreementsSearchColumnsOptions(options: Auth) {
   });
 }
 
+/**
+ *
+ * @api `/agreements`
+ */
 export function fetchAgreementsSearchListOptions(
   options: {
     filters: Omit<
@@ -91,6 +99,10 @@ export function fetchAgreementsSearchListFn(
   });
 }
 
+/**
+ *
+ * @api `/agreements/statuses`
+ */
 export function fetchAgreementStatusesOptions(
   options: { enabled?: boolean } & Auth
 ) {
@@ -111,6 +123,10 @@ export function fetchAgreementStatusesOptions(
   });
 }
 
+/**
+ *
+ * @api `/agreements/types`
+ */
 export function fetchAgreementTypesOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "types"]),
@@ -128,6 +144,10 @@ export function fetchAgreementTypesOptions(options: Auth) {
   });
 }
 
+/**
+ *
+ * @api `/agreements/$agreementId`
+ */
 export function fetchAgreementByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.agreementId]),
@@ -147,6 +167,34 @@ export function fetchAgreementByIdOptions(options: AgreementId & Auth) {
   });
 }
 
+/**
+ *
+ * @api `/agreements/$agreementId/summary`
+ */
+export function fetchAgreementSummaryByIdOptions(options: AgreementId & Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, options.agreementId, "summary"]),
+    queryFn: () =>
+      apiClient.summary.getSummaryForReferenceId({
+        params: {
+          referenceType: "agreements",
+          referenceId: String(options.agreementId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    enabled:
+      isEnabled(options) &&
+      Boolean(options.agreementId && options.agreementId !== "0"),
+  });
+}
+
+/**
+ *
+ * @api `/agreement/$agreementId/note`
+ */
 export function fetchAgreementNotesByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.agreementId, "notes"]),
@@ -164,6 +212,10 @@ export function fetchAgreementNotesByIdOptions(options: AgreementId & Auth) {
   });
 }
 
+/**
+ *
+ * @api `/vehicleexchanges?agreementId=$agreementId`
+ */
 export function fetchAgreementExchangesByIdOptions(
   options: AgreementId & Auth
 ) {
@@ -185,6 +237,10 @@ export function fetchAgreementExchangesByIdOptions(
   });
 }
 
+/**
+ *
+ * @api `/agreements/generateagreementno`
+ */
 export function fetchAgreementGeneratedNumberOptions(
   options: { enabled: boolean; agreementType: string } & Auth
 ) {

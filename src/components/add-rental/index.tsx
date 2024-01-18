@@ -16,14 +16,6 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetMiscCharges } from "@/hooks/network/misc-charges/useGetMiscCharges";
-import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
-import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
-import {
-  CalculateRentalSummaryHookInput,
-  usePostCalculateRentalSummaryAmounts,
-} from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-
 import type { RentalRateParsed } from "@/schemas/rate";
 import type { ReservationDataParsed } from "@/schemas/reservation";
 import type { TRentalRatesSummarySchema } from "@/schemas/summary";
@@ -31,6 +23,15 @@ import type { TRentalRatesSummarySchema } from "@/schemas/summary";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
+import {
+  fetchRatesListOptions,
+  fetchRatesOptimalNameOptions,
+} from "@/utils/query/rate";
+import {
+  fetchSummaryForRentalOptions,
+  type CalculateRentalSummaryInput,
+} from "@/utils/query/summary";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
@@ -147,7 +148,7 @@ const AddRentalParentForm = ({
 
   const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
   const [selectedMiscCharges, setSelectedMiscCharges] = useState<
-    CalculateRentalSummaryHookInput["miscCharges"]
+    CalculateRentalSummaryInput["miscCharges"]
   >([]);
 
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
@@ -183,7 +184,7 @@ const AddRentalParentForm = ({
   }, []);
 
   const handleSetSelectedMiscCharges = useCallback(
-    (charges: CalculateRentalSummaryHookInput["miscCharges"]) => {
+    (charges: CalculateRentalSummaryInput["miscCharges"]) => {
       setSelectedMiscCharges(charges);
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
@@ -504,29 +505,30 @@ const AddRentalParentForm = ({
     setSelectedMiscCharges((info) => {
       if (info.length > 0) return info;
 
-      const filledMiscCharges: CalculateRentalSummaryHookInput["miscCharges"] =
-        (data.mischargeList || []).map((charge) => ({
-          id: charge.miscChargeId ?? 0,
-          locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
-          quantity: charge?.quantity ?? 0,
-          startDate: charge?.startDate ?? originalStartDate.toISOString(),
-          endDate: charge?.endDate ?? originalEndDate.toISOString(),
-          optionId: charge?.optionId ?? 0,
-          isSelected: charge?.isSelected ?? false,
-          value: charge?.value ?? 0,
-          unit: charge?.unit ?? 0,
-          isTaxable: charge?.isTaxable ?? false,
-          minValue: charge.minValue,
-          maxValue: charge.maxValue,
-          hourlyValue: charge.hourlyValue,
-          hourlyQuantity: charge.hourlyQuantity,
-          dailyValue: charge.dailyValue,
-          dailyQuantity: charge.dailyQuantity,
-          weeklyValue: charge.weeklyValue,
-          weeklyQuantity: charge.weeklyQuantity,
-          monthlyValue: charge.monthlyValue,
-          monthlyQuantity: charge.monthlyQuantity,
-        }));
+      const filledMiscCharges: CalculateRentalSummaryInput["miscCharges"] = (
+        data.mischargeList || []
+      ).map((charge) => ({
+        id: charge.miscChargeId ?? 0,
+        locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
+        quantity: charge?.quantity ?? 0,
+        startDate: charge?.startDate ?? originalStartDate.toISOString(),
+        endDate: charge?.endDate ?? originalEndDate.toISOString(),
+        optionId: charge?.optionId ?? 0,
+        isSelected: charge?.isSelected ?? false,
+        value: charge?.value ?? 0,
+        unit: charge?.unit ?? 0,
+        isTaxable: charge?.isTaxable ?? false,
+        minValue: charge.minValue,
+        maxValue: charge.maxValue,
+        hourlyValue: charge.hourlyValue,
+        hourlyQuantity: charge.hourlyQuantity,
+        dailyValue: charge.dailyValue,
+        dailyQuantity: charge.dailyQuantity,
+        weeklyValue: charge.weeklyValue,
+        weeklyQuantity: charge.weeklyQuantity,
+        monthlyValue: charge.monthlyValue,
+        monthlyQuantity: charge.monthlyQuantity,
+      }));
       return filledMiscCharges;
     });
     startingCompletionStages.miscCharges = true;
@@ -552,30 +554,33 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation?.vehicleTypeId) &&
     Boolean(agreementRentalInformation?.checkoutLocation);
   const reservationConditionsForOptimalRateFetch = false;
-  const getOptimalRateQuery = useGetOptimalRateForRental({
-    filters: {
-      CheckoutDate:
+  const getOptimalRateQuery = useQuery(
+    fetchRatesOptimalNameOptions({
+      auth: authParams,
+      filters: {
+        CheckoutDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkoutDate || new Date()
+            : new Date(),
+        CheckinDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkinDate || new Date()
+            : new Date(),
+        VehicleTypeId:
+          module === "agreement"
+            ? String(agreementVehicleInformation?.vehicleTypeId)
+            : "demo-reservation-vehicle-type-id",
+        LocationId:
+          module === "agreement"
+            ? String(agreementRentalInformation?.checkoutLocation)
+            : "demo-reservation-location-id",
+      },
+      enabled:
         module === "agreement"
-          ? agreementRentalInformation?.checkoutDate || new Date()
-          : new Date(),
-      CheckinDate:
-        module === "agreement"
-          ? agreementRentalInformation?.checkinDate || new Date()
-          : new Date(),
-      VehicleTypeId:
-        module === "agreement"
-          ? String(agreementVehicleInformation?.vehicleTypeId)
-          : "demo-reservation-vehicle-type-id",
-      LocationId:
-        module === "agreement"
-          ? String(agreementRentalInformation?.checkoutLocation)
-          : "demo-reservation-location-id",
-    },
-    enabled:
-      module === "agreement"
-        ? agreementConditionsForOptimalRateFetch
-        : reservationConditionsForOptimalRateFetch,
-  });
+          ? agreementConditionsForOptimalRateFetch
+          : reservationConditionsForOptimalRateFetch,
+    })
+  );
 
   useEffect(() => {
     if (getOptimalRateQuery.status !== "success") return;
@@ -602,36 +607,42 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation) &&
     selectedRateName !== "";
   const reservationConditionsForFetchingRates = false;
-  const getRentalRatesQuery = useGetRentalRates({
-    enabled:
-      module === "agreement"
-        ? agreementConditionsForFetchingRates
-        : reservationConditionsForFetchingRates,
-    filters: {
-      LocationId: Number(
-        agreementRentalInformation?.checkoutLocation
-      ).toString(),
-      RateName: selectedRateName,
-      CheckoutDate:
+  const getRentalRatesQuery = useQuery(
+    fetchRatesListOptions({
+      auth: authParams,
+      enabled:
         module === "agreement"
-          ? agreementRentalInformation?.checkoutDate || undefined
-          : undefined,
-      CheckinDate:
-        module === "agreement"
-          ? agreementRentalInformation?.checkinDate || undefined
-          : undefined,
-      VehicleTypeId:
-        module === "agreement"
-          ? Number(agreementVehicleInformation?.vehicleTypeId || "0").toString()
-          : "demo-reservation-vehicle-type-id",
-      ...(module === "agreement"
-        ? {
-            AgreementId: referenceId ? String(referenceId) : undefined,
-            AgreementTypeName: agreementRentalInformation?.agreementType || "",
-          }
-        : {}),
-    },
-  });
+          ? agreementConditionsForFetchingRates
+          : reservationConditionsForFetchingRates,
+      filters: {
+        LocationId: Number(
+          agreementRentalInformation?.checkoutLocation
+        ).toString(),
+        RateName: selectedRateName,
+        CheckoutDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkoutDate || undefined
+            : undefined,
+        CheckinDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkinDate || undefined
+            : undefined,
+        VehicleTypeId:
+          module === "agreement"
+            ? Number(
+                agreementVehicleInformation?.vehicleTypeId || "0"
+              ).toString()
+            : "demo-reservation-vehicle-type-id",
+        ...(module === "agreement"
+          ? {
+              AgreementId: referenceId ? String(referenceId) : undefined,
+              AgreementTypeName:
+                agreementRentalInformation?.agreementType || "",
+            }
+          : {}),
+      },
+    })
+  );
 
   useEffect(() => {
     if (getRentalRatesQuery.status !== "success") return;
@@ -705,26 +716,29 @@ const AddRentalParentForm = ({
     Boolean(agreementRentalInformation) && Boolean(agreementVehicleInformation);
   const miscChargesReservationReady = false;
 
-  const getMiscChargesQuery = useGetMiscCharges({
-    filters: {
-      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
-      LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
-      CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-        agreementRentalInformation?.checkoutDate ?? new Date()
-      ),
-      CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-        agreementRentalInformation?.checkinDate ?? new Date()
-      ),
-      Active: "true",
-      ...(module === "agreement" && referenceNumber
-        ? { AgreementId: String(referenceId) }
-        : {}),
-    },
-    enabled:
-      module === "agreement"
-        ? miscChargesAgreementReady
-        : miscChargesReservationReady,
-  });
+  const getMiscChargesQuery = useQuery(
+    fetchMiscChargesListOptions({
+      auth: authParams,
+      filters: {
+        VehicleTypeId: agreementVehicleInformation?.vehicleTypeId ?? 0,
+        LocationId: agreementRentalInformation?.checkoutLocation ?? 0,
+        CheckoutDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+          agreementRentalInformation?.checkoutDate ?? new Date()
+        ),
+        CheckinDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
+          agreementRentalInformation?.checkinDate ?? new Date()
+        ),
+        Active: "true",
+        ...(module === "agreement" && referenceNumber
+          ? { AgreementId: String(referenceId) }
+          : {}),
+      },
+      enabled:
+        module === "agreement"
+          ? miscChargesAgreementReady
+          : miscChargesReservationReady,
+    })
+  );
 
   useEffect(() => {
     if (getMiscChargesQuery.status !== "success") return;
@@ -831,39 +845,44 @@ const AddRentalParentForm = ({
     Boolean(commonCustomerInformation) &&
     Boolean(selectedRate);
 
-  const calculateSummaryQuery = usePostCalculateRentalSummaryAmounts({
-    input: {
-      isCheckin: isCheckin,
-      startDate: agreementRentalInformation?.checkoutDate || new Date(),
-      endDate: agreementRentalInformation?.checkinDate || new Date(),
-      checkoutLocationId: agreementRentalInformation?.checkoutLocation || 0,
-      checkinLocationId: agreementRentalInformation?.checkinLocation || 0,
-      miscCharges: selectedMiscCharges,
-      rate: selectedRate!,
-      vehicleTypeId: agreementVehicleInformation?.vehicleTypeId || 0,
-      taxIds: selectedTaxIds,
-      advancePayment: 0,
-      amountPaid: 0,
-      preAdjustment: 0,
-      postAdjustment: 0,
-      securityDeposit: "",
-      additionalCharge: 0,
-      unTaxableAdditional: 0,
-      takeSize: 0,
-      fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
-      fuelLevelIn: agreementVehicleInformation?.fuelOut || "Full", // this should be changed for checkin
-      odometerOut: agreementVehicleInformation?.odometerOut || 0,
-      odometerIn: 0,
-      agreementId: parseInt(referenceId ? String(referenceId) : "0"),
-      agreementTypeName: agreementRentalInformation?.agreementType || "",
-      promotionIds: [],
-      writeOffAmount: 0,
-      customerId: commonCustomerInformation?.customerId || 0,
-      agreementInsurance: null,
-    },
-    enabled:
-      module === "agreement" ? agreementConditionsForSummaryCalculation : false,
-  });
+  const calculateSummaryQuery = useQuery(
+    fetchSummaryForRentalOptions({
+      auth: authParams,
+      input: {
+        isCheckin: isCheckin,
+        startDate: agreementRentalInformation?.checkoutDate || new Date(),
+        endDate: agreementRentalInformation?.checkinDate || new Date(),
+        checkoutLocationId: agreementRentalInformation?.checkoutLocation || 0,
+        checkinLocationId: agreementRentalInformation?.checkinLocation || 0,
+        miscCharges: selectedMiscCharges,
+        rate: selectedRate!,
+        vehicleTypeId: agreementVehicleInformation?.vehicleTypeId || 0,
+        taxIds: selectedTaxIds,
+        advancePayment: 0,
+        amountPaid: 0,
+        preAdjustment: 0,
+        postAdjustment: 0,
+        securityDeposit: "",
+        additionalCharge: 0,
+        unTaxableAdditional: 0,
+        takeSize: 0,
+        fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
+        fuelLevelIn: agreementVehicleInformation?.fuelOut || "Full", // this should be changed for checkin
+        odometerOut: agreementVehicleInformation?.odometerOut || 0,
+        odometerIn: 0,
+        agreementId: parseInt(referenceId ? String(referenceId) : "0"),
+        agreementTypeName: agreementRentalInformation?.agreementType || "",
+        promotionIds: [],
+        writeOffAmount: 0,
+        customerId: commonCustomerInformation?.customerId || 0,
+        agreementInsurance: null,
+      },
+      enabled:
+        module === "agreement"
+          ? agreementConditionsForSummaryCalculation
+          : false,
+    })
+  );
 
   const networkSummaryData =
     calculateSummaryQuery.data?.status === 200

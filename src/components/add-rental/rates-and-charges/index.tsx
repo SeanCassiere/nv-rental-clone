@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 
-import { CalculateRentalSummaryHookInput } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-
 import type { RentalRateParsed } from "@/schemas/rate";
+
+import type { CalculateRentalSummaryInput } from "@/utils/query/summary";
 
 import { MiscChargesStage } from "./misc-charges-stage";
 import { RatesStage } from "./rates-stage";
@@ -38,9 +38,9 @@ export interface RatesAndChargesTabProps {
   rate: RentalRateParsed | null;
   onSelectedRate: (rate: RentalRateParsed) => void;
 
-  miscCharges: CalculateRentalSummaryHookInput["miscCharges"];
+  miscCharges: CalculateRentalSummaryInput["miscCharges"];
   onSelectedMiscCharges: (
-    charges: CalculateRentalSummaryHookInput["miscCharges"]
+    charges: CalculateRentalSummaryInput["miscCharges"]
   ) => void;
 
   isEdit: boolean;

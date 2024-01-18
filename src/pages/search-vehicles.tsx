@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -19,12 +19,12 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
   fetchVehiclesStatusesOptions,
   fetchVehiclesTypesOptions,
@@ -40,8 +40,13 @@ const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 function VehiclesSearchPage() {
   const navigate = useNavigate();
 
-  const { search, searchColumnsOptions, searchListOptions, authParams } =
-    routeApi.useRouteContext();
+  const {
+    search,
+    searchColumnsOptions,
+    searchListOptions,
+    authParams,
+    queryClient,
+  } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -80,9 +85,12 @@ function VehiclesSearchPage() {
   );
   const vehicleTypes = vehicleTypesList.data ?? [];
 
-  const locationsList = useGetLocationsList({
-    query: { withActive: true },
-  });
+  const locationsList = useQuery(
+    fetchLocationsListOptions({
+      auth: authParams,
+      filters: { withActive: true },
+    })
+  );
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 
@@ -143,17 +151,31 @@ function VehiclesSearchPage() {
     [columnsData.data]
   );
 
-  const saveColumnsMutation = useSaveModuleColumns({ module: "vehicles" });
+  const saveColumnsMutation = useMutation({
+    mutationFn: saveColumnSettings,
+    onMutate: () =>
+      queryClient.cancelQueries({ queryKey: searchColumnsOptions.queryKey }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+    onError: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+  });
 
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "vehicles",
         allColumns:
           columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -164,9 +186,13 @@ function VehiclesSearchPage() {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
-      saveColumnsMutation.mutate({ allColumns: newColumnsData });
+      saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "vehicles",
+        allColumns: newColumnsData,
+      });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const headers = vehiclesData.data?.headers ?? new Headers();

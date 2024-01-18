@@ -58,10 +58,8 @@ function AgreementViewPage() {
   const navigate = useNavigate();
 
   const routeContext = routeApi.useRouteContext();
-  const routeParams = routeApi.useParams();
+  const { agreementId } = routeApi.useParams();
   const { tab: tabName = "summary" } = routeApi.useSearch();
-
-  const agreementId = routeParams.agreementId;
 
   const tabsConfig = useMemo(() => {
     const tabs: TabListItem[] = [];
@@ -69,7 +67,7 @@ function AgreementViewPage() {
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <SummaryTab agreementId={agreementId} />,
+      component: <SummaryTab agreementId={agreementId} auth={authParams} />,
       suspenseComponent: <LoadingPlaceholder />,
     });
     tabs.push({

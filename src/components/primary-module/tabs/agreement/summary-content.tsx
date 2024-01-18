@@ -1,6 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "react-oidc-context";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
 import RentalInformation from "@/components/primary-module/information-block/rental-information";
@@ -8,18 +7,18 @@ import VehicleInformation from "@/components/primary-module/information-block/ve
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
-
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import {
+  fetchAgreementByIdOptions,
+  fetchAgreementSummaryByIdOptions,
+} from "@/utils/query/agreement";
+import type { Auth } from "@/utils/query/helpers";
 
 type AgreementSummaryTabProps = {
   agreementId: string;
-};
+} & Auth;
 
 const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
-  const auth = useAuth();
-  const authParams = getAuthFromAuthHook(auth);
+  const { auth: authParams } = props;
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
@@ -37,10 +36,12 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
 
   const isCheckedIn = agreement?.returnDate ? true : false;
 
-  const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "agreements",
-    referenceId: props.agreementId,
-  });
+  const rentalRatesSummary = useQuery(
+    fetchAgreementSummaryByIdOptions({
+      auth: authParams,
+      agreementId: props.agreementId,
+    })
+  );
   const summaryData =
     rentalRatesSummary.data?.status === 200
       ? rentalRatesSummary.data?.body
