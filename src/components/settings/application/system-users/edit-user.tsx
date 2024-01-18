@@ -56,6 +56,7 @@ import { fetchRolesListOptions } from "@/utils/query/role";
 import {
   fetchLanguagesForUsersOptions,
   fetchUserByIdOptions,
+  fetchUserConfigurationOptions,
 } from "@/utils/query/user";
 
 import { apiClient } from "@/api";
@@ -254,6 +255,10 @@ function EditUserForm(props: {
 }) {
   const { t } = useTranslation();
   const qc = useQueryClient();
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
 
   const languagesList = props.languages
     .filter((item) => item.key)
@@ -296,11 +301,13 @@ function EditUserForm(props: {
     mutationKey: userQKeys.updatingProfile(String(props.user.userID)),
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
-      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
+      qc.invalidateQueries({
+        queryKey: fetchUserConfigurationOptions({ auth: authParams }).queryKey,
+      });
       qc.invalidateQueries({
         queryKey: fetchUserByIdOptions({
           userId: variables.params.userId,
-          auth: { clientId: props.clientId, userId: props.userId },
+          auth: authParams,
         }).queryKey,
       });
       qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
@@ -697,6 +704,10 @@ function NewUserForm(props: {
 }) {
   const { t } = useTranslation();
   const qc = useQueryClient();
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -758,7 +769,9 @@ function NewUserForm(props: {
     mutationKey: userQKeys.updatingProfile(String(props.userId)),
     mutationFn: apiClient.user.createdUserProfile,
     onSuccess: (data) => {
-      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
+      qc.invalidateQueries({
+        queryKey: fetchUserConfigurationOptions({ auth: authParams }).queryKey,
+      });
       qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
 

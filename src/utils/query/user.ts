@@ -75,3 +75,14 @@ export function fetchPermissionsByUserIdOptions(options: UserId & Auth) {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
+
+export function fetchUserConfigurationOptions(options: Auth) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, "user_configurations"],
+    queryFn: () =>
+      apiClient.user.getUserConfigurations({
+        query: { clientId: options.auth.clientId, userId: options.auth.userId },
+      }),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}

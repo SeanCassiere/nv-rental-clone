@@ -51,7 +51,6 @@ export const userQKeys = {
     userId,
     "updating-profile",
   ],
-  userConfigurations: () => [userQKeys.rootKey, "user-configurations"],
   activeUsersCount: () => [userQKeys.rootKey, "active-users-count"],
   maximumUsersCount: () => [userQKeys.rootKey, "maximum-users-count"],
 };
