@@ -39,8 +39,8 @@ import {
 } from "@/utils/normalize-search-params";
 import { fleetQKeys, reservationQKeys } from "@/utils/query-key";
 import {
-  fetchAgreementsListFn,
-  fetchAgreementsListOptions,
+  fetchAgreementsSearchListFn,
+  fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
 import {
   fetchCustomersSearchListFn,
@@ -141,14 +141,15 @@ export function QuickLookupForm() {
   });
 
   const agreements = useMutation({
-    mutationFn: fetchAgreementsListFn,
+    mutationFn: fetchAgreementsSearchListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
 
-      const searchQueryKey = fetchAgreementsListOptions(variables).queryKey;
+      const searchQueryKey =
+        fetchAgreementsSearchListOptions(variables).queryKey;
       qc.setQueryData(searchQueryKey, () => data);
 
       if (data.body.length > 1) {

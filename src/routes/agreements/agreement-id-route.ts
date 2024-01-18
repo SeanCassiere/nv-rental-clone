@@ -5,8 +5,8 @@ import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { agreementQKeys } from "@/utils/query-key";
 import {
   fetchAgreementByIdOptions,
-  fetchExchangesForAgreementById,
-  fetchNotesForAgreementById,
+  fetchExchangesForAgreementByIdOptions,
+  fetchNotesForAgreementByIdOptions,
 } from "@/utils/query/agreement";
 
 import { agreementsRoute } from ".";
@@ -71,11 +71,11 @@ export const viewAgreementByIdRoute = new Route({
     const auth = getAuthFromRouterContext(context);
     return {
       authParams: auth,
-      viewAgreementExchangesOptions: fetchExchangesForAgreementById({
+      viewAgreementExchangesOptions: fetchExchangesForAgreementByIdOptions({
         auth,
         agreementId,
       }),
-      viewAgreementNotesOptions: fetchNotesForAgreementById({
+      viewAgreementNotesOptions: fetchNotesForAgreementByIdOptions({
         auth,
         agreementId,
       }),

@@ -25,7 +25,7 @@ import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
-import { fetchAgreementsListOptions } from "@/utils/query/agreement";
+import { fetchAgreementsSearchListOptions } from "@/utils/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
@@ -135,7 +135,7 @@ export const CommandMenu = () => {
 
   // agreements
   const agreementsQuery = useQuery(
-    fetchAgreementsListOptions({
+    fetchAgreementsSearchListOptions({
       auth: authParams,
       pagination: {
         page: 1,

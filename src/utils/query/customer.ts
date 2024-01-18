@@ -82,7 +82,9 @@ export function fetchCustomersSearchListFn(
   });
 }
 
-export function fetchNotesForCustomerById(
+export function fetchSummaryForCustomerByIdOptions() {}
+
+export function fetchNotesForCustomerByIdOptions(
   options: { customerId: RefId } & Auth
 ) {
   return queryOptions({

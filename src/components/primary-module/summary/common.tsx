@@ -55,10 +55,10 @@ export const makeSummaryDataStyles = (
   const colorMode = data.primaryBlockHighlight
     ? "primary-block-only"
     : data.redHighlight
-    ? "red-highlight"
-    : data.primaryTextHighlight
-    ? "primary-text-only"
-    : ("" as const);
+      ? "red-highlight"
+      : data.primaryTextHighlight
+        ? "primary-text-only"
+        : ("" as const);
 
   return cn(
     "text-base font-semibold",

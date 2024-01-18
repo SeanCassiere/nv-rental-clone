@@ -19,8 +19,8 @@ import {
 } from "@/utils/columns";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import {
-  fetchAgreementsListOptions,
   fetchAgreementsSearchColumnsOptions,
+  fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
 
 interface FleetOccupiedAgreementsTabProps {
@@ -60,7 +60,7 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
   );
 
   const dataList = useQuery(
-    fetchAgreementsListOptions({
+    fetchAgreementsSearchListOptions({
       auth: authParams,
       pagination: {
         page: items.pageNumber,

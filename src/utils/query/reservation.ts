@@ -30,7 +30,7 @@ export function fetchReservationsSearchColumnsOptions(options: Auth) {
   });
 }
 
-export function fetchNotesForReservationById(
+export function fetchNotesForReservationByIdOptions(
   options: { reservationId: RefId } & Auth
 ) {
   return queryOptions({

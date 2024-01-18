@@ -60,8 +60,8 @@ export function HiddenFeatureSetter() {
       currencyDigitCount4Feature
         ? "4"
         : currencyDigitCount3Feature
-        ? "3"
-        : APP_DEFAULTS.currencyDigits
+          ? "3"
+          : APP_DEFAULTS.currencyDigits
     );
   }, [
     auth.clientId,

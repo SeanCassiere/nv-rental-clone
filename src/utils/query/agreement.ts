@@ -37,7 +37,7 @@ export function fetchAgreementsSearchColumnsOptions(options: Auth) {
   });
 }
 
-export function fetchAgreementsListOptions(
+export function fetchAgreementsSearchListOptions(
   options: {
     filters: Omit<
       Parameters<(typeof apiClient)["agreement"]["getList"]>[0]["query"],
@@ -59,13 +59,13 @@ export function fetchAgreementsListOptions(
       sortObjectKeys(options.pagination),
       sortObjectKeys(filters),
     ],
-    queryFn: () => fetchAgreementsListFn(options),
+    queryFn: () => fetchAgreementsSearchListFn(options),
     enabled: isEnabled(options) && enabled,
     placeholderData: keepPreviousData,
   });
 }
 
-export function fetchAgreementsListFn(
+export function fetchAgreementsSearchListFn(
   options: {
     filters: Omit<
       Parameters<(typeof apiClient)["agreement"]["getList"]>[0]["query"],
@@ -148,7 +148,7 @@ export function fetchAgreementByIdOptions(
   });
 }
 
-export function fetchNotesForAgreementById(
+export function fetchNotesForAgreementByIdOptions(
   options: { agreementId: RefId } & Auth
 ) {
   return queryOptions({
@@ -167,7 +167,7 @@ export function fetchNotesForAgreementById(
   });
 }
 
-export function fetchExchangesForAgreementById(
+export function fetchExchangesForAgreementByIdOptions(
   options: { agreementId: RefId } & Auth
 ) {
   return queryOptions({

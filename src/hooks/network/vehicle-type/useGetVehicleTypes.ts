@@ -7,9 +7,9 @@ import { vehicleTypeQKeys } from "@/utils/query-key";
 
 import { apiClient } from "@/api";
 
-export function useGetVehicleTypesList(
-  params?: { search?: VehicleTypesListExtraOpts }
-) {
+export function useGetVehicleTypesList(params?: {
+  search?: VehicleTypesListExtraOpts;
+}) {
   const searchParams = params?.search || {};
 
   const otherSearch: VehicleTypesListExtraOpts = {
@@ -25,7 +25,6 @@ export function useGetVehicleTypesList(
         }
       : {}),
   };
-
 
   const auth = useAuth();
   const query = useQuery({
