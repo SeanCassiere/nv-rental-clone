@@ -1,10 +1,18 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
+import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
+import {
+  isEnabled,
+  makeQueryKey,
+  type Auth,
+  type Pagination,
+  type RefId,
+} from "./helpers";
 
 const SEGMENT = "reservations";
 
@@ -29,6 +37,58 @@ export function fetchReservationsSearchColumnsOptions(options: Auth) {
           })
         ),
     enabled: isEnabled(options),
+  });
+}
+
+export function fetchReservationsSearchListOptions(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["reservation"]["getList"]>[0]["query"],
+      "clientId" | "userId" | "page" | "pageSize" | "clientDate"
+    > & {
+      clientDate: Date;
+    };
+    enabled?: boolean;
+  } & Pagination &
+    Auth
+) {
+  const { enabled = true } = options;
+  const { clientDate, ...filters } = options.filters;
+  return queryOptions({
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      "list",
+      sortObjectKeys(options.pagination),
+      sortObjectKeys(filters),
+    ]),
+    queryFn: () => fetchReservationsSearchListFn(options),
+    enabled: isEnabled(options) && enabled,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function fetchReservationsSearchListFn(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["reservation"]["getList"]>[0]["query"],
+      "clientId" | "userId" | "page" | "pageSize" | "clientDate"
+    > & {
+      clientDate: Date;
+    };
+  } & Pagination &
+    Auth
+) {
+  const { clientDate, ...filters } = options.filters;
+
+  return apiClient.reservation.getList({
+    query: {
+      clientId: options.auth.clientId,
+      userId: options.auth.userId,
+      page: options.pagination.page || 1,
+      pageSize: options.pagination.pageSize || 10,
+      clientDate: localDateToQueryYearMonthDay(clientDate),
+      ...filters,
+    },
   });
 }
 

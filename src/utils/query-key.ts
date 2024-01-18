@@ -13,12 +13,6 @@ export const agreementQKeys = {
 export const reservationQKeys = {
   // search
   rootKey: "reservations",
-  search: (opts: { pagination: Pagination; filters: Filters }) => [
-    reservationQKeys.rootKey,
-    "list",
-    sortObjectKeys(opts.pagination),
-    sortObjectKeys(opts.filters),
-  ],
   statuses: () => [reservationQKeys.rootKey, "statuses"],
   types: () => [reservationQKeys.rootKey, "types"],
   // view by ID

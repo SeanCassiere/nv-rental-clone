@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -23,7 +23,6 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
 import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
@@ -45,7 +44,8 @@ function ReservationsSearchPage() {
 
   const navigate = useNavigate();
 
-  const { searchColumnsOptions, search } = routeApi.useRouteContext();
+  const { searchColumnsOptions, searchListOptions, search } =
+    routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -72,11 +72,7 @@ function ReservationsSearchPage() {
     [pageNumber, size]
   );
 
-  const reservationsData = useGetReservationsList({
-    page: pageNumber,
-    pageSize: size,
-    filters: searchFilters,
-  });
+  const reservationsData = useQuery(searchListOptions);
 
   const reservationStatusList = useGetReservationStatusList();
   const reservationStatuses = reservationStatusList.data ?? [];

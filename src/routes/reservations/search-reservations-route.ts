@@ -1,14 +1,14 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
-
 import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 
-import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
+import { getAuthFromRouterContext } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
-import { reservationQKeys } from "@/utils/query-key";
-import { fetchReservationsSearchColumnsOptions } from "@/utils/query/reservation";
+import {
+  fetchReservationsSearchColumnsOptions,
+  fetchReservationsSearchListOptions,
+} from "@/utils/query/reservation";
 
 import { reservationsRoute } from ".";
 
@@ -25,10 +25,19 @@ export const searchReservationsRoute = new Route({
   ],
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
+    const parsedSearch = normalizeReservationListSearchParams(search);
     return {
       authParams: auth,
       searchColumnsOptions: fetchReservationsSearchColumnsOptions({ auth }),
-      search: normalizeReservationListSearchParams(search),
+      searchListOptions: fetchReservationsSearchListOptions({
+        auth,
+        pagination: {
+          page: parsedSearch.pageNumber,
+          pageSize: parsedSearch.size,
+        },
+        filters: { ...parsedSearch.searchFilters, clientDate: new Date() },
+      }),
+      search: parsedSearch,
     };
   },
   loaderDeps: ({ search }) => ({
@@ -37,39 +46,18 @@ export const searchReservationsRoute = new Route({
     filters: search.filters,
   }),
   loader: async ({ context }) => {
-    const { queryClient, search, searchColumnsOptions } = context;
-    const auth = getAuthToken();
+    const { queryClient, searchListOptions, searchColumnsOptions } = context;
 
-    const { pageNumber, size, searchFilters } = search;
+    const promises = [];
 
-    if (auth) {
-      const promises = [];
+    // get columns
+    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
 
-      // get columns
-      promises.push(queryClient.ensureQueryData(searchColumnsOptions));
+    // get search
+    promises.push(queryClient.ensureQueryData(searchListOptions));
 
-      // get search
-      const searchKey = reservationQKeys.search({
-        pagination: { page: pageNumber, pageSize: size },
-        filters: searchFilters,
-      });
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: searchKey,
-          queryFn: () =>
-            fetchReservationsListModded({
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              page: pageNumber,
-              pageSize: size,
-              clientDate: new Date(),
-              ...searchFilters,
-            }),
-        })
-      );
+    await Promise.all(promises);
 
-      await Promise.all(promises);
-    }
     return;
   },
   component: lazyRouteComponent(() => import("@/pages/search-reservations")),

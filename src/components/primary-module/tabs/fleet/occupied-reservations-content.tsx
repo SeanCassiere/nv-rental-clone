@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -10,15 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
-
-import { type TReservationListItemParsed } from "@/schemas/reservation";
+import type { TReservationListItemParsed } from "@/schemas/reservation";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { ReservationDateTimeColumns } from "@/utils/columns";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
+import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
 
 interface FleetOccupiedReservationsTabProps {
   vehicleId: string;
@@ -56,11 +55,19 @@ const FleetOccupiedReservationsTab = (
   const columnsData = useSuspenseQuery(
     fetchAgreementsSearchColumnsOptions({ auth: authParams })
   );
-  const dataList = useGetReservationsList({
-    page: items.pageNumber,
-    pageSize: items.size,
-    filters: items.searchFilters,
-  });
+  const dataList = useQuery(
+    fetchReservationsSearchListOptions({
+      auth: authParams,
+      pagination: {
+        page: items.pageNumber,
+        pageSize: items.size,
+      },
+      filters: {
+        ...items.searchFilters,
+        clientDate: new Date(),
+      },
+    })
+  );
 
   const columnDefs = useMemo(() => {
     const columns: ColumnDef<TReservationListItemParsed>[] = [];
