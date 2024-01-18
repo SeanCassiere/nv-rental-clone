@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -19,12 +19,12 @@ import ProtectorShield from "@/components/protector-shield";
 import { buttonVariants } from "@/components/ui/button";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomerTypes";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { fetchCustomerTypesOptions } from "@/utils/query/customer";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -68,7 +68,9 @@ function CustomerSearchPage() {
   );
 
   const customersData = useSuspenseQuery(routeContext.searchListOptions);
-  const customerTypesList = useGetCustomerTypesList();
+  const customerTypesList = useQuery(
+    fetchCustomerTypesOptions({ auth: routeContext.authParams })
+  );
   const customerTypes = customerTypesList.data ?? [];
 
   const columnsData = useSuspenseQuery(routeContext.searchColumnsOptions);

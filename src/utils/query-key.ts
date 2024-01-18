@@ -27,12 +27,6 @@ export const reservationQKeys = {
   summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
 };
 
-export const customerQKeys = {
-  // search
-  rootKey: "customers",
-  types: () => [customerQKeys.rootKey, "types"],
-};
-
 export const fleetQKeys = {
   // search
   rootKey: "fleet",
