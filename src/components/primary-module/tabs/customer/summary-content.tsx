@@ -1,8 +1,12 @@
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "react-oidc-context";
+
 import { CustomerSummary } from "@/components/primary-module/summary/customer";
 
-import { useGetCustomerData } from "@/hooks/network/customer/useGetCustomerData";
 import { useGetCustomerSummary } from "@/hooks/network/customer/useGetCustomerSummary";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchCustomerByIdOptions } from "@/utils/query/customer";
 import { sortObjectKeys } from "@/utils/sort";
 
 type CustomerSummaryTabProps = {
@@ -10,9 +14,12 @@ type CustomerSummaryTabProps = {
 };
 
 const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
-  const customerData = useGetCustomerData({
-    customerId: props.customerId,
-  });
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
+  const customerData = useQuery(
+    fetchCustomerByIdOptions({ auth: authParams, customerId: props.customerId })
+  );
 
   const customerSummary = useGetCustomerSummary({
     customerId: props.customerId,

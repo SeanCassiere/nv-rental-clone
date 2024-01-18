@@ -48,3 +48,22 @@ export function fetchNotesForCustomerById(
     enabled: isEnabled(options),
   });
 }
+
+export function fetchCustomerByIdOptions(
+  options: { customerId: RefId } & Auth
+) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, options.customerId],
+    queryFn: () =>
+      apiClient.customer.getById({
+        params: {
+          customerId: String(options.customerId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
