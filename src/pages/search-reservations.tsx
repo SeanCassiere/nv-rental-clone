@@ -23,14 +23,16 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
 import type { TReservationListItemParsed } from "@/schemas/reservation";
 
 import { ReservationDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
+import {
+  fetchReservationStatusesOptions,
+  fetchReservationTypesOptions,
+} from "@/utils/query/reservation";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -88,7 +90,9 @@ function ReservationsSearchPage() {
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 
-  const reservationTypesList = useGetReservationTypesList();
+  const reservationTypesList = useQuery(
+    fetchReservationTypesOptions({ auth: authParams })
+  );
   const reservationTypes = reservationTypesList.data ?? [];
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);

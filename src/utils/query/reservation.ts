@@ -112,6 +112,23 @@ export function fetchReservationStatusesOptions(
   });
 }
 
+export function fetchReservationTypesOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "types"]),
+    queryFn: () =>
+      apiClient.reservation
+        .getTypes({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : [])),
+    enabled: isEnabled(options),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
 export function fetchReservationByIdOptions(options: ReservationId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, String(options.reservationId)]),
