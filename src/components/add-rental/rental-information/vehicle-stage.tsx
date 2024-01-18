@@ -31,11 +31,13 @@ import {
 } from "@/components/ui/select";
 
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { fetchFleetFuelLevelsOptions } from "@/utils/query/fleet";
+import {
+  fetchFleetFuelLevelsOptions,
+  fetchFleetSearchListOptions,
+} from "@/utils/query/fleet";
 
 import i18n from "@/i18next-config";
 
@@ -126,15 +128,17 @@ export const VehicleStage = ({
     StartDate: rentalInformation?.checkoutDate,
     EndDate: rentalInformation?.checkinDate,
   };
-  const vehicleListData = useGetVehiclesList({
-    page: 1,
-    pageSize: 20,
-    enabled:
-      isEdit === false
-        ? !!checkoutLocation && !!form.getValues("vehicleTypeId")
-        : true,
-    filters: searchFilters,
-  });
+  const vehicleListData = useQuery(
+    fetchFleetSearchListOptions({
+      auth: authParams,
+      pagination: { page: 1, pageSize: 20 },
+      filters: searchFilters,
+      enabled:
+        isEdit === false
+          ? !!checkoutLocation && !!form.getValues("vehicleTypeId")
+          : true,
+    })
+  );
   const vehiclesList =
     vehicleListData.data?.status === 200 ? vehicleListData?.data?.body : [];
 

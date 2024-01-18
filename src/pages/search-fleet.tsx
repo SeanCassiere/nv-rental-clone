@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -22,7 +22,6 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
@@ -39,7 +38,8 @@ const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 function VehiclesSearchPage() {
   const navigate = useNavigate();
 
-  const { search, searchColumnsOptions } = routeApi.useRouteContext();
+  const { search, searchColumnsOptions, searchListOptions } =
+    routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -66,11 +66,7 @@ function VehiclesSearchPage() {
     [pageNumber, size]
   );
 
-  const vehiclesData = useGetVehiclesList({
-    page: pageNumber,
-    pageSize: size,
-    filters: searchFilters,
-  });
+  const vehiclesData = useQuery(searchListOptions);
 
   const vehicleStatusList = useGetVehicleStatusList();
   const vehicleStatuses = vehicleStatusList.data ?? [];

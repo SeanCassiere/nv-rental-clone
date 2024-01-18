@@ -1,11 +1,21 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
+import {
+  localDateTimeToQueryYearMonthDay,
+  localDateTimeWithoutSecondsToQueryYearMonthDay,
+} from "@/utils/date";
+import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
+import {
+  isEnabled,
+  makeQueryKey,
+  type Auth,
+  type Pagination,
+  type RefId,
+} from "./helpers";
 
 const SEGMENT = "fleet";
 
@@ -30,6 +40,67 @@ export function fetchFleetSearchColumnsOptions(options: Auth) {
           })
         ),
     enabled: isEnabled(options),
+  });
+}
+
+export function fetchFleetSearchListOptions(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["vehicle"]["getList"]>[0]["query"],
+      "StartDate" | "EndDate" | "clientId" | "userId" | "page" | "pageSize"
+    > & {
+      StartDate?: Date;
+      EndDate?: Date;
+    };
+    enabled?: boolean;
+  } & Pagination &
+    Auth
+) {
+  const { enabled = true } = options;
+  return queryOptions({
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      "list",
+      sortObjectKeys(options.pagination),
+      sortObjectKeys(options.filters),
+    ]),
+    queryFn: () => fetchFleetSearchListFn(options),
+    enabled: isEnabled(options) && enabled,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function fetchFleetSearchListFn(
+  options: {
+    filters: Omit<
+      Parameters<(typeof apiClient)["vehicle"]["getList"]>[0]["query"],
+      "StartDate" | "EndDate" | "clientId" | "userId" | "page" | "pageSize"
+    > & {
+      StartDate?: Date;
+      EndDate?: Date;
+    };
+  } & Pagination &
+    Auth
+) {
+  const { StartDate, EndDate, ...filters } = options.filters;
+
+  return apiClient.vehicle.getList({
+    query: {
+      clientId: options.auth.clientId,
+      userId: options.auth.userId,
+      page: options.pagination.page || 1,
+      pageSize: options.pagination.pageSize || 10,
+      ...(StartDate
+        ? {
+            StartDate:
+              localDateTimeWithoutSecondsToQueryYearMonthDay(StartDate),
+          }
+        : {}),
+      ...(EndDate
+        ? { EndDate: localDateTimeWithoutSecondsToQueryYearMonthDay(EndDate) }
+        : {}),
+      ...filters,
+    },
   });
 }
 

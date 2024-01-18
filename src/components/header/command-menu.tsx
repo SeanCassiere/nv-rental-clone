@@ -20,12 +20,12 @@ import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { fetchAgreementsSearchListOptions } from "@/utils/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
+import { fetchFleetSearchListOptions } from "@/utils/query/fleet";
 import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
@@ -84,14 +84,19 @@ export const CommandMenu = () => {
   });
 
   // vehicles
-  const vehiclesQuery = useGetVehiclesList({
-    page: 1,
-    pageSize: 50,
-    filters: {
-      LicenseNo: searchTerm,
-    },
-    enabled: showCommandMenu,
-  });
+  const vehiclesQuery = useQuery(
+    fetchFleetSearchListOptions({
+      auth: authParams,
+      pagination: {
+        page: 1,
+        pageSize: 50,
+      },
+      filters: {
+        LicenseNo: searchTerm,
+      },
+      enabled: showCommandMenu && Boolean(searchTerm),
+    })
+  );
   const vehiclesList =
     vehiclesQuery.data?.status === 200 ? vehiclesQuery.data?.body : [];
   const vehicles: GlobalSearchReturnType = vehiclesList.map((vehicle) => {

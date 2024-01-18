@@ -24,15 +24,15 @@ import {
   usePostCalculateRentalSummaryAmounts,
 } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
-import { type RentalRateParsed } from "@/schemas/rate";
-import { type ReservationDataParsed } from "@/schemas/reservation";
-import { type TRentalRatesSummarySchema } from "@/schemas/summary";
+import type { RentalRateParsed } from "@/schemas/rate";
+import type { ReservationDataParsed } from "@/schemas/reservation";
+import type { TRentalRatesSummarySchema } from "@/schemas/summary";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import { fetchFleetSearchListOptions } from "@/utils/query/fleet";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { sortObjectKeys } from "@/utils/sort";
 
@@ -680,20 +680,22 @@ const AddRentalParentForm = ({
   // fetching the data before page navigation only for rentals in edit mode
   const agreementConditionsForFetchingVehicles =
     Boolean(agreementRentalInformation) && Boolean(agreementVehicleInformation);
-  useGetVehiclesList({
-    page: 1,
-    pageSize: 20,
-    enabled:
-      module === "agreement" ? agreementConditionsForFetchingVehicles : false,
-    filters: {
-      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId
-        ? agreementVehicleInformation?.vehicleTypeId.toString()
-        : undefined,
-      CurrentLocationId: agreementRentalInformation?.checkoutLocation
-        ? agreementRentalInformation?.checkoutLocation.toString()
-        : undefined,
-    },
-  });
+  useQuery(
+    fetchFleetSearchListOptions({
+      auth: authParams,
+      pagination: { page: 1, pageSize: 20 },
+      filters: {
+        VehicleTypeId: agreementVehicleInformation?.vehicleTypeId
+          ? agreementVehicleInformation?.vehicleTypeId.toString()
+          : undefined,
+        CurrentLocationId: agreementRentalInformation?.checkoutLocation
+          ? agreementRentalInformation?.checkoutLocation.toString()
+          : undefined,
+      },
+      enabled:
+        module === "agreement" ? agreementConditionsForFetchingVehicles : false,
+    })
+  );
 
   // fetching the mandatory misc. charges
   const miscChargesAgreementReady =

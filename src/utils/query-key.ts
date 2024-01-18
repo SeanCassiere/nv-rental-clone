@@ -1,9 +1,5 @@
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 
-import { sortObjectKeys } from "./sort";
-
-type Pagination = { page: number; pageSize: number };
-type Filters = Record<string, any>;
 type ReferenceId = string | number;
 
 export const agreementQKeys = {
@@ -17,12 +13,6 @@ export const reservationQKeys = {
 export const fleetQKeys = {
   // search
   rootKey: "fleet",
-  search: (opts: { pagination: Pagination; filters: Filters }) => [
-    fleetQKeys.rootKey,
-    "list",
-    sortObjectKeys(opts.pagination),
-    sortObjectKeys(opts.filters),
-  ],
   statuses: () => [fleetQKeys.rootKey, "statuses"],
   summary: (id: ReferenceId) => ["fleet", id, "summary"],
 };

@@ -140,6 +140,8 @@ export function normalizeVehicleListSearchParams(search: TVehicleSearchQuery) {
     VehicleTypeId: filters?.VehicleTypeId || undefined,
     OwningLocationId: filters?.OwningLocationId || undefined,
     CurrentLocationId: filters?.CurrentLocationId || undefined,
+    StartDate: undefined,
+    EndDate: undefined,
   };
 
   const pageNumber = page || 1;
