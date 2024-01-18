@@ -5,7 +5,7 @@ import { getAuthFromRouterContext } from "@/utils/auth";
 import {
   fetchFleetByIdOptions,
   fetchSummaryForFleetByIdOptions,
-} from "@/utils/query/fleet";
+} from "@/utils/query/vehicle";
 
 import { fleetRoute } from ".";
 

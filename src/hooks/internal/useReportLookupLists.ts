@@ -8,8 +8,8 @@ import type { TReportDetail } from "@/schemas/report";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
-import { fetchFleetStatusesOptions } from "@/utils/query/fleet";
 import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
+import { fetchFleetStatusesOptions } from "@/utils/query/vehicle";
 import type { ReportFilterOption } from "@/types/report";
 
 type CriteriaList = TReportDetail["searchCriteria"];

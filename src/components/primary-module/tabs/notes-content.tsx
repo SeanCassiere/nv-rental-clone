@@ -12,8 +12,8 @@ import type { TNoteDataParsed } from "@/schemas/note";
 
 import { fetchNotesForAgreementByIdOptions } from "@/utils/query/agreement";
 import { fetchNotesForCustomerByIdOptions } from "@/utils/query/customer";
-import { fetchNotesForFleetByIdOptions } from "@/utils/query/fleet";
 import { fetchNotesForReservationByIdOptions } from "@/utils/query/reservation";
+import { fetchNotesForFleetByIdOptions } from "@/utils/query/vehicle";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 const EmptyIcon = icons.Files;

@@ -8,7 +8,7 @@ import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-param
 import {
   fetchFleetSearchColumnsOptions,
   fetchFleetSearchListOptions,
-} from "@/utils/query/fleet";
+} from "@/utils/query/vehicle";
 
 import { fleetRoute } from ".";
 

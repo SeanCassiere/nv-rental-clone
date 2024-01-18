@@ -12,7 +12,7 @@ import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import {
   fetchFleetByIdOptions,
   fetchSummaryForFleetByIdOptions,
-} from "@/utils/query/fleet";
+} from "@/utils/query/vehicle";
 
 type FleetSummaryTabProps = {
   vehicleId: string;

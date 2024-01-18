@@ -32,8 +32,8 @@ import type { TRentalRatesSummarySchema } from "@/schemas/summary";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
-import { fetchFleetSearchListOptions } from "@/utils/query/fleet";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
+import { fetchFleetSearchListOptions } from "@/utils/query/vehicle";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { cn } from "@/utils";

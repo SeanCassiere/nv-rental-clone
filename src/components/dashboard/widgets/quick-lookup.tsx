@@ -38,15 +38,15 @@ import {
   fetchCustomersSearchListFn,
   fetchCustomersSearchListOptions,
 } from "@/utils/query/customer";
-import {
-  fetchFleetSearchListFn,
-  fetchFleetSearchListOptions,
-} from "@/utils/query/fleet";
 import type { Auth } from "@/utils/query/helpers";
 import {
   fetchReservationsSearchListFn,
   fetchReservationsSearchListOptions,
 } from "@/utils/query/reservation";
+import {
+  fetchFleetSearchListFn,
+  fetchFleetSearchListOptions,
+} from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickLookupWidget = (props: Auth) => {

@@ -18,8 +18,8 @@ import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
-import { fetchFleetStatusesOptions } from "@/utils/query/fleet";
 import type { Auth } from "@/utils/query/helpers";
+import { fetchFleetStatusesOptions } from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { WidgetSkeleton } from "../dnd-widget-display-grid";

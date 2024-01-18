@@ -26,7 +26,7 @@ import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGe
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { fetchFleetStatusesOptions } from "@/utils/query/fleet";
+import { fetchFleetStatusesOptions } from "@/utils/query/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";

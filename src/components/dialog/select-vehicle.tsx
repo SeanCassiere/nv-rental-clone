@@ -15,7 +15,7 @@ import {
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchFleetSearchListOptions } from "@/utils/query/fleet";
+import { fetchFleetSearchListOptions } from "@/utils/query/vehicle";
 
 import { getXPaginationFromHeaders } from "@/utils";
 

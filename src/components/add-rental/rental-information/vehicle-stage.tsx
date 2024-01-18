@@ -37,7 +37,7 @@ import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import {
   fetchFleetFuelLevelsOptions,
   fetchFleetSearchListOptions,
-} from "@/utils/query/fleet";
+} from "@/utils/query/vehicle";
 
 import i18n from "@/i18next-config";
 
