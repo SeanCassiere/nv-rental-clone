@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import type { VehicleDataParsed } from "@/schemas/vehicle";
 
-import { fetchVehicleStatusesOptions } from "@/utils/query/vehicle";
+import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
@@ -22,7 +22,7 @@ const VehicleStatBlock = ({
   };
 }) => {
   const vehicleStatusList = useQuery(
-    fetchVehicleStatusesOptions({ auth: authParams })
+    fetchVehiclesStatusesOptions({ auth: authParams })
   );
 
   const getStatusById = (id?: number) => {

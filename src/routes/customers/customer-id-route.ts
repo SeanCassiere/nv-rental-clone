@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getAuthFromRouterContext } from "@/utils/auth";
 import {
   fetchCustomerByIdOptions,
-  fetchSummaryForCustomerByIdOptions,
+  fetchCustomerSummaryByIdOptions,
 } from "@/utils/query/customer";
 
 import { customersRoute } from ".";
@@ -31,7 +31,7 @@ export const viewCustomerByIdRoute = new Route({
     return {
       authParams: auth,
       viewCustomerOptions: fetchCustomerByIdOptions({ auth, customerId }),
-      viewCustomerSummaryOptions: fetchSummaryForCustomerByIdOptions({
+      viewCustomerSummaryOptions: fetchCustomerSummaryByIdOptions({
         auth,
         customerId,
       }),

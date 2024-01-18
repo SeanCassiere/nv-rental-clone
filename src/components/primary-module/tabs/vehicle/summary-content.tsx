@@ -10,8 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import {
-  fetchSummaryForVehicleByIdOptions,
-  fetchVehicleByIdOptions,
+  fetchVehiclesByIdOptions,
+  fetchVehiclesSummaryByIdOptions,
 } from "@/utils/query/vehicle";
 
 type VehicleSummaryTabProps = {
@@ -23,13 +23,13 @@ const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   const authParams = getAuthFromAuthHook(auth);
 
   const vehicleData = useQuery(
-    fetchVehicleByIdOptions({ auth: authParams, vehicleId: props.vehicleId })
+    fetchVehiclesByIdOptions({ auth: authParams, vehicleId: props.vehicleId })
   );
   const vehicle =
     vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
   const vehicleSummary = useQuery(
-    fetchSummaryForVehicleByIdOptions({
+    fetchVehiclesSummaryByIdOptions({
       auth: authParams,
       vehicleId: props.vehicleId,
     })

@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
 import {
-  fetchSummaryForVehicleByIdOptions,
-  fetchVehicleByIdOptions,
+  fetchVehiclesByIdOptions,
+  fetchVehiclesSummaryByIdOptions,
 } from "@/utils/query/vehicle";
 
 import { fleetRoute } from ".";
@@ -34,11 +34,11 @@ export const viewFleetByIdRoute = new Route({
     const auth = getAuthFromRouterContext(context);
     return {
       authParams: auth,
-      viewVehicleSummaryOptions: fetchSummaryForVehicleByIdOptions({
+      viewVehicleSummaryOptions: fetchVehiclesSummaryByIdOptions({
         auth,
         vehicleId,
       }),
-      viewVehicleOptions: fetchVehicleByIdOptions({ auth, vehicleId }),
+      viewVehicleOptions: fetchVehiclesByIdOptions({ auth, vehicleId }),
       viewTab: search?.tab || "",
     };
   },

@@ -146,7 +146,7 @@ export function fetchReservationByIdOptions(options: ReservationId & Auth) {
   });
 }
 
-export function fetchNotesForReservationByIdOptions(
+export function fetchReservationNotesByIdOptions(
   options: ReservationId & Auth
 ) {
   return queryOptions({

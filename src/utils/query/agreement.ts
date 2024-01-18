@@ -147,7 +147,7 @@ export function fetchAgreementByIdOptions(options: AgreementId & Auth) {
   });
 }
 
-export function fetchNotesForAgreementByIdOptions(options: AgreementId & Auth) {
+export function fetchAgreementNotesByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.agreementId, "notes"]),
     queryFn: () =>
@@ -164,7 +164,7 @@ export function fetchNotesForAgreementByIdOptions(options: AgreementId & Auth) {
   });
 }
 
-export function fetchExchangesForAgreementByIdOptions(
+export function fetchAgreementExchangesByIdOptions(
   options: AgreementId & Auth
 ) {
   return queryOptions({
@@ -185,7 +185,7 @@ export function fetchExchangesForAgreementByIdOptions(
   });
 }
 
-export function fetchGenerateAgreementNumberOptions(
+export function fetchAgreementGeneratedNumberOptions(
   options: { enabled: boolean; agreementType: string } & Auth
 ) {
   return queryOptions({

@@ -9,7 +9,7 @@ import type { TReportDetail } from "@/schemas/report";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
 import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
-import { fetchVehicleStatusesOptions } from "@/utils/query/vehicle";
+import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
 import type { ReportFilterOption } from "@/types/report";
 
 type CriteriaList = TReportDetail["searchCriteria"];
@@ -97,7 +97,7 @@ export function useReportLookupLists(report: TReportDetail) {
     "VehicleStatus"
   );
   const vehicleStatusesQuery = useQuery(
-    fetchVehicleStatusesOptions({
+    fetchVehiclesStatusesOptions({
       auth: authParams,
       enabled: findVehicleStatuses,
     })

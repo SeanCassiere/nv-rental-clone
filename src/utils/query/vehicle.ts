@@ -116,7 +116,7 @@ export function fetchVehiclesSearchListFn(
  *
  * @api `/vehicles/statuses`
  */
-export function fetchVehicleStatusesOptions(
+export function fetchVehiclesStatusesOptions(
   options: { enabled?: boolean } & Auth
 ) {
   const { enabled = true } = options;
@@ -140,7 +140,7 @@ export function fetchVehicleStatusesOptions(
  *
  * @api `/vehicles/fuellevels`
  */
-export function fetchVehicleFuelLevelsOptions(options: Auth) {
+export function fetchVehiclesFuelLevelsOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "fuel_levels"]),
     queryFn: () =>
@@ -161,7 +161,7 @@ export function fetchVehicleFuelLevelsOptions(options: Auth) {
  *
  * @api `/vehicles/$vehicleId`
  */
-export function fetchVehicleByIdOptions(options: VehicleId & Auth) {
+export function fetchVehiclesByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId]),
     queryFn: () =>
@@ -184,7 +184,7 @@ export function fetchVehicleByIdOptions(options: VehicleId & Auth) {
  *
  * @api `/vehicles/$vehicleId/summary`
  */
-export function fetchSummaryForVehicleByIdOptions(options: VehicleId & Auth) {
+export function fetchVehiclesSummaryByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "summary"]),
     queryFn: () =>
@@ -206,7 +206,7 @@ export function fetchSummaryForVehicleByIdOptions(options: VehicleId & Auth) {
  *
  * @api `/vehicle/$vehicleId/note`
  */
-export function fetchNotesForVehicleByIdOptions(options: VehicleId & Auth) {
+export function fetchVehiclesNotesByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "notes"]),
     queryFn: () =>

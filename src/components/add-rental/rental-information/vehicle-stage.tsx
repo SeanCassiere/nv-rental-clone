@@ -33,7 +33,7 @@ import {
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import {
-  fetchVehicleFuelLevelsOptions,
+  fetchVehiclesFuelLevelsOptions,
   fetchVehiclesSearchListOptions,
 } from "@/utils/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
@@ -146,7 +146,7 @@ export const VehicleStage = ({
 
   //
   const fuelLevelListData = useQuery(
-    fetchVehicleFuelLevelsOptions({ auth: authParams })
+    fetchVehiclesFuelLevelsOptions({ auth: authParams })
   );
   const fuelLevelsList = fuelLevelListData.data || [];
 

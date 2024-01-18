@@ -19,7 +19,7 @@ import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/us
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import type { Auth } from "@/utils/query/helpers";
-import { fetchVehicleStatusesOptions } from "@/utils/query/vehicle";
+import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
@@ -77,7 +77,7 @@ export function VehicleStatusPieChart(props: { locations: string[] } & Auth) {
   });
 
   const vehicleStatuses = useQuery(
-    fetchVehicleStatusesOptions({ auth: authParams })
+    fetchVehiclesStatusesOptions({ auth: authParams })
   );
 
   const getStatusIdByName = (name: string) => {
