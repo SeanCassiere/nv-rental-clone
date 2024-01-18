@@ -15,6 +15,8 @@ import {
 
 const SEGMENT = "customers";
 
+type CustomerId = { customerId: RefId };
+
 export function fetchCustomersSearchColumnsOptions(options: Auth) {
   return queryOptions({
     queryKey: [rootKey(options), SEGMENT, "columns"],
@@ -82,11 +84,24 @@ export function fetchCustomersSearchListFn(
   });
 }
 
-export function fetchSummaryForCustomerByIdOptions() {}
+export function fetchSummaryForCustomerByIdOptions(options: CustomerId & Auth) {
+  return queryOptions({
+    queryKey: [rootKey(options), SEGMENT, options.customerId, "summary"],
+    queryFn: () =>
+      apiClient.customer.getSummaryForId({
+        params: {
+          customerId: String(options.customerId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
 
-export function fetchNotesForCustomerByIdOptions(
-  options: { customerId: RefId } & Auth
-) {
+export function fetchNotesForCustomerByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: [rootKey(options), SEGMENT, options.customerId, "notes"],
     queryFn: () =>
@@ -103,9 +118,7 @@ export function fetchNotesForCustomerByIdOptions(
   });
 }
 
-export function fetchCustomerByIdOptions(
-  options: { customerId: RefId } & Auth
-) {
+export function fetchCustomerByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: [rootKey(options), SEGMENT, options.customerId],
     queryFn: () =>

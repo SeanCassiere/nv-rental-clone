@@ -31,9 +31,6 @@ export const customerQKeys = {
   // search
   rootKey: "customers",
   types: () => [customerQKeys.rootKey, "types"],
-  // view by ID
-  viewKey: "view-customer",
-  summary: (id: ReferenceId) => [customerQKeys.viewKey, id, "summary"],
 };
 
 export const fleetQKeys = {

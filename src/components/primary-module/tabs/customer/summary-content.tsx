@@ -3,15 +3,16 @@ import { useAuth } from "react-oidc-context";
 
 import { CustomerSummary } from "@/components/primary-module/summary/customer";
 
-import { useGetCustomerSummary } from "@/hooks/network/customer/useGetCustomerSummary";
-
 import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchCustomerByIdOptions } from "@/utils/query/customer";
+import {
+  fetchCustomerByIdOptions,
+  fetchSummaryForCustomerByIdOptions,
+} from "@/utils/query/customer";
 import { sortObjectKeys } from "@/utils/sort";
 
-type CustomerSummaryTabProps = {
+interface CustomerSummaryTabProps {
   customerId: string;
-};
+}
 
 const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
   const auth = useAuth();
@@ -21,9 +22,12 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
     fetchCustomerByIdOptions({ auth: authParams, customerId: props.customerId })
   );
 
-  const customerSummary = useGetCustomerSummary({
-    customerId: props.customerId,
-  });
+  const customerSummary = useQuery(
+    fetchSummaryForCustomerByIdOptions({
+      auth: authParams,
+      customerId: props.customerId,
+    })
+  );
   const summaryData =
     customerSummary.data?.status === 200
       ? customerSummary.data?.body
