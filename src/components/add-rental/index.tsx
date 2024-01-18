@@ -16,7 +16,6 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
 import {
   CalculateRentalSummaryHookInput,
   usePostCalculateRentalSummaryAmounts,
@@ -30,7 +29,10 @@ import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
-import { fetchRatesOptimalNameOptions } from "@/utils/query/rate";
+import {
+  fetchRatesListOptions,
+  fetchRatesOptimalNameOptions,
+} from "@/utils/query/rate";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
@@ -605,36 +607,42 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation) &&
     selectedRateName !== "";
   const reservationConditionsForFetchingRates = false;
-  const getRentalRatesQuery = useGetRentalRates({
-    enabled:
-      module === "agreement"
-        ? agreementConditionsForFetchingRates
-        : reservationConditionsForFetchingRates,
-    filters: {
-      LocationId: Number(
-        agreementRentalInformation?.checkoutLocation
-      ).toString(),
-      RateName: selectedRateName,
-      CheckoutDate:
+  const getRentalRatesQuery = useQuery(
+    fetchRatesListOptions({
+      auth: authParams,
+      enabled:
         module === "agreement"
-          ? agreementRentalInformation?.checkoutDate || undefined
-          : undefined,
-      CheckinDate:
-        module === "agreement"
-          ? agreementRentalInformation?.checkinDate || undefined
-          : undefined,
-      VehicleTypeId:
-        module === "agreement"
-          ? Number(agreementVehicleInformation?.vehicleTypeId || "0").toString()
-          : "demo-reservation-vehicle-type-id",
-      ...(module === "agreement"
-        ? {
-            AgreementId: referenceId ? String(referenceId) : undefined,
-            AgreementTypeName: agreementRentalInformation?.agreementType || "",
-          }
-        : {}),
-    },
-  });
+          ? agreementConditionsForFetchingRates
+          : reservationConditionsForFetchingRates,
+      filters: {
+        LocationId: Number(
+          agreementRentalInformation?.checkoutLocation
+        ).toString(),
+        RateName: selectedRateName,
+        CheckoutDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkoutDate || undefined
+            : undefined,
+        CheckinDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkinDate || undefined
+            : undefined,
+        VehicleTypeId:
+          module === "agreement"
+            ? Number(
+                agreementVehicleInformation?.vehicleTypeId || "0"
+              ).toString()
+            : "demo-reservation-vehicle-type-id",
+        ...(module === "agreement"
+          ? {
+              AgreementId: referenceId ? String(referenceId) : undefined,
+              AgreementTypeName:
+                agreementRentalInformation?.agreementType || "",
+            }
+          : {}),
+      },
+    })
+  );
 
   useEffect(() => {
     if (getRentalRatesQuery.status !== "success") return;
