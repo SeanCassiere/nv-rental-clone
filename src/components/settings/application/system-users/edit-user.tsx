@@ -56,6 +56,7 @@ import { fetchRolesListOptions } from "@/utils/query/role";
 import {
   fetchActiveUsersCountOptions,
   fetchLanguagesForUsersOptions,
+  fetchMaximumUsersCountOptions,
   fetchUserByIdOptions,
   fetchUserConfigurationOptions,
 } from "@/utils/query/user";
@@ -97,16 +98,11 @@ export function EditUserDialog({
     })
   );
 
-  const maximumUsersCountQuery = useQuery({
-    queryKey: userQKeys.maximumUsersCount(),
-    queryFn: () =>
-      apiClient.user.getMaximumUsersCount({
-        query: {
-          clientId: props.clientId,
-          userId: props.userId,
-        },
-      }),
-  });
+  const maximumUsersCountQuery = useQuery(
+    fetchMaximumUsersCountOptions({
+      auth: authParams,
+    })
+  );
 
   const userQuery = useQuery(
     fetchUserByIdOptions({
@@ -314,7 +310,7 @@ function EditUserForm(props: {
         queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
       });
       qc.invalidateQueries({
-        queryKey: userQKeys.maximumUsersCount(),
+        queryKey: fetchMaximumUsersCountOptions({ auth: authParams }).queryKey,
       });
 
       if (data.status >= 200 && data.status < 300) {
@@ -780,7 +776,7 @@ function NewUserForm(props: {
         queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
       });
       qc.invalidateQueries({
-        queryKey: userQKeys.maximumUsersCount(),
+        queryKey: fetchMaximumUsersCountOptions({ auth: authParams }).queryKey,
       });
 
       if (data.status >= 200 && data.status < 300) {

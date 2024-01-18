@@ -51,7 +51,6 @@ export const userQKeys = {
     userId,
     "updating-profile",
   ],
-  maximumUsersCount: () => [userQKeys.rootKey, "maximum-users-count"],
 };
 
 export const dashboardQKeys = {

@@ -51,6 +51,7 @@ import { locationQKeys, userQKeys } from "@/utils/query-key";
 import {
   fetchActiveUsersCountOptions,
   fetchLanguagesForUsersOptions,
+  fetchMaximumUsersCountOptions,
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
 } from "@/utils/query/user";
@@ -166,7 +167,9 @@ function ProfileForm(props: {
       qc.invalidateQueries({
         queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
       });
-      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
+      qc.invalidateQueries({
+        queryKey: fetchMaximumUsersCountOptions({ auth: authParams }).queryKey,
+      });
       qc.invalidateQueries({
         queryKey: fetchPermissionsByUserIdOptions({
           auth: authParams,

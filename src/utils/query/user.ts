@@ -101,9 +101,20 @@ export function fetchActiveUsersCountOptions(options: Auth) {
   });
 }
 
-export function makeMaximumUsersCountKey(options: Auth) {
-  return makeQueryKey(options, [SEGMENT, "maximum_users_count"]);
+export function fetchMaximumUsersCountOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "maximum_users_count"]),
+    queryFn: () =>
+      apiClient.user.getMaximumUsersCount({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    staleTime: 1000 * 60 * 1, // 1 minute
+  });
 }
+
 export function makeUpdatingUserKey(options: UserId & Auth) {
   return makeQueryKey(options, [SEGMENT, options.userId, "updating_profile"]);
 }
