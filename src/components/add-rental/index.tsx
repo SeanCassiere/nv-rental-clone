@@ -16,7 +16,6 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetOptimalRateForRental } from "@/hooks/network/rates/useGetOptimalRateForRental";
 import { useGetRentalRates } from "@/hooks/network/rates/useGetRentalRates";
 import {
   CalculateRentalSummaryHookInput,
@@ -31,6 +30,7 @@ import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
+import { fetchRatesOptimalNameOptions } from "@/utils/query/rate";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
@@ -552,30 +552,33 @@ const AddRentalParentForm = ({
     Boolean(agreementVehicleInformation?.vehicleTypeId) &&
     Boolean(agreementRentalInformation?.checkoutLocation);
   const reservationConditionsForOptimalRateFetch = false;
-  const getOptimalRateQuery = useGetOptimalRateForRental({
-    filters: {
-      CheckoutDate:
+  const getOptimalRateQuery = useQuery(
+    fetchRatesOptimalNameOptions({
+      auth: authParams,
+      filters: {
+        CheckoutDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkoutDate || new Date()
+            : new Date(),
+        CheckinDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkinDate || new Date()
+            : new Date(),
+        VehicleTypeId:
+          module === "agreement"
+            ? String(agreementVehicleInformation?.vehicleTypeId)
+            : "demo-reservation-vehicle-type-id",
+        LocationId:
+          module === "agreement"
+            ? String(agreementRentalInformation?.checkoutLocation)
+            : "demo-reservation-location-id",
+      },
+      enabled:
         module === "agreement"
-          ? agreementRentalInformation?.checkoutDate || new Date()
-          : new Date(),
-      CheckinDate:
-        module === "agreement"
-          ? agreementRentalInformation?.checkinDate || new Date()
-          : new Date(),
-      VehicleTypeId:
-        module === "agreement"
-          ? String(agreementVehicleInformation?.vehicleTypeId)
-          : "demo-reservation-vehicle-type-id",
-      LocationId:
-        module === "agreement"
-          ? String(agreementRentalInformation?.checkoutLocation)
-          : "demo-reservation-location-id",
-    },
-    enabled:
-      module === "agreement"
-        ? agreementConditionsForOptimalRateFetch
-        : reservationConditionsForOptimalRateFetch,
-  });
+          ? agreementConditionsForOptimalRateFetch
+          : reservationConditionsForOptimalRateFetch,
+    })
+  );
 
   useEffect(() => {
     if (getOptimalRateQuery.status !== "success") return;
