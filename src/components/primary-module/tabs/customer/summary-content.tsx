@@ -36,7 +36,7 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
   return (
     <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
       <div className="flex flex-col gap-4 lg:col-span-8">
-        <div className="max-h-[500px] overflow-x-scroll bg-slate-50">
+        <div className="max-h-[500px] overflow-x-scroll bg-card p-4">
           <h2>Customer data</h2>
           <code className="text-xs">
             <pre>
