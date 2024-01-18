@@ -1,14 +1,14 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
-
 import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
-import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
+import { getAuthFromRouterContext } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
-import { fleetQKeys } from "@/utils/query-key";
-import { fetchFleetSearchColumnsOptions } from "@/utils/query/fleet";
+import {
+  fetchVehiclesSearchColumnsOptions,
+  fetchVehiclesSearchListOptions,
+} from "@/utils/query/vehicle";
 
 import { fleetRoute } from ".";
 
@@ -25,10 +25,19 @@ export const searchFleetRoute = new Route({
   ],
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
+    const parsedSearch = normalizeVehicleListSearchParams(search);
     return {
       authParams: auth,
-      searchColumnsOptions: fetchFleetSearchColumnsOptions({ auth }),
-      search: normalizeVehicleListSearchParams(search),
+      searchColumnsOptions: fetchVehiclesSearchColumnsOptions({ auth }),
+      searchListOptions: fetchVehiclesSearchListOptions({
+        auth,
+        pagination: {
+          page: parsedSearch.pageNumber,
+          pageSize: parsedSearch.size,
+        },
+        filters: parsedSearch.searchFilters,
+      }),
+      search: parsedSearch,
     };
   },
   loaderDeps: ({ search }) => ({
@@ -37,39 +46,19 @@ export const searchFleetRoute = new Route({
     filters: search.filters,
   }),
   loader: async ({ context }) => {
-    const { queryClient, search, searchColumnsOptions } = context;
-    const auth = getAuthToken();
+    const { queryClient, searchColumnsOptions, searchListOptions } = context;
 
-    const { pageNumber, size, searchFilters } = search;
+    const promises = [];
 
-    if (auth) {
-      const promises = [];
+    // get columns
+    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
 
-      // get columns
-      promises.push(queryClient.ensureQueryData(searchColumnsOptions));
+    // get search
+    promises.push(queryClient.ensureQueryData(searchListOptions));
 
-      // get search
-      const searchKey = fleetQKeys.search({
-        pagination: { page: pageNumber, pageSize: size },
-        filters: searchFilters,
-      });
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: searchKey,
-          queryFn: () =>
-            fetchVehiclesListModded({
-              page: pageNumber,
-              pageSize: size,
-              clientId: auth.profile.navotar_clientid,
-              userId: auth.profile.navotar_userid,
-              ...searchFilters,
-            }),
-        })
-      );
+    await Promise.all(promises);
 
-      await Promise.all(promises);
-    }
     return;
   },
-  component: lazyRouteComponent(() => import("@/pages/search-fleet")),
+  component: lazyRouteComponent(() => import("@/pages/search-vehicles")),
 });

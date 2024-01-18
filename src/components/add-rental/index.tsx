@@ -23,17 +23,17 @@ import {
   CalculateRentalSummaryHookInput,
   usePostCalculateRentalSummaryAmounts,
 } from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
-import { type RentalRateParsed } from "@/schemas/rate";
-import { type ReservationDataParsed } from "@/schemas/reservation";
-import { type TRentalRatesSummarySchema } from "@/schemas/summary";
+import type { RentalRateParsed } from "@/schemas/rate";
+import type { ReservationDataParsed } from "@/schemas/reservation";
+import type { TRentalRatesSummarySchema } from "@/schemas/summary";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
+import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
+import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { cn } from "@/utils";
@@ -653,47 +653,52 @@ const AddRentalParentForm = ({
   }, [getRentalRatesQuery.data, getRentalRatesQuery.status]);
 
   // fetching the data before page navigation
-  useGetVehicleTypesList({
-    search: {
-      StartDate:
-        module === "agreement"
-          ? agreementRentalInformation?.checkoutDate
-            ? localDateTimeWithoutSecondsToQueryYearMonthDay(
-                agreementRentalInformation?.checkoutDate
-              )
-            : undefined
-          : undefined,
-      EndDate:
-        module === "agreement"
-          ? agreementRentalInformation?.checkinDate
-            ? localDateTimeWithoutSecondsToQueryYearMonthDay(
-                agreementRentalInformation?.checkinDate
-              )
-            : undefined
-          : undefined,
-      LocationId: Number(
-        agreementRentalInformation?.checkoutLocation ?? 0
-      ).toString(),
-    },
-  });
+  useQuery(
+    fetchVehicleTypesListOptions({
+      auth: authParams,
+      filters: {
+        StartDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkoutDate
+              ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+                  agreementRentalInformation?.checkoutDate
+                )
+              : undefined
+            : undefined,
+        EndDate:
+          module === "agreement"
+            ? agreementRentalInformation?.checkinDate
+              ? localDateTimeWithoutSecondsToQueryYearMonthDay(
+                  agreementRentalInformation?.checkinDate
+                )
+              : undefined
+            : undefined,
+        LocationId: Number(
+          agreementRentalInformation?.checkoutLocation ?? 0
+        ).toString(),
+      },
+    })
+  );
 
   // fetching the data before page navigation only for rentals in edit mode
   const agreementConditionsForFetchingVehicles =
     Boolean(agreementRentalInformation) && Boolean(agreementVehicleInformation);
-  useGetVehiclesList({
-    page: 1,
-    pageSize: 20,
-    enabled:
-      module === "agreement" ? agreementConditionsForFetchingVehicles : false,
-    filters: {
-      VehicleTypeId: agreementVehicleInformation?.vehicleTypeId
-        ? agreementVehicleInformation?.vehicleTypeId.toString()
-        : undefined,
-      CurrentLocationId: agreementRentalInformation?.checkoutLocation
-        ? agreementRentalInformation?.checkoutLocation.toString()
-        : undefined,
-    },
-  });
+  useQuery(
+    fetchVehiclesSearchListOptions({
+      auth: authParams,
+      pagination: { page: 1, pageSize: 20 },
+      filters: {
+        VehicleTypeId: agreementVehicleInformation?.vehicleTypeId
+          ? agreementVehicleInformation?.vehicleTypeId.toString()
+          : undefined,
+        CurrentLocationId: agreementRentalInformation?.checkoutLocation
+          ? agreementRentalInformation?.checkoutLocation.toString()
+          : undefined,
+      },
+      enabled:
+        module === "agreement" ? agreementConditionsForFetchingVehicles : false,
+    })
+  );
 
   // fetching the mandatory misc. charges
   const miscChargesAgreementReady =

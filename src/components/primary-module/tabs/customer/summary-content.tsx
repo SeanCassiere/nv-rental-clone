@@ -6,7 +6,7 @@ import { CustomerSummary } from "@/components/primary-module/summary/customer";
 import { getAuthFromAuthHook } from "@/utils/auth";
 import {
   fetchCustomerByIdOptions,
-  fetchSummaryForCustomerByIdOptions,
+  fetchCustomerSummaryByIdOptions,
 } from "@/utils/query/customer";
 import { sortObjectKeys } from "@/utils/sort";
 
@@ -23,7 +23,7 @@ const CustomerSummaryTab = (props: CustomerSummaryTabProps) => {
   );
 
   const customerSummary = useQuery(
-    fetchSummaryForCustomerByIdOptions({
+    fetchCustomerSummaryByIdOptions({
       auth: authParams,
       customerId: props.customerId,
     })

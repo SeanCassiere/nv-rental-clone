@@ -26,9 +26,10 @@ import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
+import type { Auth } from "@/utils/query/helpers";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
-const QuickCheckinAgreementWidget = () => {
+const QuickCheckinAgreementWidget = (props: Auth) => {
   return (
     <>
       <CardHeader className="pb-2">
@@ -37,7 +38,7 @@ const QuickCheckinAgreementWidget = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <QuickCheckinAgreementForm />
+        <QuickCheckinAgreementForm {...props} />
       </CardContent>
     </>
   );
@@ -52,7 +53,7 @@ function buildFormSchema() {
   });
 }
 
-export function QuickCheckinAgreementForm() {
+export function QuickCheckinAgreementForm(_: Auth) {
   const { t } = useTranslation();
   const auth = useAuth();
   const qc = useQueryClient();

@@ -32,8 +32,8 @@ import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsLis
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import {
+  fetchAgreementGeneratedNumberOptions,
   fetchAgreementTypesOptions,
-  fetchGenerateAgreementNumberOptions,
 } from "@/utils/query/agreement";
 
 import i18n from "@/i18next-config";
@@ -132,7 +132,7 @@ export const DurationStage = ({
 
   const currentAgreementType = form.watch("agreementType");
   const agreementNumberQuery = useQuery(
-    fetchGenerateAgreementNumberOptions({
+    fetchAgreementGeneratedNumberOptions({
       auth: authParams,
       agreementType: currentAgreementType,
       enabled: isEdit === false,

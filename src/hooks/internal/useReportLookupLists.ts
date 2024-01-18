@@ -2,14 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
-import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
 import type { TReportDetail } from "@/schemas/report";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
 import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
+import {
+  fetchVehiclesStatusesOptions,
+  fetchVehiclesTypesOptions,
+} from "@/utils/query/vehicle";
 import type { ReportFilterOption } from "@/types/report";
 
 type CriteriaList = TReportDetail["searchCriteria"];
@@ -79,9 +81,12 @@ export function useReportLookupLists(report: TReportDetail) {
     report.searchCriteria,
     "VehicleTypeId"
   );
-  const vehicleTypesQuery = useGetVehicleTypesLookupList({
-    enabled: findVehicleTypes,
-  });
+  const vehicleTypesQuery = useQuery(
+    fetchVehiclesTypesOptions({
+      auth: authParams,
+      enabled: findVehicleTypes,
+    })
+  );
   const vehicleTypesList = vehicleTypesQuery.data ?? [];
   const vehicleTypeOptions: ReportFilterOption[] = vehicleTypesList.map(
     (type) => ({
@@ -96,9 +101,12 @@ export function useReportLookupLists(report: TReportDetail) {
     report.searchCriteria,
     "VehicleStatus"
   );
-  const vehicleStatusesQuery = useGetVehicleStatusList({
-    enabled: findVehicleStatuses,
-  });
+  const vehicleStatusesQuery = useQuery(
+    fetchVehiclesStatusesOptions({
+      auth: authParams,
+      enabled: findVehicleStatuses,
+    })
+  );
   const vehicleStatusesList = vehicleStatusesQuery.data ?? [];
   const vehicleStatusOptions: ReportFilterOption[] = vehicleStatusesList.map(
     (status) => ({

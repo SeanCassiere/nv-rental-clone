@@ -3,31 +3,37 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
-import FleetInformation from "@/components/primary-module/information-block/fleet-information";
+import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
-import { useGetVehicleSummary } from "@/hooks/network/vehicle/useGetVehicleSummary";
-
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import {
+  fetchVehiclesByIdOptions,
+  fetchVehiclesSummaryByIdOptions,
+} from "@/utils/query/vehicle";
 
-type FleetSummaryTabProps = {
+type VehicleSummaryTabProps = {
   vehicleId: string;
 };
 
-const FleetSummaryTab = (props: FleetSummaryTabProps) => {
+const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
-  const vehicleData = useGetVehicleData({
-    vehicleId: props.vehicleId,
-  });
+  const vehicleData = useQuery(
+    fetchVehiclesByIdOptions({ auth: authParams, vehicleId: props.vehicleId })
+  );
   const vehicle =
     vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
-  const vehicleSummary = useGetVehicleSummary({ vehicleId: props.vehicleId });
+  const vehicleSummary = useQuery(
+    fetchVehiclesSummaryByIdOptions({
+      auth: authParams,
+      vehicleId: props.vehicleId,
+    })
+  );
   const summaryData =
     vehicleSummary.data?.status === 200 ? vehicleSummary.data.body : undefined;
 
@@ -49,7 +55,7 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
       id: "general",
       label: "General",
       component: (
-        <FleetInformation
+        <VehicleInformation
           mode="vehicle"
           isLoading={vehicleData.isLoading}
           data={
@@ -150,4 +156,4 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   );
 };
 
-export default FleetSummaryTab;
+export default VehicleSummaryTab;

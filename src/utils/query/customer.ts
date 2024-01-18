@@ -100,7 +100,7 @@ export function fetchCustomerTypesOptions(options: Auth) {
   });
 }
 
-export function fetchSummaryForCustomerByIdOptions(options: CustomerId & Auth) {
+export function fetchCustomerSummaryByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.customerId, "summary"]),
     queryFn: () =>
@@ -117,7 +117,7 @@ export function fetchSummaryForCustomerByIdOptions(options: CustomerId & Auth) {
   });
 }
 
-export function fetchNotesForCustomerByIdOptions(options: CustomerId & Auth) {
+export function fetchCustomerNotesByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.customerId, "notes"]),
     queryFn: () =>

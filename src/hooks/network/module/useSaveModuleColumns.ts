@@ -6,8 +6,8 @@ import type { TColumnHeaderItem } from "@/schemas/client/column";
 import { getModuleApiName } from "@/utils/columns";
 import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
 import { fetchCustomersSearchColumnsOptions } from "@/utils/query/customer";
-import { fetchFleetSearchColumnsOptions } from "@/utils/query/fleet";
 import { fetchReservationsSearchColumnsOptions } from "@/utils/query/reservation";
+import { fetchVehiclesSearchColumnsOptions } from "@/utils/query/vehicle";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 import { apiClient } from "@/api";
@@ -21,7 +21,7 @@ const allModulesKeySelector = (module: AppPrimaryModuleType) => {
     case "customers":
       return fetchCustomersSearchColumnsOptions;
     case "vehicles":
-      return fetchFleetSearchColumnsOptions;
+      return fetchVehiclesSearchColumnsOptions;
   }
 };
 

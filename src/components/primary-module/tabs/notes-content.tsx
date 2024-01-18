@@ -10,10 +10,10 @@ import { icons } from "@/components/ui/icons";
 
 import type { TNoteDataParsed } from "@/schemas/note";
 
-import { fetchNotesForAgreementByIdOptions } from "@/utils/query/agreement";
-import { fetchNotesForCustomerByIdOptions } from "@/utils/query/customer";
-import { fetchNotesForFleetByIdOptions } from "@/utils/query/fleet";
-import { fetchNotesForReservationByIdOptions } from "@/utils/query/reservation";
+import { fetchAgreementNotesByIdOptions } from "@/utils/query/agreement";
+import { fetchCustomerNotesByIdOptions } from "@/utils/query/customer";
+import { fetchReservationNotesByIdOptions } from "@/utils/query/reservation";
+import { fetchVehiclesNotesByIdOptions } from "@/utils/query/vehicle";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 const EmptyIcon = icons.Files;
@@ -139,7 +139,7 @@ const ModuleNotesTabContent = ({
       RenderComponent = CustomerDisplay;
       break;
     case "vehicles":
-      RenderComponent = FleetDisplay;
+      RenderComponent = VehicleDisplay;
       break;
     default:
       throw new Error("Module not supported");
@@ -168,7 +168,7 @@ const AgreementDisplay = ({
   auth,
 }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    fetchNotesForAgreementByIdOptions({ auth, agreementId: referenceId })
+    fetchAgreementNotesByIdOptions({ auth, agreementId: referenceId })
   );
 
   const list = query.data?.status === 200 ? query.data.body : [];
@@ -190,7 +190,7 @@ const ReservationDisplay = ({
   auth,
 }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    fetchNotesForReservationByIdOptions({
+    fetchReservationNotesByIdOptions({
       reservationId: referenceId,
       auth,
     })
@@ -215,7 +215,7 @@ const CustomerDisplay = ({
   auth,
 }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    fetchNotesForCustomerByIdOptions({
+    fetchCustomerNotesByIdOptions({
       customerId: referenceId,
       auth,
     })
@@ -234,10 +234,10 @@ const CustomerDisplay = ({
   );
 };
 
-const FleetDisplay = ({ referenceId, colDefs, auth }: ModuleDisplayProps) => {
+const VehicleDisplay = ({ referenceId, colDefs, auth }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    fetchNotesForFleetByIdOptions({
-      fleetId: referenceId,
+    fetchVehiclesNotesByIdOptions({
+      vehicleId: referenceId,
       auth,
     })
   );

@@ -1,9 +1,5 @@
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 
-import { sortObjectKeys } from "./sort";
-
-type Pagination = { page: number; pageSize: number };
-type Filters = Record<string, any>;
 type ReferenceId = string | number;
 
 export const agreementQKeys = {
@@ -11,29 +7,7 @@ export const agreementQKeys = {
 };
 
 export const reservationQKeys = {
-  // search
-  rootKey: "reservations",
-  types: () => [reservationQKeys.rootKey, "types"],
-  // view by ID
-  viewKey: "view-reservation",
-  summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
-};
-
-export const fleetQKeys = {
-  // search
-  rootKey: "fleet",
-  search: (opts: { pagination: Pagination; filters: Filters }) => [
-    fleetQKeys.rootKey,
-    "list",
-    sortObjectKeys(opts.pagination),
-    sortObjectKeys(opts.filters),
-  ],
-  statuses: () => [fleetQKeys.rootKey, "statuses"],
-  fuelLevels: () => [fleetQKeys.rootKey, "fuel-levels"],
-  // view by ID
-  viewKey: "view-fleet",
-  id: (id: ReferenceId) => [fleetQKeys.viewKey, id, "data"],
-  summary: (id: ReferenceId) => [fleetQKeys.viewKey, id, "summary"],
+  summary: (id: ReferenceId) => ["reservations", id, "summary"],
 };
 
 export const dashboardQKeys = {
@@ -60,16 +34,6 @@ export const dashboardQKeys = {
     `location-[${opts.locationId.sort().join(",")}]`,
     `vehicle-type-${opts.vehicleType}`,
   ],
-};
-
-export const vehicleTypeQKeys = {
-  rootKey: "vehicle-types",
-  all: (options?: any) => [
-    vehicleTypeQKeys.rootKey,
-    "all",
-    options ? options : undefined,
-  ],
-  lookup: () => [vehicleTypeQKeys.rootKey, "lookup"],
 };
 
 export const locationQKeys = {

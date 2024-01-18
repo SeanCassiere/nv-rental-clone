@@ -19,7 +19,7 @@ import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
 import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
 
-interface FleetOccupiedReservationsTabProps {
+interface VehicleOccupiedReservationsTabProps {
   vehicleId: string;
   vehicleNo: string | undefined;
 }
@@ -40,8 +40,8 @@ const acceptedColumns = [
 
 const pageSize = 50;
 
-const FleetOccupiedReservationsTab = (
-  props: FleetOccupiedReservationsTabProps
+const VehicleOccupiedReservationsTab = (
+  props: VehicleOccupiedReservationsTabProps
 ) => {
   const { t } = useTranslation();
   const auth = useAuth();
@@ -157,4 +157,4 @@ const FleetOccupiedReservationsTab = (
   );
 };
 
-export default FleetOccupiedReservationsTab;
+export default VehicleOccupiedReservationsTab;

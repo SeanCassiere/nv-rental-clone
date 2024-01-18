@@ -23,7 +23,6 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
 import type { TReservationListItemParsed } from "@/schemas/reservation";
 
@@ -33,6 +32,7 @@ import {
   fetchReservationStatusesOptions,
   fetchReservationTypesOptions,
 } from "@/utils/query/reservation";
+import { fetchVehiclesTypesOptions } from "@/utils/query/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -81,7 +81,9 @@ function ReservationsSearchPage() {
   );
   const reservationStatuses = reservationStatusList.data ?? [];
 
-  const vehicleTypesList = useGetVehicleTypesLookupList();
+  const vehicleTypesList = useQuery(
+    fetchVehiclesTypesOptions({ auth: authParams })
+  );
   const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useGetLocationsList({

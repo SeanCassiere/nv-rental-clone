@@ -1,15 +1,9 @@
 import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/react-router";
-import { useAuth } from "react-oidc-context";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
-import FleetStatBlock from "@/components/primary-module/statistic-block/fleet-stat-block";
+import VehicleStatBlock from "@/components/primary-module/statistic-block/vehicle-stat-block";
 import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -26,27 +20,24 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetVehicleData } from "@/hooks/network/vehicle/useGetVehicleData";
-
-import { viewFleetByIdRoute } from "@/routes/fleet/fleet-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
-const FleetSummaryTab = lazy(
-  () => import("../components/primary-module/tabs/fleet/summary-content")
+const VehicleSummaryTab = lazy(
+  () => import("../components/primary-module/tabs/vehicle/summary-content")
 );
-const FleetReservationsTab = lazy(
+const VehicleReservationsTab = lazy(
   () =>
     import(
-      "../components/primary-module/tabs/fleet/occupied-reservations-content"
+      "../components/primary-module/tabs/vehicle/occupied-reservations-content"
     )
 );
-const FleetAgreementsTab = lazy(
+const VehicleAgreementsTab = lazy(
   () =>
     import(
-      "../components/primary-module/tabs/fleet/occupied-agreements-content"
+      "../components/primary-module/tabs/vehicle/occupied-agreements-content"
     )
 );
 
@@ -54,33 +45,27 @@ const ModuleNotesTabContent = lazy(
   () => import("../components/primary-module/tabs/notes-content")
 );
 
+const routeApi = new RouteApi({ id: "/fleet/$vehicleId/" });
+
 function VehicleViewPage() {
   const router = useRouter();
-  const params = useParams({ from: viewFleetByIdRoute.id });
 
-  const auth = useAuth();
-
-  const { tab: tabName = "" } = useSearch({ from: viewFleetByIdRoute.id });
-
-  const clientId = auth?.user?.profile?.navotar_clientid || "";
-  const userId = auth?.user?.profile?.navotar_userid || "";
+  const { authParams, viewVehicleOptions } = routeApi.useRouteContext();
+  const { vehicleId } = routeApi.useParams();
+  const { tab: tabName = "" } = routeApi.useSearch();
 
   const navigate = useNavigate();
-
-  const vehicleId = params.vehicleId || "";
 
   const onTabClick = (newTabId: string) => {
     navigate({
       to: "/fleet/$vehicleId",
       search: (others) => ({ ...others, tab: newTabId }),
-      params: { vehicleId },
+      params: true,
       replace: true,
     });
   };
 
-  const vehicleData = useGetVehicleData({
-    vehicleId,
-  });
+  const vehicleData = useSuspenseQuery(viewVehicleOptions);
   const vehicle =
     vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
@@ -90,7 +75,7 @@ function VehicleViewPage() {
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <FleetSummaryTab vehicleId={vehicleId} />,
+      component: <VehicleSummaryTab vehicleId={vehicleId} />,
     });
     tabs.push({
       id: "notes",
@@ -99,8 +84,8 @@ function VehicleViewPage() {
         <ModuleNotesTabContent
           module="vehicles"
           referenceId={vehicleId}
-          clientId={clientId}
-          userId={userId}
+          clientId={authParams.clientId}
+          userId={authParams.userId}
         />
       ),
     });
@@ -113,7 +98,7 @@ function VehicleViewPage() {
       id: "reservations",
       label: "Reservations",
       component: (
-        <FleetReservationsTab
+        <VehicleReservationsTab
           vehicleId={vehicleId}
           vehicleNo={vehicle?.vehicle.vehicleNo || ""}
         />
@@ -123,7 +108,7 @@ function VehicleViewPage() {
       id: "agreements",
       label: "Agreements",
       component: (
-        <FleetAgreementsTab
+        <VehicleAgreementsTab
           vehicleId={vehicleId}
           vehicleNo={vehicle?.vehicle.vehicleNo || ""}
         />
@@ -131,7 +116,7 @@ function VehicleViewPage() {
     });
 
     return tabs;
-  }, [vehicleId, vehicle, clientId, userId]);
+  }, [vehicleId, vehicle, authParams]);
 
   useDocumentTitle(
     titleMaker((vehicle?.vehicle.vehicleNo || "Loading") + " - Fleet")
@@ -227,7 +212,7 @@ function VehicleViewPage() {
           View the details related to this fleet item.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <FleetStatBlock vehicle={vehicle} />
+        <VehicleStatBlock vehicle={vehicle} auth={authParams} />
       </section>
 
       <section

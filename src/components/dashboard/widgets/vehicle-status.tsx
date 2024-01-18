@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
   Cell,
@@ -15,9 +16,10 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
-import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import type { Auth } from "@/utils/query/helpers";
+import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
@@ -46,14 +48,14 @@ const SYSTEM_PIE_CHART_COLORS: [string, string, string][] = [
   [nameMaker(11), "262 83% 58%", "263 70% 50%"],
 ];
 
-const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
+const VehicleStatusWidget = (props: { locations: string[] } & Auth) => {
   return (
     <>
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-medium">Fleet status</CardTitle>
       </CardHeader>
       <CardContent>
-        <VehicleStatusPieChart locations={locations} />
+        <VehicleStatusPieChart {...props} />
       </CardContent>
     </>
   );
@@ -61,7 +63,8 @@ const VehicleStatusWidget = ({ locations }: { locations: string[] }) => {
 
 export default VehicleStatusWidget;
 
-export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
+export function VehicleStatusPieChart(props: { locations: string[] } & Auth) {
+  const { locations, auth: authParams } = props;
   const [activeIdx, setActiveIdx] = React.useState(0);
 
   const theme = useTernaryDarkMode();
@@ -73,7 +76,9 @@ export function VehicleStatusPieChart({ locations }: { locations: string[] }) {
     clientDate: new Date(),
   });
 
-  const vehicleStatuses = useGetVehicleStatusList();
+  const vehicleStatuses = useQuery(
+    fetchVehiclesStatusesOptions({ auth: authParams })
+  );
 
   const getStatusIdByName = (name: string) => {
     const status = vehicleStatuses.data?.find((s) => s.name === name);

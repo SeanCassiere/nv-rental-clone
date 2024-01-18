@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useAuth } from "react-oidc-context";
 
 import { CommonTable } from "@/components/common/common-table";
 import {
@@ -10,9 +12,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
+import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
-import { type TVehicleListItemParsed } from "@/schemas/vehicle";
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 
 import { getXPaginationFromHeaders } from "@/utils";
 
@@ -32,6 +35,10 @@ interface SelectVehicleModalProps {
 }
 
 export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
+  const auth = useAuth();
+
+  const authParams = getAuthFromAuthHook(auth);
+
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
@@ -54,15 +61,19 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
   );
 
   const { VehicleTypeId, ...filters } = props.filters;
-  const vehicleListData = useGetVehiclesList({
-    page,
-    pageSize,
-    enabled: !!checkoutLocation,
-    filters: {
-      ...(VehicleTypeId ? { VehicleTypeId } : {}),
-      ...filters,
-    },
-  });
+  const vehicleListData = useQuery(
+    fetchVehiclesSearchListOptions({
+      auth: authParams,
+      pagination: {
+        page,
+        pageSize,
+      },
+      filters: {
+        ...(VehicleTypeId ? { VehicleTypeId } : {}),
+        ...filters,
+      },
+    })
+  );
 
   const headers = vehicleListData.data?.headers ?? new Headers();
   const parsedPagination = getXPaginationFromHeaders(headers);

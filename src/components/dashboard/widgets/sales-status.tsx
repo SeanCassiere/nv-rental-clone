@@ -7,14 +7,16 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useGetSalesStatus } from "@/hooks/network/dashboard/useGetSalesStatus";
 
-const SalesStatus = ({ locations }: { locations: string[] }) => {
+import type { Auth } from "@/utils/query/helpers";
+
+const SalesStatus = (props: { locations: string[] } & Auth) => {
   return (
     <>
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-medium">Sales status</CardTitle>
       </CardHeader>
       <CardContent className="pt-3.5">
-        <SalesAreaChart locations={locations} />
+        <SalesAreaChart {...props} />
       </CardContent>
     </>
   );
@@ -22,7 +24,9 @@ const SalesStatus = ({ locations }: { locations: string[] }) => {
 
 export default React.memo(SalesStatus);
 
-export function SalesAreaChart({ locations }: { locations: string[] }) {
+export function SalesAreaChart(props: { locations: string[] } & Auth) {
+  const { locations } = props;
+
   const { t } = useTranslation();
   const sales = useGetSalesStatus({ locations, clientDate: new Date() });
 

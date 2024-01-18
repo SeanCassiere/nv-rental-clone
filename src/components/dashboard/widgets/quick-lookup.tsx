@@ -28,12 +28,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
-
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
-import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
-import { fleetQKeys } from "@/utils/query-key";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
@@ -42,20 +38,25 @@ import {
   fetchCustomersSearchListFn,
   fetchCustomersSearchListOptions,
 } from "@/utils/query/customer";
+import type { Auth } from "@/utils/query/helpers";
 import {
   fetchReservationsSearchListFn,
   fetchReservationsSearchListOptions,
 } from "@/utils/query/reservation";
+import {
+  fetchVehiclesSearchListFn,
+  fetchVehiclesSearchListOptions,
+} from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
-const QuickLookupWidget = () => {
+const QuickLookupWidget = (props: Auth) => {
   return (
     <>
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-medium">Quick lookup</CardTitle>
       </CardHeader>
       <CardContent>
-        <QuickLookupForm />
+        <QuickLookupForm {...props} />
       </CardContent>
     </>
   );
@@ -73,13 +74,12 @@ function buildFormSchema() {
   });
 }
 
-export function QuickLookupForm() {
+export function QuickLookupForm(props: Auth) {
   const { t } = useTranslation();
-  const auth = useAuth();
   const qc = useQueryClient();
   const navigate = useNavigate();
 
-  const authParams = getAuthFromAuthHook(auth);
+  const authParams = props.auth;
 
   const rowCountStr =
     getLocalStorageForUser(
@@ -216,36 +216,25 @@ export function QuickLookupForm() {
   });
 
   const vehicles = useMutation({
-    mutationFn: fetchVehiclesListModded,
+    mutationFn: fetchVehiclesSearchListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
 
+      const searchKey = fetchVehiclesSearchListOptions(variables).queryKey;
+      qc.setQueryData(searchKey, () => data);
+
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
-
-        const normalized = normalizeVehicleListSearchParams({
-          page: variables.page,
-          size: variables.pageSize,
-          filters: { LicenseNo: variables.LicenseNo },
-        });
-        const qk = fleetQKeys.search({
-          pagination: {
-            page: variables.page,
-            pageSize: variables.pageSize,
-          },
-          filters: normalized.searchFilters,
-        });
-        qc.setQueryData(qk, () => data);
 
         navigate({
           to: "/fleet",
           search: () => ({
-            page: variables.page,
-            pageSize: variables.pageSize,
-            filters: normalized.searchFilters,
+            page: variables.pagination.page,
+            pageSize: variables.pagination.pageSize,
+            filters: variables.filters,
           }),
         });
         return;
@@ -325,11 +314,14 @@ export function QuickLookupForm() {
               break;
             case "vehicleLicenseNo":
               vehicles.mutate({
-                clientId: authParams.clientId,
-                userId: authParams.userId,
-                page: 1,
-                pageSize: defaultRowCount,
-                LicenseNo: searchValue,
+                auth: authParams,
+                pagination: {
+                  page: 1,
+                  pageSize: defaultRowCount,
+                },
+                filters: {
+                  LicenseNo: searchValue,
+                },
               });
               break;
             default:

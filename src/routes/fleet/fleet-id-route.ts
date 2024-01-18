@@ -1,67 +1,17 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthToken } from "@/utils/auth";
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
-import { fleetQKeys } from "@/utils/query-key";
+import { getAuthFromRouterContext } from "@/utils/auth";
+import {
+  fetchVehiclesByIdOptions,
+  fetchVehiclesSummaryByIdOptions,
+} from "@/utils/query/vehicle";
 
 import { fleetRoute } from ".";
 
 export const fleetPathIdRoute = new Route({
   getParentRoute: () => fleetRoute,
   path: "$vehicleId",
-  loader: async ({
-    params: { vehicleId },
-    context: { queryClient, apiClient },
-  }) => {
-    const auth = getAuthToken();
-
-    if (auth) {
-      const promises = [];
-      // get summary
-      const summaryKey = fleetQKeys.summary(vehicleId);
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: summaryKey,
-          queryFn: () =>
-            apiClient.vehicle.getSummaryForId({
-              params: {
-                vehicleId,
-              },
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                clientTime: localDateTimeToQueryYearMonthDay(new Date()),
-              },
-            }),
-        })
-      );
-
-      const dataKey = fleetQKeys.id(vehicleId);
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: dataKey,
-          queryFn: () => {
-            apiClient.vehicle.getById({
-              params: {
-                vehicleId,
-              },
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                clientTime: localDateTimeToQueryYearMonthDay(new Date()),
-                getMakeDetails: "true",
-              },
-            });
-          },
-          retry: 0,
-        })
-      );
-
-      await Promise.all(promises);
-    }
-    return;
-  },
   parseParams: (params) => ({
     vehicleId: z.string().parse(params.vehicleId),
   }),
@@ -80,7 +30,35 @@ export const viewFleetByIdRoute = new Route({
       })
       .parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
-  component: lazyRouteComponent(() => import("@/pages/view-fleet")),
+  beforeLoad: ({ context, params: { vehicleId }, search }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      viewVehicleSummaryOptions: fetchVehiclesSummaryByIdOptions({
+        auth,
+        vehicleId,
+      }),
+      viewVehicleOptions: fetchVehiclesByIdOptions({ auth, vehicleId }),
+      viewTab: search?.tab || "",
+    };
+  },
+  loader: async ({ context }) => {
+    const { queryClient, viewVehicleOptions, viewVehicleSummaryOptions } =
+      context;
+
+    const promises = [];
+
+    // get summary
+    promises.push(queryClient.ensureQueryData(viewVehicleSummaryOptions));
+
+    // get vehicle
+    promises.push(queryClient.ensureQueryData(viewVehicleOptions));
+
+    await Promise.all(promises);
+
+    return;
+  },
+  component: lazyRouteComponent(() => import("@/pages/view-vehicle")),
 });
 
 export const editFleetByIdRoute = new Route({
