@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -21,7 +21,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TReservationListItemParsed } from "@/schemas/reservation";
 
@@ -46,8 +46,13 @@ function ReservationsSearchPage() {
 
   const navigate = useNavigate();
 
-  const { searchColumnsOptions, searchListOptions, search, authParams } =
-    routeApi.useRouteContext();
+  const {
+    searchColumnsOptions,
+    searchListOptions,
+    search,
+    authParams,
+    queryClient,
+  } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -168,17 +173,31 @@ function ReservationsSearchPage() {
     [columnsData.data, t]
   );
 
-  const saveColumnsMutation = useSaveModuleColumns({ module: "reservations" });
+  const saveColumnsMutation = useMutation({
+    mutationFn: saveColumnSettings,
+    onMutate: () =>
+      queryClient.cancelQueries({ queryKey: searchColumnsOptions.queryKey }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+    onError: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+  });
 
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "reservations",
         allColumns:
           columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -189,9 +208,13 @@ function ReservationsSearchPage() {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
-      saveColumnsMutation.mutate({ allColumns: newColumnsData });
+      saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "reservations",
+        allColumns: newColumnsData,
+      });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const headers = reservationsData.data?.headers ?? new Headers();

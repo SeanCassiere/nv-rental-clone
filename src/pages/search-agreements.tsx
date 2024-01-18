@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -9,7 +9,6 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 
 import {
   PrimaryModuleTable,
@@ -22,11 +21,10 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import {
@@ -46,11 +44,14 @@ const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 function AgreementsSearchPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const auth = useAuth();
-  const authParams = getAuthFromAuthHook(auth);
 
-  const { searchColumnsOptions, searchListOptions, search } =
-    routeApi.useRouteContext();
+  const {
+    searchColumnsOptions,
+    searchListOptions,
+    search,
+    authParams,
+    queryClient,
+  } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -170,17 +171,31 @@ function AgreementsSearchPage() {
     [columnsData.data, t]
   );
 
-  const saveColumnsMutation = useSaveModuleColumns({ module: "agreements" });
+  const saveColumnsMutation = useMutation({
+    mutationFn: saveColumnSettings,
+    onMutate: () =>
+      queryClient.cancelQueries({ queryKey: searchColumnsOptions.queryKey }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+    onError: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+  });
 
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "agreements",
         allColumns:
           columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -191,9 +206,13 @@ function AgreementsSearchPage() {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
-      saveColumnsMutation.mutate({ allColumns: newColumnsData });
+      saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "agreements",
+        allColumns: newColumnsData,
+      });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const headers = agreementsData.data?.headers ?? new Headers();

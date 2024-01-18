@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -19,7 +19,7 @@ import ProtectorShield from "@/components/protector-shield";
 import { buttonVariants } from "@/components/ui/button";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
+import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
@@ -40,8 +40,14 @@ function CustomerSearchPage() {
 
   const navigate = useNavigate();
 
-  const routeContext = routeApi.useRouteContext();
-  const { searchFilters, pageNumber, size } = routeContext.search;
+  const {
+    search,
+    authParams,
+    searchListOptions,
+    searchColumnsOptions,
+    queryClient,
+  } = routeApi.useRouteContext();
+  const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -67,13 +73,13 @@ function CustomerSearchPage() {
     [pageNumber, size]
   );
 
-  const customersData = useSuspenseQuery(routeContext.searchListOptions);
+  const customersData = useSuspenseQuery(searchListOptions);
   const customerTypesList = useQuery(
-    fetchCustomerTypesOptions({ auth: routeContext.authParams })
+    fetchCustomerTypesOptions({ auth: authParams })
   );
   const customerTypes = customerTypesList.data ?? [];
 
-  const columnsData = useSuspenseQuery(routeContext.searchColumnsOptions);
+  const columnsData = useSuspenseQuery(searchColumnsOptions);
 
   const columnDefs = useMemo(
     () =>
@@ -135,17 +141,31 @@ function CustomerSearchPage() {
     [columnsData.data, t]
   );
 
-  const saveColumnsMutation = useSaveModuleColumns({ module: "customers" });
+  const saveColumnsMutation = useMutation({
+    mutationFn: saveColumnSettings,
+    onMutate: () =>
+      queryClient.cancelQueries({ queryKey: searchColumnsOptions.queryKey }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+    onError: () =>
+      queryClient.invalidateQueries({
+        queryKey: searchColumnsOptions.queryKey,
+      }),
+  });
 
   const handleSaveColumnsOrder = useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "customers",
         allColumns:
           columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
       });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const handleSaveColumnVisibility = useCallback(
@@ -156,9 +176,13 @@ function CustomerSearchPage() {
         col.isSelected = graph[col.columnHeader] || false;
         return col;
       });
-      saveColumnsMutation.mutate({ allColumns: newColumnsData });
+      saveColumnsMutation.mutate({
+        auth: authParams,
+        module: "customers",
+        allColumns: newColumnsData,
+      });
     },
-    [columnsData.data, saveColumnsMutation]
+    [columnsData.data, saveColumnsMutation, authParams]
   );
 
   const headers = customersData.data?.headers ?? new Headers();
