@@ -47,7 +47,7 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { locationQKeys, userQKeys } from "@/utils/query-key";
+import { locationQKeys } from "@/utils/query-key";
 import {
   fetchActiveUsersCountOptions,
   fetchLanguagesForUsersOptions,
