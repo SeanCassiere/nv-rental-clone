@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -23,15 +23,16 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
-import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
-import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { type TReservationListItemParsed } from "@/schemas/reservation";
+import type { TReservationListItemParsed } from "@/schemas/reservation";
 
 import { ReservationDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import {
+  fetchReservationStatusesOptions,
+  fetchReservationTypesOptions,
+} from "@/utils/query/reservation";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -45,7 +46,8 @@ function ReservationsSearchPage() {
 
   const navigate = useNavigate();
 
-  const { searchColumnsOptions, search } = routeApi.useRouteContext();
+  const { searchColumnsOptions, searchListOptions, search, authParams } =
+    routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -72,13 +74,11 @@ function ReservationsSearchPage() {
     [pageNumber, size]
   );
 
-  const reservationsData = useGetReservationsList({
-    page: pageNumber,
-    pageSize: size,
-    filters: searchFilters,
-  });
+  const reservationsData = useQuery(searchListOptions);
 
-  const reservationStatusList = useGetReservationStatusList();
+  const reservationStatusList = useQuery(
+    fetchReservationStatusesOptions({ auth: authParams })
+  );
   const reservationStatuses = reservationStatusList.data ?? [];
 
   const vehicleTypesList = useGetVehicleTypesLookupList();
@@ -90,7 +90,9 @@ function ReservationsSearchPage() {
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 
-  const reservationTypesList = useGetReservationTypesList();
+  const reservationTypesList = useQuery(
+    fetchReservationTypesOptions({ auth: authParams })
+  );
   const reservationTypes = reservationTypesList.data ?? [];
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);

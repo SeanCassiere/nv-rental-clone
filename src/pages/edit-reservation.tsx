@@ -1,34 +1,28 @@
 import { useCallback, useEffect } from "react";
-import {
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
-import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 
 import { editReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 
 import { titleMaker } from "@/utils/title-maker";
 
+const routeApi = new RouteApi({ id: "/reservations/$reservationId/edit" });
+
 const EditReservationPage = () => {
   const navigate = useNavigate({ from: editReservationByIdRoute.id });
   const router = useRouter();
 
-  const { stage = "rental-information" } = useSearch({
-    from: editReservationByIdRoute.id,
-  });
-  const { reservationId } = useParams({ from: editReservationByIdRoute.id });
+  const routeContext = routeApi.useRouteContext();
+  const { stage = "rental-information" } = routeApi.useSearch();
+  const { reservationId } = routeApi.useParams();
 
-  const reservationData = useGetReservationData({
-    reservationId,
-  });
+  const reservationData = useQuery(routeContext.viewReservationOptions);
   const reservation =
     reservationData.data?.status === 200 ? reservationData.data?.body : null;
 

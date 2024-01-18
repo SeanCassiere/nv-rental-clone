@@ -28,16 +28,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { fetchReservationsListModded } from "@/hooks/network/reservation/useGetReservationsList";
 import { fetchVehiclesListModded } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
-import {
-  normalizeReservationListSearchParams,
-  normalizeVehicleListSearchParams,
-} from "@/utils/normalize-search-params";
-import { fleetQKeys, reservationQKeys } from "@/utils/query-key";
+import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
+import { fleetQKeys } from "@/utils/query-key";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
@@ -46,6 +42,10 @@ import {
   fetchCustomersSearchListFn,
   fetchCustomersSearchListOptions,
 } from "@/utils/query/customer";
+import {
+  fetchReservationsSearchListFn,
+  fetchReservationsSearchListOptions,
+} from "@/utils/query/reservation";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickLookupWidget = () => {
@@ -179,36 +179,25 @@ export function QuickLookupForm() {
   });
 
   const reservations = useMutation({
-    mutationFn: fetchReservationsListModded,
+    mutationFn: fetchReservationsSearchListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
 
+      const searchKey = fetchReservationsSearchListOptions(variables).queryKey;
+      qc.setQueryData(searchKey, () => data);
+
       if (data.body.length > 1) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
-
-        const normalized = normalizeReservationListSearchParams({
-          page: variables.page,
-          size: variables.pageSize,
-          filters: { ReservationNumber: variables.ReservationNumber },
-        });
-        const qk = reservationQKeys.search({
-          pagination: {
-            page: variables.page,
-            pageSize: variables.pageSize,
-          },
-          filters: normalized.searchFilters,
-        });
-        qc.setQueryData(qk, () => data);
 
         navigate({
           to: "/reservations",
           search: () => ({
-            page: variables.page,
-            pageSize: variables.pageSize,
-            filters: normalized.searchFilters,
+            page: variables.pagination.page,
+            pageSize: variables.pagination.pageSize,
+            filters: variables.filters,
           }),
         });
         return;
@@ -323,12 +312,15 @@ export function QuickLookupForm() {
               break;
             case "reservationNo":
               reservations.mutate({
-                clientId: authParams.clientId,
-                userId: authParams.userId,
-                page: 1,
-                pageSize: defaultRowCount,
-                clientDate: new Date(),
-                ReservationNumber: searchValue,
+                auth: authParams,
+                pagination: {
+                  page: 1,
+                  pageSize: defaultRowCount,
+                },
+                filters: {
+                  clientDate: new Date(),
+                  ReservationNumber: searchValue,
+                },
               });
               break;
             case "vehicleLicenseNo":

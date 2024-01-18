@@ -20,13 +20,13 @@ import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-import { useGetReservationsList } from "@/hooks/network/reservation/useGetReservationsList";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { fetchAgreementsSearchListOptions } from "@/utils/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
+import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
 
@@ -105,15 +105,21 @@ export const CommandMenu = () => {
   });
 
   // reservations
-  const reservationsQuery = useGetReservationsList({
-    page: 1,
-    pageSize: 50,
-    filters: {
-      Keyword: searchTerm,
-      Statuses: ["2", "6", "7"],
-    },
-    enabled: showCommandMenu,
-  });
+  const reservationsQuery = useQuery(
+    fetchReservationsSearchListOptions({
+      auth: authParams,
+      pagination: {
+        page: 1,
+        pageSize: 50,
+      },
+      filters: {
+        clientDate: new Date(),
+        Keyword: searchTerm,
+        Statuses: ["2", "6", "7"],
+      },
+      enabled: showCommandMenu,
+    })
+  );
   const reservationsList =
     reservationsQuery.data?.status === 200 ? reservationsQuery.data?.body : [];
   const reservations: GlobalSearchReturnType = reservationsList.map((res) => {

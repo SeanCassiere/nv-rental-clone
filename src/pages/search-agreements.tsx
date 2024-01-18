@@ -32,7 +32,6 @@ import { getAuthFromAuthHook } from "@/utils/auth";
 import { AgreementDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import {
-  fetchAgreementsSearchListOptions,
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
 } from "@/utils/query/agreement";
@@ -50,7 +49,8 @@ function AgreementsSearchPage() {
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
-  const { searchColumnsOptions, search } = routeApi.useRouteContext();
+  const { searchColumnsOptions, searchListOptions, search } =
+    routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -77,19 +77,7 @@ function AgreementsSearchPage() {
     [pageNumber, size]
   );
 
-  const agreementsData = useQuery(
-    fetchAgreementsSearchListOptions({
-      auth: authParams,
-      pagination: {
-        page: pageNumber,
-        pageSize: size,
-      },
-      filters: {
-        ...searchFilters,
-        currentDate: new Date(),
-      },
-    })
-  );
+  const agreementsData = useQuery(searchListOptions);
 
   const agreementStatusList = useQuery(
     fetchAgreementStatusesOptions({ auth: authParams })

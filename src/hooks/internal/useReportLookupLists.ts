@@ -2,14 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
-import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
-import { TReportDetail } from "@/schemas/report";
+import type { TReportDetail } from "@/schemas/report";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
+import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
 import type { ReportFilterOption } from "@/types/report";
 
 type CriteriaList = TReportDetail["searchCriteria"];
@@ -60,9 +60,12 @@ export function useReportLookupLists(report: TReportDetail) {
     report.searchCriteria,
     "ReservationStatus"
   );
-  const reservationStatusesQuery = useGetReservationStatusList({
-    enabled: findReservationStatuses,
-  });
+  const reservationStatusesQuery = useQuery(
+    fetchReservationStatusesOptions({
+      auth: authParams,
+      enabled: findReservationStatuses,
+    })
+  );
   const reservationStatusesList = reservationStatusesQuery.data ?? [];
   const reservationStatusOptions: ReportFilterOption[] =
     reservationStatusesList.map((status) => ({
