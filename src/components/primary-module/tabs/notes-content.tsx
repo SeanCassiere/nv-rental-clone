@@ -13,7 +13,7 @@ import type { TNoteDataParsed } from "@/schemas/note";
 import { fetchNotesForAgreementByIdOptions } from "@/utils/query/agreement";
 import { fetchNotesForCustomerByIdOptions } from "@/utils/query/customer";
 import { fetchNotesForReservationByIdOptions } from "@/utils/query/reservation";
-import { fetchNotesForFleetByIdOptions } from "@/utils/query/vehicle";
+import { fetchNotesForVehicleByIdOptions } from "@/utils/query/vehicle";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 const EmptyIcon = icons.Files;
@@ -139,7 +139,7 @@ const ModuleNotesTabContent = ({
       RenderComponent = CustomerDisplay;
       break;
     case "vehicles":
-      RenderComponent = FleetDisplay;
+      RenderComponent = VehicleDisplay;
       break;
     default:
       throw new Error("Module not supported");
@@ -234,10 +234,10 @@ const CustomerDisplay = ({
   );
 };
 
-const FleetDisplay = ({ referenceId, colDefs, auth }: ModuleDisplayProps) => {
+const VehicleDisplay = ({ referenceId, colDefs, auth }: ModuleDisplayProps) => {
   const query = useSuspenseQuery(
-    fetchNotesForFleetByIdOptions({
-      fleetId: referenceId,
+    fetchNotesForVehicleByIdOptions({
+      vehicleId: referenceId,
       auth,
     })
   );

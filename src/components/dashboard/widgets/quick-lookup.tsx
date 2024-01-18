@@ -44,8 +44,8 @@ import {
   fetchReservationsSearchListOptions,
 } from "@/utils/query/reservation";
 import {
-  fetchFleetSearchListFn,
-  fetchFleetSearchListOptions,
+  fetchVehiclesSearchListFn,
+  fetchVehiclesSearchListOptions,
 } from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
@@ -216,14 +216,14 @@ export function QuickLookupForm(props: Auth) {
   });
 
   const vehicles = useMutation({
-    mutationFn: fetchFleetSearchListFn,
+    mutationFn: fetchVehiclesSearchListFn,
     onSuccess: (data, variables) => {
       if (data.status !== 200 || data.body.length === 0 || !data.body[0]) {
         toast.error(t("notFound", { ns: "messages" }));
         return;
       }
 
-      const searchKey = fetchFleetSearchListOptions(variables).queryKey;
+      const searchKey = fetchVehiclesSearchListOptions(variables).queryKey;
       qc.setQueryData(searchKey, () => data);
 
       if (data.body.length > 1) {

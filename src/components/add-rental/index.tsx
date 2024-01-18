@@ -33,7 +33,7 @@ import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
-import { fetchFleetSearchListOptions } from "@/utils/query/vehicle";
+import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { cn } from "@/utils";
@@ -681,7 +681,7 @@ const AddRentalParentForm = ({
   const agreementConditionsForFetchingVehicles =
     Boolean(agreementRentalInformation) && Boolean(agreementVehicleInformation);
   useQuery(
-    fetchFleetSearchListOptions({
+    fetchVehiclesSearchListOptions({
       auth: authParams,
       pagination: { page: 1, pageSize: 20 },
       filters: {

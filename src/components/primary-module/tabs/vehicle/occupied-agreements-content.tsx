@@ -23,7 +23,7 @@ import {
   fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
 
-interface FleetOccupiedAgreementsTabProps {
+interface VehicleOccupiedAgreementsTabProps {
   vehicleId: string;
   vehicleNo: string | undefined;
 }
@@ -43,7 +43,9 @@ const acceptedColumns = [
 
 const pageSize = 50;
 
-const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
+const VehicleOccupiedAgreementsTab = (
+  props: VehicleOccupiedAgreementsTabProps
+) => {
   const { t } = useTranslation();
   const auth = useAuth();
 
@@ -161,4 +163,4 @@ const FleetOccupiedAgreementsTab = (props: FleetOccupiedAgreementsTabProps) => {
   );
 };
 
-export default FleetOccupiedAgreementsTab;
+export default VehicleOccupiedAgreementsTab;

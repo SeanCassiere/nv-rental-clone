@@ -3,35 +3,35 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
-import FleetInformation from "@/components/primary-module/information-block/fleet-information";
+import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import {
-  fetchFleetByIdOptions,
-  fetchSummaryForFleetByIdOptions,
+  fetchSummaryForVehicleByIdOptions,
+  fetchVehicleByIdOptions,
 } from "@/utils/query/vehicle";
 
-type FleetSummaryTabProps = {
+type VehicleSummaryTabProps = {
   vehicleId: string;
 };
 
-const FleetSummaryTab = (props: FleetSummaryTabProps) => {
+const VehicleSummaryTab = (props: VehicleSummaryTabProps) => {
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
   const vehicleData = useQuery(
-    fetchFleetByIdOptions({ auth: authParams, fleetId: props.vehicleId })
+    fetchVehicleByIdOptions({ auth: authParams, vehicleId: props.vehicleId })
   );
   const vehicle =
     vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
   const vehicleSummary = useQuery(
-    fetchSummaryForFleetByIdOptions({
+    fetchSummaryForVehicleByIdOptions({
       auth: authParams,
-      fleetId: props.vehicleId,
+      vehicleId: props.vehicleId,
     })
   );
   const summaryData =
@@ -55,7 +55,7 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
       id: "general",
       label: "General",
       component: (
-        <FleetInformation
+        <VehicleInformation
           mode="vehicle"
           isLoading={vehicleData.isLoading}
           data={
@@ -156,4 +156,4 @@ const FleetSummaryTab = (props: FleetSummaryTabProps) => {
   );
 };
 
-export default FleetSummaryTab;
+export default VehicleSummaryTab;

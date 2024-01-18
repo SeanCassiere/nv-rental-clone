@@ -35,8 +35,8 @@ import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehic
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import {
-  fetchFleetFuelLevelsOptions,
-  fetchFleetSearchListOptions,
+  fetchVehicleFuelLevelsOptions,
+  fetchVehiclesSearchListOptions,
 } from "@/utils/query/vehicle";
 
 import i18n from "@/i18next-config";
@@ -80,7 +80,7 @@ export const VehicleStage = ({
     [rentalInformation?.checkoutLocation]
   );
 
-  const [showFleetPicker, setShowFleetPicker] = useState(false);
+  const [showVehiclePicker, setShowVehiclePicker] = useState(false);
 
   const values: AgreementVehicleInformationSchemaParsed = {
     vehicleTypeId: vehicleInformation?.vehicleTypeId || 0,
@@ -129,7 +129,7 @@ export const VehicleStage = ({
     EndDate: rentalInformation?.checkinDate,
   };
   const vehicleListData = useQuery(
-    fetchFleetSearchListOptions({
+    fetchVehiclesSearchListOptions({
       auth: authParams,
       pagination: { page: 1, pageSize: 20 },
       filters: searchFilters,
@@ -144,15 +144,15 @@ export const VehicleStage = ({
 
   //
   const fuelLevelListData = useQuery(
-    fetchFleetFuelLevelsOptions({ auth: authParams })
+    fetchVehicleFuelLevelsOptions({ auth: authParams })
   );
   const fuelLevelsList = fuelLevelListData.data || [];
 
   return (
     <Form {...form}>
       <SelectVehicleDialog
-        show={showFleetPicker}
-        setShow={setShowFleetPicker}
+        show={showVehiclePicker}
+        setShow={setShowVehiclePicker}
         filters={searchFilters}
         onSelect={(vehicle) => {
           form.setValue("vehicleTypeId", vehicle.VehicleTypeId, {
@@ -183,7 +183,7 @@ export const VehicleStage = ({
         <Button
           variant="outline"
           onClick={() => {
-            setShowFleetPicker(true);
+            setShowVehiclePicker(true);
           }}
           disabled={!checkoutLocation}
         >

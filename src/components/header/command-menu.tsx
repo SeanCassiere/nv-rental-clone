@@ -26,7 +26,7 @@ import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
 import { fetchAgreementsSearchListOptions } from "@/utils/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
 import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
-import { fetchFleetSearchListOptions } from "@/utils/query/vehicle";
+import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
 
@@ -85,7 +85,7 @@ export const CommandMenu = () => {
 
   // vehicles
   const vehiclesQuery = useQuery(
-    fetchFleetSearchListOptions({
+    fetchVehiclesSearchListOptions({
       auth: authParams,
       pagination: {
         page: 1,

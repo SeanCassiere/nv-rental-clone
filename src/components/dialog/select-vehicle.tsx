@@ -15,7 +15,7 @@ import {
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchFleetSearchListOptions } from "@/utils/query/vehicle";
+import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 
 import { getXPaginationFromHeaders } from "@/utils";
 
@@ -62,7 +62,7 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
 
   const { VehicleTypeId, ...filters } = props.filters;
   const vehicleListData = useQuery(
-    fetchFleetSearchListOptions({
+    fetchVehiclesSearchListOptions({
       auth: authParams,
       pagination: {
         page,

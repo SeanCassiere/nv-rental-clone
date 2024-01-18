@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
-import FleetInformation from "@/components/primary-module/information-block/fleet-information";
 import RentalInformation from "@/components/primary-module/information-block/rental-information";
+import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -53,7 +53,7 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
       id: "vehicle",
       label: "Vehicle",
       component: (
-        <FleetInformation
+        <VehicleInformation
           mode={isCheckedIn ? "agreement-checked-in" : "agreement-checked-out"}
           isLoading={agreementQuery.isLoading}
           data={

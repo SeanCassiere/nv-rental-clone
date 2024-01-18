@@ -17,11 +17,11 @@ import {
   type RefId,
 } from "./helpers";
 
-const SEGMENT = "fleet";
+const SEGMENT = "vehicles";
 
-type FleetId = { fleetId: RefId };
+type VehicleId = { vehicleId: RefId };
 
-export function fetchFleetSearchColumnsOptions(options: Auth) {
+export function fetchVehiclesSearchColumnsOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "columns"]),
     queryFn: () =>
@@ -43,7 +43,7 @@ export function fetchFleetSearchColumnsOptions(options: Auth) {
   });
 }
 
-export function fetchFleetSearchListOptions(
+export function fetchVehiclesSearchListOptions(
   options: {
     filters: Omit<
       Parameters<(typeof apiClient)["vehicle"]["getList"]>[0]["query"],
@@ -64,13 +64,13 @@ export function fetchFleetSearchListOptions(
       sortObjectKeys(options.pagination),
       sortObjectKeys(options.filters),
     ]),
-    queryFn: () => fetchFleetSearchListFn(options),
+    queryFn: () => fetchVehiclesSearchListFn(options),
     enabled: isEnabled(options) && enabled,
     placeholderData: keepPreviousData,
   });
 }
 
-export function fetchFleetSearchListFn(
+export function fetchVehiclesSearchListFn(
   options: {
     filters: Omit<
       Parameters<(typeof apiClient)["vehicle"]["getList"]>[0]["query"],
@@ -104,7 +104,7 @@ export function fetchFleetSearchListFn(
   });
 }
 
-export function fetchFleetStatusesOptions(
+export function fetchVehicleStatusesOptions(
   options: { enabled?: boolean } & Auth
 ) {
   const { enabled = true } = options;
@@ -124,7 +124,7 @@ export function fetchFleetStatusesOptions(
   });
 }
 
-export function fetchFleetFuelLevelsOptions(options: Auth) {
+export function fetchVehicleFuelLevelsOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "fuel_levels"]),
     queryFn: () =>
@@ -141,13 +141,13 @@ export function fetchFleetFuelLevelsOptions(options: Auth) {
   });
 }
 
-export function fetchFleetByIdOptions(options: FleetId & Auth) {
+export function fetchVehicleByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, options.fleetId]),
+    queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId]),
     queryFn: () =>
       apiClient.vehicle.getById({
         params: {
-          vehicleId: String(options.fleetId),
+          vehicleId: String(options.vehicleId),
         },
         query: {
           clientId: options.auth.clientId,
@@ -160,13 +160,13 @@ export function fetchFleetByIdOptions(options: FleetId & Auth) {
   });
 }
 
-export function fetchSummaryForFleetByIdOptions(options: FleetId & Auth) {
+export function fetchSummaryForVehicleByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, options.fleetId, "summary"]),
+    queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "summary"]),
     queryFn: () =>
       apiClient.vehicle.getSummaryForId({
         params: {
-          vehicleId: String(options.fleetId),
+          vehicleId: String(options.vehicleId),
         },
         query: {
           clientId: options.auth.clientId,
@@ -178,14 +178,14 @@ export function fetchSummaryForFleetByIdOptions(options: FleetId & Auth) {
   });
 }
 
-export function fetchNotesForFleetByIdOptions(options: FleetId & Auth) {
+export function fetchNotesForVehicleByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, options.fleetId, "notes"]),
+    queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "notes"]),
     queryFn: () =>
       apiClient.note.getListForRefId({
         params: {
           referenceType: "vehicle",
-          referenceId: String(options.fleetId),
+          referenceId: String(options.vehicleId),
         },
         query: {
           clientId: options.auth.clientId,

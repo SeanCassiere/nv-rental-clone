@@ -7,7 +7,7 @@ import { getModuleApiName } from "@/utils/columns";
 import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
 import { fetchCustomersSearchColumnsOptions } from "@/utils/query/customer";
 import { fetchReservationsSearchColumnsOptions } from "@/utils/query/reservation";
-import { fetchFleetSearchColumnsOptions } from "@/utils/query/vehicle";
+import { fetchVehiclesSearchColumnsOptions } from "@/utils/query/vehicle";
 import type { AppPrimaryModuleType } from "@/types/General";
 
 import { apiClient } from "@/api";
@@ -21,7 +21,7 @@ const allModulesKeySelector = (module: AppPrimaryModuleType) => {
     case "customers":
       return fetchCustomersSearchColumnsOptions;
     case "vehicles":
-      return fetchFleetSearchColumnsOptions;
+      return fetchVehiclesSearchColumnsOptions;
   }
 };
 

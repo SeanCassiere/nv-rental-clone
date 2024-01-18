@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import type { VehicleDataParsed } from "@/schemas/vehicle";
 
-import { fetchFleetStatusesOptions } from "@/utils/query/vehicle";
+import { fetchVehicleStatusesOptions } from "@/utils/query/vehicle";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
@@ -11,7 +11,7 @@ export const getVehicleStatusNameFromRaw = (status: string) => {
   if (name === "OnRent") return "On rent";
   return status;
 };
-const FleetStatBlock = ({
+const VehicleStatBlock = ({
   vehicle,
   auth: authParams,
 }: {
@@ -22,7 +22,7 @@ const FleetStatBlock = ({
   };
 }) => {
   const vehicleStatusList = useQuery(
-    fetchFleetStatusesOptions({ auth: authParams })
+    fetchVehicleStatusesOptions({ auth: authParams })
   );
 
   const getStatusById = (id?: number) => {
@@ -72,4 +72,4 @@ const FleetStatBlock = ({
   );
 };
 
-export default FleetStatBlock;
+export default VehicleStatBlock;

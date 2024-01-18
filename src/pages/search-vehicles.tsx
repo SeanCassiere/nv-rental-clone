@@ -26,7 +26,7 @@ import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGe
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { fetchFleetStatusesOptions } from "@/utils/query/vehicle";
+import { fetchVehicleStatusesOptions } from "@/utils/query/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -69,7 +69,7 @@ function VehiclesSearchPage() {
   const vehiclesData = useQuery(searchListOptions);
 
   const vehicleStatusList = useQuery(
-    fetchFleetStatusesOptions({ auth: authParams })
+    fetchVehicleStatusesOptions({ auth: authParams })
   );
   const vehicleStatuses = vehicleStatusList.data ?? [];
 

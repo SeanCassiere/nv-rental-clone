@@ -6,8 +6,8 @@ import { getAuthFromRouterContext } from "@/utils/auth";
 import { APP_DEFAULTS } from "@/utils/constants";
 import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
 import {
-  fetchFleetSearchColumnsOptions,
-  fetchFleetSearchListOptions,
+  fetchVehiclesSearchColumnsOptions,
+  fetchVehiclesSearchListOptions,
 } from "@/utils/query/vehicle";
 
 import { fleetRoute } from ".";
@@ -28,8 +28,8 @@ export const searchFleetRoute = new Route({
     const parsedSearch = normalizeVehicleListSearchParams(search);
     return {
       authParams: auth,
-      searchColumnsOptions: fetchFleetSearchColumnsOptions({ auth }),
-      searchListOptions: fetchFleetSearchListOptions({
+      searchColumnsOptions: fetchVehiclesSearchColumnsOptions({ auth }),
+      searchListOptions: fetchVehiclesSearchListOptions({
         auth,
         pagination: {
           page: parsedSearch.pageNumber,
@@ -60,5 +60,5 @@ export const searchFleetRoute = new Route({
 
     return;
   },
-  component: lazyRouteComponent(() => import("@/pages/search-fleet")),
+  component: lazyRouteComponent(() => import("@/pages/search-vehicles")),
 });

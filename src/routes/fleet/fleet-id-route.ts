@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
 import {
-  fetchFleetByIdOptions,
-  fetchSummaryForFleetByIdOptions,
+  fetchSummaryForVehicleByIdOptions,
+  fetchVehicleByIdOptions,
 } from "@/utils/query/vehicle";
 
 import { fleetRoute } from ".";
@@ -34,30 +34,31 @@ export const viewFleetByIdRoute = new Route({
     const auth = getAuthFromRouterContext(context);
     return {
       authParams: auth,
-      viewFleetSummaryOptions: fetchSummaryForFleetByIdOptions({
+      viewVehicleSummaryOptions: fetchSummaryForVehicleByIdOptions({
         auth,
-        fleetId: vehicleId,
+        vehicleId,
       }),
-      viewFleetOptions: fetchFleetByIdOptions({ auth, fleetId: vehicleId }),
+      viewVehicleOptions: fetchVehicleByIdOptions({ auth, vehicleId }),
       viewTab: search?.tab || "",
     };
   },
   loader: async ({ context }) => {
-    const { queryClient, viewFleetOptions, viewFleetSummaryOptions } = context;
+    const { queryClient, viewVehicleOptions, viewVehicleSummaryOptions } =
+      context;
 
     const promises = [];
 
     // get summary
-    promises.push(queryClient.ensureQueryData(viewFleetSummaryOptions));
+    promises.push(queryClient.ensureQueryData(viewVehicleSummaryOptions));
 
     // get vehicle
-    promises.push(queryClient.ensureQueryData(viewFleetOptions));
+    promises.push(queryClient.ensureQueryData(viewVehicleOptions));
 
     await Promise.all(promises);
 
     return;
   },
-  component: lazyRouteComponent(() => import("@/pages/view-fleet")),
+  component: lazyRouteComponent(() => import("@/pages/view-vehicle")),
 });
 
 export const editFleetByIdRoute = new Route({
