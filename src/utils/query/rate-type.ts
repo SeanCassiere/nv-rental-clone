@@ -1,35 +1,35 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { sortObjectKeys } from "@/utils/sort";
-
 import { apiClient } from "@/api";
 
+import { sortObjectKeys } from "../sort";
 import { isEnabled, makeQueryKey, type Auth } from "./helpers";
 
-const SEGMENT = "locations";
+const SEGMENT = "rate_types";
 
 /**
  *
- * @api `/locations`
+ * @api `/ratestypes`
  */
-export function fetchLocationsListOptions(
+export function fetchRateTypesListOptions(
   options: {
-    filters: Omit<
-      Parameters<(typeof apiClient)["location"]["getList"]>[0]["query"],
-      "clientId" | "userId"
+    filters?: Omit<
+      Parameters<(typeof apiClient)["rateType"]["getList"]>[0]["query"],
+      "userId" | "clientId"
     >;
     enabled?: boolean;
   } & Auth
 ) {
   const { enabled = true } = options;
+
   return queryOptions({
     queryKey: makeQueryKey(options, [
       SEGMENT,
       "list",
-      sortObjectKeys(options.filters),
+      sortObjectKeys(options.filters ?? {}),
     ]),
     queryFn: () =>
-      apiClient.location.getList({
+      apiClient.rateType.getList({
         query: {
           clientId: options.auth.clientId,
           userId: options.auth.userId,
@@ -37,6 +37,5 @@ export function fetchLocationsListOptions(
         },
       }),
     enabled: isEnabled(options) && enabled,
-    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

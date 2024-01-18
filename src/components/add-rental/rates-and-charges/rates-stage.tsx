@@ -1,7 +1,9 @@
 import { useEffect, useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,9 +22,10 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 
-import { useGetRentalRateTypesForRentals } from "@/hooks/network/rates/useGetRentalRateTypesForRental";
-
 import { RentalRateSchema, type RentalRateParsed } from "@/schemas/rate";
+
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchRateTypesListOptions } from "@/utils/query/rate-type";
 
 import type { RatesAndChargesTabProps } from ".";
 
@@ -51,6 +54,8 @@ export const RatesStage = (props: RatesStageProps) => {
     hideRateSelector = false,
     hidePromotionCodeFields = false,
   } = props;
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
   const { t } = useTranslation();
 
@@ -60,12 +65,15 @@ export const RatesStage = (props: RatesStageProps) => {
   const checkoutLocation = durationStageData?.checkoutLocation || 0;
   const vehicleTypeId = vehicleStageData?.vehicleTypeId || 0;
 
-  const rateTypesData = useGetRentalRateTypesForRentals({
-    filters: {
-      LocationId: String(checkoutLocation),
-      VehicleTypeId: String(vehicleTypeId),
-    },
-  });
+  const rateTypesData = useQuery(
+    fetchRateTypesListOptions({
+      auth: authParams,
+      filters: {
+        LocationId: String(checkoutLocation),
+        VehicleTypeId: String(vehicleTypeId),
+      },
+    })
+  );
   const rateTypesList =
     rateTypesData.data?.status === 200 ? rateTypesData.data?.body : [];
 
