@@ -11,12 +11,7 @@ export const agreementQKeys = {
 };
 
 export const reservationQKeys = {
-  // search
-  rootKey: "reservations",
-  types: () => [reservationQKeys.rootKey, "types"],
-  // view by ID
-  viewKey: "view-reservation",
-  summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
+  summary: (id: ReferenceId) => ["agreements", id, "summary"],
 };
 
 export const fleetQKeys = {
@@ -30,10 +25,7 @@ export const fleetQKeys = {
   ],
   statuses: () => [fleetQKeys.rootKey, "statuses"],
   fuelLevels: () => [fleetQKeys.rootKey, "fuel-levels"],
-  // view by ID
-  viewKey: "view-fleet",
-  id: (id: ReferenceId) => [fleetQKeys.viewKey, id, "data"],
-  summary: (id: ReferenceId) => [fleetQKeys.viewKey, id, "summary"],
+  summary: (id: ReferenceId) => ["fleet", id, "summary"],
 };
 
 export const dashboardQKeys = {

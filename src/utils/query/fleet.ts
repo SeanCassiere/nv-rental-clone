@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
+import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 
 import { apiClient } from "@/api";
 
@@ -28,6 +29,25 @@ export function fetchFleetSearchColumnsOptions(options: Auth) {
             body: data.status === 200 ? data.body : [],
           })
         ),
+    enabled: isEnabled(options),
+  });
+}
+
+export function fetchFleetByIdOptions(options: FleetId & Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, options.fleetId]),
+    queryFn: () =>
+      apiClient.vehicle.getById({
+        params: {
+          vehicleId: String(options.fleetId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+          clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+          getMakeDetails: "true",
+        },
+      }),
     enabled: isEnabled(options),
   });
 }
