@@ -6,7 +6,7 @@ function rootKey({ auth }: Auth) {
   return `${auth.clientId}:${auth.userId}`;
 }
 
-export function makeQueryKey(options: Auth, ...queryArguments: any[]) {
+export function makeQueryKey(options: Auth, queryArguments: any[]) {
   return [rootKey(options), ...queryArguments];
 }
 
