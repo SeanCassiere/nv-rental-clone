@@ -1,5 +1,6 @@
 import React from "react";
 import { add } from "date-fns";
+import { useAuth } from "react-oidc-context";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { QuickCheckinAgreementForm } from "@/components/dashboard/widgets/quick-checkin-agreement";
@@ -14,6 +15,9 @@ import { usePermission } from "@/hooks/internal/usePermission";
 import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
 import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
+import type { Auth } from "@/utils/query/helpers";
+
 import { cn } from "@/utils";
 
 interface V2DashboardContentProps {
@@ -22,6 +26,9 @@ interface V2DashboardContentProps {
 
 export default function V2DashboardContent(props: V2DashboardContentProps) {
   const { locations } = props;
+
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
@@ -36,7 +43,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
       )}
     >
       {canViewRentalSummary || canViewVehicleStatus || canViewSalesStatus ? (
-        <HeroBlock locations={locations} />
+        <HeroBlock locations={locations} auth={authParams} />
       ) : null}
       {canViewQuickCheckin && (
         <Card className="shadow-none">
@@ -47,7 +54,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
           </CardHeader>
           <CardContent>
             <React.Suspense fallback={<Skeleton className="h-24" />}>
-              <QuickCheckinAgreementForm />
+              <QuickCheckinAgreementForm auth={authParams} />
             </React.Suspense>
           </CardContent>
         </Card>
@@ -60,7 +67,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <QuickLookupForm />
+            <QuickLookupForm auth={authParams} />
           </CardContent>
         </Card>
       )}
@@ -68,7 +75,7 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
   );
 }
 
-function HeroBlock({ locations }: { locations: string[] }) {
+function HeroBlock({ locations, auth }: { locations: string[] } & Auth) {
   const tomorrowTabScreenSetting = useScreenSetting(
     "Dashboard",
     "RentalManagementSummary",
@@ -153,10 +160,10 @@ function HeroBlock({ locations }: { locations: string[] }) {
               </TabsList>
             </div>
             <TabsContent value="fleet-status">
-              <VehicleStatusPieChart locations={locations} />
+              <VehicleStatusPieChart locations={locations} auth={auth} />
             </TabsContent>
             <TabsContent value="sales-performance">
-              <SalesAreaChart locations={locations} />
+              <SalesAreaChart locations={locations} auth={auth} />
             </TabsContent>
           </Tabs>
         </CardContent>

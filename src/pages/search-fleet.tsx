@@ -22,11 +22,11 @@ import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
-import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { fetchFleetStatusesOptions } from "@/utils/query/fleet";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -38,7 +38,7 @@ const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 function VehiclesSearchPage() {
   const navigate = useNavigate();
 
-  const { search, searchColumnsOptions, searchListOptions } =
+  const { search, searchColumnsOptions, searchListOptions, authParams } =
     routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
@@ -68,7 +68,9 @@ function VehiclesSearchPage() {
 
   const vehiclesData = useQuery(searchListOptions);
 
-  const vehicleStatusList = useGetVehicleStatusList();
+  const vehicleStatusList = useQuery(
+    fetchFleetStatusesOptions({ auth: authParams })
+  );
   const vehicleStatuses = vehicleStatusList.data ?? [];
 
   const vehicleTypesList = useGetVehicleTypesLookupList();

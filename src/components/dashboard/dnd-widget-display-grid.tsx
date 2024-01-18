@@ -15,11 +15,15 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useAuth } from "react-oidc-context";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
+
+import { getAuthFromAuthHook } from "@/utils/auth";
+import type { Auth } from "@/utils/query/helpers";
 
 import { cn } from "@/utils";
 
@@ -39,6 +43,9 @@ interface DashboardDndWidgetGridProps {
 const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
   const { widgets: widgetList = [], onWidgetSortingEnd } = props;
   const isDisabled = props.isLocked;
+
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
   // used purely to reliably let the animation functions run
   const [localWidgets, setLocalWidgets] = useState(
@@ -99,6 +106,7 @@ const DashboardDndWidgetGrid = (props: DashboardDndWidgetGridProps) => {
                 key={`widget-${widget.widgetID}`}
                 isDisabled={isDisabled}
                 currentLocations={props.selectedLocationIds}
+                auth={authParams}
               />
             ))}
         </SortableContext>
@@ -166,18 +174,18 @@ export function sortWidgetsByUserPositionFn(
 
 function renderWidgetView(
   widget: DashboardWidgetItemParsed,
-  { locations }: { locations: string[] }
+  { locations, auth }: { locations: string[] } & Auth
 ) {
   const widgetId = widget.widgetID;
   switch (widgetId) {
     case "VehicleStatus":
-      return <VehicleStatusWidget locations={locations} />;
+      return <VehicleStatusWidget locations={locations} auth={auth} />;
     case "SalesStatus":
-      return <SalesStatusWidget locations={locations} />;
+      return <SalesStatusWidget locations={locations} auth={auth} />;
     case "QuickCheckin":
-      return <QuickCheckinAgreementWidget />;
+      return <QuickCheckinAgreementWidget auth={auth} />;
     case "QuickLookup":
-      return <QuickLookupWidget />;
+      return <QuickLookupWidget auth={auth} />;
     default:
       return (
         <>
@@ -198,11 +206,12 @@ function WidgetSizingContainer({
   widget,
   isDisabled,
   currentLocations,
+  auth,
 }: {
   widget: DashboardWidgetItemParsed;
   isDisabled: boolean;
   currentLocations: string[];
-}) {
+} & Auth) {
   const {
     listeners,
     attributes,
@@ -247,7 +256,7 @@ function WidgetSizingContainer({
         {...attributes}
       >
         <Suspense fallback={<WidgetSkeleton />}>
-          {renderWidgetView(widget, { locations: currentLocations })}
+          {renderWidgetView(widget, { locations: currentLocations, auth })}
         </Suspense>
       </Card>
     </li>

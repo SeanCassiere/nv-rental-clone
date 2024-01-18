@@ -42,20 +42,21 @@ import {
   fetchFleetSearchListFn,
   fetchFleetSearchListOptions,
 } from "@/utils/query/fleet";
+import type { Auth } from "@/utils/query/helpers";
 import {
   fetchReservationsSearchListFn,
   fetchReservationsSearchListOptions,
 } from "@/utils/query/reservation";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
-const QuickLookupWidget = () => {
+const QuickLookupWidget = (props: Auth) => {
   return (
     <>
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-medium">Quick lookup</CardTitle>
       </CardHeader>
       <CardContent>
-        <QuickLookupForm />
+        <QuickLookupForm {...props} />
       </CardContent>
     </>
   );
@@ -73,13 +74,12 @@ function buildFormSchema() {
   });
 }
 
-export function QuickLookupForm() {
+export function QuickLookupForm(props: Auth) {
   const { t } = useTranslation();
-  const auth = useAuth();
   const qc = useQueryClient();
   const navigate = useNavigate();
 
-  const authParams = getAuthFromAuthHook(auth);
+  const authParams = props.auth;
 
   const rowCountStr =
     getLocalStorageForUser(

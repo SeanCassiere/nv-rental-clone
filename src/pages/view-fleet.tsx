@@ -212,7 +212,7 @@ function VehicleViewPage() {
           View the details related to this fleet item.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <FleetStatBlock vehicle={vehicle} />
+        <FleetStatBlock vehicle={vehicle} auth={authParams} />
       </section>
 
       <section

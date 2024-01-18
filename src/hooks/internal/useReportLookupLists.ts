@@ -3,12 +3,12 @@ import { useAuth } from "react-oidc-context";
 
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
-import { useGetVehicleStatusList } from "@/hooks/network/vehicle/useGetVehicleStatusList";
 
 import type { TReportDetail } from "@/schemas/report";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
+import { fetchFleetStatusesOptions } from "@/utils/query/fleet";
 import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
 import type { ReportFilterOption } from "@/types/report";
 
@@ -96,9 +96,12 @@ export function useReportLookupLists(report: TReportDetail) {
     report.searchCriteria,
     "VehicleStatus"
   );
-  const vehicleStatusesQuery = useGetVehicleStatusList({
-    enabled: findVehicleStatuses,
-  });
+  const vehicleStatusesQuery = useQuery(
+    fetchFleetStatusesOptions({
+      auth: authParams,
+      enabled: findVehicleStatuses,
+    })
+  );
   const vehicleStatusesList = vehicleStatusesQuery.data ?? [];
   const vehicleStatusOptions: ReportFilterOption[] = vehicleStatusesList.map(
     (status) => ({

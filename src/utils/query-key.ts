@@ -11,9 +11,6 @@ export const reservationQKeys = {
 };
 
 export const fleetQKeys = {
-  // search
-  rootKey: "fleet",
-  statuses: () => [fleetQKeys.rootKey, "statuses"],
   summary: (id: ReferenceId) => ["fleet", id, "summary"],
 };
 
