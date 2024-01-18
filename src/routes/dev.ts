@@ -2,8 +2,8 @@ import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { rootRoute } from "./__root";
 
-export const stylingRoute = new Route({
+export const devRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: "styles",
-  component: lazyRouteComponent(() => import("@/pages/styling-playground")),
+  path: "dev",
+  component: lazyRouteComponent(() => import("@/pages/dev")),
 });

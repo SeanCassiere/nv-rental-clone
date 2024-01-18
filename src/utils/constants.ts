@@ -14,9 +14,14 @@ export const USER_STORAGE_KEYS = {
   theme: "theme",
 } as const;
 
+export const APP_STORAGE_KEYS = {
+  theme: "theme",
+} as const;
+
 export const APP_DEFAULTS = {
   tableRowCount: "10",
   currencyDigits: "2",
+  theme: "system",
 } as const;
 
 export const OIDC_AUTHORITY =

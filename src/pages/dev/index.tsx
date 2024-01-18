@@ -10,7 +10,7 @@ const StylingAreaPage: React.FC = () => {
   useDocumentTitle(titleMaker("Styling Area"));
 
   return (
-    <div className="overflow-y-auto bg-background px-2">
+    <div className="overflow-y-auto bg-background px-2 text-foreground">
       <section className="py-10 md:mx-28">
         <h2 className="text-2xl">JSURL Utils</h2>
         <JsURLDecoder />

@@ -1,11 +1,10 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useLocalStorage } from "@/hooks/internal/useLocalStorage";
 import { useMediaQuery } from "@/hooks/internal/useMediaQuery";
 import { useUpdateEffect } from "@/hooks/internal/useUpdateEffect";
 
-import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { APP_DEFAULTS, APP_STORAGE_KEYS } from "@/utils/constants";
 import { setDomClass } from "@/utils/dom";
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
@@ -20,16 +19,11 @@ interface UseTernaryDarkModeOutput {
 }
 
 export function useTernaryDarkMode(): UseTernaryDarkModeOutput {
-  const { clientId: authClientId, userId: authUserId } = useAuthValues();
-
-  const clientId = authClientId || "0";
-  const userId = authUserId || "0";
-
   const isDarkOS = useMediaQuery(COLOR_SCHEME_QUERY);
   const [ternaryDarkMode, setTernaryDarkMode] =
     useLocalStorage<TernaryDarkMode>(
-      `${clientId}:${userId}:${USER_STORAGE_KEYS.theme}`,
-      "system"
+      APP_STORAGE_KEYS.theme,
+      APP_DEFAULTS.theme
     );
   const [isDarkMode, setDarkMode] = useState<boolean>(isDarkOS);
 

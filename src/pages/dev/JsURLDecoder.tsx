@@ -36,7 +36,7 @@ const JsURLDecoder = () => {
       <div>
         <p className="text-sm">Encoded</p>
         <div className="flex flex-col md:flex-row">
-          <p className="w-full break-all bg-indigo-100 p-4">{encoded}</p>
+          <p className="w-full break-all bg-card p-4">{encoded}</p>
           <p className="w-min">
             <Button
               type="button"
@@ -68,7 +68,7 @@ const JsURLDecoder = () => {
       <div>
         <p className="text-sm">Decoded</p>
         <div className="flex flex-col md:flex-row">
-          <p className="w-full break-all bg-indigo-100 p-4">
+          <p className="w-full break-all bg-card p-4">
             {JSON.stringify(decoded)}
           </p>
           <p className="w-min">

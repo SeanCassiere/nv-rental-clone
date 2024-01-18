@@ -19,6 +19,7 @@ import {
   viewCustomerByIdRoute,
 } from "@/routes/customers/customer-id-route";
 import { searchCustomersRoute } from "@/routes/customers/search-customers-route";
+import { devRoute } from "@/routes/dev";
 import { fleetRoute } from "@/routes/fleet";
 import { addFleetRoute } from "@/routes/fleet/add-fleet-route";
 import {
@@ -48,7 +49,6 @@ import { searchReservationsRoute } from "@/routes/reservations/search-reservatio
 import { settingsRoute } from "@/routes/settings";
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 import { mainSettingsRoute } from "@/routes/settings/main-settings-route";
-import { stylingRoute } from "@/routes/styles";
 
 import { IS_LOCAL_DEV } from "@/utils/constants";
 
@@ -131,6 +131,6 @@ export const routeTree = rootRoute.addChildren([
   logoutRoute, // /logout
   loggedOutRoute, // /logged-out
   oidcCallbackRoute, // /oidc-callback
-  ...(IS_LOCAL_DEV ? [stylingRoute] : []),
+  ...(IS_LOCAL_DEV ? [devRoute] : []),
   indexRoute, // /
 ]);
