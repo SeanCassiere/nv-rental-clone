@@ -44,19 +44,6 @@ export const fleetQKeys = {
   summary: (id: ReferenceId) => [fleetQKeys.viewKey, id, "summary"],
 };
 
-export const userQKeys = {
-  rootKey: "users",
-  profile: (userId: string) => [userQKeys.rootKey, userId, "profile"],
-  updatingProfile: (userId: string) => [
-    userQKeys.rootKey,
-    userId,
-    "updating-profile",
-  ],
-  userConfigurations: () => [userQKeys.rootKey, "user-configurations"],
-  activeUsersCount: () => [userQKeys.rootKey, "active-users-count"],
-  maximumUsersCount: () => [userQKeys.rootKey, "maximum-users-count"],
-};
-
 export const dashboardQKeys = {
   rootKey: "dashboard",
   widgets: () => [dashboardQKeys.rootKey, "widgets"],

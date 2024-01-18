@@ -2,13 +2,13 @@ import { queryOptions } from "@tanstack/react-query";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "role";
 
 export function fetchRolesListOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "all"],
+    queryKey: makeQueryKey(options, [SEGMENT, "list"]),
     queryFn: () =>
       apiClient.role.getList({
         query: {
@@ -23,7 +23,7 @@ export function fetchRolesListOptions(options: Auth) {
 
 export function fetchRoleByIdOptions(options: { roleId: RefId } & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.roleId],
+    queryKey: makeQueryKey(options, [SEGMENT, options.roleId]),
     queryFn: () =>
       apiClient.role.getById({
         params: { roleId: String(options.roleId) },
@@ -39,7 +39,7 @@ export function fetchRoleByIdOptions(options: { roleId: RefId } & Auth) {
 
 export function fetchRolePermissionsListOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "permissions"],
+    queryKey: makeQueryKey(options, [SEGMENT, "permissions"]),
     queryFn: () =>
       apiClient.role.getPermissions({
         query: {

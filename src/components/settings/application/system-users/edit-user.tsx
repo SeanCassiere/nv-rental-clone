@@ -51,9 +51,15 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { userQKeys } from "@/utils/query-key";
 import { fetchRolesListOptions } from "@/utils/query/role";
-import { fetchLanguagesForUsersOptions } from "@/utils/query/user";
+import {
+  fetchActiveUsersCountOptions,
+  fetchLanguagesForUsersOptions,
+  fetchMaximumUsersCountOptions,
+  fetchUserByIdOptions,
+  fetchUserConfigurationOptions,
+  makeUpdatingUserKey,
+} from "@/utils/query/user";
 
 import { apiClient } from "@/api";
 import { cn } from "@/utils";
@@ -82,46 +88,32 @@ export function EditUserDialog({
   };
 
   const isSubmittingNumber = useIsMutating({
-    mutationKey: userQKeys.updatingProfile(props.intendedUserId),
+    mutationKey: makeUpdatingUserKey({
+      auth: authParams,
+      userId: props.intendedUserId,
+    }),
   });
   const isSubmittingUpdating = isSubmittingNumber > 0;
 
-  const currentUsersQuery = useQuery({
-    queryKey: userQKeys.activeUsersCount(),
-    queryFn: () =>
-      apiClient.user.getActiveUsersCount({
-        query: {
-          clientId: props.clientId,
-          userId: props.userId,
-        },
-      }),
-  });
+  const currentUsersCountQuery = useQuery(
+    fetchActiveUsersCountOptions({
+      auth: authParams,
+    })
+  );
 
-  const maxUsersQuery = useQuery({
-    queryKey: userQKeys.maximumUsersCount(),
-    queryFn: () =>
-      apiClient.user.getMaximumUsersCount({
-        query: {
-          clientId: props.clientId,
-          userId: props.userId,
-        },
-      }),
-  });
+  const maximumUsersCountQuery = useQuery(
+    fetchMaximumUsersCountOptions({
+      auth: authParams,
+    })
+  );
 
-  const userQuery = useQuery({
-    queryKey: userQKeys.profile(props.intendedUserId),
-    queryFn: () =>
-      apiClient.user.getProfileByUserId({
-        query: {
-          clientId: props.clientId,
-          userId: props.userId,
-          currentUserId: props.userId,
-        },
-        params: { userId: props.intendedUserId },
-      }),
-    staleTime: 1000 * 60 * 1, // 1 minute
-    enabled: props.mode === "edit" && props.intendedUserId !== "" && open,
-  });
+  const userQuery = useQuery(
+    fetchUserByIdOptions({
+      userId: props.intendedUserId,
+      auth: authParams,
+      enabled: props.mode === "edit" && props.intendedUserId !== "" && open,
+    })
+  );
 
   const rolesQuery = useQuery(fetchRolesListOptions({ auth: authParams }));
 
@@ -135,9 +127,13 @@ export function EditUserDialog({
   });
 
   const currentUsersCount =
-    currentUsersQuery.data?.status === 200 ? currentUsersQuery.data.body : 0;
+    currentUsersCountQuery.data?.status === 200
+      ? currentUsersCountQuery.data.body
+      : 0;
   const maxUsersCount =
-    maxUsersQuery.data?.status === 200 ? maxUsersQuery.data.body : 0;
+    maximumUsersCountQuery.data?.status === 200
+      ? maximumUsersCountQuery.data.body
+      : 0;
   const isMaxUsersReached = currentUsersCount >= maxUsersCount;
 
   const user = userQuery.data?.status === 200 ? userQuery.data.body : null;
@@ -195,6 +191,7 @@ export function EditUserDialog({
           <EditUserForm
             formId={formId}
             userId={props.userId}
+            clientId={props.clientId}
             user={user}
             languages={languages}
             roles={roles}
@@ -250,12 +247,17 @@ function EditUserForm(props: {
   user: TUserProfile;
   formId: string;
   userId: string;
+  clientId: string;
   languages: UserLanguageItem[];
   roles: RoleListItem[];
   setOpen: (open: boolean) => void;
 }) {
   const { t } = useTranslation();
   const qc = useQueryClient();
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
 
   const languagesList = props.languages
     .filter((item) => item.key)
@@ -295,15 +297,27 @@ function EditUserForm(props: {
   });
 
   const updateProfile = useMutation({
-    mutationKey: userQKeys.updatingProfile(String(props.user.userID)),
+    mutationKey: makeUpdatingUserKey({
+      auth: authParams,
+      userId: props.user.userID,
+    }),
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
-      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
       qc.invalidateQueries({
-        queryKey: userQKeys.profile(variables.params.userId),
+        queryKey: fetchUserConfigurationOptions({ auth: authParams }).queryKey,
       });
-      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
-      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
+      qc.invalidateQueries({
+        queryKey: fetchUserByIdOptions({
+          userId: variables.params.userId,
+          auth: authParams,
+        }).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: fetchMaximumUsersCountOptions({ auth: authParams }).queryKey,
+      });
 
       if (data.status >= 200 && data.status < 300) {
         toast.success(
@@ -696,6 +710,10 @@ function NewUserForm(props: {
 }) {
   const { t } = useTranslation();
   const qc = useQueryClient();
+  const authParams = {
+    clientId: props.clientId,
+    userId: props.userId,
+  };
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -754,12 +772,21 @@ function NewUserForm(props: {
   });
 
   const createUser = useMutation({
-    mutationKey: userQKeys.updatingProfile(String(props.userId)),
+    mutationKey: makeUpdatingUserKey({
+      auth: authParams,
+      userId: props.userId,
+    }),
     mutationFn: apiClient.user.createdUserProfile,
     onSuccess: (data) => {
-      qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
-      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
-      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
+      qc.invalidateQueries({
+        queryKey: fetchUserConfigurationOptions({ auth: authParams }).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: fetchMaximumUsersCountOptions({ auth: authParams }).queryKey,
+      });
 
       if (data.status >= 200 && data.status < 300) {
         toast.success(

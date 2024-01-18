@@ -2,13 +2,13 @@ import { queryOptions } from "@tanstack/react-query";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth } from "./helpers";
 
 const SEGMENT = "reports";
 
 export function fetchReportsListOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "search"],
+    queryKey: makeQueryKey(options, [SEGMENT, "search"]),
     queryFn: () =>
       apiClient.report.getList({
         query: {
@@ -23,7 +23,7 @@ export function fetchReportsListOptions(options: Auth) {
 
 export function fetchReportByIdOptions(options: { reportId: string } & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.reportId],
+    queryKey: makeQueryKey(options, [SEGMENT, options.reportId]),
     queryFn: () =>
       apiClient.report.getById({
         params: { reportId: options.reportId },

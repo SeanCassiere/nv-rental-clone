@@ -7,7 +7,7 @@ import { apiClient } from "@/api";
 import { sortObjectKeys } from "../sort";
 import {
   isEnabled,
-  rootKey,
+  makeQueryKey,
   type Auth,
   type Pagination,
   type RefId,
@@ -15,9 +15,11 @@ import {
 
 const SEGMENT = "agreements";
 
+type AgreementId = { agreementId: RefId };
+
 export function fetchAgreementsSearchColumnsOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "columns"],
+    queryKey: makeQueryKey(options, [SEGMENT, "columns"]),
     queryFn: () =>
       apiClient.client
         .getColumnHeaderInfo({
@@ -52,13 +54,12 @@ export function fetchAgreementsSearchListOptions(
   const { enabled = true } = options;
   const { currentDate, ...filters } = options.filters;
   return queryOptions({
-    queryKey: [
-      rootKey(options),
+    queryKey: makeQueryKey(options, [
       SEGMENT,
       "list",
       sortObjectKeys(options.pagination),
       sortObjectKeys(filters),
-    ],
+    ]),
     queryFn: () => fetchAgreementsSearchListFn(options),
     enabled: isEnabled(options) && enabled,
     placeholderData: keepPreviousData,
@@ -95,7 +96,7 @@ export function fetchAgreementStatusesOptions(
 ) {
   const { enabled = true } = options;
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "statuses"],
+    queryKey: makeQueryKey(options, [SEGMENT, "statuses"]),
     queryFn: () =>
       apiClient.agreement
         .getStatuses({
@@ -112,7 +113,7 @@ export function fetchAgreementStatusesOptions(
 
 export function fetchAgreementTypesOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "types"],
+    queryKey: makeQueryKey(options, [SEGMENT, "types"]),
     queryFn: () =>
       apiClient.agreement
         .getTypes({
@@ -127,11 +128,9 @@ export function fetchAgreementTypesOptions(options: Auth) {
   });
 }
 
-export function fetchAgreementByIdOptions(
-  options: { agreementId: RefId } & Auth
-) {
+export function fetchAgreementByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.agreementId],
+    queryKey: makeQueryKey(options, [SEGMENT, options.agreementId]),
     queryFn: () =>
       apiClient.agreement.getById({
         params: {
@@ -148,11 +147,9 @@ export function fetchAgreementByIdOptions(
   });
 }
 
-export function fetchNotesForAgreementByIdOptions(
-  options: { agreementId: RefId } & Auth
-) {
+export function fetchNotesForAgreementByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.agreementId, "notes"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.agreementId, "notes"]),
     queryFn: () =>
       apiClient.note.getListForRefId({
         params: {
@@ -168,10 +165,14 @@ export function fetchNotesForAgreementByIdOptions(
 }
 
 export function fetchExchangesForAgreementByIdOptions(
-  options: { agreementId: RefId } & Auth
+  options: AgreementId & Auth
 ) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.agreementId, "exchanges"],
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      options.agreementId,
+      "exchanges",
+    ]),
     queryFn: () =>
       apiClient.vehicleExchange.getList({
         query: {
@@ -188,13 +189,12 @@ export function fetchGenerateAgreementNumberOptions(
   options: { enabled: boolean; agreementType: string } & Auth
 ) {
   return queryOptions({
-    queryKey: [
-      rootKey(options),
+    queryKey: makeQueryKey(options, [
       SEGMENT,
       "generate_number",
       new Date().toISOString().slice(0, 16),
       options.agreementType,
-    ],
+    ]),
     queryFn: () =>
       apiClient.agreement
         .generateNewNumber({

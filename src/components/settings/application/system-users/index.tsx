@@ -26,9 +26,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
-import { userQKeys } from "@/utils/query-key";
+import { fetchUserConfigurationOptions } from "@/utils/query/user";
 
-import { apiClient } from "@/api";
 import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
 
 import { EditUserDialog } from "./edit-user";
@@ -85,31 +84,15 @@ const SystemUsersSettings = () => {
   );
 };
 
-async function getUsers({
-  clientId,
-  userId,
-}: {
-  clientId: string;
-  userId: string;
-}) {
-  return await apiClient.user.getUserConfigurations({
-    query: { clientId, userId },
-  });
-}
-
 interface UserListProps {
   clientId: string;
   userId: string;
 }
 function UsersList(props: UserListProps) {
-  const { data } = useSuspenseQuery({
-    queryKey: userQKeys.userConfigurations(),
-    queryFn: () =>
-      getUsers({
-        clientId: props.clientId,
-        userId: props.userId,
-      }),
-  });
+  const authParams = { clientId: props.clientId, userId: props.userId };
+  const { data } = useSuspenseQuery(
+    fetchUserConfigurationOptions({ auth: authParams })
+  );
 
   const users = (data?.status === 200 ? data.body : []).sort((a, b) =>
     a.fullName.localeCompare(b.fullName)

@@ -4,13 +4,13 @@ import { mutateColumnAccessors } from "@/utils/columns";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "reservations";
 
 export function fetchReservationsSearchColumnsOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "columns"],
+    queryKey: makeQueryKey(options, [, SEGMENT, "columns"]),
     queryFn: () =>
       apiClient.client
         .getColumnHeaderInfo({
@@ -34,7 +34,7 @@ export function fetchNotesForReservationByIdOptions(
   options: { reservationId: RefId } & Auth
 ) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.reservationId, "notes"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.reservationId, "notes"]),
     queryFn: () =>
       apiClient.note.getListForRefId({
         params: {

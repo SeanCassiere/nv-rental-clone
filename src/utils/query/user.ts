@@ -3,13 +3,17 @@ import { queryOptions } from "@tanstack/react-query";
 import { apiClient } from "@/api";
 import i18next, { i18nextChangeLanguage } from "@/i18next-config";
 
-import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "users";
 
-export function fetchUserByIdOptions(options: { userId: RefId } & Auth) {
+type UserId = { userId: RefId };
+
+export function fetchUserByIdOptions(
+  options: { enabled?: boolean } & UserId & Auth
+) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.userId, "profile"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.userId, "profile"]),
     queryFn: () =>
       apiClient.user
         .getProfileByUserId({
@@ -38,13 +42,13 @@ export function fetchUserByIdOptions(options: { userId: RefId } & Auth) {
           return res;
         }),
     enabled: isEnabled(options),
-    staleTime: 1000 * 60 * 1, // 1 minute
+    staleTime: 1000 * 60 * 1, // 1 minutes
   });
 }
 
 export function fetchLanguagesForUsersOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "languages"],
+    queryKey: makeQueryKey(options, [SEGMENT, "languages"]),
     queryFn: () =>
       apiClient.user.getLanguages({
         query: {
@@ -57,14 +61,12 @@ export function fetchLanguagesForUsersOptions(options: Auth) {
   });
 }
 
-export function fetchPermissionsByUserIdOptions(
-  options: { userId: string } & Auth
-) {
+export function fetchPermissionsByUserIdOptions(options: UserId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.userId, "permissions"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.userId, "permissions"]),
     queryFn: () =>
       apiClient.user.getPermissionForUserId({
-        params: { userId: options.userId },
+        params: { userId: String(options.userId) },
         query: {
           clientId: options.auth.clientId,
         },
@@ -72,4 +74,47 @@ export function fetchPermissionsByUserIdOptions(
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
+}
+
+export function fetchUserConfigurationOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "user_configurations"]),
+    queryFn: () =>
+      apiClient.user.getUserConfigurations({
+        query: { clientId: options.auth.clientId, userId: options.auth.userId },
+      }),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
+export function fetchActiveUsersCountOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "active_users_count"]),
+    queryFn: () =>
+      apiClient.user.getActiveUsersCount({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    staleTime: 1000 * 60 * 1, // 1 minute
+  });
+}
+
+export function fetchMaximumUsersCountOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "maximum_users_count"]),
+    queryFn: () =>
+      apiClient.user.getMaximumUsersCount({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    staleTime: 1000 * 60 * 1, // 1 minute
+  });
+}
+
+export function makeUpdatingUserKey(options: UserId & Auth) {
+  return makeQueryKey(options, [SEGMENT, options.userId, "updating_profile"]);
 }

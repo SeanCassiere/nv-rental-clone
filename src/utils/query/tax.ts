@@ -4,7 +4,7 @@ import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth } from "./helpers";
 
 const SEGMENT = "taxes";
 
@@ -19,7 +19,7 @@ export function fetchTaxesListOptions(
 ) {
   const { enabled = true, filters } = options;
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "list", sortObjectKeys(filters)],
+    queryKey: makeQueryKey(options, [SEGMENT, "list", sortObjectKeys(filters)]),
     queryFn: () =>
       apiClient.tax.getList({
         query: {
