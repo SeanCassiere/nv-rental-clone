@@ -7,7 +7,7 @@ import { apiClient } from "@/api";
 import { sortObjectKeys } from "../sort";
 import {
   isEnabled,
-  rootKey,
+  makeQueryKey,
   type Auth,
   type Pagination,
   type RefId,
@@ -19,7 +19,7 @@ type CustomerId = { customerId: RefId };
 
 export function fetchCustomersSearchColumnsOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "columns"],
+    queryKey: makeQueryKey(options, [SEGMENT, "columns"]),
     queryFn: () =>
       apiClient.client
         .getColumnHeaderInfo({
@@ -51,13 +51,12 @@ export function fetchCustomersSearchListOptions(
 ) {
   const { enabled = true } = options;
   return queryOptions({
-    queryKey: [
-      rootKey(options),
+    queryKey: makeQueryKey(options, [
       SEGMENT,
       "list",
       sortObjectKeys(options.pagination),
       sortObjectKeys(options.filters),
-    ],
+    ]),
     queryFn: () => fetchCustomersSearchListFn(options),
     enabled: isEnabled(options) && enabled,
     placeholderData: keepPreviousData,
@@ -86,7 +85,7 @@ export function fetchCustomersSearchListFn(
 
 export function fetchCustomerTypesOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "types"],
+    queryKey: makeQueryKey(options, [SEGMENT, "types"]),
     queryFn: () =>
       apiClient.customer
         .getTypes({
@@ -103,7 +102,7 @@ export function fetchCustomerTypesOptions(options: Auth) {
 
 export function fetchSummaryForCustomerByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.customerId, "summary"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.customerId, "summary"]),
     queryFn: () =>
       apiClient.customer.getSummaryForId({
         params: {
@@ -120,7 +119,7 @@ export function fetchSummaryForCustomerByIdOptions(options: CustomerId & Auth) {
 
 export function fetchNotesForCustomerByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.customerId, "notes"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.customerId, "notes"]),
     queryFn: () =>
       apiClient.note.getListForRefId({
         params: {
@@ -137,7 +136,7 @@ export function fetchNotesForCustomerByIdOptions(options: CustomerId & Auth) {
 
 export function fetchCustomerByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.customerId],
+    queryKey: makeQueryKey(options, [SEGMENT, options.customerId]),
     queryFn: () =>
       apiClient.customer.getById({
         params: {

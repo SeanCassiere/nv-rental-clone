@@ -3,7 +3,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { apiClient } from "@/api";
 import i18next, { i18nextChangeLanguage } from "@/i18next-config";
 
-import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "users";
 
@@ -13,7 +13,7 @@ export function fetchUserByIdOptions(
   options: { enabled?: boolean } & UserId & Auth
 ) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.userId, "profile"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.userId, "profile"]),
     queryFn: () =>
       apiClient.user
         .getProfileByUserId({
@@ -48,7 +48,7 @@ export function fetchUserByIdOptions(
 
 export function fetchLanguagesForUsersOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "languages"],
+    queryKey: makeQueryKey(options, [SEGMENT, "languages"]),
     queryFn: () =>
       apiClient.user.getLanguages({
         query: {
@@ -63,7 +63,7 @@ export function fetchLanguagesForUsersOptions(options: Auth) {
 
 export function fetchPermissionsByUserIdOptions(options: UserId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.userId, "permissions"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.userId, "permissions"]),
     queryFn: () =>
       apiClient.user.getPermissionForUserId({
         params: { userId: String(options.userId) },
@@ -78,7 +78,7 @@ export function fetchPermissionsByUserIdOptions(options: UserId & Auth) {
 
 export function fetchUserConfigurationOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "user_configurations"],
+    queryKey: makeQueryKey(options, [SEGMENT, "user_configurations"]),
     queryFn: () =>
       apiClient.user.getUserConfigurations({
         query: { clientId: options.auth.clientId, userId: options.auth.userId },

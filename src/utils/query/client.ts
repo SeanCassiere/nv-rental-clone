@@ -5,13 +5,13 @@ import { setLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth } from "./helpers";
 
 const SEGMENT = "client";
 
 export function fetchClientProfileOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "profile"],
+    queryKey: makeQueryKey(options, [SEGMENT, "profile"]),
     queryFn: () =>
       apiClient.client
         .getProfile({
@@ -37,7 +37,7 @@ export function fetchClientProfileOptions(options: Auth) {
 
 export function fetchFeaturesForClientOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "features"],
+    queryKey: makeQueryKey(options, [SEGMENT, "features"]),
     queryFn: () =>
       apiClient.client.getFeatures({
         params: { clientId: options.auth.clientId },
@@ -50,7 +50,7 @@ export function fetchFeaturesForClientOptions(options: Auth) {
 
 export function fetchScreenSettingsForClientOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "screen_settings"],
+    queryKey: makeQueryKey(options, [SEGMENT, "screen_settings"]),
     queryFn: () =>
       apiClient.client.getScreenSettings({
         params: { clientId: options.auth.clientId },

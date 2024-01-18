@@ -4,13 +4,15 @@ import { mutateColumnAccessors } from "@/utils/columns";
 
 import { apiClient } from "@/api";
 
-import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
+import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "fleet";
 
+type FleetId = { fleetId: RefId };
+
 export function fetchFleetSearchColumnsOptions(options: Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, "columns"],
+    queryKey: makeQueryKey(options, [SEGMENT, "columns"]),
     queryFn: () =>
       apiClient.client
         .getColumnHeaderInfo({
@@ -30,11 +32,9 @@ export function fetchFleetSearchColumnsOptions(options: Auth) {
   });
 }
 
-export function fetchNotesForFleetByIdOptions(
-  options: { fleetId: RefId } & Auth
-) {
+export function fetchNotesForFleetByIdOptions(options: FleetId & Auth) {
   return queryOptions({
-    queryKey: [rootKey(options), SEGMENT, options.fleetId, "notes"],
+    queryKey: makeQueryKey(options, [SEGMENT, options.fleetId, "notes"]),
     queryFn: () =>
       apiClient.note.getListForRefId({
         params: {
