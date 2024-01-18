@@ -138,6 +138,30 @@ export function fetchVehiclesStatusesOptions(
 
 /**
  *
+ * @api `/vehicles/types`
+ */
+export function fetchVehiclesTypesOptions(
+  options: { enabled?: boolean } & Auth
+) {
+  const { enabled = true } = options;
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "types"]),
+    queryFn: () =>
+      apiClient.vehicle
+        .getTypesLookupList({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : [])),
+    enabled: isEnabled(options) && enabled,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
+/**
+ *
  * @api `/vehicles/fuellevels`
  */
 export function fetchVehiclesFuelLevelsOptions(options: Auth) {

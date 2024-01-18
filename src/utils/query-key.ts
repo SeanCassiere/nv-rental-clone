@@ -36,16 +36,6 @@ export const dashboardQKeys = {
   ],
 };
 
-export const vehicleTypeQKeys = {
-  rootKey: "vehicle-types",
-  all: (options?: any) => [
-    vehicleTypeQKeys.rootKey,
-    "all",
-    options ? options : undefined,
-  ],
-  lookup: () => [vehicleTypeQKeys.rootKey, "lookup"],
-};
-
 export const locationQKeys = {
   rootKey: "locations",
   all: (filters: { withActive: boolean }) => [

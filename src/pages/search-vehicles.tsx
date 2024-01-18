@@ -21,12 +21,14 @@ import { buttonVariants } from "@/components/ui/button";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
-import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
+import {
+  fetchVehiclesStatusesOptions,
+  fetchVehiclesTypesOptions,
+} from "@/utils/query/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -73,7 +75,9 @@ function VehiclesSearchPage() {
   );
   const vehicleStatuses = vehicleStatusList.data ?? [];
 
-  const vehicleTypesList = useGetVehicleTypesLookupList();
+  const vehicleTypesList = useQuery(
+    fetchVehiclesTypesOptions({ auth: authParams })
+  );
   const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useGetLocationsList({
