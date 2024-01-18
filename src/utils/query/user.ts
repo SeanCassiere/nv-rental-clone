@@ -7,7 +7,11 @@ import { isEnabled, rootKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "users";
 
-export function fetchUserByIdOptions(options: { userId: RefId } & Auth) {
+type UserId = { userId: RefId };
+
+export function fetchUserByIdOptions(
+  options: { enabled?: boolean } & UserId & Auth
+) {
   return queryOptions({
     queryKey: [rootKey(options), SEGMENT, options.userId, "profile"],
     queryFn: () =>
@@ -38,7 +42,7 @@ export function fetchUserByIdOptions(options: { userId: RefId } & Auth) {
           return res;
         }),
     enabled: isEnabled(options),
-    staleTime: 1000 * 60 * 1, // 1 minute
+    staleTime: 1000 * 60 * 1, // 1 minutes
   });
 }
 
@@ -57,14 +61,12 @@ export function fetchLanguagesForUsersOptions(options: Auth) {
   });
 }
 
-export function fetchPermissionsByUserIdOptions(
-  options: { userId: string } & Auth
-) {
+export function fetchPermissionsByUserIdOptions(options: UserId & Auth) {
   return queryOptions({
     queryKey: [rootKey(options), SEGMENT, options.userId, "permissions"],
     queryFn: () =>
       apiClient.user.getPermissionForUserId({
-        params: { userId: options.userId },
+        params: { userId: String(options.userId) },
         query: {
           clientId: options.auth.clientId,
         },

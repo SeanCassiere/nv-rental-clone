@@ -53,7 +53,10 @@ import {
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { userQKeys } from "@/utils/query-key";
 import { fetchRolesListOptions } from "@/utils/query/role";
-import { fetchLanguagesForUsersOptions } from "@/utils/query/user";
+import {
+  fetchLanguagesForUsersOptions,
+  fetchUserByIdOptions,
+} from "@/utils/query/user";
 
 import { apiClient } from "@/api";
 import { cn } from "@/utils";
@@ -108,20 +111,13 @@ export function EditUserDialog({
       }),
   });
 
-  const userQuery = useQuery({
-    queryKey: userQKeys.profile(props.intendedUserId),
-    queryFn: () =>
-      apiClient.user.getProfileByUserId({
-        query: {
-          clientId: props.clientId,
-          userId: props.userId,
-          currentUserId: props.userId,
-        },
-        params: { userId: props.intendedUserId },
-      }),
-    staleTime: 1000 * 60 * 1, // 1 minute
-    enabled: props.mode === "edit" && props.intendedUserId !== "" && open,
-  });
+  const userQuery = useQuery(
+    fetchUserByIdOptions({
+      userId: props.intendedUserId,
+      auth: authParams,
+      enabled: props.mode === "edit" && props.intendedUserId !== "" && open,
+    })
+  );
 
   const rolesQuery = useQuery(fetchRolesListOptions({ auth: authParams }));
 
@@ -195,6 +191,7 @@ export function EditUserDialog({
           <EditUserForm
             formId={formId}
             userId={props.userId}
+            clientId={props.clientId}
             user={user}
             languages={languages}
             roles={roles}
@@ -250,6 +247,7 @@ function EditUserForm(props: {
   user: TUserProfile;
   formId: string;
   userId: string;
+  clientId: string;
   languages: UserLanguageItem[];
   roles: RoleListItem[];
   setOpen: (open: boolean) => void;
@@ -300,7 +298,10 @@ function EditUserForm(props: {
     onSuccess: (data, variables) => {
       qc.invalidateQueries({ queryKey: userQKeys.userConfigurations() });
       qc.invalidateQueries({
-        queryKey: userQKeys.profile(variables.params.userId),
+        queryKey: fetchUserByIdOptions({
+          userId: variables.params.userId,
+          auth: { clientId: props.clientId, userId: props.userId },
+        }).queryKey,
       });
       qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });

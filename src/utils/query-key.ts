@@ -46,7 +46,6 @@ export const fleetQKeys = {
 
 export const userQKeys = {
   rootKey: "users",
-  profile: (userId: string) => [userQKeys.rootKey, userId, "profile"],
   updatingProfile: (userId: string) => [
     userQKeys.rootKey,
     userId,
