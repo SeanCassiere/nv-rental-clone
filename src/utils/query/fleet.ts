@@ -33,6 +33,23 @@ export function fetchFleetSearchColumnsOptions(options: Auth) {
   });
 }
 
+export function fetchFleetFuelLevelsOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "fuel_levels"]),
+    queryFn: () =>
+      apiClient.vehicle
+        .getFuelLevels({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : [])),
+    enabled: isEnabled(options),
+    staleTime: 1000 * 60 * 10, // 10 minutes
+  });
+}
+
 export function fetchFleetByIdOptions(options: FleetId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.fleetId]),

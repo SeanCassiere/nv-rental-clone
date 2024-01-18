@@ -11,7 +11,7 @@ export const agreementQKeys = {
 };
 
 export const reservationQKeys = {
-  summary: (id: ReferenceId) => ["agreements", id, "summary"],
+  summary: (id: ReferenceId) => ["reservations", id, "summary"],
 };
 
 export const fleetQKeys = {
@@ -24,7 +24,6 @@ export const fleetQKeys = {
     sortObjectKeys(opts.filters),
   ],
   statuses: () => [fleetQKeys.rootKey, "statuses"],
-  fuelLevels: () => [fleetQKeys.rootKey, "fuel-levels"],
   summary: (id: ReferenceId) => ["fleet", id, "summary"],
 };
 

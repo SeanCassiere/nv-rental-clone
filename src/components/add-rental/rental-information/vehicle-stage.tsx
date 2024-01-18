@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "react-oidc-context";
 import { z } from "zod";
 
 import { SelectVehicleDialog } from "@/components/dialog/select-vehicle";
@@ -29,10 +31,11 @@ import {
 } from "@/components/ui/select";
 
 import { useGetVehicleTypesList } from "@/hooks/network/vehicle-type/useGetVehicleTypes";
-import { useGetVehicleFuelLevelList } from "@/hooks/network/vehicle/useGetVehicleFuelLevelList";
 import { useGetVehiclesList } from "@/hooks/network/vehicle/useGetVehiclesList";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
+import { fetchFleetFuelLevelsOptions } from "@/utils/query/fleet";
 
 import i18n from "@/i18next-config";
 
@@ -66,6 +69,9 @@ export const VehicleStage = ({
   onCompleted,
 }: VehicleStageProps) => {
   const { t } = useTranslation();
+  const auth = useAuth();
+
+  const authParams = getAuthFromAuthHook(auth);
 
   const checkoutLocation = useMemo(
     () => rentalInformation?.checkoutLocation || 0,
@@ -133,7 +139,9 @@ export const VehicleStage = ({
     vehicleListData.data?.status === 200 ? vehicleListData?.data?.body : [];
 
   //
-  const fuelLevelListData = useGetVehicleFuelLevelList();
+  const fuelLevelListData = useQuery(
+    fetchFleetFuelLevelsOptions({ auth: authParams })
+  );
   const fuelLevelsList = fuelLevelListData.data || [];
 
   return (
