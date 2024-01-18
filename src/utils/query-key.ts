@@ -23,7 +23,6 @@ export const reservationQKeys = {
   types: () => [reservationQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-reservation",
-  id: (id: ReferenceId) => [reservationQKeys.viewKey, id, "data"],
   summary: (id: ReferenceId) => [reservationQKeys.viewKey, id, "summary"],
 };
 

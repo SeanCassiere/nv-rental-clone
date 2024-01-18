@@ -1,20 +1,30 @@
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "react-oidc-context";
+
+import CustomerInformation from "@/components/primary-module/information-block/customer-information";
+import FleetInformation from "@/components/primary-module/information-block/fleet-information";
+import RentalInformation from "@/components/primary-module/information-block/rental-information";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 
 import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
-import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 
-import CustomerInformation from "../../information-block/customer-information";
-import FleetInformation from "../../information-block/fleet-information";
-import RentalInformation from "../../information-block/rental-information";
+import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchReservationByIdOptions } from "@/utils/query/reservation";
 
 type ReservationSummaryTabProps = {
   reservationId: string;
 };
 
 const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
-  const reservationData = useGetReservationData({
-    reservationId: props.reservationId,
-  });
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
+  const reservationData = useQuery(
+    fetchReservationByIdOptions({
+      auth: authParams,
+      reservationId: props.reservationId,
+    })
+  );
   const reservation =
     reservationData.data?.status === 200 ? reservationData.data?.body : null;
 

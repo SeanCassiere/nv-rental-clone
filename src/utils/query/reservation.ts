@@ -8,6 +8,8 @@ import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "reservations";
 
+type ReservationId = { reservationId: RefId };
+
 export function fetchReservationsSearchColumnsOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [, SEGMENT, "columns"]),
@@ -30,11 +32,32 @@ export function fetchReservationsSearchColumnsOptions(options: Auth) {
   });
 }
 
+export function fetchReservationByIdOptions(options: ReservationId & Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, String(options.reservationId)]),
+    queryFn: () =>
+      apiClient.reservation.getById({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+        params: {
+          reservationId: String(options.reservationId),
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
+
 export function fetchNotesForReservationByIdOptions(
-  options: { reservationId: RefId } & Auth
+  options: ReservationId & Auth
 ) {
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, options.reservationId, "notes"]),
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      String(options.reservationId),
+      "notes",
+    ]),
     queryFn: () =>
       apiClient.note.getListForRefId({
         params: {

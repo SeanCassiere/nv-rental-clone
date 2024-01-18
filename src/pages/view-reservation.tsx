@@ -1,11 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -26,10 +21,8 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetReservationData } from "@/hooks/network/reservation/useGetReservationData";
 
-import { viewReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
@@ -41,21 +34,19 @@ const ModuleNotesTabContent = lazy(
   () => import("../components/primary-module/tabs/notes-content")
 );
 
+const routeApi = new RouteApi({ id: "/reservations/$reservationId/" });
+
 function ReservationViewPage() {
   const router = useRouter();
-  const params = useParams({ from: viewReservationByIdRoute.id });
+
   const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
 
-  const { tab: tabName = "summary" } = useSearch({
-    from: viewReservationByIdRoute.id,
-  });
-
-  const clientId = auth?.user?.profile?.navotar_clientid || "";
-  const userId = auth?.user?.profile?.navotar_userid || "";
+  const routeContext = routeApi.useRouteContext();
+  const { tab: tabName = "summary" } = routeApi.useSearch();
+  const { reservationId } = routeApi.useParams();
 
   const navigate = useNavigate();
-
-  const reservationId = params.reservationId || "";
 
   const tabsConfig = useMemo(() => {
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
@@ -72,8 +63,8 @@ function ReservationViewPage() {
         <ModuleNotesTabContent
           module="reservations"
           referenceId={reservationId}
-          clientId={clientId}
-          userId={userId}
+          clientId={authParams.clientId}
+          userId={authParams.userId}
         />
       ),
     });
@@ -89,7 +80,7 @@ function ReservationViewPage() {
     });
 
     return tabs;
-  }, [reservationId, clientId, userId]);
+  }, [reservationId, authParams]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
@@ -100,9 +91,7 @@ function ReservationViewPage() {
     });
   };
 
-  const reservationData = useGetReservationData({
-    reservationId,
-  });
+  const reservationData = useQuery(routeContext.viewReservationOptions);
   const reservation =
     reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
