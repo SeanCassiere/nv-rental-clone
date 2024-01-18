@@ -49,6 +49,7 @@ import {
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { locationQKeys, userQKeys } from "@/utils/query-key";
 import {
+  fetchActiveUsersCountOptions,
   fetchLanguagesForUsersOptions,
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
@@ -162,7 +163,9 @@ function ProfileForm(props: {
           userId: variables.params.userId,
         }).queryKey,
       });
-      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
+      qc.invalidateQueries({
+        queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
+      });
       qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
       qc.invalidateQueries({
         queryKey: fetchPermissionsByUserIdOptions({

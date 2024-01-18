@@ -54,6 +54,7 @@ import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { userQKeys } from "@/utils/query-key";
 import { fetchRolesListOptions } from "@/utils/query/role";
 import {
+  fetchActiveUsersCountOptions,
   fetchLanguagesForUsersOptions,
   fetchUserByIdOptions,
   fetchUserConfigurationOptions,
@@ -90,18 +91,13 @@ export function EditUserDialog({
   });
   const isSubmittingUpdating = isSubmittingNumber > 0;
 
-  const currentUsersQuery = useQuery({
-    queryKey: userQKeys.activeUsersCount(),
-    queryFn: () =>
-      apiClient.user.getActiveUsersCount({
-        query: {
-          clientId: props.clientId,
-          userId: props.userId,
-        },
-      }),
-  });
+  const currentUsersCountQuery = useQuery(
+    fetchActiveUsersCountOptions({
+      auth: authParams,
+    })
+  );
 
-  const maxUsersQuery = useQuery({
+  const maximumUsersCountQuery = useQuery({
     queryKey: userQKeys.maximumUsersCount(),
     queryFn: () =>
       apiClient.user.getMaximumUsersCount({
@@ -132,9 +128,13 @@ export function EditUserDialog({
   });
 
   const currentUsersCount =
-    currentUsersQuery.data?.status === 200 ? currentUsersQuery.data.body : 0;
+    currentUsersCountQuery.data?.status === 200
+      ? currentUsersCountQuery.data.body
+      : 0;
   const maxUsersCount =
-    maxUsersQuery.data?.status === 200 ? maxUsersQuery.data.body : 0;
+    maximumUsersCountQuery.data?.status === 200
+      ? maximumUsersCountQuery.data.body
+      : 0;
   const isMaxUsersReached = currentUsersCount >= maxUsersCount;
 
   const user = userQuery.data?.status === 200 ? userQuery.data.body : null;
@@ -310,8 +310,12 @@ function EditUserForm(props: {
           auth: authParams,
         }).queryKey,
       });
-      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
-      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
+      qc.invalidateQueries({
+        queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: userQKeys.maximumUsersCount(),
+      });
 
       if (data.status >= 200 && data.status < 300) {
         toast.success(
@@ -772,8 +776,12 @@ function NewUserForm(props: {
       qc.invalidateQueries({
         queryKey: fetchUserConfigurationOptions({ auth: authParams }).queryKey,
       });
-      qc.invalidateQueries({ queryKey: userQKeys.activeUsersCount() });
-      qc.invalidateQueries({ queryKey: userQKeys.maximumUsersCount() });
+      qc.invalidateQueries({
+        queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
+      });
+      qc.invalidateQueries({
+        queryKey: userQKeys.maximumUsersCount(),
+      });
 
       if (data.status >= 200 && data.status < 300) {
         toast.success(

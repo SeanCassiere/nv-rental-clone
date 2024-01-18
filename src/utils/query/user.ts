@@ -86,3 +86,24 @@ export function fetchUserConfigurationOptions(options: Auth) {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
+
+export function fetchActiveUsersCountOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "active_users_count"]),
+    queryFn: () =>
+      apiClient.user.getActiveUsersCount({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    staleTime: 1000 * 60 * 1, // 1 minute
+  });
+}
+
+export function makeMaximumUsersCountKey(options: Auth) {
+  return makeQueryKey(options, [SEGMENT, "maximum_users_count"]);
+}
+export function makeUpdatingUserKey(options: UserId & Auth) {
+  return makeQueryKey(options, [SEGMENT, options.userId, "updating_profile"]);
+}
