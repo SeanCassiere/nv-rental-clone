@@ -16,11 +16,6 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import {
-  CalculateRentalSummaryHookInput,
-  usePostCalculateRentalSummaryAmounts,
-} from "@/hooks/network/rates/usePostCalculateRentalSummaryAmounts";
-
 import type { RentalRateParsed } from "@/schemas/rate";
 import type { ReservationDataParsed } from "@/schemas/reservation";
 import type { TRentalRatesSummarySchema } from "@/schemas/summary";
@@ -33,6 +28,10 @@ import {
   fetchRatesListOptions,
   fetchRatesOptimalNameOptions,
 } from "@/utils/query/rate";
+import {
+  fetchSummaryForRentalOptions,
+  type CalculateRentalSummaryInput,
+} from "@/utils/query/summary";
 import { fetchTaxesListOptions } from "@/utils/query/tax";
 import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
@@ -149,7 +148,7 @@ const AddRentalParentForm = ({
 
   const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
   const [selectedMiscCharges, setSelectedMiscCharges] = useState<
-    CalculateRentalSummaryHookInput["miscCharges"]
+    CalculateRentalSummaryInput["miscCharges"]
   >([]);
 
   const [[selectedRateName, selectedRate], setRateDetails] = useState<
@@ -185,7 +184,7 @@ const AddRentalParentForm = ({
   }, []);
 
   const handleSetSelectedMiscCharges = useCallback(
-    (charges: CalculateRentalSummaryHookInput["miscCharges"]) => {
+    (charges: CalculateRentalSummaryInput["miscCharges"]) => {
       setSelectedMiscCharges(charges);
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
     },
@@ -506,29 +505,30 @@ const AddRentalParentForm = ({
     setSelectedMiscCharges((info) => {
       if (info.length > 0) return info;
 
-      const filledMiscCharges: CalculateRentalSummaryHookInput["miscCharges"] =
-        (data.mischargeList || []).map((charge) => ({
-          id: charge.miscChargeId ?? 0,
-          locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
-          quantity: charge?.quantity ?? 0,
-          startDate: charge?.startDate ?? originalStartDate.toISOString(),
-          endDate: charge?.endDate ?? originalEndDate.toISOString(),
-          optionId: charge?.optionId ?? 0,
-          isSelected: charge?.isSelected ?? false,
-          value: charge?.value ?? 0,
-          unit: charge?.unit ?? 0,
-          isTaxable: charge?.isTaxable ?? false,
-          minValue: charge.minValue,
-          maxValue: charge.maxValue,
-          hourlyValue: charge.hourlyValue,
-          hourlyQuantity: charge.hourlyQuantity,
-          dailyValue: charge.dailyValue,
-          dailyQuantity: charge.dailyQuantity,
-          weeklyValue: charge.weeklyValue,
-          weeklyQuantity: charge.weeklyQuantity,
-          monthlyValue: charge.monthlyValue,
-          monthlyQuantity: charge.monthlyQuantity,
-        }));
+      const filledMiscCharges: CalculateRentalSummaryInput["miscCharges"] = (
+        data.mischargeList || []
+      ).map((charge) => ({
+        id: charge.miscChargeId ?? 0,
+        locationMiscChargeId: charge?.locationMiscChargeID ?? 0,
+        quantity: charge?.quantity ?? 0,
+        startDate: charge?.startDate ?? originalStartDate.toISOString(),
+        endDate: charge?.endDate ?? originalEndDate.toISOString(),
+        optionId: charge?.optionId ?? 0,
+        isSelected: charge?.isSelected ?? false,
+        value: charge?.value ?? 0,
+        unit: charge?.unit ?? 0,
+        isTaxable: charge?.isTaxable ?? false,
+        minValue: charge.minValue,
+        maxValue: charge.maxValue,
+        hourlyValue: charge.hourlyValue,
+        hourlyQuantity: charge.hourlyQuantity,
+        dailyValue: charge.dailyValue,
+        dailyQuantity: charge.dailyQuantity,
+        weeklyValue: charge.weeklyValue,
+        weeklyQuantity: charge.weeklyQuantity,
+        monthlyValue: charge.monthlyValue,
+        monthlyQuantity: charge.monthlyQuantity,
+      }));
       return filledMiscCharges;
     });
     startingCompletionStages.miscCharges = true;
@@ -845,39 +845,44 @@ const AddRentalParentForm = ({
     Boolean(commonCustomerInformation) &&
     Boolean(selectedRate);
 
-  const calculateSummaryQuery = usePostCalculateRentalSummaryAmounts({
-    input: {
-      isCheckin: isCheckin,
-      startDate: agreementRentalInformation?.checkoutDate || new Date(),
-      endDate: agreementRentalInformation?.checkinDate || new Date(),
-      checkoutLocationId: agreementRentalInformation?.checkoutLocation || 0,
-      checkinLocationId: agreementRentalInformation?.checkinLocation || 0,
-      miscCharges: selectedMiscCharges,
-      rate: selectedRate!,
-      vehicleTypeId: agreementVehicleInformation?.vehicleTypeId || 0,
-      taxIds: selectedTaxIds,
-      advancePayment: 0,
-      amountPaid: 0,
-      preAdjustment: 0,
-      postAdjustment: 0,
-      securityDeposit: "",
-      additionalCharge: 0,
-      unTaxableAdditional: 0,
-      takeSize: 0,
-      fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
-      fuelLevelIn: agreementVehicleInformation?.fuelOut || "Full", // this should be changed for checkin
-      odometerOut: agreementVehicleInformation?.odometerOut || 0,
-      odometerIn: 0,
-      agreementId: parseInt(referenceId ? String(referenceId) : "0"),
-      agreementTypeName: agreementRentalInformation?.agreementType || "",
-      promotionIds: [],
-      writeOffAmount: 0,
-      customerId: commonCustomerInformation?.customerId || 0,
-      agreementInsurance: null,
-    },
-    enabled:
-      module === "agreement" ? agreementConditionsForSummaryCalculation : false,
-  });
+  const calculateSummaryQuery = useQuery(
+    fetchSummaryForRentalOptions({
+      auth: authParams,
+      input: {
+        isCheckin: isCheckin,
+        startDate: agreementRentalInformation?.checkoutDate || new Date(),
+        endDate: agreementRentalInformation?.checkinDate || new Date(),
+        checkoutLocationId: agreementRentalInformation?.checkoutLocation || 0,
+        checkinLocationId: agreementRentalInformation?.checkinLocation || 0,
+        miscCharges: selectedMiscCharges,
+        rate: selectedRate!,
+        vehicleTypeId: agreementVehicleInformation?.vehicleTypeId || 0,
+        taxIds: selectedTaxIds,
+        advancePayment: 0,
+        amountPaid: 0,
+        preAdjustment: 0,
+        postAdjustment: 0,
+        securityDeposit: "",
+        additionalCharge: 0,
+        unTaxableAdditional: 0,
+        takeSize: 0,
+        fuelLevelOut: agreementVehicleInformation?.fuelOut || "Full",
+        fuelLevelIn: agreementVehicleInformation?.fuelOut || "Full", // this should be changed for checkin
+        odometerOut: agreementVehicleInformation?.odometerOut || 0,
+        odometerIn: 0,
+        agreementId: parseInt(referenceId ? String(referenceId) : "0"),
+        agreementTypeName: agreementRentalInformation?.agreementType || "",
+        promotionIds: [],
+        writeOffAmount: 0,
+        customerId: commonCustomerInformation?.customerId || 0,
+        agreementInsurance: null,
+      },
+      enabled:
+        module === "agreement"
+          ? agreementConditionsForSummaryCalculation
+          : false,
+    })
+  );
 
   const networkSummaryData =
     calculateSummaryQuery.data?.status === 200
