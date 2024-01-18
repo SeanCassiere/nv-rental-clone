@@ -13,7 +13,6 @@ export const agreementQKeys = {
 export const reservationQKeys = {
   // search
   rootKey: "reservations",
-  statuses: () => [reservationQKeys.rootKey, "statuses"],
   types: () => [reservationQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-reservation",

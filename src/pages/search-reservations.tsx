@@ -23,14 +23,14 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
 import { useGetLocationsList } from "@/hooks/network/location/useGetLocationsList";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
-import { useGetReservationStatusList } from "@/hooks/network/reservation/useGetReservationStatusList";
 import { useGetReservationTypesList } from "@/hooks/network/reservation/useGetReservationTypes";
 import { useGetVehicleTypesLookupList } from "@/hooks/network/vehicle-type/useGetVehicleTypesLookup";
 
-import { type TReservationListItemParsed } from "@/schemas/reservation";
+import type { TReservationListItemParsed } from "@/schemas/reservation";
 
 import { ReservationDateTimeColumns } from "@/utils/columns";
 import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
@@ -44,7 +44,7 @@ function ReservationsSearchPage() {
 
   const navigate = useNavigate();
 
-  const { searchColumnsOptions, searchListOptions, search } =
+  const { searchColumnsOptions, searchListOptions, search, authParams } =
     routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
@@ -74,7 +74,9 @@ function ReservationsSearchPage() {
 
   const reservationsData = useQuery(searchListOptions);
 
-  const reservationStatusList = useGetReservationStatusList();
+  const reservationStatusList = useQuery(
+    fetchReservationStatusesOptions({ auth: authParams })
+  );
   const reservationStatuses = reservationStatusList.data ?? [];
 
   const vehicleTypesList = useGetVehicleTypesLookupList();

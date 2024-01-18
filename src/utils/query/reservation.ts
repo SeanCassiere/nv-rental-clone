@@ -92,6 +92,26 @@ export function fetchReservationsSearchListFn(
   });
 }
 
+export function fetchReservationStatusesOptions(
+  options: { enabled?: boolean } & Auth
+) {
+  const { enabled = true } = options;
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "statuses"]),
+    queryFn: () =>
+      apiClient.reservation
+        .getStatuses({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => (res.status === 200 ? res.body : [])),
+    enabled: isEnabled(options) && enabled,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
 export function fetchReservationByIdOptions(options: ReservationId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, String(options.reservationId)]),
