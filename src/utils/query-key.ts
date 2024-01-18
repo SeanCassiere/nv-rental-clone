@@ -30,12 +30,6 @@ export const reservationQKeys = {
 export const customerQKeys = {
   // search
   rootKey: "customers",
-  search: (opts: { pagination: Pagination; filters: Filters }) => [
-    customerQKeys.rootKey,
-    "list",
-    sortObjectKeys(opts.pagination),
-    sortObjectKeys(opts.filters),
-  ],
   types: () => [customerQKeys.rootKey, "types"],
   // view by ID
   viewKey: "view-customer",

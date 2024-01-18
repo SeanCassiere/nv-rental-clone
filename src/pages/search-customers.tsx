@@ -19,7 +19,6 @@ import ProtectorShield from "@/components/protector-shield";
 import { buttonVariants } from "@/components/ui/button";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetCustomersList } from "@/hooks/network/customer/useGetCustomersList";
 import { useGetCustomerTypesList } from "@/hooks/network/customer/useGetCustomerTypes";
 import { useSaveModuleColumns } from "@/hooks/network/module/useSaveModuleColumns";
 
@@ -41,8 +40,8 @@ function CustomerSearchPage() {
 
   const navigate = useNavigate();
 
-  const { search, searchColumnsOptions } = routeApi.useRouteContext();
-  const { searchFilters, pageNumber, size } = search;
+  const routeContext = routeApi.useRouteContext();
+  const { searchFilters, pageNumber, size } = routeContext.search;
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -68,15 +67,11 @@ function CustomerSearchPage() {
     [pageNumber, size]
   );
 
-  const customersData = useGetCustomersList({
-    page: pageNumber,
-    pageSize: size,
-    filters: searchFilters,
-  });
+  const customersData = useSuspenseQuery(routeContext.searchListOptions);
   const customerTypesList = useGetCustomerTypesList();
   const customerTypes = customerTypesList.data ?? [];
 
-  const columnsData = useSuspenseQuery(searchColumnsOptions);
+  const columnsData = useSuspenseQuery(routeContext.searchColumnsOptions);
 
   const columnDefs = useMemo(
     () =>
