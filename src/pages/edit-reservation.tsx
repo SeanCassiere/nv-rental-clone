@@ -6,7 +6,6 @@ import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { editReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
 
@@ -26,10 +25,9 @@ const EditReservationPage = () => {
   const reservation =
     reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
-  const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "reservations",
-    referenceId: reservationId,
-  });
+  const rentalRatesSummary = useQuery(
+    routeContext.viewReservationSummaryOptions
+  );
   const summaryData =
     rentalRatesSummary.data?.status === 200
       ? rentalRatesSummary.data?.body

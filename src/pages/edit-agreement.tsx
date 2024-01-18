@@ -6,7 +6,6 @@ import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
 
 import { editAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 
@@ -24,10 +23,7 @@ const EditAgreementPage = () => {
 
   const agreementData = useQuery(routeContext.viewAgreementOptions);
 
-  const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "agreements",
-    referenceId: agreementId,
-  });
+  const rentalRatesSummary = useQuery(routeContext.viewAgreementSummaryOptions);
   const summaryData =
     rentalRatesSummary.data?.status === 200
       ? rentalRatesSummary.data?.body

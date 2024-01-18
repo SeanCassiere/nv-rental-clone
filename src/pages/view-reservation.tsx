@@ -54,7 +54,7 @@ function ReservationViewPage() {
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <SummaryTab reservationId={reservationId} />,
+      component: <SummaryTab reservationId={reservationId} auth={authParams} />,
     });
     tabs.push({
       id: "notes",

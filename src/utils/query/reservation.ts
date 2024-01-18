@@ -18,9 +18,13 @@ const SEGMENT = "reservations";
 
 type ReservationId = { reservationId: RefId };
 
+/**
+ *
+ * @api `/clients/columnheaderinformation?module=reservation`
+ */
 export function fetchReservationsSearchColumnsOptions(options: Auth) {
   return queryOptions({
-    queryKey: makeQueryKey(options, [, SEGMENT, "columns"]),
+    queryKey: makeQueryKey(options, [SEGMENT, "columns"]),
     queryFn: () =>
       apiClient.client
         .getColumnHeaderInfo({
@@ -40,6 +44,10 @@ export function fetchReservationsSearchColumnsOptions(options: Auth) {
   });
 }
 
+/**
+ *
+ * @api `/reservations`
+ */
 export function fetchReservationsSearchListOptions(
   options: {
     filters: Omit<
@@ -92,6 +100,10 @@ export function fetchReservationsSearchListFn(
   });
 }
 
+/**
+ *
+ * @api `/reservations/statuses`
+ */
 export function fetchReservationStatusesOptions(
   options: { enabled?: boolean } & Auth
 ) {
@@ -112,6 +124,10 @@ export function fetchReservationStatusesOptions(
   });
 }
 
+/**
+ *
+ * @api `/reservations/types`
+ */
 export function fetchReservationTypesOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "types"]),
@@ -129,6 +145,10 @@ export function fetchReservationTypesOptions(options: Auth) {
   });
 }
 
+/**
+ *
+ * @api `/reservations/$reservationId`
+ */
 export function fetchReservationByIdOptions(options: ReservationId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, String(options.reservationId)]),
@@ -146,6 +166,40 @@ export function fetchReservationByIdOptions(options: ReservationId & Auth) {
   });
 }
 
+/**
+ *
+ * @api `/reservations/$reservationId/summary`
+ */
+export function fetchReservationSummaryByIdOptions(
+  options: ReservationId & Auth
+) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      options.reservationId,
+      "summary",
+    ]),
+    queryFn: () =>
+      apiClient.summary.getSummaryForReferenceId({
+        params: {
+          referenceType: "reservations",
+          referenceId: String(options.reservationId),
+        },
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    enabled:
+      isEnabled(options) &&
+      Boolean(options.reservationId && options.reservationId !== "0"),
+  });
+}
+
+/**
+ *
+ * @api `/reservation/$reservationId/note`
+ */
 export function fetchReservationNotesByIdOptions(
   options: ReservationId & Auth
 ) {

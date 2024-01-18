@@ -1,23 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "react-oidc-context";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
 import RentalInformation from "@/components/primary-module/information-block/rental-information";
 import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 
-import { useGetModuleRentalRatesSummary } from "@/hooks/network/module/useGetModuleRentalRatesSummary";
-
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchReservationByIdOptions } from "@/utils/query/reservation";
+import type { Auth } from "@/utils/query/helpers";
+import {
+  fetchReservationByIdOptions,
+  fetchReservationSummaryByIdOptions,
+} from "@/utils/query/reservation";
 
 type ReservationSummaryTabProps = {
   reservationId: string;
-};
+} & Auth;
 
 const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
-  const auth = useAuth();
-  const authParams = getAuthFromAuthHook(auth);
+  const { auth: authParams } = props;
 
   const reservationData = useQuery(
     fetchReservationByIdOptions({
@@ -28,10 +27,12 @@ const ReservationSummaryTab = (props: ReservationSummaryTabProps) => {
   const reservation =
     reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
-  const rentalRatesSummary = useGetModuleRentalRatesSummary({
-    module: "reservations",
-    referenceId: props.reservationId,
-  });
+  const rentalRatesSummary = useQuery(
+    fetchReservationSummaryByIdOptions({
+      auth: authParams,
+      reservationId: props.reservationId,
+    })
+  );
 
   const summaryData =
     rentalRatesSummary.data?.status === 200

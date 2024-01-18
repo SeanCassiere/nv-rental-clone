@@ -1,12 +1,12 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
-import { agreementQKeys } from "@/utils/query-key";
+import { getAuthFromRouterContext } from "@/utils/auth";
 import {
   fetchAgreementByIdOptions,
   fetchAgreementExchangesByIdOptions,
   fetchAgreementNotesByIdOptions,
+  fetchAgreementSummaryByIdOptions,
 } from "@/utils/query/agreement";
 
 import { agreementsRoute } from ".";
@@ -14,41 +14,6 @@ import { agreementsRoute } from ".";
 export const agreementPathIdRoute = new Route({
   getParentRoute: () => agreementsRoute,
   path: "$agreementId",
-  loader: async ({
-    params: { agreementId },
-    context: { queryClient, apiClient },
-  }) => {
-    const auth = getAuthToken();
-
-    if (auth) {
-      const promises = [];
-      // get summary
-      const summaryKey = agreementQKeys.summary(agreementId);
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: summaryKey,
-          queryFn: () =>
-            apiClient.summary.getSummaryForReferenceId({
-              params: {
-                referenceType: "agreements",
-                referenceId: agreementId,
-              },
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-              },
-            }),
-        })
-      );
-
-      try {
-        await Promise.all(promises);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return;
-  },
   parseParams: (params) => ({
     agreementId: z.string().parse(params.agreementId),
   }),
@@ -79,6 +44,10 @@ export const viewAgreementByIdRoute = new Route({
         auth,
         agreementId,
       }),
+      viewAgreementSummaryOptions: fetchAgreementSummaryByIdOptions({
+        auth,
+        agreementId,
+      }),
       viewAgreementOptions: fetchAgreementByIdOptions({
         auth,
         agreementId,
@@ -92,6 +61,7 @@ export const viewAgreementByIdRoute = new Route({
       queryClient,
       viewAgreementExchangesOptions,
       viewAgreementNotesOptions,
+      viewAgreementSummaryOptions,
       viewAgreementOptions,
       viewTab,
     } = context;
@@ -108,7 +78,9 @@ export const viewAgreementByIdRoute = new Route({
       case "notes":
         promises.push(queryClient.ensureQueryData(viewAgreementNotesOptions));
         break;
+      case "summary":
       default:
+        promises.push(queryClient.ensureQueryData(viewAgreementSummaryOptions));
         break;
     }
 
@@ -133,6 +105,10 @@ export const editAgreementByIdRoute = new Route({
     const auth = getAuthFromRouterContext(context);
     return {
       authParams: auth,
+      viewAgreementSummaryOptions: fetchAgreementSummaryByIdOptions({
+        auth,
+        agreementId,
+      }),
       viewAgreementOptions: fetchAgreementByIdOptions({
         auth,
         agreementId,
@@ -140,10 +116,13 @@ export const editAgreementByIdRoute = new Route({
     };
   },
   loader: async ({ context }) => {
-    const { queryClient, viewAgreementOptions } = context;
+    const { queryClient, viewAgreementOptions, viewAgreementSummaryOptions } =
+      context;
     const promises = [];
 
     promises.push(queryClient.ensureQueryData(viewAgreementOptions));
+
+    promises.push(queryClient.ensureQueryData(viewAgreementSummaryOptions));
 
     await Promise.all(promises);
 
@@ -166,6 +145,10 @@ export const checkinAgreementByIdRoute = new Route({
     const auth = getAuthFromRouterContext(context);
     return {
       authParams: auth,
+      viewAgreementSummaryOptions: fetchAgreementSummaryByIdOptions({
+        auth,
+        agreementId,
+      }),
       viewAgreementOptions: fetchAgreementByIdOptions({
         auth,
         agreementId,
@@ -173,10 +156,13 @@ export const checkinAgreementByIdRoute = new Route({
     };
   },
   loader: async ({ context }) => {
-    const { queryClient, viewAgreementOptions } = context;
+    const { queryClient, viewAgreementOptions, viewAgreementSummaryOptions } =
+      context;
     const promises = [];
 
     promises.push(queryClient.ensureQueryData(viewAgreementOptions));
+
+    promises.push(queryClient.ensureQueryData(viewAgreementSummaryOptions));
 
     await Promise.all(promises);
 
