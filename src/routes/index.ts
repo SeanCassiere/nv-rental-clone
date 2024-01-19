@@ -2,9 +2,11 @@ import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
-import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
-import { dashboardQKeys } from "@/utils/query-key";
-import { fetchDashboardMessagesOptions } from "@/utils/query/dashboard";
+import { getAuthFromRouterContext } from "@/utils/auth";
+import {
+  fetchDashboardMessagesOptions,
+  fetchDashboardWidgetsOptions,
+} from "@/utils/query/dashboard";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 
 import { rootRoute } from "./__root";
@@ -18,6 +20,7 @@ export const indexRoute = new Route({
     return {
       authParams: auth,
       dashboardMessagesOptions: fetchDashboardMessagesOptions({ auth }),
+      dashboardWidgetsOptions: fetchDashboardWidgetsOptions({ auth }),
       activeLocationsOptions: fetchLocationsListOptions({
         auth,
         filters: { withActive: true },
@@ -27,8 +30,8 @@ export const indexRoute = new Route({
   loader: async ({ context }) => {
     const {
       queryClient,
-      apiClient,
       dashboardMessagesOptions,
+      dashboardWidgetsOptions,
       activeLocationsOptions,
     } = context;
     const promises = [];
@@ -36,23 +39,8 @@ export const indexRoute = new Route({
     // get messages
     promises.push(queryClient.ensureQueryData(dashboardMessagesOptions));
 
-    const auth = getAuthToken();
-    if (auth) {
-      // get widgets
-      const widgetsKey = dashboardQKeys.widgets();
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: widgetsKey,
-          queryFn: () =>
-            apiClient.dashboard.getWidgets({
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-              },
-            }),
-        })
-      );
-    }
+    // get widgets
+    promises.push(queryClient.ensureQueryData(dashboardWidgetsOptions));
 
     // get locations
     promises.push(queryClient.ensureQueryData(activeLocationsOptions));

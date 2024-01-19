@@ -19,6 +19,20 @@ export function fetchDashboardMessagesOptions(options: Auth) {
   });
 }
 
+export function fetchDashboardWidgetsOptions(options: Auth) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [SEGMENT, "messages"]),
+    queryFn: () =>
+      apiClient.dashboard.getWidgets({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+        },
+      }),
+    enabled: isEnabled(options),
+  });
+}
+
 export function fetchDashboardRentalStatisticsOptions(
   options: {
     filters: {

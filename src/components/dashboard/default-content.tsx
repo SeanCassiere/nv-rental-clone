@@ -20,12 +20,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
 import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
-import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
-import { fetchDashboardRentalStatisticsOptions } from "@/utils/query/dashboard";
+import {
+  fetchDashboardRentalStatisticsOptions,
+  fetchDashboardWidgetsOptions,
+} from "@/utils/query/dashboard";
 import type { Auth } from "@/utils/query/helpers";
 
 import { cn } from "@/utils";
@@ -71,7 +73,9 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
     })
   );
 
-  const widgetList = useGetDashboardWidgetList();
+  const widgetList = useQuery(
+    fetchDashboardWidgetsOptions({ auth: authParams })
+  );
   const widgets = React.useMemo(() => {
     if (widgetList.data?.status === 200) {
       return widgetList.data?.body;
@@ -159,6 +163,7 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
             <WidgetPickerContent
               onModalStateChange={onShowWidgetPicker}
               onWidgetSave={handleWidgetSortingEnd}
+              auth={authParams}
             />
           </DialogContent>
         </Dialog>
