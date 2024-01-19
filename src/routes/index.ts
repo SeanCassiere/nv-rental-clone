@@ -3,8 +3,9 @@ import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
 import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
-import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
+import { dashboardQKeys } from "@/utils/query-key";
 import { fetchDashboardMessagesOptions } from "@/utils/query/dashboard";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 
 import { rootRoute } from "./__root";
 
@@ -17,10 +18,19 @@ export const indexRoute = new Route({
     return {
       authParams: auth,
       dashboardMessagesOptions: fetchDashboardMessagesOptions({ auth }),
+      activeLocationsOptions: fetchLocationsListOptions({
+        auth,
+        filters: { withActive: true },
+      }),
     };
   },
   loader: async ({ context }) => {
-    const { queryClient, apiClient, dashboardMessagesOptions } = context;
+    const {
+      queryClient,
+      apiClient,
+      dashboardMessagesOptions,
+      activeLocationsOptions,
+    } = context;
     const promises = [];
 
     // get messages
@@ -42,23 +52,10 @@ export const indexRoute = new Route({
             }),
         })
       );
-
-      // get locations
-      const locationsKey = locationQKeys.all({ withActive: true });
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: locationsKey,
-          queryFn: async () =>
-            apiClient.location.getList({
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                withActive: true,
-              },
-            }),
-        })
-      );
     }
+
+    // get locations
+    promises.push(queryClient.ensureQueryData(activeLocationsOptions));
 
     await Promise.all(promises);
     return;

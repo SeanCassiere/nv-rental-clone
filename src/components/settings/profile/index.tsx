@@ -47,7 +47,7 @@ import {
 } from "@/schemas/user";
 
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { locationQKeys } from "@/utils/query-key";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
   fetchActiveUsersCountOptions,
   fetchLanguagesForUsersOptions,
@@ -177,7 +177,10 @@ function ProfileForm(props: {
         }).queryKey,
       });
       qc.invalidateQueries({
-        queryKey: locationQKeys.all({ withActive: true }),
+        queryKey: fetchLocationsListOptions({
+          auth: authParams,
+          filters: { withActive: true },
+        }).queryKey,
       });
 
       if (data.status >= 200 && data.status < 300) {
