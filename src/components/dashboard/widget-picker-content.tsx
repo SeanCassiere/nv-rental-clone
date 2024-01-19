@@ -18,6 +18,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   reorderBasedOnWidgetIdPositions,
@@ -27,19 +28,25 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { icons } from "@/components/ui/icons";
 
-import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
-
 import { type DashboardWidgetItemParsed } from "@/schemas/dashboard";
+
+import { fetchDashboardWidgetsOptions } from "@/utils/query/dashboard";
+import type { Auth } from "@/utils/query/helpers";
 
 import { cn } from "@/utils";
 
-const WidgetPickerContent = ({
-  onModalStateChange: setModalOpenState,
-  onWidgetSave,
-}: {
+interface WidgetPickerContentProps extends Auth {
   onModalStateChange: (show: boolean) => void;
   onWidgetSave: (widgets: DashboardWidgetItemParsed[]) => void;
-}) => {
+}
+
+const WidgetPickerContent = (props: WidgetPickerContentProps) => {
+  const {
+    onModalStateChange: setModalOpenState,
+    onWidgetSave,
+    auth: authParams,
+  } = props;
+
   const [isModalClosingLocked, setModalClosingLocked] = useState(false);
 
   const [widgetsLocal, setWidgetsLocal] = useState<DashboardWidgetItemParsed[]>(
@@ -50,7 +57,9 @@ const WidgetPickerContent = ({
     setModalOpenState(false);
   };
 
-  const widgetsQuery = useGetDashboardWidgetList();
+  const widgetsQuery = useQuery(
+    fetchDashboardWidgetsOptions({ auth: authParams })
+  );
   useEffect(() => {
     if (widgetsQuery.status === "success") {
       setWidgetsLocal((local) => {

@@ -9,6 +9,9 @@ import {
   OIDC_SILENT_REDIRECT_URI,
 } from "@/utils/constants";
 
+const userStore = new WebStorageStateStore({ store: window.localStorage });
+const stateStore = new WebStorageStateStore({ store: window.localStorage });
+
 export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   authority: OIDC_AUTHORITY,
   metadataUrl: `${OIDC_AUTHORITY}/.well-known/openid-configuration`,
@@ -22,5 +25,6 @@ export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
-  userStore: new WebStorageStateStore({ store: window.localStorage }),
+  userStore,
+  stateStore,
 };

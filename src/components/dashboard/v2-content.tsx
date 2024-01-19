@@ -1,6 +1,6 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { add } from "date-fns";
-import { useAuth } from "react-oidc-context";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { QuickCheckinAgreementForm } from "@/components/dashboard/widgets/quick-checkin-agreement";
@@ -13,22 +13,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
 import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
-import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchDashboardRentalStatisticsOptions } from "@/utils/query/dashboard";
 import type { Auth } from "@/utils/query/helpers";
 
 import { cn } from "@/utils";
 
-interface V2DashboardContentProps {
+interface V2DashboardContentProps extends Auth {
   locations: string[];
 }
 
 export default function V2DashboardContent(props: V2DashboardContentProps) {
-  const { locations } = props;
-
-  const auth = useAuth();
-  const authParams = getAuthFromAuthHook(auth);
+  const { locations, auth: authParams } = props;
 
   const canViewVehicleStatus = usePermission("VIEW_VEHICLESTATUS_CHART");
   const canViewSalesStatus = usePermission("VIEW_SALES_STATUS");
@@ -75,7 +71,9 @@ export default function V2DashboardContent(props: V2DashboardContentProps) {
   );
 }
 
-function HeroBlock({ locations, auth }: { locations: string[] } & Auth) {
+function HeroBlock(props: { locations: string[] } & Auth) {
+  const { locations, auth: authParams } = props;
+
   const tomorrowTabScreenSetting = useScreenSetting(
     "Dashboard",
     "RentalManagementSummary",
@@ -99,13 +97,18 @@ function HeroBlock({ locations, auth }: { locations: string[] } & Auth) {
 
   const currentDate = new Date();
 
-  const statistics = useGetDashboardStats({
-    locationIds: locations,
-    clientDate:
-      statisticsTab === "tomorrow"
-        ? add(currentDate, { days: 1 })
-        : currentDate,
-  });
+  const statistics = useQuery(
+    fetchDashboardRentalStatisticsOptions({
+      auth: authParams,
+      filters: {
+        locationIds: locations,
+        clientDate:
+          statisticsTab === "tomorrow"
+            ? add(currentDate, { days: 1 })
+            : currentDate,
+      },
+    })
+  );
 
   return (
     <Card
@@ -131,10 +134,18 @@ function HeroBlock({ locations, auth }: { locations: string[] } & Auth) {
               </TabsList>
             </div>
             <TabsContent value="today">
-              <DashboardStatsBlock statistics={statistics.data} />
+              <DashboardStatsBlock
+                statistics={
+                  statistics.data?.status === 200 ? statistics.data.body : null
+                }
+              />
             </TabsContent>
             <TabsContent value="tomorrow">
-              <DashboardStatsBlock statistics={statistics.data} />
+              <DashboardStatsBlock
+                statistics={
+                  statistics.data?.status === 200 ? statistics.data.body : null
+                }
+              />
             </TabsContent>
           </Tabs>
         </CardContent>
@@ -160,10 +171,10 @@ function HeroBlock({ locations, auth }: { locations: string[] } & Auth) {
               </TabsList>
             </div>
             <TabsContent value="fleet-status">
-              <VehicleStatusPieChart locations={locations} auth={auth} />
+              <VehicleStatusPieChart locations={locations} auth={authParams} />
             </TabsContent>
             <TabsContent value="sales-performance">
-              <SalesAreaChart locations={locations} auth={auth} />
+              <SalesAreaChart locations={locations} auth={authParams} />
             </TabsContent>
           </Tabs>
         </CardContent>

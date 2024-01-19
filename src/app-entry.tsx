@@ -2,6 +2,7 @@ import * as React from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Router, RouterProvider } from "@tanstack/react-router";
+import { WebStorageStateStore } from "oidc-client-ts";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
@@ -18,7 +19,6 @@ import { notFoundRoute } from "@/routes/not-found";
 
 import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 
-import { apiClient } from "@/api";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { queryClient } from "@/tanstack-query-config";
 import {
@@ -38,7 +38,6 @@ export const router = new Router({
   stringifySearch: stringifySearchFn,
   defaultPendingComponent: LoadingPlaceholder,
   context: {
-    apiClient,
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
   },

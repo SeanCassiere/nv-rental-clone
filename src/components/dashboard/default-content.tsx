@@ -1,4 +1,5 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { add } from "date-fns";
 
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
@@ -19,22 +20,33 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
 import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
-import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
-import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
-import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
+import {
+  fetchDashboardRentalStatisticsOptions,
+  fetchDashboardWidgetsOptions,
+  saveDashboardWidgetsMutationOptions,
+} from "@/utils/query/dashboard";
+import type { Auth } from "@/utils/query/helpers";
+
 import { cn } from "@/utils";
 
-interface DefaultDashboardContentProps {
+interface DefaultDashboardContentProps extends Auth {
   locations: string[];
   showWidgetsPicker: boolean;
   onShowWidgetPicker: (show: boolean) => void;
 }
 
 const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
-  const { locations, showWidgetsPicker, onShowWidgetPicker } = props;
+  const {
+    locations,
+    showWidgetsPicker,
+    onShowWidgetPicker,
+    auth: authParams,
+  } = props;
+
+  const queryClient = useQueryClient();
 
   const tomorrowTabScreenSetting = useScreenSetting(
     "Dashboard",
@@ -50,15 +62,22 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
 
   const currentDate = new Date();
 
-  const statistics = useGetDashboardStats({
-    locationIds: locations,
-    clientDate:
-      statisticsTab === "tomorrow"
-        ? add(currentDate, { days: 1 })
-        : currentDate,
-  });
+  const clientDate =
+    statisticsTab === "tomorrow" ? add(currentDate, { days: 1 }) : currentDate;
 
-  const widgetList = useGetDashboardWidgetList();
+  const statistics = useQuery(
+    fetchDashboardRentalStatisticsOptions({
+      auth: authParams,
+      filters: {
+        clientDate,
+        locationIds: locations,
+      },
+    })
+  );
+
+  const widgetList = useQuery(
+    fetchDashboardWidgetsOptions({ auth: authParams })
+  );
   const widgets = React.useMemo(() => {
     if (widgetList.data?.status === 200) {
       return widgetList.data?.body;
@@ -66,13 +85,25 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
     return [];
   }, [widgetList.data]);
 
-  const saveDashboardWidgetsMutation = useSaveDashboardWidgetList();
+  const saveDashboardWidgetsMutation = useMutation({
+    ...saveDashboardWidgetsMutationOptions(),
+    onMutate: () => {
+      queryClient.cancelQueries({
+        queryKey: fetchDashboardWidgetsOptions({ auth: authParams }).queryKey,
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: fetchDashboardWidgetsOptions({ auth: authParams }).queryKey,
+      });
+    },
+  });
 
   const handleWidgetSortingEnd = React.useCallback(
     (widgets: DashboardWidgetItemParsed[]) => {
-      saveDashboardWidgetsMutation.mutate({ widgets });
+      saveDashboardWidgetsMutation.mutate({ widgets, auth: authParams });
     },
-    [saveDashboardWidgetsMutation]
+    [saveDashboardWidgetsMutation, authParams]
   );
 
   const isEmpty =
@@ -96,10 +127,18 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
             </div>
           )}
           <TabsContent value="today">
-            <DashboardStatsBlock statistics={statistics.data} />
+            <DashboardStatsBlock
+              statistics={
+                statistics.data?.status === 200 ? statistics.data.body : null
+              }
+            />
           </TabsContent>
           <TabsContent value="tomorrow">
-            <DashboardStatsBlock statistics={statistics.data} />
+            <DashboardStatsBlock
+              statistics={
+                statistics.data?.status === 200 ? statistics.data.body : null
+              }
+            />
           </TabsContent>
         </Tabs>
       )}
@@ -138,6 +177,7 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
             <WidgetPickerContent
               onModalStateChange={onShowWidgetPicker}
               onWidgetSave={handleWidgetSortingEnd}
+              auth={authParams}
             />
           </DialogContent>
         </Dialog>

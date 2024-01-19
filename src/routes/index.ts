@@ -1,11 +1,13 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
-
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
-import { getAuthToken } from "@/utils/auth";
-import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
+import { getAuthFromRouterContext } from "@/utils/auth";
+import {
+  fetchDashboardMessagesOptions,
+  fetchDashboardWidgetsOptions,
+} from "@/utils/query/dashboard";
+import { fetchLocationsListOptions } from "@/utils/query/location";
 
 import { rootRoute } from "./__root";
 
@@ -13,63 +15,37 @@ export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
-  loader: async ({ context: { queryClient, apiClient } }) => {
-    const auth = getAuthToken();
-    if (auth) {
-      const promises = [];
-      // get messages
-      const messagesKey = dashboardQKeys.messages();
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: messagesKey,
-          queryFn: () =>
-            fetchDashboardMessagesListModded(
-              {
-                query: {
-                  clientId: auth.profile.navotar_clientid,
-                },
-              },
-              {
-                userId: auth.profile.navotar_userid,
-              }
-            ),
-          staleTime: 1000 * 60 * 1,
-        })
-      );
+  beforeLoad: ({ context }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      dashboardMessagesOptions: fetchDashboardMessagesOptions({ auth }),
+      dashboardWidgetsOptions: fetchDashboardWidgetsOptions({ auth }),
+      activeLocationsOptions: fetchLocationsListOptions({
+        auth,
+        filters: { withActive: true },
+      }),
+    };
+  },
+  loader: async ({ context }) => {
+    const {
+      queryClient,
+      dashboardMessagesOptions,
+      dashboardWidgetsOptions,
+      activeLocationsOptions,
+    } = context;
+    const promises = [];
 
-      // get widgets
-      const widgetsKey = dashboardQKeys.widgets();
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: widgetsKey,
-          queryFn: () =>
-            apiClient.dashboard.getWidgets({
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-              },
-            }),
-        })
-      );
+    // get messages
+    promises.push(queryClient.ensureQueryData(dashboardMessagesOptions));
 
-      // get locations
-      const locationsKey = locationQKeys.all({ withActive: true });
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: locationsKey,
-          queryFn: async () =>
-            apiClient.location.getList({
-              query: {
-                clientId: auth.profile.navotar_clientid,
-                userId: auth.profile.navotar_userid,
-                withActive: true,
-              },
-            }),
-        })
-      );
+    // get widgets
+    promises.push(queryClient.ensureQueryData(dashboardWidgetsOptions));
 
-      await Promise.all(promises);
-    }
+    // get locations
+    promises.push(queryClient.ensureQueryData(activeLocationsOptions));
+
+    await Promise.all(promises);
     return;
   },
   component: lazyRouteComponent(() => import("@/pages/dashboard")),

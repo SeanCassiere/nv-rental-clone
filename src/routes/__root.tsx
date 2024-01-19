@@ -25,11 +25,9 @@ import {
   fetchUserByIdOptions,
 } from "@/utils/query/user";
 
-import type { apiClient } from "@/api";
 import type { queryClient } from "@/tanstack-query-config";
 
 export interface MyRouterContext {
-  apiClient: typeof apiClient;
   queryClient: typeof queryClient;
   auth: AuthContextProps;
 }

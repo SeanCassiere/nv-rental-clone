@@ -137,6 +137,7 @@ function IndexPage() {
             locations={currentLocationIds}
             showWidgetsPicker={showWidgetPickerModal}
             onShowWidgetPicker={handleSetShowWidgetPickerModal}
+            auth={authParams}
           />
         )}
       </Suspense>
@@ -148,7 +149,10 @@ function IndexPage() {
         }
       >
         {dashboardVersion === "v2" && (
-          <V2DashboardContent locations={currentLocationIds} />
+          <V2DashboardContent
+            locations={currentLocationIds}
+            auth={authParams}
+          />
         )}
       </Suspense>
     </ProtectorShield>

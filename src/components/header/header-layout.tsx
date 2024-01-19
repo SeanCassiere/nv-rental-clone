@@ -1,9 +1,10 @@
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { useAuth } from "react-oidc-context";
 
-import { useGetDashboardMessages } from "@/hooks/network/dashboard/useGetDashboardMessages";
-
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
+import { fetchDashboardMessagesOptions } from "@/utils/query/dashboard";
 
 import { AppNavigation } from "./app-navigation";
 import { BannerNotice } from "./banner-notice";
@@ -11,8 +12,13 @@ import { CommandMenu } from "./command-menu";
 import { UserNavigationDropdown } from "./user-navigation-dropdown";
 
 export const HeaderLayout = () => {
-  const messagesList = useGetDashboardMessages();
-  const messages = [...(messagesList.data ? messagesList.data : [])];
+  const auth = useAuth();
+  const authParams = getAuthFromAuthHook(auth);
+
+  const messagesList = useQuery(
+    fetchDashboardMessagesOptions({ auth: authParams })
+  );
+  const messages = messagesList.data ? messagesList.data : [];
 
   return (
     <>
