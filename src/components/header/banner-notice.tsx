@@ -31,13 +31,13 @@ export const BannerNotice = React.memo(
       [] as string[]
     );
 
-    const show = !dismissedMessages.includes(message.messageId);
+    const hidden = dismissedMessages.includes(message.messageId);
 
     const onDismiss = () => {
       setDismissedMessages((data) => [...data, message.messageId]);
     };
 
-    if (!show) return null;
+    if (hidden) return null;
 
     return (
       <article className="mx-auto flex w-full max-w-[1700px] flex-1 items-center gap-6 pb-2.5 pl-3.5 pr-1 pt-3 md:px-16">
