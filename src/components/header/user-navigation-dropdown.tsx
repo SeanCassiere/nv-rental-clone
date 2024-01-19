@@ -24,6 +24,7 @@ import { icons } from "@/components/ui/icons";
 
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
+import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 import { fetchUserByIdOptions } from "@/utils/query/user";
 
 import { useGlobalDialogContext } from "@/context/modals";
@@ -73,11 +74,13 @@ export const UserNavigationDropdown = () => {
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-64" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.userName}</p>
-            <p className="text-xs leading-none text-muted-foreground">
+            <p className="truncate font-medium leading-none">
+              {user?.userName}
+            </p>
+            <p className="truncate text-sm leading-none text-muted-foreground">
               {user?.email}
             </p>
           </div>
@@ -174,6 +177,10 @@ export const UserNavigationDropdown = () => {
             Log out
           </DropdownMenuItem>
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel className="text-xs font-normal leading-none text-muted-foreground">
+          {IS_LOCAL_DEV ? "Development" : "Production"} - {APP_VERSION}
+        </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>
   );
