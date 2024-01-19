@@ -14,7 +14,7 @@ import { fetchAgreementNotesByIdOptions } from "@/utils/query/agreement";
 import { fetchCustomerNotesByIdOptions } from "@/utils/query/customer";
 import { fetchReservationNotesByIdOptions } from "@/utils/query/reservation";
 import { fetchVehiclesNotesByIdOptions } from "@/utils/query/vehicle";
-import type { AppPrimaryModuleType } from "@/types/General";
+import type { AppModule } from "@/types/app-module";
 
 const EmptyIcon = icons.Files;
 
@@ -50,7 +50,7 @@ const agreementNoteColumns: TNoteKeyHelp[] = [
 ];
 
 const emptyContentLabels: Record<
-  AppPrimaryModuleType,
+  AppModule,
   { title: string; subtitle: string }
 > = {
   vehicles: {
@@ -77,7 +77,7 @@ const ModuleNotesTabContent = ({
   clientId,
   userId,
 }: {
-  module: AppPrimaryModuleType;
+  module: AppModule;
   referenceId: string;
   clientId: string;
   userId: string;
