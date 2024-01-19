@@ -178,8 +178,8 @@ export const UserNavigationDropdown = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs font-normal leading-none text-muted-foreground">
-          {IS_LOCAL_DEV ? "Development" : "Production"} - {APP_VERSION}
+        <DropdownMenuLabel className="-mx-1 -my-1 bg-muted px-3 py-2.5 text-xs font-normal leading-none text-muted-foreground">
+          {APP_VERSION} {IS_LOCAL_DEV ? "(Development)" : "(Production)"}
         </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>
