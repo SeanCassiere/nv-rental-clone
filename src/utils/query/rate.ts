@@ -47,13 +47,15 @@ export function fetchRatesListOptions(
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "list", sortObjectKeys(filters)]),
     queryFn: () =>
-      apiClient.rate.getList({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          ...filters,
-        },
-      }),
+      apiClient.rate
+        .getList({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            ...filters,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
   });
 }
@@ -90,13 +92,15 @@ export function fetchRatesOptimalNameOptions(
       sortObjectKeys(filters),
     ]),
     queryFn: () =>
-      apiClient.rate.getOptimal({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          ...filters,
-        },
-      }),
+      apiClient.rate
+        .getOptimal({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            ...filters,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
   });
 }

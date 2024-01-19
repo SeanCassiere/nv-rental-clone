@@ -24,13 +24,15 @@ export function fetchVehicleTypesListOptions(
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "list", sortObjectKeys(filters)]),
     queryFn: () =>
-      apiClient.vehicleType.getList({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          ...filters,
-        },
-      }),
+      apiClient.vehicleType
+        .getList({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            ...filters,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 1, // 1 minute
   });

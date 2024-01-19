@@ -1,4 +1,4 @@
-export function getXPaginationFromHeaders(headers: Headers): {
+export function getXPaginationFromHeaders(headers: Headers | null): {
   page: number;
   pageSize: number;
   totalRecords: number;

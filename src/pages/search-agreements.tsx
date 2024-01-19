@@ -215,8 +215,10 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const headers = agreementsData.data?.headers ?? new Headers();
-  const parsedPagination = getXPaginationFromHeaders(headers);
+  const parsedPagination =
+    agreementsData.status === "success"
+      ? agreementsData.data.pagination
+      : getXPaginationFromHeaders(null);
 
   const agreementsList =
     agreementsData.data?.status === 200 ? agreementsData.data.body : [];
