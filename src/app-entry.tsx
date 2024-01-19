@@ -18,7 +18,6 @@ import { notFoundRoute } from "@/routes/not-found";
 
 import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 
-import { apiClient } from "@/api";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { queryClient } from "@/tanstack-query-config";
 import {
@@ -38,7 +37,6 @@ export const router = new Router({
   stringifySearch: stringifySearchFn,
   defaultPendingComponent: LoadingPlaceholder,
   context: {
-    apiClient,
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
   },
