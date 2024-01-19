@@ -23,7 +23,8 @@ export function fetchClientProfileOptions(options: Auth) {
             window.localStorage.setItem(STORAGE_KEYS.currency, currency);
           }
           return res;
-        }),
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 30, // 30 secs before the data is considered to be stale
   });
@@ -33,10 +34,12 @@ export function fetchFeaturesForClientOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "features"]),
     queryFn: () =>
-      apiClient.client.getFeatures({
-        params: { clientId: options.auth.clientId },
-        body: {},
-      }),
+      apiClient.client
+        .getFeatures({
+          params: { clientId: options.auth.clientId },
+          body: {},
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 5, // 5 mins before the data is considered to be stale
   });
