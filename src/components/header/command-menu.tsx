@@ -16,7 +16,6 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGlobalDialogContext } from "@/hooks/context/modals";
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useDebounce } from "@/hooks/internal/useDebounce";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
@@ -30,6 +29,7 @@ import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
 
+import { useGlobalDialogContext } from "@/context/modals";
 import { cn, IsMacLike } from "@/utils";
 
 export const CommandMenu = () => {

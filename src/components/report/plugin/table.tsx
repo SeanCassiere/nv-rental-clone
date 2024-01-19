@@ -38,11 +38,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useReportContext } from "@/hooks/context/view-report";
-
 import { fuzzyFilter } from "@/utils/table";
 import type { ReportTablePlugin } from "@/types/report";
 
+import { useReportContext } from "@/context/view-report";
 import { cn } from "@/utils";
 
 interface ReportTableProps<TData, TValue> {

@@ -11,7 +11,6 @@ import { Toaster } from "sonner";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 
-import { GlobalDialogProvider } from "@/hooks/context/modals";
 import { useEventListener } from "@/hooks/internal/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
 
@@ -19,6 +18,7 @@ import { notFoundRoute } from "@/routes/not-found";
 
 import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 
+import { GlobalDialogProvider } from "@/context/modals";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { queryClient } from "@/tanstack-query-config";
 import {
