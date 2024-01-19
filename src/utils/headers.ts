@@ -9,10 +9,13 @@ export function getXPaginationFromHeaders(headers: Headers): {
   let totalPages = 0;
   let totalRecords = 0;
 
-  const paginationHeaders = headers.get("x-pagination") ?? "";
+  /**
+   * @important DO NOT remove the optional chaining as it'll break because of the QueryClient's persist plugin
+   * */
+  const paginationHeaders = headers ? headers?.get?.("x-pagination") : "";
 
   try {
-    const parse = JSON.parse(paginationHeaders);
+    const parse = JSON.parse(paginationHeaders ?? "");
 
     page = parse?.currentPage ? parse?.currentPage : page;
     pageSize = parse?.pageSize ? parse?.pageSize : pageSize;
