@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchPermissionsByUserIdOptions } from "@/utils/query/user";
 
 export function usePermission(
@@ -8,10 +9,7 @@ export function usePermission(
   defaultValue: boolean = false
 ) {
   const auth = useAuth();
-
-  const clientId = auth.user?.profile.navotar_clientid || "";
-  const userId = auth.user?.profile.navotar_userid || "";
-  const authParams = { clientId, userId };
+  const authParams = getAuthFromAuthHook(auth);
 
   const permissions = useQuery(
     fetchPermissionsByUserIdOptions({
