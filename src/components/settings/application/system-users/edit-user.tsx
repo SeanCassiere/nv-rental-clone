@@ -52,15 +52,15 @@ import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 import { fetchRolesListOptions } from "@/utils/query/role";
 import {
+  createUserMutationOptions,
   fetchActiveUsersCountOptions,
   fetchLanguagesForUsersOptions,
   fetchMaximumUsersCountOptions,
   fetchUserByIdOptions,
   fetchUserConfigurationOptions,
-  makeUpdatingUserKey,
+  updateUserMutationOptions,
 } from "@/utils/query/user";
 
-import { apiClient } from "@/api";
 import { cn } from "@/utils";
 
 interface EditUserDialogProps {
@@ -86,13 +86,18 @@ export function EditUserDialog({
     userId: props.userId,
   };
 
-  const isSubmittingNumber = useIsMutating({
-    mutationKey: makeUpdatingUserKey({
-      auth: authParams,
-      userId: props.intendedUserId,
-    }),
+  // track user creation mutations
+  const creatingUserMutationCount = useIsMutating({
+    mutationKey: createUserMutationOptions().mutationKey,
   });
-  const isSubmittingUpdating = isSubmittingNumber > 0;
+  const isCreateMutationActive = creatingUserMutationCount > 0;
+
+  // track user updating mutations
+  const updatingUserMutationCount = useIsMutating({
+    mutationKey: updateUserMutationOptions({ userId: props.intendedUserId })
+      .mutationKey,
+  });
+  const isUpdateMutationActive = updatingUserMutationCount > 0;
 
   const currentUsersCountQuery = useQuery(
     fetchActiveUsersCountOptions({
@@ -151,8 +156,8 @@ export function EditUserDialog({
     isSelected: true,
   }));
 
-  const editModeDisabled = isSubmittingUpdating;
-  const createModeDisabled = isSubmittingUpdating || isMaxUsersReached;
+  const editModeDisabled = isUpdateMutationActive;
+  const createModeDisabled = isCreateMutationActive || isMaxUsersReached;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -201,7 +206,7 @@ export function EditUserDialog({
           />
         )}
         {props.mode === "new" && (
-          <NewUserForm
+          <CreateUserForm
             formId={formId}
             userId={props.userId}
             clientId={props.clientId}
@@ -232,7 +237,7 @@ export function EditUserDialog({
               props.mode === "edit" ? editModeDisabled : createModeDisabled
             }
           >
-            {isSubmittingUpdating && (
+            {isUpdateMutationActive && (
               <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
             )}
             {props.mode === "edit"
@@ -299,11 +304,7 @@ function EditUserForm(props: {
   });
 
   const updateProfile = useMutation({
-    mutationKey: makeUpdatingUserKey({
-      auth: authParams,
-      userId: props.user.userID,
-    }),
-    mutationFn: apiClient.user.updateProfileByUserId,
+    ...updateUserMutationOptions({ userId: props.user.userID }),
     onSuccess: (data, variables) => {
       qc.invalidateQueries({
         queryKey: fetchUserConfigurationOptions({ auth: authParams }).queryKey,
@@ -701,7 +702,7 @@ function EditUserForm(props: {
 
 const MAX_PASSWORD_LENGTH = 35;
 
-function NewUserForm(props: {
+function CreateUserForm(props: {
   formId: string;
   userId: string;
   clientId: string;
@@ -774,11 +775,7 @@ function NewUserForm(props: {
   });
 
   const createUser = useMutation({
-    mutationKey: makeUpdatingUserKey({
-      auth: authParams,
-      userId: props.userId,
-    }),
-    mutationFn: apiClient.user.createdUserProfile,
+    ...createUserMutationOptions(),
     onSuccess: (data) => {
       qc.invalidateQueries({
         queryKey: fetchUserConfigurationOptions({ auth: authParams }).queryKey,

@@ -12,8 +12,13 @@ type UserId = { userId: RefId };
 export function fetchUserByIdOptions(
   options: { enabled?: boolean } & UserId & Auth
 ) {
+  const { enabled = true } = options;
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, options.userId, "profile"]),
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      String(options.userId),
+      "profile",
+    ]),
     queryFn: () =>
       apiClient.user
         .getProfileByUserId({
@@ -41,7 +46,7 @@ export function fetchUserByIdOptions(
 
           return res;
         }),
-    enabled: isEnabled(options),
+    enabled: isEnabled(options) && enabled,
     staleTime: 1000 * 60 * 1, // 1 minutes
   });
 }
@@ -63,7 +68,11 @@ export function fetchLanguagesForUsersOptions(options: Auth) {
 
 export function fetchPermissionsByUserIdOptions(options: UserId & Auth) {
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, options.userId, "permissions"]),
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      String(options.userId),
+      "permissions",
+    ]),
     queryFn: () =>
       apiClient.user.getPermissionForUserId({
         params: { userId: String(options.userId) },
@@ -115,6 +124,16 @@ export function fetchMaximumUsersCountOptions(options: Auth) {
   });
 }
 
-export function makeUpdatingUserKey(options: UserId & Auth) {
-  return makeQueryKey(options, [SEGMENT, options.userId, "updating_profile"]);
+export function updateUserMutationOptions(options: UserId) {
+  return {
+    mutationKey: [SEGMENT, "update_profile", String(options.userId)],
+    mutationFn: apiClient.user.updateProfileByUserId,
+  } as const;
+}
+
+export function createUserMutationOptions() {
+  return {
+    mutationKey: [SEGMENT, "create_profile"],
+    mutationFn: apiClient.user.createUserProfile,
+  } as const;
 }

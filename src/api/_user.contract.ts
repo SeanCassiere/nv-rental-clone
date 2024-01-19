@@ -52,7 +52,7 @@ const rootUserContract = c.router({
       200: UserLanguageListSchema,
     },
   },
-  createdUserProfile: {
+  createUserProfile: {
     method: "POST",
     path: "/v3/users",
     body: c.type<UpdateUserInput & { password: string }>(),
