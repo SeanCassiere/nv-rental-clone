@@ -21,7 +21,7 @@ export function fetchDashboardMessagesOptions(options: Auth) {
 
 export function fetchDashboardWidgetsOptions(options: Auth) {
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, "messages"]),
+    queryKey: makeQueryKey(options, [SEGMENT, "widgets"]),
     queryFn: () =>
       apiClient.dashboard.getWidgets({
         query: {
@@ -30,6 +30,7 @@ export function fetchDashboardWidgetsOptions(options: Auth) {
         },
       }),
     enabled: isEnabled(options),
+    staleTime: 1000 * 60 * 1,
   });
 }
 

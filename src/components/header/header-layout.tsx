@@ -18,7 +18,7 @@ export const HeaderLayout = () => {
   const messagesList = useQuery(
     fetchDashboardMessagesOptions({ auth: authParams })
   );
-  const messages = [...(messagesList.data ? messagesList.data : [])];
+  const messages = messagesList.data ? messagesList.data : [];
 
   return (
     <>
