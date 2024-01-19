@@ -16,9 +16,9 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
-import { useDebounce } from "@/hooks/internal/useDebounce";
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+import { useAuthValues } from "@/hooks/useAuthValues";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";

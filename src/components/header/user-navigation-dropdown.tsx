@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { icons } from "@/components/ui/icons";
 
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
 import { fetchUserByIdOptions } from "@/utils/query/user";
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
-import { useFeature } from "@/hooks/internal/useFeature";
+import { useAuthValues } from "@/hooks/useAuthValues";
+import { useFeature } from "@/hooks/useFeature";
 
 import { momentToDateFnsFormat } from "@/schemas/user";
 

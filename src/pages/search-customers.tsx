@@ -18,7 +18,7 @@ import {
 import ProtectorShield from "@/components/protector-shield";
 import { buttonVariants } from "@/components/ui/button";
 
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";

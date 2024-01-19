@@ -27,7 +27,7 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 
-import { useDatePreference } from "@/hooks/internal/useDatePreferences";
+import { useDatePreference } from "@/hooks/useDatePreferences";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import {

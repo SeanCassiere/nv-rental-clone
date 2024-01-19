@@ -4,7 +4,7 @@ import { useNavigate, useRouter, useSearch } from "@tanstack/react-router";
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, type LinkOptions } from "@tanstack/react-router";
 
-import { useFeature } from "@/hooks/internal/useFeature";
+import { useFeature } from "@/hooks/useFeature";
 
 import { APP_DEFAULTS } from "@/utils/constants";
 

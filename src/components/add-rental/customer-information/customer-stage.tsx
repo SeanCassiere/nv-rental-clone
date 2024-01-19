@@ -20,7 +20,7 @@ import {
   InputDatePickerSlot,
 } from "@/components/ui/input-datepicker";
 
-import { useDatePreference } from "@/hooks/internal/useDatePreferences";
+import { useDatePreference } from "@/hooks/useDatePreferences";
 
 import i18n from "@/i18next-config";
 

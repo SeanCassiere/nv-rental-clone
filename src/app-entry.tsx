@@ -11,8 +11,8 @@ import { Toaster } from "sonner";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 
-import { useEventListener } from "@/hooks/internal/useEventListener";
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+import { useEventListener } from "@/hooks/useEventListener";
+import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
 import { notFoundRoute } from "@/routes/not-found";
 

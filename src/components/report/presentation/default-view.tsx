@@ -9,7 +9,7 @@ import { ReportTable } from "@/components/report/plugin/table";
 import { ViewColumns } from "@/components/report/plugin/view-columns";
 import { icons } from "@/components/ui/icons";
 
-import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatter";
+import { useReportValueFormatter } from "@/hooks/useReportValueFormatter";
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
 

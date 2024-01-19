@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 

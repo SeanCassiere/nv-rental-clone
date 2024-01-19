@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
-import { useLocalStorage } from "@/hooks/internal/useLocalStorage";
-import { useMediaQuery } from "@/hooks/internal/useMediaQuery";
-import { useUpdateEffect } from "@/hooks/internal/useUpdateEffect";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useUpdateEffect } from "@/hooks/useUpdateEffect";
 
 import { APP_DEFAULTS, APP_STORAGE_KEYS } from "@/utils/constants";
 import { setDomClass } from "@/utils/dom";

@@ -11,8 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { usePermission } from "@/hooks/internal/usePermission";
-import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
+import { usePermission } from "@/hooks/usePermission";
+import { useScreenSetting } from "@/hooks/useScreenSetting";
 
 import { fetchDashboardRentalStatisticsOptions } from "@/utils/query/dashboard";
 import type { Auth } from "@/utils/query/helpers";

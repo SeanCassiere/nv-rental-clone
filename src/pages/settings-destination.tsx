@@ -8,8 +8,8 @@ import { SidebarSettingsNavigation } from "@/components/settings/nav-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { usePermission } from "@/hooks/internal/usePermission";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { usePermission } from "@/hooks/usePermission";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 

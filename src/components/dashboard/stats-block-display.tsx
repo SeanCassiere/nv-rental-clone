@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { icons, type LucideIcon } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
+import { useAuthValues } from "@/hooks/useAuthValues";
 
 import type { TDashboardStats } from "@/schemas/dashboard";
 

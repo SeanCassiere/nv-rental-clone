@@ -36,8 +36,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
-import { usePermission } from "@/hooks/internal/usePermission";
+import { useAuthValues } from "@/hooks/useAuthValues";
+import { usePermission } from "@/hooks/usePermission";
 
 import {
   buildUpdateUserSchema,
