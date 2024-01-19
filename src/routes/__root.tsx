@@ -33,6 +33,13 @@ export interface MyRouterContext {
 
 const routerRootWithContext = rootRouteWithContext<MyRouterContext>();
 
+const exceptionRoutes = [
+  "/oidc-callback",
+  "/dev",
+  "/logout",
+  "/logged-out",
+] as const;
+
 export const rootRoute = routerRootWithContext({
   loader: async ({ context }) => {
     const { queryClient } = context;
@@ -79,8 +86,6 @@ export const rootRoute = routerRootWithContext({
   },
   component: RootComponent,
 });
-
-const exceptionRoutes = ["/oidc-callback", "/dev"] as const;
 
 function RootComponent() {
   const routerStore = useRouterState();

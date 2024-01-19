@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRouter } from "@tanstack/react-router";
+import { Navigate, useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
@@ -58,6 +58,15 @@ function ProtectorShield({ children }: { children: React.ReactNode }) {
     router.history.location.pathname,
     router.history.location.search,
   ]);
+
+  if (!auth.isAuthenticated) {
+    return (
+      <Navigate
+        to="/oidc-callback"
+        search={() => ({ redirect: router.state.location.href })}
+      />
+    );
+  }
 
   return <>{children}</>;
 }
