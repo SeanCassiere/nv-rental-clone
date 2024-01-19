@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { add } from "date-fns";
 
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
@@ -20,13 +20,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
 import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
-import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
 import {
   fetchDashboardRentalStatisticsOptions,
   fetchDashboardWidgetsOptions,
+  saveDashboardWidgetsMutationOptions,
 } from "@/utils/query/dashboard";
 import type { Auth } from "@/utils/query/helpers";
 
@@ -46,6 +46,8 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
     auth: authParams,
   } = props;
 
+  const queryClient = useQueryClient();
+
   const tomorrowTabScreenSetting = useScreenSetting(
     "Dashboard",
     "RentalManagementSummary",
@@ -60,15 +62,15 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
 
   const currentDate = new Date();
 
+  const clientDate =
+    statisticsTab === "tomorrow" ? add(currentDate, { days: 1 }) : currentDate;
+
   const statistics = useQuery(
     fetchDashboardRentalStatisticsOptions({
       auth: authParams,
       filters: {
+        clientDate,
         locationIds: locations,
-        clientDate:
-          statisticsTab === "tomorrow"
-            ? add(currentDate, { days: 1 })
-            : currentDate,
       },
     })
   );
@@ -83,13 +85,25 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
     return [];
   }, [widgetList.data]);
 
-  const saveDashboardWidgetsMutation = useSaveDashboardWidgetList();
+  const saveDashboardWidgetsMutation = useMutation({
+    ...saveDashboardWidgetsMutationOptions(),
+    onMutate: () => {
+      queryClient.cancelQueries({
+        queryKey: fetchDashboardWidgetsOptions({ auth: authParams }).queryKey,
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: fetchDashboardWidgetsOptions({ auth: authParams }).queryKey,
+      });
+    },
+  });
 
   const handleWidgetSortingEnd = React.useCallback(
     (widgets: DashboardWidgetItemParsed[]) => {
-      saveDashboardWidgetsMutation.mutate({ widgets });
+      saveDashboardWidgetsMutation.mutate({ widgets, auth: authParams });
     },
-    [saveDashboardWidgetsMutation]
+    [saveDashboardWidgetsMutation, authParams]
   );
 
   const isEmpty =

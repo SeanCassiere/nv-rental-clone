@@ -1,6 +1,7 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { getDashboardMessagesAndFilter } from "@/api/get-dashboard-messages";
+import { saveDashboardWidgets } from "@/api/save-dashboard-widgets";
 
 import { localDateToQueryYearMonthDay } from "@/utils/date";
 
@@ -142,4 +143,11 @@ export function fetchDashboardVehicleStatusCountsOptions(
     staleTime: 1000 * 60 * 1, // 1 minute
     placeholderData: keepPreviousData,
   });
+}
+
+export function saveDashboardWidgetsMutationOptions() {
+  return {
+    mutationKey: [SEGMENT, "save_dashboard_widgets"],
+    mutationFn: saveDashboardWidgets,
+  } as const;
 }
