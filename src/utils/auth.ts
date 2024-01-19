@@ -52,6 +52,14 @@ export function getAuthFromAuthHook(auth: MyRouterContext["auth"]) {
     userId = auth.user.profile.navotar_userid;
   }
 
+  if (!clientId && !userId) {
+    const local = getAuthToken();
+    if (local) {
+      clientId = local.profile.navotar_clientid;
+      userId = local.profile.navotar_userid;
+    }
+  }
+
   return { clientId, userId };
 }
 
