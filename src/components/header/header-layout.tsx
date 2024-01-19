@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
+import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
+
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
 import { fetchDashboardMessagesOptions } from "@/utils/query/dashboard";
@@ -22,6 +24,7 @@ export const HeaderLayout = () => {
 
   return (
     <>
+      <HiddenFeatureSetter />
       <header>
         {messages.length > 0 && (
           <section className="grid w-full divide-y divide-bannerPromo-foreground/80 bg-bannerPromo">

@@ -10,7 +10,6 @@ import { useAuth, type AuthContextProps } from "react-oidc-context";
 
 import { LogoutDialog } from "@/components/common/logout-dialog";
 import { HeaderLayout } from "@/components/header/header-layout";
-import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -112,7 +111,6 @@ function RootComponent() {
         {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
         {!isExceptionRoute && !isFreshAuthenticating && (
           <>
-            <HiddenFeatureSetter />
             <Suspense fallback={<LoadingPlaceholder />}>
               <Outlet />
             </Suspense>
