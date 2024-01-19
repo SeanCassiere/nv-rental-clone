@@ -217,8 +217,10 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const headers = reservationsData.data?.headers ?? new Headers();
-  const parsedPagination = getXPaginationFromHeaders(headers);
+  const parsedPagination =
+    reservationsData.status === "success"
+      ? reservationsData.data.pagination
+      : getXPaginationFromHeaders(null);
 
   const reservationsList =
     reservationsData.data?.status === 200 ? reservationsData.data?.body : [];

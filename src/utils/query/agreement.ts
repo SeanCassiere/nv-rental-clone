@@ -1,6 +1,7 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
+import { getXPaginationFromHeaders } from "@/utils/headers";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
@@ -38,7 +39,8 @@ export function fetchAgreementsSearchColumnsOptions(options: Auth) {
             ...data,
             body: data.status === 200 ? data.body : [],
           })
-        ),
+        )
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -87,16 +89,23 @@ export function fetchAgreementsSearchListFn(
 ) {
   const { currentDate, ...filters } = options.filters;
 
-  return apiClient.agreement.getList({
-    query: {
-      clientId: options.auth.clientId,
-      userId: options.auth.userId,
-      page: options.pagination.page || 1,
-      pageSize: options.pagination.pageSize || 10,
-      currentDate: currentDate.toISOString(),
-      ...filters,
-    },
-  });
+  return apiClient.agreement
+    .getList({
+      query: {
+        clientId: options.auth.clientId,
+        userId: options.auth.userId,
+        page: options.pagination.page || 1,
+        pageSize: options.pagination.pageSize || 10,
+        currentDate: currentDate.toISOString(),
+        ...filters,
+      },
+    })
+    .then((res) => {
+      const pagination = getXPaginationFromHeaders(
+        res.status === 200 ? res.headers : null
+      );
+      return { ...res, headers: null, pagination };
+    });
 }
 
 /**
@@ -152,15 +161,17 @@ export function fetchAgreementByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.agreementId]),
     queryFn: () =>
-      apiClient.agreement.getById({
-        params: {
-          agreementId: String(options.agreementId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.agreement
+        .getById({
+          params: {
+            agreementId: String(options.agreementId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled:
       isEnabled(options) &&
       Boolean(options.agreementId && options.agreementId !== "0"),
@@ -175,16 +186,18 @@ export function fetchAgreementSummaryByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.agreementId, "summary"]),
     queryFn: () =>
-      apiClient.summary.getSummaryForReferenceId({
-        params: {
-          referenceType: "agreements",
-          referenceId: String(options.agreementId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.summary
+        .getSummaryForReferenceId({
+          params: {
+            referenceType: "agreements",
+            referenceId: String(options.agreementId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled:
       isEnabled(options) &&
       Boolean(options.agreementId && options.agreementId !== "0"),
@@ -199,15 +212,17 @@ export function fetchAgreementNotesByIdOptions(options: AgreementId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.agreementId, "notes"]),
     queryFn: () =>
-      apiClient.note.getListForRefId({
-        params: {
-          referenceType: "agreement",
-          referenceId: String(options.agreementId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-        },
-      }),
+      apiClient.note
+        .getListForRefId({
+          params: {
+            referenceType: "agreement",
+            referenceId: String(options.agreementId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -226,13 +241,15 @@ export function fetchAgreementExchangesByIdOptions(
       "exchanges",
     ]),
     queryFn: () =>
-      apiClient.vehicleExchange.getList({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          agreementId: String(options.agreementId),
-        },
-      }),
+      apiClient.vehicleExchange
+        .getList({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            agreementId: String(options.agreementId),
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }

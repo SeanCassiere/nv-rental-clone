@@ -29,13 +29,15 @@ export function fetchLocationsListOptions(
       sortObjectKeys(options.filters),
     ]),
     queryFn: () =>
-      apiClient.location.getList({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          ...options.filters,
-        },
-      }),
+      apiClient.location
+        .getList({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            ...options.filters,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

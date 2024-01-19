@@ -1,3 +1,4 @@
+import { broadcastQueryClient } from "@tanstack/query-broadcast-client-experimental";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { QueryClient } from "@tanstack/react-query";
 import { persistQueryClient } from "@tanstack/react-query-persist-client";
@@ -22,4 +23,9 @@ persistQueryClient({
   queryClient,
   buster: APP_VERSION,
   persister: localStoragePersister,
+});
+
+broadcastQueryClient({
+  queryClient,
+  broadcastChannel: APP_VERSION,
 });

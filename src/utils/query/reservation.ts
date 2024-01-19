@@ -2,6 +2,7 @@ import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { mutateColumnAccessors } from "@/utils/columns";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { getXPaginationFromHeaders } from "@/utils/headers";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
@@ -39,7 +40,8 @@ export function fetchReservationsSearchColumnsOptions(options: Auth) {
             ...data,
             body: data.status === 200 ? data.body : [],
           })
-        ),
+        )
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -88,16 +90,23 @@ export function fetchReservationsSearchListFn(
 ) {
   const { clientDate, ...filters } = options.filters;
 
-  return apiClient.reservation.getList({
-    query: {
-      clientId: options.auth.clientId,
-      userId: options.auth.userId,
-      page: options.pagination.page || 1,
-      pageSize: options.pagination.pageSize || 10,
-      clientDate: localDateToQueryYearMonthDay(clientDate),
-      ...filters,
-    },
-  });
+  return apiClient.reservation
+    .getList({
+      query: {
+        clientId: options.auth.clientId,
+        userId: options.auth.userId,
+        page: options.pagination.page || 1,
+        pageSize: options.pagination.pageSize || 10,
+        clientDate: localDateToQueryYearMonthDay(clientDate),
+        ...filters,
+      },
+    })
+    .then((res) => {
+      const pagination = getXPaginationFromHeaders(
+        res.status === 200 ? res.headers : null
+      );
+      return { ...res, headers: null, pagination };
+    });
 }
 
 /**
@@ -153,15 +162,17 @@ export function fetchReservationByIdOptions(options: ReservationId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, String(options.reservationId)]),
     queryFn: () =>
-      apiClient.reservation.getById({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-        params: {
-          reservationId: String(options.reservationId),
-        },
-      }),
+      apiClient.reservation
+        .getById({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+          params: {
+            reservationId: String(options.reservationId),
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -180,16 +191,18 @@ export function fetchReservationSummaryByIdOptions(
       "summary",
     ]),
     queryFn: () =>
-      apiClient.summary.getSummaryForReferenceId({
-        params: {
-          referenceType: "reservations",
-          referenceId: String(options.reservationId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.summary
+        .getSummaryForReferenceId({
+          params: {
+            referenceType: "reservations",
+            referenceId: String(options.reservationId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled:
       isEnabled(options) &&
       Boolean(options.reservationId && options.reservationId !== "0"),
@@ -210,15 +223,17 @@ export function fetchReservationNotesByIdOptions(
       "notes",
     ]),
     queryFn: () =>
-      apiClient.note.getListForRefId({
-        params: {
-          referenceType: "reservation",
-          referenceId: String(options.reservationId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-        },
-      }),
+      apiClient.note
+        .getListForRefId({
+          params: {
+            referenceType: "reservation",
+            referenceId: String(options.reservationId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }

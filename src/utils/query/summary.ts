@@ -116,7 +116,10 @@ export function fetchSummaryForRentalOptions(
       "calculate",
       sortObjectKeys(options.input),
     ]),
-    queryFn: () => apiClient.summary.getLiveCalculationsForRental({ body }),
+    queryFn: () =>
+      apiClient.summary
+        .getLiveCalculationsForRental({ body })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
   });
 }

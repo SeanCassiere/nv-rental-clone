@@ -46,9 +46,11 @@ export function fetchScreenSettingsForClientOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "screen_settings"]),
     queryFn: () =>
-      apiClient.client.getScreenSettings({
-        params: { clientId: options.auth.clientId },
-      }),
+      apiClient.client
+        .getScreenSettings({
+          params: { clientId: options.auth.clientId },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 5, // 5 mins before the data is considered to be stale
   });

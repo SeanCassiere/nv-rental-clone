@@ -45,7 +45,8 @@ export function fetchUserByIdOptions(
           }
 
           return res;
-        }),
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
     staleTime: 1000 * 60 * 1, // 1 minutes
   });
@@ -55,12 +56,14 @@ export function fetchLanguagesForUsersOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "languages"]),
     queryFn: () =>
-      apiClient.user.getLanguages({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.user
+        .getLanguages({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 1, // 1 minute
   });
@@ -74,12 +77,14 @@ export function fetchPermissionsByUserIdOptions(options: UserId & Auth) {
       "permissions",
     ]),
     queryFn: () =>
-      apiClient.user.getPermissionForUserId({
-        params: { userId: String(options.userId) },
-        query: {
-          clientId: options.auth.clientId,
-        },
-      }),
+      apiClient.user
+        .getPermissionForUserId({
+          params: { userId: String(options.userId) },
+          query: {
+            clientId: options.auth.clientId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
@@ -89,9 +94,14 @@ export function fetchUserConfigurationOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "user_configurations"]),
     queryFn: () =>
-      apiClient.user.getUserConfigurations({
-        query: { clientId: options.auth.clientId, userId: options.auth.userId },
-      }),
+      apiClient.user
+        .getUserConfigurations({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
@@ -100,12 +110,14 @@ export function fetchActiveUsersCountOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "active_users_count"]),
     queryFn: () =>
-      apiClient.user.getActiveUsersCount({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.user
+        .getActiveUsersCount({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     staleTime: 1000 * 60 * 1, // 1 minute
   });
 }
@@ -114,12 +126,14 @@ export function fetchMaximumUsersCountOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "maximum_users_count"]),
     queryFn: () =>
-      apiClient.user.getMaximumUsersCount({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.user
+        .getMaximumUsersCount({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     staleTime: 1000 * 60 * 1, // 1 minute
   });
 }

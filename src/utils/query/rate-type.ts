@@ -30,13 +30,15 @@ export function fetchRateTypesListOptions(
       sortObjectKeys(options.filters ?? {}),
     ]),
     queryFn: () =>
-      apiClient.rateType.getList({
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          ...options.filters,
-        },
-      }),
+      apiClient.rateType
+        .getList({
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            ...options.filters,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
   });
 }

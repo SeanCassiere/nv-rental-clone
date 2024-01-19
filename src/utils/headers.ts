@@ -1,4 +1,4 @@
-export function getXPaginationFromHeaders(headers: Headers): {
+export function getXPaginationFromHeaders(headers: Headers | null): {
   page: number;
   pageSize: number;
   totalRecords: number;
@@ -12,18 +12,25 @@ export function getXPaginationFromHeaders(headers: Headers): {
   /**
    * @important DO NOT remove the optional chaining as it'll break because of the QueryClient's persist plugin
    * */
-  const paginationHeaders = headers ? headers?.get?.("x-pagination") : "";
+  const paginationHeaders =
+    headers instanceof Headers ? headers?.get?.("x-pagination") : null;
 
-  try {
-    const parse = JSON.parse(paginationHeaders ?? "");
+  if (paginationHeaders) {
+    try {
+      const parse = JSON.parse(paginationHeaders);
 
-    page = parse?.currentPage ? parse?.currentPage : page;
-    pageSize = parse?.pageSize ? parse?.pageSize : pageSize;
-    totalRecords = parse?.totalCount ? parse?.totalCount : totalRecords;
-    totalPages = parse?.totalPages ? parse?.totalPages : totalPages;
-  } catch (error) {
-    console.warn("Failed parsing x-pagination header\n", paginationHeaders);
+      page = parse?.currentPage ? parse?.currentPage : page;
+      pageSize = parse?.pageSize ? parse?.pageSize : pageSize;
+      totalRecords = parse?.totalCount ? parse?.totalCount : totalRecords;
+      totalPages = parse?.totalPages ? parse?.totalPages : totalPages;
+    } catch (error) {
+      console.warn(
+        "Failed parsing x-pagination header\nThe input passed to getXPaginationFromHeaders was",
+        headers
+      );
+    }
   }
+
   return {
     page,
     pageSize,

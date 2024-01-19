@@ -21,14 +21,16 @@ export function fetchTaxesListOptions(
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "list", sortObjectKeys(filters)]),
     queryFn: () =>
-      apiClient.tax.getList({
-        query: {
-          userId: options.auth.userId,
-          clientId: options.auth.clientId,
-          LocationId: filters?.LocationId || "0",
-          AgreementId: filters?.AgreementId,
-        },
-      }),
+      apiClient.tax
+        .getList({
+          query: {
+            userId: options.auth.userId,
+            clientId: options.auth.clientId,
+            LocationId: filters?.LocationId || "0",
+            AgreementId: filters?.AgreementId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
   });
 }

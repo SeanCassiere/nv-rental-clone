@@ -5,6 +5,7 @@ import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
 
+import { getXPaginationFromHeaders } from "../headers";
 import {
   isEnabled,
   makeQueryKey,
@@ -34,7 +35,8 @@ export function fetchCustomersSearchColumnsOptions(options: Auth) {
             ...data,
             body: data.status === 200 ? data.body : [],
           })
-        ),
+        )
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -72,15 +74,22 @@ export function fetchCustomersSearchListFn(
   } & Pagination &
     Auth
 ) {
-  return apiClient.customer.getList({
-    query: {
-      clientId: options.auth.clientId,
-      userId: options.auth.userId,
-      page: options.pagination.page || 1,
-      pageSize: options.pagination.pageSize || 10,
-      ...options.filters,
-    },
-  });
+  return apiClient.customer
+    .getList({
+      query: {
+        clientId: options.auth.clientId,
+        userId: options.auth.userId,
+        page: options.pagination.page || 1,
+        pageSize: options.pagination.pageSize || 10,
+        ...options.filters,
+      },
+    })
+    .then((res) => {
+      const pagination = getXPaginationFromHeaders(
+        res.status === 200 ? res.headers : null
+      );
+      return { ...res, headers: null, pagination };
+    });
 }
 
 export function fetchCustomerTypesOptions(options: Auth) {
@@ -104,15 +113,17 @@ export function fetchCustomerSummaryByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.customerId, "summary"]),
     queryFn: () =>
-      apiClient.customer.getSummaryForId({
-        params: {
-          customerId: String(options.customerId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.customer
+        .getSummaryForId({
+          params: {
+            customerId: String(options.customerId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -121,15 +132,17 @@ export function fetchCustomerNotesByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.customerId, "notes"]),
     queryFn: () =>
-      apiClient.note.getListForRefId({
-        params: {
-          referenceType: "customer",
-          referenceId: String(options.customerId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-        },
-      }),
+      apiClient.note
+        .getListForRefId({
+          params: {
+            referenceType: "customer",
+            referenceId: String(options.customerId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -138,15 +151,17 @@ export function fetchCustomerByIdOptions(options: CustomerId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.customerId]),
     queryFn: () =>
-      apiClient.customer.getById({
-        params: {
-          customerId: String(options.customerId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-        },
-      }),
+      apiClient.customer
+        .getById({
+          params: {
+            customerId: String(options.customerId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }

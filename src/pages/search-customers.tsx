@@ -185,8 +185,10 @@ function CustomerSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const headers = customersData.data?.headers ?? new Headers();
-  const parsedPagination = getXPaginationFromHeaders(headers);
+  const parsedPagination =
+    customersData.status === "success"
+      ? customersData.data.pagination
+      : getXPaginationFromHeaders(null);
 
   const customersList =
     customersData.data?.status === 200 ? customersData.data?.body : [];

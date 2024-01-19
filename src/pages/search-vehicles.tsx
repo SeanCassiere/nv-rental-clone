@@ -195,8 +195,10 @@ function VehiclesSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const headers = vehiclesData.data?.headers ?? new Headers();
-  const parsedPagination = getXPaginationFromHeaders(headers);
+  const parsedPagination =
+    vehiclesData.status === "success"
+      ? vehiclesData.data.pagination
+      : getXPaginationFromHeaders(null);
 
   const vehiclesList =
     vehiclesData.data?.status === 200 ? vehiclesData.data?.body : [];

@@ -5,6 +5,7 @@ import {
   localDateTimeToQueryYearMonthDay,
   localDateTimeWithoutSecondsToQueryYearMonthDay,
 } from "@/utils/date";
+import { getXPaginationFromHeaders } from "@/utils/headers";
 import { sortObjectKeys } from "@/utils/sort";
 
 import { apiClient } from "@/api";
@@ -42,7 +43,8 @@ export function fetchVehiclesSearchColumnsOptions(options: Auth) {
             ...data,
             body: data.status === 200 ? data.body : [],
           })
-        ),
+        )
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -92,24 +94,31 @@ export function fetchVehiclesSearchListFn(
 ) {
   const { StartDate, EndDate, ...filters } = options.filters;
 
-  return apiClient.vehicle.getList({
-    query: {
-      clientId: options.auth.clientId,
-      userId: options.auth.userId,
-      page: options.pagination.page || 1,
-      pageSize: options.pagination.pageSize || 10,
-      ...(StartDate
-        ? {
-            StartDate:
-              localDateTimeWithoutSecondsToQueryYearMonthDay(StartDate),
-          }
-        : {}),
-      ...(EndDate
-        ? { EndDate: localDateTimeWithoutSecondsToQueryYearMonthDay(EndDate) }
-        : {}),
-      ...filters,
-    },
-  });
+  return apiClient.vehicle
+    .getList({
+      query: {
+        clientId: options.auth.clientId,
+        userId: options.auth.userId,
+        page: options.pagination.page || 1,
+        pageSize: options.pagination.pageSize || 10,
+        ...(StartDate
+          ? {
+              StartDate:
+                localDateTimeWithoutSecondsToQueryYearMonthDay(StartDate),
+            }
+          : {}),
+        ...(EndDate
+          ? { EndDate: localDateTimeWithoutSecondsToQueryYearMonthDay(EndDate) }
+          : {}),
+        ...filters,
+      },
+    })
+    .then((res) => {
+      const pagination = getXPaginationFromHeaders(
+        res.status === 200 ? res.headers : null
+      );
+      return { ...res, headers: null, pagination };
+    });
 }
 
 /**
@@ -189,17 +198,19 @@ export function fetchVehiclesByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId]),
     queryFn: () =>
-      apiClient.vehicle.getById({
-        params: {
-          vehicleId: String(options.vehicleId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          clientTime: localDateTimeToQueryYearMonthDay(new Date()),
-          getMakeDetails: "true",
-        },
-      }),
+      apiClient.vehicle
+        .getById({
+          params: {
+            vehicleId: String(options.vehicleId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+            getMakeDetails: "true",
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -212,16 +223,18 @@ export function fetchVehiclesSummaryByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "summary"]),
     queryFn: () =>
-      apiClient.vehicle.getSummaryForId({
-        params: {
-          vehicleId: String(options.vehicleId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-          userId: options.auth.userId,
-          clientTime: localDateTimeToQueryYearMonthDay(new Date()),
-        },
-      }),
+      apiClient.vehicle
+        .getSummaryForId({
+          params: {
+            vehicleId: String(options.vehicleId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+            userId: options.auth.userId,
+            clientTime: localDateTimeToQueryYearMonthDay(new Date()),
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
@@ -234,15 +247,17 @@ export function fetchVehiclesNotesByIdOptions(options: VehicleId & Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, options.vehicleId, "notes"]),
     queryFn: () =>
-      apiClient.note.getListForRefId({
-        params: {
-          referenceType: "vehicle",
-          referenceId: String(options.vehicleId),
-        },
-        query: {
-          clientId: options.auth.clientId,
-        },
-      }),
+      apiClient.note
+        .getListForRefId({
+          params: {
+            referenceType: "vehicle",
+            referenceId: String(options.vehicleId),
+          },
+          query: {
+            clientId: options.auth.clientId,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
   });
 }
