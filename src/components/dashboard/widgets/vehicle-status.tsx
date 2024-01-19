@@ -15,9 +15,9 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useAuthValues } from "@/hooks/internal/useAuthValues";
 import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
-import { useGetDashboardVehicleStatusCounts } from "@/hooks/network/dashboard/useGetDashboardVehicleStatusCounts";
 
 import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { fetchDashboardVehicleStatusCountsOptions } from "@/utils/query/dashboard";
 import type { Auth } from "@/utils/query/helpers";
 import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
@@ -70,11 +70,16 @@ export function VehicleStatusPieChart(props: { locations: string[] } & Auth) {
   const theme = useTernaryDarkMode();
 
   const vehicleTypeId = "0";
-  const statusCounts = useGetDashboardVehicleStatusCounts({
-    locationIds: locations,
-    vehicleType: vehicleTypeId,
-    clientDate: new Date(),
-  });
+  const statusCounts = useQuery(
+    fetchDashboardVehicleStatusCountsOptions({
+      auth: authParams,
+      filters: {
+        vehicleTypeId,
+        locationIds: locations,
+        clientDate: new Date(),
+      },
+    })
+  );
 
   const vehicleStatuses = useQuery(
     fetchVehiclesStatusesOptions({ auth: authParams })
@@ -85,7 +90,8 @@ export function VehicleStatusPieChart(props: { locations: string[] } & Auth) {
     return status?.id || 0;
   };
 
-  const dataList = statusCounts.data || [];
+  const dataList =
+    statusCounts.data?.status === 200 ? statusCounts.data?.body : [];
 
   const getDataListIndexForName = (name: string) => {
     return dataList.findIndex((d) => d.name === name);

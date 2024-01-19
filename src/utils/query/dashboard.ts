@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
 import { getDashboardMessagesAndFilter } from "@/api/get-dashboard-messages";
 
@@ -30,9 +30,9 @@ export function fetchDashboardRentalStatisticsOptions(
   return queryOptions({
     queryKey: makeQueryKey(options, [
       SEGMENT,
-      "statistics",
-      `locations-{${options.filters.locationIds.sort().join("|")}}`,
       localDateToQueryYearMonthDay(options.filters.clientDate),
+      "statistics",
+      `locations_{${options.filters.locationIds.sort().join("|")}}`,
     ]),
     queryFn: () =>
       apiClient.dashboard.getStatisticsForRentals({
@@ -51,5 +51,44 @@ export function fetchDashboardRentalStatisticsOptions(
       }),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 1, // 1 minutes
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function fetchDashboardVehicleStatusCountsOptions(
+  options: {
+    filters: {
+      locationIds: string[];
+      clientDate: Date;
+      vehicleTypeId: string;
+    };
+  } & Auth
+) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      localDateToQueryYearMonthDay(options.filters.clientDate),
+      "sales_status_counts",
+      `locations_{${options.filters.locationIds.sort().join("|")}}`,
+      `vehicle_type_{${options.filters.vehicleTypeId}}`,
+    ]),
+    queryFn: () =>
+      apiClient.dashboard.getStatisticsForVehiclesStatuses({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+          ClientDate: localDateToQueryYearMonthDay(options.filters.clientDate),
+          ...(options.filters.locationIds.length === 0
+            ? {
+                LocationId: "0",
+              }
+            : {
+                MultipleLocation: options.filters.locationIds,
+              }),
+        },
+      }),
+    enabled: isEnabled(options),
+    staleTime: 1000 * 60 * 1, // 1 minutes
+    placeholderData: keepPreviousData,
   });
 }
