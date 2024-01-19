@@ -10,7 +10,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
-      gcTime: 1000 * 60 * 45, // 45 minutes
+      gcTime: 1000 * 60 * 45, // 45 minutes or higher than the persister's maxAge
     },
   },
 });
@@ -23,7 +23,7 @@ persistQueryClient({
   queryClient,
   buster: APP_VERSION,
   persister: localStoragePersister,
-  maxAge: 1000 * 60 * 60, // 1 hour
+  maxAge: 1000 * 60 * 45, // 1 hour
 });
 
 broadcastQueryClient({
