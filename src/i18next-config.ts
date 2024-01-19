@@ -10,7 +10,6 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-import { getAuthToken } from "@/utils/auth";
 import { IS_LOCAL_DEV, STORAGE_KEYS } from "@/utils/constants";
 
 // START: date-fns formats
@@ -125,10 +124,6 @@ i18next
 
         if (i18nFormat === "currency") {
           const { value: numberValue = 0, digits } = options as any;
-
-          const auth = getAuthToken();
-          const clientId = auth?.profile.navotar_clientid;
-          const userId = auth?.profile.navotar_userid;
 
           const digitsCountFromLocal = window.localStorage.getItem(
             STORAGE_KEYS.currencyDigits
