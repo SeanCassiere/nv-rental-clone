@@ -1,76 +1,70 @@
 import React from "react";
-import { useAuth } from "react-oidc-context";
 
 import { useFeature } from "@/hooks/useFeature";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { momentToDateFnsFormat } from "@/schemas/user";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
-import { setLocalStorageForUser } from "@/utils/user-local-storage";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 
 import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 
 export function HiddenFeatureSetter() {
-  const authHook = useAuth();
-  const auth = getAuthFromAuthHook(authHook);
-
   // Set user's default date format
   const [dateFormatFeature] = useFeature("OVERRIDE_DATE_FORMAT");
   const dateFormat = momentToDateFnsFormat(dateFormatFeature || dfnsDateFormat);
+  const [storedDateFormat, setDateFormat] = useLocalStorage(
+    STORAGE_KEYS.dateFormat,
+    dfnsDateFormat
+  );
   React.useEffect(() => {
-    setLocalStorageForUser(
-      auth.clientId,
-      auth.userId,
-      USER_STORAGE_KEYS.dateFormat,
-      dateFormat
-    );
-  }, [auth.clientId, auth.userId, dateFormat]);
+    if (storedDateFormat !== dateFormat) {
+      setDateFormat(dateFormat);
+    }
+  }, [dateFormat, setDateFormat, storedDateFormat]);
 
   // Set user's default time format
   const [timeFormatFeature] = useFeature("OVERRIDE_TIME_FORMAT");
   const timeFormat = momentToDateFnsFormat(timeFormatFeature || dfnsTimeFormat);
+  const [storedTimeFormat, setTimeFormat] = useLocalStorage(
+    STORAGE_KEYS.timeFormat,
+    dfnsTimeFormat
+  );
   React.useEffect(() => {
-    setLocalStorageForUser(
-      auth.clientId,
-      auth.userId,
-      USER_STORAGE_KEYS.timeFormat,
-      timeFormat
-    );
-  }, [auth.clientId, auth.userId, timeFormat]);
+    if (storedTimeFormat !== timeFormat) {
+      setTimeFormat(timeFormat);
+    }
+  }, [setTimeFormat, storedTimeFormat, timeFormat]);
 
   // Set user's default row count
   const [tableRowCountFeature] = useFeature("DEFAULT_ROW_COUNT");
-  const tableRowCount = tableRowCountFeature || APP_DEFAULTS.tableRowCount;
+  const [storedTableRowCount, setTableRowCount] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
   React.useEffect(() => {
-    setLocalStorageForUser(
-      auth.clientId,
-      auth.userId,
-      USER_STORAGE_KEYS.tableRowCount,
-      tableRowCount
-    );
-  }, [auth.clientId, auth.userId, tableRowCount]);
+    if (tableRowCountFeature && tableRowCountFeature !== storedTableRowCount) {
+      setTableRowCount(tableRowCountFeature);
+    }
+  }, [setTableRowCount, storedTableRowCount, tableRowCountFeature]);
 
   // Set user's default currency digits for 3 or 4 decimal places
   const [currencyDigitCount3Feature] = useFeature("G_C_AUTO_BODY_3_DECIMALS");
   const [currencyDigitCount4Feature] = useFeature("G_C_AUTO_BODY_4_DECIMALS");
+  const [_, setStoredDigits] = useLocalStorage(
+    STORAGE_KEYS.currencyDigits,
+    STORAGE_DEFAULTS.currencyDigits
+  );
   React.useEffect(() => {
-    setLocalStorageForUser(
-      auth.clientId,
-      auth.userId,
-      USER_STORAGE_KEYS.currencyDigits,
-      currencyDigitCount4Feature
-        ? "4"
-        : currencyDigitCount3Feature
-          ? "3"
-          : APP_DEFAULTS.currencyDigits
-    );
-  }, [
-    auth.clientId,
-    auth.userId,
-    currencyDigitCount3Feature,
-    currencyDigitCount4Feature,
-  ]);
+    if (currencyDigitCount4Feature) {
+      setStoredDigits("4");
+      return;
+    }
+    if (currencyDigitCount3Feature) {
+      setStoredDigits("3");
+      return;
+    }
+  }, [currencyDigitCount3Feature, currencyDigitCount4Feature, setStoredDigits]);
 
   return null;
 }

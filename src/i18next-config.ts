@@ -1,17 +1,17 @@
-import { format as dateFnsFormat, type Locale } from "date-fns";
+import { format as dateFnsFormat } from "date-fns/format";
 import {
   enNZ as enNZLocale,
   enUS as enUSLocale,
   ru as ruLocale,
+  type Locale,
 } from "date-fns/locale";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-import { getAuthToken } from "./utils/auth";
-import { IS_LOCAL_DEV, USER_STORAGE_KEYS } from "./utils/constants";
-import { getLocalStorageForUser } from "./utils/user-local-storage";
+import { getAuthToken } from "@/utils/auth";
+import { IS_LOCAL_DEV, STORAGE_KEYS } from "@/utils/constants";
 
 // START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";
@@ -80,22 +80,12 @@ i18next
       escapeValue: false,
       format: (value, i18nFormat, lng, options) => {
         if (i18nFormat === "datetime") {
-          const auth = getAuthToken();
-          const clientId = auth?.profile.navotar_clientid;
-          const userId = auth?.profile.navotar_userid;
-
           const dateFormat =
-            getLocalStorageForUser(
-              clientId ?? "",
-              userId ?? "",
-              USER_STORAGE_KEYS.dateFormat
-            ) || dfnsDateFormat;
+            window.localStorage.getItem(STORAGE_KEYS.dateFormat) ||
+            dfnsDateFormat;
           const timeFormat =
-            getLocalStorageForUser(
-              clientId ?? "",
-              userId ?? "",
-              USER_STORAGE_KEYS.timeFormat
-            ) || dfnsTimeFormat;
+            window.localStorage.getItem(STORAGE_KEYS.timeFormat) ||
+            dfnsTimeFormat;
           const dfnsDateFormatWithTime = `${dateFormat} ${timeFormat}`;
 
           try {
@@ -120,16 +110,9 @@ i18next
         }
 
         if (i18nFormat === "date") {
-          const auth = getAuthToken();
-          const clientId = auth?.profile.navotar_clientid;
-          const userId = auth?.profile.navotar_userid;
-
           const dateFormat =
-            getLocalStorageForUser(
-              clientId ?? "",
-              userId ?? "",
-              USER_STORAGE_KEYS.dateFormat
-            ) || dfnsDateFormat;
+            window.localStorage.getItem(STORAGE_KEYS.dateFormat) ||
+            dfnsDateFormat;
           try {
             return dateFnsFormat(new Date(value), dateFormat, {
               locale: getDateFnsLocale(lng),
@@ -147,13 +130,11 @@ i18next
           const clientId = auth?.profile.navotar_clientid;
           const userId = auth?.profile.navotar_userid;
 
-          const digitsCountFromLocal = getLocalStorageForUser(
-            clientId ?? "",
-            userId ?? "",
-            USER_STORAGE_KEYS.currencyDigits
+          const digitsCountFromLocal = window.localStorage.getItem(
+            STORAGE_KEYS.currencyDigits
           );
-
           const digitsCountParsed = parseInt(digitsCountFromLocal ?? "2", 10);
+
           const digitsToShow =
             typeof digits !== "undefined"
               ? typeof digits === "number"
@@ -162,11 +143,7 @@ i18next
               : digitsCountParsed;
 
           const currency =
-            getLocalStorageForUser(
-              clientId ?? "",
-              userId ?? "",
-              USER_STORAGE_KEYS.currency
-            ) ?? "USD";
+            window.localStorage.getItem(STORAGE_KEYS.currency) ?? "USD";
 
           try {
             if (currency !== "" && currency) {

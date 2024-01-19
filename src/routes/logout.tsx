@@ -2,8 +2,6 @@ import { Route } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
-import { removeAllLocalStorageKeysForUser } from "@/utils/user-local-storage";
-
 import { rootRoute } from "./__root";
 
 export const logoutRoute = new Route({
@@ -20,11 +18,11 @@ export const logoutRoute = new Route({
       });
     }
 
-    const clientId = auth.user?.profile.navotar_clientid || "";
-    const userId = auth.user?.profile.navotar_userid || "";
-
-    if (clientId && userId) {
-      removeAllLocalStorageKeysForUser(clientId, userId);
+    if (typeof window !== "undefined") {
+      const localStorageKeyPrefix = `app-runtime:`;
+      Object.keys(window.localStorage)
+        .filter((key) => key.startsWith(localStorageKeyPrefix))
+        .forEach((key) => window.localStorage.removeItem(key));
     }
 
     await auth.signoutRedirect();

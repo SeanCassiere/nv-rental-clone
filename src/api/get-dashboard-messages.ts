@@ -3,10 +3,9 @@ import { isBefore } from "date-fns/isBefore";
 
 import type { ServerMessage } from "@/schemas/dashboard";
 
-import { USER_STORAGE_KEYS } from "@/utils/constants";
+import { STORAGE_KEYS } from "@/utils/constants";
 import { tryParseJson } from "@/utils/parse";
 import type { Auth } from "@/utils/query/helpers";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { apiClient } from "@/api";
 
@@ -34,11 +33,7 @@ export async function getDashboardMessagesAndFilter(options: Auth) {
       return [];
     })
     .then((res) => {
-      const local = getLocalStorageForUser(
-        options.auth.clientId,
-        options.auth.userId,
-        USER_STORAGE_KEYS.dismissedMessages
-      );
+      const local = window.localStorage.getItem(STORAGE_KEYS.dismissedMessages);
       const dismissedMessageIds = tryParseJson<string[]>(local, []);
 
       const messages = res.filter((msg) => {

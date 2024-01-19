@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -28,8 +27,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
@@ -47,7 +47,6 @@ import {
   fetchVehiclesSearchListFn,
   fetchVehiclesSearchListOptions,
 } from "@/utils/query/vehicle";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickLookupWidget = (props: Auth) => {
   return (
@@ -81,12 +80,10 @@ export function QuickLookupForm(props: Auth) {
 
   const authParams = props.auth;
 
-  const rowCountStr =
-    getLocalStorageForUser(
-      authParams.clientId,
-      authParams.userId,
-      USER_STORAGE_KEYS.tableRowCount
-    ) || APP_DEFAULTS.tableRowCount;
+  const [rowCountStr] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   const form = useForm({

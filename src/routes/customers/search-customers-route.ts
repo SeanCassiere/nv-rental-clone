@@ -3,7 +3,7 @@ import { lazyRouteComponent, Route } from "@tanstack/react-router";
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
-import { APP_DEFAULTS } from "@/utils/constants";
+import { STORAGE_DEFAULTS } from "@/utils/constants";
 import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
 import {
   fetchCustomersSearchColumnsOptions,
@@ -19,7 +19,7 @@ export const searchCustomersRoute = new Route({
   preSearchFilters: [
     (search) => ({
       page: search?.page || 1,
-      size: search?.size || parseInt(APP_DEFAULTS.tableRowCount),
+      size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
       ...(search.filters ? { filters: search.filters } : {}),
     }),
   ],

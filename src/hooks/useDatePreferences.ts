@@ -1,34 +1,23 @@
-import { useAuth } from "react-oidc-context";
+import React from "react";
 
-import { USER_STORAGE_KEYS } from "@/utils/constants";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 
+import { useLocalStorage } from "./useLocalStorage";
+
 export function useDatePreference() {
-  const auth = useAuth();
+  const [dateFormat] = useLocalStorage(STORAGE_KEYS.dateFormat, dfnsDateFormat);
+  const [timeFormat] = useLocalStorage(STORAGE_KEYS.timeFormat, dfnsTimeFormat);
 
-  const clientId = auth.user?.profile.navotar_clientid;
-  const userId = auth.user?.profile.navotar_userid;
-
-  const fromStorageDate =
-    clientId && userId
-      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.dateFormat)
-      : null;
-  const fromStorageTime =
-    clientId && userId
-      ? getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.timeFormat)
-      : null;
-
-  const defaultDateTimeFormat = `${dfnsDateFormat} ${dfnsTimeFormat}`;
-  const parsedUserDateTimeFormat = `${fromStorageDate} ${fromStorageTime}`;
+  const dateTimeFormat = React.useMemo(
+    () => `${dateFormat} ${timeFormat}`,
+    [dateFormat, timeFormat]
+  );
 
   return {
-    dateFormat: fromStorageDate || dfnsDateFormat,
-    timeFormat: fromStorageTime || dfnsTimeFormat,
-    dateTimeFormat:
-      fromStorageDate && fromStorageTime
-        ? parsedUserDateTimeFormat
-        : defaultDateTimeFormat,
+    dateFormat,
+    timeFormat,
+    dateTimeFormat,
   } as const;
 }

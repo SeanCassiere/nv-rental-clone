@@ -4,25 +4,21 @@ export const apiBaseUrl = import.meta.env.VITE_APP_API_URI
   ? `${import.meta.env.VITE_APP_API_URI}/api`
   : "https://testapi.appnavotar.com/api";
 
-export const USER_STORAGE_KEYS = {
-  dateFormat: "date-format",
-  timeFormat: "time-format",
-  dismissedMessages: "dismissed-messages",
-  tableRowCount: "table-row-count",
-  currency: "currency",
-  currencyDigits: "currency-digits",
+export const STORAGE_KEYS = {
   theme: "theme",
+  dateFormat: "app-runtime:date-format",
+  timeFormat: "app-runtime:time-format",
+  dismissedMessages: "app-runtime:dismissed-messages",
+  tableRowCount: "app-runtime:table-row-count",
+  currency: "app-runtime:currency",
+  currencyDigits: "app-runtime:currency-digits",
 } as const;
 
-export const APP_STORAGE_KEYS = {
-  theme: "theme",
-} as const;
-
-export const APP_DEFAULTS = {
+export const STORAGE_DEFAULTS = {
   tableRowCount: "10",
   currencyDigits: "2",
-  theme: "system",
-} as const;
+  theme: "system" as const,
+};
 
 export const OIDC_AUTHORITY =
   import.meta.env.VITE_APP_AUTH_AUTHORITY || "https://testauth.appnavotar.com";

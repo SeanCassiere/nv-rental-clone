@@ -4,7 +4,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useUpdateEffect } from "@/hooks/useUpdateEffect";
 
-import { APP_DEFAULTS, APP_STORAGE_KEYS } from "@/utils/constants";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import { setDomClass } from "@/utils/dom";
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
@@ -22,8 +22,8 @@ export function useTernaryDarkMode(): UseTernaryDarkModeOutput {
   const isDarkOS = useMediaQuery(COLOR_SCHEME_QUERY);
   const [ternaryDarkMode, setTernaryDarkMode] =
     useLocalStorage<TernaryDarkMode>(
-      APP_STORAGE_KEYS.theme,
-      APP_DEFAULTS.theme
+      STORAGE_KEYS.theme,
+      STORAGE_DEFAULTS.theme
     );
   const [isDarkMode, setDarkMode] = useState<boolean>(isDarkOS);
 

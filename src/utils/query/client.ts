@@ -1,7 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { USER_STORAGE_KEYS } from "@/utils/constants";
-import { setLocalStorageForUser } from "@/utils/user-local-storage";
+import { STORAGE_KEYS } from "@/utils/constants";
 
 import { apiClient } from "@/api";
 
@@ -21,12 +20,7 @@ export function fetchClientProfileOptions(options: Auth) {
           if (res.status === 200) {
             const currency = res.body.currency || "USD";
 
-            setLocalStorageForUser(
-              options.auth.clientId,
-              options.auth.userId,
-              USER_STORAGE_KEYS.currency,
-              currency
-            );
+            window.localStorage.setItem(STORAGE_KEYS.currency, currency);
           }
           return res;
         }),
