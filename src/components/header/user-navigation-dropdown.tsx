@@ -24,6 +24,7 @@ import { icons } from "@/components/ui/icons";
 
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
+import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
 import { fetchUserByIdOptions } from "@/utils/query/user";
 
 import { useGlobalDialogContext } from "@/context/modals";
@@ -73,11 +74,13 @@ export const UserNavigationDropdown = () => {
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-64" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.userName}</p>
-            <p className="text-xs leading-none text-muted-foreground">
+            <p className="truncate font-medium leading-none">
+              {user?.userName}
+            </p>
+            <p className="truncate text-sm leading-none text-muted-foreground">
               {user?.email}
             </p>
           </div>
@@ -139,7 +142,7 @@ export const UserNavigationDropdown = () => {
                     value="system"
                     onSelect={(evt) => evt.preventDefault()}
                   >
-                    <span className="inline-flex w-full justify-between">
+                    <span className="inline-flex w-full items-center justify-between">
                       System
                       <icons.System className="ml-2 h-3.5 w-3.5" />
                     </span>
@@ -148,7 +151,7 @@ export const UserNavigationDropdown = () => {
                     value="light"
                     onSelect={(evt) => evt.preventDefault()}
                   >
-                    <span className="inline-flex w-full justify-between">
+                    <span className="inline-flex w-full items-center justify-between">
                       Light
                       <icons.Sun className="ml-2 h-3.5 w-3.5" />
                     </span>
@@ -157,7 +160,7 @@ export const UserNavigationDropdown = () => {
                     value="dark"
                     onSelect={(evt) => evt.preventDefault()}
                   >
-                    <span className="inline-flex w-full justify-between">
+                    <span className="inline-flex w-full items-center justify-between">
                       Dark
                       <icons.Moon className="ml-2 h-3.5 w-3.5" />
                     </span>
@@ -174,6 +177,10 @@ export const UserNavigationDropdown = () => {
             Log out
           </DropdownMenuItem>
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel className="-mx-1 -my-1 bg-muted px-3 py-2.5 text-xs font-normal leading-none text-muted-foreground">
+          {APP_VERSION} {IS_LOCAL_DEV ? "(Development)" : "(Production)"}
+        </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>
   );
