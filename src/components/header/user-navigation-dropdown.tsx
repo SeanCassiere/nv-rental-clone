@@ -142,7 +142,7 @@ export const UserNavigationDropdown = () => {
                     value="system"
                     onSelect={(evt) => evt.preventDefault()}
                   >
-                    <span className="inline-flex w-full justify-between">
+                    <span className="inline-flex w-full items-center justify-between">
                       System
                       <icons.System className="ml-2 h-3.5 w-3.5" />
                     </span>
@@ -151,7 +151,7 @@ export const UserNavigationDropdown = () => {
                     value="light"
                     onSelect={(evt) => evt.preventDefault()}
                   >
-                    <span className="inline-flex w-full justify-between">
+                    <span className="inline-flex w-full items-center justify-between">
                       Light
                       <icons.Sun className="ml-2 h-3.5 w-3.5" />
                     </span>
@@ -160,7 +160,7 @@ export const UserNavigationDropdown = () => {
                     value="dark"
                     onSelect={(evt) => evt.preventDefault()}
                   >
-                    <span className="inline-flex w-full justify-between">
+                    <span className="inline-flex w-full items-center justify-between">
                       Dark
                       <icons.Moon className="ml-2 h-3.5 w-3.5" />
                     </span>
