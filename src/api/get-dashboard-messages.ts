@@ -1,43 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
-import { isAfter, isBefore } from "date-fns";
-import { useAuth } from "react-oidc-context";
+import { isAfter } from "date-fns/isAfter";
+import { isBefore } from "date-fns/isBefore";
 
 import { USER_STORAGE_KEYS } from "@/utils/constants";
 import { tryParseJson } from "@/utils/parse";
-import { dashboardQKeys } from "@/utils/query-key";
+import type { Auth } from "@/utils/query/helpers";
 import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { apiClient } from "@/api";
 
-export function useGetDashboardMessages() {
-  const auth = useAuth();
-
-  const query = useQuery({
-    queryKey: dashboardQKeys.messages(),
-    queryFn: async () => {
-      return await fetchDashboardMessagesListModded(
-        {
-          query: {
-            clientId: auth.user?.profile.navotar_clientid || "",
-          },
-        },
-        {
-          userId: auth.user?.profile.navotar_userid || "",
-        }
-      );
-    },
-    enabled: auth.isAuthenticated,
-    staleTime: 1000 * 60 * 1, // 1 minute
-  });
-  return query;
-}
-
-export async function fetchDashboardMessagesListModded(
-  opts: Parameters<(typeof apiClient)["dashboard"]["getAdminMessages"]>[0],
-  extra: { userId: string }
-) {
+/**
+ * Retrieves dashboard messages and filters them based on their active status, sent date, and expiry date.
+ * Dismissed messages are excluded from the result.
+ *
+ * @param options - The authentication options.
+ * @returns A promise that resolves to an array of sorted and filtered dashboard messages.
+ */
+export async function getDashboardMessagesAndFilter(options: Auth) {
   return await apiClient.dashboard
-    .getAdminMessages(opts)
+    .getAdminMessages({ query: { clientId: options.auth.clientId } })
     .then((res) => {
       if (res.status === 200) {
         const allMessages = res.body;
@@ -80,8 +60,8 @@ export async function fetchDashboardMessagesListModded(
     })
     .then((res) => {
       const local = getLocalStorageForUser(
-        opts.query.clientId,
-        extra.userId,
+        options.auth.clientId,
+        options.auth.userId,
         USER_STORAGE_KEYS.dismissedMessages
       );
       const dismissedMessageIds = tryParseJson<string[]>(local, []);
@@ -94,9 +74,5 @@ export async function fetchDashboardMessagesListModded(
       });
 
       return messages;
-    })
-    .catch((e) => {
-      console.error(e);
-      throw e;
     });
 }

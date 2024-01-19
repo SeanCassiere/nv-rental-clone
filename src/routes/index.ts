@@ -1,11 +1,10 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { fetchDashboardMessagesListModded } from "@/hooks/network/dashboard/useGetDashboardMessages";
-
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
-import { getAuthToken } from "@/utils/auth";
+import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
 import { dashboardQKeys, locationQKeys } from "@/utils/query-key";
+import { fetchDashboardMessagesOptions } from "@/utils/query/dashboard";
 
 import { rootRoute } from "./__root";
 
@@ -13,30 +12,22 @@ export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
-  loader: async ({ context: { queryClient, apiClient } }) => {
+  beforeLoad: ({ context }) => {
+    const auth = getAuthFromRouterContext(context);
+    return {
+      authParams: auth,
+      dashboardMessagesOptions: fetchDashboardMessagesOptions({ auth }),
+    };
+  },
+  loader: async ({ context }) => {
+    const { queryClient, apiClient, dashboardMessagesOptions } = context;
+    const promises = [];
+
+    // get messages
+    promises.push(queryClient.ensureQueryData(dashboardMessagesOptions));
+
     const auth = getAuthToken();
     if (auth) {
-      const promises = [];
-      // get messages
-      const messagesKey = dashboardQKeys.messages();
-      promises.push(
-        queryClient.ensureQueryData({
-          queryKey: messagesKey,
-          queryFn: () =>
-            fetchDashboardMessagesListModded(
-              {
-                query: {
-                  clientId: auth.profile.navotar_clientid,
-                },
-              },
-              {
-                userId: auth.profile.navotar_userid,
-              }
-            ),
-          staleTime: 1000 * 60 * 1,
-        })
-      );
-
       // get widgets
       const widgetsKey = dashboardQKeys.widgets();
       promises.push(
@@ -67,9 +58,9 @@ export const indexRoute = new Route({
             }),
         })
       );
-
-      await Promise.all(promises);
     }
+
+    await Promise.all(promises);
     return;
   },
   component: lazyRouteComponent(() => import("@/pages/dashboard")),
