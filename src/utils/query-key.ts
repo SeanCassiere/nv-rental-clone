@@ -1,14 +1,6 @@
-import { localDateToQueryYearMonthDay } from "@/utils/date";
-
 export const dashboardQKeys = {
   rootKey: "dashboard",
   widgets: () => [dashboardQKeys.rootKey, "widgets"],
-  stats: (date: Date, locations: string[]) => [
-    dashboardQKeys.rootKey,
-    "statistics",
-    `locations-[${locations.sort().join(",")}]`,
-    localDateToQueryYearMonthDay(date),
-  ],
   salesStatus: (opts: { locations: string[] }) => [
     dashboardQKeys.rootKey,
     "sales-status",

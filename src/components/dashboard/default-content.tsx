@@ -1,4 +1,5 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { add } from "date-fns";
 
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
@@ -19,22 +20,29 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/hooks/internal/usePermission";
 import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
-import { useGetDashboardStats } from "@/hooks/network/dashboard/useGetDashboardStats";
 import { useGetDashboardWidgetList } from "@/hooks/network/dashboard/useGetDashboardWidgetList";
 import { useSaveDashboardWidgetList } from "@/hooks/network/dashboard/useSaveDashboardWidgetList";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
+import { fetchDashboardRentalStatisticsOptions } from "@/utils/query/dashboard";
+import type { Auth } from "@/utils/query/helpers";
+
 import { cn } from "@/utils";
 
-interface DefaultDashboardContentProps {
+interface DefaultDashboardContentProps extends Auth {
   locations: string[];
   showWidgetsPicker: boolean;
   onShowWidgetPicker: (show: boolean) => void;
 }
 
 const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
-  const { locations, showWidgetsPicker, onShowWidgetPicker } = props;
+  const {
+    locations,
+    showWidgetsPicker,
+    onShowWidgetPicker,
+    auth: authParams,
+  } = props;
 
   const tomorrowTabScreenSetting = useScreenSetting(
     "Dashboard",
@@ -50,13 +58,18 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
 
   const currentDate = new Date();
 
-  const statistics = useGetDashboardStats({
-    locationIds: locations,
-    clientDate:
-      statisticsTab === "tomorrow"
-        ? add(currentDate, { days: 1 })
-        : currentDate,
-  });
+  const statistics = useQuery(
+    fetchDashboardRentalStatisticsOptions({
+      auth: authParams,
+      filters: {
+        locationIds: locations,
+        clientDate:
+          statisticsTab === "tomorrow"
+            ? add(currentDate, { days: 1 })
+            : currentDate,
+      },
+    })
+  );
 
   const widgetList = useGetDashboardWidgetList();
   const widgets = React.useMemo(() => {
@@ -96,10 +109,18 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
             </div>
           )}
           <TabsContent value="today">
-            <DashboardStatsBlock statistics={statistics.data} />
+            <DashboardStatsBlock
+              statistics={
+                statistics.data?.status === 200 ? statistics.data.body : null
+              }
+            />
           </TabsContent>
           <TabsContent value="tomorrow">
-            <DashboardStatsBlock statistics={statistics.data} />
+            <DashboardStatsBlock
+              statistics={
+                statistics.data?.status === 200 ? statistics.data.body : null
+              }
+            />
           </TabsContent>
         </Tabs>
       )}
