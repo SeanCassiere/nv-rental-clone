@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useDateInput } from "@/hooks/internal/useDateInput";
+import { useDateInput } from "@/hooks/useDateInput";
 
 import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
 

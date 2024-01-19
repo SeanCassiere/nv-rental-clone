@@ -18,8 +18,8 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { usePermission } from "@/hooks/internal/usePermission";
-import { useScreenSetting } from "@/hooks/internal/useScreenSetting";
+import { usePermission } from "@/hooks/usePermission";
+import { useScreenSetting } from "@/hooks/useScreenSetting";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 

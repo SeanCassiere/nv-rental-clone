@@ -16,20 +16,19 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGlobalDialogContext } from "@/hooks/context/modals";
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
-import { useDebounce } from "@/hooks/internal/useDebounce";
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import { fetchAgreementsSearchListOptions } from "@/utils/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
 import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
 import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
 import type { GlobalSearchReturnType } from "@/types/search";
 
+import { useGlobalDialogContext } from "@/context/modals";
 import { cn, IsMacLike } from "@/utils";
 
 export const CommandMenu = () => {
@@ -40,14 +39,10 @@ export const CommandMenu = () => {
 
   const [text, setText] = React.useState("");
 
-  const authValues = useAuthValues();
-
-  const rowCountStr =
-    getLocalStorageForUser(
-      authValues.clientId,
-      authValues.userId,
-      USER_STORAGE_KEYS.tableRowCount
-    ) || APP_DEFAULTS.tableRowCount;
+  const [rowCountStr] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =

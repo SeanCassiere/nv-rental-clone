@@ -3,25 +3,15 @@ import { type TCustomerSearchQuery } from "@/schemas/customer";
 import { type TReservationSearchQuery } from "@/schemas/reservation";
 import { type TVehicleSearchQuery } from "@/schemas/vehicle";
 
-import { getAuthToken } from "./auth";
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "./constants";
-import { getLocalStorageForUser } from "./user-local-storage";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "./constants";
 
 export function normalizeAgreementListSearchParams(
   search: TAgreementSearchQuery
 ) {
   const { page, size, filters } = search;
 
-  const auth = getAuthToken();
-
-  const localRowCountStr = auth
-    ? getLocalStorageForUser(
-        auth.profile.navotar_clientid,
-        auth.profile.navotar_userid,
-        USER_STORAGE_KEYS.tableRowCount
-      )
-    : null;
-  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
+  const rowCountStr = window.localStorage.getItem(STORAGE_KEYS.tableRowCount);
+  const rowCount = parseInt(rowCountStr || STORAGE_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     AgreementStatusName: filters?.AgreementStatusName || undefined,
@@ -55,16 +45,8 @@ export function normalizeCustomerListSearchParams(
 ) {
   const { page, size, filters } = search;
 
-  const auth = getAuthToken();
-
-  const localRowCountStr = auth
-    ? getLocalStorageForUser(
-        auth.profile.navotar_clientid,
-        auth.profile.navotar_userid,
-        USER_STORAGE_KEYS.tableRowCount
-      )
-    : null;
-  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
+  const rowCountStr = window.localStorage.getItem(STORAGE_KEYS.tableRowCount);
+  const rowCount = parseInt(rowCountStr || STORAGE_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     Active: typeof filters?.Active !== "undefined" ? filters?.Active : "true",
@@ -85,16 +67,8 @@ export function normalizeReservationListSearchParams(
 ) {
   const { page, size, filters } = search;
 
-  const auth = getAuthToken();
-
-  const localRowCountStr = auth
-    ? getLocalStorageForUser(
-        auth.profile.navotar_clientid,
-        auth.profile.navotar_userid,
-        USER_STORAGE_KEYS.tableRowCount
-      )
-    : null;
-  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
+  const rowCountStr = window.localStorage.getItem(STORAGE_KEYS.tableRowCount);
+  const rowCount = parseInt(rowCountStr || STORAGE_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     Statuses: filters?.Statuses || [],
@@ -120,16 +94,8 @@ export function normalizeReservationListSearchParams(
 export function normalizeVehicleListSearchParams(search: TVehicleSearchQuery) {
   const { page, size, filters } = search;
 
-  const auth = getAuthToken();
-
-  const localRowCountStr = auth
-    ? getLocalStorageForUser(
-        auth.profile.navotar_clientid,
-        auth.profile.navotar_userid,
-        USER_STORAGE_KEYS.tableRowCount
-      )
-    : null;
-  const rowCount = parseInt(localRowCountStr || APP_DEFAULTS.tableRowCount, 10);
+  const rowCountStr = window.localStorage.getItem(STORAGE_KEYS.tableRowCount);
+  const rowCount = parseInt(rowCountStr || STORAGE_DEFAULTS.tableRowCount, 10);
 
   const searchFilters = {
     Active: typeof filters?.Active !== "undefined" ? filters?.Active : "true",

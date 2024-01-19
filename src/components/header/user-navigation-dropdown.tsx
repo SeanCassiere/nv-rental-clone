@@ -22,11 +22,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { icons } from "@/components/ui/icons";
 
-import { useGlobalDialogContext } from "@/hooks/context/modals";
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
 import { fetchUserByIdOptions } from "@/utils/query/user";
 
+import { useGlobalDialogContext } from "@/context/modals";
 import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/utils";
 
 export const UserNavigationDropdown = () => {

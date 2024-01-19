@@ -11,8 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
 
-import { useReportContext } from "@/hooks/context/view-report";
-import { useReportLookupLists } from "@/hooks/internal/useReportLookupLists";
+import { useReportLookupLists } from "@/hooks/useReportLookupLists";
+
+import { useReportContext } from "@/context/view-report";
 
 export const ReportFilters = () => {
   const { t } = useTranslation();

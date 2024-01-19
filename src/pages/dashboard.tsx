@@ -24,8 +24,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
-import { useFeature } from "@/hooks/internal/useFeature";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useFeature } from "@/hooks/useFeature";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { fetchLocationsListOptions } from "@/utils/query/location";

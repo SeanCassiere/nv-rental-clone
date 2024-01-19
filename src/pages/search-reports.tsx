@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { searchReportsRoute } from "@/routes/reports/search-reports-route";
 

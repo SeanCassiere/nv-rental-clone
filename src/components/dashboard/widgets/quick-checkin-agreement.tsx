@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -21,13 +20,14 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
 import type { Auth } from "@/utils/query/helpers";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 const QuickCheckinAgreementWidget = (props: Auth) => {
   return (
@@ -53,14 +53,12 @@ function buildFormSchema() {
   });
 }
 
-export function QuickCheckinAgreementForm(_: Auth) {
+export function QuickCheckinAgreementForm(props: Auth) {
+  const { auth: authParams } = props;
   const { t } = useTranslation();
-  const auth = useAuth();
-  const qc = useQueryClient();
-  const navigate = useNavigate();
 
-  const clientId = auth?.user?.profile?.navotar_clientid || "";
-  const userId = auth?.user?.profile?.navotar_userid || "";
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(buildFormSchema()),
@@ -70,9 +68,10 @@ export function QuickCheckinAgreementForm(_: Auth) {
     },
   });
 
-  const rowCountStr =
-    getLocalStorageForUser(clientId, userId, USER_STORAGE_KEYS.tableRowCount) ||
-    APP_DEFAULTS.tableRowCount;
+  const [rowCountStr] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   const search = useMutation({
@@ -88,7 +87,7 @@ export function QuickCheckinAgreementForm(_: Auth) {
         form.reset();
 
         const qk = fetchAgreementsSearchListOptions(variables).queryKey;
-        qc.setQueryData(qk, () => data);
+        queryClient.setQueryData(qk, () => data);
 
         navigate({
           to: "/agreements",
@@ -135,10 +134,7 @@ export function QuickCheckinAgreementForm(_: Auth) {
           }
 
           search.mutate({
-            auth: {
-              clientId,
-              userId,
-            },
+            auth: authParams,
             filters: {
               currentDate: new Date(),
               Statuses: ["2"],

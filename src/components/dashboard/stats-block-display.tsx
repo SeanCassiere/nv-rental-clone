@@ -4,13 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { icons, type LucideIcon } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import type { TDashboardStats } from "@/schemas/dashboard";
 
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import { localDateToQueryYearMonthDay } from "@/utils/date";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;
@@ -22,14 +21,10 @@ const DashboardStatsBlock = ({
 }: {
   statistics: TDashboardStats | null | undefined;
 }) => {
-  const auth = useAuthValues();
-
-  const rowCountStr =
-    getLocalStorageForUser(
-      auth.clientId,
-      auth.userId,
-      USER_STORAGE_KEYS.tableRowCount
-    ) || APP_DEFAULTS.tableRowCount;
+  const [rowCountStr] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   return (

@@ -1,4 +1,4 @@
-export type AppPrimaryModuleType =
+export type AppModule =
   | "reservations"
   | "agreements"
   | "customers"

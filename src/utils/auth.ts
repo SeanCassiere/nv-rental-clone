@@ -42,20 +42,17 @@ export function getAuthToken() {
 export function getAuthFromAuthHook(auth: MyRouterContext["auth"]) {
   let clientId = "";
   let userId = "";
-  let accessToken = "";
 
   if (
     auth.user &&
     auth.user.profile.navotar_clientid &&
-    auth.user.profile.navotar_userid &&
-    auth.user.access_token
+    auth.user.profile.navotar_userid
   ) {
     clientId = auth.user.profile.navotar_clientid;
     userId = auth.user.profile.navotar_userid;
-    accessToken = auth.user.access_token;
   }
 
-  return { clientId, userId, accessToken };
+  return { clientId, userId };
 }
 
 export function getAuthFromRouterContext(context: MyRouterContext) {

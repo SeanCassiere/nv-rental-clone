@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, type LinkOptions } from "@tanstack/react-router";
 
-import { useFeature } from "@/hooks/internal/useFeature";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-import { APP_DEFAULTS } from "@/utils/constants";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 
 import { cn } from "@/utils";
 
@@ -26,10 +26,13 @@ type Props = React.JSX.IntrinsicElements["nav"];
 export const AppNavigation = (props: Props) => {
   const { className = "", ...navProps } = props;
 
-  const [featureRowCount] = useFeature("DEFAULT_ROW_COUNT");
+  const [tableRowCountStr] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
   const tableRowCount = React.useMemo(
-    () => parseInt(featureRowCount || APP_DEFAULTS.tableRowCount, 10),
-    [featureRowCount]
+    () => parseInt(tableRowCountStr, 10),
+    [tableRowCountStr]
   );
 
   const links: AppNavigationLinks = [

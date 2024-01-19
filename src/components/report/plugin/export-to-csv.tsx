@@ -21,10 +21,9 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 
-import { useReportContext } from "@/hooks/context/view-report";
-
 import type { ReportTablePlugin } from "@/types/report";
 
+import { useReportContext } from "@/context/view-report";
 import { downloadDataToCsv, sanitizeFilename } from "@/utils";
 
 const DEFAULT_NAME = "report";

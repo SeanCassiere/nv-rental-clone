@@ -7,9 +7,9 @@ import ProtectorShield from "@/components/protector-shield";
 import { ViewReport } from "@/components/report/page";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { ReportContextProvider } from "@/hooks/context/view-report";
-
 import { viewReportByIdRoute } from "@/routes/reports/report-id-route";
+
+import { ReportContextProvider } from "@/context/view-report";
 
 const routeApi = new RouteApi({ id: "/reports/$reportId/" });
 

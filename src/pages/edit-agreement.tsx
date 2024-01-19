@@ -5,7 +5,7 @@ import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { editAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
 

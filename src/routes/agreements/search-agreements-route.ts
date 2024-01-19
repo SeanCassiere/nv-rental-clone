@@ -2,15 +2,14 @@ import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
-import { getAuthFromRouterContext, getAuthToken } from "@/utils/auth";
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { getAuthFromRouterContext } from "@/utils/auth";
+import { STORAGE_DEFAULTS } from "@/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import {
   fetchAgreementsSearchColumnsOptions,
   fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
 import { sortObjectKeys } from "@/utils/sort";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { agreementsRoute } from ".";
 
@@ -19,27 +18,11 @@ export const searchAgreementsRoute = new Route({
   path: "/",
   validateSearch: AgreementSearchQuerySchema.parse,
   preSearchFilters: [
-    (search) => {
-      const auth = getAuthToken();
-
-      const localRowCountStr = auth
-        ? getLocalStorageForUser(
-            auth.profile.navotar_clientid,
-            auth.profile.navotar_userid,
-            USER_STORAGE_KEYS.tableRowCount
-          )
-        : null;
-      const rowCount = parseInt(
-        localRowCountStr || APP_DEFAULTS.tableRowCount,
-        10
-      );
-
-      return {
-        page: search?.page || 1,
-        size: search?.size || rowCount,
-        ...(search.filters ? { filters: search.filters } : {}),
-      };
-    },
+    (search) => ({
+      page: search?.page || 1,
+      size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
+      ...(search.filters ? { filters: search.filters } : {}),
+    }),
   ],
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);

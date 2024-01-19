@@ -12,9 +12,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { useGlobalDialogContext } from "@/hooks/context/modals";
-
 import { UI_APPLICATION_NAME } from "@/utils/constants";
+
+import { useGlobalDialogContext } from "@/context/modals";
 
 export const LogoutDialog = () => {
   const navigate = useNavigate();

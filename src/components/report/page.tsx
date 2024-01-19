@@ -6,11 +6,11 @@ import { ReportFilters } from "@/components/report/page-filters";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
-import { useReportContext } from "@/hooks/context/view-report";
-import { useDocumentTitle } from "@/hooks/internal/useDocumentTitle";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
+import { useReportContext } from "@/context/view-report";
 import { cn } from "@/utils";
 
 import DefaultView from "./presentation/default-view";

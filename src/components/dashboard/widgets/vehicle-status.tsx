@@ -13,14 +13,13 @@ import type { PieSectorDataItem } from "recharts/types/polar/Pie";
 
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
-import { useTernaryDarkMode } from "@/hooks/internal/useTernaryDarkMode";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import { APP_DEFAULTS, USER_STORAGE_KEYS } from "@/utils/constants";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import { fetchDashboardVehicleStatusCountsOptions } from "@/utils/query/dashboard";
 import type { Auth } from "@/utils/query/helpers";
 import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
-import { getLocalStorageForUser } from "@/utils/user-local-storage";
 
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
 
@@ -97,14 +96,10 @@ export function VehicleStatusPieChart(props: { locations: string[] } & Auth) {
     return dataList.findIndex((d) => d.name === name);
   };
 
-  const auth = useAuthValues();
-
-  const rowCountStr =
-    getLocalStorageForUser(
-      auth.clientId,
-      auth.userId,
-      USER_STORAGE_KEYS.tableRowCount
-    ) || APP_DEFAULTS.tableRowCount;
+  const [rowCountStr] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
   const defaultRowCount = parseInt(rowCountStr, 10);
 
   const pieChartColors: React.CSSProperties = useMemo(() => {

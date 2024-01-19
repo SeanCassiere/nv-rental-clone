@@ -9,12 +9,13 @@ import { ReportTable } from "@/components/report/plugin/table";
 import { ViewColumns } from "@/components/report/plugin/view-columns";
 import { icons } from "@/components/ui/icons";
 
-import { useReportContext } from "@/hooks/context/view-report";
-import { useReportValueFormatter } from "@/hooks/internal/useReportValueFormatter";
+import { useReportValueFormatter } from "@/hooks/useReportValueFormatter";
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
 
 import type { ReportTablePlugin } from "@/types/report";
+
+import { useReportContext } from "@/context/view-report";
 
 type OutputField = TReportDetail["outputFields"][number];
 

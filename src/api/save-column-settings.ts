@@ -2,7 +2,7 @@ import type { TColumnHeaderItem } from "@/schemas/client/column";
 
 import { getModuleApiName } from "@/utils/columns";
 import type { Auth } from "@/utils/query/helpers";
-import type { AppPrimaryModuleType } from "@/types/General";
+import type { AppModule } from "@/types/app-module";
 
 import { apiClient } from "@/api";
 
@@ -10,7 +10,7 @@ export async function saveColumnSettings(
   input: {
     accessorKeys?: string[];
     allColumns: TColumnHeaderItem[];
-    module: AppPrimaryModuleType;
+    module: AppModule;
   } & Auth
 ) {
   const { accessorKeys = [], allColumns, module } = input;

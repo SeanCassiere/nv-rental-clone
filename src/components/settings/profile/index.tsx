@@ -36,8 +36,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-import { useAuthValues } from "@/hooks/internal/useAuthValues";
-import { usePermission } from "@/hooks/internal/usePermission";
+import { usePermission } from "@/hooks/usePermission";
 
 import {
   buildUpdateUserSchema,
@@ -46,6 +45,7 @@ import {
   type UserLanguageItem,
 } from "@/schemas/user";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
@@ -61,13 +61,7 @@ import { apiClient } from "@/api";
 export default function SettingsProfileTab() {
   const { t } = useTranslation("settings");
   const auth = useAuth();
-
-  const clientId = auth.user?.profile?.navotar_clientid || "";
-  const userId = auth.user?.profile?.navotar_userid || "";
-  const authParams = {
-    clientId,
-    userId,
-  };
+  const authParams = getAuthFromAuthHook(auth);
 
   const userQuery = useSuspenseQuery(
     fetchUserByIdOptions({ auth: authParams, userId: authParams.userId })
@@ -97,8 +91,8 @@ export default function SettingsProfileTab() {
                     ? languagesQuery.data.body
                     : []
                 }
-                clientId={clientId}
-                userId={userId}
+                clientId={authParams.clientId}
+                userId={authParams.userId}
               />
             </article>
           )}
@@ -120,9 +114,7 @@ function ProfileForm(props: {
   };
 
   const { t } = useTranslation();
-
-  const auth = useAuthValues();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
 
   const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
 
@@ -150,7 +142,7 @@ function ProfileForm(props: {
       isActive: user.isActive ?? false,
       lockOut: user.lockOut ?? false,
       isReservationEmail: user.isReservationEmail ?? false,
-      createdBy: Number(auth.userId),
+      createdBy: Number(authParams.userId),
       createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(new Date()),
     },
   });
@@ -158,25 +150,25 @@ function ProfileForm(props: {
   const { mutate, isPending } = useMutation({
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
-      qc.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: fetchUserByIdOptions({
           auth: authParams,
           userId: variables.params.userId,
         }).queryKey,
       });
-      qc.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: fetchActiveUsersCountOptions({ auth: authParams }).queryKey,
       });
-      qc.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: fetchMaximumUsersCountOptions({ auth: authParams }).queryKey,
       });
-      qc.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: fetchPermissionsByUserIdOptions({
           auth: authParams,
           userId: variables.params.userId,
         }).queryKey,
       });
-      qc.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: fetchLocationsListOptions({
           auth: authParams,
           filters: { withActive: true },
@@ -219,7 +211,7 @@ function ProfileForm(props: {
 
           mutate({
             params: {
-              userId: auth.userId,
+              userId: authParams.userId,
             },
             body: {
               ...values,

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useFeature } from "@/hooks/internal/useFeature";
+import { useFeature } from "@/hooks/useFeature";
 
 import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 

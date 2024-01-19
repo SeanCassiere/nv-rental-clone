@@ -3,7 +3,7 @@ import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useDebounce } from "@/hooks/internal/useDebounce";
+import { useDebounce } from "@/hooks/useDebounce";
 
 import type { ReportTablePlugin } from "@/types/report";
 

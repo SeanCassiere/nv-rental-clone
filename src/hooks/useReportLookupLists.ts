@@ -127,8 +127,9 @@ export function useReportLookupLists(report: TReportDetail) {
 
   // dynamically get list of options
   const getList = (name: string): ReportFilterOption[] => {
-    const defaultValue = report.searchCriteria.find((c) => c.name === name)
-      ?.defaultValue;
+    const defaultValue = report.searchCriteria.find(
+      (c) => c.name === name
+    )?.defaultValue;
 
     switch (name.toLowerCase().trim()) {
       case "locationid":
