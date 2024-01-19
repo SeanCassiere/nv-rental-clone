@@ -2,7 +2,6 @@ import * as React from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Router, RouterProvider } from "@tanstack/react-router";
-import { WebStorageStateStore } from "oidc-client-ts";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
