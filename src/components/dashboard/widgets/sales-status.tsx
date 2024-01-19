@@ -1,12 +1,12 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
 import { WidgetSkeleton } from "@/components/dashboard/dnd-widget-display-grid";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { useGetSalesStatus } from "@/hooks/network/dashboard/useGetSalesStatus";
-
+import { fetchDashboardSalesStatisticsOptions } from "@/utils/query/dashboard";
 import type { Auth } from "@/utils/query/helpers";
 
 const SalesStatus = (props: { locations: string[] } & Auth) => {
@@ -25,17 +25,27 @@ const SalesStatus = (props: { locations: string[] } & Auth) => {
 export default React.memo(SalesStatus);
 
 export function SalesAreaChart(props: { locations: string[] } & Auth) {
-  const { locations } = props;
+  const { locations, auth } = props;
 
   const { t } = useTranslation();
-  const sales = useGetSalesStatus({ locations, clientDate: new Date() });
+  const salesQuery = useQuery(
+    fetchDashboardSalesStatisticsOptions({
+      auth,
+      filters: {
+        locationIds: locations,
+        clientDate: new Date(),
+      },
+    })
+  );
 
-  return sales.status === "pending" ? (
+  const sales = salesQuery.data?.status === 200 ? salesQuery.data.body : [];
+
+  return salesQuery.status === "pending" ? (
     <WidgetSkeleton />
   ) : (
     <ResponsiveContainer width="100%" height="100%" className="min-h-[250px]">
       <LineChart
-        data={sales.data || []}
+        data={sales}
         margin={{
           top: 5,
           right: 15,

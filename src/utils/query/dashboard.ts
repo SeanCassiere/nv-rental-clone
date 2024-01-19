@@ -34,6 +34,42 @@ export function fetchDashboardWidgetsOptions(options: Auth) {
   });
 }
 
+export function fetchDashboardSalesStatisticsOptions(
+  options: {
+    filters: {
+      locationIds: string[];
+      clientDate: Date;
+    };
+  } & Auth
+) {
+  return queryOptions({
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      localDateToQueryYearMonthDay(options.filters.clientDate),
+      "statistics_sales",
+      `locations_{${options.filters.locationIds.sort().join("|")}}`,
+    ]),
+    queryFn: () =>
+      apiClient.dashboard.getStatisticsForSales({
+        query: {
+          clientId: options.auth.clientId,
+          userId: options.auth.userId,
+          ClientDate: localDateToQueryYearMonthDay(options.filters.clientDate),
+          ...(options.filters.locationIds.length === 0
+            ? {
+                LocationId: "0",
+              }
+            : {
+                MultipleLocation: options.filters.locationIds,
+              }),
+        },
+      }),
+    enabled: isEnabled(options),
+    staleTime: 1000 * 60 * 1, // 1 minute
+    placeholderData: keepPreviousData,
+  });
+}
+
 export function fetchDashboardRentalStatisticsOptions(
   options: {
     filters: {
@@ -46,7 +82,7 @@ export function fetchDashboardRentalStatisticsOptions(
     queryKey: makeQueryKey(options, [
       SEGMENT,
       localDateToQueryYearMonthDay(options.filters.clientDate),
-      "statistics",
+      "statistics_rentals",
       `locations_{${options.filters.locationIds.sort().join("|")}}`,
     ]),
     queryFn: () =>
@@ -65,7 +101,7 @@ export function fetchDashboardRentalStatisticsOptions(
         },
       }),
     enabled: isEnabled(options),
-    staleTime: 1000 * 60 * 1, // 1 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
     placeholderData: keepPreviousData,
   });
 }
@@ -83,7 +119,7 @@ export function fetchDashboardVehicleStatusCountsOptions(
     queryKey: makeQueryKey(options, [
       SEGMENT,
       localDateToQueryYearMonthDay(options.filters.clientDate),
-      "sales_status_counts",
+      "statistics_vehicle_status_counts",
       `locations_{${options.filters.locationIds.sort().join("|")}}`,
       `vehicle_type_{${options.filters.vehicleTypeId}}`,
     ]),
@@ -103,7 +139,7 @@ export function fetchDashboardVehicleStatusCountsOptions(
         },
       }),
     enabled: isEnabled(options),
-    staleTime: 1000 * 60 * 1, // 1 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
     placeholderData: keepPreviousData,
   });
 }
