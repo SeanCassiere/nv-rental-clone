@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
@@ -26,7 +26,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
-import { fetchUserConfigurationOptions } from "@/utils/query/user";
+import {
+  fetchUserByIdOptions,
+  fetchUserConfigurationOptions,
+} from "@/utils/query/user";
 
 import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
 
@@ -112,9 +115,17 @@ function SystemUser({
   ...props
 }: { user: TUserConfigurations[number] } & UserListProps) {
   const { t } = useTranslation();
+  const auth = { clientId: props.clientId, userId: props.userId };
+  const queryClient = useQueryClient();
 
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
   const [showEditUser, setShowEditUser] = React.useState(false);
+
+  const handlePrefetch = () => {
+    queryClient.prefetchQuery(
+      fetchUserByIdOptions({ auth, userId: user.userID })
+    );
+  };
 
   return (
     <>
@@ -174,7 +185,11 @@ function SystemUser({
           </div>
           <div className="flex grow-0 items-center justify-center">
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger
+                onMouseOver={handlePrefetch}
+                onTouchStart={handlePrefetch}
+                asChild
+              >
                 <Button variant="ghost" size="icon" className="h-8 w-8">
                   <icons.More className="h-3 w-3 lg:h-4 lg:w-4" />
                   <span className="sr-only">

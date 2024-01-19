@@ -81,15 +81,13 @@ export function EditRoleDialog({
 
   const rolesQuery = useQuery(fetchRolesListOptions({ auth: authParams }));
 
-  const roleQueryOptions = fetchRoleByIdOptions({
-    auth: authParams,
-    roleId: props.roleId,
-  });
-
-  const roleQuery = useQuery({
-    ...roleQueryOptions,
-    enabled: roleQueryOptions.enabled && props.mode === "edit" && open,
-  });
+  const roleQuery = useQuery(
+    fetchRoleByIdOptions({
+      auth: authParams,
+      roleId: props.roleId,
+      enabled: props.mode === "edit" && open,
+    })
+  );
 
   const permissionsList =
     permissionsQuery.data?.status === 200 ? permissionsQuery.data?.body : [];
@@ -380,19 +378,13 @@ function RoleForm(props: {
 
   const templateId = form.watch("templateId");
 
-  const roleQueryOptions = React.useMemo(
-    () =>
-      fetchRoleByIdOptions({
-        roleId: String(templateId),
-        auth: authParams,
-      }),
-    [authParams, templateId]
+  const roleQuery = useQuery(
+    fetchRoleByIdOptions({
+      roleId: String(templateId),
+      auth: authParams,
+      enabled: templateId !== 0,
+    })
   );
-
-  const roleQuery = useQuery({
-    ...roleQueryOptions,
-    enabled: roleQueryOptions.enabled && templateId !== 0,
-  });
 
   React.useEffect(() => {
     if (templateId === 0) return;

@@ -6,6 +6,8 @@ import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 
 const SEGMENT = "role";
 
+type RoleId = { roleId: RefId };
+
 export function fetchRolesListOptions(options: Auth) {
   return queryOptions({
     queryKey: makeQueryKey(options, [SEGMENT, "list"]),
@@ -21,9 +23,12 @@ export function fetchRolesListOptions(options: Auth) {
   });
 }
 
-export function fetchRoleByIdOptions(options: { roleId: RefId } & Auth) {
+export function fetchRoleByIdOptions(
+  options: { enabled?: boolean } & RoleId & Auth
+) {
+  const { enabled = true } = options;
   return queryOptions({
-    queryKey: makeQueryKey(options, [SEGMENT, options.roleId]),
+    queryKey: makeQueryKey(options, [SEGMENT, String(options.roleId)]),
     queryFn: () =>
       apiClient.role.getById({
         params: { roleId: String(options.roleId) },
@@ -33,7 +38,7 @@ export function fetchRoleByIdOptions(options: { roleId: RefId } & Auth) {
         },
       }),
     staleTime: 1000 * 60 * 5, // 5 minutes
-    enabled: isEnabled(options),
+    enabled: isEnabled(options) && enabled,
   });
 }
 

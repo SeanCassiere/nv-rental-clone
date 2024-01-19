@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
@@ -34,7 +34,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { RoleListItem } from "@/schemas/role";
 
-import { fetchRolesListOptions } from "@/utils/query/role";
+import {
+  fetchRoleByIdOptions,
+  fetchRolesListOptions,
+} from "@/utils/query/role";
 
 import { cn } from "@/utils";
 
@@ -193,10 +196,20 @@ function SystemRole({
 }) {
   const { t } = useTranslation();
 
+  const queryClient = useQueryClient();
+
+  const auth = { clientId: props.clientId, userId: props.userId };
+
   const isSystemRole = role.type <= 0; // role.type is less than or equal to 0
 
   const [showEdit, setShowEdit] = React.useState(false);
   const [showDelete, setShowDelete] = React.useState(false);
+
+  const handlePrefetch = () => {
+    queryClient.prefetchQuery(
+      fetchRoleByIdOptions({ auth, roleId: role.userRoleID })
+    );
+  };
 
   return (
     <>
@@ -246,7 +259,11 @@ function SystemRole({
           </div>
           <div className="flex grow-0 items-center justify-center">
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger
+                onMouseOver={handlePrefetch}
+                onTouchStart={handlePrefetch}
+                asChild
+              >
                 <Button
                   variant="ghost"
                   size="icon"
