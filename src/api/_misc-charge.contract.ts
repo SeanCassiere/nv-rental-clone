@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { MiscChargeListItemSchema } from "@/schemas/misCharges";
+import { MiscChargeListItemSchema } from "@/schemas/misc-charge";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 
