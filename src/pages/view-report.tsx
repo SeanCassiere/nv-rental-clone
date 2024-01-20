@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { ReportContextProvider } from "@/context/view-report";
 
-const routeApi = new RouteApi({ id: "/reports/$reportId/" });
+const routeApi = new RouteApi({ id: "/reports/$reportId" });
 
 const ViewReportPage = () => {
   const auth = useAuth();

@@ -17,7 +17,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/reports/" });
+const routeApi = new RouteApi({ id: "/reports" });
 
 export default function SearchReportsPage() {
   const auth = useAuth();

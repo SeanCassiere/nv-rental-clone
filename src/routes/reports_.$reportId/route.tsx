@@ -1,25 +1,9 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
-import { z } from "zod";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
 import { fetchReportByIdOptions } from "@/utils/query/report";
 
-import { reportsRoute } from ".";
-
-export const reportPathIdRoute = new Route({
-  getParentRoute: () => reportsRoute,
-  path: "$reportId",
-  parseParams: (params) => ({
-    reportId: z.string().parse(params.reportId),
-  }),
-  stringifyParams: (params) => ({
-    reportId: `${params.reportId}`,
-  }),
-});
-
-export const viewReportByIdRoute = new Route({
-  getParentRoute: () => reportPathIdRoute,
-  path: "/",
+export const Route = new FileRoute("/reports/$reportId").createRoute({
   beforeLoad: ({ context, params: { reportId } }) => {
     const auth = getAuthFromRouterContext(context);
     return {
