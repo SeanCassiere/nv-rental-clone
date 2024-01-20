@@ -6,6 +6,8 @@ import { Route as rootRoute } from "./routes/__root"
 import { Route as DevImport } from "./routes/dev"
 import { Route as ReservationsRouteImport } from "./routes/reservations/route"
 import { Route as OidcCallbackRouteImport } from "./routes/oidc-callback.route"
+import { Route as LogoutRouteImport } from "./routes/logout.route"
+import { Route as LoggedOutRouteImport } from "./routes/logged-out.route"
 import { Route as FleetRouteImport } from "./routes/fleet/route"
 import { Route as CustomersRouteImport } from "./routes/customers/route"
 import { Route as AgreementsRouteImport } from "./routes/agreements/route"
@@ -38,6 +40,16 @@ const ReservationsRouteRoute = ReservationsRouteImport.update({
 
 const OidcCallbackRouteRoute = OidcCallbackRouteImport.update({
   path: "/oidc-callback",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LogoutRouteRoute = LogoutRouteImport.update({
+  path: "/logout",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoggedOutRouteRoute = LoggedOutRouteImport.update({
+  path: "/logged-out",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -153,6 +165,14 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof FleetRouteImport
       parentRoute: typeof rootRoute
     }
+    "/logged-out": {
+      preLoaderRoute: typeof LoggedOutRouteImport
+      parentRoute: typeof rootRoute
+    }
+    "/logout": {
+      preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRoute
+    }
     "/oidc-callback": {
       preLoaderRoute: typeof OidcCallbackRouteImport
       parentRoute: typeof rootRoute
@@ -227,6 +247,8 @@ export const routeTree = rootRoute.addChildren([
   AgreementsRouteRoute,
   CustomersRouteRoute,
   FleetRouteRoute.addChildren([FleetNewRouteRoute]),
+  LoggedOutRouteRoute,
+  LogoutRouteRoute,
   OidcCallbackRouteRoute,
   ReservationsRouteRoute,
   DevRoute,

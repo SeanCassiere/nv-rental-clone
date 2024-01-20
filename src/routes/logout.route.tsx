@@ -1,14 +1,10 @@
-import { Route } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { localStoragePersister } from "@/tanstack-query-config";
 
-import { Route } from "../routes/__root";
-
-export const logoutRoute = new Route({
-  getParentRoute: () => Route,
-  path: "logout",
+export const Route = new FileRoute("/logout").createRoute({
   loader: async ({ context, preload, navigate }) => {
     if (preload) return;
 
