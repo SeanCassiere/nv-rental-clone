@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
+import { notFoundRoute } from "@/components/not-found";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 
 import { useEventListener } from "@/hooks/useEventListener";
@@ -21,13 +22,11 @@ import { routeTree } from "@/route-tree.gen";
 import { queryClient } from "@/tanstack-query-config";
 import { parseSearchFn, stringifySearchFn } from "@/tanstack-router-config";
 
-// import { notFoundRoute } from "@/temp-routes/not-found";
-
 import i18n from "./i18next-config";
 
 export const router = new Router({
   routeTree,
-  // notFoundRoute,
+  notFoundRoute,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   parseSearch: parseSearchFn,
@@ -39,11 +38,11 @@ export const router = new Router({
   },
 });
 
-// declare module "@tanstack/react-router" {
-//   interface Register {
-//     router: typeof router;
-//   }
-// }
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 export default function App() {
   return (
