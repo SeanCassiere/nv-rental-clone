@@ -37,7 +37,7 @@ const routeApi = new RouteApi({ id: "/fleet" });
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
-function VehiclesSearchPage() {
+export const component = function VehicleSearchPage() {
   const navigate = useNavigate();
 
   const {
@@ -340,6 +340,4 @@ function VehiclesSearchPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default VehiclesSearchPage;
+};

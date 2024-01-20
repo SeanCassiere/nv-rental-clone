@@ -26,28 +26,28 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 const VehicleSummaryTab = lazy(
-  () => import("../components/primary-module/tabs/vehicle/summary-content")
+  () => import("@/components/primary-module/tabs/vehicle/summary-content")
 );
 const VehicleReservationsTab = lazy(
   () =>
     import(
-      "../components/primary-module/tabs/vehicle/occupied-reservations-content"
+      "@/components/primary-module/tabs/vehicle/occupied-reservations-content"
     )
 );
 const VehicleAgreementsTab = lazy(
   () =>
     import(
-      "../components/primary-module/tabs/vehicle/occupied-agreements-content"
+      "@/components/primary-module/tabs/vehicle/occupied-agreements-content"
     )
 );
 
 const ModuleNotesTabContent = lazy(
-  () => import("../components/primary-module/tabs/notes-content")
+  () => import("@/components/primary-module/tabs/notes-content")
 );
 
 const routeApi = new RouteApi({ id: "/fleet/$vehicleId" });
 
-function VehicleViewPage() {
+export const component = function VehicleViewPage() {
   const router = useRouter();
 
   const { authParams, viewVehicleOptions } = routeApi.useRouteContext();
@@ -243,6 +243,4 @@ function VehicleViewPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default VehicleViewPage;
+};

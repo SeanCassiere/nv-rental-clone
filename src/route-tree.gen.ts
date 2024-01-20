@@ -109,6 +109,15 @@ const FleetRouteRoute = FleetRouteImport.update({
   path: "/fleet",
   getParentRoute: () => rootRoute,
 } as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/fleet/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/fleet/component"),
+      "component",
+    ),
+  })
 
 const CustomersRouteRoute = CustomersRouteImport.update({
   path: "/customers",
@@ -193,11 +202,25 @@ const FleetVehicleIdRouteRoute = FleetVehicleIdRouteImport.update({
   path: "/fleet/$vehicleId",
   getParentRoute: () => rootRoute,
 } as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/fleet_.$vehicleId/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/fleet_.$vehicleId/component"),
+      "component",
+    ),
+  })
 
 const FleetNewRouteRoute = FleetNewRouteImport.update({
   path: "/new",
   getParentRoute: () => FleetRouteRoute,
-} as any)
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/fleet.new/component"),
+    "component",
+  ),
+})
 
 const CustomersNewRouteRoute = CustomersNewRouteImport.update({
   path: "/customers/new",
@@ -242,7 +265,12 @@ const ReservationsReservationIdEditRouteRoute =
 const FleetVehicleIdEditRouteRoute = FleetVehicleIdEditRouteImport.update({
   path: "/edit",
   getParentRoute: () => FleetVehicleIdRouteRoute,
-} as any)
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/fleet_.$vehicleId.edit/component"),
+    "component",
+  ),
+})
 
 const CustomersCustomerIdEditRouteRoute =
   CustomersCustomerIdEditRouteImport.update({
