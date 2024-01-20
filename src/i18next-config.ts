@@ -52,6 +52,11 @@ const languagesCore = [en];
 const languagesExtensions = ["en-US", "en-GB"]; // i.e: "en-GB", "en-US", etc...
 export const supportedLanguages = [...languagesCore, ...languagesExtensions];
 
+function escapeLocalStorageQuotes(input: string | null) {
+  if (!input) return input;
+  return input.replaceAll('"', "");
+}
+
 i18next
   .use(HttpApi)
   .use(LanguageDetector)
@@ -80,11 +85,15 @@ i18next
       format: (value, i18nFormat, lng, options) => {
         if (i18nFormat === "datetime") {
           const dateFormat =
-            window.localStorage.getItem(STORAGE_KEYS.dateFormat) ||
-            dfnsDateFormat;
+            escapeLocalStorageQuotes(
+              window.localStorage.getItem(STORAGE_KEYS.dateFormat)
+            ) || dfnsDateFormat;
+
           const timeFormat =
-            window.localStorage.getItem(STORAGE_KEYS.timeFormat) ||
-            dfnsTimeFormat;
+            escapeLocalStorageQuotes(
+              window.localStorage.getItem(STORAGE_KEYS.timeFormat)
+            ) || dfnsTimeFormat;
+
           const dfnsDateFormatWithTime = `${dateFormat} ${timeFormat}`;
 
           try {
@@ -110,8 +119,10 @@ i18next
 
         if (i18nFormat === "date") {
           const dateFormat =
-            window.localStorage.getItem(STORAGE_KEYS.dateFormat) ||
-            dfnsDateFormat;
+            escapeLocalStorageQuotes(
+              window.localStorage.getItem(STORAGE_KEYS.dateFormat)
+            ) || dfnsDateFormat;
+
           try {
             return dateFnsFormat(new Date(value), dateFormat, {
               locale: getDateFnsLocale(lng),
@@ -138,7 +149,9 @@ i18next
               : digitsCountParsed;
 
           const currency =
-            window.localStorage.getItem(STORAGE_KEYS.currency) ?? "USD";
+            escapeLocalStorageQuotes(
+              window.localStorage.getItem(STORAGE_KEYS.currency)
+            ) || "USD";
 
           try {
             if (currency !== "" && currency) {
