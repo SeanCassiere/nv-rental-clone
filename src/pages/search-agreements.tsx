@@ -37,7 +37,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/agreements/" });
+const routeApi = new RouteApi({ id: "/agreements" });
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 

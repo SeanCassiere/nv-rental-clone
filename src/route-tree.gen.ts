@@ -3,26 +3,88 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
-import { Route as IndexImport } from "./routes/index"
+import { Route as AgreementsRouteImport } from "./routes/agreements/route"
+import { Route as IndexRouteImport } from "./routes/index.route"
+import { Route as AgreementsNewRouteImport } from "./routes/agreements_.new/route"
+import { Route as AgreementsAgreementIdRouteImport } from "./routes/agreements_.$agreementId/route"
+import { Route as AgreementsAgreementIdEditRouteImport } from "./routes/agreements_.$agreementId.edit/route"
+import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agreements_.$agreementId.check-in/route"
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
+const AgreementsRouteRoute = AgreementsRouteImport.update({
+  path: "/agreements",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const IndexRouteRoute = IndexRouteImport.update({
   path: "/",
   getParentRoute: () => rootRoute,
 } as any)
+
+const AgreementsNewRouteRoute = AgreementsNewRouteImport.update({
+  path: "/agreements/new",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AgreementsAgreementIdRouteRoute = AgreementsAgreementIdRouteImport.update(
+  {
+    path: "/agreements/$agreementId",
+    getParentRoute: () => rootRoute,
+  } as any,
+)
+
+const AgreementsAgreementIdEditRouteRoute =
+  AgreementsAgreementIdEditRouteImport.update({
+    path: "/edit",
+    getParentRoute: () => AgreementsAgreementIdRouteRoute,
+  } as any)
+
+const AgreementsAgreementIdCheckInRouteRoute =
+  AgreementsAgreementIdCheckInRouteImport.update({
+    path: "/check-in",
+    getParentRoute: () => AgreementsAgreementIdRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
     "/": {
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRoute
+    }
+    "/agreements": {
+      preLoaderRoute: typeof AgreementsRouteImport
+      parentRoute: typeof rootRoute
+    }
+    "/agreements/$agreementId": {
+      preLoaderRoute: typeof AgreementsAgreementIdRouteImport
+      parentRoute: typeof rootRoute
+    }
+    "/agreements/new": {
+      preLoaderRoute: typeof AgreementsNewRouteImport
+      parentRoute: typeof rootRoute
+    }
+    "/agreements/$agreementId/check-in": {
+      preLoaderRoute: typeof AgreementsAgreementIdCheckInRouteImport
+      parentRoute: typeof AgreementsAgreementIdRouteImport
+    }
+    "/agreements/$agreementId/edit": {
+      preLoaderRoute: typeof AgreementsAgreementIdEditRouteImport
+      parentRoute: typeof AgreementsAgreementIdRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexRouteRoute,
+  AgreementsRouteRoute,
+  AgreementsAgreementIdRouteRoute.addChildren([
+    AgreementsAgreementIdCheckInRouteRoute,
+    AgreementsAgreementIdEditRouteRoute,
+  ]),
+  AgreementsNewRouteRoute,
+])

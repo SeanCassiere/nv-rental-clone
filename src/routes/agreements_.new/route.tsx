@@ -1,11 +1,7 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { agreementsRoute } from ".";
-
-export const addAgreementRoute = new Route({
-  getParentRoute: () => agreementsRoute,
-  path: "new",
+export const Route = new FileRoute("/agreements/new").createRoute({
   validateSearch: (search) =>
     z
       .object({

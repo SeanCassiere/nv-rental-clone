@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
@@ -11,11 +11,7 @@ import {
 } from "@/utils/query/agreement";
 import { sortObjectKeys } from "@/utils/sort";
 
-import { agreementsRoute } from ".";
-
-export const searchAgreementsRoute = new Route({
-  getParentRoute: () => agreementsRoute,
-  path: "/",
+export const Route = new FileRoute("/agreements").createRoute({
   validateSearch: AgreementSearchQuerySchema.parse,
   preSearchFilters: [
     (search) => ({
