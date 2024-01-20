@@ -34,12 +34,14 @@ function ProtectorShield({ children }: { children: React.ReactNode }) {
       const redirectUri =
         router.history.location.pathname + router.history.location.search;
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
-      auth.signinSilent();
+      // auth.signinSilent();
+      auth.startSilentRenew();
     });
   }, [
     auth,
     auth.events,
-    auth.signinSilent,
+    // auth.signinSilent,
+    auth.startSilentRenew,
     router.history.location.pathname,
     router.history.location.search,
   ]);
@@ -49,12 +51,14 @@ function ProtectorShield({ children }: { children: React.ReactNode }) {
       const redirectUri =
         router.history.location.pathname + router.history.location.search;
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
-      auth.signinSilent();
+      // auth.signinSilent();
+      auth.signinRedirect();
     });
   }, [
     auth,
     auth.events,
-    auth.signinSilent,
+    // auth.signinSilent,
+    auth.signoutRedirect,
     router.history.location.pathname,
     router.history.location.search,
   ]);
