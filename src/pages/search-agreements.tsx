@@ -25,8 +25,10 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
-import { AgreementDateTimeColumns } from "@/utils/columns";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import {
+  AgreementDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/utils/columns";
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
@@ -37,7 +39,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/agreements/" });
+const routeApi = new RouteApi({ id: "/agreements" });
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 

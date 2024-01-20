@@ -23,13 +23,13 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { sortColOrderByOrderIndex } from "@/utils/columns";
 import { fetchCustomerTypesOptions } from "@/utils/query/customer";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/customers/" });
+const routeApi = new RouteApi({ id: "/customers" });
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 

@@ -7,14 +7,12 @@ import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { editReservationByIdRoute } from "@/routes/reservations/reservation-id-route";
-
 import { titleMaker } from "@/utils/title-maker";
 
 const routeApi = new RouteApi({ id: "/reservations/$reservationId/edit" });
 
 const EditReservationPage = () => {
-  const navigate = useNavigate({ from: editReservationByIdRoute.id });
+  const navigate = useNavigate({ from: "/reservations/$reservationId/edit" });
   const router = useRouter();
 
   const routeContext = routeApi.useRouteContext();

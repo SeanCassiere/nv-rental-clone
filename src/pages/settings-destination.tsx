@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, type LinkOptions } from "@tanstack/react-router";
+import { RouteApi, type LinkOptions } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import ProtectorShield from "@/components/protector-shield";
@@ -10,8 +10,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { usePermission } from "@/hooks/usePermission";
-
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
 
 import { SETTINGS_LOCATION_KEYS, UI_APPLICATION_NAME } from "@/utils/constants";
 import { titleMaker } from "@/utils/title-maker";
@@ -35,12 +33,12 @@ const SettingsRuntimeConfigurationTab = React.lazy(
   () => import("@/components/settings/runtime-configuration")
 );
 
+const routeApi = new RouteApi({ id: "/settings/$destination" });
+
 export default function SettingsCatchAllPage() {
   const { t } = useTranslation("settings");
 
-  const { destination = "profile" } = useParams({
-    from: destinationSettingsRoute.id,
-  });
+  const { destination = "profile" } = routeApi.useParams();
 
   const canSeeAdminTab = usePermission("VIEW_ADMIN_TAB");
 
@@ -53,6 +51,7 @@ export default function SettingsCatchAllPage() {
         linkProps: {
           to: "/settings/$destination",
           params: { destination: "profile" },
+          search: false,
         },
       },
     ];
@@ -66,6 +65,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "application" },
+        search: false,
       },
     });
     items.push({
@@ -75,6 +75,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "runtime-configuration" },
+        search: false,
       },
     });
     items.push({
@@ -84,6 +85,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "vehicles-and-categories" },
+        search: false,
       },
     });
     items.push({
@@ -93,6 +95,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "rates-and-charges" },
+        search: false,
       },
     });
     return items;

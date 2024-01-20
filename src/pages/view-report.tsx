@@ -1,21 +1,19 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { RouteApi, useParams } from "@tanstack/react-router";
+import { RouteApi } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
 import { ViewReport } from "@/components/report/page";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { viewReportByIdRoute } from "@/routes/reports/report-id-route";
-
 import { ReportContextProvider } from "@/context/view-report";
 
-const routeApi = new RouteApi({ id: "/reports/$reportId/" });
+const routeApi = new RouteApi({ id: "/reports/$reportId" });
 
 const ViewReportPage = () => {
   const auth = useAuth();
-  const { reportId } = useParams({ from: viewReportByIdRoute.id });
+  const { reportId } = routeApi.useParams();
 
   const clientId = auth.user?.profile?.navotar_clientid;
   const userId = auth.user?.profile?.navotar_userid;

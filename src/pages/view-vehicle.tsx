@@ -45,7 +45,7 @@ const ModuleNotesTabContent = lazy(
   () => import("../components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/fleet/$vehicleId/" });
+const routeApi = new RouteApi({ id: "/fleet/$vehicleId" });
 
 function VehicleViewPage() {
   const router = useRouter();

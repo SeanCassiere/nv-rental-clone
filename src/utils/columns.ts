@@ -4,6 +4,13 @@ import type { AppModule } from "@/types/app-module";
 
 import type { apiClient } from "@/api";
 
+export function sortColOrderByOrderIndex(
+  col1: TColumnHeaderItem,
+  col2: TColumnHeaderItem
+) {
+  return col1.orderIndex - col2.orderIndex;
+}
+
 export const ReservationDateTimeColumns = [
   "CreatedDate",
   "StartDate",

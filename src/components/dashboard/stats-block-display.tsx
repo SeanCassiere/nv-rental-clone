@@ -126,6 +126,7 @@ const DashboardStatsBlock = ({
             linkProps={{
               to: "/",
               params: false,
+              search: false,
             }}
           />
         </li>

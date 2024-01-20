@@ -7,14 +7,12 @@ import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { checkinAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-
 import { titleMaker } from "@/utils/title-maker";
 
 const routeApi = new RouteApi({ id: "/agreements/$agreementId/check-in" });
 
 const CheckinAgreementPage = () => {
-  const navigate = useNavigate({ from: checkinAgreementByIdRoute.id });
+  const navigate = useNavigate({ from: "/agreements/$agreementId/check-in" });
   const router = useRouter();
 
   const routeContext = routeApi.useRouteContext();

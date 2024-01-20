@@ -1,5 +1,6 @@
 import cp from "child_process";
 import path from "path";
+import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import eslintPlugin from "vite-plugin-eslint";
@@ -15,7 +16,7 @@ const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [eslintPlugin(), react()],
+  plugins: [eslintPlugin(), react(), TanStackRouterVite()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

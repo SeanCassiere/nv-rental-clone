@@ -8,23 +8,19 @@ import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
+import { notFoundRoute } from "@/components/not-found";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 
 import { useEventListener } from "@/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import { notFoundRoute } from "@/routes/not-found";
-
 import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
+import { parseSearchFn, stringifySearchFn } from "@/utils/router";
 
 import { GlobalDialogProvider } from "@/context/modals";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
+import { routeTree } from "@/route-tree.gen";
 import { queryClient } from "@/tanstack-query-config";
-import {
-  parseSearchFn,
-  routeTree,
-  stringifySearchFn,
-} from "@/tanstack-router-config";
 
 import i18n from "./i18next-config";
 

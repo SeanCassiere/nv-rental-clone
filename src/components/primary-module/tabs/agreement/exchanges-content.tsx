@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicleExchange";
+import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicle-exchange";
 
 import { cn } from "@/utils";
 
@@ -22,7 +22,7 @@ type TVehicleExchangeKeyHelp = {
   header: string;
 };
 
-const routeApi = new RouteApi({ id: "/agreements/$agreementId/" });
+const routeApi = new RouteApi({ id: "/agreements/$agreementId" });
 
 const AgreementExchangesTab = () => {
   const { t } = useTranslation();

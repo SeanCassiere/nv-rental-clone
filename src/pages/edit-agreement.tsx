@@ -7,14 +7,12 @@ import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { editAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-
 import { titleMaker } from "@/utils/title-maker";
 
 const routeApi = new RouteApi({ id: "/agreements/$agreementId/edit" });
 
 const EditAgreementPage = () => {
-  const navigate = useNavigate({ from: editAgreementByIdRoute.id });
+  const navigate = useNavigate({ from: "/agreements/$agreementId/edit" });
   const router = useRouter();
 
   const routeContext = routeApi.useRouteContext();

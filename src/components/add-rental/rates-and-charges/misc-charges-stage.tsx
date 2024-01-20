@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 
-import type { MiscChargeListItem } from "@/schemas/misCharges";
+import type { MiscChargeListItem } from "@/schemas/misc-charge";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
 import {

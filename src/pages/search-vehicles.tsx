@@ -23,7 +23,7 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { sortColOrderByOrderIndex } from "@/utils/columns";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
   fetchVehiclesStatusesOptions,
@@ -33,7 +33,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/fleet/" });
+const routeApi = new RouteApi({ id: "/fleet" });
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 

@@ -34,7 +34,7 @@ const ModuleNotesTabContent = lazy(
   () => import("../components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/reservations/$reservationId/" });
+const routeApi = new RouteApi({ id: "/reservations/$reservationId" });
 
 function ReservationViewPage() {
   const router = useRouter();

@@ -1,0 +1,4 @@
+src/*.gen.*
+
+node_modules/**/*
+dist/**/*

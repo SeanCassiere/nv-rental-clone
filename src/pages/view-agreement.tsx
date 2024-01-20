@@ -23,8 +23,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { viewAgreementByIdRoute } from "@/routes/agreements/agreement-id-route";
-
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -40,7 +38,7 @@ const AgreementExchangesTab = lazy(
   () => import("../components/primary-module/tabs/agreement/exchanges-content")
 );
 
-const routeApi = new RouteApi({ id: "/agreements/$agreementId/" });
+const routeApi = new RouteApi({ id: "/agreements/$agreementId" });
 
 type TabListItem = {
   id: string;
@@ -83,7 +81,7 @@ function AgreementViewPage() {
       ),
       preloadFn: () =>
         router.preloadRoute({
-          to: viewAgreementByIdRoute.id,
+          to: "/agreements/$agreementId",
           params: {
             agreementId,
           },
@@ -99,7 +97,7 @@ function AgreementViewPage() {
       component: "Payments Tab",
       preloadFn: () =>
         router.preloadRoute({
-          to: viewAgreementByIdRoute.id,
+          to: "/agreements/$agreementId",
           params: {
             agreementId,
           },
@@ -115,7 +113,7 @@ function AgreementViewPage() {
       component: "Invoices Tab",
       preloadFn: () =>
         router.preloadRoute({
-          to: viewAgreementByIdRoute.id,
+          to: "/agreements/$agreementId",
           params: {
             agreementId,
           },
@@ -131,7 +129,7 @@ function AgreementViewPage() {
       component: "Documents Tab",
       preloadFn: () =>
         router.preloadRoute({
-          to: viewAgreementByIdRoute.id,
+          to: "/agreements/$agreementId",
           params: {
             agreementId,
           },
@@ -147,7 +145,7 @@ function AgreementViewPage() {
       component: "Charges Tab",
       preloadFn: () =>
         router.preloadRoute({
-          to: viewAgreementByIdRoute.id,
+          to: "/agreements/$agreementId",
           params: {
             agreementId,
           },
@@ -163,7 +161,7 @@ function AgreementViewPage() {
       component: <AgreementExchangesTab />,
       preloadFn: () =>
         router.preloadRoute({
-          to: viewAgreementByIdRoute.id,
+          to: "/agreements/$agreementId",
           params: {
             agreementId,
           },
