@@ -33,7 +33,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/fleet/" });
+const routeApi = new RouteApi({ id: "/fleet" });
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 

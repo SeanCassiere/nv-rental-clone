@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -7,22 +7,7 @@ import {
   fetchVehiclesSummaryByIdOptions,
 } from "@/utils/query/vehicle";
 
-import { fleetRoute } from ".";
-
-export const fleetPathIdRoute = new Route({
-  getParentRoute: () => fleetRoute,
-  path: "$vehicleId",
-  parseParams: (params) => ({
-    vehicleId: z.string().parse(params.vehicleId),
-  }),
-  stringifyParams: (params) => ({
-    vehicleId: `${params.vehicleId}`,
-  }),
-});
-
-export const viewFleetByIdRoute = new Route({
-  getParentRoute: () => fleetPathIdRoute,
-  path: "/",
+export const Route = new FileRoute("/fleet/$vehicleId").createRoute({
   validateSearch: (search) =>
     z
       .object({
@@ -59,10 +44,4 @@ export const viewFleetByIdRoute = new Route({
     return;
   },
   component: lazyRouteComponent(() => import("@/pages/view-vehicle")),
-});
-
-export const editFleetByIdRoute = new Route({
-  getParentRoute: () => fleetPathIdRoute,
-  path: "edit",
-  component: () => "Edit Vehicle Route",
 });

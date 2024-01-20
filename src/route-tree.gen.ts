@@ -4,16 +4,20 @@
 
 import { Route as rootRoute } from "./routes/__root"
 import { Route as ReservationsRouteImport } from "./routes/reservations/route"
+import { Route as FleetRouteImport } from "./routes/fleet/route"
 import { Route as CustomersRouteImport } from "./routes/customers/route"
 import { Route as AgreementsRouteImport } from "./routes/agreements/route"
 import { Route as IndexRouteImport } from "./routes/index.route"
 import { Route as ReservationsNewRouteImport } from "./routes/reservations_.new/route"
 import { Route as ReservationsReservationIdRouteImport } from "./routes/reservations_.$reservationId/route"
+import { Route as FleetVehicleIdRouteImport } from "./routes/fleet_.$vehicleId/route"
+import { Route as FleetNewRouteImport } from "./routes/fleet.new/route"
 import { Route as CustomersNewRouteImport } from "./routes/customers_.new/route"
 import { Route as CustomersCustomerIdRouteImport } from "./routes/customers_.$customerId/route"
 import { Route as AgreementsNewRouteImport } from "./routes/agreements_.new/route"
 import { Route as AgreementsAgreementIdRouteImport } from "./routes/agreements_.$agreementId/route"
 import { Route as ReservationsReservationIdEditRouteImport } from "./routes/reservations_.$reservationId.edit/route"
+import { Route as FleetVehicleIdEditRouteImport } from "./routes/fleet_.$vehicleId.edit/route"
 import { Route as CustomersCustomerIdEditRouteImport } from "./routes/customers_.$customerId.edit/route"
 import { Route as AgreementsAgreementIdEditRouteImport } from "./routes/agreements_.$agreementId.edit/route"
 import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agreements_.$agreementId.check-in/route"
@@ -22,6 +26,11 @@ import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agree
 
 const ReservationsRouteRoute = ReservationsRouteImport.update({
   path: "/reservations",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FleetRouteRoute = FleetRouteImport.update({
+  path: "/fleet",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -51,6 +60,16 @@ const ReservationsReservationIdRouteRoute =
     getParentRoute: () => rootRoute,
   } as any)
 
+const FleetVehicleIdRouteRoute = FleetVehicleIdRouteImport.update({
+  path: "/fleet/$vehicleId",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FleetNewRouteRoute = FleetNewRouteImport.update({
+  path: "/new",
+  getParentRoute: () => FleetRouteRoute,
+} as any)
+
 const CustomersNewRouteRoute = CustomersNewRouteImport.update({
   path: "/customers/new",
   getParentRoute: () => rootRoute,
@@ -78,6 +97,11 @@ const ReservationsReservationIdEditRouteRoute =
     path: "/edit",
     getParentRoute: () => ReservationsReservationIdRouteRoute,
   } as any)
+
+const FleetVehicleIdEditRouteRoute = FleetVehicleIdEditRouteImport.update({
+  path: "/edit",
+  getParentRoute: () => FleetVehicleIdRouteRoute,
+} as any)
 
 const CustomersCustomerIdEditRouteRoute =
   CustomersCustomerIdEditRouteImport.update({
@@ -113,6 +137,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof CustomersRouteImport
       parentRoute: typeof rootRoute
     }
+    "/fleet": {
+      preLoaderRoute: typeof FleetRouteImport
+      parentRoute: typeof rootRoute
+    }
     "/reservations": {
       preLoaderRoute: typeof ReservationsRouteImport
       parentRoute: typeof rootRoute
@@ -131,6 +159,14 @@ declare module "@tanstack/react-router" {
     }
     "/customers/new": {
       preLoaderRoute: typeof CustomersNewRouteImport
+      parentRoute: typeof rootRoute
+    }
+    "/fleet/new": {
+      preLoaderRoute: typeof FleetNewRouteImport
+      parentRoute: typeof FleetRouteImport
+    }
+    "/fleet/$vehicleId": {
+      preLoaderRoute: typeof FleetVehicleIdRouteImport
       parentRoute: typeof rootRoute
     }
     "/reservations/$reservationId": {
@@ -153,6 +189,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof CustomersCustomerIdEditRouteImport
       parentRoute: typeof CustomersCustomerIdRouteImport
     }
+    "/fleet/$vehicleId/edit": {
+      preLoaderRoute: typeof FleetVehicleIdEditRouteImport
+      parentRoute: typeof FleetVehicleIdRouteImport
+    }
     "/reservations/$reservationId/edit": {
       preLoaderRoute: typeof ReservationsReservationIdEditRouteImport
       parentRoute: typeof ReservationsReservationIdRouteImport
@@ -166,6 +206,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRouteRoute,
   AgreementsRouteRoute,
   CustomersRouteRoute,
+  FleetRouteRoute.addChildren([FleetNewRouteRoute]),
   ReservationsRouteRoute,
   AgreementsAgreementIdRouteRoute.addChildren([
     AgreementsAgreementIdCheckInRouteRoute,
@@ -176,6 +217,7 @@ export const routeTree = rootRoute.addChildren([
     CustomersCustomerIdEditRouteRoute,
   ]),
   CustomersNewRouteRoute,
+  FleetVehicleIdRouteRoute.addChildren([FleetVehicleIdEditRouteRoute]),
   ReservationsReservationIdRouteRoute.addChildren([
     ReservationsReservationIdEditRouteRoute,
   ]),

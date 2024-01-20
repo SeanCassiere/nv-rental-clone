@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
@@ -10,11 +10,7 @@ import {
   fetchVehiclesSearchListOptions,
 } from "@/utils/query/vehicle";
 
-import { fleetRoute } from ".";
-
-export const searchFleetRoute = new Route({
-  getParentRoute: () => fleetRoute,
-  path: "/",
+export const Route = new FileRoute("/fleet").createRoute({
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
