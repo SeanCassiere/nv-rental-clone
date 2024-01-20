@@ -1,9 +1,9 @@
 import React from "react";
 
-import { IS_LOCAL_DEV } from "@/utils/constants";
+import { IS_DEV } from "@/utils/constants";
 
 export const TailwindScreenDevTool = () => {
-  if (!IS_LOCAL_DEV) return null;
+  if (!IS_DEV) return null;
 
   return (
     <div className="fixed bottom-2 right-2 z-[100] w-20 rounded-full bg-foreground py-2 text-center font-semibold text-background">

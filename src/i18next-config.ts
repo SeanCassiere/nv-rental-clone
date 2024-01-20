@@ -10,7 +10,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-import { IS_LOCAL_DEV, STORAGE_KEYS } from "@/utils/constants";
+import { IS_DEV, STORAGE_KEYS } from "@/utils/constants";
 
 // START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";
@@ -173,7 +173,7 @@ i18next
         return value;
       },
     },
-    debug: IS_LOCAL_DEV,
+    debug: IS_DEV,
     defaultNS: i18nextNsDefault,
     ns: [
       i18nextNsTranslation,
