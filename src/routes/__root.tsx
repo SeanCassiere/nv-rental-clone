@@ -40,7 +40,7 @@ const exceptionRoutes = [
   "/logged-out",
 ] as const;
 
-export const rootRoute = routerRootWithContext({
+export const Route = routerRootWithContext({
   loader: async ({ context }) => {
     const { queryClient } = context;
     const auth = getAuthFromRouterContext(context);

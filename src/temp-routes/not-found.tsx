@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { cn } from "@/utils";
 
-import { rootRoute } from "./__root";
+import { Route } from "../routes/__root";
 
 const NotFoundPage = () => {
   const { t } = useTranslation();
@@ -39,6 +39,6 @@ const NotFoundPage = () => {
 };
 
 export const notFoundRoute = new NotFoundRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => Route,
   component: NotFoundPage,
 });

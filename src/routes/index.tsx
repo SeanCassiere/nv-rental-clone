@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
@@ -9,11 +9,7 @@ import {
 } from "@/utils/query/dashboard";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 
-import { rootRoute } from "./__root";
-
-export const indexRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: "/",
+export const Route = new FileRoute("/").createRoute({
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
   beforeLoad: ({ context }) => {
     const auth = getAuthFromRouterContext(context);

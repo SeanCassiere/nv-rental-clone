@@ -1,9 +1,9 @@
 import { lazyRouteComponent, Route } from "@tanstack/react-router";
 
-import { rootRoute } from "./__root";
+import { Route } from "../routes/__root";
 
 export const devRoute = new Route({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => Route,
   path: "dev",
   component: lazyRouteComponent(() => import("@/pages/dev")),
 });

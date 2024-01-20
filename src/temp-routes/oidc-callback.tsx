@@ -6,7 +6,7 @@ import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
-import { rootRoute } from "./__root";
+import { Route } from "../routes/__root";
 
 function removeTrailingSlash(path: string) {
   // const pathParts = path.split("?");
@@ -16,7 +16,7 @@ function removeTrailingSlash(path: string) {
 }
 
 export const oidcCallbackRoute = new Route({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => Route,
   validateSearch: z.object({
     redirect: z.string().optional(),
     code: z.string().optional(),

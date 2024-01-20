@@ -4,10 +4,10 @@ import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { localStoragePersister } from "@/tanstack-query-config";
 
-import { rootRoute } from "./__root";
+import { Route } from "../routes/__root";
 
 export const logoutRoute = new Route({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => Route,
   path: "logout",
   loader: async ({ context, preload, navigate }) => {
     if (preload) return;
