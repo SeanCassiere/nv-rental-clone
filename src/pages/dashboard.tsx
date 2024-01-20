@@ -32,7 +32,6 @@ import { fetchLocationsListOptions } from "@/utils/query/location";
 import { titleMaker } from "@/utils/title-maker";
 
 import type { apiClient } from "@/api";
-import { indexRoute } from "@/routes";
 import { cn } from "@/utils";
 
 const DefaultDashboardContent = lazy(
@@ -43,7 +42,7 @@ const V2DashboardContent = lazy(
 );
 
 function IndexPage() {
-  const navigate = useNavigate({ from: indexRoute.id });
+  const navigate = useNavigate({ from: "/" });
   const auth = useAuth();
 
   const authParams = getAuthFromAuthHook(auth);
@@ -55,7 +54,7 @@ function IndexPage() {
   }, []);
 
   const { "show-widget-picker": showWidgetPickerModal = false } = useSearch({
-    from: indexRoute.id,
+    from: "/",
   });
 
   const locationsList = useQuery(

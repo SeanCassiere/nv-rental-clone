@@ -1,6 +1,6 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, RouteApi, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import ProtectorShield from "@/components/protector-shield";
@@ -10,8 +10,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-
-import { searchReportsRoute } from "@/routes/reports/search-reports-route";
 
 import type { TReportsListItem } from "@/schemas/report";
 
@@ -28,7 +26,7 @@ export default function SearchReportsPage() {
   const userId = auth.user?.profile?.navotar_userid || "";
   const ALL_KEY = "All";
 
-  const { category = ALL_KEY } = useSearch({ from: searchReportsRoute.id });
+  const { category = ALL_KEY } = routeApi.useSearch();
 
   useDocumentTitle(titleMaker("Reports"));
 

@@ -1,22 +1,20 @@
 import { useCallback } from "react";
-import { useNavigate, useRouter, useSearch } from "@tanstack/react-router";
+import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { addReservationRoute } from "@/routes/reservations/add-reservation-route";
-
 import { titleMaker } from "@/utils/title-maker";
 
+const routeApi = new RouteApi({ id: "/reservations/new" });
+
 const AddReservationPage = () => {
-  const navigate = useNavigate({ from: addReservationRoute.id });
+  const navigate = useNavigate({ from: "/reservations/new" });
   const router = useRouter();
 
-  const { stage = "rental-information" } = useSearch({
-    from: addReservationRoute.id,
-  });
+  const { stage = "rental-information" } = routeApi.useSearch();
 
   const handleStageTabClick = useCallback(
     (destination: string) => {

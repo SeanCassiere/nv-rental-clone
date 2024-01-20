@@ -7,8 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useFeature } from "@/hooks/useFeature";
 
-import { destinationSettingsRoute } from "@/routes/settings/destination-settings-route";
-
 import { SETTINGS_LOCATION_KEYS } from "@/utils/constants";
 
 const SettingsEmailTemplatesTab = React.lazy(
@@ -34,10 +32,10 @@ function getValueForTabList(list: TabListItem[], id: string) {
 const SettingsRuntimeConfigurationTab = () => {
   const { t } = useTranslation("settings");
 
-  const navigate = useNavigate({ from: destinationSettingsRoute.id });
+  const navigate = useNavigate({ from: "/settings/$destination" });
 
   const { tab } = useSearch({
-    from: destinationSettingsRoute.id,
+    from: "/settings/$destination",
   });
 
   const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS", "");
