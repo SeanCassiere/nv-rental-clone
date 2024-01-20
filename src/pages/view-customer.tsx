@@ -40,7 +40,7 @@ const ModuleNotesTabContent = lazy(
   () => import("../components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/customers/$customerId/" });
+const routeApi = new RouteApi({ id: "/customers/$customerId" });
 
 function CustomerViewPage() {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -7,22 +7,7 @@ import {
   fetchCustomerSummaryByIdOptions,
 } from "@/utils/query/customer";
 
-import { customersRoute } from ".";
-
-export const customerPathIdRoute = new Route({
-  getParentRoute: () => customersRoute,
-  path: "$customerId",
-  parseParams: (params) => ({
-    customerId: z.string().parse(params.customerId),
-  }),
-  stringifyParams: (params) => ({
-    customerId: `${params.customerId}`,
-  }),
-});
-
-export const viewCustomerByIdRoute = new Route({
-  getParentRoute: () => customerPathIdRoute,
-  path: "/",
+export const Route = new FileRoute("/customers/$customerId").createRoute({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
@@ -54,28 +39,4 @@ export const viewCustomerByIdRoute = new Route({
     return;
   },
   component: lazyRouteComponent(() => import("@/pages/view-customer")),
-});
-
-export const editCustomerByIdRoute = new Route({
-  getParentRoute: () => customerPathIdRoute,
-  path: "edit",
-  beforeLoad: ({ context, params: { customerId } }) => {
-    const auth = getAuthFromRouterContext(context);
-    return {
-      authParams: auth,
-      viewCustomerOptions: fetchCustomerByIdOptions({ auth, customerId }),
-    };
-  },
-  loader: async ({ context }) => {
-    const { queryClient, viewCustomerOptions } = context;
-
-    const promises = [];
-
-    promises.push(queryClient.ensureQueryData(viewCustomerOptions));
-
-    await Promise.all(promises);
-
-    return;
-  },
-  component: () => "Edit Customer Route",
 });

@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
@@ -10,11 +10,7 @@ import {
   fetchCustomersSearchListOptions,
 } from "@/utils/query/customer";
 
-import { customersRoute } from ".";
-
-export const searchCustomersRoute = new Route({
-  getParentRoute: () => customersRoute,
-  path: "/",
+export const Route = new FileRoute("/customers").createRoute({
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({

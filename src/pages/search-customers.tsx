@@ -29,7 +29,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/customers/" });
+const routeApi = new RouteApi({ id: "/customers" });
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
