@@ -71,6 +71,15 @@ const ReservationsRouteRoute = ReservationsRouteImport.update({
   path: "/reservations",
   getParentRoute: () => rootRoute,
 } as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/reservations/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/reservations/component"),
+      "component",
+    ),
+  })
 
 const ReportsRouteRoute = ReportsRouteImport.update({
   path: "/reports",
@@ -129,13 +138,30 @@ const SettingsDestinationRouteRoute = SettingsDestinationRouteImport.update({
 const ReservationsNewRouteRoute = ReservationsNewRouteImport.update({
   path: "/reservations/new",
   getParentRoute: () => rootRoute,
-} as any)
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/reservations_.new/component"),
+    "component",
+  ),
+})
 
 const ReservationsReservationIdRouteRoute =
   ReservationsReservationIdRouteImport.update({
     path: "/reservations/$reservationId",
     getParentRoute: () => rootRoute,
   } as any)
+    .updateLoader({
+      loader: lazyFn(
+        () => import("./routes/reservations_.$reservationId/loader"),
+        "loader",
+      ),
+    })
+    .update({
+      component: lazyRouteComponent(
+        () => import("./routes/reservations_.$reservationId/component"),
+        "component",
+      ),
+    })
 
 const ReportsReportIdRouteRoute = ReportsReportIdRouteImport.update({
   path: "/reports/$reportId",
@@ -179,6 +205,18 @@ const ReservationsReservationIdEditRouteRoute =
     path: "/edit",
     getParentRoute: () => ReservationsReservationIdRouteRoute,
   } as any)
+    .updateLoader({
+      loader: lazyFn(
+        () => import("./routes/reservations_.$reservationId.edit/loader"),
+        "loader",
+      ),
+    })
+    .update({
+      component: lazyRouteComponent(
+        () => import("./routes/reservations_.$reservationId.edit/component"),
+        "component",
+      ),
+    })
 
 const FleetVehicleIdEditRouteRoute = FleetVehicleIdEditRouteImport.update({
   path: "/edit",

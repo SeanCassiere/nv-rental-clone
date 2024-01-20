@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -31,21 +31,4 @@ export const Route = new FileRoute(
       }),
     };
   },
-  loader: async ({ context }) => {
-    const {
-      queryClient,
-      viewReservationOptions,
-      viewReservationSummaryOptions,
-    } = context;
-    const promises = [];
-
-    promises.push(queryClient.ensureQueryData(viewReservationOptions));
-
-    promises.push(queryClient.ensureQueryData(viewReservationSummaryOptions));
-
-    await Promise.all(promises);
-
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/edit-reservation")),
 });

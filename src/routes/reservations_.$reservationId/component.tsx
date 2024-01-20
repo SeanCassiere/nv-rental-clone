@@ -28,15 +28,15 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(
-  () => import("../components/primary-module/tabs/reservation/summary-content")
+  () => import("@/components/primary-module/tabs/reservation/summary-content")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../components/primary-module/tabs/notes-content")
+  () => import("@/components/primary-module/tabs/notes-content")
 );
 
 const routeApi = new RouteApi({ id: "/reservations/$reservationId" });
 
-function ReservationViewPage() {
+export const component = function ReservationViewPage() {
   const router = useRouter();
 
   const auth = useAuth();
@@ -221,6 +221,4 @@ function ReservationViewPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default ReservationViewPage;
+};

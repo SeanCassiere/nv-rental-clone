@@ -11,7 +11,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 const routeApi = new RouteApi({ id: "/reservations/$reservationId/edit" });
 
-const EditReservationPage = () => {
+export const component = function EditReservationPage() {
   const navigate = useNavigate({ from: "/reservations/$reservationId/edit" });
   const router = useRouter();
 
@@ -87,5 +87,3 @@ const EditReservationPage = () => {
     </ProtectorShield>
   );
 };
-
-export default EditReservationPage;
