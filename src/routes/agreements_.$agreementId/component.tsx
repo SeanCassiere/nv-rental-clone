@@ -29,13 +29,13 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(
-  () => import("../components/primary-module/tabs/agreement/summary-content")
+  () => import("@/components/primary-module/tabs/agreement/summary-content")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../components/primary-module/tabs/notes-content")
+  () => import("@/components/primary-module/tabs/notes-content")
 );
 const AgreementExchangesTab = lazy(
-  () => import("../components/primary-module/tabs/agreement/exchanges-content")
+  () => import("@/components/primary-module/tabs/agreement/exchanges-content")
 );
 
 const routeApi = new RouteApi({ id: "/agreements/$agreementId" });
@@ -48,7 +48,7 @@ type TabListItem = {
   suspenseComponent?: ReactNode;
 };
 
-function AgreementViewPage() {
+export const component = function AgreementViewPage() {
   const router = useRouter();
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
@@ -346,6 +346,4 @@ function AgreementViewPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default AgreementViewPage;
+};

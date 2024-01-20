@@ -43,7 +43,7 @@ const routeApi = new RouteApi({ id: "/agreements" });
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
-function AgreementsSearchPage() {
+export const component = function AgreementsSearchPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -406,6 +406,4 @@ function AgreementsSearchPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default AgreementsSearchPage;
+};

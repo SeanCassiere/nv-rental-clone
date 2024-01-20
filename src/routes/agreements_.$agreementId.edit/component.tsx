@@ -9,10 +9,10 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
-const routeApi = new RouteApi({ id: "/agreements/$agreementId/check-in" });
+const routeApi = new RouteApi({ id: "/agreements/$agreementId/edit" });
 
-const CheckinAgreementPage = () => {
-  const navigate = useNavigate({ from: "/agreements/$agreementId/check-in" });
+export const component = function EditAgreementPage() {
+  const navigate = useNavigate({ from: "/agreements/$agreementId/edit" });
   const router = useRouter();
 
   const routeContext = routeApi.useRouteContext();
@@ -55,9 +55,7 @@ const CheckinAgreementPage = () => {
     agreementData.data?.status === 200 ? agreementData.data.body : null;
 
   useDocumentTitle(
-    titleMaker(
-      `Check-in - ${agreement?.agreementNumber || "Loading"} - Agreement`
-    )
+    titleMaker(`Edit - ${agreement?.agreementNumber || "Loading"} - Agreement`)
   );
 
   useEffect(() => {
@@ -77,10 +75,7 @@ const CheckinAgreementPage = () => {
         onRentalCancelClick={handleCancelEditAgreement}
         referenceNumber={agreement?.agreementNumber || undefined}
         summaryData={summaryData}
-        isCheckin
       />
     </ProtectorShield>
   );
 };
-
-export default CheckinAgreementPage;

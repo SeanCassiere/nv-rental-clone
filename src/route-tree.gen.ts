@@ -137,6 +137,15 @@ const AgreementsRouteRoute = AgreementsRouteImport.update({
   path: "/agreements",
   getParentRoute: () => rootRoute,
 } as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/agreements/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/agreements/component"),
+      "component",
+    ),
+  })
 
 const IndexRouteRoute = IndexRouteImport.update({
   path: "/",
@@ -261,7 +270,12 @@ const CustomersCustomerIdRouteRoute = CustomersCustomerIdRouteImport.update({
 const AgreementsNewRouteRoute = AgreementsNewRouteImport.update({
   path: "/agreements/new",
   getParentRoute: () => rootRoute,
-} as any)
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/agreements_.new/component"),
+    "component",
+  ),
+})
 
 const AgreementsAgreementIdRouteRoute = AgreementsAgreementIdRouteImport.update(
   {
@@ -269,6 +283,18 @@ const AgreementsAgreementIdRouteRoute = AgreementsAgreementIdRouteImport.update(
     getParentRoute: () => rootRoute,
   } as any,
 )
+  .updateLoader({
+    loader: lazyFn(
+      () => import("./routes/agreements_.$agreementId/loader"),
+      "loader",
+    ),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/agreements_.$agreementId/component"),
+      "component",
+    ),
+  })
 
 const ReservationsReservationIdEditRouteRoute =
   ReservationsReservationIdEditRouteImport.update({
@@ -321,12 +347,36 @@ const AgreementsAgreementIdEditRouteRoute =
     path: "/edit",
     getParentRoute: () => AgreementsAgreementIdRouteRoute,
   } as any)
+    .updateLoader({
+      loader: lazyFn(
+        () => import("./routes/agreements_.$agreementId.edit/loader"),
+        "loader",
+      ),
+    })
+    .update({
+      component: lazyRouteComponent(
+        () => import("./routes/agreements_.$agreementId.edit/component"),
+        "component",
+      ),
+    })
 
 const AgreementsAgreementIdCheckInRouteRoute =
   AgreementsAgreementIdCheckInRouteImport.update({
     path: "/check-in",
     getParentRoute: () => AgreementsAgreementIdRouteRoute,
   } as any)
+    .updateLoader({
+      loader: lazyFn(
+        () => import("./routes/agreements_.$agreementId.check-in/loader"),
+        "loader",
+      ),
+    })
+    .update({
+      component: lazyRouteComponent(
+        () => import("./routes/agreements_.$agreementId.check-in/component"),
+        "component",
+      ),
+    })
 
 // Populate the FileRoutesByPath interface
 

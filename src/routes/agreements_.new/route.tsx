@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 export const Route = new FileRoute("/agreements/new").createRoute({
@@ -9,5 +9,4 @@ export const Route = new FileRoute("/agreements/new").createRoute({
       })
       .parse(search),
   preSearchFilters: [() => ({ stage: "rental-information" })],
-  component: lazyRouteComponent(() => import("@/pages/add-agreement")),
 });
