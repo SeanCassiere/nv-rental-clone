@@ -42,11 +42,11 @@ export const router = new Router({
   },
 });
 
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
+// declare module "@tanstack/react-router" {
+//   interface Register {
+//     router: typeof router;
+//   }
+// }
 
 export default function App() {
   return (
