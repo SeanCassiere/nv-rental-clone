@@ -3,6 +3,7 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
+import { Route as DevImport } from "./routes/dev"
 import { Route as ReservationsRouteImport } from "./routes/reservations/route"
 import { Route as OidcCallbackRouteImport } from "./routes/oidc-callback.route"
 import { Route as FleetRouteImport } from "./routes/fleet/route"
@@ -24,6 +25,11 @@ import { Route as AgreementsAgreementIdEditRouteImport } from "./routes/agreemen
 import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agreements_.$agreementId.check-in/route"
 
 // Create/Update Routes
+
+const DevRoute = DevImport.update({
+  path: "/dev",
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ReservationsRouteRoute = ReservationsRouteImport.update({
   path: "/reservations",
@@ -155,6 +161,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ReservationsRouteImport
       parentRoute: typeof rootRoute
     }
+    "/dev": {
+      preLoaderRoute: typeof DevImport
+      parentRoute: typeof rootRoute
+    }
     "/agreements/$agreementId": {
       preLoaderRoute: typeof AgreementsAgreementIdRouteImport
       parentRoute: typeof rootRoute
@@ -219,6 +229,7 @@ export const routeTree = rootRoute.addChildren([
   FleetRouteRoute.addChildren([FleetNewRouteRoute]),
   OidcCallbackRouteRoute,
   ReservationsRouteRoute,
+  DevRoute,
   AgreementsAgreementIdRouteRoute.addChildren([
     AgreementsAgreementIdCheckInRouteRoute,
     AgreementsAgreementIdEditRouteRoute,
