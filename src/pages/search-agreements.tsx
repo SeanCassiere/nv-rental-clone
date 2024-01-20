@@ -25,8 +25,10 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
-import { AgreementDateTimeColumns } from "@/utils/columns";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import {
+  AgreementDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/utils/columns";
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,

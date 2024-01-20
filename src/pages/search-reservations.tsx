@@ -25,8 +25,10 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TReservationListItemParsed } from "@/schemas/reservation";
 
-import { ReservationDateTimeColumns } from "@/utils/columns";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import {
+  ReservationDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/utils/columns";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
   fetchReservationStatusesOptions,

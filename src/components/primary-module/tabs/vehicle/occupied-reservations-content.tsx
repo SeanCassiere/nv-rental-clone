@@ -13,9 +13,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { TReservationListItemParsed } from "@/schemas/reservation";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
-import { ReservationDateTimeColumns } from "@/utils/columns";
+import {
+  ReservationDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/utils/columns";
 import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
 import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
 import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
 

@@ -23,7 +23,7 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
-import { sortColOrderByOrderIndex } from "@/utils/ordering";
+import { sortColOrderByOrderIndex } from "@/utils/columns";
 import { fetchCustomerTypesOptions } from "@/utils/query/customer";
 import { titleMaker } from "@/utils/title-maker";
 
