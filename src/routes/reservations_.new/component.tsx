@@ -10,7 +10,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 const routeApi = new RouteApi({ id: "/reservations/new" });
 
-const AddReservationPage = () => {
+export const component = function AddReservationPage() {
   const navigate = useNavigate({ from: "/reservations/new" });
   const router = useRouter();
 
@@ -56,5 +56,3 @@ const AddReservationPage = () => {
     </ProtectorShield>
   );
 };
-
-export default AddReservationPage;

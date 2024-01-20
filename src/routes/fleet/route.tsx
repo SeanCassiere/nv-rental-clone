@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 
 import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
@@ -41,20 +41,4 @@ export const Route = new FileRoute("/fleet").createRoute({
     size: search.size,
     filters: search.filters,
   }),
-  loader: async ({ context }) => {
-    const { queryClient, searchColumnsOptions, searchListOptions } = context;
-
-    const promises = [];
-
-    // get columns
-    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
-
-    // get search
-    promises.push(queryClient.ensureQueryData(searchListOptions));
-
-    await Promise.all(promises);
-
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/search-vehicles")),
 });

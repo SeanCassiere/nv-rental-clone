@@ -1,10 +1,9 @@
 import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
-import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
-import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
+import VehicleStatBlock from "@/components/primary-module/statistic-block/vehicle-stat-block";
 import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -22,31 +21,53 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
-const SummaryTab = lazy(
-  () => import("../components/primary-module/tabs/reservation/summary-content")
+const VehicleSummaryTab = lazy(
+  () => import("@/components/primary-module/tabs/vehicle/summary-content")
 );
+const VehicleReservationsTab = lazy(
+  () =>
+    import(
+      "@/components/primary-module/tabs/vehicle/occupied-reservations-content"
+    )
+);
+const VehicleAgreementsTab = lazy(
+  () =>
+    import(
+      "@/components/primary-module/tabs/vehicle/occupied-agreements-content"
+    )
+);
+
 const ModuleNotesTabContent = lazy(
-  () => import("../components/primary-module/tabs/notes-content")
+  () => import("@/components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/reservations/$reservationId" });
+const routeApi = new RouteApi({ id: "/fleet/$vehicleId" });
 
-function ReservationViewPage() {
+export const component = function VehicleViewPage() {
   const router = useRouter();
 
-  const auth = useAuth();
-  const authParams = getAuthFromAuthHook(auth);
-
-  const routeContext = routeApi.useRouteContext();
-  const { tab: tabName = "summary" } = routeApi.useSearch();
-  const { reservationId } = routeApi.useParams();
+  const { authParams, viewVehicleOptions } = routeApi.useRouteContext();
+  const { vehicleId } = routeApi.useParams();
+  const { tab: tabName = "" } = routeApi.useSearch();
 
   const navigate = useNavigate();
+
+  const onTabClick = (newTabId: string) => {
+    navigate({
+      to: "/fleet/$vehicleId",
+      search: (others) => ({ ...others, tab: newTabId }),
+      params: true,
+      replace: true,
+    });
+  };
+
+  const vehicleData = useSuspenseQuery(viewVehicleOptions);
+  const vehicle =
+    vehicleData.data?.status === 200 ? vehicleData.data.body : null;
 
   const tabsConfig = useMemo(() => {
     const tabs: { id: string; label: string; component: ReactNode }[] = [];
@@ -54,59 +75,58 @@ function ReservationViewPage() {
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <SummaryTab reservationId={reservationId} auth={authParams} />,
+      component: <VehicleSummaryTab vehicleId={vehicleId} />,
     });
     tabs.push({
       id: "notes",
       label: "Notes",
       component: (
         <ModuleNotesTabContent
-          module="reservations"
-          referenceId={reservationId}
+          module="vehicles"
+          referenceId={vehicleId}
           clientId={authParams.clientId}
           userId={authParams.userId}
         />
       ),
     });
     tabs.push({
-      id: "payments",
-      label: "Payments",
-      component: "Payments Tab",
+      id: "documents",
+      label: "Documents",
+      component: "Documents Tab",
     });
     tabs.push({
-      id: "invoices",
-      label: "Invoices",
-      component: "Invoices Tab",
+      id: "reservations",
+      label: "Reservations",
+      component: (
+        <VehicleReservationsTab
+          vehicleId={vehicleId}
+          vehicleNo={vehicle?.vehicle.vehicleNo || ""}
+        />
+      ),
+    });
+    tabs.push({
+      id: "agreements",
+      label: "Agreements",
+      component: (
+        <VehicleAgreementsTab
+          vehicleId={vehicleId}
+          vehicleNo={vehicle?.vehicle.vehicleNo || ""}
+        />
+      ),
     });
 
     return tabs;
-  }, [reservationId, authParams]);
-
-  const onTabClick = (newTabId: string) => {
-    navigate({
-      to: "/reservations/$reservationId",
-      search: (others) => ({ ...others, tab: newTabId }),
-      params: { reservationId },
-      replace: true,
-    });
-  };
-
-  const reservationData = useQuery(routeContext.viewReservationOptions);
-  const reservation =
-    reservationData.data?.status === 200 ? reservationData.data?.body : null;
+  }, [vehicleId, vehicle, authParams]);
 
   useDocumentTitle(
-    titleMaker(
-      (reservation?.reservationview.reservationNumber || "Loading") +
-        " - Reservations"
-    )
+    titleMaker((vehicle?.vehicle.vehicleNo || "Loading") + " - Fleet")
   );
 
   useEffect(() => {
-    if (reservationData.status !== "error") return;
+    if (vehicleData.status !== "error") return;
 
     router.history.go(-1);
-  }, [reservationData.status, router.history]);
+  }, [router.history, vehicleData.status]);
 
   return (
     <ProtectorShield>
@@ -122,31 +142,30 @@ function ReservationViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link to=".." className="text-2xl font-semibold leading-6">
-              Reservations
+              Fleet
             </Link>
             <icons.ChevronRight
               className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
             <Link
-              to="/reservations/$reservationId"
+              to="/fleet/$vehicleId"
               search={(current) => ({
                 tab:
                   "tab" in current && typeof current.tab === "string"
                     ? current.tab
                     : "summary",
               })}
-              params={{ reservationId }}
+              params={{ vehicleId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
-              {reservation?.reservationview?.reservationNumber}
+              {vehicle?.vehicle.vehicleNo}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to="/reservations/$reservationId/edit"
-              search={() => ({ stage: "rental-information" })}
-              params={{ reservationId: String(reservationId) }}
+              to="/fleet/$vehicleId/edit"
+              params={{ vehicleId: String(vehicleId) }}
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
               <icons.Edit className="mr-2 h-4 w-4" />
@@ -173,24 +192,27 @@ function ReservationViewPage() {
                     <icons.Copy className="mr-2 h-4 w-4 sm:mr-4" />
                     <span>Copy and create</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <icons.Print className="mr-2 h-4 w-4 sm:mr-4" />
-                    <span>Print</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <icons.MailPlus className="mr-2 h-4 w-4 sm:mr-4" />
-                    <span>Email</span>
-                  </DropdownMenuItem>
+                  {vehicle?.vehicle.active ? (
+                    <DropdownMenuItem>
+                      <icons.Deactivate className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Deactivate</span>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem>
+                      <icons.Activate className="mr-2 h-4 w-4 sm:mr-4" />
+                      <span>Activate</span>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-foreground/80")}>
-          View the details related to this booking.
+          View the details related to this fleet item.
         </p>
         <Separator className="mb-3.5 mt-3.5" />
-        <ReservationStatBlock reservation={reservation} />
+        <VehicleStatBlock vehicle={vehicle} auth={authParams} />
       </section>
 
       <section
@@ -221,6 +243,4 @@ function ReservationViewPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default ReservationViewPage;
+};

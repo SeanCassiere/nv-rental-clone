@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 export const Route = new FileRoute("/settings/$destination").createRoute({
@@ -15,5 +15,4 @@ export const Route = new FileRoute("/settings/$destination").createRoute({
       })
       .parse(search),
   preSearchFilters: [(prev) => prev],
-  component: lazyRouteComponent(() => import("@/pages/settings-destination")),
 });

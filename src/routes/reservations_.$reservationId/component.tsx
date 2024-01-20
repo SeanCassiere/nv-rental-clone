@@ -1,16 +1,10 @@
-import { lazy, Suspense, useEffect, useMemo } from "react";
+import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Link,
-  RouteApi,
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/react-router";
+import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
+import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
 import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -34,82 +28,85 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(
-  () => import("../components/primary-module/tabs/customer/summary-content")
+  () => import("@/components/primary-module/tabs/reservation/summary-content")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../components/primary-module/tabs/notes-content")
+  () => import("@/components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/customers/$customerId" });
+const routeApi = new RouteApi({ id: "/reservations/$reservationId" });
 
-function CustomerViewPage() {
+export const component = function ReservationViewPage() {
   const router = useRouter();
-  const auth = useAuth();
 
+  const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
   const routeContext = routeApi.useRouteContext();
-  const { customerId } = routeApi.useParams();
   const { tab: tabName = "summary" } = routeApi.useSearch();
+  const { reservationId } = routeApi.useParams();
 
   const navigate = useNavigate();
 
   const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: React.ReactNode }[] =
-      [];
+    const tabs: { id: string; label: string; component: ReactNode }[] = [];
 
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <SummaryTab customerId={customerId} />,
+      component: <SummaryTab reservationId={reservationId} auth={authParams} />,
     });
     tabs.push({
       id: "notes",
       label: "Notes",
       component: (
         <ModuleNotesTabContent
-          module="customers"
-          referenceId={customerId}
+          module="reservations"
+          referenceId={reservationId}
           clientId={authParams.clientId}
           userId={authParams.userId}
         />
       ),
     });
     tabs.push({
-      id: "documents",
-      label: "Documents",
-      component: "Documents Tab",
+      id: "payments",
+      label: "Payments",
+      component: "Payments Tab",
+    });
+    tabs.push({
+      id: "invoices",
+      label: "Invoices",
+      component: "Invoices Tab",
     });
 
     return tabs;
-  }, [customerId, authParams]);
+  }, [reservationId, authParams]);
 
   const onTabClick = (newTabId: string) => {
     navigate({
-      to: "/customers/$customerId",
+      to: "/reservations/$reservationId",
       search: (others) => ({ ...others, tab: newTabId }),
-      params: { customerId },
+      params: { reservationId },
       replace: true,
     });
   };
 
-  const customerQuery = useQuery(routeContext.viewCustomerOptions);
-  const customer =
-    customerQuery.data?.status === 200 ? customerQuery.data.body : null;
+  const reservationData = useQuery(routeContext.viewReservationOptions);
+  const reservation =
+    reservationData.data?.status === 200 ? reservationData.data?.body : null;
 
   useDocumentTitle(
     titleMaker(
-      (customer?.firstName && customer?.lastName
-        ? customer?.firstName + " " + customer?.lastName
-        : "Loading") + " - Customers"
+      (reservation?.reservationview.reservationNumber || "Loading") +
+        " - Reservations"
     )
   );
 
   useEffect(() => {
-    if (customerQuery.status !== "error") return;
+    if (reservationData.status !== "error") return;
 
     router.history.go(-1);
-  }, [customerQuery.status, router.history]);
+  }, [reservationData.status, router.history]);
 
   return (
     <ProtectorShield>
@@ -125,35 +122,34 @@ function CustomerViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link to=".." className="text-2xl font-semibold leading-6">
-              Customers
+              Reservations
             </Link>
             <icons.ChevronRight
               className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
             <Link
-              to="/customers/$customerId"
+              to="/reservations/$reservationId"
               search={(current) => ({
                 tab:
                   "tab" in current && typeof current.tab === "string"
                     ? current.tab
                     : "summary",
               })}
-              params={{ customerId }}
+              params={{ reservationId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
-              {customer?.firstName}&nbsp;
-              {customer?.lastName}
+              {reservation?.reservationview?.reservationNumber}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to="/customers/$customerId/edit"
-              search={() => ({})}
-              params={{ customerId: String(customerId) }}
+              to="/reservations/$reservationId/edit"
+              search={() => ({ stage: "rental-information" })}
+              params={{ reservationId: String(reservationId) }}
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
-              <icons.Edit className="h-4 w-4 sm:mr-2" />
+              <icons.Edit className="mr-2 h-4 w-4" />
               <span className="inline-block">Edit</span>
             </Link>
 
@@ -173,31 +169,33 @@ function CustomerViewPage() {
                 <DropdownMenuLabel>More actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  {customer?.active ? (
-                    <DropdownMenuItem>
-                      <icons.Deactivate className="mr-2 h-4 w-4 sm:mr-4" />
-                      <span>Deactivate</span>
-                    </DropdownMenuItem>
-                  ) : (
-                    <DropdownMenuItem>
-                      <icons.Activate className="mr-2 h-4 w-4 sm:mr-4" />
-                      <span>Activate</span>
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem>
+                    <icons.Copy className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Copy and create</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <icons.Print className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Print</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <icons.MailPlus className="mr-2 h-4 w-4 sm:mr-4" />
+                    <span>Email</span>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
         <p className={cn("text-base text-foreground/80")}>
-          View the details related to this customer.
+          View the details related to this booking.
         </p>
-        <Separator className="mt-3.5" />
+        <Separator className="mb-3.5 mt-3.5" />
+        <ReservationStatBlock reservation={reservation} />
       </section>
 
       <section
         className={cn(
-          "mx-auto mb-4 mt-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:mb-6 sm:px-1"
+          "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
         )}
       >
         <Tabs value={tabName} onValueChange={onTabClick}>
@@ -223,6 +221,4 @@ function CustomerViewPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default CustomerViewPage;
+};

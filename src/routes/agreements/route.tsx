@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
@@ -48,19 +48,4 @@ export const Route = new FileRoute("/agreements").createRoute({
     size: search.size,
     filters: sortObjectKeys(search.filters),
   }),
-  loader: async ({ context }) => {
-    const { queryClient, searchColumnsOptions, searchListOptions } = context;
-
-    const promises = [];
-
-    // get columns
-    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
-
-    // get list
-    promises.push(queryClient.ensureQueryData(searchListOptions));
-
-    await Promise.all(promises);
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/search-agreements")),
 });

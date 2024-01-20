@@ -10,7 +10,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 const routeApi = new RouteApi({ id: "/agreements/new" });
 
-const AddAgreementPage = () => {
+export const component = function AddAgreementPage() {
   const navigate = useNavigate({ from: "/agreements/new" });
   const router = useRouter();
 
@@ -56,5 +56,3 @@ const AddAgreementPage = () => {
     </ProtectorShield>
   );
 };
-
-export default AddAgreementPage;

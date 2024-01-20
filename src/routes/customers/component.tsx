@@ -35,7 +35,7 @@ const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
 const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 
-function CustomerSearchPage() {
+export const component = function CustomerSearchPage() {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -316,6 +316,4 @@ function CustomerSearchPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default CustomerSearchPage;
+};

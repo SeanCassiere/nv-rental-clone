@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
@@ -41,19 +41,4 @@ export const Route = new FileRoute("/customers").createRoute({
     size: search.size,
     filters: search.filters,
   }),
-  loader: async ({ context }) => {
-    const { queryClient, searchColumnsOptions, searchListOptions } = context;
-
-    const promises = [];
-
-    // get columns
-    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
-
-    // get search
-    promises.push(queryClient.ensureQueryData(searchListOptions));
-
-    await Promise.all(promises);
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/search-customers")),
 });

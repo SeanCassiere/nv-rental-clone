@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { lazy, Suspense, useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
+import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
-import VehicleStatBlock from "@/components/primary-module/statistic-block/vehicle-stat-block";
 import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -21,69 +21,48 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
+import { getAuthFromAuthHook } from "@/utils/auth";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
-const VehicleSummaryTab = lazy(
-  () => import("../components/primary-module/tabs/vehicle/summary-content")
+const SummaryTab = lazy(
+  () => import("@/components/primary-module/tabs/customer/summary-content")
 );
-const VehicleReservationsTab = lazy(
-  () =>
-    import(
-      "../components/primary-module/tabs/vehicle/occupied-reservations-content"
-    )
-);
-const VehicleAgreementsTab = lazy(
-  () =>
-    import(
-      "../components/primary-module/tabs/vehicle/occupied-agreements-content"
-    )
-);
-
 const ModuleNotesTabContent = lazy(
-  () => import("../components/primary-module/tabs/notes-content")
+  () => import("@/components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/fleet/$vehicleId" });
+const routeApi = new RouteApi({ id: "/customers/$customerId" });
 
-function VehicleViewPage() {
+export const component = function CustomerViewPage() {
   const router = useRouter();
+  const auth = useAuth();
 
-  const { authParams, viewVehicleOptions } = routeApi.useRouteContext();
-  const { vehicleId } = routeApi.useParams();
-  const { tab: tabName = "" } = routeApi.useSearch();
+  const authParams = getAuthFromAuthHook(auth);
+
+  const routeContext = routeApi.useRouteContext();
+  const { customerId } = routeApi.useParams();
+  const { tab: tabName = "summary" } = routeApi.useSearch();
 
   const navigate = useNavigate();
 
-  const onTabClick = (newTabId: string) => {
-    navigate({
-      to: "/fleet/$vehicleId",
-      search: (others) => ({ ...others, tab: newTabId }),
-      params: true,
-      replace: true,
-    });
-  };
-
-  const vehicleData = useSuspenseQuery(viewVehicleOptions);
-  const vehicle =
-    vehicleData.data?.status === 200 ? vehicleData.data.body : null;
-
   const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: ReactNode }[] = [];
+    const tabs: { id: string; label: string; component: React.ReactNode }[] =
+      [];
 
     tabs.push({
       id: "summary",
       label: "Summary",
-      component: <VehicleSummaryTab vehicleId={vehicleId} />,
+      component: <SummaryTab customerId={customerId} />,
     });
     tabs.push({
       id: "notes",
       label: "Notes",
       component: (
         <ModuleNotesTabContent
-          module="vehicles"
-          referenceId={vehicleId}
+          module="customers"
+          referenceId={customerId}
           clientId={authParams.clientId}
           userId={authParams.userId}
         />
@@ -94,39 +73,36 @@ function VehicleViewPage() {
       label: "Documents",
       component: "Documents Tab",
     });
-    tabs.push({
-      id: "reservations",
-      label: "Reservations",
-      component: (
-        <VehicleReservationsTab
-          vehicleId={vehicleId}
-          vehicleNo={vehicle?.vehicle.vehicleNo || ""}
-        />
-      ),
-    });
-    tabs.push({
-      id: "agreements",
-      label: "Agreements",
-      component: (
-        <VehicleAgreementsTab
-          vehicleId={vehicleId}
-          vehicleNo={vehicle?.vehicle.vehicleNo || ""}
-        />
-      ),
-    });
 
     return tabs;
-  }, [vehicleId, vehicle, authParams]);
+  }, [customerId, authParams]);
+
+  const onTabClick = (newTabId: string) => {
+    navigate({
+      to: "/customers/$customerId",
+      search: (others) => ({ ...others, tab: newTabId }),
+      params: { customerId },
+      replace: true,
+    });
+  };
+
+  const customerQuery = useQuery(routeContext.viewCustomerOptions);
+  const customer =
+    customerQuery.data?.status === 200 ? customerQuery.data.body : null;
 
   useDocumentTitle(
-    titleMaker((vehicle?.vehicle.vehicleNo || "Loading") + " - Fleet")
+    titleMaker(
+      (customer?.firstName && customer?.lastName
+        ? customer?.firstName + " " + customer?.lastName
+        : "Loading") + " - Customers"
+    )
   );
 
   useEffect(() => {
-    if (vehicleData.status !== "error") return;
+    if (customerQuery.status !== "error") return;
 
     router.history.go(-1);
-  }, [router.history, vehicleData.status]);
+  }, [customerQuery.status, router.history]);
 
   return (
     <ProtectorShield>
@@ -142,33 +118,35 @@ function VehicleViewPage() {
         >
           <div className="flex w-full items-center justify-start gap-2">
             <Link to=".." className="text-2xl font-semibold leading-6">
-              Fleet
+              Customers
             </Link>
             <icons.ChevronRight
               className="h-4 w-4 flex-shrink-0"
               aria-hidden="true"
             />
             <Link
-              to="/fleet/$vehicleId"
+              to="/customers/$customerId"
               search={(current) => ({
                 tab:
                   "tab" in current && typeof current.tab === "string"
                     ? current.tab
                     : "summary",
               })}
-              params={{ vehicleId }}
+              params={{ customerId }}
               className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
             >
-              {vehicle?.vehicle.vehicleNo}
+              {customer?.firstName}&nbsp;
+              {customer?.lastName}
             </Link>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
-              to="/fleet/$vehicleId/edit"
-              params={{ vehicleId: String(vehicleId) }}
+              to="/customers/$customerId/edit"
+              search={() => ({})}
+              params={{ customerId: String(customerId) }}
               className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
             >
-              <icons.Edit className="mr-2 h-4 w-4" />
+              <icons.Edit className="h-4 w-4 sm:mr-2" />
               <span className="inline-block">Edit</span>
             </Link>
 
@@ -188,11 +166,7 @@ function VehicleViewPage() {
                 <DropdownMenuLabel>More actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <icons.Copy className="mr-2 h-4 w-4 sm:mr-4" />
-                    <span>Copy and create</span>
-                  </DropdownMenuItem>
-                  {vehicle?.vehicle.active ? (
+                  {customer?.active ? (
                     <DropdownMenuItem>
                       <icons.Deactivate className="mr-2 h-4 w-4 sm:mr-4" />
                       <span>Deactivate</span>
@@ -209,15 +183,14 @@ function VehicleViewPage() {
           </div>
         </div>
         <p className={cn("text-base text-foreground/80")}>
-          View the details related to this fleet item.
+          View the details related to this customer.
         </p>
-        <Separator className="mb-3.5 mt-3.5" />
-        <VehicleStatBlock vehicle={vehicle} auth={authParams} />
+        <Separator className="mt-3.5" />
       </section>
 
       <section
         className={cn(
-          "mx-auto my-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:my-6 sm:px-1"
+          "mx-auto mb-4 mt-4 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:mb-6 sm:px-1"
         )}
       >
         <Tabs value={tabName} onValueChange={onTabClick}>
@@ -243,6 +216,4 @@ function VehicleViewPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default VehicleViewPage;
+};

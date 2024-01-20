@@ -2,8 +2,6 @@ import { FileRoute } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
-import { localStoragePersister } from "@/tanstack-query-config";
-
 export const Route = new FileRoute("/logout").createRoute({
   loader: async ({ context, preload, navigate }) => {
     if (preload) return;
@@ -17,8 +15,6 @@ export const Route = new FileRoute("/logout").createRoute({
     }
 
     if (typeof window !== "undefined") {
-      localStoragePersister.removeClient();
-
       const localStorageKeyPrefix = `app-runtime:`;
       Object.keys(window.localStorage)
         .filter((key) => key.startsWith(localStorageKeyPrefix))

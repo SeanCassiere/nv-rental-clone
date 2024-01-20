@@ -41,7 +41,7 @@ const V2DashboardContent = lazy(
   () => import("@/components/dashboard/v2-content")
 );
 
-function IndexPage() {
+export const component = function DashboardPage() {
   const navigate = useNavigate({ from: "/" });
   const auth = useAuth();
 
@@ -156,7 +156,7 @@ function IndexPage() {
       </Suspense>
     </ProtectorShield>
   );
-}
+};
 
 type LocationResult = Awaited<
   ReturnType<(typeof apiClient)["location"]["getList"]>
@@ -309,5 +309,3 @@ function LocationPicker({
 }
 
 LocationPicker.displayName = "LocationPicker";
-
-export default IndexPage;

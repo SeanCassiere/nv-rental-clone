@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -16,10 +16,4 @@ export const Route = new FileRoute("/reports").createRoute({
       searchListOptions: fetchReportsListOptions({ auth }),
     };
   },
-  loader: async ({ context }) => {
-    const { queryClient, searchListOptions } = context;
-    await queryClient.ensureQueryData(searchListOptions);
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/search-reports")),
 });

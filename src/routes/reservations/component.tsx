@@ -43,7 +43,7 @@ const routeApi = new RouteApi({ id: "/reservations" });
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-function ReservationsSearchPage() {
+export const component = function ReservationsSearchPage() {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -392,6 +392,4 @@ function ReservationsSearchPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default ReservationsSearchPage;
+};

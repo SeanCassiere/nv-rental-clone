@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -41,37 +41,4 @@ export const Route = new FileRoute("/agreements/$agreementId").createRoute({
     };
   },
   loaderDeps: (ctx) => ({ tab: ctx.search?.tab }),
-  loader: async ({ context }) => {
-    const {
-      queryClient,
-      viewAgreementExchangesOptions,
-      viewAgreementNotesOptions,
-      viewAgreementSummaryOptions,
-      viewAgreementOptions,
-      viewTab,
-    } = context;
-    const promises = [];
-
-    promises.push(queryClient.ensureQueryData(viewAgreementOptions));
-
-    switch (viewTab.trim().toLowerCase()) {
-      case "exchanges":
-        promises.push(
-          queryClient.ensureQueryData(viewAgreementExchangesOptions)
-        );
-        break;
-      case "notes":
-        promises.push(queryClient.ensureQueryData(viewAgreementNotesOptions));
-        break;
-      case "summary":
-      default:
-        promises.push(queryClient.ensureQueryData(viewAgreementSummaryOptions));
-        break;
-    }
-
-    await Promise.all(promises);
-
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/view-agreement")),
 });

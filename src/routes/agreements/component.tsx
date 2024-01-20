@@ -8,6 +8,7 @@ import {
   type PaginationState,
   type VisibilityState,
 } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 
 import {
   PrimaryModuleTable,
@@ -17,33 +18,39 @@ import {
 import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
-import type { TVehicleListItemParsed } from "@/schemas/vehicle";
+import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
-import { sortColOrderByOrderIndex } from "@/utils/columns";
-import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
-  fetchVehiclesStatusesOptions,
-  fetchVehiclesTypesOptions,
-} from "@/utils/query/vehicle";
+  AgreementDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/utils/columns";
+import {
+  fetchAgreementStatusesOptions,
+  fetchAgreementTypesOptions,
+} from "@/utils/query/agreement";
+import { fetchLocationsListOptions } from "@/utils/query/location";
+import { fetchVehiclesTypesOptions } from "@/utils/query/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/fleet" });
+const routeApi = new RouteApi({ id: "/agreements" });
 
-const columnHelper = createColumnHelper<TVehicleListItemParsed>();
+const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
-function VehiclesSearchPage() {
+export const component = function AgreementsSearchPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const {
-    search,
     searchColumnsOptions,
     searchListOptions,
+    search,
     authParams,
     queryClient,
   } = routeApi.useRouteContext();
@@ -73,12 +80,12 @@ function VehiclesSearchPage() {
     [pageNumber, size]
   );
 
-  const vehiclesData = useQuery(searchListOptions);
+  const agreementsData = useQuery(searchListOptions);
 
-  const vehicleStatusList = useQuery(
-    fetchVehiclesStatusesOptions({ auth: authParams })
+  const agreementStatusList = useQuery(
+    fetchAgreementStatusesOptions({ auth: authParams })
   );
-  const vehicleStatuses = vehicleStatusList.data ?? [];
+  const agreementStatuses = agreementStatusList.data ?? [];
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
@@ -93,6 +100,11 @@ function VehiclesSearchPage() {
   );
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
+
+  const agreementTypesList = useQuery(
+    fetchAgreementTypesOptions({ auth: authParams })
+  );
+  const agreementTypes = agreementTypesList.data ?? [];
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 
@@ -114,13 +126,14 @@ function VehiclesSearchPage() {
             ),
             cell: (item) => {
               const value = item.getValue();
-              if (column.columnHeader === "VehicleNo") {
-                const vehicleId = item.table.getRow(item.row.id).original.id;
+              if (column.columnHeader === "AgreementNumber") {
+                const agreementId = item.table.getRow(item.row.id).original
+                  .AgreementId;
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to="/fleet/$vehicleId"
-                      params={{ vehicleId: String(vehicleId) }}
+                      to="/agreements/$agreementId"
+                      params={{ agreementId: String(agreementId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
@@ -132,23 +145,32 @@ function VehiclesSearchPage() {
                   </PrimaryModuleTableCellWrap>
                 );
               }
-              if (column.columnHeader === "VehicleStatus") {
+              if (column.columnHeader === "AgreementStatusName") {
                 return (
                   <PrimaryModuleTableCellWrap>
-                    <Badge variant="outline">{value}</Badge>
+                    <Badge variant="outline">{String(value)}</Badge>
                   </PrimaryModuleTableCellWrap>
                 );
               }
-
+              if (AgreementDateTimeColumns.includes(column.columnHeader)) {
+                return (
+                  <PrimaryModuleTableCellWrap>
+                    {t("intlDateTime", {
+                      value: new Date(value),
+                      ns: "format",
+                    })}
+                  </PrimaryModuleTableCellWrap>
+                );
+              }
               return (
                 <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
               );
             },
-            enableHiding: column.columnHeader !== "VehicleNo",
             enableSorting: false,
+            enableHiding: column.columnHeader !== "AgreementNumber",
           })
         ),
-    [columnsData.data]
+    [columnsData.data, t]
   );
 
   const saveColumnsMutation = useMutation({
@@ -169,7 +191,7 @@ function VehiclesSearchPage() {
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
-        module: "vehicles",
+        module: "agreements",
         allColumns:
           columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
@@ -188,7 +210,7 @@ function VehiclesSearchPage() {
       });
       saveColumnsMutation.mutate({
         auth: authParams,
-        module: "vehicles",
+        module: "agreements",
         allColumns: newColumnsData,
       });
     },
@@ -196,14 +218,14 @@ function VehiclesSearchPage() {
   );
 
   const parsedPagination =
-    vehiclesData.status === "success"
-      ? vehiclesData.data.pagination
+    agreementsData.status === "success"
+      ? agreementsData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const vehiclesList =
-    vehiclesData.data?.status === 200 ? vehiclesData.data?.body : [];
+  const agreementsList =
+    agreementsData.data?.status === 200 ? agreementsData.data.body : [];
 
-  useDocumentTitle(titleMaker("Fleet"));
+  useDocumentTitle(titleMaker("Agreements"));
 
   return (
     <ProtectorShield>
@@ -212,25 +234,42 @@ function VehiclesSearchPage() {
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
         )}
       >
-        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6">Fleet</h1>
+        <div
+          className={cn(
+            "flex min-h-[2.5rem] flex-col items-center justify-between gap-4 sm:flex-row"
+          )}
+        >
+          <div className="flex w-full items-center justify-start gap-2">
+            <h1 className="text-2xl font-semibold leading-6">Agreements</h1>
+          </div>
+          <div className="flex w-full gap-2 sm:w-max">
+            <Link
+              to="/agreements/new"
+              search={() => ({ stage: "rental-information" })}
+              className={cn(buttonVariants({ size: "sm" }), "w-max")}
+            >
+              <icons.Plus className="h-4 w-4 sm:mr-2" />
+              <span>New Agreement</span>
+            </Link>
+          </div>
         </div>
         <p className={cn("text-base text-foreground/80")}>
-          Search through your fleet and view details.
+          Search through your rentals and view details.
         </p>
       </section>
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={vehiclesList}
+          data={agreementsList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
+          isLoading={agreementsData.isLoading || _trackTableLoading}
           rawColumnsData={
             columnsData.data.status === 200 ? columnsData.data.body : []
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            parsedPagination?.totalRecords
+            parsedPagination.totalRecords
               ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
@@ -238,7 +277,7 @@ function VehiclesSearchPage() {
           onPaginationChange={(newPaginationState) => {
             startChangingPage();
             navigate({
-              to: "/fleet",
+              to: "/agreements",
               params: {},
               search: (current) => ({
                 ...current,
@@ -252,9 +291,9 @@ function VehiclesSearchPage() {
             columnFilters,
             setColumnFilters,
             onClearFilters: () => {
-              startChangingPage();
+              startChangingPage;
               navigate({
-                to: "/fleet",
+                to: "/agreements",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -263,6 +302,7 @@ function VehiclesSearchPage() {
               }).then(stopChangingPage);
             },
             onSearchWithFilters: () => {
+              startChangingPage();
               const filters = columnFilters.reduce(
                 (prev, current) => ({
                   ...prev,
@@ -270,9 +310,8 @@ function VehiclesSearchPage() {
                 }),
                 {}
               );
-              startChangingPage();
               navigate({
-                to: "/fleet",
+                to: "/agreements",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -283,17 +322,62 @@ function VehiclesSearchPage() {
             },
             filterableColumns: [
               {
-                id: "VehicleStatus",
+                id: "Keyword",
+                title: "Search",
+                type: "text",
+                size: "large",
+              },
+              {
+                id: "Statuses",
                 title: "Status",
-                type: "select",
-                options: vehicleStatuses.map((item) => ({
+                type: "multi-select",
+                options: agreementStatuses.map((item) => ({
                   value: `${item.id}`,
                   label: item.name,
+                })),
+                defaultValue: [],
+              },
+              {
+                id: "AgreementTypes",
+                title: "Type",
+                type: "multi-select",
+                options: agreementTypes.map((item) => ({
+                  value: `${item.typeName}`,
+                  label: item.typeName,
+                })),
+                defaultValue: [],
+              },
+              {
+                id: "StartDate",
+                title: "Start date",
+                type: "date",
+              },
+              {
+                id: "EndDate",
+                title: "End date",
+                type: "date",
+              },
+              {
+                id: "PickupLocationId",
+                title: "Checkout location",
+                type: "select",
+                options: locations.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "ReturnLocationId",
+                title: "Checkin location",
+                type: "select",
+                options: locations.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
                 })),
               },
               {
                 id: "VehicleTypeId",
-                title: "Type",
+                title: "Vehicle type",
                 type: "select",
                 options: vehicleTypes.map((item) => ({
                   value: `${item.id}`,
@@ -307,32 +391,14 @@ function VehiclesSearchPage() {
                 size: "normal",
               },
               {
-                id: "OwningLocationId",
-                title: "Owning location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-              {
-                id: "CurrentLocationId",
-                title: "Current location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-              {
-                id: "Active",
-                title: "Is active?",
+                id: "IsSearchOverdues",
+                title: "Only overdues?",
                 type: "select",
                 options: [
                   { value: "true", label: "Yes" },
                   { value: "false", label: "No" },
                 ],
-                defaultValue: "true",
+                defaultValue: "false",
               },
             ],
           }}
@@ -340,6 +406,4 @@ function VehiclesSearchPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default VehiclesSearchPage;
+};

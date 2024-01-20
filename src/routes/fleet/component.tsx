@@ -8,7 +8,6 @@ import {
   type PaginationState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useTranslation } from "react-i18next";
 
 import {
   PrimaryModuleTable,
@@ -18,39 +17,33 @@ import {
 import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
-import type { TAgreementListItemParsed } from "@/schemas/agreement";
+import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
-import {
-  AgreementDateTimeColumns,
-  sortColOrderByOrderIndex,
-} from "@/utils/columns";
-import {
-  fetchAgreementStatusesOptions,
-  fetchAgreementTypesOptions,
-} from "@/utils/query/agreement";
+import { sortColOrderByOrderIndex } from "@/utils/columns";
 import { fetchLocationsListOptions } from "@/utils/query/location";
-import { fetchVehiclesTypesOptions } from "@/utils/query/vehicle";
+import {
+  fetchVehiclesStatusesOptions,
+  fetchVehiclesTypesOptions,
+} from "@/utils/query/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/agreements" });
+const routeApi = new RouteApi({ id: "/fleet" });
 
-const columnHelper = createColumnHelper<TAgreementListItemParsed>();
+const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 
-function AgreementsSearchPage() {
-  const { t } = useTranslation();
+export const component = function VehicleSearchPage() {
   const navigate = useNavigate();
 
   const {
+    search,
     searchColumnsOptions,
     searchListOptions,
-    search,
     authParams,
     queryClient,
   } = routeApi.useRouteContext();
@@ -80,12 +73,12 @@ function AgreementsSearchPage() {
     [pageNumber, size]
   );
 
-  const agreementsData = useQuery(searchListOptions);
+  const vehiclesData = useQuery(searchListOptions);
 
-  const agreementStatusList = useQuery(
-    fetchAgreementStatusesOptions({ auth: authParams })
+  const vehicleStatusList = useQuery(
+    fetchVehiclesStatusesOptions({ auth: authParams })
   );
-  const agreementStatuses = agreementStatusList.data ?? [];
+  const vehicleStatuses = vehicleStatusList.data ?? [];
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
@@ -100,11 +93,6 @@ function AgreementsSearchPage() {
   );
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
-
-  const agreementTypesList = useQuery(
-    fetchAgreementTypesOptions({ auth: authParams })
-  );
-  const agreementTypes = agreementTypesList.data ?? [];
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 
@@ -126,14 +114,13 @@ function AgreementsSearchPage() {
             ),
             cell: (item) => {
               const value = item.getValue();
-              if (column.columnHeader === "AgreementNumber") {
-                const agreementId = item.table.getRow(item.row.id).original
-                  .AgreementId;
+              if (column.columnHeader === "VehicleNo") {
+                const vehicleId = item.table.getRow(item.row.id).original.id;
                 return (
                   <PrimaryModuleTableCellWrap>
                     <Link
-                      to="/agreements/$agreementId"
-                      params={{ agreementId: String(agreementId) }}
+                      to="/fleet/$vehicleId"
+                      params={{ vehicleId: String(vehicleId) }}
                       search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
@@ -145,32 +132,23 @@ function AgreementsSearchPage() {
                   </PrimaryModuleTableCellWrap>
                 );
               }
-              if (column.columnHeader === "AgreementStatusName") {
+              if (column.columnHeader === "VehicleStatus") {
                 return (
                   <PrimaryModuleTableCellWrap>
-                    <Badge variant="outline">{String(value)}</Badge>
+                    <Badge variant="outline">{value}</Badge>
                   </PrimaryModuleTableCellWrap>
                 );
               }
-              if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    {t("intlDateTime", {
-                      value: new Date(value),
-                      ns: "format",
-                    })}
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
+
               return (
                 <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
               );
             },
+            enableHiding: column.columnHeader !== "VehicleNo",
             enableSorting: false,
-            enableHiding: column.columnHeader !== "AgreementNumber",
           })
         ),
-    [columnsData.data, t]
+    [columnsData.data]
   );
 
   const saveColumnsMutation = useMutation({
@@ -191,7 +169,7 @@ function AgreementsSearchPage() {
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
-        module: "agreements",
+        module: "vehicles",
         allColumns:
           columnsData.data.status === 200 ? columnsData.data.body : [],
         accessorKeys: newColumnOrder,
@@ -210,7 +188,7 @@ function AgreementsSearchPage() {
       });
       saveColumnsMutation.mutate({
         auth: authParams,
-        module: "agreements",
+        module: "vehicles",
         allColumns: newColumnsData,
       });
     },
@@ -218,14 +196,14 @@ function AgreementsSearchPage() {
   );
 
   const parsedPagination =
-    agreementsData.status === "success"
-      ? agreementsData.data.pagination
+    vehiclesData.status === "success"
+      ? vehiclesData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const agreementsList =
-    agreementsData.data?.status === 200 ? agreementsData.data.body : [];
+  const vehiclesList =
+    vehiclesData.data?.status === 200 ? vehiclesData.data?.body : [];
 
-  useDocumentTitle(titleMaker("Agreements"));
+  useDocumentTitle(titleMaker("Fleet"));
 
   return (
     <ProtectorShield>
@@ -234,42 +212,25 @@ function AgreementsSearchPage() {
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
         )}
       >
-        <div
-          className={cn(
-            "flex min-h-[2.5rem] flex-col items-center justify-between gap-4 sm:flex-row"
-          )}
-        >
-          <div className="flex w-full items-center justify-start gap-2">
-            <h1 className="text-2xl font-semibold leading-6">Agreements</h1>
-          </div>
-          <div className="flex w-full gap-2 sm:w-max">
-            <Link
-              to="/agreements/new"
-              search={() => ({ stage: "rental-information" })}
-              className={cn(buttonVariants({ size: "sm" }), "w-max")}
-            >
-              <icons.Plus className="h-4 w-4 sm:mr-2" />
-              <span>New Agreement</span>
-            </Link>
-          </div>
+        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
+          <h1 className="text-2xl font-semibold leading-6">Fleet</h1>
         </div>
         <p className={cn("text-base text-foreground/80")}>
-          Search through your rentals and view details.
+          Search through your fleet and view details.
         </p>
       </section>
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={agreementsList}
+          data={vehiclesList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
-          isLoading={agreementsData.isLoading || _trackTableLoading}
           rawColumnsData={
             columnsData.data.status === 200 ? columnsData.data.body : []
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
-            parsedPagination.totalRecords
+            parsedPagination?.totalRecords
               ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
               : 0
           }
@@ -277,7 +238,7 @@ function AgreementsSearchPage() {
           onPaginationChange={(newPaginationState) => {
             startChangingPage();
             navigate({
-              to: "/agreements",
+              to: "/fleet",
               params: {},
               search: (current) => ({
                 ...current,
@@ -291,9 +252,9 @@ function AgreementsSearchPage() {
             columnFilters,
             setColumnFilters,
             onClearFilters: () => {
-              startChangingPage;
+              startChangingPage();
               navigate({
-                to: "/agreements",
+                to: "/fleet",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -302,7 +263,6 @@ function AgreementsSearchPage() {
               }).then(stopChangingPage);
             },
             onSearchWithFilters: () => {
-              startChangingPage();
               const filters = columnFilters.reduce(
                 (prev, current) => ({
                   ...prev,
@@ -310,8 +270,9 @@ function AgreementsSearchPage() {
                 }),
                 {}
               );
+              startChangingPage();
               navigate({
-                to: "/agreements",
+                to: "/fleet",
                 params: {},
                 search: () => ({
                   page: 1,
@@ -322,62 +283,17 @@ function AgreementsSearchPage() {
             },
             filterableColumns: [
               {
-                id: "Keyword",
-                title: "Search",
-                type: "text",
-                size: "large",
-              },
-              {
-                id: "Statuses",
+                id: "VehicleStatus",
                 title: "Status",
-                type: "multi-select",
-                options: agreementStatuses.map((item) => ({
+                type: "select",
+                options: vehicleStatuses.map((item) => ({
                   value: `${item.id}`,
                   label: item.name,
-                })),
-                defaultValue: [],
-              },
-              {
-                id: "AgreementTypes",
-                title: "Type",
-                type: "multi-select",
-                options: agreementTypes.map((item) => ({
-                  value: `${item.typeName}`,
-                  label: item.typeName,
-                })),
-                defaultValue: [],
-              },
-              {
-                id: "StartDate",
-                title: "Start date",
-                type: "date",
-              },
-              {
-                id: "EndDate",
-                title: "End date",
-                type: "date",
-              },
-              {
-                id: "PickupLocationId",
-                title: "Checkout location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-              {
-                id: "ReturnLocationId",
-                title: "Checkin location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
                 })),
               },
               {
                 id: "VehicleTypeId",
-                title: "Vehicle type",
+                title: "Type",
                 type: "select",
                 options: vehicleTypes.map((item) => ({
                   value: `${item.id}`,
@@ -391,14 +307,32 @@ function AgreementsSearchPage() {
                 size: "normal",
               },
               {
-                id: "IsSearchOverdues",
-                title: "Only overdues?",
+                id: "OwningLocationId",
+                title: "Owning location",
+                type: "select",
+                options: locations.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "CurrentLocationId",
+                title: "Current location",
+                type: "select",
+                options: locations.map((item) => ({
+                  value: `${item.locationId}`,
+                  label: `${item.locationName}`,
+                })),
+              },
+              {
+                id: "Active",
+                title: "Is active?",
                 type: "select",
                 options: [
                   { value: "true", label: "Yes" },
                   { value: "false", label: "No" },
                 ],
-                defaultValue: "false",
+                defaultValue: "true",
               },
             ],
           }}
@@ -406,6 +340,4 @@ function AgreementsSearchPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default AgreementsSearchPage;
+};

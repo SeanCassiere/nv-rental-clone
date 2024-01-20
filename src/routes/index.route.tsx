@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
@@ -23,26 +23,4 @@ export const Route = new FileRoute("/").createRoute({
       }),
     };
   },
-  loader: async ({ context }) => {
-    const {
-      queryClient,
-      dashboardMessagesOptions,
-      dashboardWidgetsOptions,
-      activeLocationsOptions,
-    } = context;
-    const promises = [];
-
-    // get messages
-    promises.push(queryClient.ensureQueryData(dashboardMessagesOptions));
-
-    // get widgets
-    promises.push(queryClient.ensureQueryData(dashboardWidgetsOptions));
-
-    // get locations
-    promises.push(queryClient.ensureQueryData(activeLocationsOptions));
-
-    await Promise.all(promises);
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/dashboard")),
 });

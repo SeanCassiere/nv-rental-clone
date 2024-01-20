@@ -4,7 +4,7 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
-const LoggedOutPage = () => {
+export const component = function LoggedOutPage() {
   useDocumentTitle(titleMaker("Logged out"));
 
   return (
@@ -26,5 +26,3 @@ const LoggedOutPage = () => {
     </>
   );
 };
-
-export default LoggedOutPage;

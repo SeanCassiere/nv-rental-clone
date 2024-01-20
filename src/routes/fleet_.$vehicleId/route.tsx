@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -27,21 +27,4 @@ export const Route = new FileRoute("/fleet/$vehicleId").createRoute({
       viewTab: search?.tab || "",
     };
   },
-  loader: async ({ context }) => {
-    const { queryClient, viewVehicleOptions, viewVehicleSummaryOptions } =
-      context;
-
-    const promises = [];
-
-    // get summary
-    promises.push(queryClient.ensureQueryData(viewVehicleSummaryOptions));
-
-    // get vehicle
-    promises.push(queryClient.ensureQueryData(viewVehicleOptions));
-
-    await Promise.all(promises);
-
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/view-vehicle")),
 });

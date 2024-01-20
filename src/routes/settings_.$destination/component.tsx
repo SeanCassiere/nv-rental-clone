@@ -35,7 +35,7 @@ const SettingsRuntimeConfigurationTab = React.lazy(
 
 const routeApi = new RouteApi({ id: "/settings/$destination" });
 
-export default function SettingsCatchAllPage() {
+export const component = function SettingsDestinationPage() {
   const { t } = useTranslation("settings");
 
   const { destination = "profile" } = routeApi.useParams();
@@ -166,4 +166,4 @@ export default function SettingsCatchAllPage() {
       </section>
     </ProtectorShield>
   );
-}
+};

@@ -5,7 +5,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const JsURLDecoder = () => {
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+
+import { titleMaker } from "@/utils/title-maker";
+
+export const component = function DevPage() {
+  useDocumentTitle(titleMaker("Styling Area"));
+
+  return (
+    <div className="overflow-y-auto bg-background px-2 text-foreground">
+      <section className="py-10 md:mx-28">
+        <h2 className="text-2xl">JSURL Utils</h2>
+        <JsURLDecoder />
+      </section>
+    </div>
+  );
+};
+
+function JsURLDecoder() {
   const encodeValueId = useId();
   const decodeJSURLtoJSONId = useId();
   const [encodeValue, setEncodeValue] = useState("");
@@ -36,7 +53,9 @@ const JsURLDecoder = () => {
       <div>
         <p className="text-sm">Encoded</p>
         <div className="flex flex-col md:flex-row">
-          <p className="w-full break-all bg-card p-4">{encoded}</p>
+          <p className="w-full break-all bg-accent p-4 text-accent-foreground">
+            {encoded}
+          </p>
           <p className="w-min">
             <Button
               type="button"
@@ -68,7 +87,7 @@ const JsURLDecoder = () => {
       <div>
         <p className="text-sm">Decoded</p>
         <div className="flex flex-col md:flex-row">
-          <p className="w-full break-all bg-card p-4">
+          <p className="w-full break-all bg-accent p-4 text-accent-foreground">
             {JSON.stringify(decoded)}
           </p>
           <p className="w-min">
@@ -85,6 +104,4 @@ const JsURLDecoder = () => {
       </div>
     </div>
   );
-};
-
-export default JsURLDecoder;
+}

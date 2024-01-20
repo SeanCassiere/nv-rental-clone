@@ -1,0 +1,28 @@
+import { FileRouteLoader } from "@tanstack/react-router";
+
+export const loader = FileRouteLoader("/reservations/$reservationId")(async ({
+  context,
+}) => {
+  const {
+    queryClient,
+    viewReservationOptions,
+    viewReservationSummaryOptions,
+    viewTab,
+  } = context;
+  const promises = [];
+
+  promises.push(queryClient.ensureQueryData(viewReservationOptions));
+
+  switch (viewTab.trim().toLowerCase()) {
+    case "notes":
+      break;
+    case "summary":
+    default:
+      promises.push(queryClient.ensureQueryData(viewReservationSummaryOptions));
+      break;
+  }
+
+  await Promise.all(promises);
+
+  return;
+});

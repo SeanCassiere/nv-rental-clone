@@ -4,8 +4,6 @@ import { useAuth } from "react-oidc-context";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
-import { localStoragePersister } from "@/tanstack-query-config";
-
 function ProtectorShield({ children }: { children: React.ReactNode }) {
   const auth = useAuth();
   const router = useRouter();
@@ -67,7 +65,6 @@ function ProtectorShield({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     return auth.events.addSilentRenewError(() => {
-      localStoragePersister.removeClient();
       auth.signoutRedirect();
     });
   }, [auth, auth.events]);
