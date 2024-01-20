@@ -1,13 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Link,
-  RouteApi,
-  useNavigate,
-  useParams,
-  useRouter,
-  useSearch,
-} from "@tanstack/react-router";
+import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -34,15 +27,15 @@ import { titleMaker } from "@/utils/title-maker";
 import { cn } from "@/utils";
 
 const SummaryTab = lazy(
-  () => import("../components/primary-module/tabs/customer/summary-content")
+  () => import("@/components/primary-module/tabs/customer/summary-content")
 );
 const ModuleNotesTabContent = lazy(
-  () => import("../components/primary-module/tabs/notes-content")
+  () => import("@/components/primary-module/tabs/notes-content")
 );
 
 const routeApi = new RouteApi({ id: "/customers/$customerId" });
 
-function CustomerViewPage() {
+export const component = function CustomerViewPage() {
   const router = useRouter();
   const auth = useAuth();
 
@@ -223,6 +216,4 @@ function CustomerViewPage() {
       </section>
     </ProtectorShield>
   );
-}
-
-export default CustomerViewPage;
+};

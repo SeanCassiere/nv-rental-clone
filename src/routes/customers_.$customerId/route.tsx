@@ -1,4 +1,4 @@
-import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -22,21 +22,4 @@ export const Route = new FileRoute("/customers/$customerId").createRoute({
       }),
     };
   },
-  loader: async ({ context }) => {
-    const { queryClient, viewCustomerSummaryOptions, viewCustomerOptions } =
-      context;
-
-    const promises = [];
-
-    // get summary
-    promises.push(queryClient.ensureQueryData(viewCustomerSummaryOptions));
-
-    // get customer
-    promises.push(queryClient.ensureQueryData(viewCustomerOptions));
-
-    await Promise.all(promises);
-
-    return;
-  },
-  component: lazyRouteComponent(() => import("@/pages/view-customer")),
 });
