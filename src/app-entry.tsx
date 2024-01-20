@@ -15,12 +15,12 @@ import { useEventListener } from "@/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
 import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
+import { parseSearchFn, stringifySearchFn } from "@/utils/router";
 
 import { GlobalDialogProvider } from "@/context/modals";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { routeTree } from "@/route-tree.gen";
 import { queryClient } from "@/tanstack-query-config";
-import { parseSearchFn, stringifySearchFn } from "@/tanstack-router-config";
 
 import i18n from "./i18next-config";
 
