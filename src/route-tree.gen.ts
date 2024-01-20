@@ -3,18 +3,27 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
+import { Route as ReservationsRouteImport } from "./routes/reservations/route"
 import { Route as CustomersRouteImport } from "./routes/customers/route"
 import { Route as AgreementsRouteImport } from "./routes/agreements/route"
 import { Route as IndexRouteImport } from "./routes/index.route"
+import { Route as ReservationsNewRouteImport } from "./routes/reservations_.new/route"
+import { Route as ReservationsReservationIdRouteImport } from "./routes/reservations_.$reservationId/route"
 import { Route as CustomersNewRouteImport } from "./routes/customers_.new/route"
 import { Route as CustomersCustomerIdRouteImport } from "./routes/customers_.$customerId/route"
 import { Route as AgreementsNewRouteImport } from "./routes/agreements_.new/route"
 import { Route as AgreementsAgreementIdRouteImport } from "./routes/agreements_.$agreementId/route"
+import { Route as ReservationsReservationIdEditRouteImport } from "./routes/reservations_.$reservationId.edit/route"
 import { Route as CustomersCustomerIdEditRouteImport } from "./routes/customers_.$customerId.edit/route"
 import { Route as AgreementsAgreementIdEditRouteImport } from "./routes/agreements_.$agreementId.edit/route"
 import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agreements_.$agreementId.check-in/route"
 
 // Create/Update Routes
+
+const ReservationsRouteRoute = ReservationsRouteImport.update({
+  path: "/reservations",
+  getParentRoute: () => rootRoute,
+} as any)
 
 const CustomersRouteRoute = CustomersRouteImport.update({
   path: "/customers",
@@ -30,6 +39,17 @@ const IndexRouteRoute = IndexRouteImport.update({
   path: "/",
   getParentRoute: () => rootRoute,
 } as any)
+
+const ReservationsNewRouteRoute = ReservationsNewRouteImport.update({
+  path: "/reservations/new",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ReservationsReservationIdRouteRoute =
+  ReservationsReservationIdRouteImport.update({
+    path: "/reservations/$reservationId",
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const CustomersNewRouteRoute = CustomersNewRouteImport.update({
   path: "/customers/new",
@@ -52,6 +72,12 @@ const AgreementsAgreementIdRouteRoute = AgreementsAgreementIdRouteImport.update(
     getParentRoute: () => rootRoute,
   } as any,
 )
+
+const ReservationsReservationIdEditRouteRoute =
+  ReservationsReservationIdEditRouteImport.update({
+    path: "/edit",
+    getParentRoute: () => ReservationsReservationIdRouteRoute,
+  } as any)
 
 const CustomersCustomerIdEditRouteRoute =
   CustomersCustomerIdEditRouteImport.update({
@@ -87,6 +113,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof CustomersRouteImport
       parentRoute: typeof rootRoute
     }
+    "/reservations": {
+      preLoaderRoute: typeof ReservationsRouteImport
+      parentRoute: typeof rootRoute
+    }
     "/agreements/$agreementId": {
       preLoaderRoute: typeof AgreementsAgreementIdRouteImport
       parentRoute: typeof rootRoute
@@ -103,6 +133,14 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof CustomersNewRouteImport
       parentRoute: typeof rootRoute
     }
+    "/reservations/$reservationId": {
+      preLoaderRoute: typeof ReservationsReservationIdRouteImport
+      parentRoute: typeof rootRoute
+    }
+    "/reservations/new": {
+      preLoaderRoute: typeof ReservationsNewRouteImport
+      parentRoute: typeof rootRoute
+    }
     "/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AgreementsAgreementIdCheckInRouteImport
       parentRoute: typeof AgreementsAgreementIdRouteImport
@@ -115,6 +153,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof CustomersCustomerIdEditRouteImport
       parentRoute: typeof CustomersCustomerIdRouteImport
     }
+    "/reservations/$reservationId/edit": {
+      preLoaderRoute: typeof ReservationsReservationIdEditRouteImport
+      parentRoute: typeof ReservationsReservationIdRouteImport
+    }
   }
 }
 
@@ -124,6 +166,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRouteRoute,
   AgreementsRouteRoute,
   CustomersRouteRoute,
+  ReservationsRouteRoute,
   AgreementsAgreementIdRouteRoute.addChildren([
     AgreementsAgreementIdCheckInRouteRoute,
     AgreementsAgreementIdEditRouteRoute,
@@ -133,4 +176,8 @@ export const routeTree = rootRoute.addChildren([
     CustomersCustomerIdEditRouteRoute,
   ]),
   CustomersNewRouteRoute,
+  ReservationsReservationIdRouteRoute.addChildren([
+    ReservationsReservationIdEditRouteRoute,
+  ]),
+  ReservationsNewRouteRoute,
 ])

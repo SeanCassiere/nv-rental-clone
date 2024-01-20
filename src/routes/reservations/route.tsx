@@ -1,4 +1,4 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 import { ReservationSearchQuerySchema } from "@/schemas/reservation";
 
@@ -10,11 +10,7 @@ import {
   fetchReservationsSearchListOptions,
 } from "@/utils/query/reservation";
 
-import { reservationsRoute } from ".";
-
-export const searchReservationsRoute = new Route({
-  getParentRoute: () => reservationsRoute,
-  path: "/",
+export const Route = new FileRoute("/reservations").createRoute({
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({

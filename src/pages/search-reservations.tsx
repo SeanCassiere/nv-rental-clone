@@ -37,7 +37,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/reservations/" });
+const routeApi = new RouteApi({ id: "/reservations" });
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
