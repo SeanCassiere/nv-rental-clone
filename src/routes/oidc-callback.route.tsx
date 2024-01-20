@@ -1,12 +1,10 @@
-import { Route } from "@tanstack/react-router";
+import { FileRoute } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
-
-import { Route } from "../routes/__root";
 
 function removeTrailingSlash(path: string) {
   // const pathParts = path.split("?");
@@ -15,8 +13,7 @@ function removeTrailingSlash(path: string) {
   return path.replace(/\/\?/, "?").replace(/\/$/, "");
 }
 
-export const oidcCallbackRoute = new Route({
-  getParentRoute: () => Route,
+export const Route = new FileRoute("/oidc-callback").createRoute({
   validateSearch: z.object({
     redirect: z.string().optional(),
     code: z.string().optional(),
@@ -24,7 +21,6 @@ export const oidcCallbackRoute = new Route({
     state: z.string().optional(),
     session_state: z.string().optional(),
   }),
-  path: "oidc-callback",
   loaderDeps: ({ search }) => ({
     redirect: search?.redirect,
     code: search?.code,
