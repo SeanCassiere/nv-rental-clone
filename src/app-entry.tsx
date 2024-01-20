@@ -1,7 +1,7 @@
 import * as React from "react";
 import { broadcastQueryClient } from "@tanstack/query-broadcast-client-experimental";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Router, RouterProvider } from "@tanstack/react-router";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
 import { I18nextProvider, useTranslation } from "react-i18next";
@@ -21,11 +21,7 @@ import { parseSearchFn, stringifySearchFn } from "@/utils/router";
 import { GlobalDialogProvider } from "@/context/modals";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { routeTree } from "@/route-tree.gen";
-import {
-  localStoragePersister,
-  persisterMaxAge,
-  queryClient,
-} from "@/tanstack-query-config";
+import { queryClient } from "@/tanstack-query-config";
 
 import i18n from "./i18next-config";
 
@@ -62,14 +58,7 @@ export default function App() {
       isVerboseMode={IS_LOCAL_DEV}
       loadingComponent={<LoadingPlaceholder />}
     >
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{
-          persister: localStoragePersister,
-          buster: APP_VERSION,
-          maxAge: persisterMaxAge,
-        }}
-      >
+      <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>
           <React.Suspense fallback={<LoadingPlaceholder />}>
             <I18nextProvider i18n={i18n}>
@@ -86,7 +75,7 @@ export default function App() {
           />
           <TailwindScreenDevTool />
         </AuthProvider>
-      </PersistQueryClientProvider>
+      </QueryClientProvider>
     </CacheBuster>
   );
 }
