@@ -11,7 +11,7 @@ import { ReportContextProvider } from "@/context/view-report";
 
 const routeApi = new RouteApi({ id: "/reports/$reportId" });
 
-const ViewReportPage = () => {
+export const component = function ViewReportPage() {
   const auth = useAuth();
   const { reportId } = routeApi.useParams();
 
@@ -48,9 +48,7 @@ const ViewReportPage = () => {
   );
 };
 
-export default ViewReportPage;
-
-const FetchReportLayer = ({
+function FetchReportLayer({
   clientId,
   userId,
   reportId,
@@ -58,7 +56,7 @@ const FetchReportLayer = ({
   clientId: string;
   userId: string;
   reportId: string;
-}) => {
+}) {
   const { searchReportByIdOptions } = routeApi.useRouteContext();
 
   const query = useSuspenseQuery(searchReportByIdOptions);
@@ -83,4 +81,4 @@ const FetchReportLayer = ({
       )}
     </>
   );
-};
+}

@@ -11,12 +11,5 @@ export const Route = new FileRoute("/reports/$reportId").createRoute({
       searchReportByIdOptions: fetchReportByIdOptions({ auth, reportId }),
     };
   },
-  loader: async ({ context }) => {
-    const { queryClient, searchReportByIdOptions } = context;
-
-    await queryClient.ensureQueryData(searchReportByIdOptions);
-
-    return;
-  },
   component: lazyRouteComponent(() => import("@/pages/view-report")),
 });

@@ -85,6 +85,15 @@ const ReportsRouteRoute = ReportsRouteImport.update({
   path: "/reports",
   getParentRoute: () => rootRoute,
 } as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/reports/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/reports/component"),
+      "component",
+    ),
+  })
 
 const OidcCallbackRouteRoute = OidcCallbackRouteImport.update({
   path: "/oidc-callback",
@@ -167,6 +176,18 @@ const ReportsReportIdRouteRoute = ReportsReportIdRouteImport.update({
   path: "/reports/$reportId",
   getParentRoute: () => rootRoute,
 } as any)
+  .updateLoader({
+    loader: lazyFn(
+      () => import("./routes/reports_.$reportId/loader"),
+      "loader",
+    ),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/reports_.$reportId/component"),
+      "component",
+    ),
+  })
 
 const FleetVehicleIdRouteRoute = FleetVehicleIdRouteImport.update({
   path: "/fleet/$vehicleId",

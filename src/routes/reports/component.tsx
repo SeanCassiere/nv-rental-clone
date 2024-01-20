@@ -19,7 +19,7 @@ import { cn } from "@/utils";
 
 const routeApi = new RouteApi({ id: "/reports" });
 
-export default function SearchReportsPage() {
+export const component = function ReportSearchPage() {
   const auth = useAuth();
 
   const clientId = auth.user?.profile?.navotar_clientid || "";
@@ -53,7 +53,7 @@ export default function SearchReportsPage() {
       </React.Suspense>
     </ProtectorShield>
   );
-}
+};
 
 const PAYMENT_BREAKDOWN_REPORT_ID = "117";
 const BUSINESS_SUMMARY_REPORT_ID = "116";
