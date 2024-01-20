@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Outlet,
+  redirect,
   rootRouteWithContext,
   ScrollRestoration,
   useRouterState,
@@ -40,6 +41,18 @@ const exceptionRoutes = [
 ] as const;
 
 export const Route = routerRootWithContext({
+  beforeLoad: ({ context, location }) => {
+    if (!exceptionRoutes.includes(location.pathname.toLowerCase() as any)) {
+      if (!context.auth.isAuthenticated && !context.auth.isLoading) {
+        throw redirect({
+          to: "/oidc-callback",
+          search: {
+            redirect: location.href,
+          },
+        });
+      }
+    }
+  },
   loader: async ({ context }) => {
     const { queryClient } = context;
     const auth = getAuthFromRouterContext(context);

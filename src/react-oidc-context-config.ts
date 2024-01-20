@@ -9,8 +9,7 @@ import {
   OIDC_SILENT_REDIRECT_URI,
 } from "@/utils/constants";
 
-const userStore = new WebStorageStateStore({ store: window.localStorage });
-const stateStore = new WebStorageStateStore({ store: window.localStorage });
+import { router } from "./app-entry";
 
 export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   authority: OIDC_AUTHORITY,
@@ -25,6 +24,10 @@ export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
-  userStore,
-  stateStore,
+  userStore: new WebStorageStateStore({ store: window.localStorage }),
+  onSigninCallback: (user) => {
+    if (user) {
+      router.invalidate();
+    }
+  },
 };
