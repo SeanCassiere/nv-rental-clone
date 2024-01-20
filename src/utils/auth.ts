@@ -16,18 +16,14 @@ const OidcWebStorageSchema = z.object({
 });
 export function getAuthToken() {
   const key = `oidc.user:${OIDC_AUTHORITY}:${OIDC_CLIENT_ID}`;
-  const sessionItem = window.localStorage.getItem(key);
+  const storageItem = window.localStorage.getItem(key);
 
-  if (!sessionItem) {
+  if (!storageItem) {
     return null;
   }
 
   try {
-    const data = OidcWebStorageSchema.parse(JSON.parse(sessionItem));
-
-    if (data.expires_at * 1000 < Date.now()) {
-      throw new Error("Token expired");
-    }
+    const data = OidcWebStorageSchema.parse(JSON.parse(storageItem));
 
     return data;
   } catch (error) {
