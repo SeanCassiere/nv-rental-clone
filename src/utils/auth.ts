@@ -14,7 +14,7 @@ const OidcWebStorageSchema = z.object({
     preferred_username: z.string().nullable(),
   }),
 });
-export function getAuthToken() {
+export function getAuthFromOidcStorage() {
   const key = `oidc.user:${OIDC_AUTHORITY}:${OIDC_CLIENT_ID}`;
   const storageItem = window.localStorage.getItem(key);
 
@@ -28,7 +28,7 @@ export function getAuthToken() {
     return data;
   } catch (error) {
     if (error instanceof z.ZodError || error instanceof Error) {
-      console.error("getAuthToken error\n", error);
+      console.error("getAuthFromOidcStorage failed", error);
     }
 
     return null;
@@ -41,15 +41,15 @@ export function getAuthFromAuthHook(auth: MyRouterContext["auth"]) {
 
   if (
     auth.user &&
-    auth.user.profile.navotar_clientid &&
-    auth.user.profile.navotar_userid
+    typeof auth.user?.profile?.navotar_clientid === "string" &&
+    typeof auth.user?.profile?.navotar_userid === "string"
   ) {
     clientId = auth.user.profile.navotar_clientid;
     userId = auth.user.profile.navotar_userid;
   }
 
   if (!clientId && !userId) {
-    const local = getAuthToken();
+    const local = getAuthFromOidcStorage();
     if (local) {
       clientId = local.profile.navotar_clientid;
       userId = local.profile.navotar_userid;

@@ -15,7 +15,7 @@ import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 import { useEventListener } from "@/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
+import { APP_VERSION, IS_DEV } from "@/utils/constants";
 import { parseSearchFn, stringifySearchFn } from "@/utils/router";
 
 import { GlobalDialogProvider } from "@/context/modals";
@@ -53,10 +53,10 @@ broadcastQueryClient({
 export default function App() {
   return (
     <CacheBuster
-      isEnabled={!IS_LOCAL_DEV}
-      currentVersion={APP_VERSION}
-      isVerboseMode={IS_LOCAL_DEV}
       loadingComponent={<LoadingPlaceholder />}
+      currentVersion={APP_VERSION}
+      isVerboseMode={IS_DEV}
+      isEnabled={IS_DEV === false}
     >
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>

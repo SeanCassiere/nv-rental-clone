@@ -24,7 +24,7 @@ import { icons } from "@/components/ui/icons";
 
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import { APP_VERSION, IS_LOCAL_DEV } from "@/utils/constants";
+import { APP_VERSION, IS_DEV } from "@/utils/constants";
 import { fetchUserByIdOptions } from "@/utils/query/user";
 
 import { useGlobalDialogContext } from "@/context/modals";
@@ -179,7 +179,7 @@ export const UserNavigationDropdown = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuLabel className="-mx-1 -my-1 bg-muted px-3 py-2.5 text-xs font-normal leading-none text-muted-foreground">
-          {APP_VERSION} {IS_LOCAL_DEV ? "(Development)" : "(Production)"}
+          {APP_VERSION} {IS_DEV ? "(Development)" : "(Production)"}
         </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,11 +1,11 @@
-import { Suspense } from "react";
+import React from "react";
 import {
   Outlet,
+  redirect,
   rootRouteWithContext,
   ScrollRestoration,
   useRouterState,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useAuth, type AuthContextProps } from "react-oidc-context";
 
 import { LogoutDialog } from "@/components/common/logout-dialog";
@@ -13,7 +13,7 @@ import { HeaderLayout } from "@/components/header/header-layout";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
-import { UI_APPLICATION_SHOW_ROUTER_DEVTOOLS } from "@/utils/constants";
+import { IS_DEV } from "@/utils/constants";
 import {
   fetchClientProfileOptions,
   fetchFeaturesForClientOptions,
@@ -41,6 +41,18 @@ const exceptionRoutes = [
 ] as const;
 
 export const Route = routerRootWithContext({
+  beforeLoad: ({ context, location }) => {
+    if (!exceptionRoutes.includes(location.pathname.toLowerCase() as any)) {
+      if (!context.auth.isAuthenticated && !context.auth.isLoading) {
+        throw redirect({
+          to: "/oidc-callback",
+          search: {
+            redirect: location.href,
+          },
+        });
+      }
+    }
+  },
   loader: async ({ context }) => {
     const { queryClient } = context;
     const auth = getAuthFromRouterContext(context);
@@ -87,6 +99,14 @@ export const Route = routerRootWithContext({
   component: RootComponent,
 });
 
+const RouterDevTools = IS_DEV
+  ? React.lazy(() =>
+      import("@tanstack/router-devtools").then((res) => ({
+        default: res.TanStackRouterDevtools,
+      }))
+    )
+  : () => null;
+
 function RootComponent() {
   const routerStore = useRouterState();
   const routerMatches = routerStore.matches.map((route) => route.routeId);
@@ -114,16 +134,8 @@ function RootComponent() {
         {isExceptionRoute && !isFreshAuthenticating && <Outlet />}
         {isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
         {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
-        {!isExceptionRoute && !isFreshAuthenticating && (
-          <>
-            <Suspense fallback={<LoadingPlaceholder />}>
-              <Outlet />
-            </Suspense>
-          </>
-        )}
-        {UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === true && (
-          <TanStackRouterDevtools position="top-right" />
-        )}
+        {!isExceptionRoute && !isFreshAuthenticating && <Outlet />}
+        <RouterDevTools position="top-right" />
       </main>
     </>
   );

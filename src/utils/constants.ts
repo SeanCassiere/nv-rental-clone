@@ -33,12 +33,10 @@ export const OIDC_SILENT_REDIRECT_URI =
 
 export const UI_APPLICATION_NAME =
   import.meta.env.VITE_APP_UI_APPLICATION_NAME ?? "Rental Clone";
-export const UI_APPLICATION_SHOW_ROUTER_DEVTOOLS =
-  import.meta.env.VITE_APP_UI_APPLICATION_SHOW_ROUTER_DEVTOOLS === "true"
-    ? true
-    : false;
+export const DEPLOYMENT_ENV =
+  import.meta.env.VITE_APP_DEPLOYMENT_ENV || "development";
 
-export const IS_LOCAL_DEV = OIDC_REDIRECT_URI.startsWith("http://localhost");
+export const IS_DEV = DEPLOYMENT_ENV !== "production";
 export const APP_VERSION = import.meta.env.APP_VERSION ?? "0.0.0-abcdefg";
 
 export const SETTINGS_LOCATION_KEYS = {
