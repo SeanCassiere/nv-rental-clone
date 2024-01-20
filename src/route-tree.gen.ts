@@ -4,6 +4,7 @@
 
 import { Route as rootRoute } from "./routes/__root"
 import { Route as DevImport } from "./routes/dev"
+import { Route as SettingsRouteImport } from "./routes/settings/route"
 import { Route as ReservationsRouteImport } from "./routes/reservations/route"
 import { Route as ReportsRouteImport } from "./routes/reports/route"
 import { Route as OidcCallbackRouteImport } from "./routes/oidc-callback.route"
@@ -13,6 +14,7 @@ import { Route as FleetRouteImport } from "./routes/fleet/route"
 import { Route as CustomersRouteImport } from "./routes/customers/route"
 import { Route as AgreementsRouteImport } from "./routes/agreements/route"
 import { Route as IndexRouteImport } from "./routes/index.route"
+import { Route as SettingsDestinationRouteImport } from "./routes/settings_.$destination/route"
 import { Route as ReservationsNewRouteImport } from "./routes/reservations_.new/route"
 import { Route as ReservationsReservationIdRouteImport } from "./routes/reservations_.$reservationId/route"
 import { Route as ReportsReportIdRouteImport } from "./routes/reports_.$reportId/route"
@@ -32,6 +34,11 @@ import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agree
 
 const DevRoute = DevImport.update({
   path: "/dev",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsRouteRoute = SettingsRouteImport.update({
+  path: "/settings",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -77,6 +84,11 @@ const AgreementsRouteRoute = AgreementsRouteImport.update({
 
 const IndexRouteRoute = IndexRouteImport.update({
   path: "/",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsDestinationRouteRoute = SettingsDestinationRouteImport.update({
+  path: "/settings/$destination",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -197,6 +209,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ReservationsRouteImport
       parentRoute: typeof rootRoute
     }
+    "/settings": {
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRoute
+    }
     "/dev": {
       preLoaderRoute: typeof DevImport
       parentRoute: typeof rootRoute
@@ -237,6 +253,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ReservationsNewRouteImport
       parentRoute: typeof rootRoute
     }
+    "/settings/$destination": {
+      preLoaderRoute: typeof SettingsDestinationRouteImport
+      parentRoute: typeof rootRoute
+    }
     "/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AgreementsAgreementIdCheckInRouteImport
       parentRoute: typeof AgreementsAgreementIdRouteImport
@@ -272,6 +292,7 @@ export const routeTree = rootRoute.addChildren([
   OidcCallbackRouteRoute,
   ReportsRouteRoute,
   ReservationsRouteRoute,
+  SettingsRouteRoute,
   DevRoute,
   AgreementsAgreementIdRouteRoute.addChildren([
     AgreementsAgreementIdCheckInRouteRoute,
@@ -288,4 +309,5 @@ export const routeTree = rootRoute.addChildren([
     ReservationsReservationIdEditRouteRoute,
   ]),
   ReservationsNewRouteRoute,
+  SettingsDestinationRouteRoute,
 ])

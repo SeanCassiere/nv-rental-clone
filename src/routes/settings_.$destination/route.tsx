@@ -1,11 +1,7 @@
-import { lazyRouteComponent, Route } from "@tanstack/react-router";
+import { FileRoute, lazyRouteComponent } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { settingsRoute } from ".";
-
-export const destinationSettingsRoute = new Route({
-  getParentRoute: () => settingsRoute,
-  path: "$destination",
+export const Route = new FileRoute("/settings/$destination").createRoute({
   parseParams: (params) => ({
     destination: z.string().parse(params.destination),
   }),
