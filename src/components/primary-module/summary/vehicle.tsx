@@ -123,6 +123,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/reservations/$reservationId",
         params: { reservationId: `${summaryData?.currentReservation}` },
+        search: false,
       },
     },
 
@@ -175,6 +176,7 @@ export const VehicleSummary = ({
       linkProps: {
         to: "/agreements/$agreementId",
         params: { agreementId: `${summaryData?.currentAgreement}` },
+        search: false,
       },
     },
 

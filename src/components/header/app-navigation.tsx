@@ -44,6 +44,7 @@ export const AppNavigation = (props: Props) => {
           exact: true,
         },
         params: false,
+        search: false,
       },
     },
     {
@@ -108,6 +109,7 @@ export const AppNavigation = (props: Props) => {
         to: "/reports",
         activeOptions: defaultActiveOptions,
         params: false,
+        search: false,
       },
     },
     {
@@ -116,6 +118,7 @@ export const AppNavigation = (props: Props) => {
         to: "/settings",
         activeOptions: defaultActiveOptions,
         params: false,
+        search: false,
       },
     },
   ];

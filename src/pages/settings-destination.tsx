@@ -51,6 +51,7 @@ export default function SettingsCatchAllPage() {
         linkProps: {
           to: "/settings/$destination",
           params: { destination: "profile" },
+          search: false,
         },
       },
     ];
@@ -64,6 +65,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "application" },
+        search: false,
       },
     });
     items.push({
@@ -73,6 +75,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "runtime-configuration" },
+        search: false,
       },
     });
     items.push({
@@ -82,6 +85,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "vehicles-and-categories" },
+        search: false,
       },
     });
     items.push({
@@ -91,6 +95,7 @@ export default function SettingsCatchAllPage() {
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "rates-and-charges" },
+        search: false,
       },
     });
     return items;
