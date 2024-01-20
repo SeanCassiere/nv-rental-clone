@@ -5,7 +5,6 @@ import { FileRoute, lazyFn, lazyRouteComponent } from "@tanstack/react-router"
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
-import { Route as SettingsRouteImport } from "./routes/settings/route"
 import { Route as ReservationsRouteImport } from "./routes/reservations/route"
 import { Route as ReportsRouteImport } from "./routes/reports/route"
 import { Route as OidcCallbackRouteImport } from "./routes/oidc-callback.route"
@@ -32,10 +31,21 @@ import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agree
 
 // Create Virtual Routes
 
+const SettingsComponentImport = new FileRoute("/settings").createRoute()
 const LoggedOutComponentImport = new FileRoute("/logged-out").createRoute()
 const DevComponentImport = new FileRoute("/dev").createRoute()
 
 // Create/Update Routes
+
+const SettingsComponentRoute = SettingsComponentImport.update({
+  path: "/settings",
+  getParentRoute: () => rootRoute,
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/settings/component"),
+    "component",
+  ),
+})
 
 const LoggedOutComponentRoute = LoggedOutComponentImport.update({
   path: "/logged-out",
@@ -56,11 +66,6 @@ const DevComponentRoute = DevComponentImport.update({
     "component",
   ),
 })
-
-const SettingsRouteRoute = SettingsRouteImport.update({
-  path: "/settings",
-  getParentRoute: () => rootRoute,
-} as any)
 
 const ReservationsRouteRoute = ReservationsRouteImport.update({
   path: "/reservations",
@@ -114,7 +119,12 @@ const IndexRouteRoute = IndexRouteImport.update({
 const SettingsDestinationRouteRoute = SettingsDestinationRouteImport.update({
   path: "/settings/$destination",
   getParentRoute: () => rootRoute,
-} as any)
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/settings_.$destination/component"),
+    "component",
+  ),
+})
 
 const ReservationsNewRouteRoute = ReservationsNewRouteImport.update({
   path: "/reservations/new",
@@ -229,16 +239,16 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ReservationsRouteImport
       parentRoute: typeof rootRoute
     }
-    "/settings": {
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRoute
-    }
     "/dev": {
       preLoaderRoute: typeof DevComponentImport
       parentRoute: typeof rootRoute
     }
     "/logged-out": {
       preLoaderRoute: typeof LoggedOutComponentImport
+      parentRoute: typeof rootRoute
+    }
+    "/settings": {
+      preLoaderRoute: typeof SettingsComponentImport
       parentRoute: typeof rootRoute
     }
     "/agreements/$agreementId": {
@@ -315,9 +325,9 @@ export const routeTree = rootRoute.addChildren([
   OidcCallbackRouteRoute,
   ReportsRouteRoute,
   ReservationsRouteRoute,
-  SettingsRouteRoute,
   DevComponentRoute,
   LoggedOutComponentRoute,
+  SettingsComponentRoute,
   AgreementsAgreementIdRouteRoute.addChildren([
     AgreementsAgreementIdCheckInRouteRoute,
     AgreementsAgreementIdEditRouteRoute,
