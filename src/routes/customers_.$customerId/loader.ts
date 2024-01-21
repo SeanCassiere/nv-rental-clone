@@ -6,6 +6,8 @@ export const loader = FileRouteLoader("/customers/$customerId")(async ({
   const { queryClient, viewCustomerSummaryOptions, viewCustomerOptions } =
     context;
 
+  if (!context.auth.isAuthenticated) return;
+
   const promises = [];
 
   // get summary

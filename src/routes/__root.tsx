@@ -43,10 +43,14 @@ const exceptionRoutes = [
 export const Route = routerRootWithContext({
   beforeLoad: async ({ context, location }) => {
     if (!exceptionRoutes.includes(location.pathname.toLowerCase() as any)) {
+      const isAuthenticated = context.auth.isAuthenticated;
       const user = context.auth.user;
       const isAuthExpired = (user?.expires_at || 0) > Date.now();
 
-      if ((!user || isAuthExpired) && !context.auth.isLoading) {
+      if (
+        (!user || isAuthExpired || !isAuthenticated) &&
+        !context.auth.isLoading
+      ) {
         const path =
           location.href && location.href === "/"
             ? "/"
@@ -61,6 +65,8 @@ export const Route = routerRootWithContext({
   loader: async ({ context }) => {
     const { queryClient } = context;
     const auth = getAuthFromRouterContext(context);
+
+    if (!context.auth.isAuthenticated) return;
 
     const promises = [];
 

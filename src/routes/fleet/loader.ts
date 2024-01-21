@@ -3,6 +3,8 @@ import { FileRouteLoader } from "@tanstack/react-router";
 export const loader = FileRouteLoader("/fleet")(async ({ context }) => {
   const { queryClient, searchColumnsOptions, searchListOptions } = context;
 
+  if (!context.auth.isAuthenticated) return;
+
   const promises = [];
 
   // get columns

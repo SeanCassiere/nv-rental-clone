@@ -5,6 +5,8 @@ export const loader = FileRouteLoader("/reports/$reportId")(async ({
 }) => {
   const { queryClient, searchReportByIdOptions } = context;
 
+  if (!context.auth.isAuthenticated) return;
+
   await queryClient.ensureQueryData(searchReportByIdOptions);
 
   return;

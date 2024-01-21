@@ -7,6 +7,9 @@ export const loader = FileRouteLoader("/reservations/$reservationId/edit")(
       viewReservationOptions,
       viewReservationSummaryOptions,
     } = context;
+
+    if (!context.auth.isAuthenticated) return;
+
     const promises = [];
 
     promises.push(queryClient.ensureQueryData(viewReservationOptions));

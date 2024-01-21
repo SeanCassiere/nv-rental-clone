@@ -11,6 +11,8 @@ export const loader = FileRouteLoader("/reservations/$reservationId")(async ({
   } = context;
   const promises = [];
 
+  if (!context.auth.isAuthenticated) return;
+
   promises.push(queryClient.ensureQueryData(viewReservationOptions));
 
   switch (viewTab.trim().toLowerCase()) {

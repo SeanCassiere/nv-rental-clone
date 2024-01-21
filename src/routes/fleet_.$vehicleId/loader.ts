@@ -6,6 +6,8 @@ export const loader = FileRouteLoader("/fleet/$vehicleId")(async ({
   const { queryClient, viewVehicleOptions, viewVehicleSummaryOptions } =
     context;
 
+  if (!context.auth.isAuthenticated) return;
+
   const promises = [];
 
   // get summary

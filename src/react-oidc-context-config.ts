@@ -10,6 +10,7 @@ import {
 } from "@/utils/constants";
 
 import { router } from "./app-entry";
+import { queryClient } from "./tanstack-query-config";
 
 export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   authority: OIDC_AUTHORITY,
@@ -25,7 +26,8 @@ export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   loadUserInfo: true,
   monitorSession: true,
   userStore: new WebStorageStateStore({ store: window.localStorage }),
-  onSigninCallback: (user) => {
+  onSigninCallback: async (user) => {
+    await queryClient.invalidateQueries();
     if (user) {
       router.invalidate();
     }

@@ -7,6 +7,9 @@ export const loader = FileRouteLoader("/")(async ({ context }) => {
     dashboardWidgetsOptions,
     activeLocationsOptions,
   } = context;
+
+  if (!context.auth.isAuthenticated) return;
+
   const promises = [];
 
   // get messages

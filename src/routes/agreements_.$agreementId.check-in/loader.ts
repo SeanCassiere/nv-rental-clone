@@ -4,6 +4,9 @@ export const loader = FileRouteLoader("/agreements/$agreementId/check-in")(
   async ({ context }) => {
     const { queryClient, viewAgreementOptions, viewAgreementSummaryOptions } =
       context;
+
+    if (!context.auth.isAuthenticated) return;
+
     const promises = [];
 
     promises.push(queryClient.ensureQueryData(viewAgreementOptions));

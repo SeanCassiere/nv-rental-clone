@@ -5,6 +5,8 @@ export const loader = FileRouteLoader("/customers/$customerId/edit")(async ({
 }) => {
   const { queryClient, viewCustomerOptions } = context;
 
+  if (!context.auth.isAuthenticated) return;
+
   const promises = [];
 
   promises.push(queryClient.ensureQueryData(viewCustomerOptions));
