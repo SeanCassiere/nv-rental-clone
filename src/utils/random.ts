@@ -15,3 +15,7 @@ export function wait(ms: number): Promise<void> {
     }, ms);
   });
 }
+
+export function removeTrailingSlash(path: string) {
+  return path.replace(/\/\?/, "?").replace(/\/$/, "");
+}

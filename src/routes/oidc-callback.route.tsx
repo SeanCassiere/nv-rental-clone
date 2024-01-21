@@ -6,12 +6,7 @@ import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
-function removeTrailingSlash(path: string) {
-  // const pathParts = path.split("?");
-  // const pathWithoutSlash = pathParts[0]?.replace(/\/$/, "");
-  // return pathWithoutSlash + (pathParts[1] ? `?${pathParts[1]}` : "");
-  return path.replace(/\/\?/, "?").replace(/\/$/, "");
-}
+import { removeTrailingSlash } from "@/utils";
 
 export const Route = new FileRoute("/oidc-callback").createRoute({
   validateSearch: z.object({
@@ -33,9 +28,9 @@ export const Route = new FileRoute("/oidc-callback").createRoute({
     const locationPathname = location.pathname;
     if (preload || !locationPathname.includes("oidc-callback")) return;
 
-    const { search } = context;
+    const auth = context.auth;
+    const search = context.search;
     const redirectPath = search?.redirect ?? null;
-    const { auth } = context;
 
     const routerLocation = location;
 

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Outlet,
-  redirect,
   rootRouteWithContext,
   ScrollRestoration,
   useRouterState,
@@ -13,7 +12,7 @@ import { HeaderLayout } from "@/components/header/header-layout";
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
-import { IS_DEV } from "@/utils/constants";
+import { IS_DEV, LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 import {
   fetchClientProfileOptions,
   fetchFeaturesForClientOptions,
@@ -25,6 +24,7 @@ import {
 } from "@/utils/query/user";
 
 import type { queryClient } from "@/tanstack-query-config";
+import { removeTrailingSlash } from "@/utils";
 
 export interface MyRouterContext {
   queryClient: typeof queryClient;
@@ -41,15 +41,20 @@ const exceptionRoutes = [
 ] as const;
 
 export const Route = routerRootWithContext({
-  beforeLoad: ({ context, location }) => {
+  beforeLoad: async ({ context, location }) => {
     if (!exceptionRoutes.includes(location.pathname.toLowerCase() as any)) {
-      if (!context.auth.isAuthenticated && !context.auth.isLoading) {
-        throw redirect({
-          to: "/oidc-callback",
-          search: {
-            redirect: location.href,
-          },
-        });
+      const user = context.auth.user;
+      const isAuthExpired = (user?.expires_at || 0) > Date.now();
+
+      if ((!user || isAuthExpired) && !context.auth.isLoading) {
+        const path =
+          location.href && location.href === "/"
+            ? "/"
+            : removeTrailingSlash(location.href);
+        window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, path);
+
+        await context.auth.signinRedirect();
+        return;
       }
     }
   },
