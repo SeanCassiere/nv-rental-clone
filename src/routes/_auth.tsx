@@ -1,5 +1,6 @@
 import React from "react";
-import { FileRoute, Outlet } from "@tanstack/react-router";
+import { FileRoute, Outlet, useRouterState } from "@tanstack/react-router";
+import { useAuth } from "react-oidc-context";
 
 import { LogoutDialog } from "@/components/common/logout-dialog";
 import { HeaderLayout } from "@/components/header/header-layout";
@@ -87,6 +88,30 @@ export const Route = new FileRoute("/_auth").createRoute({
 });
 
 function AuthLayout() {
+  const auth = useAuth();
+  const redirectUri = useRouterState({ select: (s) => s.location.href });
+
+  React.useEffect(() => {
+    return auth.events.addAccessTokenExpiring(() => {
+      window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
+      auth.signinSilent();
+    });
+  }, [auth, auth.events, auth.signinSilent, redirectUri]);
+
+  React.useEffect(() => {
+    return auth.events.addAccessTokenExpired(() => {
+      window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
+      auth.signinRedirect();
+    });
+  }, [auth, auth.events, auth.signinRedirect, redirectUri]);
+
+  React.useEffect(() => {
+    return auth.events.addSilentRenewError((error) => {
+      console.error("🔐 ~ Auth silent renew error: ", error);
+      auth.signoutRedirect();
+    });
+  }, [auth, auth.events]);
+
   return (
     <React.Fragment>
       <LogoutDialog />
