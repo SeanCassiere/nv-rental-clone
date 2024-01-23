@@ -5,375 +5,401 @@ import { FileRoute, lazyFn, lazyRouteComponent } from "@tanstack/react-router"
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
-import { Route as ReservationsRouteImport } from "./routes/reservations/route"
-import { Route as ReportsRouteImport } from "./routes/reports/route"
-import { Route as OidcCallbackRouteImport } from "./routes/oidc-callback.route"
-import { Route as LogoutRouteImport } from "./routes/logout.route"
-import { Route as FleetRouteImport } from "./routes/fleet/route"
-import { Route as CustomersRouteImport } from "./routes/customers/route"
-import { Route as AgreementsRouteImport } from "./routes/agreements/route"
-import { Route as IndexRouteImport } from "./routes/index.route"
-import { Route as SettingsDestinationRouteImport } from "./routes/settings_.$destination/route"
-import { Route as ReservationsNewRouteImport } from "./routes/reservations_.new/route"
-import { Route as ReservationsReservationIdRouteImport } from "./routes/reservations_.$reservationId/route"
-import { Route as ReportsReportIdRouteImport } from "./routes/reports_.$reportId/route"
-import { Route as FleetVehicleIdRouteImport } from "./routes/fleet_.$vehicleId/route"
-import { Route as FleetNewRouteImport } from "./routes/fleet.new/route"
-import { Route as CustomersNewRouteImport } from "./routes/customers_.new/route"
-import { Route as CustomersCustomerIdRouteImport } from "./routes/customers_.$customerId/route"
-import { Route as AgreementsNewRouteImport } from "./routes/agreements_.new/route"
-import { Route as AgreementsAgreementIdRouteImport } from "./routes/agreements_.$agreementId/route"
-import { Route as ReservationsReservationIdEditRouteImport } from "./routes/reservations_.$reservationId.edit/route"
-import { Route as FleetVehicleIdEditRouteImport } from "./routes/fleet_.$vehicleId.edit/route"
-import { Route as CustomersCustomerIdEditRouteImport } from "./routes/customers_.$customerId.edit/route"
-import { Route as AgreementsAgreementIdEditRouteImport } from "./routes/agreements_.$agreementId.edit/route"
-import { Route as AgreementsAgreementIdCheckInRouteImport } from "./routes/agreements_.$agreementId.check-in/route"
+import { Route as PublicImport } from "./routes/_public"
+import { Route as AuthImport } from "./routes/_auth"
+import { Route as AuthIndexRouteImport } from "./routes/_auth/index.route"
+import { Route as PublicOidcCallbackRouteImport } from "./routes/_public/oidc-callback.route"
+import { Route as PublicLogoutRouteImport } from "./routes/_public/logout.route"
+import { Route as AuthReservationsRouteImport } from "./routes/_auth/reservations/route"
+import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
+import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
+import { Route as AuthCustomersRouteImport } from "./routes/_auth/customers/route"
+import { Route as AuthAgreementsRouteImport } from "./routes/_auth/agreements/route"
+import { Route as AuthSettingsDestinationRouteImport } from "./routes/_auth/settings_.$destination/route"
+import { Route as AuthReservationsNewRouteImport } from "./routes/_auth/reservations_.new/route"
+import { Route as AuthReservationsReservationIdRouteImport } from "./routes/_auth/reservations_.$reservationId/route"
+import { Route as AuthReportsReportIdRouteImport } from "./routes/_auth/reports_.$reportId/route"
+import { Route as AuthFleetVehicleIdRouteImport } from "./routes/_auth/fleet_.$vehicleId/route"
+import { Route as AuthFleetNewRouteImport } from "./routes/_auth/fleet.new/route"
+import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers_.new/route"
+import { Route as AuthCustomersCustomerIdRouteImport } from "./routes/_auth/customers_.$customerId/route"
+import { Route as AuthAgreementsNewRouteImport } from "./routes/_auth/agreements_.new/route"
+import { Route as AuthAgreementsAgreementIdRouteImport } from "./routes/_auth/agreements_.$agreementId/route"
+import { Route as AuthReservationsReservationIdEditRouteImport } from "./routes/_auth/reservations_.$reservationId.edit/route"
+import { Route as AuthFleetVehicleIdEditRouteImport } from "./routes/_auth/fleet_.$vehicleId.edit/route"
+import { Route as AuthCustomersCustomerIdEditRouteImport } from "./routes/_auth/customers_.$customerId.edit/route"
+import { Route as AuthAgreementsAgreementIdEditRouteImport } from "./routes/_auth/agreements_.$agreementId.edit/route"
+import { Route as AuthAgreementsAgreementIdCheckInRouteImport } from "./routes/_auth/agreements_.$agreementId.check-in/route"
 
 // Create Virtual Routes
 
-const SettingsComponentImport = new FileRoute("/settings").createRoute()
-const LoggedOutComponentImport = new FileRoute("/logged-out").createRoute()
-const DevComponentImport = new FileRoute("/dev").createRoute()
+const PublicLoggedOutComponentImport = new FileRoute(
+  "/_public/logged-out",
+).createRoute()
+const PublicDevComponentImport = new FileRoute("/_public/dev").createRoute()
+const AuthSettingsComponentImport = new FileRoute(
+  "/_auth/settings",
+).createRoute()
 
 // Create/Update Routes
 
-const SettingsComponentRoute = SettingsComponentImport.update({
-  path: "/settings",
-  getParentRoute: () => rootRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/settings/component"),
-    "component",
-  ),
-})
-
-const LoggedOutComponentRoute = LoggedOutComponentImport.update({
-  path: "/logged-out",
-  getParentRoute: () => rootRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/logged-out.component"),
-    "component",
-  ),
-})
-
-const DevComponentRoute = DevComponentImport.update({
-  path: "/dev",
-  getParentRoute: () => rootRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/dev.component"),
-    "component",
-  ),
-})
-
-const ReservationsRouteRoute = ReservationsRouteImport.update({
-  path: "/reservations",
-  getParentRoute: () => rootRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/reservations/loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/reservations/component"),
-      "component",
-    ),
-  })
-
-const ReportsRouteRoute = ReportsRouteImport.update({
-  path: "/reports",
-  getParentRoute: () => rootRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/reports/loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/reports/component"),
-      "component",
-    ),
-  })
-
-const OidcCallbackRouteRoute = OidcCallbackRouteImport.update({
-  path: "/oidc-callback",
+const PublicRoute = PublicImport.update({
+  id: "/_public",
   getParentRoute: () => rootRoute,
 } as any)
 
-const LogoutRouteRoute = LogoutRouteImport.update({
-  path: "/logout",
+const AuthRoute = AuthImport.update({
+  id: "/_auth",
   getParentRoute: () => rootRoute,
 } as any)
 
-const FleetRouteRoute = FleetRouteImport.update({
-  path: "/fleet",
-  getParentRoute: () => rootRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/fleet/loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/fleet/component"),
-      "component",
-    ),
-  })
-
-const CustomersRouteRoute = CustomersRouteImport.update({
-  path: "/customers",
-  getParentRoute: () => rootRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/customers/loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/customers/component"),
-      "component",
-    ),
-  })
-
-const AgreementsRouteRoute = AgreementsRouteImport.update({
-  path: "/agreements",
-  getParentRoute: () => rootRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/agreements/loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/agreements/component"),
-      "component",
-    ),
-  })
-
-const IndexRouteRoute = IndexRouteImport.update({
+const AuthIndexRouteRoute = AuthIndexRouteImport.update({
   path: "/",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
   .updateLoader({
-    loader: lazyFn(() => import("./routes/index.loader"), "loader"),
+    loader: lazyFn(() => import("./routes/_auth/index.loader"), "loader"),
   })
   .update({
     component: lazyRouteComponent(
-      () => import("./routes/index.component"),
+      () => import("./routes/_auth/index.component"),
       "component",
     ),
   })
 
-const SettingsDestinationRouteRoute = SettingsDestinationRouteImport.update({
-  path: "/settings/$destination",
-  getParentRoute: () => rootRoute,
+const PublicLoggedOutComponentRoute = PublicLoggedOutComponentImport.update({
+  path: "/logged-out",
+  getParentRoute: () => PublicRoute,
 } as any).update({
   component: lazyRouteComponent(
-    () => import("./routes/settings_.$destination/component"),
+    () => import("./routes/_public/logged-out.component"),
     "component",
   ),
 })
 
-const ReservationsNewRouteRoute = ReservationsNewRouteImport.update({
+const PublicDevComponentRoute = PublicDevComponentImport.update({
+  path: "/dev",
+  getParentRoute: () => PublicRoute,
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/_public/dev.component"),
+    "component",
+  ),
+})
+
+const AuthSettingsComponentRoute = AuthSettingsComponentImport.update({
+  path: "/settings",
+  getParentRoute: () => AuthRoute,
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/_auth/settings/component"),
+    "component",
+  ),
+})
+
+const PublicOidcCallbackRouteRoute = PublicOidcCallbackRouteImport.update({
+  path: "/oidc-callback",
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicLogoutRouteRoute = PublicLogoutRouteImport.update({
+  path: "/logout",
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const AuthReservationsRouteRoute = AuthReservationsRouteImport.update({
+  path: "/reservations",
+  getParentRoute: () => AuthRoute,
+} as any)
+  .updateLoader({
+    loader: lazyFn(
+      () => import("./routes/_auth/reservations/loader"),
+      "loader",
+    ),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/_auth/reservations/component"),
+      "component",
+    ),
+  })
+
+const AuthReportsRouteRoute = AuthReportsRouteImport.update({
+  path: "/reports",
+  getParentRoute: () => AuthRoute,
+} as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/_auth/reports/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/_auth/reports/component"),
+      "component",
+    ),
+  })
+
+const AuthFleetRouteRoute = AuthFleetRouteImport.update({
+  path: "/fleet",
+  getParentRoute: () => AuthRoute,
+} as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/_auth/fleet/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/_auth/fleet/component"),
+      "component",
+    ),
+  })
+
+const AuthCustomersRouteRoute = AuthCustomersRouteImport.update({
+  path: "/customers",
+  getParentRoute: () => AuthRoute,
+} as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/_auth/customers/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/_auth/customers/component"),
+      "component",
+    ),
+  })
+
+const AuthAgreementsRouteRoute = AuthAgreementsRouteImport.update({
+  path: "/agreements",
+  getParentRoute: () => AuthRoute,
+} as any)
+  .updateLoader({
+    loader: lazyFn(() => import("./routes/_auth/agreements/loader"), "loader"),
+  })
+  .update({
+    component: lazyRouteComponent(
+      () => import("./routes/_auth/agreements/component"),
+      "component",
+    ),
+  })
+
+const AuthSettingsDestinationRouteRoute =
+  AuthSettingsDestinationRouteImport.update({
+    path: "/settings/$destination",
+    getParentRoute: () => AuthRoute,
+  } as any).update({
+    component: lazyRouteComponent(
+      () => import("./routes/_auth/settings_.$destination/component"),
+      "component",
+    ),
+  })
+
+const AuthReservationsNewRouteRoute = AuthReservationsNewRouteImport.update({
   path: "/reservations/new",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any).update({
   component: lazyRouteComponent(
-    () => import("./routes/reservations_.new/component"),
+    () => import("./routes/_auth/reservations_.new/component"),
     "component",
   ),
 })
 
-const ReservationsReservationIdRouteRoute =
-  ReservationsReservationIdRouteImport.update({
+const AuthReservationsReservationIdRouteRoute =
+  AuthReservationsReservationIdRouteImport.update({
     path: "/reservations/$reservationId",
-    getParentRoute: () => rootRoute,
+    getParentRoute: () => AuthRoute,
   } as any)
     .updateLoader({
       loader: lazyFn(
-        () => import("./routes/reservations_.$reservationId/loader"),
+        () => import("./routes/_auth/reservations_.$reservationId/loader"),
         "loader",
       ),
     })
     .update({
       component: lazyRouteComponent(
-        () => import("./routes/reservations_.$reservationId/component"),
+        () => import("./routes/_auth/reservations_.$reservationId/component"),
         "component",
       ),
     })
 
-const ReportsReportIdRouteRoute = ReportsReportIdRouteImport.update({
+const AuthReportsReportIdRouteRoute = AuthReportsReportIdRouteImport.update({
   path: "/reports/$reportId",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
   .updateLoader({
     loader: lazyFn(
-      () => import("./routes/reports_.$reportId/loader"),
+      () => import("./routes/_auth/reports_.$reportId/loader"),
       "loader",
     ),
   })
   .update({
     component: lazyRouteComponent(
-      () => import("./routes/reports_.$reportId/component"),
+      () => import("./routes/_auth/reports_.$reportId/component"),
       "component",
     ),
   })
 
-const FleetVehicleIdRouteRoute = FleetVehicleIdRouteImport.update({
+const AuthFleetVehicleIdRouteRoute = AuthFleetVehicleIdRouteImport.update({
   path: "/fleet/$vehicleId",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
   .updateLoader({
-    loader: lazyFn(() => import("./routes/fleet_.$vehicleId/loader"), "loader"),
+    loader: lazyFn(
+      () => import("./routes/_auth/fleet_.$vehicleId/loader"),
+      "loader",
+    ),
   })
   .update({
     component: lazyRouteComponent(
-      () => import("./routes/fleet_.$vehicleId/component"),
+      () => import("./routes/_auth/fleet_.$vehicleId/component"),
       "component",
     ),
   })
 
-const FleetNewRouteRoute = FleetNewRouteImport.update({
+const AuthFleetNewRouteRoute = AuthFleetNewRouteImport.update({
   path: "/new",
-  getParentRoute: () => FleetRouteRoute,
+  getParentRoute: () => AuthFleetRouteRoute,
 } as any).update({
   component: lazyRouteComponent(
-    () => import("./routes/fleet.new/component"),
+    () => import("./routes/_auth/fleet.new/component"),
     "component",
   ),
 })
 
-const CustomersNewRouteRoute = CustomersNewRouteImport.update({
+const AuthCustomersNewRouteRoute = AuthCustomersNewRouteImport.update({
   path: "/customers/new",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any).update({
   component: lazyRouteComponent(
-    () => import("./routes/customers_.new/component"),
+    () => import("./routes/_auth/customers_.new/component"),
     "component",
   ),
 })
 
-const CustomersCustomerIdRouteRoute = CustomersCustomerIdRouteImport.update({
-  path: "/customers/$customerId",
-  getParentRoute: () => rootRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(
-      () => import("./routes/customers_.$customerId/loader"),
-      "loader",
-    ),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/customers_.$customerId/component"),
-      "component",
-    ),
-  })
+const AuthCustomersCustomerIdRouteRoute =
+  AuthCustomersCustomerIdRouteImport.update({
+    path: "/customers/$customerId",
+    getParentRoute: () => AuthRoute,
+  } as any)
+    .updateLoader({
+      loader: lazyFn(
+        () => import("./routes/_auth/customers_.$customerId/loader"),
+        "loader",
+      ),
+    })
+    .update({
+      component: lazyRouteComponent(
+        () => import("./routes/_auth/customers_.$customerId/component"),
+        "component",
+      ),
+    })
 
-const AgreementsNewRouteRoute = AgreementsNewRouteImport.update({
+const AuthAgreementsNewRouteRoute = AuthAgreementsNewRouteImport.update({
   path: "/agreements/new",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any).update({
   component: lazyRouteComponent(
-    () => import("./routes/agreements_.new/component"),
+    () => import("./routes/_auth/agreements_.new/component"),
     "component",
   ),
 })
 
-const AgreementsAgreementIdRouteRoute = AgreementsAgreementIdRouteImport.update(
-  {
+const AuthAgreementsAgreementIdRouteRoute =
+  AuthAgreementsAgreementIdRouteImport.update({
     path: "/agreements/$agreementId",
-    getParentRoute: () => rootRoute,
-  } as any,
-)
-  .updateLoader({
-    loader: lazyFn(
-      () => import("./routes/agreements_.$agreementId/loader"),
-      "loader",
-    ),
-  })
-  .update({
+    getParentRoute: () => AuthRoute,
+  } as any)
+    .updateLoader({
+      loader: lazyFn(
+        () => import("./routes/_auth/agreements_.$agreementId/loader"),
+        "loader",
+      ),
+    })
+    .update({
+      component: lazyRouteComponent(
+        () => import("./routes/_auth/agreements_.$agreementId/component"),
+        "component",
+      ),
+    })
+
+const AuthReservationsReservationIdEditRouteRoute =
+  AuthReservationsReservationIdEditRouteImport.update({
+    path: "/edit",
+    getParentRoute: () => AuthReservationsReservationIdRouteRoute,
+  } as any)
+    .updateLoader({
+      loader: lazyFn(
+        () => import("./routes/_auth/reservations_.$reservationId.edit/loader"),
+        "loader",
+      ),
+    })
+    .update({
+      component: lazyRouteComponent(
+        () =>
+          import("./routes/_auth/reservations_.$reservationId.edit/component"),
+        "component",
+      ),
+    })
+
+const AuthFleetVehicleIdEditRouteRoute =
+  AuthFleetVehicleIdEditRouteImport.update({
+    path: "/edit",
+    getParentRoute: () => AuthFleetVehicleIdRouteRoute,
+  } as any).update({
     component: lazyRouteComponent(
-      () => import("./routes/agreements_.$agreementId/component"),
+      () => import("./routes/_auth/fleet_.$vehicleId.edit/component"),
       "component",
     ),
   })
 
-const ReservationsReservationIdEditRouteRoute =
-  ReservationsReservationIdEditRouteImport.update({
+const AuthCustomersCustomerIdEditRouteRoute =
+  AuthCustomersCustomerIdEditRouteImport.update({
     path: "/edit",
-    getParentRoute: () => ReservationsReservationIdRouteRoute,
+    getParentRoute: () => AuthCustomersCustomerIdRouteRoute,
   } as any)
     .updateLoader({
       loader: lazyFn(
-        () => import("./routes/reservations_.$reservationId.edit/loader"),
+        () => import("./routes/_auth/customers_.$customerId.edit/loader"),
         "loader",
       ),
     })
     .update({
       component: lazyRouteComponent(
-        () => import("./routes/reservations_.$reservationId.edit/component"),
+        () => import("./routes/_auth/customers_.$customerId.edit/component"),
         "component",
       ),
     })
 
-const FleetVehicleIdEditRouteRoute = FleetVehicleIdEditRouteImport.update({
-  path: "/edit",
-  getParentRoute: () => FleetVehicleIdRouteRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/fleet_.$vehicleId.edit/component"),
-    "component",
-  ),
-})
-
-const CustomersCustomerIdEditRouteRoute =
-  CustomersCustomerIdEditRouteImport.update({
+const AuthAgreementsAgreementIdEditRouteRoute =
+  AuthAgreementsAgreementIdEditRouteImport.update({
     path: "/edit",
-    getParentRoute: () => CustomersCustomerIdRouteRoute,
+    getParentRoute: () => AuthAgreementsAgreementIdRouteRoute,
   } as any)
     .updateLoader({
       loader: lazyFn(
-        () => import("./routes/customers_.$customerId.edit/loader"),
+        () => import("./routes/_auth/agreements_.$agreementId.edit/loader"),
         "loader",
       ),
     })
     .update({
       component: lazyRouteComponent(
-        () => import("./routes/customers_.$customerId.edit/component"),
+        () => import("./routes/_auth/agreements_.$agreementId.edit/component"),
         "component",
       ),
     })
 
-const AgreementsAgreementIdEditRouteRoute =
-  AgreementsAgreementIdEditRouteImport.update({
-    path: "/edit",
-    getParentRoute: () => AgreementsAgreementIdRouteRoute,
-  } as any)
-    .updateLoader({
-      loader: lazyFn(
-        () => import("./routes/agreements_.$agreementId.edit/loader"),
-        "loader",
-      ),
-    })
-    .update({
-      component: lazyRouteComponent(
-        () => import("./routes/agreements_.$agreementId.edit/component"),
-        "component",
-      ),
-    })
-
-const AgreementsAgreementIdCheckInRouteRoute =
-  AgreementsAgreementIdCheckInRouteImport.update({
+const AuthAgreementsAgreementIdCheckInRouteRoute =
+  AuthAgreementsAgreementIdCheckInRouteImport.update({
     path: "/check-in",
-    getParentRoute: () => AgreementsAgreementIdRouteRoute,
+    getParentRoute: () => AuthAgreementsAgreementIdRouteRoute,
   } as any)
     .updateLoader({
       loader: lazyFn(
-        () => import("./routes/agreements_.$agreementId.check-in/loader"),
+        () => import("./routes/_auth/agreements_.$agreementId.check-in/loader"),
         "loader",
       ),
     })
     .update({
       component: lazyRouteComponent(
-        () => import("./routes/agreements_.$agreementId.check-in/component"),
+        () =>
+          import("./routes/_auth/agreements_.$agreementId.check-in/component"),
         "component",
       ),
     })
@@ -382,109 +408,117 @@ const AgreementsAgreementIdCheckInRouteRoute =
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/": {
-      preLoaderRoute: typeof IndexRouteImport
+    "/_auth": {
+      preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
-    "/agreements": {
-      preLoaderRoute: typeof AgreementsRouteImport
+    "/_public": {
+      preLoaderRoute: typeof PublicImport
       parentRoute: typeof rootRoute
     }
-    "/customers": {
-      preLoaderRoute: typeof CustomersRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/agreements": {
+      preLoaderRoute: typeof AuthAgreementsRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/fleet": {
-      preLoaderRoute: typeof FleetRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/customers": {
+      preLoaderRoute: typeof AuthCustomersRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/logout": {
-      preLoaderRoute: typeof LogoutRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/fleet": {
+      preLoaderRoute: typeof AuthFleetRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/oidc-callback": {
-      preLoaderRoute: typeof OidcCallbackRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/reports": {
+      preLoaderRoute: typeof AuthReportsRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/reports": {
-      preLoaderRoute: typeof ReportsRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/reservations": {
+      preLoaderRoute: typeof AuthReservationsRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/reservations": {
-      preLoaderRoute: typeof ReservationsRouteImport
-      parentRoute: typeof rootRoute
+    "/_public/logout": {
+      preLoaderRoute: typeof PublicLogoutRouteImport
+      parentRoute: typeof PublicImport
     }
-    "/dev": {
-      preLoaderRoute: typeof DevComponentImport
-      parentRoute: typeof rootRoute
+    "/_public/oidc-callback": {
+      preLoaderRoute: typeof PublicOidcCallbackRouteImport
+      parentRoute: typeof PublicImport
     }
-    "/logged-out": {
-      preLoaderRoute: typeof LoggedOutComponentImport
-      parentRoute: typeof rootRoute
+    "/_auth/settings": {
+      preLoaderRoute: typeof AuthSettingsComponentImport
+      parentRoute: typeof AuthImport
     }
-    "/settings": {
-      preLoaderRoute: typeof SettingsComponentImport
-      parentRoute: typeof rootRoute
+    "/_public/dev": {
+      preLoaderRoute: typeof PublicDevComponentImport
+      parentRoute: typeof PublicImport
     }
-    "/agreements/$agreementId": {
-      preLoaderRoute: typeof AgreementsAgreementIdRouteImport
-      parentRoute: typeof rootRoute
+    "/_public/logged-out": {
+      preLoaderRoute: typeof PublicLoggedOutComponentImport
+      parentRoute: typeof PublicImport
     }
-    "/agreements/new": {
-      preLoaderRoute: typeof AgreementsNewRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/": {
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/customers/$customerId": {
-      preLoaderRoute: typeof CustomersCustomerIdRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/agreements/$agreementId": {
+      preLoaderRoute: typeof AuthAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/customers/new": {
-      preLoaderRoute: typeof CustomersNewRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/agreements/new": {
+      preLoaderRoute: typeof AuthAgreementsNewRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/fleet/new": {
-      preLoaderRoute: typeof FleetNewRouteImport
-      parentRoute: typeof FleetRouteImport
+    "/_auth/customers/$customerId": {
+      preLoaderRoute: typeof AuthCustomersCustomerIdRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/fleet/$vehicleId": {
-      preLoaderRoute: typeof FleetVehicleIdRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/customers/new": {
+      preLoaderRoute: typeof AuthCustomersNewRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/reports/$reportId": {
-      preLoaderRoute: typeof ReportsReportIdRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/fleet/new": {
+      preLoaderRoute: typeof AuthFleetNewRouteImport
+      parentRoute: typeof AuthFleetRouteImport
     }
-    "/reservations/$reservationId": {
-      preLoaderRoute: typeof ReservationsReservationIdRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/fleet/$vehicleId": {
+      preLoaderRoute: typeof AuthFleetVehicleIdRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/reservations/new": {
-      preLoaderRoute: typeof ReservationsNewRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/reports/$reportId": {
+      preLoaderRoute: typeof AuthReportsReportIdRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/settings/$destination": {
-      preLoaderRoute: typeof SettingsDestinationRouteImport
-      parentRoute: typeof rootRoute
+    "/_auth/reservations/$reservationId": {
+      preLoaderRoute: typeof AuthReservationsReservationIdRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/agreements/$agreementId/check-in": {
-      preLoaderRoute: typeof AgreementsAgreementIdCheckInRouteImport
-      parentRoute: typeof AgreementsAgreementIdRouteImport
+    "/_auth/reservations/new": {
+      preLoaderRoute: typeof AuthReservationsNewRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/agreements/$agreementId/edit": {
-      preLoaderRoute: typeof AgreementsAgreementIdEditRouteImport
-      parentRoute: typeof AgreementsAgreementIdRouteImport
+    "/_auth/settings/$destination": {
+      preLoaderRoute: typeof AuthSettingsDestinationRouteImport
+      parentRoute: typeof AuthImport
     }
-    "/customers/$customerId/edit": {
-      preLoaderRoute: typeof CustomersCustomerIdEditRouteImport
-      parentRoute: typeof CustomersCustomerIdRouteImport
+    "/_auth/agreements/$agreementId/check-in": {
+      preLoaderRoute: typeof AuthAgreementsAgreementIdCheckInRouteImport
+      parentRoute: typeof AuthAgreementsAgreementIdRouteImport
     }
-    "/fleet/$vehicleId/edit": {
-      preLoaderRoute: typeof FleetVehicleIdEditRouteImport
-      parentRoute: typeof FleetVehicleIdRouteImport
+    "/_auth/agreements/$agreementId/edit": {
+      preLoaderRoute: typeof AuthAgreementsAgreementIdEditRouteImport
+      parentRoute: typeof AuthAgreementsAgreementIdRouteImport
     }
-    "/reservations/$reservationId/edit": {
-      preLoaderRoute: typeof ReservationsReservationIdEditRouteImport
-      parentRoute: typeof ReservationsReservationIdRouteImport
+    "/_auth/customers/$customerId/edit": {
+      preLoaderRoute: typeof AuthCustomersCustomerIdEditRouteImport
+      parentRoute: typeof AuthCustomersCustomerIdRouteImport
+    }
+    "/_auth/fleet/$vehicleId/edit": {
+      preLoaderRoute: typeof AuthFleetVehicleIdEditRouteImport
+      parentRoute: typeof AuthFleetVehicleIdRouteImport
+    }
+    "/_auth/reservations/$reservationId/edit": {
+      preLoaderRoute: typeof AuthReservationsReservationIdEditRouteImport
+      parentRoute: typeof AuthReservationsReservationIdRouteImport
     }
   }
 }
@@ -492,31 +526,37 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  IndexRouteRoute,
-  AgreementsRouteRoute,
-  CustomersRouteRoute,
-  FleetRouteRoute.addChildren([FleetNewRouteRoute]),
-  LogoutRouteRoute,
-  OidcCallbackRouteRoute,
-  ReportsRouteRoute,
-  ReservationsRouteRoute,
-  DevComponentRoute,
-  LoggedOutComponentRoute,
-  SettingsComponentRoute,
-  AgreementsAgreementIdRouteRoute.addChildren([
-    AgreementsAgreementIdCheckInRouteRoute,
-    AgreementsAgreementIdEditRouteRoute,
+  AuthRoute.addChildren([
+    AuthAgreementsRouteRoute,
+    AuthCustomersRouteRoute,
+    AuthFleetRouteRoute.addChildren([AuthFleetNewRouteRoute]),
+    AuthReportsRouteRoute,
+    AuthReservationsRouteRoute,
+    AuthSettingsComponentRoute,
+    AuthIndexRouteRoute,
+    AuthAgreementsAgreementIdRouteRoute.addChildren([
+      AuthAgreementsAgreementIdCheckInRouteRoute,
+      AuthAgreementsAgreementIdEditRouteRoute,
+    ]),
+    AuthAgreementsNewRouteRoute,
+    AuthCustomersCustomerIdRouteRoute.addChildren([
+      AuthCustomersCustomerIdEditRouteRoute,
+    ]),
+    AuthCustomersNewRouteRoute,
+    AuthFleetVehicleIdRouteRoute.addChildren([
+      AuthFleetVehicleIdEditRouteRoute,
+    ]),
+    AuthReportsReportIdRouteRoute,
+    AuthReservationsReservationIdRouteRoute.addChildren([
+      AuthReservationsReservationIdEditRouteRoute,
+    ]),
+    AuthReservationsNewRouteRoute,
+    AuthSettingsDestinationRouteRoute,
   ]),
-  AgreementsNewRouteRoute,
-  CustomersCustomerIdRouteRoute.addChildren([
-    CustomersCustomerIdEditRouteRoute,
+  PublicRoute.addChildren([
+    PublicLogoutRouteRoute,
+    PublicOidcCallbackRouteRoute,
+    PublicDevComponentRoute,
+    PublicLoggedOutComponentRoute,
   ]),
-  CustomersNewRouteRoute,
-  FleetVehicleIdRouteRoute.addChildren([FleetVehicleIdEditRouteRoute]),
-  ReportsReportIdRouteRoute,
-  ReservationsReservationIdRouteRoute.addChildren([
-    ReservationsReservationIdEditRouteRoute,
-  ]),
-  ReservationsNewRouteRoute,
-  SettingsDestinationRouteRoute,
 ])
