@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
-import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
@@ -43,16 +42,15 @@ export const component = function AddAgreementPage() {
   }, [router]);
 
   useDocumentTitle(titleMaker("New - Agreement"));
+
   return (
-    <ProtectorShield>
-      <AddRentalParentForm
-        referenceId={0}
-        currentStage={stage}
-        module="agreement"
-        onStageTabClick={handleStageTabClick}
-        onRentalSaveClick={handleAgreementSaveComplete}
-        onRentalCancelClick={handleCancelAddAgreement}
-      />
-    </ProtectorShield>
+    <AddRentalParentForm
+      referenceId={0}
+      currentStage={stage}
+      module="agreement"
+      onStageTabClick={handleStageTabClick}
+      onRentalSaveClick={handleAgreementSaveComplete}
+      onRentalCancelClick={handleCancelAddAgreement}
+    />
   );
 };

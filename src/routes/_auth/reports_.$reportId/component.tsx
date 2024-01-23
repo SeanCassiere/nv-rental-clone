@@ -3,7 +3,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { RouteApi } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
-import ProtectorShield from "@/components/protector-shield";
 import { ViewReport } from "@/components/report/page";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -19,32 +18,30 @@ export const component = function ViewReportPage() {
   const userId = auth.user?.profile?.navotar_userid;
 
   return (
-    <ProtectorShield>
-      <React.Suspense fallback={<Skeleton className="h-48" />}>
-        {clientId && userId && reportId ? (
-          <FetchReportLayer
-            clientId={clientId}
-            userId={userId}
-            reportId={reportId}
-          />
-        ) : (
-          <div>
-            <h2>Something is missing</h2>
-            <pre>
-              {JSON.stringify(
-                {
-                  clientId: clientId ?? `typeof ${typeof clientId} ${clientId}`,
-                  userId: userId ?? `typeof ${typeof userId} ${userId}`,
-                  reportId: reportId ?? `typeof ${typeof reportId} ${reportId}`,
-                },
-                null,
-                2
-              )}
-            </pre>
-          </div>
-        )}
-      </React.Suspense>
-    </ProtectorShield>
+    <React.Suspense fallback={<Skeleton className="h-48" />}>
+      {clientId && userId && reportId ? (
+        <FetchReportLayer
+          clientId={clientId}
+          userId={userId}
+          reportId={reportId}
+        />
+      ) : (
+        <div>
+          <h2>Something is missing</h2>
+          <pre>
+            {JSON.stringify(
+              {
+                clientId: clientId ?? `typeof ${typeof clientId} ${clientId}`,
+                userId: userId ?? `typeof ${typeof userId} ${userId}`,
+                reportId: reportId ?? `typeof ${typeof reportId} ${reportId}`,
+              },
+              null,
+              2
+            )}
+          </pre>
+        </div>
+      )}
+    </React.Suspense>
   );
 };
 

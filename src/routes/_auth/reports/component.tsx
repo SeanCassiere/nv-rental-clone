@@ -3,7 +3,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
-import ProtectorShield from "@/components/protector-shield";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,7 +30,7 @@ export const component = function ReportSearchPage() {
   useDocumentTitle(titleMaker("Reports"));
 
   return (
-    <ProtectorShield>
+    <>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -51,7 +50,7 @@ export const component = function ReportSearchPage() {
           <ReportsList currentCategory={category} ALL_KEY={ALL_KEY} />
         )}
       </React.Suspense>
-    </ProtectorShield>
+    </>
   );
 };
 

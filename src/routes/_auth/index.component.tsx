@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
-import ProtectorShield from "@/components/protector-shield";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -88,7 +87,7 @@ export const component = function DashboardPage() {
   useDocumentTitle(titleMaker("Dashboard"));
 
   return (
-    <ProtectorShield>
+    <>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:px-4 sm:pb-2"
@@ -155,7 +154,7 @@ export const component = function DashboardPage() {
           />
         )}
       </Suspense>
-    </ProtectorShield>
+    </>
   );
 };
 

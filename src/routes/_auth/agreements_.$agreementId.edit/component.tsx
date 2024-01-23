@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
-import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
@@ -65,17 +64,15 @@ export const component = function EditAgreementPage() {
   }, [router.history, agreementData.status]);
 
   return (
-    <ProtectorShield>
-      <AddRentalParentForm
-        referenceId={parseInt(agreementId)}
-        currentStage={stage}
-        module="agreement"
-        onStageTabClick={handleStageTabClick}
-        onRentalSaveClick={handleAgreementSaveComplete}
-        onRentalCancelClick={handleCancelEditAgreement}
-        referenceNumber={agreement?.agreementNumber || undefined}
-        summaryData={summaryData}
-      />
-    </ProtectorShield>
+    <AddRentalParentForm
+      referenceId={parseInt(agreementId)}
+      currentStage={stage}
+      module="agreement"
+      onStageTabClick={handleStageTabClick}
+      onRentalSaveClick={handleAgreementSaveComplete}
+      onRentalCancelClick={handleCancelEditAgreement}
+      referenceNumber={agreement?.agreementNumber || undefined}
+      summaryData={summaryData}
+    />
   );
 };

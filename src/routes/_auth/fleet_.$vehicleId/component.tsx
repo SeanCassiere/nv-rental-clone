@@ -4,7 +4,6 @@ import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import VehicleStatBlock from "@/components/primary-module/statistic-block/vehicle-stat-block";
-import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -129,7 +128,7 @@ export const component = function VehicleViewPage() {
   }, [router.history, vehicleData.status]);
 
   return (
-    <ProtectorShield>
+    <>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -241,6 +240,6 @@ export const component = function VehicleViewPage() {
           ))}
         </Tabs>
       </section>
-    </ProtectorShield>
+    </>
   );
 };

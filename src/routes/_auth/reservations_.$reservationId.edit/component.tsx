@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
-import ProtectorShield from "@/components/protector-shield";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
@@ -72,20 +71,18 @@ export const component = function EditReservationPage() {
   }, [router.history, rentalRatesSummary.status]);
 
   return (
-    <ProtectorShield>
-      <AddRentalParentForm
-        referenceId={parseInt(reservationId)}
-        currentStage={stage}
-        module="reservation"
-        onStageTabClick={handleStageTabClick}
-        onRentalSaveClick={handleReservationSaveComplete}
-        onRentalCancelClick={handleCancelEditReservation}
-        referenceNumber={
-          reservation?.reservationview.reservationNumber || undefined
-        }
-        reservationData={reservation || undefined}
-        summaryData={summaryData}
-      />
-    </ProtectorShield>
+    <AddRentalParentForm
+      referenceId={parseInt(reservationId)}
+      currentStage={stage}
+      module="reservation"
+      onStageTabClick={handleStageTabClick}
+      onRentalSaveClick={handleReservationSaveComplete}
+      onRentalCancelClick={handleCancelEditReservation}
+      referenceNumber={
+        reservation?.reservationview.reservationNumber || undefined
+      }
+      reservationData={reservation || undefined}
+      summaryData={summaryData}
+    />
   );
 };

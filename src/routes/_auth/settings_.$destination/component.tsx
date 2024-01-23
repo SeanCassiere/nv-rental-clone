@@ -2,7 +2,6 @@ import React from "react";
 import { RouteApi, type LinkOptions } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import ProtectorShield from "@/components/protector-shield";
 import { SelectorSettingsNavigation } from "@/components/settings/nav-selector";
 import { SidebarSettingsNavigation } from "@/components/settings/nav-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -126,7 +125,7 @@ export const component = function SettingsDestinationPage() {
   );
 
   return (
-    <ProtectorShield>
+    <>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -164,6 +163,6 @@ export const component = function SettingsDestinationPage() {
           </React.Suspense>
         </div>
       </section>
-    </ProtectorShield>
+    </>
   );
 };

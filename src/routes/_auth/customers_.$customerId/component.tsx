@@ -4,7 +4,6 @@ import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
-import ProtectorShield from "@/components/protector-shield";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -105,7 +104,7 @@ export const component = function CustomerViewPage() {
   }, [customerQuery.status, router.history]);
 
   return (
-    <ProtectorShield>
+    <>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -214,6 +213,6 @@ export const component = function CustomerViewPage() {
           ))}
         </Tabs>
       </section>
-    </ProtectorShield>
+    </>
   );
 };
