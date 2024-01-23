@@ -7,9 +7,9 @@ import { FileRoute, lazyFn, lazyRouteComponent } from "@tanstack/react-router"
 import { Route as rootRoute } from "./routes/__root"
 import { Route as PublicImport } from "./routes/_public"
 import { Route as AuthImport } from "./routes/_auth"
-import { Route as OidcCallbackRouteImport } from "./routes/oidc-callback.route"
-import { Route as LogoutRouteImport } from "./routes/logout.route"
 import { Route as AuthIndexRouteImport } from "./routes/_auth/index.route"
+import { Route as PublicOidcCallbackRouteImport } from "./routes/_public/oidc-callback.route"
+import { Route as PublicLogoutRouteImport } from "./routes/_public/logout.route"
 import { Route as AuthReservationsRouteImport } from "./routes/_auth/reservations/route"
 import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
 import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
@@ -33,33 +33,15 @@ import { Route as AuthAgreementsAgreementIdCheckInRouteImport } from "./routes/_
 
 // Create Virtual Routes
 
-const LoggedOutComponentImport = new FileRoute("/logged-out").createRoute()
-const DevComponentImport = new FileRoute("/dev").createRoute()
+const PublicLoggedOutComponentImport = new FileRoute(
+  "/_public/logged-out",
+).createRoute()
+const PublicDevComponentImport = new FileRoute("/_public/dev").createRoute()
 const AuthSettingsComponentImport = new FileRoute(
   "/_auth/settings",
 ).createRoute()
 
 // Create/Update Routes
-
-const LoggedOutComponentRoute = LoggedOutComponentImport.update({
-  path: "/logged-out",
-  getParentRoute: () => rootRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/logged-out.component"),
-    "component",
-  ),
-})
-
-const DevComponentRoute = DevComponentImport.update({
-  path: "/dev",
-  getParentRoute: () => rootRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/dev.component"),
-    "component",
-  ),
-})
 
 const PublicRoute = PublicImport.update({
   id: "/_public",
@@ -68,16 +50,6 @@ const PublicRoute = PublicImport.update({
 
 const AuthRoute = AuthImport.update({
   id: "/_auth",
-  getParentRoute: () => rootRoute,
-} as any)
-
-const OidcCallbackRouteRoute = OidcCallbackRouteImport.update({
-  path: "/oidc-callback",
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LogoutRouteRoute = LogoutRouteImport.update({
-  path: "/logout",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,6 +67,26 @@ const AuthIndexRouteRoute = AuthIndexRouteImport.update({
     ),
   })
 
+const PublicLoggedOutComponentRoute = PublicLoggedOutComponentImport.update({
+  path: "/logged-out",
+  getParentRoute: () => PublicRoute,
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/_public/logged-out.component"),
+    "component",
+  ),
+})
+
+const PublicDevComponentRoute = PublicDevComponentImport.update({
+  path: "/dev",
+  getParentRoute: () => PublicRoute,
+} as any).update({
+  component: lazyRouteComponent(
+    () => import("./routes/_public/dev.component"),
+    "component",
+  ),
+})
+
 const AuthSettingsComponentRoute = AuthSettingsComponentImport.update({
   path: "/settings",
   getParentRoute: () => AuthRoute,
@@ -104,6 +96,16 @@ const AuthSettingsComponentRoute = AuthSettingsComponentImport.update({
     "component",
   ),
 })
+
+const PublicOidcCallbackRouteRoute = PublicOidcCallbackRouteImport.update({
+  path: "/oidc-callback",
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicLogoutRouteRoute = PublicLogoutRouteImport.update({
+  path: "/logout",
+  getParentRoute: () => PublicRoute,
+} as any)
 
 const AuthReservationsRouteRoute = AuthReservationsRouteImport.update({
   path: "/reservations",
@@ -406,28 +408,12 @@ const AuthAgreementsAgreementIdCheckInRouteRoute =
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/logout": {
-      preLoaderRoute: typeof LogoutRouteImport
-      parentRoute: typeof rootRoute
-    }
-    "/oidc-callback": {
-      preLoaderRoute: typeof OidcCallbackRouteImport
-      parentRoute: typeof rootRoute
-    }
     "/_auth": {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
     "/_public": {
       preLoaderRoute: typeof PublicImport
-      parentRoute: typeof rootRoute
-    }
-    "/dev": {
-      preLoaderRoute: typeof DevComponentImport
-      parentRoute: typeof rootRoute
-    }
-    "/logged-out": {
-      preLoaderRoute: typeof LoggedOutComponentImport
       parentRoute: typeof rootRoute
     }
     "/_auth/agreements": {
@@ -450,9 +436,25 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthReservationsRouteImport
       parentRoute: typeof AuthImport
     }
+    "/_public/logout": {
+      preLoaderRoute: typeof PublicLogoutRouteImport
+      parentRoute: typeof PublicImport
+    }
+    "/_public/oidc-callback": {
+      preLoaderRoute: typeof PublicOidcCallbackRouteImport
+      parentRoute: typeof PublicImport
+    }
     "/_auth/settings": {
       preLoaderRoute: typeof AuthSettingsComponentImport
       parentRoute: typeof AuthImport
+    }
+    "/_public/dev": {
+      preLoaderRoute: typeof PublicDevComponentImport
+      parentRoute: typeof PublicImport
+    }
+    "/_public/logged-out": {
+      preLoaderRoute: typeof PublicLoggedOutComponentImport
+      parentRoute: typeof PublicImport
     }
     "/_auth/": {
       preLoaderRoute: typeof AuthIndexRouteImport
@@ -524,8 +526,6 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  LogoutRouteRoute,
-  OidcCallbackRouteRoute,
   AuthRoute.addChildren([
     AuthAgreementsRouteRoute,
     AuthCustomersRouteRoute,
@@ -553,7 +553,10 @@ export const routeTree = rootRoute.addChildren([
     AuthReservationsNewRouteRoute,
     AuthSettingsDestinationRouteRoute,
   ]),
-  PublicRoute,
-  DevComponentRoute,
-  LoggedOutComponentRoute,
+  PublicRoute.addChildren([
+    PublicLogoutRouteRoute,
+    PublicOidcCallbackRouteRoute,
+    PublicDevComponentRoute,
+    PublicLoggedOutComponentRoute,
+  ]),
 ])

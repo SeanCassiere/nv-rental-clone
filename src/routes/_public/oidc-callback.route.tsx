@@ -8,7 +8,7 @@ import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
 import { removeTrailingSlash } from "@/utils";
 
-export const Route = new FileRoute("/oidc-callback").createRoute({
+export const Route = new FileRoute("/_public/oidc-callback").createRoute({
   validateSearch: z.object({
     redirect: z.string().optional(),
     code: z.string().optional(),
