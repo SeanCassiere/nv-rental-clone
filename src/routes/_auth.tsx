@@ -21,24 +21,29 @@ import { Container } from "./-components/container";
 
 export const Route = new FileRoute("/_auth").createRoute({
   beforeLoad: async ({ context, location }) => {
-    const auth = getAuthFromRouterContext(context);
+    const navigator = context.auth.activeNavigator;
 
-    const isAuthenticated = context.auth.isAuthenticated;
-    const user = context.auth.user;
-    const isAuthExpired = (user?.expires_at || 0) > Date.now();
-
+    // if there isn't an authentication flow currently in-flight
     if (
-      (!user || isAuthExpired || !isAuthenticated || auth.clientId === "") &&
-      !context.auth.isLoading
+      !context.auth.isLoading &&
+      navigator !== "signinSilent" &&
+      navigator !== "signinRedirect"
     ) {
-      const path =
-        location.href && location.href === "/"
-          ? "/"
-          : removeTrailingSlash(location.href);
+      const user = context.auth.user;
+      const isAuthenticated = context.auth.isAuthenticated;
+      const isAuthExpired = (user?.expires_at || 0) > Date.now();
 
-      window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, path);
-      await context.auth.signinRedirect();
+      if (!user || isAuthExpired || !isAuthenticated) {
+        const path =
+          location.href && location.href === "/"
+            ? "/"
+            : removeTrailingSlash(location.href);
+
+        window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, path);
+        await context.auth.signinRedirect();
+      }
     }
+
     return;
   },
   loader: async ({ context }) => {
