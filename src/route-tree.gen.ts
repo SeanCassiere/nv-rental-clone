@@ -5,6 +5,8 @@ import { FileRoute, lazyFn, lazyRouteComponent } from "@tanstack/react-router"
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
+import { Route as PublicImport } from "./routes/_public"
+import { Route as AuthImport } from "./routes/_auth"
 import { Route as ReservationsRouteImport } from "./routes/reservations/route"
 import { Route as ReportsRouteImport } from "./routes/reports/route"
 import { Route as OidcCallbackRouteImport } from "./routes/oidc-callback.route"
@@ -66,6 +68,16 @@ const DevComponentRoute = DevComponentImport.update({
     "component",
   ),
 })
+
+const PublicRoute = PublicImport.update({
+  id: "/_public",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRoute = AuthImport.update({
+  id: "/_auth",
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ReservationsRouteRoute = ReservationsRouteImport.update({
   path: "/reservations",
@@ -414,6 +426,14 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ReservationsRouteImport
       parentRoute: typeof rootRoute
     }
+    "/_auth": {
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    "/_public": {
+      preLoaderRoute: typeof PublicImport
+      parentRoute: typeof rootRoute
+    }
     "/dev": {
       preLoaderRoute: typeof DevComponentImport
       parentRoute: typeof rootRoute
@@ -500,6 +520,8 @@ export const routeTree = rootRoute.addChildren([
   OidcCallbackRouteRoute,
   ReportsRouteRoute,
   ReservationsRouteRoute,
+  AuthRoute,
+  PublicRoute,
   DevComponentRoute,
   LoggedOutComponentRoute,
   SettingsComponentRoute,

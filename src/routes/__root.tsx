@@ -26,6 +26,8 @@ import {
 import type { queryClient } from "@/tanstack-query-config";
 import { removeTrailingSlash } from "@/utils";
 
+import { Container } from "./-components/container";
+
 export interface MyRouterContext {
   queryClient: typeof queryClient;
   auth: AuthContextProps;
@@ -137,17 +139,21 @@ function RootComponent() {
   const isFreshAuthenticating = auth.isLoading && !auth.isAuthenticated;
 
   return (
-    <>
-      <LogoutDialog />
-      {isHeaderShown && <HeaderLayout />}
-      <main className="mx-auto w-full max-w-[1700px] flex-1 px-1 md:px-10">
-        <ScrollRestoration getKey={(location) => location.pathname} />
-        {isExceptionRoute && !isFreshAuthenticating && <Outlet />}
-        {isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
-        {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
-        {!isExceptionRoute && !isFreshAuthenticating && <Outlet />}
-        <RouterDevTools position="top-right" />
-      </main>
-    </>
+    // <>
+    //   <LogoutDialog />
+    //   {isHeaderShown && <HeaderLayout />}
+    //   <Container>
+    //     <ScrollRestoration getKey={(location) => location.pathname} />
+    //     {isExceptionRoute && !isFreshAuthenticating && <Outlet />}
+    //     {isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
+    //     {!isExceptionRoute && isFreshAuthenticating && <LoadingPlaceholder />}
+    //     {!isExceptionRoute && !isFreshAuthenticating && <Outlet />}
+    //     <RouterDevTools position="top-right" />
+    //   </Container>
+    // </>
+    <React.Fragment>
+      <Outlet />
+      <RouterDevTools position="top-right" />
+    </React.Fragment>
   );
 }
