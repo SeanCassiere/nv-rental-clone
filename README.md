@@ -1,7 +1,7 @@
 # Navotar and RENTALL Clone
 
-![Issues](https://img.shields.io/github/issues/SeanCassiere/nv-rental-clone)
-![Pull Requests](https://img.shields.io/github/issues-pr-closed/SeanCassiere/nv-rental-clone)
+![GitHub open issues](https://img.shields.io/github/issues/SeanCassiere/nv-rental-clone)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/SeanCassiere/nv-rental-clone)
 ![GitHub contributors](https://img.shields.io/github/contributors/SeanCassiere/nv-rental-clone)
 ![GitHub stars](https://img.shields.io/github/stars/SeanCassiere/nv-rental-clone?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/SeanCassiere/nv-rental-clone?style=social)
@@ -27,7 +27,7 @@ This project is written in Typescript, using React for the UI library, and Tailw
 1. Clone the repository: `git clone https://github.com/SeanCassiere/nv-rental-clone.git`
 2. Navigate to the project directory: `cd nv-rental-clone`
 3. Install dependencies: `npm install`
-4. Start the development server: `npm start`
+4. Start the development server: `npm run dev`
 
 ## Usage
 
