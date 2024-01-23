@@ -2,6 +2,7 @@ import React from "react";
 import { FileRoute, Outlet } from "@tanstack/react-router";
 
 import { LogoutDialog } from "@/components/common/logout-dialog";
+import { HeaderLayout } from "@/components/header/header-layout";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
@@ -84,6 +85,7 @@ function AuthLayout() {
   return (
     <React.Fragment>
       <LogoutDialog />
+      <HeaderLayout />
       <Container>
         <Outlet />
       </Container>

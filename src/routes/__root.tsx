@@ -43,72 +43,72 @@ const exceptionRoutes = [
 ] as const;
 
 export const Route = routerRootWithContext({
-  beforeLoad: async ({ context, location }) => {
-    if (!exceptionRoutes.includes(location.pathname.toLowerCase() as any)) {
-      const isAuthenticated = context.auth.isAuthenticated;
-      const user = context.auth.user;
-      const isAuthExpired = (user?.expires_at || 0) > Date.now();
+  // beforeLoad: async ({ context, location }) => {
+  //   if (!exceptionRoutes.includes(location.pathname.toLowerCase() as any)) {
+  //     const isAuthenticated = context.auth.isAuthenticated;
+  //     const user = context.auth.user;
+  //     const isAuthExpired = (user?.expires_at || 0) > Date.now();
 
-      if (
-        (!user || isAuthExpired || !isAuthenticated) &&
-        !context.auth.isLoading
-      ) {
-        const path =
-          location.href && location.href === "/"
-            ? "/"
-            : removeTrailingSlash(location.href);
-        window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, path);
+  //     if (
+  //       (!user || isAuthExpired || !isAuthenticated) &&
+  //       !context.auth.isLoading
+  //     ) {
+  //       const path =
+  //         location.href && location.href === "/"
+  //           ? "/"
+  //           : removeTrailingSlash(location.href);
+  //       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, path);
 
-        await context.auth.signinRedirect();
-        return;
-      }
-    }
-  },
-  loader: async ({ context }) => {
-    const { queryClient } = context;
-    const auth = getAuthFromRouterContext(context);
+  //       await context.auth.signinRedirect();
+  //       return;
+  //     }
+  //   }
+  // },
+  // loader: async ({ context }) => {
+  //   const { queryClient } = context;
+  //   const auth = getAuthFromRouterContext(context);
 
-    if (!context.auth.isAuthenticated) return;
+  //   if (!context.auth.isAuthenticated) return;
 
-    const promises = [];
+  //   const promises = [];
 
-    // current client's profile
-    promises.push(
-      queryClient.ensureQueryData(fetchClientProfileOptions({ auth }))
-    );
+  //   // current client's profile
+  //   promises.push(
+  //     queryClient.ensureQueryData(fetchClientProfileOptions({ auth }))
+  //   );
 
-    // current client's feature configurations
-    promises.push(
-      queryClient.ensureQueryData(fetchFeaturesForClientOptions({ auth }))
-    );
+  //   // current client's feature configurations
+  //   promises.push(
+  //     queryClient.ensureQueryData(fetchFeaturesForClientOptions({ auth }))
+  //   );
 
-    // current client screen settings configurations
-    promises.push(
-      queryClient.ensureQueryData(fetchScreenSettingsForClientOptions({ auth }))
-    );
+  //   // current client screen settings configurations
+  //   promises.push(
+  //     queryClient.ensureQueryData(fetchScreenSettingsForClientOptions({ auth }))
+  //   );
 
-    // current user's profile
-    promises.push(
-      queryClient.ensureQueryData(
-        fetchUserByIdOptions({ auth, userId: auth.userId })
-      )
-    );
+  //   // current user's profile
+  //   promises.push(
+  //     queryClient.ensureQueryData(
+  //       fetchUserByIdOptions({ auth, userId: auth.userId })
+  //     )
+  //   );
 
-    // current user's permissions
-    promises.push(
-      queryClient.ensureQueryData(
-        fetchPermissionsByUserIdOptions({ auth, userId: auth.userId })
-      )
-    );
+  //   // current user's permissions
+  //   promises.push(
+  //     queryClient.ensureQueryData(
+  //       fetchPermissionsByUserIdOptions({ auth, userId: auth.userId })
+  //     )
+  //   );
 
-    try {
-      await Promise.all(promises);
-    } catch (error) {
-      console.log("error in rootRoute.loader", error);
-    }
+  //   try {
+  //     await Promise.all(promises);
+  //   } catch (error) {
+  //     console.log("error in rootRoute.loader", error);
+  //   }
 
-    return;
-  },
+  //   return;
+  // },
   component: RootComponent,
 });
 
