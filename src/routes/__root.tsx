@@ -11,9 +11,7 @@ export interface MyRouterContext {
   auth: AuthContextProps;
 }
 
-const routerRootWithContext = rootRouteWithContext<MyRouterContext>();
-
-export const Route = routerRootWithContext({
+export const Route = rootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
 });
 
