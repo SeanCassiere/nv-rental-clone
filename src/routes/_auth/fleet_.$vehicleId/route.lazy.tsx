@@ -4,7 +4,6 @@ import {
   createLazyFileRoute,
   getRouteApi,
   Link,
-  RouteApi,
   useNavigate,
   useRouter,
 } from "@tanstack/react-router";
