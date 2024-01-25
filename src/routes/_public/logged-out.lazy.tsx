@@ -1,10 +1,15 @@
-import { Link } from "@tanstack/react-router";
+import React from "react";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
-export const component = function LoggedOutPage() {
+export const Route = createLazyFileRoute("/_public/logged-out")({
+  component: LoggedOutPage,
+});
+
+function LoggedOutPage() {
   useDocumentTitle(titleMaker("Logged out"));
 
   return (
@@ -25,4 +30,4 @@ export const component = function LoggedOutPage() {
       </div>
     </>
   );
-};
+}
