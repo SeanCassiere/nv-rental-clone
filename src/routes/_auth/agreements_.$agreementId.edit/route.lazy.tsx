@@ -1,6 +1,11 @@
 import { useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 
@@ -8,9 +13,15 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
-const routeApi = new RouteApi({ id: "/_auth/agreements/$agreementId/edit" });
+export const Route = createLazyFileRoute("/_auth/agreements/$agreementId/edit")(
+  {
+    component: EditAgreementPage,
+  }
+);
 
-export const component = function EditAgreementPage() {
+const routeApi = getRouteApi("/_auth/agreements/$agreementId/edit");
+
+function EditAgreementPage() {
   const navigate = useNavigate({ from: "/agreements/$agreementId/edit" });
   const router = useRouter();
 
@@ -75,4 +86,4 @@ export const component = function EditAgreementPage() {
       summaryData={summaryData}
     />
   );
-};
+}
