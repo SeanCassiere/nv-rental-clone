@@ -16,7 +16,7 @@ export function fetchDashboardMessagesOptions(options: Auth) {
     queryKey: makeQueryKey(options, [SEGMENT, "messages"]),
     queryFn: () =>
       getDashboardMessagesAndFilter(options).then((res) => ({
-        ...res,
+        data: res,
         headers: null,
       })),
     enabled: isEnabled(options),
