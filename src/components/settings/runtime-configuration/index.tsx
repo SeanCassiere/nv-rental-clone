@@ -62,16 +62,16 @@ const SettingsRuntimeConfigurationTab = () => {
       });
     }
 
-    tabItems.push({
-      id: "number-sequencing",
-      title: t("titles.idConfiguration"),
-      component: <Skeleton className="h-96" />,
-    });
-    tabItems.push({
-      id: "system-lists",
-      title: t("titles.compatibilityConfiguration"),
-      component: <Skeleton className="h-96" />,
-    });
+    // tabItems.push({
+    //   id: "number-sequencing",
+    //   title: t("titles.idConfiguration"),
+    //   component: <Skeleton className="h-96" />,
+    // });
+    // tabItems.push({
+    //   id: "system-lists",
+    //   title: t("titles.compatibilityConfiguration"),
+    //   component: <Skeleton className="h-96" />,
+    // });
 
     return tabItems;
   }, [showGlobalDocuments, t]);
