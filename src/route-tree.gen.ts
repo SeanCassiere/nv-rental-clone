@@ -284,20 +284,11 @@ const AuthReservationsReservationIdEditRouteRoute =
   AuthReservationsReservationIdEditRouteImport.update({
     path: "/edit",
     getParentRoute: () => AuthReservationsReservationIdRouteRoute,
-  } as any)
-    .updateLoader({
-      loader: lazyFn(
-        () => import("./routes/_auth/reservations_.$reservationId.edit/loader"),
-        "loader",
-      ),
-    })
-    .update({
-      component: lazyRouteComponent(
-        () =>
-          import("./routes/_auth/reservations_.$reservationId.edit/component"),
-        "component",
-      ),
-    })
+  } as any).lazy(() =>
+    import("./routes/_auth/reservations_.$reservationId.edit/route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthFleetVehicleIdEditRouteRoute =
   AuthFleetVehicleIdEditRouteImport.update({

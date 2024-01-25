@@ -1,6 +1,11 @@
 import { useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 
@@ -8,11 +13,15 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
-const routeApi = new RouteApi({
-  id: "/_auth/reservations/$reservationId/edit",
+export const Route = createLazyFileRoute(
+  "/_auth/reservations/$reservationId/edit"
+)({
+  component: EditReservationPage,
 });
 
-export const component = function EditReservationPage() {
+const routeApi = getRouteApi("/_auth/reservations/$reservationId/edit");
+
+function EditReservationPage() {
   const navigate = useNavigate({ from: "/reservations/$reservationId/edit" });
   const router = useRouter();
 
@@ -85,4 +94,4 @@ export const component = function EditReservationPage() {
       summaryData={summaryData}
     />
   );
-};
+}
