@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { RouteApi, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,7 +29,7 @@ function getValueForTabList(list: TabListItem[], id: string) {
   return item ? item.id : firstItem ? firstItem.id : "";
 }
 
-const routeApi = new RouteApi({ id: "/_auth/settings/$destination" });
+const routeApi = getRouteApi("/_auth/settings/$destination");
 
 const SettingsRuntimeConfigurationTab = () => {
   const { t } = useTranslation("settings");

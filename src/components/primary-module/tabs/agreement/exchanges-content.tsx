@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, RouteApi } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { parseISO } from "date-fns";
 import { useTranslation } from "react-i18next";
@@ -22,7 +22,7 @@ type TVehicleExchangeKeyHelp = {
   header: string;
 };
 
-const routeApi = new RouteApi({ id: "/_auth/agreements/$agreementId" });
+const routeApi = getRouteApi("/_auth/agreements/$agreementId");
 
 const AgreementExchangesTab = () => {
   const { t } = useTranslation();

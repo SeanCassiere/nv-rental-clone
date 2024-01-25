@@ -1,7 +1,7 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-export const Route = new FileRoute("/_auth/agreements/new").createRoute({
+export const Route = createFileRoute("/_auth/agreements/new")({
   validateSearch: (search) =>
     z
       .object({

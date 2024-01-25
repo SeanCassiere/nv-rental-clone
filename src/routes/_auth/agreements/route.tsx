@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { AgreementSearchQuerySchema } from "@/schemas/agreement";
 
@@ -11,7 +11,7 @@ import {
 } from "@/utils/query/agreement";
 import { sortObjectKeys } from "@/utils/sort";
 
-export const Route = new FileRoute("/_auth/agreements").createRoute({
+export const Route = createFileRoute("/_auth/agreements")({
   validateSearch: AgreementSearchQuerySchema.parse,
   preSearchFilters: [
     (search) => ({
@@ -48,4 +48,20 @@ export const Route = new FileRoute("/_auth/agreements").createRoute({
     size: search.size,
     filters: sortObjectKeys(search.filters),
   }),
+  loader: async ({ context }) => {
+    const { queryClient, searchColumnsOptions, searchListOptions } = context;
+
+    if (!context.auth.isAuthenticated) return;
+
+    const promises = [];
+
+    // get columns
+    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
+
+    // get list
+    promises.push(queryClient.ensureQueryData(searchListOptions));
+
+    await Promise.all(promises);
+    return;
+  },
 });

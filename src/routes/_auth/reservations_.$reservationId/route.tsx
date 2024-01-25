@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -7,7 +7,7 @@ import {
   fetchReservationSummaryByIdOptions,
 } from "@/utils/query/reservation";
 
-export const Route = new FileRoute("/_auth/reservations/$reservationId").createRoute({
+export const Route = createFileRoute("/_auth/reservations/$reservationId")({
   validateSearch: (search) =>
     z
       .object({
@@ -29,5 +29,33 @@ export const Route = new FileRoute("/_auth/reservations/$reservationId").createR
       }),
       viewTab: search?.tab || "",
     };
+  },
+  loader: async ({ context }) => {
+    const {
+      queryClient,
+      viewReservationOptions,
+      viewReservationSummaryOptions,
+      viewTab,
+    } = context;
+    const promises = [];
+
+    if (!context.auth.isAuthenticated) return;
+
+    promises.push(queryClient.ensureQueryData(viewReservationOptions));
+
+    switch (viewTab.trim().toLowerCase()) {
+      case "notes":
+        break;
+      case "summary":
+      default:
+        promises.push(
+          queryClient.ensureQueryData(viewReservationSummaryOptions)
+        );
+        break;
+    }
+
+    await Promise.all(promises);
+
+    return;
   },
 });

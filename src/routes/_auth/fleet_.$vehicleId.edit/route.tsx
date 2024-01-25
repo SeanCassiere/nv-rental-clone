@@ -1,3 +1,3 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = new FileRoute("/_auth/fleet/$vehicleId/edit").createRoute();
+export const Route = createFileRoute("/_auth/fleet/$vehicleId/edit")();
