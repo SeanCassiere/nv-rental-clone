@@ -12,8 +12,8 @@ import { Route as rootRoute } from "./routes/__root"
 import { Route as PublicImport } from "./routes/_public"
 import { Route as AuthImport } from "./routes/_auth"
 import { Route as AuthIndexRouteImport } from "./routes/_auth/index.route"
+import { Route as PublicOidcCallbackImport } from "./routes/_public/oidc-callback"
 import { Route as PublicLogoutImport } from "./routes/_public/logout"
-import { Route as PublicOidcCallbackRouteImport } from "./routes/_public/oidc-callback.route"
 import { Route as AuthReservationsRouteImport } from "./routes/_auth/reservations/route"
 import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
 import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
@@ -89,13 +89,13 @@ const AuthSettingsComponentRoute = AuthSettingsComponentImport.update({
   ),
 })
 
-const PublicLogoutRoute = PublicLogoutImport.update({
-  path: "/logout",
+const PublicOidcCallbackRoute = PublicOidcCallbackImport.update({
+  path: "/oidc-callback",
   getParentRoute: () => PublicRoute,
 } as any)
 
-const PublicOidcCallbackRouteRoute = PublicOidcCallbackRouteImport.update({
-  path: "/oidc-callback",
+const PublicLogoutRoute = PublicLogoutImport.update({
+  path: "/logout",
   getParentRoute: () => PublicRoute,
 } as any)
 
@@ -428,12 +428,12 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthReservationsRouteImport
       parentRoute: typeof AuthImport
     }
-    "/_public/oidc-callback": {
-      preLoaderRoute: typeof PublicOidcCallbackRouteImport
-      parentRoute: typeof PublicImport
-    }
     "/_public/logout": {
       preLoaderRoute: typeof PublicLogoutImport
+      parentRoute: typeof PublicImport
+    }
+    "/_public/oidc-callback": {
+      preLoaderRoute: typeof PublicOidcCallbackImport
       parentRoute: typeof PublicImport
     }
     "/_auth/settings": {
@@ -546,8 +546,8 @@ export const routeTree = rootRoute.addChildren([
     AuthSettingsDestinationRouteRoute,
   ]),
   PublicRoute.addChildren([
-    PublicOidcCallbackRouteRoute,
     PublicLogoutRoute,
+    PublicOidcCallbackRoute,
     PublicDevLazyRoute,
     PublicLoggedOutLazyRoute,
   ]),

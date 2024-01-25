@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
 
@@ -8,7 +8,7 @@ import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 
 import { removeTrailingSlash } from "@/utils";
 
-export const Route = new FileRoute("/_public/oidc-callback").createRoute({
+export const Route = createFileRoute("/_public/oidc-callback")({
   validateSearch: z.object({
     redirect: z.string().optional(),
     code: z.string().optional(),
