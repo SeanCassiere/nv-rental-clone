@@ -261,19 +261,11 @@ const AuthCustomersCustomerIdEditRouteRoute =
   AuthCustomersCustomerIdEditRouteImport.update({
     path: "/edit",
     getParentRoute: () => AuthCustomersCustomerIdRouteRoute,
-  } as any)
-    .updateLoader({
-      loader: lazyFn(
-        () => import("./routes/_auth/customers_.$customerId.edit/loader"),
-        "loader",
-      ),
-    })
-    .update({
-      component: lazyRouteComponent(
-        () => import("./routes/_auth/customers_.$customerId.edit/component"),
-        "component",
-      ),
-    })
+  } as any).lazy(() =>
+    import("./routes/_auth/customers_.$customerId.edit/route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthAgreementsAgreementIdEditRouteRoute =
   AuthAgreementsAgreementIdEditRouteImport.update({
