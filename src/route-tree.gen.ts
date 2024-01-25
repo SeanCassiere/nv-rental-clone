@@ -97,16 +97,9 @@ const AuthReportsRouteRoute = AuthReportsRouteImport.update({
 const AuthFleetRouteRoute = AuthFleetRouteImport.update({
   path: "/fleet",
   getParentRoute: () => AuthRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/_auth/fleet/loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/_auth/fleet/component"),
-      "component",
-    ),
-  })
+} as any).lazy(() =>
+  import("./routes/_auth/fleet/route.lazy").then((d) => d.Route),
+)
 
 const AuthCustomersRouteRoute = AuthCustomersRouteImport.update({
   path: "/customers",

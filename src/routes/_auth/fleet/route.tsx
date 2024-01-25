@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
 
@@ -10,7 +10,7 @@ import {
   fetchVehiclesSearchListOptions,
 } from "@/utils/query/vehicle";
 
-export const Route = new FileRoute("/_auth/fleet").createRoute({
+export const Route = createFileRoute("/_auth/fleet")({
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
@@ -41,4 +41,21 @@ export const Route = new FileRoute("/_auth/fleet").createRoute({
     size: search.size,
     filters: search.filters,
   }),
+  loader: async ({ context }) => {
+    const { queryClient, searchColumnsOptions, searchListOptions } = context;
+
+    if (!context.auth.isAuthenticated) return;
+
+    const promises = [];
+
+    // get columns
+    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
+
+    // get search
+    promises.push(queryClient.ensureQueryData(searchListOptions));
+
+    await Promise.all(promises);
+
+    return;
+  },
 });
