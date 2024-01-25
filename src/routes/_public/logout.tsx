@@ -1,8 +1,8 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
-export const Route = new FileRoute("/_public/logout").createRoute({
+export const Route = createFileRoute("/_public/logout")({
   loader: async ({ context, preload, navigate }) => {
     if (preload) return;
 
