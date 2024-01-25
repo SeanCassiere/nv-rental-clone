@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
@@ -9,7 +9,7 @@ import {
 } from "@/utils/query/dashboard";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 
-export const Route = new FileRoute("/_auth/").createRoute({
+export const Route = createFileRoute("/_auth/")({
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
   beforeLoad: ({ context }) => {
     const auth = getAuthFromRouterContext(context);
@@ -22,5 +22,29 @@ export const Route = new FileRoute("/_auth/").createRoute({
         filters: { withActive: true },
       }),
     };
+  },
+  loader: async ({ context }) => {
+    const {
+      queryClient,
+      dashboardMessagesOptions,
+      dashboardWidgetsOptions,
+      activeLocationsOptions,
+    } = context;
+
+    if (!context.auth.isAuthenticated) return;
+
+    const promises = [];
+
+    // get messages
+    promises.push(queryClient.ensureQueryData(dashboardMessagesOptions));
+
+    // get widgets
+    promises.push(queryClient.ensureQueryData(dashboardWidgetsOptions));
+
+    // get locations
+    promises.push(queryClient.ensureQueryData(activeLocationsOptions));
+
+    await Promise.all(promises);
+    return;
   },
 });

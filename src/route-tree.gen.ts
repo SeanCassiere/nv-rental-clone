@@ -11,7 +11,7 @@ import {
 import { Route as rootRoute } from "./routes/__root"
 import { Route as PublicImport } from "./routes/_public"
 import { Route as AuthImport } from "./routes/_auth"
-import { Route as AuthIndexRouteImport } from "./routes/_auth/index.route"
+import { Route as AuthIndexImport } from "./routes/_auth/index"
 import { Route as PublicOidcCallbackImport } from "./routes/_public/oidc-callback"
 import { Route as PublicLogoutImport } from "./routes/_public/logout"
 import { Route as AuthReservationsRouteImport } from "./routes/_auth/reservations/route"
@@ -53,19 +53,10 @@ const AuthRoute = AuthImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthIndexRouteRoute = AuthIndexRouteImport.update({
+const AuthIndexRoute = AuthIndexImport.update({
   path: "/",
   getParentRoute: () => AuthRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/_auth/index.loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/_auth/index.component"),
-      "component",
-    ),
-  })
+} as any).lazy(() => import("./routes/_auth/index.lazy").then((d) => d.Route))
 
 const PublicLoggedOutLazyRoute = PublicLoggedOutLazyImport.update({
   path: "/logged-out",
@@ -449,7 +440,7 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof PublicImport
     }
     "/_auth/": {
-      preLoaderRoute: typeof AuthIndexRouteImport
+      preLoaderRoute: typeof AuthIndexImport
       parentRoute: typeof AuthImport
     }
     "/_auth/agreements/$agreementId": {
@@ -525,7 +516,7 @@ export const routeTree = rootRoute.addChildren([
     AuthReportsRouteRoute,
     AuthReservationsRouteRoute,
     AuthSettingsComponentRoute,
-    AuthIndexRouteRoute,
+    AuthIndexRoute,
     AuthAgreementsAgreementIdRouteRoute.addChildren([
       AuthAgreementsAgreementIdCheckInRouteRoute,
       AuthAgreementsAgreementIdEditRouteRoute,

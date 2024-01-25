@@ -1,6 +1,11 @@
 import { lazy, Suspense, useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  Link,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { Badge } from "@/components/ui/badge";
@@ -40,9 +45,13 @@ const V2DashboardContent = lazy(
   () => import("@/components/dashboard/v2-content")
 );
 
-const routeApi = new RouteApi({ id: "/_auth/" });
+const routeApi = getRouteApi("/_auth/");
 
-export const component = function DashboardPage() {
+export const Route = createLazyFileRoute("/_auth/")({
+  component: DashboardPage,
+});
+
+function DashboardPage() {
   const navigate = useNavigate({ from: "/" });
   const auth = useAuth();
 
@@ -156,7 +165,7 @@ export const component = function DashboardPage() {
       </Suspense>
     </>
   );
-};
+}
 
 type LocationResult = Awaited<
   ReturnType<(typeof apiClient)["location"]["getList"]>
