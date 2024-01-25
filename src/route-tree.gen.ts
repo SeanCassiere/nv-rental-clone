@@ -90,16 +90,9 @@ const AuthReservationsRouteRoute = AuthReservationsRouteImport.update({
 const AuthReportsRouteRoute = AuthReportsRouteImport.update({
   path: "/reports",
   getParentRoute: () => AuthRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(() => import("./routes/_auth/reports/loader"), "loader"),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/_auth/reports/component"),
-      "component",
-    ),
-  })
+} as any).lazy(() =>
+  import("./routes/_auth/reports/route.lazy").then((d) => d.Route),
+)
 
 const AuthFleetRouteRoute = AuthFleetRouteImport.update({
   path: "/fleet",

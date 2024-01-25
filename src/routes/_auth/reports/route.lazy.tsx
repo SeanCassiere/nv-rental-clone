@@ -1,6 +1,11 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
+import {
+  createLazyRoute,
+  getRouteApi,
+  Link,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { icons } from "@/components/ui/icons";
@@ -16,9 +21,13 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/_auth/reports" });
+export const Route = createLazyRoute("/_auth/reports")({
+  component: ReportSearchPage,
+});
 
-export const component = function ReportSearchPage() {
+const routeApi = getRouteApi("/_auth/reports");
+
+function ReportSearchPage() {
   const auth = useAuth();
 
   const clientId = auth.user?.profile?.navotar_clientid || "";
@@ -52,7 +61,7 @@ export const component = function ReportSearchPage() {
       </React.Suspense>
     </>
   );
-};
+}
 
 const PAYMENT_BREAKDOWN_REPORT_ID = "117";
 const BUSINESS_SUMMARY_REPORT_ID = "116";
