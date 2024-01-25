@@ -174,19 +174,11 @@ const AuthReservationsReservationIdRouteRoute =
   AuthReservationsReservationIdRouteImport.update({
     path: "/reservations/$reservationId",
     getParentRoute: () => AuthRoute,
-  } as any)
-    .updateLoader({
-      loader: lazyFn(
-        () => import("./routes/_auth/reservations_.$reservationId/loader"),
-        "loader",
-      ),
-    })
-    .update({
-      component: lazyRouteComponent(
-        () => import("./routes/_auth/reservations_.$reservationId/component"),
-        "component",
-      ),
-    })
+  } as any).lazy(() =>
+    import("./routes/_auth/reservations_.$reservationId/route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthReportsReportIdRouteRoute = AuthReportsReportIdRouteImport.update({
   path: "/reports/$reportId",
