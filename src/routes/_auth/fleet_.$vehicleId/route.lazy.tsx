@@ -1,6 +1,13 @@
 import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  Link,
+  RouteApi,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import VehicleStatBlock from "@/components/primary-module/statistic-block/vehicle-stat-block";
@@ -44,9 +51,13 @@ const ModuleNotesTabContent = lazy(
   () => import("@/components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/_auth/fleet/$vehicleId" });
+export const Route = createLazyFileRoute("/_auth/fleet/$vehicleId")({
+  component: VehicleViewPage,
+});
 
-export const component = function VehicleViewPage() {
+const routeApi = getRouteApi("/_auth/fleet/$vehicleId");
+
+function VehicleViewPage() {
   const router = useRouter();
 
   const { authParams, viewVehicleOptions } = routeApi.useRouteContext();
@@ -242,4 +253,4 @@ export const component = function VehicleViewPage() {
       </section>
     </>
   );
-};
+}

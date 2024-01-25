@@ -180,19 +180,9 @@ const AuthReportsReportIdRouteRoute = AuthReportsReportIdRouteImport.update({
 const AuthFleetVehicleIdRouteRoute = AuthFleetVehicleIdRouteImport.update({
   path: "/fleet/$vehicleId",
   getParentRoute: () => AuthRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(
-      () => import("./routes/_auth/fleet_.$vehicleId/loader"),
-      "loader",
-    ),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/_auth/fleet_.$vehicleId/component"),
-      "component",
-    ),
-  })
+} as any).lazy(() =>
+  import("./routes/_auth/fleet_.$vehicleId/route.lazy").then((d) => d.Route),
+)
 
 const AuthFleetNewRouteRoute = AuthFleetNewRouteImport.update({
   path: "/new",

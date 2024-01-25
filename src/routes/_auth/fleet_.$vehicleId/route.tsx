@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -7,7 +7,7 @@ import {
   fetchVehiclesSummaryByIdOptions,
 } from "@/utils/query/vehicle";
 
-export const Route = new FileRoute("/_auth/fleet/$vehicleId").createRoute({
+export const Route = createFileRoute("/_auth/fleet/$vehicleId")({
   validateSearch: (search) =>
     z
       .object({
@@ -26,5 +26,23 @@ export const Route = new FileRoute("/_auth/fleet/$vehicleId").createRoute({
       viewVehicleOptions: fetchVehiclesByIdOptions({ auth, vehicleId }),
       viewTab: search?.tab || "",
     };
+  },
+  loader: async ({ context }) => {
+    const { queryClient, viewVehicleOptions, viewVehicleSummaryOptions } =
+      context;
+
+    if (!context.auth.isAuthenticated) return;
+
+    const promises = [];
+
+    // get summary
+    promises.push(queryClient.ensureQueryData(viewVehicleSummaryOptions));
+
+    // get vehicle
+    promises.push(queryClient.ensureQueryData(viewVehicleOptions));
+
+    await Promise.all(promises);
+
+    return;
   },
 });
