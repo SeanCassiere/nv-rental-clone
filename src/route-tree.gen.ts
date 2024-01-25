@@ -39,7 +39,7 @@ import { Route as AuthAgreementsAgreementIdCheckInRouteImport } from "./routes/_
 
 const PublicLoggedOutLazyImport = createFileRoute("/_public/logged-out")()
 const PublicDevLazyImport = createFileRoute("/_public/dev")()
-const AuthSettingsComponentImport = createFileRoute("/_auth/settings")()
+const AuthSettingsIndexLazyImport = createFileRoute("/_auth/settings/")()
 
 // Create/Update Routes
 
@@ -69,16 +69,6 @@ const PublicDevLazyRoute = PublicDevLazyImport.update({
   path: "/dev",
   getParentRoute: () => PublicRoute,
 } as any).lazy(() => import("./routes/_public/dev.lazy").then((d) => d.Route))
-
-const AuthSettingsComponentRoute = AuthSettingsComponentImport.update({
-  path: "/settings",
-  getParentRoute: () => AuthRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/_auth/settings/component"),
-    "component",
-  ),
-})
 
 const PublicOidcCallbackRoute = PublicOidcCallbackImport.update({
   path: "/oidc-callback",
@@ -163,16 +153,22 @@ const AuthAgreementsRouteRoute = AuthAgreementsRouteImport.update({
     ),
   })
 
+const AuthSettingsIndexLazyRoute = AuthSettingsIndexLazyImport.update({
+  path: "/settings/",
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+  import("./routes/_auth/settings/index.lazy").then((d) => d.Route),
+)
+
 const AuthSettingsDestinationRouteRoute =
   AuthSettingsDestinationRouteImport.update({
     path: "/settings/$destination",
     getParentRoute: () => AuthRoute,
-  } as any).update({
-    component: lazyRouteComponent(
-      () => import("./routes/_auth/settings_.$destination/component"),
-      "component",
+  } as any).lazy(() =>
+    import("./routes/_auth/settings_.$destination/route.lazy").then(
+      (d) => d.Route,
     ),
-  })
+  )
 
 const AuthReservationsNewRouteRoute = AuthReservationsNewRouteImport.update({
   path: "/reservations/new",
@@ -427,10 +423,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PublicOidcCallbackImport
       parentRoute: typeof PublicImport
     }
-    "/_auth/settings": {
-      preLoaderRoute: typeof AuthSettingsComponentImport
-      parentRoute: typeof AuthImport
-    }
     "/_public/dev": {
       preLoaderRoute: typeof PublicDevLazyImport
       parentRoute: typeof PublicImport
@@ -483,6 +475,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthSettingsDestinationRouteImport
       parentRoute: typeof AuthImport
     }
+    "/_auth/settings/": {
+      preLoaderRoute: typeof AuthSettingsIndexLazyImport
+      parentRoute: typeof AuthImport
+    }
     "/_auth/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AuthAgreementsAgreementIdCheckInRouteImport
       parentRoute: typeof AuthAgreementsAgreementIdRouteImport
@@ -515,7 +511,6 @@ export const routeTree = rootRoute.addChildren([
     AuthFleetRouteRoute.addChildren([AuthFleetNewRouteRoute]),
     AuthReportsRouteRoute,
     AuthReservationsRouteRoute,
-    AuthSettingsComponentRoute,
     AuthIndexRoute,
     AuthAgreementsAgreementIdRouteRoute.addChildren([
       AuthAgreementsAgreementIdCheckInRouteRoute,
@@ -535,6 +530,7 @@ export const routeTree = rootRoute.addChildren([
     ]),
     AuthReservationsNewRouteRoute,
     AuthSettingsDestinationRouteRoute,
+    AuthSettingsIndexLazyRoute,
   ]),
   PublicRoute.addChildren([
     PublicLogoutRoute,

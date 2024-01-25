@@ -1,5 +1,9 @@
 import React from "react";
-import { RouteApi, type LinkOptions } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  type LinkOptions,
+} from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { SelectorSettingsNavigation } from "@/components/settings/nav-selector";
@@ -32,9 +36,13 @@ const SettingsRuntimeConfigurationTab = React.lazy(
   () => import("@/components/settings/runtime-configuration")
 );
 
-const routeApi = new RouteApi({ id: "/_auth/settings/$destination" });
+export const Route = createLazyFileRoute("/_auth/settings/$destination")({
+  component: SettingsDestinationPage,
+});
 
-export const component = function SettingsDestinationPage() {
+const routeApi = getRouteApi("/_auth/settings/$destination");
+
+function SettingsDestinationPage() {
   const { t } = useTranslation("settings");
 
   const { destination = "profile" } = routeApi.useParams();
@@ -165,4 +173,4 @@ export const component = function SettingsDestinationPage() {
       </section>
     </>
   );
-};
+}
