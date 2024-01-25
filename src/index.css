@@ -3,7 +3,8 @@
 @layer base {
   :root {
     color-scheme: light;
-    --background: 0 0% 100%;
+    /* --background: 0 0% 100%; */
+    --background: 220 33% 98%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
