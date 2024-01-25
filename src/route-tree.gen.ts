@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router"
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
-import { Route as PublicImport } from "./routes/_public"
+import { Route as PublicRouteImport } from "./routes/_public.route"
 import { Route as AuthRouteImport } from "./routes/_auth.route"
 import { Route as AuthIndexImport } from "./routes/_auth/index"
 import { Route as PublicOidcCallbackImport } from "./routes/_public/oidc-callback"
@@ -39,7 +39,7 @@ const AuthSettingsIndexLazyImport = createFileRoute("/_auth/settings/")()
 
 // Create/Update Routes
 
-const PublicRoute = PublicImport.update({
+const PublicRouteRoute = PublicRouteImport.update({
   id: "/_public",
   getParentRoute: () => rootRoute,
 } as any)
@@ -56,24 +56,24 @@ const AuthIndexRoute = AuthIndexImport.update({
 
 const PublicLoggedOutLazyRoute = PublicLoggedOutLazyImport.update({
   path: "/logged-out",
-  getParentRoute: () => PublicRoute,
+  getParentRoute: () => PublicRouteRoute,
 } as any).lazy(() =>
   import("./routes/_public/logged-out.lazy").then((d) => d.Route),
 )
 
 const PublicDevLazyRoute = PublicDevLazyImport.update({
   path: "/dev",
-  getParentRoute: () => PublicRoute,
+  getParentRoute: () => PublicRouteRoute,
 } as any).lazy(() => import("./routes/_public/dev.lazy").then((d) => d.Route))
 
 const PublicOidcCallbackRoute = PublicOidcCallbackImport.update({
   path: "/oidc-callback",
-  getParentRoute: () => PublicRoute,
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 
 const PublicLogoutRoute = PublicLogoutImport.update({
   path: "/logout",
-  getParentRoute: () => PublicRoute,
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 
 const AuthReservationsRouteRoute = AuthReservationsRouteImport.update({
@@ -259,7 +259,7 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof rootRoute
     }
     "/_public": {
-      preLoaderRoute: typeof PublicImport
+      preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRoute
     }
     "/_auth/agreements": {
@@ -284,19 +284,19 @@ declare module "@tanstack/react-router" {
     }
     "/_public/logout": {
       preLoaderRoute: typeof PublicLogoutImport
-      parentRoute: typeof PublicImport
+      parentRoute: typeof PublicRouteImport
     }
     "/_public/oidc-callback": {
       preLoaderRoute: typeof PublicOidcCallbackImport
-      parentRoute: typeof PublicImport
+      parentRoute: typeof PublicRouteImport
     }
     "/_public/dev": {
       preLoaderRoute: typeof PublicDevLazyImport
-      parentRoute: typeof PublicImport
+      parentRoute: typeof PublicRouteImport
     }
     "/_public/logged-out": {
       preLoaderRoute: typeof PublicLoggedOutLazyImport
-      parentRoute: typeof PublicImport
+      parentRoute: typeof PublicRouteImport
     }
     "/_auth/": {
       preLoaderRoute: typeof AuthIndexImport
@@ -399,7 +399,7 @@ export const routeTree = rootRoute.addChildren([
     AuthSettingsDestinationRouteRoute,
     AuthSettingsIndexLazyRoute,
   ]),
-  PublicRoute.addChildren([
+  PublicRouteRoute.addChildren([
     PublicLogoutRoute,
     PublicOidcCallbackRoute,
     PublicDevLazyRoute,
