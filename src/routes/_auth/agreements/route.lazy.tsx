@@ -1,6 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, RouteApi, useNavigate } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  Link,
+  useNavigate,
+} from "@tanstack/react-router";
 import {
   createColumnHelper,
   type ColumnFiltersState,
@@ -38,11 +43,15 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-const routeApi = new RouteApi({ id: "/_auth/agreements" });
+export const Route = createLazyFileRoute("/_auth/agreements")({
+  component: AgreementsSearchPage,
+});
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
-export const component = function AgreementsSearchPage() {
+const routeApi = getRouteApi("/_auth/agreements");
+
+function AgreementsSearchPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -405,4 +414,4 @@ export const component = function AgreementsSearchPage() {
       </section>
     </>
   );
-};
+}
