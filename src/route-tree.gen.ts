@@ -195,19 +195,11 @@ const AuthCustomersCustomerIdRouteRoute =
   AuthCustomersCustomerIdRouteImport.update({
     path: "/customers/$customerId",
     getParentRoute: () => AuthRoute,
-  } as any)
-    .updateLoader({
-      loader: lazyFn(
-        () => import("./routes/_auth/customers_.$customerId/loader"),
-        "loader",
-      ),
-    })
-    .update({
-      component: lazyRouteComponent(
-        () => import("./routes/_auth/customers_.$customerId/component"),
-        "component",
-      ),
-    })
+  } as any).lazy(() =>
+    import("./routes/_auth/customers_.$customerId/route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthAgreementsNewRouteRoute = AuthAgreementsNewRouteImport.update({
   path: "/agreements/new",

@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -7,7 +7,7 @@ import {
   fetchCustomerSummaryByIdOptions,
 } from "@/utils/query/customer";
 
-export const Route = new FileRoute("/_auth/customers/$customerId").createRoute({
+export const Route = createFileRoute("/_auth/customers/$customerId")({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],
@@ -21,5 +21,23 @@ export const Route = new FileRoute("/_auth/customers/$customerId").createRoute({
         customerId,
       }),
     };
+  },
+  loader: async ({ context }) => {
+    const { queryClient, viewCustomerSummaryOptions, viewCustomerOptions } =
+      context;
+
+    if (!context.auth.isAuthenticated) return;
+
+    const promises = [];
+
+    // get summary
+    promises.push(queryClient.ensureQueryData(viewCustomerSummaryOptions));
+
+    // get customer
+    promises.push(queryClient.ensureQueryData(viewCustomerOptions));
+
+    await Promise.all(promises);
+
+    return;
   },
 });

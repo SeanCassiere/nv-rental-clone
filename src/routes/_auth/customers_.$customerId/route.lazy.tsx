@@ -1,6 +1,12 @@
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  Link,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -32,9 +38,13 @@ const ModuleNotesTabContent = lazy(
   () => import("@/components/primary-module/tabs/notes-content")
 );
 
-const routeApi = new RouteApi({ id: "/_auth/customers/$customerId" });
+export const Route = createLazyFileRoute("/_auth/customers/$customerId")({
+  component: CustomerViewPage,
+});
 
-export const component = function CustomerViewPage() {
+const routeApi = getRouteApi("/_auth/customers/$customerId");
+
+function CustomerViewPage() {
   const router = useRouter();
   const auth = useAuth();
 
@@ -215,4 +225,4 @@ export const component = function CustomerViewPage() {
       </section>
     </>
   );
-};
+}
