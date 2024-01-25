@@ -1,6 +1,12 @@
 import { lazy, Suspense, useEffect, useMemo, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  Link,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
@@ -37,7 +43,11 @@ const AgreementExchangesTab = lazy(
   () => import("@/components/primary-module/tabs/agreement/exchanges-content")
 );
 
-const routeApi = new RouteApi({ id: "/_auth/agreements/$agreementId" });
+export const Route = createLazyFileRoute("/_auth/agreements/$agreementId")({
+  component: AgreementViewPage,
+});
+
+const routeApi = getRouteApi("/_auth/agreements/$agreementId");
 
 type TabListItem = {
   id: string;
@@ -47,7 +57,7 @@ type TabListItem = {
   suspenseComponent?: ReactNode;
 };
 
-export const component = function AgreementViewPage() {
+function AgreementViewPage() {
   const router = useRouter();
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
@@ -345,4 +355,4 @@ export const component = function AgreementViewPage() {
       </section>
     </>
   );
-};
+}

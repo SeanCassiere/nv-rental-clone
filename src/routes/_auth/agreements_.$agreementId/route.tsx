@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
@@ -9,7 +9,7 @@ import {
   fetchAgreementSummaryByIdOptions,
 } from "@/utils/query/agreement";
 
-export const Route = new FileRoute("/_auth/agreements/$agreementId").createRoute({
+export const Route = createFileRoute("/_auth/agreements/$agreementId")({
   validateSearch: (search) =>
     z
       .object({
@@ -41,4 +41,39 @@ export const Route = new FileRoute("/_auth/agreements/$agreementId").createRoute
     };
   },
   loaderDeps: (ctx) => ({ tab: ctx.search?.tab }),
+  loader: async ({ context }) => {
+    const {
+      queryClient,
+      viewAgreementExchangesOptions,
+      viewAgreementNotesOptions,
+      viewAgreementSummaryOptions,
+      viewAgreementOptions,
+      viewTab,
+    } = context;
+
+    if (!context.auth.isAuthenticated) return;
+
+    const promises = [];
+
+    promises.push(queryClient.ensureQueryData(viewAgreementOptions));
+
+    switch (viewTab.trim().toLowerCase()) {
+      case "exchanges":
+        promises.push(
+          queryClient.ensureQueryData(viewAgreementExchangesOptions)
+        );
+        break;
+      case "notes":
+        promises.push(queryClient.ensureQueryData(viewAgreementNotesOptions));
+        break;
+      case "summary":
+      default:
+        promises.push(queryClient.ensureQueryData(viewAgreementSummaryOptions));
+        break;
+    }
+
+    await Promise.all(promises);
+
+    return;
+  },
 });

@@ -205,19 +205,11 @@ const AuthAgreementsAgreementIdRouteRoute =
   AuthAgreementsAgreementIdRouteImport.update({
     path: "/agreements/$agreementId",
     getParentRoute: () => AuthRoute,
-  } as any)
-    .updateLoader({
-      loader: lazyFn(
-        () => import("./routes/_auth/agreements_.$agreementId/loader"),
-        "loader",
-      ),
-    })
-    .update({
-      component: lazyRouteComponent(
-        () => import("./routes/_auth/agreements_.$agreementId/component"),
-        "component",
-      ),
-    })
+  } as any).lazy(() =>
+    import("./routes/_auth/agreements_.$agreementId/route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthReservationsReservationIdEditRouteRoute =
   AuthReservationsReservationIdEditRouteImport.update({
