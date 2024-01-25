@@ -50,11 +50,11 @@ const SettingsApplicationTab = () => {
       component: <SettingsPermissionsAndRolesTab />,
     });
 
-    tabItems.push({
-      id: "locations",
-      title: t("titles.locations"),
-      component: <Skeleton className="h-96" />,
-    });
+    // tabItems.push({
+    //   id: "locations",
+    //   title: t("titles.locations"),
+    //   component: <Skeleton className="h-96" />,
+    // });
 
     return tabItems;
   }, [t]);

@@ -3,28 +3,28 @@
 @layer base {
   :root {
     color-scheme: light;
-    --background: 0 0% 100%;
+    --background: 220 33% 98%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 20 14.3% 4.1%;
-    --primary: 24.6 95% 53.1%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
+    --primary: 240 5.9% 16%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 20 14.3% 4.1%;
+    --secondary-foreground: 220 33% 98%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
     --accent: 60 4.8% 95.9%;
     --accent-foreground: 24 9.8% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 24.6 95% 53.1%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 45%;
     --radius: 0.5rem;
 
-    --banner-promo: 173 80% 40%;
+    --banner-promo: 224 87% 65%;
     --banner-promo-foreground: 166 76% 97%;
 
     --logo-url: url(/android-chrome-192x192-light.png);
@@ -32,29 +32,28 @@
 
   :root.dark {
     color-scheme: dark;
-    /* --background: 20 14.3% 4.1%; */
-    --background: 7 7% 7%;
+    --background: 0 0% 7%;
     --foreground: 60 9.1% 97.8%;
-    /* --card: 252 11% 9%; */
     --card: 20 14.3% 4.1%;
     --card-foreground: 60 9.1% 97.8%;
     --popover: 20 14.3% 4.1%;
     --popover-foreground: 60 9.1% 97.8%;
-    --primary: 20.5 90.2% 48.2%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-    --muted: 240 5% 11%;
-    --muted-foreground: 24 5.4% 63.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
     --accent: 12 6.5% 15.1%;
     --accent-foreground: 60 9.1% 97.8%;
     --destructive: 0 72.2% 50.6%;
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 20.5 90.2% 48.2%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 40%;
 
-    --banner-promo: 175 77% 26%;
+    --banner-promo: 217 71% 19%;
     --banner-promo-foreground: 166 76% 97%;
 
     --logo-url: url(/android-chrome-192x192-dark.png);

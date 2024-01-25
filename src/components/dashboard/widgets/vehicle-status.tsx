@@ -28,23 +28,23 @@ function nameMaker(index: number) {
 }
 
 function hslVarNameMaker(index: number) {
-  return `hsl(var(${nameMaker(index)}))`;
+  return `hsla(var(${nameMaker(index)}))`;
 }
 
 // generated from https://www.learnui.design/tools/data-color-picker.html#divergent
 const SYSTEM_PIE_CHART_COLORS: [string, string, string][] = [
   // --css-var-name light-mode-hsl dark-mode-hsl
-  [nameMaker(1), "25 95% 53%", "21 90% 48%"],
-  [nameMaker(2), "11 100% 69%", "5 100% 69%"],
-  [nameMaker(3), "358 100% 79%", "352 100% 78%"],
-  [nameMaker(4), "343 100% 84%", "339 100% 86%"],
-  [nameMaker(5), "329 100% 89%", "325 100% 93%"],
-  [nameMaker(6), "31 100% 95%", "300 100% 100%"],
-  [nameMaker(7), "302 70% 83%", "293 59% 89%"],
-  [nameMaker(8), "292 70% 75%", "285 62% 78%"],
-  [nameMaker(9), "282 74% 69%", "278 65% 69%"],
-  [nameMaker(10), "27 79% 63%", "271 67% 59%"],
-  [nameMaker(11), "262 83% 58%", "263 70% 50%"],
+  [nameMaker(1), "199 100% 18%", "199 100% 18%"],
+  [nameMaker(2), "231 33% 40%", "231 33% 30%"],
+  [nameMaker(3), "299 30% 45%", "299 30% 35%"],
+  [nameMaker(4), "339 67% 59%", "339 67% 49%"],
+  [nameMaker(5), "9 100% 66%", "9 100% 56%"],
+  [nameMaker(6), "39 100% 50%", "39 100% 40%"],
+  // [nameMaker(7), "302 70% 83%", "293 59% 89%"],
+  // [nameMaker(8), "292 70% 75%", "285 62% 78%"],
+  // [nameMaker(9), "282 74% 69%", "278 65% 69%"],
+  // [nameMaker(10), "27 79% 63%", "271 67% 59%"],
+  // [nameMaker(11), "262 83% 58%", "263 70% 50%"],
 ];
 
 const VehicleStatusWidget = (props: { locations: string[] } & Auth) => {

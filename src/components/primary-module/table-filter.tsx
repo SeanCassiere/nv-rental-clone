@@ -117,7 +117,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
             const writeValue = event.target.value.trim();
             handleSaveValue(writeValue !== "" ? writeValue : undefined);
           }}
-          className="h-8 w-full md:w-[250px]"
+          className="h-8 w-full border-dashed md:w-[250px]"
         />
       </div>
     );

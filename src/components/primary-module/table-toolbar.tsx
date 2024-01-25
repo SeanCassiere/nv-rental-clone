@@ -52,7 +52,7 @@ export function PrimaryModuleTableToolbar<TData>({
   };
 
   return (
-    <Card className="mt-4 border-none shadow-none">
+    <Card className="mt-4 border shadow-none">
       <CardTitle className="sr-only">Table filters</CardTitle>
       <CardContent className="flex flex-col justify-between gap-2 px-2 py-2 sm:flex-row sm:items-end">
         <div className="flex flex-1 flex-wrap items-start justify-start gap-2">

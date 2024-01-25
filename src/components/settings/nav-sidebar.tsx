@@ -27,10 +27,10 @@ export const SidebarSettingsNavigation = ({
           <Link
             key={`settings_sidebar_${idx}_${item.title}`}
             className={cn(
-              buttonVariants({ variant: "ghost" }),
+              buttonVariants({ variant: "ghost", size: "sm" }),
               isSelected
-                ? "bg-muted hover:bg-muted"
-                : "text-foreground/80 hover:bg-transparent hover:underline",
+                ? "border bg-card text-foreground hover:bg-card/90"
+                : "border border-transparent bg-background text-muted-foreground hover:bg-background hover:text-foreground hover:underline",
               "justify-start"
             )}
             {...item.linkProps}
