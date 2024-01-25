@@ -1,6 +1,6 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { RouteApi } from "@tanstack/react-router";
+import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { ViewReport } from "@/components/report/page";
@@ -8,9 +8,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { ReportContextProvider } from "@/context/view-report";
 
-const routeApi = new RouteApi({ id: "/_auth/reports/$reportId" });
+export const Route = createLazyFileRoute("/_auth/reports/$reportId")({
+  component: ViewReportPage,
+});
 
-export const component = function ViewReportPage() {
+const routeApi = getRouteApi("/_auth/reports/$reportId");
+
+function ViewReportPage() {
   const auth = useAuth();
   const { reportId } = routeApi.useParams();
 
@@ -43,7 +47,7 @@ export const component = function ViewReportPage() {
       )}
     </React.Suspense>
   );
-};
+}
 
 function FetchReportLayer({
   clientId,
