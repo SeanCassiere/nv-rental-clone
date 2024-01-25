@@ -21,7 +21,7 @@
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 20 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --ring: 240 5.9% 45%;
     --radius: 0.5rem;
 
     --banner-promo: 224 87% 65%;
@@ -51,7 +51,7 @@
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 12 6.5% 15.1%;
     --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --ring: 240 4.9% 40%;
 
     --banner-promo: 217 71% 19%;
     --banner-promo-foreground: 166 76% 97%;
