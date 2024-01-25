@@ -64,7 +64,7 @@ export const makeSummaryDataStyles = (
     "text-base font-semibold",
     data.biggerText ? "text-lg" : "text-base",
     colorMode === "" ? "text-foreground/80" : "",
-    colorMode === "primary-block-only" ? "text-white" : "",
+    colorMode === "primary-block-only" ? "text-background" : "",
     colorMode === "primary-text-only" ? "text-foreground" : "",
     colorMode === "red-highlight" ? "text-destructive" : ""
   );
@@ -95,7 +95,7 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
         className={cn(
           "px-5",
           !data.primaryTextHighlight && data.primaryBlockHighlight
-            ? "bg-primary text-white"
+            ? "bg-foreground text-card"
             : ""
         )}
         hideBorder
