@@ -1,4 +1,5 @@
-import { useId, useState } from "react";
+import React from "react";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import JSURL from "jsurl2";
 
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,11 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
-export const component = function DevPage() {
+export const Route = createLazyFileRoute("/_public/dev")({
+  component: DevPage,
+});
+
+function DevPage() {
   useDocumentTitle(titleMaker("Styling Area"));
 
   return (
@@ -20,16 +25,16 @@ export const component = function DevPage() {
       </section>
     </div>
   );
-};
+}
 
 function JsURLDecoder() {
-  const encodeValueId = useId();
-  const decodeJSURLtoJSONId = useId();
-  const [encodeValue, setEncodeValue] = useState("");
-  const [encoded, setEncoded] = useState("");
+  const encodeValueId = React.useId();
+  const decodeJSURLtoJSONId = React.useId();
+  const [encodeValue, setEncodeValue] = React.useState("");
+  const [encoded, setEncoded] = React.useState("");
 
-  const [decodeValue, setDecodeValue] = useState("");
-  const [decoded, setDecoded] = useState<any>({});
+  const [decodeValue, setDecodeValue] = React.useState("");
+  const [decoded, setDecoded] = React.useState<any>({});
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

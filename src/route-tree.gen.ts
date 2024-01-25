@@ -38,7 +38,7 @@ import { Route as AuthAgreementsAgreementIdCheckInRouteImport } from "./routes/_
 // Create Virtual Routes
 
 const PublicLoggedOutComponentImport = createFileRoute("/_public/logged-out")()
-const PublicDevComponentImport = createFileRoute("/_public/dev")()
+const PublicDevLazyImport = createFileRoute("/_public/dev")()
 const AuthSettingsComponentImport = createFileRoute("/_auth/settings")()
 
 // Create/Update Routes
@@ -77,15 +77,10 @@ const PublicLoggedOutComponentRoute = PublicLoggedOutComponentImport.update({
   ),
 })
 
-const PublicDevComponentRoute = PublicDevComponentImport.update({
+const PublicDevLazyRoute = PublicDevLazyImport.update({
   path: "/dev",
   getParentRoute: () => PublicRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/_public/dev.component"),
-    "component",
-  ),
-})
+} as any).lazy(() => import("./routes/_public/dev.lazy").then((d) => d.Route))
 
 const AuthSettingsComponentRoute = AuthSettingsComponentImport.update({
   path: "/settings",
@@ -449,7 +444,7 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof AuthImport
     }
     "/_public/dev": {
-      preLoaderRoute: typeof PublicDevComponentImport
+      preLoaderRoute: typeof PublicDevLazyImport
       parentRoute: typeof PublicImport
     }
     "/_public/logged-out": {
@@ -556,7 +551,7 @@ export const routeTree = rootRoute.addChildren([
   PublicRoute.addChildren([
     PublicLogoutRouteRoute,
     PublicOidcCallbackRouteRoute,
-    PublicDevComponentRoute,
+    PublicDevLazyRoute,
     PublicLoggedOutComponentRoute,
   ]),
 ])
