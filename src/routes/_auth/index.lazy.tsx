@@ -190,7 +190,7 @@ function LocationPicker({
           <Button
             size="sm"
             variant="outline"
-            className="h-8 whitespace-nowrap border-dashed"
+            className="h-8 whitespace-nowrap border"
           >
             <icons.PlusCircle className="mr-2 h-3 w-3" />
             Locations
