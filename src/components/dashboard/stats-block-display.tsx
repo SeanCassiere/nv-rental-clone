@@ -29,7 +29,7 @@ const DashboardStatsBlock = ({
 
   return (
     <div className="@container">
-      <ul className="grid grid-cols-2 gap-4 @xl:grid-cols-3 @3xl:grid-cols-4 @5xl:grid-cols-6 [&>li]:h-full">
+      <ul className="grid grid-cols-2 gap-4 @xl:grid-cols-3 @2xl:grid-cols-4 @6xl:grid-cols-6 [&>li]:h-full">
         <li>
           <StatBlock
             title="Reservation"
