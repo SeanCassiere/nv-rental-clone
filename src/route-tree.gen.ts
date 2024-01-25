@@ -163,12 +163,9 @@ const AuthSettingsDestinationRouteRoute =
 const AuthReservationsNewRouteRoute = AuthReservationsNewRouteImport.update({
   path: "/reservations/new",
   getParentRoute: () => AuthRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/_auth/reservations_.new/component"),
-    "component",
-  ),
-})
+} as any).lazy(() =>
+  import("./routes/_auth/reservations_.new/route.lazy").then((d) => d.Route),
+)
 
 const AuthReservationsReservationIdRouteRoute =
   AuthReservationsReservationIdRouteImport.update({
