@@ -1,5 +1,10 @@
 import { useCallback } from "react";
-import { RouteApi, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  getRouteApi,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 
@@ -7,9 +12,13 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/utils/title-maker";
 
-const routeApi = new RouteApi({ id: "/_auth/agreements/new" });
+export const Route = createLazyFileRoute("/_auth/agreements/new")({
+  component: AddAgreementPage,
+});
 
-export const component = function AddAgreementPage() {
+const routeApi = getRouteApi("/_auth/agreements/new");
+
+function AddAgreementPage() {
   const navigate = useNavigate({ from: "/agreements/new" });
   const router = useRouter();
 
@@ -53,4 +62,4 @@ export const component = function AddAgreementPage() {
       onRentalCancelClick={handleCancelAddAgreement}
     />
   );
-};
+}

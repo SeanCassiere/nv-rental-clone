@@ -197,12 +197,9 @@ const AuthCustomersCustomerIdRouteRoute =
 const AuthAgreementsNewRouteRoute = AuthAgreementsNewRouteImport.update({
   path: "/agreements/new",
   getParentRoute: () => AuthRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/_auth/agreements_.new/component"),
-    "component",
-  ),
-})
+} as any).lazy(() =>
+  import("./routes/_auth/agreements_.new/route.lazy").then((d) => d.Route),
+)
 
 const AuthAgreementsAgreementIdRouteRoute =
   AuthAgreementsAgreementIdRouteImport.update({
