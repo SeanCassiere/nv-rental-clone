@@ -49,7 +49,7 @@ export const SelectorSettingsNavigation = ({
           <Button
             size="lg"
             variant="outline"
-            className="w-full justify-start whitespace-nowrap border-dashed px-4"
+            className="w-full justify-start whitespace-nowrap border bg-card px-4 hover:bg-background hover:text-foreground"
             onClick={() => setOpen(true)}
           >
             <span className="flex">
