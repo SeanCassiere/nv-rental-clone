@@ -83,19 +83,9 @@ const PublicLogoutRoute = PublicLogoutImport.update({
 const AuthReservationsRouteRoute = AuthReservationsRouteImport.update({
   path: "/reservations",
   getParentRoute: () => AuthRoute,
-} as any)
-  .updateLoader({
-    loader: lazyFn(
-      () => import("./routes/_auth/reservations/loader"),
-      "loader",
-    ),
-  })
-  .update({
-    component: lazyRouteComponent(
-      () => import("./routes/_auth/reservations/component"),
-      "component",
-    ),
-  })
+} as any).lazy(() =>
+  import("./routes/_auth/reservations/route.lazy").then((d) => d.Route),
+)
 
 const AuthReportsRouteRoute = AuthReportsRouteImport.update({
   path: "/reports",
