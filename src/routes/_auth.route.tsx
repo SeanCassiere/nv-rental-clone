@@ -1,5 +1,9 @@
 import React from "react";
-import { FileRoute, Outlet, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import { LogoutDialog } from "@/components/common/logout-dialog";
@@ -20,7 +24,7 @@ import { removeTrailingSlash } from "@/utils/random";
 
 import { Container } from "./-components/container";
 
-export const Route = new FileRoute("/_auth").createRoute({
+export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context, location }) => {
     const navigator = context.auth.activeNavigator;
 
