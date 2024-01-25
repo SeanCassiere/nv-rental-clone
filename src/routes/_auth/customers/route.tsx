@@ -1,4 +1,4 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { CustomerSearchQuerySchema } from "@/schemas/customer";
 
@@ -10,7 +10,7 @@ import {
   fetchCustomersSearchListOptions,
 } from "@/utils/query/customer";
 
-export const Route = new FileRoute("/_auth/customers").createRoute({
+export const Route = createFileRoute("/_auth/customers")({
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
@@ -41,4 +41,20 @@ export const Route = new FileRoute("/_auth/customers").createRoute({
     size: search.size,
     filters: search.filters,
   }),
+  loader: async ({ context }) => {
+    const { queryClient, searchColumnsOptions, searchListOptions } = context;
+
+    if (!context.auth.isAuthenticated) return;
+
+    const promises = [];
+
+    // get columns
+    promises.push(queryClient.ensureQueryData(searchColumnsOptions));
+
+    // get search
+    promises.push(queryClient.ensureQueryData(searchListOptions));
+
+    await Promise.all(promises);
+    return;
+  },
 });
