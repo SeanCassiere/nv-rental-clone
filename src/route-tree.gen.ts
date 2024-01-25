@@ -263,20 +263,11 @@ const AuthAgreementsAgreementIdCheckInRouteRoute =
   AuthAgreementsAgreementIdCheckInRouteImport.update({
     path: "/check-in",
     getParentRoute: () => AuthAgreementsAgreementIdRouteRoute,
-  } as any)
-    .updateLoader({
-      loader: lazyFn(
-        () => import("./routes/_auth/agreements_.$agreementId.check-in/loader"),
-        "loader",
-      ),
-    })
-    .update({
-      component: lazyRouteComponent(
-        () =>
-          import("./routes/_auth/agreements_.$agreementId.check-in/component"),
-        "component",
-      ),
-    })
+  } as any).lazy(() =>
+    import("./routes/_auth/agreements_.$agreementId.check-in/route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 // Populate the FileRoutesByPath interface
 
