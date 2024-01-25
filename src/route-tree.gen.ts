@@ -187,12 +187,9 @@ const AuthFleetNewRouteRoute = AuthFleetNewRouteImport.update({
 const AuthCustomersNewRouteRoute = AuthCustomersNewRouteImport.update({
   path: "/customers/new",
   getParentRoute: () => AuthRoute,
-} as any).update({
-  component: lazyRouteComponent(
-    () => import("./routes/_auth/customers_.new/component"),
-    "component",
-  ),
-})
+} as any).lazy(() =>
+  import("./routes/_auth/customers_.new/route.lazy").then((d) => d.Route),
+)
 
 const AuthCustomersCustomerIdRouteRoute =
   AuthCustomersCustomerIdRouteImport.update({
