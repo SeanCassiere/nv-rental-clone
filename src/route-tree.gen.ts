@@ -271,12 +271,11 @@ const AuthFleetVehicleIdEditRouteRoute =
   AuthFleetVehicleIdEditRouteImport.update({
     path: "/edit",
     getParentRoute: () => AuthFleetVehicleIdRouteRoute,
-  } as any).update({
-    component: lazyRouteComponent(
-      () => import("./routes/_auth/fleet_.$vehicleId.edit/component"),
-      "component",
+  } as any).lazy(() =>
+    import("./routes/_auth/fleet_.$vehicleId.edit/route.lazy").then(
+      (d) => d.Route,
     ),
-  })
+  )
 
 const AuthCustomersCustomerIdEditRouteRoute =
   AuthCustomersCustomerIdEditRouteImport.update({
