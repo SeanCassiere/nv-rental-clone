@@ -32,9 +32,11 @@
 
   :root.dark {
     color-scheme: dark;
-    --background: 20 14.3% 4.1%;
+    /* --background: 20 14.3% 4.1%; */
+    --background: 7 7% 7%;
     --foreground: 60 9.1% 97.8%;
-    --card: 252 11% 9%;
+    /* --card: 252 11% 9%; */
+    --card: 20 14.3% 4.1%;
     --card-foreground: 60 9.1% 97.8%;
     --popover: 20 14.3% 4.1%;
     --popover-foreground: 60 9.1% 97.8%;

@@ -368,7 +368,7 @@ function ProfileForm(props: {
           control={form.control}
           name="isReservationEmail"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("labels.youReceiveEmailsQuestion", { ns: "settings" })}

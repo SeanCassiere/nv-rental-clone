@@ -304,7 +304,7 @@ export function EditRoleDialog({
             }}
           />
         )}
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button
             variant="ghost"
             type="button"

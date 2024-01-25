@@ -216,7 +216,7 @@ export function EditUserDialog({
             setOpen={setOpen}
           />
         )}
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button
             variant="ghost"
             type="button"
@@ -624,7 +624,7 @@ function EditUserForm(props: {
           control={form.control}
           name="isReservationEmail"
           render={({ field }) => (
-            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}
@@ -647,7 +647,7 @@ function EditUserForm(props: {
           control={form.control}
           name="isActive"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("titles.accountActive", { ns: "settings" })}
@@ -672,7 +672,7 @@ function EditUserForm(props: {
           control={form.control}
           name="lockOut"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("titles.accountLock", { ns: "settings" })}
@@ -1126,7 +1126,7 @@ function CreateUserForm(props: {
           control={form.control}
           name="isReservationEmail"
           render={({ field }) => (
-            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
+            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}
