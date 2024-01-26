@@ -28,18 +28,19 @@ function nameMaker(index: number) {
 }
 
 function hslVarNameMaker(index: number) {
-  return `hsla(var(${nameMaker(index)}))`;
+  return `hsl(var(${nameMaker(index)}))`;
 }
 
 // generated from https://www.learnui.design/tools/data-color-picker.html#divergent
 const SYSTEM_PIE_CHART_COLORS: [string, string, string][] = [
   // --css-var-name light-mode-hsl dark-mode-hsl
-  [nameMaker(1), "0, 0%, 20%", "0, 0%, 65%"],
-  [nameMaker(2), "0, 0%, 31%", "0, 0%, 55%"],
-  [nameMaker(3), "0, 0%, 50%", "0, 0%, 45%"],
-  [nameMaker(4), "0, 0%, 63%", "0, 0%, 35%"],
-  [nameMaker(5), "0, 0%, 80%", "0, 0%, 25%"],
-  [nameMaker(6), "0, 0%, 88%", "0, 0%, 10%"],
+  [nameMaker(1), "var(--primary)", "var(--primary)"],
+  [nameMaker(2), "0, 0%, 20%", "0, 0%, 65%"],
+  [nameMaker(3), "0, 0%, 31%", "0, 0%, 55%"],
+  [nameMaker(4), "0, 0%, 50%", "0, 0%, 45%"],
+  [nameMaker(5), "0, 0%, 63%", "0, 0%, 35%"],
+  [nameMaker(6), "0, 0%, 80%", "0, 0%, 25%"],
+  [nameMaker(7), "0, 0%, 88%", "0, 0%, 10%"],
 ];
 
 const VehicleStatusWidget = (props: { locations: string[] } & Auth) => {
