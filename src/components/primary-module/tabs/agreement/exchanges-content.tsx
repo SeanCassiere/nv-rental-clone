@@ -22,7 +22,7 @@ type TVehicleExchangeKeyHelp = {
   header: string;
 };
 
-const routeApi = getRouteApi("/_auth/agreements/$agreementId");
+const routeApi = getRouteApi("/_auth/agreements/$agreementId/");
 
 const AgreementExchangesTab = () => {
   const { t } = useTranslation();
