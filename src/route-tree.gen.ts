@@ -23,6 +23,7 @@ import { Route as AuthCustomersIndexRouteImport } from "./routes/_auth/customers
 import { Route as AuthAgreementsIndexRouteImport } from "./routes/_auth/agreements/index.route"
 import { Route as AuthReservationsNewRouteImport } from "./routes/_auth/reservations/new.route"
 import { Route as AuthReservationsReservationIdRouteImport } from "./routes/_auth/reservations/$reservationId/route"
+import { Route as AuthReportsReportIdRouteImport } from "./routes/_auth/reports/$reportId/route"
 import { Route as AuthFleetNewRouteImport } from "./routes/_auth/fleet/new.route"
 import { Route as AuthFleetVehicleIdRouteImport } from "./routes/_auth/fleet/$vehicleId/route"
 import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers/new.route"
@@ -173,6 +174,11 @@ const AuthReservationsReservationIdRouteRoute =
     getParentRoute: () => AuthReservationsRouteRoute,
   } as any)
 
+const AuthReportsReportIdRouteRoute = AuthReportsReportIdRouteImport.update({
+  path: "/$reportId",
+  getParentRoute: () => AuthReportsRouteRoute,
+} as any)
+
 const AuthFleetNewRouteRoute = AuthFleetNewRouteImport.update({
   path: "/new",
   getParentRoute: () => AuthFleetRouteRoute,
@@ -233,8 +239,8 @@ const AuthReservationsReservationIdIndexRouteRoute =
 
 const AuthReportsReportIdIndexRouteRoute =
   AuthReportsReportIdIndexRouteImport.update({
-    path: "/$reportId/",
-    getParentRoute: () => AuthReportsRouteRoute,
+    path: "/",
+    getParentRoute: () => AuthReportsReportIdRouteRoute,
   } as any).lazy(() =>
     import("./routes/_auth/reports/$reportId/index.route.lazy").then(
       (d) => d.Route,
@@ -401,6 +407,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthFleetNewRouteImport
       parentRoute: typeof AuthFleetRouteImport
     }
+    "/_auth/reports/$reportId": {
+      preLoaderRoute: typeof AuthReportsReportIdRouteImport
+      parentRoute: typeof AuthReportsRouteImport
+    }
     "/_auth/reservations/$reservationId": {
       preLoaderRoute: typeof AuthReservationsReservationIdRouteImport
       parentRoute: typeof AuthReservationsRouteImport
@@ -467,7 +477,7 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/reports/$reportId/": {
       preLoaderRoute: typeof AuthReportsReportIdIndexRouteImport
-      parentRoute: typeof AuthReportsRouteImport
+      parentRoute: typeof AuthReportsReportIdRouteImport
     }
     "/_auth/reservations/$reservationId/": {
       preLoaderRoute: typeof AuthReservationsReservationIdIndexRouteImport
@@ -510,8 +520,10 @@ export const routeTree = rootRoute.addChildren([
       AuthFleetIndexRouteRoute,
     ]),
     AuthReportsRouteRoute.addChildren([
+      AuthReportsReportIdRouteRoute.addChildren([
+        AuthReportsReportIdIndexRouteRoute,
+      ]),
       AuthReportsIndexRouteRoute,
-      AuthReportsReportIdIndexRouteRoute,
     ]),
     AuthReservationsRouteRoute.addChildren([
       AuthReservationsReservationIdRouteRoute.addChildren([
