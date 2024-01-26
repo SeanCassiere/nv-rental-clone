@@ -36,11 +36,11 @@ const SettingsRuntimeConfigurationTab = React.lazy(
   () => import("@/components/settings/runtime-configuration")
 );
 
-export const Route = createLazyFileRoute("/_auth/settings/$destination")({
+export const Route = createLazyFileRoute("/_auth/settings/$destination/")({
   component: SettingsDestinationPage,
 });
 
-const routeApi = getRouteApi("/_auth/settings/$destination");
+const routeApi = getRouteApi("/_auth/settings/$destination/");
 
 function SettingsDestinationPage() {
   const { t } = useTranslation("settings");

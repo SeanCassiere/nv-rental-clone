@@ -7,7 +7,7 @@ import {
   fetchReservationSummaryByIdOptions,
 } from "@/utils/query/reservation";
 
-export const Route = createFileRoute("/_auth/reservations/$reservationId")({
+export const Route = createFileRoute("/_auth/reservations/$reservationId/")({
   validateSearch: (search) =>
     z
       .object({

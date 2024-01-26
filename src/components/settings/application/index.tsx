@@ -26,7 +26,7 @@ function getValueForTabList(list: TabListItem[], id: string) {
   return item ? item.id : firstItem ? firstItem.id : "";
 }
 
-const routeApi = getRouteApi("/_auth/settings/$destination");
+const routeApi = getRouteApi("/_auth/settings/$destination/");
 
 const SettingsApplicationTab = () => {
   const { t } = useTranslation("settings");

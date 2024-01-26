@@ -45,11 +45,11 @@ import { cn, getXPaginationFromHeaders } from "@/utils";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-export const Route = createLazyFileRoute("/_auth/reservations")({
+export const Route = createLazyFileRoute("/_auth/reservations/")({
   component: ReservationsSearchPage,
 });
 
-const routeApi = getRouteApi("/_auth/reservations");
+const routeApi = getRouteApi("/_auth/reservations/");
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
