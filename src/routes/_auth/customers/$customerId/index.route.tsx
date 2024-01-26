@@ -7,7 +7,7 @@ import {
   fetchCustomerSummaryByIdOptions,
 } from "@/utils/query/customer";
 
-export const Route = createFileRoute("/_auth/customers/$customerId")({
+export const Route = createFileRoute("/_auth/customers/$customerId/")({
   validateSearch: (search) =>
     z.object({ tab: z.string().optional() }).parse(search),
   preSearchFilters: [(search) => ({ tab: search?.tab || "summary" })],

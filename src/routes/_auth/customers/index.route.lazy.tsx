@@ -33,7 +33,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-export const Route = createLazyFileRoute("/_auth/customers")({
+export const Route = createLazyFileRoute("/_auth/customers/")({
   component: CustomerSearchPage,
 });
 
@@ -41,7 +41,7 @@ const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 
 const DateColumns = ["DateOfbirth", "LicenseExpiryDate"];
 
-const routeApi = getRouteApi("/_auth/customers");
+const routeApi = getRouteApi("/_auth/customers/");
 
 function CustomerSearchPage() {
   const { t } = useTranslation();

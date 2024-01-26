@@ -15,6 +15,7 @@ import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
 import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
 import { Route as AuthCustomersRouteImport } from "./routes/_auth/customers/route"
 import { Route as AuthAgreementsRouteImport } from "./routes/_auth/agreements/route"
+import { Route as AuthCustomersIndexRouteImport } from "./routes/_auth/customers/index.route"
 import { Route as AuthAgreementsIndexRouteImport } from "./routes/_auth/agreements/index.route"
 import { Route as AuthSettingsDestinationRouteImport } from "./routes/_auth/settings_.$destination/route"
 import { Route as AuthReservationsNewRouteImport } from "./routes/_auth/reservations_.new/route"
@@ -22,13 +23,13 @@ import { Route as AuthReservationsReservationIdRouteImport } from "./routes/_aut
 import { Route as AuthReportsReportIdRouteImport } from "./routes/_auth/reports_.$reportId/route"
 import { Route as AuthFleetVehicleIdRouteImport } from "./routes/_auth/fleet_.$vehicleId/route"
 import { Route as AuthFleetNewRouteImport } from "./routes/_auth/fleet.new/route"
-import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers_.new/route"
-import { Route as AuthCustomersCustomerIdRouteImport } from "./routes/_auth/customers_.$customerId/route"
+import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers/new.route"
 import { Route as AuthAgreementsNewRouteImport } from "./routes/_auth/agreements/new.route"
+import { Route as AuthCustomersCustomerIdIndexRouteImport } from "./routes/_auth/customers/$customerId/index.route"
 import { Route as AuthAgreementsAgreementIdIndexRouteImport } from "./routes/_auth/agreements/$agreementId/index.route"
 import { Route as AuthReservationsReservationIdEditRouteImport } from "./routes/_auth/reservations_.$reservationId.edit/route"
 import { Route as AuthFleetVehicleIdEditRouteImport } from "./routes/_auth/fleet_.$vehicleId.edit/route"
-import { Route as AuthCustomersCustomerIdEditRouteImport } from "./routes/_auth/customers_.$customerId.edit/route"
+import { Route as AuthCustomersCustomerIdEditRouteImport } from "./routes/_auth/customers/$customerId/edit.route"
 import { Route as AuthAgreementsAgreementIdEditRouteImport } from "./routes/_auth/agreements/$agreementId/edit.route"
 import { Route as AuthAgreementsAgreementIdCheckInRouteImport } from "./routes/_auth/agreements/$agreementId/check-in.route"
 
@@ -101,9 +102,7 @@ const AuthFleetRouteRoute = AuthFleetRouteImport.update({
 const AuthCustomersRouteRoute = AuthCustomersRouteImport.update({
   path: "/customers",
   getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() =>
-  import("./routes/_auth/customers/route.lazy").then((d) => d.Route),
-)
+} as any)
 
 const AuthAgreementsRouteRoute = AuthAgreementsRouteImport.update({
   path: "/agreements",
@@ -115,6 +114,13 @@ const AuthSettingsIndexLazyRoute = AuthSettingsIndexLazyImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any).lazy(() =>
   import("./routes/_auth/settings/index.lazy").then((d) => d.Route),
+)
+
+const AuthCustomersIndexRouteRoute = AuthCustomersIndexRouteImport.update({
+  path: "/",
+  getParentRoute: () => AuthCustomersRouteRoute,
+} as any).lazy(() =>
+  import("./routes/_auth/customers/index.route.lazy").then((d) => d.Route),
 )
 
 const AuthAgreementsIndexRouteRoute = AuthAgreementsIndexRouteImport.update({
@@ -173,21 +179,11 @@ const AuthFleetNewRouteRoute = AuthFleetNewRouteImport.update({
 )
 
 const AuthCustomersNewRouteRoute = AuthCustomersNewRouteImport.update({
-  path: "/customers/new",
-  getParentRoute: () => AuthRouteRoute,
+  path: "/new",
+  getParentRoute: () => AuthCustomersRouteRoute,
 } as any).lazy(() =>
-  import("./routes/_auth/customers_.new/route.lazy").then((d) => d.Route),
+  import("./routes/_auth/customers/new.route.lazy").then((d) => d.Route),
 )
-
-const AuthCustomersCustomerIdRouteRoute =
-  AuthCustomersCustomerIdRouteImport.update({
-    path: "/customers/$customerId",
-    getParentRoute: () => AuthRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/customers_.$customerId/route.lazy").then(
-      (d) => d.Route,
-    ),
-  )
 
 const AuthAgreementsNewRouteRoute = AuthAgreementsNewRouteImport.update({
   path: "/new",
@@ -195,6 +191,16 @@ const AuthAgreementsNewRouteRoute = AuthAgreementsNewRouteImport.update({
 } as any).lazy(() =>
   import("./routes/_auth/agreements/new.route.lazy").then((d) => d.Route),
 )
+
+const AuthCustomersCustomerIdIndexRouteRoute =
+  AuthCustomersCustomerIdIndexRouteImport.update({
+    path: "/$customerId/",
+    getParentRoute: () => AuthCustomersRouteRoute,
+  } as any).lazy(() =>
+    import("./routes/_auth/customers/$customerId/index.route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthAgreementsAgreementIdIndexRouteRoute =
   AuthAgreementsAgreementIdIndexRouteImport.update({
@@ -228,10 +234,10 @@ const AuthFleetVehicleIdEditRouteRoute =
 
 const AuthCustomersCustomerIdEditRouteRoute =
   AuthCustomersCustomerIdEditRouteImport.update({
-    path: "/edit",
-    getParentRoute: () => AuthCustomersCustomerIdRouteRoute,
+    path: "/$customerId/edit",
+    getParentRoute: () => AuthCustomersRouteRoute,
   } as any).lazy(() =>
-    import("./routes/_auth/customers_.$customerId.edit/route.lazy").then(
+    import("./routes/_auth/customers/$customerId/edit.route.lazy").then(
       (d) => d.Route,
     ),
   )
@@ -312,13 +318,9 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthAgreementsNewRouteImport
       parentRoute: typeof AuthAgreementsRouteImport
     }
-    "/_auth/customers/$customerId": {
-      preLoaderRoute: typeof AuthCustomersCustomerIdRouteImport
-      parentRoute: typeof AuthRouteImport
-    }
     "/_auth/customers/new": {
       preLoaderRoute: typeof AuthCustomersNewRouteImport
-      parentRoute: typeof AuthRouteImport
+      parentRoute: typeof AuthCustomersRouteImport
     }
     "/_auth/fleet/new": {
       preLoaderRoute: typeof AuthFleetNewRouteImport
@@ -348,6 +350,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthAgreementsIndexRouteImport
       parentRoute: typeof AuthAgreementsRouteImport
     }
+    "/_auth/customers/": {
+      preLoaderRoute: typeof AuthCustomersIndexRouteImport
+      parentRoute: typeof AuthCustomersRouteImport
+    }
     "/_auth/settings/": {
       preLoaderRoute: typeof AuthSettingsIndexLazyImport
       parentRoute: typeof AuthRouteImport
@@ -362,7 +368,7 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/customers/$customerId/edit": {
       preLoaderRoute: typeof AuthCustomersCustomerIdEditRouteImport
-      parentRoute: typeof AuthCustomersCustomerIdRouteImport
+      parentRoute: typeof AuthCustomersRouteImport
     }
     "/_auth/fleet/$vehicleId/edit": {
       preLoaderRoute: typeof AuthFleetVehicleIdEditRouteImport
@@ -375,6 +381,10 @@ declare module "@tanstack/react-router" {
     "/_auth/agreements/$agreementId/": {
       preLoaderRoute: typeof AuthAgreementsAgreementIdIndexRouteImport
       parentRoute: typeof AuthAgreementsRouteImport
+    }
+    "/_auth/customers/$customerId/": {
+      preLoaderRoute: typeof AuthCustomersCustomerIdIndexRouteImport
+      parentRoute: typeof AuthCustomersRouteImport
     }
   }
 }
@@ -390,15 +400,16 @@ export const routeTree = rootRoute.addChildren([
       AuthAgreementsAgreementIdEditRouteRoute,
       AuthAgreementsAgreementIdIndexRouteRoute,
     ]),
-    AuthCustomersRouteRoute,
+    AuthCustomersRouteRoute.addChildren([
+      AuthCustomersNewRouteRoute,
+      AuthCustomersIndexRouteRoute,
+      AuthCustomersCustomerIdEditRouteRoute,
+      AuthCustomersCustomerIdIndexRouteRoute,
+    ]),
     AuthFleetRouteRoute.addChildren([AuthFleetNewRouteRoute]),
     AuthReportsRouteRoute,
     AuthReservationsRouteRoute,
     AuthIndexRoute,
-    AuthCustomersCustomerIdRouteRoute.addChildren([
-      AuthCustomersCustomerIdEditRouteRoute,
-    ]),
-    AuthCustomersNewRouteRoute,
     AuthFleetVehicleIdRouteRoute.addChildren([
       AuthFleetVehicleIdEditRouteRoute,
     ]),
