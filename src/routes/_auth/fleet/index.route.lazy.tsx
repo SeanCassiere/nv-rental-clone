@@ -37,11 +37,11 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-export const Route = createLazyFileRoute("/_auth/fleet")({
+export const Route = createLazyFileRoute("/_auth/fleet/")({
   component: VehicleSearchPage,
 });
 
-const routeApi = getRouteApi("/_auth/fleet");
+const routeApi = getRouteApi("/_auth/fleet/");
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 

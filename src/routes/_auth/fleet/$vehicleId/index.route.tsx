@@ -7,7 +7,7 @@ import {
   fetchVehiclesSummaryByIdOptions,
 } from "@/utils/query/vehicle";
 
-export const Route = createFileRoute("/_auth/fleet/$vehicleId")({
+export const Route = createFileRoute("/_auth/fleet/$vehicleId/")({
   validateSearch: (search) =>
     z
       .object({

@@ -50,11 +50,11 @@ const ModuleNotesTabContent = lazy(
   () => import("@/components/primary-module/tabs/notes-content")
 );
 
-export const Route = createLazyFileRoute("/_auth/fleet/$vehicleId")({
+export const Route = createLazyFileRoute("/_auth/fleet/$vehicleId/")({
   component: VehicleViewPage,
 });
 
-const routeApi = getRouteApi("/_auth/fleet/$vehicleId");
+const routeApi = getRouteApi("/_auth/fleet/$vehicleId/");
 
 function VehicleViewPage() {
   const router = useRouter();
