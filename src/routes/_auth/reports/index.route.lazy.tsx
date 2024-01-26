@@ -21,11 +21,11 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
-export const Route = createLazyRoute("/_auth/reports")({
+export const Route = createLazyRoute("/_auth/reports/")({
   component: ReportSearchPage,
 });
 
-const routeApi = getRouteApi("/_auth/reports");
+const routeApi = getRouteApi("/_auth/reports/");
 
 function ReportSearchPage() {
   const auth = useAuth();

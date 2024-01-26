@@ -8,11 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { ReportContextProvider } from "@/context/view-report";
 
-export const Route = createLazyFileRoute("/_auth/reports/$reportId")({
+export const Route = createLazyFileRoute("/_auth/reports/$reportId/")({
   component: ViewReportPage,
 });
 
-const routeApi = getRouteApi("/_auth/reports/$reportId");
+const routeApi = getRouteApi("/_auth/reports/$reportId/");
 
 function ViewReportPage() {
   const auth = useAuth();

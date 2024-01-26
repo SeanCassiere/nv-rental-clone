@@ -15,16 +15,17 @@ import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
 import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
 import { Route as AuthCustomersRouteImport } from "./routes/_auth/customers/route"
 import { Route as AuthAgreementsRouteImport } from "./routes/_auth/agreements/route"
+import { Route as AuthReportsIndexRouteImport } from "./routes/_auth/reports/index.route"
 import { Route as AuthFleetIndexRouteImport } from "./routes/_auth/fleet/index.route"
 import { Route as AuthCustomersIndexRouteImport } from "./routes/_auth/customers/index.route"
 import { Route as AuthAgreementsIndexRouteImport } from "./routes/_auth/agreements/index.route"
 import { Route as AuthSettingsDestinationRouteImport } from "./routes/_auth/settings_.$destination/route"
 import { Route as AuthReservationsNewRouteImport } from "./routes/_auth/reservations_.new/route"
 import { Route as AuthReservationsReservationIdRouteImport } from "./routes/_auth/reservations_.$reservationId/route"
-import { Route as AuthReportsReportIdRouteImport } from "./routes/_auth/reports_.$reportId/route"
 import { Route as AuthFleetNewRouteImport } from "./routes/_auth/fleet/new.route"
 import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers/new.route"
 import { Route as AuthAgreementsNewRouteImport } from "./routes/_auth/agreements/new.route"
+import { Route as AuthReportsReportIdIndexRouteImport } from "./routes/_auth/reports/$reportId/index.route"
 import { Route as AuthFleetVehicleIdIndexRouteImport } from "./routes/_auth/fleet/$vehicleId/index.route"
 import { Route as AuthCustomersCustomerIdIndexRouteImport } from "./routes/_auth/customers/$customerId/index.route"
 import { Route as AuthAgreementsAgreementIdIndexRouteImport } from "./routes/_auth/agreements/$agreementId/index.route"
@@ -89,9 +90,7 @@ const AuthReservationsRouteRoute = AuthReservationsRouteImport.update({
 const AuthReportsRouteRoute = AuthReportsRouteImport.update({
   path: "/reports",
   getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() =>
-  import("./routes/_auth/reports/route.lazy").then((d) => d.Route),
-)
+} as any)
 
 const AuthFleetRouteRoute = AuthFleetRouteImport.update({
   path: "/fleet",
@@ -113,6 +112,13 @@ const AuthSettingsIndexLazyRoute = AuthSettingsIndexLazyImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any).lazy(() =>
   import("./routes/_auth/settings/index.lazy").then((d) => d.Route),
+)
+
+const AuthReportsIndexRouteRoute = AuthReportsIndexRouteImport.update({
+  path: "/",
+  getParentRoute: () => AuthReportsRouteRoute,
+} as any).lazy(() =>
+  import("./routes/_auth/reports/index.route.lazy").then((d) => d.Route),
 )
 
 const AuthFleetIndexRouteRoute = AuthFleetIndexRouteImport.update({
@@ -163,13 +169,6 @@ const AuthReservationsReservationIdRouteRoute =
     ),
   )
 
-const AuthReportsReportIdRouteRoute = AuthReportsReportIdRouteImport.update({
-  path: "/reports/$reportId",
-  getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() =>
-  import("./routes/_auth/reports_.$reportId/route.lazy").then((d) => d.Route),
-)
-
 const AuthFleetNewRouteRoute = AuthFleetNewRouteImport.update({
   path: "/new",
   getParentRoute: () => AuthFleetRouteRoute,
@@ -190,6 +189,16 @@ const AuthAgreementsNewRouteRoute = AuthAgreementsNewRouteImport.update({
 } as any).lazy(() =>
   import("./routes/_auth/agreements/new.route.lazy").then((d) => d.Route),
 )
+
+const AuthReportsReportIdIndexRouteRoute =
+  AuthReportsReportIdIndexRouteImport.update({
+    path: "/$reportId/",
+    getParentRoute: () => AuthReportsRouteRoute,
+  } as any).lazy(() =>
+    import("./routes/_auth/reports/$reportId/index.route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthFleetVehicleIdIndexRouteRoute =
   AuthFleetVehicleIdIndexRouteImport.update({
@@ -335,10 +344,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthFleetNewRouteImport
       parentRoute: typeof AuthFleetRouteImport
     }
-    "/_auth/reports/$reportId": {
-      preLoaderRoute: typeof AuthReportsReportIdRouteImport
-      parentRoute: typeof AuthRouteImport
-    }
     "/_auth/reservations/$reservationId": {
       preLoaderRoute: typeof AuthReservationsReservationIdRouteImport
       parentRoute: typeof AuthRouteImport
@@ -362,6 +367,10 @@ declare module "@tanstack/react-router" {
     "/_auth/fleet/": {
       preLoaderRoute: typeof AuthFleetIndexRouteImport
       parentRoute: typeof AuthFleetRouteImport
+    }
+    "/_auth/reports/": {
+      preLoaderRoute: typeof AuthReportsIndexRouteImport
+      parentRoute: typeof AuthReportsRouteImport
     }
     "/_auth/settings/": {
       preLoaderRoute: typeof AuthSettingsIndexLazyImport
@@ -399,6 +408,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthFleetVehicleIdIndexRouteImport
       parentRoute: typeof AuthFleetRouteImport
     }
+    "/_auth/reports/$reportId/": {
+      preLoaderRoute: typeof AuthReportsReportIdIndexRouteImport
+      parentRoute: typeof AuthReportsRouteImport
+    }
   }
 }
 
@@ -425,10 +438,12 @@ export const routeTree = rootRoute.addChildren([
       AuthFleetVehicleIdEditRouteRoute,
       AuthFleetVehicleIdIndexRouteRoute,
     ]),
-    AuthReportsRouteRoute,
+    AuthReportsRouteRoute.addChildren([
+      AuthReportsIndexRouteRoute,
+      AuthReportsReportIdIndexRouteRoute,
+    ]),
     AuthReservationsRouteRoute,
     AuthIndexRoute,
-    AuthReportsReportIdRouteRoute,
     AuthReservationsReservationIdRouteRoute.addChildren([
       AuthReservationsReservationIdEditRouteRoute,
     ]),
