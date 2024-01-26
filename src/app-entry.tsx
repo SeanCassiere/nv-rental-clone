@@ -2,7 +2,7 @@ import * as React from "react";
 import { broadcastQueryClient } from "@tanstack/query-broadcast-client-experimental";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Router, RouterProvider } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
@@ -25,7 +25,7 @@ import { queryClient } from "@/tanstack-query-config";
 
 import i18n from "./i18next-config";
 
-export const router = new Router({
+export const router = createRouter({
   routeTree,
   notFoundRoute,
   defaultPreload: "intent",
