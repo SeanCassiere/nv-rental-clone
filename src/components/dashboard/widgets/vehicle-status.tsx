@@ -24,23 +24,22 @@ import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
 
 function nameMaker(index: number) {
-  return `--pie-hsl-color-${index}`;
+  return `--pie-segment-${index}-color`;
 }
 
 function hslVarNameMaker(index: number) {
-  return `hsl(var(${nameMaker(index)}))`;
+  return `hsla(var(${nameMaker(index)}))`;
 }
 
-// generated from https://www.learnui.design/tools/data-color-picker.html#divergent
 const SYSTEM_PIE_CHART_COLORS: [string, string, string][] = [
   // --css-var-name light-mode-hsl dark-mode-hsl
-  [nameMaker(1), "var(--primary)", "var(--primary)"],
-  [nameMaker(2), "0, 0%, 20%", "0, 0%, 65%"],
-  [nameMaker(3), "0, 0%, 31%", "0, 0%, 55%"],
-  [nameMaker(4), "0, 0%, 50%", "0, 0%, 45%"],
-  [nameMaker(5), "0, 0%, 63%", "0, 0%, 35%"],
-  [nameMaker(6), "0, 0%, 80%", "0, 0%, 25%"],
-  [nameMaker(7), "0, 0%, 88%", "0, 0%, 10%"],
+  [nameMaker(1), "var(--primary) / 1", "var(--primary) / 1"],
+  [nameMaker(2), "var(--primary) / 0.2", "var(--primary) / 0.75"],
+  [nameMaker(3), "var(--primary) / 0.31", "var(--primary) / 0.55"],
+  [nameMaker(4), "var(--primary) / 0.5", "var(--primary) / 0.45"],
+  [nameMaker(5), "var(--primary) / 0.63", "var(--primary) / 0.35"],
+  [nameMaker(6), "var(--primary) / 0.8", "var(--primary) / 0.25"],
+  [nameMaker(7), "var(--primary) / 0.88", "var(--primary) / 0.1"],
 ];
 
 const VehicleStatusWidget = (props: { locations: string[] } & Auth) => {
@@ -105,17 +104,18 @@ export function VehicleStatusPieChart(props: { locations: string[] } & Auth) {
       (theme.ternaryDarkMode === "system" && theme.isDarkMode)
     ) {
       return SYSTEM_PIE_CHART_COLORS.reduce(
-        (acc, [key, _, value]) => {
-          acc[key] = value;
+        (acc, [key, _, darkValue]) => {
+          acc[key] = darkValue;
           return acc;
         },
         {} as { [key: string]: string }
       );
     }
 
+    // if the currently selected theme is light
     return SYSTEM_PIE_CHART_COLORS.reduce(
-      (acc, [key, value]) => {
-        acc[key] = value;
+      (acc, [key, lightValue]) => {
+        acc[key] = lightValue;
         return acc;
       },
       {} as { [key: string]: string }
@@ -198,10 +198,8 @@ export function VehicleStatusPieChart(props: { locations: string[] } & Auth) {
           {dataList.map((_, idx) => (
             <Cell
               key={`vehicle-status-pie-cell-${idx}`}
-              stroke="hsl(var(--border)/0.5)"
-              fill={hslVarNameMaker(
-                (idx + 1) % (SYSTEM_PIE_CHART_COLORS.length + 1)
-              )}
+              stroke="hsla(var(--border) / 0.5)"
+              fill={hslVarNameMaker((idx % SYSTEM_PIE_CHART_COLORS.length) + 1)}
             />
           ))}
         </Pie>
