@@ -22,6 +22,7 @@ import { Route as AuthFleetIndexRouteImport } from "./routes/_auth/fleet/index.r
 import { Route as AuthCustomersIndexRouteImport } from "./routes/_auth/customers/index.route"
 import { Route as AuthAgreementsIndexRouteImport } from "./routes/_auth/agreements/index.route"
 import { Route as AuthReservationsNewRouteImport } from "./routes/_auth/reservations/new.route"
+import { Route as AuthReservationsReservationIdRouteImport } from "./routes/_auth/reservations/$reservationId/route"
 import { Route as AuthFleetNewRouteImport } from "./routes/_auth/fleet/new.route"
 import { Route as AuthFleetVehicleIdRouteImport } from "./routes/_auth/fleet/$vehicleId/route"
 import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers/new.route"
@@ -166,6 +167,12 @@ const AuthReservationsNewRouteRoute = AuthReservationsNewRouteImport.update({
   import("./routes/_auth/reservations/new.route.lazy").then((d) => d.Route),
 )
 
+const AuthReservationsReservationIdRouteRoute =
+  AuthReservationsReservationIdRouteImport.update({
+    path: "/$reservationId",
+    getParentRoute: () => AuthReservationsRouteRoute,
+  } as any)
+
 const AuthFleetNewRouteRoute = AuthFleetNewRouteImport.update({
   path: "/new",
   getParentRoute: () => AuthFleetRouteRoute,
@@ -216,8 +223,8 @@ const AuthSettingsDestinationIndexRouteRoute =
 
 const AuthReservationsReservationIdIndexRouteRoute =
   AuthReservationsReservationIdIndexRouteImport.update({
-    path: "/$reservationId/",
-    getParentRoute: () => AuthReservationsRouteRoute,
+    path: "/",
+    getParentRoute: () => AuthReservationsReservationIdRouteRoute,
   } as any).lazy(() =>
     import("./routes/_auth/reservations/$reservationId/index.route.lazy").then(
       (d) => d.Route,
@@ -266,8 +273,8 @@ const AuthAgreementsAgreementIdIndexRouteRoute =
 
 const AuthReservationsReservationIdEditRouteRoute =
   AuthReservationsReservationIdEditRouteImport.update({
-    path: "/$reservationId/edit",
-    getParentRoute: () => AuthReservationsRouteRoute,
+    path: "/edit",
+    getParentRoute: () => AuthReservationsReservationIdRouteRoute,
   } as any).lazy(() =>
     import("./routes/_auth/reservations/$reservationId/edit.route.lazy").then(
       (d) => d.Route,
@@ -394,6 +401,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthFleetNewRouteImport
       parentRoute: typeof AuthFleetRouteImport
     }
+    "/_auth/reservations/$reservationId": {
+      preLoaderRoute: typeof AuthReservationsReservationIdRouteImport
+      parentRoute: typeof AuthReservationsRouteImport
+    }
     "/_auth/reservations/new": {
       preLoaderRoute: typeof AuthReservationsNewRouteImport
       parentRoute: typeof AuthReservationsRouteImport
@@ -440,7 +451,7 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/reservations/$reservationId/edit": {
       preLoaderRoute: typeof AuthReservationsReservationIdEditRouteImport
-      parentRoute: typeof AuthReservationsRouteImport
+      parentRoute: typeof AuthReservationsReservationIdRouteImport
     }
     "/_auth/agreements/$agreementId/": {
       preLoaderRoute: typeof AuthAgreementsAgreementIdIndexRouteImport
@@ -460,7 +471,7 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/reservations/$reservationId/": {
       preLoaderRoute: typeof AuthReservationsReservationIdIndexRouteImport
-      parentRoute: typeof AuthReservationsRouteImport
+      parentRoute: typeof AuthReservationsReservationIdRouteImport
     }
     "/_auth/settings/$destination/": {
       preLoaderRoute: typeof AuthSettingsDestinationIndexRouteImport
@@ -503,10 +514,12 @@ export const routeTree = rootRoute.addChildren([
       AuthReportsReportIdIndexRouteRoute,
     ]),
     AuthReservationsRouteRoute.addChildren([
+      AuthReservationsReservationIdRouteRoute.addChildren([
+        AuthReservationsReservationIdEditRouteRoute,
+        AuthReservationsReservationIdIndexRouteRoute,
+      ]),
       AuthReservationsNewRouteRoute,
       AuthReservationsIndexRouteRoute,
-      AuthReservationsReservationIdEditRouteRoute,
-      AuthReservationsReservationIdIndexRouteRoute,
     ]),
     AuthSettingsRouteRoute.addChildren([
       AuthSettingsIndexLazyRoute,
