@@ -17,6 +17,6 @@
   "id": "/",
   "start_url": "/",
   "display": "minimal-ui",
-  "theme_color": "#f97316",
-  "background_color": "#f8fafc"
+  "theme_color": "#F8F9FC",
+  "background_color": "#F8F9FC"
 }
