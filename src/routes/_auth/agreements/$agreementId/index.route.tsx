@@ -9,7 +9,7 @@ import {
   fetchAgreementSummaryByIdOptions,
 } from "@/utils/query/agreement";
 
-export const Route = createFileRoute("/_auth/agreements/$agreementId")({
+export const Route = createFileRoute("/_auth/agreements/$agreementId/")({
   validateSearch: (search) =>
     z
       .object({

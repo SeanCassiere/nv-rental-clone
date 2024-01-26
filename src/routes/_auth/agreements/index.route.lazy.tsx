@@ -49,7 +49,7 @@ export const Route = createLazyFileRoute("/_auth/agreements/")({
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
-const routeApi = getRouteApi("/_auth/agreements");
+const routeApi = getRouteApi("/_auth/agreements/");
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();

@@ -43,11 +43,11 @@ const AgreementExchangesTab = lazy(
   () => import("@/components/primary-module/tabs/agreement/exchanges-content")
 );
 
-export const Route = createLazyFileRoute("/_auth/agreements/$agreementId")({
+export const Route = createLazyFileRoute("/_auth/agreements/$agreementId/")({
   component: AgreementViewPage,
 });
 
-const routeApi = getRouteApi("/_auth/agreements/$agreementId");
+const routeApi = getRouteApi("/_auth/agreements/$agreementId/");
 
 type TabListItem = {
   id: string;
