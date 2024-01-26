@@ -11,7 +11,7 @@ import {
 } from "@/utils/query/agreement";
 import { sortObjectKeys } from "@/utils/sort";
 
-export const Route = createFileRoute("/_auth/agreements")({
+export const Route = createFileRoute("/_auth/agreements/")({
   validateSearch: AgreementSearchQuerySchema.parse,
   preSearchFilters: [
     (search) => ({

@@ -43,7 +43,7 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-export const Route = createLazyFileRoute("/_auth/agreements")({
+export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,
 });
 
