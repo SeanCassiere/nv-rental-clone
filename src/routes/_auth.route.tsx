@@ -87,6 +87,8 @@ export const Route = createFileRoute("/_auth")({
         fetchPermissionsByUserIdOptions({ auth, userId: auth.userId })
       )
     );
+
+    await Promise.all(promises);
   },
   component: AuthLayout,
 });
