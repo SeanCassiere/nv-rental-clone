@@ -115,7 +115,7 @@ export const AppNavigation = (props: Props) => {
     {
       name: "Settings",
       props: {
-        to: "/settings-temp/profile",
+        to: "/settings-temp",
         activeOptions: defaultActiveOptions,
         params: false,
         search: false,
