@@ -3,8 +3,6 @@ import {
   createLazyFileRoute,
   LinkOptions,
   Outlet,
-  useMatches,
-  useRouterState,
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +18,7 @@ import { SidebarDesktopNavigation } from "./-components/sidebar-desktop-navigati
 import { SidebarMobileNavigation } from "./-components/sidebar-mobile-navigation";
 
 export const Route = createLazyFileRoute("/_auth/settings-temp")({
-  component: SettingsPage,
+  component: SettingsLayout,
 });
 
 type SettingsNavigationDestination = {
@@ -29,29 +27,18 @@ type SettingsNavigationDestination = {
   linkProps: LinkOptions;
 };
 
-function SettingsPage() {
+function SettingsLayout() {
   const { t } = useTranslation();
-  const location = useRouterState({ select: (s) => s.location });
 
   const canSeeAdminTab = usePermission("VIEW_ADMIN_TAB");
-
-  const allRouteMatches = useMatches();
-  const currentDestinationPath = React.useMemo(() => {
-    const pathnames = allRouteMatches.map((route) => route.pathname);
-    const destination = pathnames.find(
-      (path) => path.toLowerCase() === location.pathname.toLowerCase()
-    );
-    return destination ?? "";
-  }, [allRouteMatches, location.pathname]);
 
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
       {
         id: "/settings-temp/profile",
         title: t("titles.profile", { ns: "settings" }),
-        // component: <SettingsProfileTab />,
         linkProps: {
-          to: "/settings-temp/",
+          to: "/settings-temp/profile",
           params: false,
           search: false,
         },
@@ -64,8 +51,8 @@ function SettingsPage() {
       id: "/settings-temp/application-configuration",
       title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
       linkProps: {
-        to: "/settings/$destination",
-        params: { destination: "application" },
+        to: "/settings-temp/application-configuration",
+        params: false,
         search: false,
       },
     });
@@ -125,14 +112,8 @@ function SettingsPage() {
         )}
       >
         <aside className="shrink-0 border-b pb-4 lg:w-1/5 lg:border-b-0 lg:pb-0">
-          <SidebarMobileNavigation
-            items={destinations}
-            currentId={currentDestinationPath}
-          />
-          <SidebarDesktopNavigation
-            items={destinations}
-            currentId={currentDestinationPath}
-          />
+          <SidebarMobileNavigation items={destinations} />
+          <SidebarDesktopNavigation items={destinations} />
         </aside>
         <div className="flex-1">
           <Outlet />

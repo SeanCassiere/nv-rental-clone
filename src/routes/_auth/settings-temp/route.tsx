@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { getAuthFromRouterContext } from "@/utils/auth";
+import { fetchFeaturesForClientOptions } from "@/utils/query/client";
 import { fetchPermissionsByUserIdOptions } from "@/utils/query/user";
 
 export const Route = createFileRoute("/_auth/settings-temp")({
@@ -13,24 +14,21 @@ export const Route = createFileRoute("/_auth/settings-temp")({
         auth,
         userId: auth.userId,
       }),
+      clientFeaturesOptions: fetchFeaturesForClientOptions({ auth }),
     };
   },
   loader: async ({ context }) => {
-    const { queryClient, userPermissionsOptions } = context;
+    const { queryClient, userPermissionsOptions, clientFeaturesOptions } =
+      context;
 
-    // data fetching
     const promises = [];
+    // ensure user permissions are being loaded in
     promises.push(queryClient.ensureQueryData(userPermissionsOptions));
 
+    // ensure client features are being loaded in
+    promises.push(queryClient.ensureQueryData(clientFeaturesOptions));
+
     await Promise.allSettled(promises);
-
-    // permissions
-    const permissionsData = queryClient.getQueryData(
-      userPermissionsOptions.queryKey
-    );
-    const permissions = permissionsData?.body ?? [];
-    console.log("permissions", permissions);
-
     return;
   },
 });

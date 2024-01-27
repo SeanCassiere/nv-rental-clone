@@ -1,5 +1,9 @@
 import React from "react";
-import { useNavigate, type LinkOptions } from "@tanstack/react-router";
+import {
+  useMatches,
+  useNavigate,
+  type LinkOptions,
+} from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
@@ -27,17 +31,27 @@ interface SidebarMobileNavigationProps {
     title: string;
     linkProps: LinkOptions;
   }[];
-  currentId: string;
 }
 
-export const SidebarMobileNavigation = ({
+export function SidebarMobileNavigation({
   items,
-  currentId,
-}: SidebarMobileNavigationProps) => {
-  const { t } = useTranslation("messages");
+}: SidebarMobileNavigationProps) {
+  const { t } = useTranslation();
 
-  const currentTitle =
-    items.find((d) => d.id === currentId)?.title ?? "Unknown";
+  const routeMatches = useMatches();
+  const pathnames = routeMatches.map((r) => r.pathname);
+
+  const currentTitle = React.useMemo(() => {
+    let titleValue = "unknown";
+    items.map((item) => {
+      pathnames.map((path) => {
+        if (item.id === path) {
+          titleValue = item.title;
+        }
+      });
+    });
+    return titleValue;
+  }, [items, pathnames]);
 
   const navigate = useNavigate();
 
@@ -70,12 +84,10 @@ export const SidebarMobileNavigation = ({
         <PopoverContent align="start" className="w-[calc(100vw-10%)] p-0">
           <Command>
             <CommandList>
-              <CommandEmpty>{t("notFound")}</CommandEmpty>
+              <CommandEmpty>{t("notFound", { ns: "messages" })}</CommandEmpty>
               <CommandGroup>
                 {items.map((item, idx) => {
-                  const isSelected =
-                    String(item.id).toLowerCase() ===
-                    String(currentId).toLowerCase();
+                  const isSelected = pathnames.includes(item.id);
                   return (
                     <CommandItem
                       key={`settings_selector_${idx}_${item.title}`}
@@ -106,4 +118,4 @@ export const SidebarMobileNavigation = ({
       </div>
     </Popover>
   );
-};
+}
