@@ -17,11 +17,13 @@ import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
 import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
 import { Route as AuthCustomersRouteImport } from "./routes/_auth/customers/route"
 import { Route as AuthAgreementsRouteImport } from "./routes/_auth/agreements/route"
+import { Route as AuthSettingsTempIndexRouteImport } from "./routes/_auth/settings-temp/index.route"
 import { Route as AuthReservationsIndexRouteImport } from "./routes/_auth/reservations/index.route"
 import { Route as AuthReportsIndexRouteImport } from "./routes/_auth/reports/index.route"
 import { Route as AuthFleetIndexRouteImport } from "./routes/_auth/fleet/index.route"
 import { Route as AuthCustomersIndexRouteImport } from "./routes/_auth/customers/index.route"
 import { Route as AuthAgreementsIndexRouteImport } from "./routes/_auth/agreements/index.route"
+import { Route as AuthSettingsTempProfileRouteImport } from "./routes/_auth/settings-temp/profile.route"
 import { Route as AuthReservationsNewRouteImport } from "./routes/_auth/reservations/new.route"
 import { Route as AuthReservationsReservationIdRouteImport } from "./routes/_auth/reservations/$reservationId/route"
 import { Route as AuthReportsReportIdRouteImport } from "./routes/_auth/reports/$reportId/route"
@@ -91,7 +93,9 @@ const PublicLogoutRoute = PublicLogoutImport.update({
 const AuthSettingsTempRouteRoute = AuthSettingsTempRouteImport.update({
   path: "/settings-temp",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any).lazy(() =>
+  import("./routes/_auth/settings-temp/route.lazy").then((d) => d.Route),
+)
 
 const AuthSettingsRouteRoute = AuthSettingsRouteImport.update({
   path: "/settings",
@@ -130,6 +134,13 @@ const AuthSettingsIndexLazyRoute = AuthSettingsIndexLazyImport.update({
   import("./routes/_auth/settings/index.lazy").then((d) => d.Route),
 )
 
+const AuthSettingsTempIndexRouteRoute = AuthSettingsTempIndexRouteImport.update(
+  {
+    path: "/",
+    getParentRoute: () => AuthSettingsTempRouteRoute,
+  } as any,
+)
+
 const AuthReservationsIndexRouteRoute = AuthReservationsIndexRouteImport.update(
   {
     path: "/",
@@ -166,6 +177,16 @@ const AuthAgreementsIndexRouteRoute = AuthAgreementsIndexRouteImport.update({
 } as any).lazy(() =>
   import("./routes/_auth/agreements/index.route.lazy").then((d) => d.Route),
 )
+
+const AuthSettingsTempProfileRouteRoute =
+  AuthSettingsTempProfileRouteImport.update({
+    path: "/profile",
+    getParentRoute: () => AuthSettingsTempRouteRoute,
+  } as any).lazy(() =>
+    import("./routes/_auth/settings-temp/profile.route.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthReservationsNewRouteRoute = AuthReservationsNewRouteImport.update({
   path: "/new",
@@ -429,6 +450,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthReservationsNewRouteImport
       parentRoute: typeof AuthReservationsRouteImport
     }
+    "/_auth/settings-temp/profile": {
+      preLoaderRoute: typeof AuthSettingsTempProfileRouteImport
+      parentRoute: typeof AuthSettingsTempRouteImport
+    }
     "/_auth/agreements/": {
       preLoaderRoute: typeof AuthAgreementsIndexRouteImport
       parentRoute: typeof AuthAgreementsRouteImport
@@ -448,6 +473,10 @@ declare module "@tanstack/react-router" {
     "/_auth/reservations/": {
       preLoaderRoute: typeof AuthReservationsIndexRouteImport
       parentRoute: typeof AuthReservationsRouteImport
+    }
+    "/_auth/settings-temp/": {
+      preLoaderRoute: typeof AuthSettingsTempIndexRouteImport
+      parentRoute: typeof AuthSettingsTempRouteImport
     }
     "/_auth/settings/": {
       preLoaderRoute: typeof AuthSettingsIndexLazyImport
@@ -547,7 +576,10 @@ export const routeTree = rootRoute.addChildren([
       AuthSettingsIndexLazyRoute,
       AuthSettingsDestinationIndexRouteRoute,
     ]),
-    AuthSettingsTempRouteRoute,
+    AuthSettingsTempRouteRoute.addChildren([
+      AuthSettingsTempProfileRouteRoute,
+      AuthSettingsTempIndexRouteRoute,
+    ]),
     AuthIndexRoute,
   ]),
   PublicRouteRoute.addChildren([

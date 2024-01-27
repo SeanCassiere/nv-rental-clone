@@ -33,5 +33,4 @@ export const Route = createFileRoute("/_auth/settings-temp")({
 
     return;
   },
-  component: () => <div>Hello /_auth/settings-temp!</div>,
 });
