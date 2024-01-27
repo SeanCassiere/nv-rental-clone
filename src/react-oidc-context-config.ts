@@ -9,8 +9,7 @@ import {
   OIDC_SILENT_REDIRECT_URI,
 } from "@/utils/constants";
 
-import { router } from "./app-entry";
-import { queryClient } from "./tanstack-query-config";
+import { queryClient } from "@/tanstack-query-config";
 
 export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   authority: OIDC_AUTHORITY,
@@ -28,8 +27,5 @@ export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   userStore: new WebStorageStateStore({ store: window.localStorage }),
   onSigninCallback: async (user) => {
     await queryClient.invalidateQueries();
-    if (user) {
-      router.invalidate();
-    }
   },
 };
