@@ -47,7 +47,6 @@ function SettingsPage() {
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
       {
-        // id: SETTINGS_LOCATION_KEYS.profile,
         id: "/settings-temp/profile",
         title: t("titles.profile", { ns: "settings" }),
         // component: <SettingsProfileTab />,
@@ -62,9 +61,8 @@ function SettingsPage() {
     if (!canSeeAdminTab) return items;
 
     items.push({
-      id: "/settings-temp/application",
+      id: "/settings-temp/application-configuration",
       title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
-      // component: <SettingsApplicationTab />,
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "application" },
@@ -74,7 +72,6 @@ function SettingsPage() {
     items.push({
       id: "/settings-temp/runtime-configuration",
       title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
-      // component: <SettingsRuntimeConfigurationTab />,
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "runtime-configuration" },
@@ -84,7 +81,6 @@ function SettingsPage() {
     items.push({
       id: "/settings-temp/vehicles-and-categories",
       title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
-      // component: <Skeleton className="h-96" />,
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "vehicles-and-categories" },
@@ -94,7 +90,6 @@ function SettingsPage() {
     items.push({
       id: "/settings-temp/rates-and-charges",
       title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
-      // component: <Skeleton className="h-96" />,
       linkProps: {
         to: "/settings/$destination",
         params: { destination: "rates-and-charges" },
@@ -103,10 +98,6 @@ function SettingsPage() {
     });
     return items;
   }, [canSeeAdminTab, t]);
-
-  const currentDestination = destinations.find(
-    (d) => d.id === currentDestinationPath
-  );
 
   return (
     <>
