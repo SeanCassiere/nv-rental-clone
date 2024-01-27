@@ -39,8 +39,8 @@ import { Route as AuthReportsReportIdIndexRouteImport } from "./routes/_auth/rep
 import { Route as AuthFleetVehicleIdIndexRouteImport } from "./routes/_auth/fleet/$vehicleId/index.route"
 import { Route as AuthCustomersCustomerIdIndexRouteImport } from "./routes/_auth/customers/$customerId/index.route"
 import { Route as AuthAgreementsAgreementIdIndexRouteImport } from "./routes/_auth/agreements/$agreementId/index.route"
-import { Route as AuthSettingsTempApplicationConfigurationSystemUsersRouteImport } from "./routes/_auth/settings-temp/application-configuration/system-users/route"
-import { Route as AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteImport } from "./routes/_auth/settings-temp/application-configuration/permissions-and-roles/route"
+import { Route as AuthSettingsTempApplicationConfigurationSystemUsersRouteImport } from "./routes/_auth/settings-temp/application-configuration/system-users.route"
+import { Route as AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteImport } from "./routes/_auth/settings-temp/application-configuration/permissions-and-roles.route"
 import { Route as AuthReservationsReservationIdEditRouteImport } from "./routes/_auth/reservations/$reservationId/edit.route"
 import { Route as AuthFleetVehicleIdEditRouteImport } from "./routes/_auth/fleet/$vehicleId/edit.route"
 import { Route as AuthCustomersCustomerIdEditRouteImport } from "./routes/_auth/customers/$customerId/edit.route"
@@ -340,7 +340,7 @@ const AuthSettingsTempApplicationConfigurationSystemUsersRouteRoute =
     getParentRoute: () => AuthSettingsTempApplicationConfigurationRouteRoute,
   } as any).lazy(() =>
     import(
-      "./routes/_auth/settings-temp/application-configuration/system-users/route.lazy"
+      "./routes/_auth/settings-temp/application-configuration/system-users.route.lazy"
     ).then((d) => d.Route),
   )
 
@@ -352,7 +352,7 @@ const AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteRoute =
     } as any,
   ).lazy(() =>
     import(
-      "./routes/_auth/settings-temp/application-configuration/permissions-and-roles/route.lazy"
+      "./routes/_auth/settings-temp/application-configuration/permissions-and-roles.route.lazy"
     ).then((d) => d.Route),
   )
 
