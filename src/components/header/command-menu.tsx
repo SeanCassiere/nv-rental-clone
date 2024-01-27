@@ -479,7 +479,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/settings/$destination",
+                    to: "/settings-temp/profile",
                     params: () => ({ destination: "profile" }),
                   })
                 );
@@ -492,7 +492,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/settings",
+                    to: "/settings-temp/profile",
                   })
                 );
               }}
