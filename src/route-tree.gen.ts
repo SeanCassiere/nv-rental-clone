@@ -39,7 +39,7 @@ import { Route as AuthReportsReportIdIndexRouteImport } from "./routes/_auth/rep
 import { Route as AuthFleetVehicleIdIndexRouteImport } from "./routes/_auth/fleet/$vehicleId/index.route"
 import { Route as AuthCustomersCustomerIdIndexRouteImport } from "./routes/_auth/customers/$customerId/index.route"
 import { Route as AuthAgreementsAgreementIdIndexRouteImport } from "./routes/_auth/agreements/$agreementId/index.route"
-import { Route as AuthSettingsTempApplicationConfigurationUsersRouteImport } from "./routes/_auth/settings-temp/application-configuration/users/route"
+import { Route as AuthSettingsTempApplicationConfigurationSystemUsersRouteImport } from "./routes/_auth/settings-temp/application-configuration/system-users/route"
 import { Route as AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteImport } from "./routes/_auth/settings-temp/application-configuration/permissions-and-roles/route"
 import { Route as AuthReservationsReservationIdEditRouteImport } from "./routes/_auth/reservations/$reservationId/edit.route"
 import { Route as AuthFleetVehicleIdEditRouteImport } from "./routes/_auth/fleet/$vehicleId/edit.route"
@@ -334,13 +334,13 @@ const AuthAgreementsAgreementIdIndexRouteRoute =
     ),
   )
 
-const AuthSettingsTempApplicationConfigurationUsersRouteRoute =
-  AuthSettingsTempApplicationConfigurationUsersRouteImport.update({
-    path: "/users",
+const AuthSettingsTempApplicationConfigurationSystemUsersRouteRoute =
+  AuthSettingsTempApplicationConfigurationSystemUsersRouteImport.update({
+    path: "/system-users",
     getParentRoute: () => AuthSettingsTempApplicationConfigurationRouteRoute,
   } as any).lazy(() =>
     import(
-      "./routes/_auth/settings-temp/application-configuration/users/route.lazy"
+      "./routes/_auth/settings-temp/application-configuration/system-users/route.lazy"
     ).then((d) => d.Route),
   )
 
@@ -562,8 +562,8 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteImport
       parentRoute: typeof AuthSettingsTempApplicationConfigurationRouteImport
     }
-    "/_auth/settings-temp/application-configuration/users": {
-      preLoaderRoute: typeof AuthSettingsTempApplicationConfigurationUsersRouteImport
+    "/_auth/settings-temp/application-configuration/system-users": {
+      preLoaderRoute: typeof AuthSettingsTempApplicationConfigurationSystemUsersRouteImport
       parentRoute: typeof AuthSettingsTempApplicationConfigurationRouteImport
     }
     "/_auth/agreements/$agreementId/": {
@@ -647,7 +647,7 @@ export const routeTree = rootRoute.addChildren([
     AuthSettingsTempRouteRoute.addChildren([
       AuthSettingsTempApplicationConfigurationRouteRoute.addChildren([
         AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteRoute,
-        AuthSettingsTempApplicationConfigurationUsersRouteRoute,
+        AuthSettingsTempApplicationConfigurationSystemUsersRouteRoute,
         AuthSettingsTempApplicationConfigurationIndexRouteLazyRoute,
       ]),
       AuthSettingsTempProfileRouteRoute,
