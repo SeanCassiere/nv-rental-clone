@@ -350,6 +350,10 @@ const AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteRoute =
       path: "/permissions-and-roles",
       getParentRoute: () => AuthSettingsTempApplicationConfigurationRouteRoute,
     } as any,
+  ).lazy(() =>
+    import(
+      "./routes/_auth/settings-temp/application-configuration/permissions-and-roles/route.lazy"
+    ).then((d) => d.Route),
   )
 
 const AuthReservationsReservationIdEditRouteRoute =
