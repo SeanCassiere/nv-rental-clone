@@ -5,7 +5,7 @@ import {
   fetchUserByIdOptions,
 } from "@/utils/query/user";
 
-export const Route = createFileRoute("/_auth/settings-temp/profile")({
+export const Route = createFileRoute("/_auth/settings/profile")({
   beforeLoad: ({ context }) => ({
     currentUserProfileOptions: fetchUserByIdOptions({
       auth: context.authParams,

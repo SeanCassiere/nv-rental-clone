@@ -58,11 +58,11 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { apiClient } from "@/api";
 
-export const Route = createLazyFileRoute("/_auth/settings-temp/profile")({
+export const Route = createLazyFileRoute("/_auth/settings/profile")({
   component: SettingsProfilePage,
 });
 
-const routeApi = getRouteApi("/_auth/settings-temp/profile");
+const routeApi = getRouteApi("/_auth/settings/profile");
 
 function SettingsProfilePage() {
   const context = routeApi.useRouteContext();

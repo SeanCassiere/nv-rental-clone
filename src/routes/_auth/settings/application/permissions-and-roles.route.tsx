@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { fetchRolesListOptions } from "@/utils/query/role";
 
 export const Route = createFileRoute(
-  "/_auth/settings-temp/application/permissions-and-roles"
+  "/_auth/settings/application/permissions-and-roles"
 )({
   beforeLoad: ({ context }) => {
     const { authParams } = context;

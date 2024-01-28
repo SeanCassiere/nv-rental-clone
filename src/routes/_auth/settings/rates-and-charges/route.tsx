@@ -1,8 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute(
-  "/_auth/settings-temp/rates-and-charges"
-)({
+export const Route = createFileRoute("/_auth/settings/rates-and-charges")({
   loader: async ({ context }) => {
     const { queryClient, userPermissionsOptions } = context;
 
@@ -23,7 +21,7 @@ export const Route = createFileRoute(
 
     if (!canViewAdminTab)
       throw redirect({
-        to: "/settings-temp/profile",
+        to: "/settings/profile",
         replace: true,
       });
 

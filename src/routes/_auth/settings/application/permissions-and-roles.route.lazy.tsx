@@ -42,13 +42,13 @@ import { RoleDeleteDialog } from "./-components/role-delete-dialog";
 import { RoleEditDialog } from "./-components/role-edit-dialog";
 
 export const Route = createLazyFileRoute(
-  "/_auth/settings-temp/application/permissions-and-roles"
+  "/_auth/settings/application/permissions-and-roles"
 )({
   component: PermissionsAndRolesPage,
 });
 
 const routeApi = getRouteApi(
-  "/_auth/settings-temp/application/permissions-and-roles"
+  "/_auth/settings/application/permissions-and-roles"
 );
 
 function PermissionsAndRolesPage() {

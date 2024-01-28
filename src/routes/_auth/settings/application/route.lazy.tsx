@@ -12,7 +12,7 @@ import {
   LayoutTabsNavigationTabListItem,
 } from "../-components/layout-tabs-navigation";
 
-export const Route = createLazyFileRoute("/_auth/settings-temp/application")({
+export const Route = createLazyFileRoute("/_auth/settings/application")({
   component: ApplicationConfigurationLayout,
 });
 
@@ -22,28 +22,28 @@ function ApplicationConfigurationLayout() {
 
   const tabs: LayoutTabsNavigationTabListItem[] = [
     {
-      pathname: "/settings-temp/application/users",
+      pathname: "/settings/application/users",
       title: t("titles.systemUsers", { ns: "settings" }),
       linkProps: {
-        to: "/settings-temp/application/users",
+        to: "/settings/application/users",
         params: true,
         search: true,
       },
     },
     {
-      pathname: "/settings-temp/application/permissions-and-roles",
+      pathname: "/settings/application/permissions-and-roles",
       title: t("titles.permissionsAndRoles", { ns: "settings" }),
       linkProps: {
-        to: "/settings-temp/application/permissions-and-roles",
+        to: "/settings/application/permissions-and-roles",
         params: true,
         search: true,
       },
     },
     {
-      pathname: "/settings-temp/application/locations",
+      pathname: "/settings/application/locations",
       title: t("titles.locations", { ns: "settings" }),
       linkProps: {
-        to: "/settings-temp/application/locations",
+        to: "/settings/application/locations",
         params: true,
         search: true,
       },

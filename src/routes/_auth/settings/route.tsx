@@ -4,7 +4,7 @@ import { getAuthFromRouterContext } from "@/utils/auth";
 import { fetchFeaturesForClientOptions } from "@/utils/query/client";
 import { fetchPermissionsByUserIdOptions } from "@/utils/query/user";
 
-export const Route = createFileRoute("/_auth/settings-temp")({
+export const Route = createFileRoute("/_auth/settings")({
   beforeLoad: ({ context }) => {
     const auth = getAuthFromRouterContext(context);
 

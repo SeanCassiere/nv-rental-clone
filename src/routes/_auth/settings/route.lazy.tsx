@@ -17,7 +17,7 @@ import { cn } from "@/utils";
 import { SidebarDesktopNavigation } from "./-components/sidebar-desktop-navigation";
 import { SidebarMobileNavigation } from "./-components/sidebar-mobile-navigation";
 
-export const Route = createLazyFileRoute("/_auth/settings-temp")({
+export const Route = createLazyFileRoute("/_auth/settings")({
   component: SettingsLayout,
 });
 
@@ -35,10 +35,10 @@ function SettingsLayout() {
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
       {
-        id: "/settings-temp/profile",
+        id: "/settings/profile",
         title: t("titles.profile", { ns: "settings" }),
         linkProps: {
-          to: "/settings-temp/profile",
+          to: "/settings/profile",
           params: false,
           search: false,
         },
@@ -48,37 +48,37 @@ function SettingsLayout() {
     if (!canSeeAdminTab) return items;
 
     items.push({
-      id: "/settings-temp/application",
+      id: "/settings/application",
       title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
       linkProps: {
-        to: "/settings-temp/application",
+        to: "/settings/application",
         params: false,
         search: false,
       },
     });
     items.push({
-      id: "/settings-temp/runtime-configuration",
+      id: "/settings/runtime-configuration",
       title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
       linkProps: {
-        to: "/settings-temp/runtime-configuration",
+        to: "/settings/runtime-configuration",
         params: false,
         search: false,
       },
     });
     items.push({
-      id: "/settings-temp/vehicles-and-categories",
+      id: "/settings/vehicles-and-categories",
       title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
       linkProps: {
-        to: "/settings-temp/vehicles-and-categories",
+        to: "/settings/vehicles-and-categories",
         params: false,
         search: false,
       },
     });
     items.push({
-      id: "/settings-temp/rates-and-charges",
+      id: "/settings/rates-and-charges",
       title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
       linkProps: {
-        to: "/settings-temp/rates-and-charges",
+        to: "/settings/rates-and-charges",
         params: false,
         search: false,
       },

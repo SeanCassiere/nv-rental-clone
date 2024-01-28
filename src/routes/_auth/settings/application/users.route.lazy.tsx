@@ -34,13 +34,11 @@ import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
 import { UserEditDialog } from "./-components/user-edit-dialog";
 import { UserResetPasswordDialog } from "./-components/user-reset-password-dialog";
 
-export const Route = createLazyFileRoute(
-  "/_auth/settings-temp/application/users"
-)({
+export const Route = createLazyFileRoute("/_auth/settings/application/users")({
   component: ApplicationConfigurationUsersPage,
 });
 
-const routeApi = getRouteApi("/_auth/settings-temp/application/users");
+const routeApi = getRouteApi("/_auth/settings/application/users");
 
 function ApplicationConfigurationUsersPage() {
   const { t } = useTranslation();
