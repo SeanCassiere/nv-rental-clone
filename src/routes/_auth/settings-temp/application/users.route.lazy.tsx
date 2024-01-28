@@ -44,9 +44,6 @@ const routeApi = getRouteApi("/_auth/settings-temp/application/users");
 
 function ApplicationConfigurationUsersPage() {
   const { t } = useTranslation();
-  const context = routeApi.useRouteContext();
-
-  const { authParams } = context;
 
   const auth = useAuth();
 
