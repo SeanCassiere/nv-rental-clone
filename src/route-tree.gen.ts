@@ -41,6 +41,7 @@ import { Route as AuthCustomersCustomerIdIndexRouteImport } from "./routes/_auth
 import { Route as AuthAgreementsAgreementIdIndexRouteImport } from "./routes/_auth/agreements/$agreementId/index.route"
 import { Route as AuthSettingsTempApplicationConfigurationUsersRouteImport } from "./routes/_auth/settings-temp/application-configuration/users.route"
 import { Route as AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteImport } from "./routes/_auth/settings-temp/application-configuration/permissions-and-roles.route"
+import { Route as AuthSettingsTempApplicationConfigurationLocationsRouteImport } from "./routes/_auth/settings-temp/application-configuration/locations.route"
 import { Route as AuthReservationsReservationIdEditRouteImport } from "./routes/_auth/reservations/$reservationId/edit.route"
 import { Route as AuthFleetVehicleIdEditRouteImport } from "./routes/_auth/fleet/$vehicleId/edit.route"
 import { Route as AuthCustomersCustomerIdEditRouteImport } from "./routes/_auth/customers/$customerId/edit.route"
@@ -356,6 +357,16 @@ const AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteRoute =
     ).then((d) => d.Route),
   )
 
+const AuthSettingsTempApplicationConfigurationLocationsRouteRoute =
+  AuthSettingsTempApplicationConfigurationLocationsRouteImport.update({
+    path: "/locations",
+    getParentRoute: () => AuthSettingsTempApplicationConfigurationRouteRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/settings-temp/application-configuration/locations.route.lazy"
+    ).then((d) => d.Route),
+  )
+
 const AuthReservationsReservationIdEditRouteRoute =
   AuthReservationsReservationIdEditRouteImport.update({
     path: "/edit",
@@ -558,6 +569,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthReservationsReservationIdEditRouteImport
       parentRoute: typeof AuthReservationsReservationIdRouteImport
     }
+    "/_auth/settings-temp/application-configuration/locations": {
+      preLoaderRoute: typeof AuthSettingsTempApplicationConfigurationLocationsRouteImport
+      parentRoute: typeof AuthSettingsTempApplicationConfigurationRouteImport
+    }
     "/_auth/settings-temp/application-configuration/permissions-and-roles": {
       preLoaderRoute: typeof AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteImport
       parentRoute: typeof AuthSettingsTempApplicationConfigurationRouteImport
@@ -646,6 +661,7 @@ export const routeTree = rootRoute.addChildren([
     ]),
     AuthSettingsTempRouteRoute.addChildren([
       AuthSettingsTempApplicationConfigurationRouteRoute.addChildren([
+        AuthSettingsTempApplicationConfigurationLocationsRouteRoute,
         AuthSettingsTempApplicationConfigurationPermissionsAndRolesRouteRoute,
         AuthSettingsTempApplicationConfigurationUsersRouteRoute,
         AuthSettingsTempApplicationConfigurationIndexRouteLazyRoute,

@@ -43,6 +43,15 @@ function ApplicationConfigurationLayout() {
         search: true,
       },
     },
+    {
+      pathname: "/settings-temp/application-configuration/locations",
+      title: t("titles.locations", { ns: "settings" }),
+      linkProps: {
+        to: "/settings-temp/application-configuration/locations",
+        params: true,
+        search: true,
+      },
+    },
   ];
 
   return (
