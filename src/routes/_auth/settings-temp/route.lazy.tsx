@@ -56,33 +56,33 @@ function SettingsLayout() {
         search: false,
       },
     });
-    // items.push({
-    //   id: "/settings-temp/runtime-configuration",
-    //   title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
-    //   linkProps: {
-    //     to: "/settings/$destination",
-    //     params: { destination: "runtime-configuration" },
-    //     search: false,
-    //   },
-    // });
-    // items.push({
-    //   id: "/settings-temp/vehicles-and-categories",
-    //   title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
-    //   linkProps: {
-    //     to: "/settings/$destination",
-    //     params: { destination: "vehicles-and-categories" },
-    //     search: false,
-    //   },
-    // });
-    // items.push({
-    //   id: "/settings-temp/rates-and-charges",
-    //   title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
-    //   linkProps: {
-    //     to: "/settings/$destination",
-    //     params: { destination: "rates-and-charges" },
-    //     search: false,
-    //   },
-    // });
+    items.push({
+      id: "/settings-temp/runtime-configuration",
+      title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
+      linkProps: {
+        to: "/settings-temp/runtime-configuration",
+        params: false,
+        search: false,
+      },
+    });
+    items.push({
+      id: "/settings-temp/vehicles-and-categories",
+      title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
+      linkProps: {
+        to: "/settings-temp/vehicles-and-categories",
+        params: false,
+        search: false,
+      },
+    });
+    items.push({
+      id: "/settings-temp/rates-and-charges",
+      title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
+      linkProps: {
+        to: "/settings-temp/rates-and-charges",
+        params: false,
+        search: false,
+      },
+    });
     return items;
   }, [canSeeAdminTab, t]);
 
