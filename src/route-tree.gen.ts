@@ -11,7 +11,6 @@ import { Route as AuthIndexImport } from "./routes/_auth/index"
 import { Route as PublicOidcCallbackImport } from "./routes/_public/oidc-callback"
 import { Route as PublicLogoutImport } from "./routes/_public/logout"
 import { Route as AuthSettingsTempRouteImport } from "./routes/_auth/settings-temp/route"
-import { Route as AuthSettingsRouteImport } from "./routes/_auth/settings/route"
 import { Route as AuthReservationsRouteImport } from "./routes/_auth/reservations/route"
 import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
 import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
@@ -36,7 +35,6 @@ import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers/n
 import { Route as AuthCustomersCustomerIdRouteImport } from "./routes/_auth/customers/$customerId/route"
 import { Route as AuthAgreementsNewRouteImport } from "./routes/_auth/agreements/new.route"
 import { Route as AuthAgreementsAgreementIdRouteImport } from "./routes/_auth/agreements/$agreementId/route"
-import { Route as AuthSettingsDestinationIndexRouteImport } from "./routes/_auth/settings/$destination/index.route"
 import { Route as AuthReservationsReservationIdIndexRouteImport } from "./routes/_auth/reservations/$reservationId/index.route"
 import { Route as AuthReportsReportIdIndexRouteImport } from "./routes/_auth/reports/$reportId/index.route"
 import { Route as AuthFleetVehicleIdIndexRouteImport } from "./routes/_auth/fleet/$vehicleId/index.route"
@@ -55,7 +53,6 @@ import { Route as AuthAgreementsAgreementIdCheckInRouteImport } from "./routes/_
 
 const PublicLoggedOutLazyImport = createFileRoute("/_public/logged-out")()
 const PublicDevLazyImport = createFileRoute("/_public/dev")()
-const AuthSettingsIndexLazyImport = createFileRoute("/_auth/settings/")()
 const AuthSettingsTempIndexRouteLazyImport = createFileRoute(
   "/_auth/settings-temp/",
 )()
@@ -109,11 +106,6 @@ const AuthSettingsTempRouteRoute = AuthSettingsTempRouteImport.update({
   import("./routes/_auth/settings-temp/route.lazy").then((d) => d.Route),
 )
 
-const AuthSettingsRouteRoute = AuthSettingsRouteImport.update({
-  path: "/settings",
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-
 const AuthReservationsRouteRoute = AuthReservationsRouteImport.update({
   path: "/reservations",
   getParentRoute: () => AuthRouteRoute,
@@ -138,13 +130,6 @@ const AuthAgreementsRouteRoute = AuthAgreementsRouteImport.update({
   path: "/agreements",
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-const AuthSettingsIndexLazyRoute = AuthSettingsIndexLazyImport.update({
-  path: "/",
-  getParentRoute: () => AuthSettingsRouteRoute,
-} as any).lazy(() =>
-  import("./routes/_auth/settings/index.lazy").then((d) => d.Route),
-)
 
 const AuthSettingsTempIndexRouteLazyRoute =
   AuthSettingsTempIndexRouteLazyImport.update({
@@ -305,16 +290,6 @@ const AuthSettingsTempApplicationIndexRouteLazyRoute =
     getParentRoute: () => AuthSettingsTempApplicationRouteRoute,
   } as any).lazy(() =>
     import("./routes/_auth/settings-temp/application/index.route.lazy").then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthSettingsDestinationIndexRouteRoute =
-  AuthSettingsDestinationIndexRouteImport.update({
-    path: "/$destination/",
-    getParentRoute: () => AuthSettingsRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/settings/$destination/index.route.lazy").then(
       (d) => d.Route,
     ),
   )
@@ -481,10 +456,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthReservationsRouteImport
       parentRoute: typeof AuthRouteImport
     }
-    "/_auth/settings": {
-      preLoaderRoute: typeof AuthSettingsRouteImport
-      parentRoute: typeof AuthRouteImport
-    }
     "/_auth/settings-temp": {
       preLoaderRoute: typeof AuthSettingsTempRouteImport
       parentRoute: typeof AuthRouteImport
@@ -589,10 +560,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthSettingsTempIndexRouteLazyImport
       parentRoute: typeof AuthSettingsTempRouteImport
     }
-    "/_auth/settings/": {
-      preLoaderRoute: typeof AuthSettingsIndexLazyImport
-      parentRoute: typeof AuthSettingsRouteImport
-    }
     "/_auth/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AuthAgreementsAgreementIdCheckInRouteImport
       parentRoute: typeof AuthAgreementsAgreementIdRouteImport
@@ -645,10 +612,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthReservationsReservationIdIndexRouteImport
       parentRoute: typeof AuthReservationsReservationIdRouteImport
     }
-    "/_auth/settings/$destination/": {
-      preLoaderRoute: typeof AuthSettingsDestinationIndexRouteImport
-      parentRoute: typeof AuthSettingsRouteImport
-    }
     "/_auth/settings-temp/application/": {
       preLoaderRoute: typeof AuthSettingsTempApplicationIndexRouteLazyImport
       parentRoute: typeof AuthSettingsTempApplicationRouteImport
@@ -698,10 +661,6 @@ export const routeTree = rootRoute.addChildren([
       ]),
       AuthReservationsNewRouteRoute,
       AuthReservationsIndexRouteRoute,
-    ]),
-    AuthSettingsRouteRoute.addChildren([
-      AuthSettingsIndexLazyRoute,
-      AuthSettingsDestinationIndexRouteRoute,
     ]),
     AuthSettingsTempRouteRoute.addChildren([
       AuthSettingsTempApplicationRouteRoute.addChildren([
