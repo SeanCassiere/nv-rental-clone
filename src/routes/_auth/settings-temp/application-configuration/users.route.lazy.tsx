@@ -1,11 +1,7 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import {
-  createLazyFileRoute,
-  getRouteApi,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
@@ -39,16 +35,16 @@ import { EditUserDialog } from "./-components/user-edit-dialog";
 import { ResetPasswordAlertDialog } from "./-components/user-reset-password-dialog";
 
 export const Route = createLazyFileRoute(
-  "/_auth/settings-temp/application-configuration/system-users"
+  "/_auth/settings-temp/application-configuration/users"
 )({
-  component: ApplicationConfigurationSystemUsersPage,
+  component: ApplicationConfigurationUsersPage,
 });
 
 const routeApi = getRouteApi(
-  "/_auth/settings-temp/application-configuration/system-users"
+  "/_auth/settings-temp/application-configuration/users"
 );
 
-function ApplicationConfigurationSystemUsersPage() {
+function ApplicationConfigurationUsersPage() {
   const { t } = useTranslation();
   const context = routeApi.useRouteContext();
 

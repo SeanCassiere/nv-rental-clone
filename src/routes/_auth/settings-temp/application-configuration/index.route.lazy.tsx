@@ -4,9 +4,6 @@ export const Route = createLazyFileRoute(
   "/_auth/settings-temp/application-configuration/"
 )({
   component: () => (
-    <Navigate
-      to="/settings-temp/application-configuration/system-users"
-      replace
-    />
+    <Navigate to="/settings-temp/application-configuration/users" replace />
   ),
 });

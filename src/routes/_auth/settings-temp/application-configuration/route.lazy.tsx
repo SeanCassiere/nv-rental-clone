@@ -25,10 +25,10 @@ function ApplicationConfigurationLayout() {
 
   const tabs: LayoutTabsNavigationTabListItem[] = [
     {
-      pathname: "/settings-temp/application-configuration/system-users",
+      pathname: "/settings-temp/application-configuration/users",
       title: t("titles.systemUsers", { ns: "settings" }),
       linkProps: {
-        to: "/settings-temp/application-configuration/system-users",
+        to: "/settings-temp/application-configuration/users",
         params: true,
         search: true,
       },
