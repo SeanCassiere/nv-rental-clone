@@ -63,7 +63,7 @@ import {
 
 import { cn } from "@/utils";
 
-interface EditUserDialogProps {
+interface UserEditDialogProps {
   mode: "new" | "edit";
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -72,11 +72,11 @@ interface EditUserDialogProps {
   intendedUserId: string;
 }
 
-export function EditUserDialog({
+export function UserEditDialog({
   open,
   setOpen,
   ...props
-}: EditUserDialogProps) {
+}: UserEditDialogProps) {
   const { t } = useTranslation();
 
   const formId = React.useId();

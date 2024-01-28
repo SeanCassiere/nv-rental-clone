@@ -88,16 +88,13 @@ export const UserNavigationDropdown = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link
-              to="/settings/$destination"
-              params={{ destination: "profile" }}
-            >
+            <Link to="/settings/profile" params={{ destination: "profile" }}>
               <icons.User className="mr-2 h-4 w-4" />
               Profile
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/settings">
+            <Link to="/settings/profile">
               <icons.Settings className="mr-2 h-4 w-4" />
               Settings
             </Link>

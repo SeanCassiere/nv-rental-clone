@@ -20,7 +20,7 @@ import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
 
 import { apiClient } from "@/api";
 
-interface ResetPasswordAlertDialogProps {
+interface UserResetPasswordDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   clientId: string;
@@ -28,12 +28,12 @@ interface ResetPasswordAlertDialogProps {
   user: TUserConfigurations[number];
 }
 
-export function ResetPasswordAlertDialog({
+export function UserResetPasswordDialog({
   open,
   setOpen,
   user,
   ...props
-}: ResetPasswordAlertDialogProps) {
+}: UserResetPasswordDialogProps) {
   const { t } = useTranslation();
 
   const resetPassword = useMutation({

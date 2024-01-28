@@ -49,7 +49,7 @@ import {
 
 import { apiClient } from "@/api";
 
-interface EditRoleDialogProps {
+interface RoleEditDialogProps {
   mode: "new" | "edit";
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -58,11 +58,11 @@ interface EditRoleDialogProps {
   userId: string;
 }
 
-export function EditRoleDialog({
+export function RoleEditDialog({
   open,
   setOpen,
   ...props
-}: EditRoleDialogProps) {
+}: RoleEditDialogProps) {
   const { t } = useTranslation();
   const qc = useQueryClient();
 

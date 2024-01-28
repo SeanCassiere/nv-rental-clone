@@ -19,7 +19,7 @@ import { fetchRolesListOptions } from "@/utils/query/role";
 
 import { apiClient } from "@/api";
 
-interface DeleteRoleAlertDialogProps {
+interface RoleDeleteDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   clientId: string;
@@ -27,11 +27,11 @@ interface DeleteRoleAlertDialogProps {
   roleId: string;
 }
 
-export function DeleteRoleAlertDialog({
+export function RoleDeleteDialog({
   open,
   setOpen,
   ...props
-}: DeleteRoleAlertDialogProps) {
+}: RoleDeleteDialogProps) {
   const { t } = useTranslation();
   const qc = useQueryClient();
 

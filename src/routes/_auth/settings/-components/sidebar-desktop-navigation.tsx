@@ -5,34 +5,35 @@ import { buttonVariants } from "@/components/ui/button";
 
 import { cn } from "@/utils";
 
-interface SidebarSettingsNavigationProps {
+interface SidebarDesktopNavigationProps {
   items: {
     id: string;
     title: string;
     linkProps: LinkOptions;
   }[];
-  currentId: string;
 }
 
-export const SidebarSettingsNavigation = ({
+export function SidebarDesktopNavigation({
   items,
-  currentId,
-}: SidebarSettingsNavigationProps) => {
+}: SidebarDesktopNavigationProps) {
   return (
     <nav className="hidden space-x-2 lg:flex lg:flex-col lg:space-x-0 lg:space-y-1">
       {items.map((item, idx) => {
-        const isSelected =
-          String(item.id).toLowerCase() === String(currentId).toLowerCase();
         return (
           <Link
             key={`settings_sidebar_${idx}_${item.title}`}
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              isSelected
-                ? "border bg-card text-foreground hover:bg-card/90"
-                : "border border-transparent bg-background text-muted-foreground hover:bg-background hover:text-foreground hover:underline",
               "justify-start"
             )}
+            activeProps={{
+              className: cn("border bg-card text-foreground hover:bg-card/90"),
+            }}
+            inactiveProps={{
+              className: cn(
+                "border border-transparent bg-background text-muted-foreground hover:bg-background hover:text-foreground hover:underline"
+              ),
+            }}
             {...item.linkProps}
           >
             {item.title}
@@ -41,4 +42,4 @@ export const SidebarSettingsNavigation = ({
       })}
     </nav>
   );
-};
+}

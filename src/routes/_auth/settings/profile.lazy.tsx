@@ -4,9 +4,9 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { usePermission } from "@/hooks/usePermission";
 
 import {
@@ -45,38 +46,50 @@ import {
   type UserLanguageItem,
 } from "@/schemas/user";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 import {
   fetchActiveUsersCountOptions,
-  fetchLanguagesForUsersOptions,
   fetchMaximumUsersCountOptions,
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
 } from "@/utils/query/user";
+import { titleMaker } from "@/utils/title-maker";
 
 import { apiClient } from "@/api";
 
-export default function SettingsProfileTab() {
-  const { t } = useTranslation("settings");
-  const auth = useAuth();
-  const authParams = getAuthFromAuthHook(auth);
+export const Route = createLazyFileRoute("/_auth/settings/profile")({
+  component: SettingsProfilePage,
+});
 
-  const userQuery = useSuspenseQuery(
-    fetchUserByIdOptions({ auth: authParams, userId: authParams.userId })
-  );
+const routeApi = getRouteApi("/_auth/settings/profile");
 
-  const languagesQuery = useSuspenseQuery(
-    fetchLanguagesForUsersOptions({ auth: authParams })
+function SettingsProfilePage() {
+  const context = routeApi.useRouteContext();
+  const { authParams } = context;
+  const { t } = useTranslation();
+
+  const userQuery = useSuspenseQuery(context.currentUserProfileOptions);
+
+  const languagesQuery = useSuspenseQuery(context.availableLanguagesOptions);
+
+  useDocumentTitle(
+    titleMaker(
+      t("titles.page", {
+        ns: "settings",
+        pageTitle: t("titles.profile", { ns: "settings" }),
+      })
+    )
   );
 
   return (
     <Card className="shadow-none lg:w-[600px]">
       <CardHeader className="p-4 lg:p-6">
-        <CardTitle className="text-xl">{t("titles.profile")}</CardTitle>
+        <CardTitle className="text-xl">
+          {t("titles.profile", { ns: "settings" })}
+        </CardTitle>
         <CardDescription className="text-base text-foreground/80">
-          {t("descriptions.profile")}
+          {t("descriptions.profile", { ns: "settings" })}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-0 lg:p-6">

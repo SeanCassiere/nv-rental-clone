@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 
 import { EmptyState } from "@/components/layouts/empty-state";
 import { Button } from "@/components/ui/button";
@@ -34,39 +34,42 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { RoleListItem } from "@/schemas/role";
 
-import {
-  fetchRoleByIdOptions,
-  fetchRolesListOptions,
-} from "@/utils/query/role";
+import { fetchRoleByIdOptions } from "@/utils/query/role";
 
 import { cn } from "@/utils";
 
-import { DeleteRoleAlertDialog } from "./delete-role";
-import { EditRoleDialog } from "./edit-role";
+import { RoleDeleteDialog } from "./-components/role-delete-dialog";
+import { RoleEditDialog } from "./-components/role-edit-dialog";
 
-const PermissionsAndRoles = () => {
+export const Route = createLazyFileRoute(
+  "/_auth/settings/application/permissions-and-roles"
+)({
+  component: PermissionsAndRolesPage,
+});
+
+const routeApi = getRouteApi(
+  "/_auth/settings/application/permissions-and-roles"
+);
+
+function PermissionsAndRolesPage() {
   const { t } = useTranslation();
 
-  const auth = useAuth();
+  const context = routeApi.useRouteContext();
+  const auth = context.authParams;
 
   const [filterMode, setFilterMode] = React.useState("all");
   const [showNew, setShowNew] = React.useState(false);
 
-  const clientId = auth.user?.profile?.navotar_clientid;
-  const userId = auth.user?.profile?.navotar_userid;
-
   return (
     <>
-      {clientId && userId && (
-        <EditRoleDialog
-          mode="new"
-          open={showNew}
-          setOpen={setShowNew}
-          clientId={clientId}
-          userId={userId}
-          roleId={""}
-        />
-      )}
+      <RoleEditDialog
+        mode="new"
+        open={showNew}
+        setOpen={setShowNew}
+        clientId={auth.clientId}
+        userId={auth.userId}
+        roleId={""}
+      />
       <Card className="shadow-none">
         <CardHeader className="p-4 lg:p-6">
           <CardTitle className="text-lg">
@@ -93,32 +96,24 @@ const PermissionsAndRoles = () => {
                   <SelectItem value="all">
                     {t("display.allResults", { ns: "labels" })}
                   </SelectItem>
-                  <SelectItem value="system">
-                    {t("display.systemGenerated", { ns: "labels" })}
-                  </SelectItem>
                   <SelectItem value="user">
                     {t("display.userGenerated", { ns: "labels" })}
+                  </SelectItem>
+                  <SelectItem value="system">
+                    {t("display.systemGenerated", { ns: "labels" })}
                   </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
           <Suspense fallback={<Skeleton className="h-72" />}>
-            {clientId && userId ? (
-              <SystemRolesList
-                filterMode={filterMode}
-                clientId={clientId}
-                userId={userId}
-              />
-            ) : null}
+            <SystemRolesList filterMode={filterMode} />
           </Suspense>
         </CardContent>
       </Card>
     </>
   );
-};
-
-export default PermissionsAndRoles;
+}
 
 function filterRoles(role: RoleListItem[], type: string) {
   switch (type.toLowerCase()) {
@@ -132,23 +127,11 @@ function filterRoles(role: RoleListItem[], type: string) {
   }
 }
 
-function SystemRolesList({
-  clientId,
-  userId,
-  filterMode,
-}: {
-  clientId: string;
-  userId: string;
-  filterMode: string;
-}) {
-  const authParams = {
-    clientId,
-    userId,
-  };
-  const rolesQuery = useSuspenseQuery(
-    fetchRolesListOptions({ auth: authParams })
-  );
+function SystemRolesList({ filterMode }: { filterMode: string }) {
+  const context = routeApi.useRouteContext();
+  const auth = context.authParams;
 
+  const rolesQuery = useSuspenseQuery(context.systemRolesListOptions);
   const roles = React.useMemo(
     () =>
       filterRoles(
@@ -176,8 +159,8 @@ function SystemRolesList({
             <SystemRole
               key={`role_list_item_${role.userRoleID}_${idx}`}
               role={role}
-              clientId={clientId}
-              userId={userId}
+              clientId={auth.clientId}
+              userId={auth.userId}
             />
           ))}
         </>
@@ -213,7 +196,7 @@ function SystemRole({
 
   return (
     <>
-      <EditRoleDialog
+      <RoleEditDialog
         mode="edit"
         open={showEdit}
         setOpen={setShowEdit}
@@ -221,7 +204,7 @@ function SystemRole({
         userId={props.userId}
         roleId={String(role.userRoleID)}
       />
-      <DeleteRoleAlertDialog
+      <RoleDeleteDialog
         open={showDelete}
         setOpen={setShowDelete}
         clientId={props.clientId}

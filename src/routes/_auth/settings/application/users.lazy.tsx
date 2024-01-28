@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
@@ -26,17 +27,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
-import {
-  fetchUserByIdOptions,
-  fetchUserConfigurationOptions,
-} from "@/utils/query/user";
+import { fetchUserByIdOptions } from "@/utils/query/user";
 
 import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
 
-import { EditUserDialog } from "./edit-user";
-import { ResetPasswordAlertDialog } from "./reset-password";
+import { UserEditDialog } from "./-components/user-edit-dialog";
+import { UserResetPasswordDialog } from "./-components/user-reset-password-dialog";
 
-const SystemUsersSettings = () => {
+export const Route = createLazyFileRoute("/_auth/settings/application/users")({
+  component: ApplicationConfigurationUsersPage,
+});
+
+const routeApi = getRouteApi("/_auth/settings/application/users");
+
+function ApplicationConfigurationUsersPage() {
   const { t } = useTranslation();
 
   const auth = useAuth();
@@ -47,7 +51,7 @@ const SystemUsersSettings = () => {
     <>
       {auth.user?.profile?.navotar_userid &&
         auth.user?.profile?.navotar_clientid && (
-          <EditUserDialog
+          <UserEditDialog
             mode="new"
             open={showNewUser}
             setOpen={setShowNewUser}
@@ -73,29 +77,17 @@ const SystemUsersSettings = () => {
             </Button>
           </div>
           <Suspense fallback={<Skeleton className="h-72" />}>
-            {auth.user?.profile?.navotar_userid &&
-            auth.user?.profile?.navotar_clientid ? (
-              <UsersList
-                clientId={auth.user?.profile?.navotar_clientid}
-                userId={auth.user?.profile?.navotar_userid}
-              />
-            ) : null}
+            <ListUsers />
           </Suspense>
         </CardContent>
       </Card>
     </>
   );
-};
-
-interface UserListProps {
-  clientId: string;
-  userId: string;
 }
-function UsersList(props: UserListProps) {
-  const authParams = { clientId: props.clientId, userId: props.userId };
-  const { data } = useSuspenseQuery(
-    fetchUserConfigurationOptions({ auth: authParams })
-  );
+
+function ListUsers() {
+  const { authParams, systemUsersListOptions } = routeApi.useRouteContext();
+  const { data } = useSuspenseQuery(systemUsersListOptions);
 
   const users = (data?.status === 200 ? data.body : []).sort((a, b) =>
     a.fullName.localeCompare(b.fullName)
@@ -104,18 +96,24 @@ function UsersList(props: UserListProps) {
   return (
     <ul role="list" className="divide-y divide-muted">
       {users.map((user) => (
-        <SystemUser key={`user_config_${user.userID}`} user={user} {...props} />
+        <ListItemUser
+          key={`user_config_${user.userID}`}
+          user={user}
+          auth={authParams}
+        />
       ))}
     </ul>
   );
 }
 
-function SystemUser({
+function ListItemUser({
   user,
-  ...props
-}: { user: TUserConfigurations[number] } & UserListProps) {
+  auth,
+}: {
+  user: TUserConfigurations[number];
+  auth: { clientId: string; userId: string };
+}) {
   const { t } = useTranslation();
-  const auth = { clientId: props.clientId, userId: props.userId };
   const queryClient = useQueryClient();
 
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
@@ -129,20 +127,20 @@ function SystemUser({
 
   return (
     <>
-      <ResetPasswordAlertDialog
+      <UserResetPasswordDialog
         open={showForgotPassword}
         setOpen={setShowForgotPassword}
         user={user}
-        clientId={props.clientId}
-        userId={props.userId}
+        clientId={auth.clientId}
+        userId={auth.userId}
       />
-      <EditUserDialog
+      <UserEditDialog
         mode="edit"
         open={showEditUser}
         setOpen={setShowEditUser}
         intendedUserId={String(user.userID)}
-        clientId={props.clientId}
-        userId={props.userId}
+        clientId={auth.clientId}
+        userId={auth.userId}
       />
       <li className="flex justify-between gap-x-6 py-5">
         <div className="flex min-w-0 gap-x-4">
@@ -220,5 +218,3 @@ function SystemUser({
     </>
   );
 }
-
-export default SystemUsersSettings;

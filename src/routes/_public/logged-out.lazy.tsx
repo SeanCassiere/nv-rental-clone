@@ -21,7 +21,7 @@ function LoggedOutPage() {
         <div className="mx-auto max-w-full px-4 sm:px-6 md:px-8">
           <div className="my-2 py-4">
             Please&nbsp;
-            <Link to="/" className="font-medium text-primary">
+            <Link to="/" preload={false} className="font-medium text-primary">
               login
             </Link>
             &nbsp;to use the application.

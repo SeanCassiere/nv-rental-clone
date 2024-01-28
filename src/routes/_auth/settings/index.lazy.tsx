@@ -1,15 +1,5 @@
 import { createLazyFileRoute, Navigate } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/_auth/settings/")({
-  component: SettingsIndexPage,
+  component: () => <Navigate to="/settings/profile" replace />,
 });
-
-function SettingsIndexPage() {
-  return (
-    <Navigate
-      to="/settings/$destination"
-      params={{ destination: "profile" }}
-      replace
-    />
-  );
-}
