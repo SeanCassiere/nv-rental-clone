@@ -2,7 +2,6 @@ import React from "react";
 import {
   createLazyFileRoute,
   Outlet,
-  useRouter,
   useRouterState,
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
