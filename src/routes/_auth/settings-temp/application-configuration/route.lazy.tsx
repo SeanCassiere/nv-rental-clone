@@ -20,7 +20,6 @@ export const Route = createLazyFileRoute(
 });
 
 function ApplicationConfigurationLayout() {
-  const router = useRouter();
   const { t } = useTranslation();
   const location = useRouterState({ select: (s) => s.location });
 
