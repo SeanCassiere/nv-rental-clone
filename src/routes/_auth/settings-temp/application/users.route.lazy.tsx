@@ -31,8 +31,8 @@ import { fetchUserByIdOptions } from "@/utils/query/user";
 
 import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
 
-import { EditUserDialog } from "./-components/user-edit-dialog";
-import { ResetPasswordAlertDialog } from "./-components/user-reset-password-dialog";
+import { UserEditDialog } from "./-components/user-edit-dialog";
+import { UserResetPasswordDialog } from "./-components/user-reset-password-dialog";
 
 export const Route = createLazyFileRoute(
   "/_auth/settings-temp/application/users"
@@ -53,7 +53,7 @@ function ApplicationConfigurationUsersPage() {
     <>
       {auth.user?.profile?.navotar_userid &&
         auth.user?.profile?.navotar_clientid && (
-          <EditUserDialog
+          <UserEditDialog
             mode="new"
             open={showNewUser}
             setOpen={setShowNewUser}
@@ -129,14 +129,14 @@ function ListItemUser({
 
   return (
     <>
-      <ResetPasswordAlertDialog
+      <UserResetPasswordDialog
         open={showForgotPassword}
         setOpen={setShowForgotPassword}
         user={user}
         clientId={auth.clientId}
         userId={auth.userId}
       />
-      <EditUserDialog
+      <UserEditDialog
         mode="edit"
         open={showEditUser}
         setOpen={setShowEditUser}
