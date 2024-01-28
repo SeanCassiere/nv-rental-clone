@@ -35,14 +35,12 @@ import { EditUserDialog } from "./-components/user-edit-dialog";
 import { ResetPasswordAlertDialog } from "./-components/user-reset-password-dialog";
 
 export const Route = createLazyFileRoute(
-  "/_auth/settings-temp/application-configuration/users"
+  "/_auth/settings-temp/application/users"
 )({
   component: ApplicationConfigurationUsersPage,
 });
 
-const routeApi = getRouteApi(
-  "/_auth/settings-temp/application-configuration/users"
-);
+const routeApi = getRouteApi("/_auth/settings-temp/application/users");
 
 function ApplicationConfigurationUsersPage() {
   const { t } = useTranslation();

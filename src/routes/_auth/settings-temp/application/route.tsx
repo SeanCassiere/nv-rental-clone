@@ -1,8 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute(
-  "/_auth/settings-temp/application-configuration"
-)({
+export const Route = createFileRoute("/_auth/settings-temp/application")({
   loader: async ({ context }) => {
     const { queryClient, userPermissionsOptions } = context;
 

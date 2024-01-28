@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_auth/settings-temp/application-configuration/permissions-and-roles"
+  "/_auth/settings-temp/application/locations"
 )();

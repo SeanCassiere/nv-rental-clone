@@ -48,10 +48,10 @@ function SettingsLayout() {
     if (!canSeeAdminTab) return items;
 
     items.push({
-      id: "/settings-temp/application-configuration",
+      id: "/settings-temp/application",
       title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
       linkProps: {
-        to: "/settings-temp/application-configuration",
+        to: "/settings-temp/application",
         params: false,
         search: false,
       },
