@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, rootRouteWithContext } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import type { AuthContextProps } from "react-oidc-context";
 
 import { IS_DEV } from "@/utils/constants";
@@ -11,7 +11,7 @@ export interface MyRouterContext {
   auth: AuthContextProps;
 }
 
-export const Route = rootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
 });
 
