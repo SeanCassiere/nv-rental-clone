@@ -37,6 +37,7 @@
   "buttons": {
     "save": "Save",
     "cancel": "Cancel",
+    "reset": "Reset",
     "edit": "Edit",
     "confirm": "Confirm",
     "saveProfileDetails": "Save profile details",
