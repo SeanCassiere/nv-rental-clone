@@ -22,6 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import {
   notifyLocalStorageChange,
@@ -150,30 +155,48 @@ function StringFeatureInput(props: StringFeatureInputProps) {
           onChange={(evt) => onEditValueChange(evt.target.value)}
         />
         <div className="flex gap-2">
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="md:h-7 md:w-7"
-            onClick={handleResetToDefault}
-          >
-            <icons.RotateBackwards className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })} {feature.name}
-            </span>
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="outline"
-            className="md:h-7 md:w-7"
-            onClick={handleSave}
-          >
-            <icons.Save className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })} {feature.name}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="md:h-7 md:w-7"
+                onClick={handleResetToDefault}
+              >
+                <icons.RotateBackwards className="h-3.5 w-3.5" />
+                <span className="sr-only">
+                  {t("buttons.reset", { ns: "labels" })} {feature.name}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>
+                {t("buttons.reset", { ns: "labels" })} {feature.name}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="outline"
+                className="md:h-7 md:w-7"
+                onClick={handleSave}
+              >
+                <icons.Save className="h-3.5 w-3.5" />
+                <span className="sr-only">
+                  {t("buttons.save", { ns: "labels" })} {feature.name}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>
+                {t("buttons.save", { ns: "labels" })} {feature.name}
+              </p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </li>
@@ -246,30 +269,48 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
           </SelectContent>
         </Select>
         <div className="flex gap-2">
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="md:h-7 md:w-7"
-            onClick={handleResetToDefault}
-          >
-            <icons.RotateBackwards className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })} {feature.name}
-            </span>
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="outline"
-            className="md:h-7 md:w-7"
-            onClick={handleSave}
-          >
-            <icons.Save className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })} {feature.name}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="md:h-7 md:w-7"
+                onClick={handleResetToDefault}
+              >
+                <icons.RotateBackwards className="h-3.5 w-3.5" />
+                <span className="sr-only">
+                  {t("buttons.reset", { ns: "labels" })} {feature.name}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>
+                {t("buttons.reset", { ns: "labels" })} {feature.name}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="outline"
+                className="md:h-7 md:w-7"
+                onClick={handleSave}
+              >
+                <icons.Save className="h-3.5 w-3.5" />
+                <span className="sr-only">
+                  {t("buttons.save", { ns: "labels" })} {feature.name}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>
+                {t("buttons.save", { ns: "labels" })} {feature.name}
+              </p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </li>
@@ -327,30 +368,48 @@ function SwitchFeatureInput(props: SwitchFeatureInputProps) {
       <div className="flex w-full items-center justify-center gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col">
         <Switch checked={editValue} onCheckedChange={onEditValueChange} />
         <div className="flex gap-2">
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="md:h-7 md:w-7"
-            onClick={handleResetToDefault}
-          >
-            <icons.RotateBackwards className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })} {feature.name}
-            </span>
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="outline"
-            className="md:h-7 md:w-7"
-            onClick={handleSave}
-          >
-            <icons.Save className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })} {feature.name}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="md:h-7 md:w-7"
+                onClick={handleResetToDefault}
+              >
+                <icons.RotateBackwards className="h-3.5 w-3.5" />
+                <span className="sr-only">
+                  {t("buttons.reset", { ns: "labels" })} {feature.name}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>
+                {t("buttons.reset", { ns: "labels" })} {feature.name}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="outline"
+                className="md:h-7 md:w-7"
+                onClick={handleSave}
+              >
+                <icons.Save className="h-3.5 w-3.5" />
+                <span className="sr-only">
+                  {t("buttons.save", { ns: "labels" })} {feature.name}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>
+                {t("buttons.save", { ns: "labels" })} {feature.name}
+              </p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </li>
