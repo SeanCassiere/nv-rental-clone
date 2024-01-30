@@ -103,7 +103,7 @@ function StringFeatureInput(props: StringFeatureInputProps) {
           {feature.description}
         </p>
       </div>
-      <div className="flex items-center justify-center gap-2 md:min-w-32 md:grow-0 md:flex-col md:pr-1">
+      <div className="flex w-full items-center justify-center gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col">
         <Input
           className="w-full md:h-8"
           value={editValue}
@@ -171,7 +171,7 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
           {feature.description}
         </p>
       </div>
-      <div className="flex items-center justify-center gap-2 md:min-w-32 md:grow-0 md:flex-col md:pr-1">
+      <div className="flex w-full items-center justify-center gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col">
         <Select value={editValue} onValueChange={onEditValueChange}>
           <SelectTrigger className="w-full md:h-8">
             <SelectValue />
