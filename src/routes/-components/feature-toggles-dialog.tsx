@@ -1,5 +1,7 @@
 import React from "react";
+import { toast } from "sonner";
 
+import { EmptyState } from "@/components/layouts/empty-state";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -49,24 +51,37 @@ export function FeatureTogglesDialog() {
             role="list"
             className="min-h-96 max-w-full divide-y divide-muted overflow-x-auto"
           >
-            {featureFlags.map((feature, idx) => {
-              const key = `feature_toggle_${feature.id}_${idx}`;
-              if (feature.input_type === "dropdown") {
-                return <DropdownFeatureInput key={key} feature={feature} />;
-              }
+            {featureFlags.length === 0 ? (
+              <EmptyState
+                title="No features available"
+                subtitle="There are no features currently available for activation. Please check back later for updates."
+              />
+            ) : (
+              featureFlags.map((feature, idx) => {
+                const key = `feature_toggle_${feature.id}_${idx}`;
+                if (feature.input_type === "dropdown") {
+                  return <DropdownFeatureInput key={key} feature={feature} />;
+                }
 
-              if (feature.input_type === "string") {
-                return <StringFeatureInput key={key} feature={feature} />;
-              }
+                if (feature.input_type === "string") {
+                  return <StringFeatureInput key={key} feature={feature} />;
+                }
 
-              return null;
-            })}
+                return null;
+              })
+            )}
           </ul>
         </DialogContent>
       </Dialog>
     </React.Fragment>
   );
 }
+
+const QUICK_DISMISS_TOAST_OPTIONS = {
+  dismissible: false,
+  closeButton: false,
+  duration: 1500,
+} as const;
 
 // Feature toggle component for the input_type "string"
 interface StringFeatureInputProps {
@@ -83,15 +98,21 @@ function StringFeatureInput(props: StringFeatureInputProps) {
   const handleResetToDefault = React.useCallback(() => {
     window.localStorage.removeItem(feature.id);
     onEditValueChange(feature.default_value);
-  }, [feature.default_value, feature.id]);
+    toast.info(
+      `${feature.name} feature reset to default`,
+      QUICK_DISMISS_TOAST_OPTIONS
+    );
+  }, [feature.default_value, feature.id, feature.name]);
 
   const handleSave = React.useCallback(() => {
     if (editValue === feature.default_value) {
-      handleResetToDefault();
-      return;
+      window.localStorage.removeItem(feature.id);
+      onEditValueChange(feature.default_value);
+    } else {
+      setValue(editValue);
     }
-    setValue(editValue);
-  }, [editValue, feature.default_value, handleResetToDefault, setValue]);
+    toast.info(`${feature.name} feature updated`, QUICK_DISMISS_TOAST_OPTIONS);
+  }, [editValue, feature.default_value, feature.id, feature.name, setValue]);
 
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
@@ -151,15 +172,21 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
   const handleResetToDefault = React.useCallback(() => {
     window.localStorage.removeItem(feature.id);
     onEditValueChange(feature.default_value);
-  }, [feature.default_value, feature.id]);
+    toast.info(
+      `${feature.name} feature reset to default`,
+      QUICK_DISMISS_TOAST_OPTIONS
+    );
+  }, [feature.default_value, feature.id, feature.name]);
 
   const handleSave = React.useCallback(() => {
     if (editValue === feature.default_value) {
-      handleResetToDefault();
-      return;
+      window.localStorage.removeItem(feature.id);
+      onEditValueChange(feature.default_value);
+    } else {
+      setValue(editValue);
     }
-    setValue(editValue);
-  }, [editValue, feature.default_value, handleResetToDefault, setValue]);
+    toast.info(`${feature.name} feature updated`, QUICK_DISMISS_TOAST_OPTIONS);
+  }, [editValue, feature.default_value, feature.id, feature.name, setValue]);
 
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
