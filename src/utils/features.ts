@@ -47,5 +47,5 @@ export const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
 
 export const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
-  incompleteSettingsNavigationFeatureFlag,
+  // incompleteSettingsNavigationFeatureFlag,
 ] as const;
