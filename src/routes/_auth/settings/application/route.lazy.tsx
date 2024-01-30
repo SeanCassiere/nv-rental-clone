@@ -6,6 +6,10 @@ import {
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+
+import { incompleteApplicationSettingsTabsFeatureFlag } from "@/utils/features";
+
 import { SettingsLayoutHeader } from "../-components/layout-header";
 import {
   LayoutTabsNavigation,
@@ -20,8 +24,15 @@ function ApplicationConfigurationLayout() {
   const { t } = useTranslation();
   const location = useRouterState({ select: (s) => s.location });
 
-  const tabs: LayoutTabsNavigationTabListItem[] = [
-    {
+  const [experimental_incompleteApplicationSettingsTabs] = useLocalStorage(
+    incompleteApplicationSettingsTabsFeatureFlag.id,
+    incompleteApplicationSettingsTabsFeatureFlag.default_value
+  );
+
+  const tabs = React.useMemo(() => {
+    const items: LayoutTabsNavigationTabListItem[] = [];
+
+    items.push({
       pathname: "/settings/application/users",
       title: t("titles.systemUsers", { ns: "settings" }),
       linkProps: {
@@ -29,8 +40,9 @@ function ApplicationConfigurationLayout() {
         params: true,
         search: true,
       },
-    },
-    {
+    });
+
+    items.push({
       pathname: "/settings/application/permissions-and-roles",
       title: t("titles.permissionsAndRoles", { ns: "settings" }),
       linkProps: {
@@ -38,17 +50,22 @@ function ApplicationConfigurationLayout() {
         params: true,
         search: true,
       },
-    },
-    {
-      pathname: "/settings/application/locations",
-      title: t("titles.locations", { ns: "settings" }),
-      linkProps: {
-        to: "/settings/application/locations",
-        params: true,
-        search: true,
-      },
-    },
-  ];
+    });
+
+    if (experimental_incompleteApplicationSettingsTabs) {
+      items.push({
+        pathname: "/settings/application/locations",
+        title: t("titles.locations", { ns: "settings" }),
+        linkProps: {
+          to: "/settings/application/locations",
+          params: true,
+          search: true,
+        },
+      });
+    }
+
+    return items;
+  }, [experimental_incompleteApplicationSettingsTabs, t]);
 
   return (
     <React.Fragment>

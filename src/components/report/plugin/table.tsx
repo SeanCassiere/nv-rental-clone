@@ -34,7 +34,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipPortal,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
@@ -302,75 +301,73 @@ function ReportTableColumnHeader<TData, TValue>(
         minWidth: `${header.column.columnDef.minSize ?? 32}px`,
       }}
     >
-      <TooltipProvider>
-        {header.isPlaceholder ? null : (
-          <div
-            className={cn(
-              "relative flex h-full w-full flex-col items-center justify-start gap-2 px-4"
-            )}
-          >
-            <div className="flex w-full justify-start whitespace-nowrap pt-2">
-              {flexRender(header.column.columnDef.header, header.getContext())}
-            </div>
-            <div className="flex w-full justify-start gap-2 whitespace-nowrap pb-2">
-              {header.column.getCanSort() && (
-                <Tooltip delayDuration={250}>
-                  <TooltipTrigger asChild>
-                    <button
-                      onClick={header.column.getToggleSortingHandler()}
-                      aria-label="Toggle sorting"
-                      className="flex items-center justify-start"
-                    >
-                      {{
-                        asc: (
-                          <icons.SortAsc className="h-3.5 w-3.5 text-foreground" />
-                        ),
-                        desc: (
-                          <icons.SortDesc className="h-3.5 w-3.5 text-foreground" />
-                        ),
-                      }[header.column.getIsSorted() as string] ?? (
-                        <icons.SortUnsorted className="h-3.5 w-3.5 text-foreground/30" />
-                      )}
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipPortal>
-                    <TooltipContent>
-                      <p>
-                        {header.column.getIsSorted() === "asc"
+      {header.isPlaceholder ? null : (
+        <div
+          className={cn(
+            "relative flex h-full w-full flex-col items-center justify-start gap-2 px-4"
+          )}
+        >
+          <div className="flex w-full justify-start whitespace-nowrap pt-2">
+            {flexRender(header.column.columnDef.header, header.getContext())}
+          </div>
+          <div className="flex w-full justify-start gap-2 whitespace-nowrap pb-2">
+            {header.column.getCanSort() && (
+              <Tooltip delayDuration={250}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={header.column.getToggleSortingHandler()}
+                    aria-label="Toggle sorting"
+                    className="flex items-center justify-start"
+                  >
+                    {{
+                      asc: (
+                        <icons.SortAsc className="h-3.5 w-3.5 text-foreground" />
+                      ),
+                      desc: (
+                        <icons.SortDesc className="h-3.5 w-3.5 text-foreground" />
+                      ),
+                    }[header.column.getIsSorted() as string] ?? (
+                      <icons.SortUnsorted className="h-3.5 w-3.5 text-foreground/30" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipPortal>
+                  <TooltipContent>
+                    <p>
+                      {header.column.getIsSorted() === "asc"
+                        ? "Sorted " +
+                          (header.column.columnDef?.meta?.columnName ??
+                            header.column.id) +
+                          " column in ascending"
+                        : header.column.getIsSorted() === "desc"
                           ? "Sorted " +
                             (header.column.columnDef?.meta?.columnName ??
                               header.column.id) +
-                            " column in ascending"
-                          : header.column.getIsSorted() === "desc"
-                            ? "Sorted " +
-                              (header.column.columnDef?.meta?.columnName ??
-                                header.column.id) +
-                              " column in descending"
-                            : "Sort " +
-                              (header.column.columnDef?.meta?.columnName ??
-                                header.column.id) +
-                              " column in ascending"}
-                      </p>
-                    </TooltipContent>
-                  </TooltipPortal>
-                </Tooltip>
-              )}
-            </div>
-            {header.column.getCanResize() && (
-              <span
-                className={cn(
-                  "absolute right-0 top-1/4 z-20 mr-1 inline-block h-2/4 w-[3px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full focus:h-full sm:w-[2px]",
-                  header.column.getIsResizing()
-                    ? "top-0 h-full w-[4px] opacity-40 sm:w-[3px]"
-                    : "top-1/4 hover:h-2/4 hover:opacity-40"
-                )}
-                onMouseDown={header.getResizeHandler()}
-                onTouchStart={header.getResizeHandler()}
-              />
+                            " column in descending"
+                          : "Sort " +
+                            (header.column.columnDef?.meta?.columnName ??
+                              header.column.id) +
+                            " column in ascending"}
+                    </p>
+                  </TooltipContent>
+                </TooltipPortal>
+              </Tooltip>
             )}
           </div>
-        )}
-      </TooltipProvider>
+          {header.column.getCanResize() && (
+            <span
+              className={cn(
+                "absolute right-0 top-1/4 z-20 mr-1 inline-block h-2/4 w-[3px] cursor-col-resize touch-none select-none bg-foreground opacity-10 transition-all focus-within:h-full focus:h-full sm:w-[2px]",
+                header.column.getIsResizing()
+                  ? "top-0 h-full w-[4px] opacity-40 sm:w-[3px]"
+                  : "top-1/4 hover:h-2/4 hover:opacity-40"
+              )}
+              onMouseDown={header.getResizeHandler()}
+              onTouchStart={header.getResizeHandler()}
+            />
+          )}
+        </div>
+      )}
     </TableHead>
   );
 }

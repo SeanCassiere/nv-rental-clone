@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { EmptyState } from "@/components/layouts/empty-state";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import {
   notifyLocalStorageChange,
@@ -37,6 +43,8 @@ import {
 import { useGlobalDialogContext } from "@/context/modals";
 
 export function FeatureTogglesDialog() {
+  const { t } = useTranslation();
+
   const { showFeatureFlags, setShowFeatureFlags } = useGlobalDialogContext();
 
   return (
@@ -44,18 +52,16 @@ export function FeatureTogglesDialog() {
       <Dialog open={showFeatureFlags} onOpenChange={setShowFeatureFlags}>
         <DialogContent className="md:max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <icons.Experimental className="h-4 w-4" />
-              Experimental features
+            <DialogTitle>
+              {t("titles.experimentalFeatures", { ns: "translation" })}
             </DialogTitle>
             <DialogDescription>
-              These features are experimental and may not work as expected. Use
-              at your own risk.
+              {t("descriptions.experimentalFeatures", { ns: "translation" })}
             </DialogDescription>
           </DialogHeader>
           <ul
             role="list"
-            className="min-h-96 max-w-full divide-y divide-muted overflow-x-auto"
+            className="min-h-96 max-w-full divide-y divide-muted overflow-x-auto md:max-h-[80dvh]"
           >
             {featureFlags.length === 0 ? (
               <EmptyState
@@ -130,47 +136,68 @@ function StringFeatureInput(props: StringFeatureInputProps) {
     );
   }, [editValue, feature.default_value, feature.id, feature.name, setValue, t]);
 
+  const isTouched = value !== editValue;
+  const isDiffering = value !== feature.default_value;
+
+  const resetBtnLabel = `${t("buttons.reset", { ns: "labels" })} ${feature.name}`;
+  const saveBtnLabel = `${t("buttons.save", { ns: "labels" })} ${feature.name}`;
+
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
-      <div className="flex min-w-0 flex-col text-sm">
+      <div className="flex min-w-0 flex-col gap-y-1 text-sm">
         <p className="font-semibold leading-6 text-foreground">
+          {isDiffering ? <icons.Check className="mr-2 inline h-3 w-3" /> : null}
           {feature.name}
+          {isTouched ? (
+            <icons.Alert className="ml-2 inline h-3 w-3 text-destructive" />
+          ) : null}
         </p>
-        <p className="mt-1 leading-5 text-muted-foreground">
-          {feature.description}
-        </p>
+        <p className="leading-5 text-muted-foreground">{feature.description}</p>
+        <Badge variant="outline" className="w-min truncate">
+          {feature.id}
+        </Badge>
       </div>
-      <div className="flex w-full items-center justify-center gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col">
+      <div className="flex w-full items-center justify-end gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col md:justify-center">
         <Input
           className="w-full md:h-8"
           value={editValue}
           onChange={(evt) => onEditValueChange(evt.target.value)}
         />
         <div className="flex gap-2">
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="md:h-7 md:w-7"
-            onClick={handleResetToDefault}
-          >
-            <icons.RotateBackwards className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })}
-            </span>
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="outline"
-            className="md:h-7 md:w-7"
-            onClick={handleSave}
-          >
-            <icons.Save className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="md:h-7 md:w-7"
+                onClick={handleResetToDefault}
+              >
+                <icons.RotateBackwards className="h-3.5 w-3.5" />
+                <span className="sr-only">{resetBtnLabel}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>{resetBtnLabel}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant={isTouched ? "default" : "outline"}
+                className="md:h-7 md:w-7"
+                onClick={handleSave}
+              >
+                <icons.Save className="h-3.5 w-3.5" />
+                <span className="sr-only">{saveBtnLabel}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>{saveBtnLabel}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </li>
@@ -214,17 +241,28 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
     );
   }, [editValue, feature.default_value, feature.id, feature.name, setValue, t]);
 
+  const isTouched = value !== editValue;
+  const isDiffering = value !== feature.default_value;
+
+  const resetBtnLabel = `${t("buttons.reset", { ns: "labels" })} ${feature.name}`;
+  const saveBtnLabel = `${t("buttons.save", { ns: "labels" })} ${feature.name}`;
+
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
-      <div className="flex min-w-0 flex-col text-sm">
+      <div className="flex min-w-0 flex-col gap-y-1 text-sm">
         <p className="font-semibold leading-6 text-foreground">
+          {isDiffering ? <icons.Check className="mr-2 inline h-3 w-3" /> : null}
           {feature.name}
+          {isTouched ? (
+            <icons.Alert className="ml-2 inline h-3 w-3 text-destructive" />
+          ) : null}
         </p>
-        <p className="mt-1 leading-5 text-muted-foreground">
-          {feature.description}
-        </p>
+        <p className="leading-5 text-muted-foreground">{feature.description}</p>
+        <Badge variant="outline" className="w-min truncate">
+          {feature.id}
+        </Badge>
       </div>
-      <div className="flex w-full items-center justify-center gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col">
+      <div className="flex w-full items-center justify-end gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col md:justify-center">
         <Select value={editValue} onValueChange={onEditValueChange}>
           <SelectTrigger className="w-full md:h-8">
             <SelectValue />
@@ -242,30 +280,40 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
           </SelectContent>
         </Select>
         <div className="flex gap-2">
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="md:h-7 md:w-7"
-            onClick={handleResetToDefault}
-          >
-            <icons.RotateBackwards className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })}
-            </span>
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="outline"
-            className="md:h-7 md:w-7"
-            onClick={handleSave}
-          >
-            <icons.Save className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="md:h-7 md:w-7"
+                onClick={handleResetToDefault}
+              >
+                <icons.RotateBackwards className="h-3.5 w-3.5" />
+                <span className="sr-only">{resetBtnLabel}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>{resetBtnLabel}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant={isTouched ? "default" : "outline"}
+                className="md:h-7 md:w-7"
+                onClick={handleSave}
+              >
+                <icons.Save className="h-3.5 w-3.5" />
+                <span className="sr-only">{saveBtnLabel}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>{saveBtnLabel}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </li>
@@ -309,43 +357,64 @@ function SwitchFeatureInput(props: SwitchFeatureInputProps) {
     );
   }, [editValue, feature.default_value, feature.id, feature.name, setValue, t]);
 
+  const isTouched = value !== editValue;
+  const isDiffering = value !== feature.default_value;
+
+  const resetBtnLabel = `${t("buttons.reset", { ns: "labels" })} ${feature.name}`;
+  const saveBtnLabel = `${t("buttons.save", { ns: "labels" })} ${feature.name}`;
+
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
-      <div className="flex min-w-0 flex-col text-sm">
+      <div className="flex min-w-0 flex-col gap-y-1 text-sm">
         <p className="font-semibold leading-6 text-foreground">
+          {isDiffering ? <icons.Check className="mr-2 inline h-3 w-3" /> : null}
           {feature.name}
+          {isTouched ? (
+            <icons.Alert className="ml-2 inline h-3 w-3 text-destructive" />
+          ) : null}
         </p>
-        <p className="mt-1 leading-5 text-muted-foreground">
-          {feature.description}
-        </p>
+        <p className="leading-5 text-muted-foreground">{feature.description}</p>
+        <Badge variant="outline" className="w-min truncate">
+          {feature.id}
+        </Badge>
       </div>
-      <div className="flex w-full items-center justify-center gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col">
+      <div className="flex w-full items-center justify-end gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col md:justify-center">
         <Switch checked={editValue} onCheckedChange={onEditValueChange} />
         <div className="flex gap-2">
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="md:h-7 md:w-7"
-            onClick={handleResetToDefault}
-          >
-            <icons.RotateBackwards className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })}
-            </span>
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="outline"
-            className="md:h-7 md:w-7"
-            onClick={handleSave}
-          >
-            <icons.Save className="h-3.5 w-3.5" />
-            <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })}
-            </span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="md:h-7 md:w-7"
+                onClick={handleResetToDefault}
+              >
+                <icons.RotateBackwards className="h-3.5 w-3.5" />
+                <span className="sr-only">{resetBtnLabel}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>{resetBtnLabel}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                size="icon"
+                variant={isTouched ? "default" : "outline"}
+                className="md:h-7 md:w-7"
+                onClick={handleSave}
+              >
+                <icons.Save className="h-3.5 w-3.5" />
+                <span className="sr-only">{saveBtnLabel}</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" side="bottom">
+              <p>{saveBtnLabel}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </li>
