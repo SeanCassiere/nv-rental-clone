@@ -52,8 +52,7 @@ export function FeatureTogglesDialog() {
       <Dialog open={showFeatureFlags} onOpenChange={setShowFeatureFlags}>
         <DialogContent className="md:max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <icons.Experimental className="h-4 w-4" />
+            <DialogTitle>
               {t("titles.experimentalFeatures", { ns: "translation" })}
             </DialogTitle>
             <DialogDescription>
