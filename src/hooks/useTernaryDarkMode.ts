@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -15,7 +15,6 @@ interface UseTernaryDarkModeOutput {
   ternaryDarkMode: TernaryDarkMode;
   setTernaryDarkMode: Dispatch<SetStateAction<TernaryDarkMode>>;
   toggleTernaryDarkMode: () => void;
-  nextToggleTernaryDarkMode: TernaryDarkMode;
 }
 
 export function useTernaryDarkMode(): UseTernaryDarkModeOutput {
@@ -26,16 +25,6 @@ export function useTernaryDarkMode(): UseTernaryDarkModeOutput {
       STORAGE_DEFAULTS.theme
     );
   const [isDarkMode, setDarkMode] = useState<boolean>(isDarkOS);
-
-  const nextToggleTernaryDarkMode = useMemo(() => {
-    const toggleDict: Record<TernaryDarkMode, TernaryDarkMode> = {
-      light: "system",
-      system: "dark",
-      dark: "light",
-    };
-
-    return toggleDict[ternaryDarkMode];
-  }, [ternaryDarkMode]);
 
   // Update darkMode if os prefers changes
   useUpdateEffect(() => {
@@ -73,7 +62,6 @@ export function useTernaryDarkMode(): UseTernaryDarkModeOutput {
   return {
     isDarkMode,
     ternaryDarkMode,
-    nextToggleTernaryDarkMode,
     setTernaryDarkMode,
     toggleTernaryDarkMode,
   };
