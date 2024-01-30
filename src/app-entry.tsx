@@ -23,6 +23,7 @@ import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { routeTree } from "@/route-tree.gen";
 import { queryClient } from "@/tanstack-query-config";
 
+import { TooltipProvider } from "./components/ui/tooltip";
 import i18n from "./i18next-config";
 
 export const router = createRouter({
@@ -63,8 +64,10 @@ export default function App() {
           <React.Suspense fallback={<LoadingPlaceholder />}>
             <I18nextProvider i18n={i18n}>
               <GlobalDialogProvider>
-                <CacheDocumentFocusChecker />
-                <RouterWithAuth />
+                <TooltipProvider>
+                  <CacheDocumentFocusChecker />
+                  <RouterWithInjectedAuth />
+                </TooltipProvider>
               </GlobalDialogProvider>
             </I18nextProvider>
           </React.Suspense>
@@ -80,7 +83,7 @@ export default function App() {
   );
 }
 
-function RouterWithAuth() {
+function RouterWithInjectedAuth() {
   const { i18n } = useTranslation();
   const auth = useAuth();
   const theme = useTernaryDarkMode();
