@@ -21,7 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import {
+  notifyLocalStorageChange,
+  useLocalStorage,
+} from "@/hooks/useLocalStorage";
 
 import {
   featureFlags,
@@ -100,6 +103,7 @@ function StringFeatureInput(props: StringFeatureInputProps) {
   const handleResetToDefault = React.useCallback(() => {
     window.localStorage.removeItem(feature.id);
     onEditValueChange(feature.default_value);
+    notifyLocalStorageChange();
     toast.info(
       t("labelFeatureReset", { ns: "messages", label: feature.name }),
       TOAST_DISMISS_OPTIONS
@@ -110,6 +114,7 @@ function StringFeatureInput(props: StringFeatureInputProps) {
     if (editValue === feature.default_value) {
       window.localStorage.removeItem(feature.id);
       onEditValueChange(feature.default_value);
+      notifyLocalStorageChange();
     } else {
       setValue(editValue);
     }
@@ -182,6 +187,7 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
   const handleResetToDefault = React.useCallback(() => {
     window.localStorage.removeItem(feature.id);
     onEditValueChange(feature.default_value);
+    notifyLocalStorageChange();
     toast.info(
       t("labelFeatureReset", { ns: "messages", label: feature.name }),
       TOAST_DISMISS_OPTIONS
@@ -192,6 +198,7 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
     if (editValue === feature.default_value) {
       window.localStorage.removeItem(feature.id);
       onEditValueChange(feature.default_value);
+      notifyLocalStorageChange();
     } else {
       setValue(editValue);
     }
