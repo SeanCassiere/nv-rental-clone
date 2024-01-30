@@ -159,7 +159,7 @@ function StringFeatureInput(props: StringFeatureInputProps) {
           >
             <icons.RotateBackwards className="h-3.5 w-3.5" />
             <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })}
+              {t("buttons.reset", { ns: "labels" })} {feature.name}
             </span>
           </Button>
           <Button
@@ -171,7 +171,7 @@ function StringFeatureInput(props: StringFeatureInputProps) {
           >
             <icons.Save className="h-3.5 w-3.5" />
             <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })}
+              {t("buttons.save", { ns: "labels" })} {feature.name}
             </span>
           </Button>
         </div>
@@ -255,7 +255,7 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
           >
             <icons.RotateBackwards className="h-3.5 w-3.5" />
             <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })}
+              {t("buttons.reset", { ns: "labels" })} {feature.name}
             </span>
           </Button>
           <Button
@@ -267,7 +267,7 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
           >
             <icons.Save className="h-3.5 w-3.5" />
             <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })}
+              {t("buttons.save", { ns: "labels" })} {feature.name}
             </span>
           </Button>
         </div>
@@ -336,7 +336,7 @@ function SwitchFeatureInput(props: SwitchFeatureInputProps) {
           >
             <icons.RotateBackwards className="h-3.5 w-3.5" />
             <span className="sr-only">
-              {t("buttons.reset", { ns: "labels" })}
+              {t("buttons.reset", { ns: "labels" })} {feature.name}
             </span>
           </Button>
           <Button
@@ -348,7 +348,7 @@ function SwitchFeatureInput(props: SwitchFeatureInputProps) {
           >
             <icons.Save className="h-3.5 w-3.5" />
             <span className="sr-only">
-              {t("buttons.save", { ns: "labels" })}
+              {t("buttons.save", { ns: "labels" })} {feature.name}
             </span>
           </Button>
         </div>

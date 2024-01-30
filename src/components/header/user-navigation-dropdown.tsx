@@ -173,7 +173,7 @@ export const UserNavigationDropdown = () => {
           </DropdownMenuSub>
           <DropdownMenuItem onClick={handleFeatureToggles}>
             <icons.Experimental className="mr-2 h-4 w-4" />
-            <span>Feature preview</span>
+            <span>Experimental features</span>
             {/* <DropdownMenuShortcut>
               {IsMacLike ? "⌘" : "Ctrl"} + K
             </DropdownMenuShortcut> */}
