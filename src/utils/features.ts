@@ -57,6 +57,6 @@ export const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
 
 export const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
-  // incompleteSettingsNavigationFeatureFlag,
+  incompleteSettingsNavigationFeatureFlag,
   // incompleteApplicationSettingsTabsFeatureFlag,
 ] as const;

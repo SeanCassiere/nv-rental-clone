@@ -8,9 +8,11 @@ import { useTranslation } from "react-i18next";
 
 import { Separator } from "@/components/ui/separator";
 
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePermission } from "@/hooks/usePermission";
 
 import { UI_APPLICATION_NAME } from "@/utils/constants";
+import { incompleteSettingsNavigationFeatureFlag } from "@/utils/features";
 
 import { cn } from "@/utils";
 
@@ -31,6 +33,10 @@ function SettingsLayout() {
   const { t } = useTranslation();
 
   const canSeeAdminTab = usePermission("VIEW_ADMIN_TAB");
+  const [experimental_allSettingsNavigation] = useLocalStorage(
+    incompleteSettingsNavigationFeatureFlag.id,
+    incompleteSettingsNavigationFeatureFlag.default_value
+  );
 
   const destinations = React.useMemo(() => {
     const items: SettingsNavigationDestination[] = [
@@ -45,46 +51,50 @@ function SettingsLayout() {
       },
     ];
 
-    if (!canSeeAdminTab) return items;
+    if (canSeeAdminTab) {
+      items.push({
+        id: "/settings/application",
+        title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
+        linkProps: {
+          to: "/settings/application",
+          params: false,
+          search: false,
+        },
+      });
+    }
 
-    items.push({
-      id: "/settings/application",
-      title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
-      linkProps: {
-        to: "/settings/application",
-        params: false,
-        search: false,
-      },
-    });
-    items.push({
-      id: "/settings/runtime-configuration",
-      title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
-      linkProps: {
-        to: "/settings/runtime-configuration",
-        params: false,
-        search: false,
-      },
-    });
-    items.push({
-      id: "/settings/vehicles-and-categories",
-      title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
-      linkProps: {
-        to: "/settings/vehicles-and-categories",
-        params: false,
-        search: false,
-      },
-    });
-    items.push({
-      id: "/settings/rates-and-charges",
-      title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
-      linkProps: {
-        to: "/settings/rates-and-charges",
-        params: false,
-        search: false,
-      },
-    });
+    if (canSeeAdminTab && experimental_allSettingsNavigation) {
+      items.push({
+        id: "/settings/runtime-configuration",
+        title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
+        linkProps: {
+          to: "/settings/runtime-configuration",
+          params: false,
+          search: false,
+        },
+      });
+      items.push({
+        id: "/settings/vehicles-and-categories",
+        title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
+        linkProps: {
+          to: "/settings/vehicles-and-categories",
+          params: false,
+          search: false,
+        },
+      });
+      items.push({
+        id: "/settings/rates-and-charges",
+        title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
+        linkProps: {
+          to: "/settings/rates-and-charges",
+          params: false,
+          search: false,
+        },
+      });
+    }
+
     return items;
-  }, [canSeeAdminTab, t]);
+  }, [canSeeAdminTab, experimental_allSettingsNavigation, t]);
 
   return (
     <>
