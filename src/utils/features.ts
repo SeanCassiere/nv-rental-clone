@@ -29,6 +29,4 @@ export const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
   options: ["v1", "v2"],
 } as const;
 
-export const featureFlags: FeatureFlags = [
-  // dashboardLayoutFeatureFlag
-] as const;
+export const featureFlags: FeatureFlags = [dashboardLayoutFeatureFlag] as const;

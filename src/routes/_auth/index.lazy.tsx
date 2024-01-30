@@ -29,9 +29,10 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import { useFeature } from "@/hooks/useFeature";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { getAuthFromAuthHook } from "@/utils/auth";
+import { dashboardLayoutFeatureFlag } from "@/utils/features";
 import { fetchLocationsListOptions } from "@/utils/query/location";
 import { titleMaker } from "@/utils/title-maker";
 
@@ -75,13 +76,10 @@ function DashboardPage() {
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 
-  const [adminUrlsFeature] = useFeature("SHOW_ADMIN_URLS");
-  const adminUrlsSplit = (adminUrlsFeature || "")
-    .split(",")
-    .map((url) => url.trim());
-
-  const showV2Dashboard = adminUrlsSplit.includes("dashboard-v2");
-  const dashboardVersion = showV2Dashboard ? "v2" : "v1";
+  const [dashboardVersion] = useLocalStorage(
+    dashboardLayoutFeatureFlag.id,
+    dashboardLayoutFeatureFlag.default_value
+  );
 
   const handleSetShowWidgetPickerModal = useCallback(
     (show: boolean) => {
