@@ -17,6 +17,11 @@ declare global {
 
 type SetValue<T> = Dispatch<SetStateAction<T>>;
 
+// We dispatch a custom event so every useLocalStorage hook are notified
+export function notifyLocalStorageChange() {
+  window.dispatchEvent(new Event("local-storage"));
+}
+
 export function useLocalStorage<T>(
   key: string,
   initialValue: T
@@ -63,7 +68,7 @@ export function useLocalStorage<T>(
       setStoredValue(newValue);
 
       // We dispatch a custom event so every useLocalStorage hook are notified
-      window.dispatchEvent(new Event("local-storage"));
+      notifyLocalStorageChange();
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error);
     }
