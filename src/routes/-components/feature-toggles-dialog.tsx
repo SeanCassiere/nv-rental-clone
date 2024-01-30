@@ -145,7 +145,7 @@ function StringFeatureInput(props: StringFeatureInputProps) {
 
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
-      <div className="flex min-w-0 flex-col text-sm">
+      <div className="flex min-w-0 flex-col gap-y-1 text-sm">
         <p className="font-semibold leading-6 text-foreground">
           {isDiffering ? <icons.Check className="mr-2 inline h-3 w-3" /> : null}
           {feature.name}
@@ -153,10 +153,10 @@ function StringFeatureInput(props: StringFeatureInputProps) {
             <icons.Alert className="ml-2 inline h-3 w-3 text-destructive" />
           ) : null}
         </p>
-        <Badge className="w-min truncate">{feature.id}</Badge>
-        <p className="mt-1 leading-5 text-muted-foreground">
-          {feature.description}
-        </p>
+        <p className="leading-5 text-muted-foreground">{feature.description}</p>
+        <Badge variant="outline" className="w-min truncate">
+          {feature.id}
+        </Badge>
       </div>
       <div className="flex w-full items-center justify-end gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col md:justify-center">
         <Input
@@ -250,7 +250,7 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
 
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
-      <div className="flex min-w-0 flex-col text-sm">
+      <div className="flex min-w-0 flex-col gap-y-1 text-sm">
         <p className="font-semibold leading-6 text-foreground">
           {isDiffering ? <icons.Check className="mr-2 inline h-3 w-3" /> : null}
           {feature.name}
@@ -258,10 +258,10 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
             <icons.Alert className="ml-2 inline h-3 w-3 text-destructive" />
           ) : null}
         </p>
-        <Badge className="w-min truncate">{feature.id}</Badge>
-        <p className="mt-1 leading-5 text-muted-foreground">
-          {feature.description}
-        </p>
+        <p className="leading-5 text-muted-foreground">{feature.description}</p>
+        <Badge variant="outline" className="w-min truncate">
+          {feature.id}
+        </Badge>
       </div>
       <div className="flex w-full items-center justify-end gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col md:justify-center">
         <Select value={editValue} onValueChange={onEditValueChange}>
@@ -366,7 +366,7 @@ function SwitchFeatureInput(props: SwitchFeatureInputProps) {
 
   return (
     <li className="flex max-w-full flex-col items-center justify-between gap-x-6 gap-y-2 py-2 md:flex-row">
-      <div className="flex min-w-0 flex-col text-sm">
+      <div className="flex min-w-0 flex-col gap-y-1 text-sm">
         <p className="font-semibold leading-6 text-foreground">
           {isDiffering ? <icons.Check className="mr-2 inline h-3 w-3" /> : null}
           {feature.name}
@@ -374,10 +374,10 @@ function SwitchFeatureInput(props: SwitchFeatureInputProps) {
             <icons.Alert className="ml-2 inline h-3 w-3 text-destructive" />
           ) : null}
         </p>
-        <Badge className="w-min truncate">{feature.id}</Badge>
-        <p className="mt-1 leading-5 text-muted-foreground">
-          {feature.description}
-        </p>
+        <p className="leading-5 text-muted-foreground">{feature.description}</p>
+        <Badge variant="outline" className="w-min truncate">
+          {feature.id}
+        </Badge>
       </div>
       <div className="flex w-full items-center justify-end gap-2 px-1 md:min-w-32 md:max-w-32 md:grow-0 md:flex-col md:justify-center">
         <Switch checked={editValue} onCheckedChange={onEditValueChange} />
