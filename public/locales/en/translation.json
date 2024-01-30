@@ -1,3 +1,8 @@
 {
-  "foo": "bar"
+  "titles": {
+    "experimentalFeatures": "Experimental features"
+  },
+  "descriptions": {
+    "experimentalFeatures": "These features are experimental and may not work as expected. Use at your own risk."
+  }
 }

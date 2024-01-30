@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { EmptyState } from "@/components/layouts/empty-state";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,6 +38,8 @@ import {
 import { useGlobalDialogContext } from "@/context/modals";
 
 export function FeatureTogglesDialog() {
+  const { t } = useTranslation();
+
   const { showFeatureFlags, setShowFeatureFlags } = useGlobalDialogContext();
 
   return (
@@ -46,16 +49,15 @@ export function FeatureTogglesDialog() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <icons.Experimental className="h-4 w-4" />
-              Experimental features
+              {t("titles.experimentalFeatures", { ns: "translation" })}
             </DialogTitle>
             <DialogDescription>
-              These features are experimental and may not work as expected. Use
-              at your own risk.
+              {t("descriptions.experimentalFeatures", { ns: "translation" })}
             </DialogDescription>
           </DialogHeader>
           <ul
             role="list"
-            className="min-h-96 max-w-full divide-y divide-muted overflow-x-auto"
+            className="min-h-96 max-w-full divide-y divide-muted overflow-x-auto md:max-h-[80dvh]"
           >
             {featureFlags.length === 0 ? (
               <EmptyState
@@ -136,6 +138,7 @@ function StringFeatureInput(props: StringFeatureInputProps) {
         <p className="font-semibold leading-6 text-foreground">
           {feature.name}
         </p>
+        <Badge className="w-min truncate">{feature.id}</Badge>
         <p className="mt-1 leading-5 text-muted-foreground">
           {feature.description}
         </p>
@@ -220,6 +223,7 @@ function DropdownFeatureInput(props: DropdownFeatureInputProps) {
         <p className="font-semibold leading-6 text-foreground">
           {feature.name}
         </p>
+        <Badge className="w-min truncate">{feature.id}</Badge>
         <p className="mt-1 leading-5 text-muted-foreground">
           {feature.description}
         </p>
@@ -315,6 +319,7 @@ function SwitchFeatureInput(props: SwitchFeatureInputProps) {
         <p className="font-semibold leading-6 text-foreground">
           {feature.name}
         </p>
+        <Badge className="w-min truncate">{feature.id}</Badge>
         <p className="mt-1 leading-5 text-muted-foreground">
           {feature.description}
         </p>
