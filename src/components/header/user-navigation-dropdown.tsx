@@ -38,7 +38,8 @@ export const UserNavigationDropdown = () => {
   const authParams = { clientId, userId };
 
   const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
-  const { setShowLogout, setShowCommandMenu } = useGlobalDialogContext();
+  const { setShowLogout, setShowCommandMenu, setShowFeatureFlags } =
+    useGlobalDialogContext();
 
   const userQuery = useQuery(
     fetchUserByIdOptions({ auth: authParams, userId: authParams.userId })
@@ -56,6 +57,10 @@ export const UserNavigationDropdown = () => {
 
   const handleSearch = () => {
     setShowCommandMenu(true);
+  };
+
+  const handleFeatureToggles = () => {
+    setShowFeatureFlags(true);
   };
 
   return (
@@ -166,6 +171,13 @@ export const UserNavigationDropdown = () => {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
+          <DropdownMenuItem onClick={handleFeatureToggles}>
+            <icons.Experimental className="mr-2 h-4 w-4" />
+            <span>Feature preview</span>
+            {/* <DropdownMenuShortcut>
+              {IsMacLike ? "⌘" : "Ctrl"} + K
+            </DropdownMenuShortcut> */}
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

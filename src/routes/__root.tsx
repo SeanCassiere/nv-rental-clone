@@ -6,6 +6,8 @@ import { IS_DEV } from "@/utils/constants";
 
 import type { queryClient } from "@/tanstack-query-config";
 
+import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
+
 export interface MyRouterContext {
   queryClient: typeof queryClient;
   auth: AuthContextProps;
@@ -27,6 +29,7 @@ function RootComponent() {
   return (
     <React.Fragment>
       <Outlet />
+      <FeatureTogglesDialog />
       <RouterDevTools position="top-right" />
     </React.Fragment>
   );
