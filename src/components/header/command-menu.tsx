@@ -45,8 +45,7 @@ export const CommandMenu = () => {
   );
   const defaultRowCount = parseInt(rowCountStr, 10);
 
-  const { ternaryDarkMode, toggleTernaryDarkMode, nextToggleTernaryDarkMode } =
-    useTernaryDarkMode();
+  const { setTernaryDarkMode } = useTernaryDarkMode();
   const { showCommandMenu, setShowCommandMenu, setShowLogout } =
     useGlobalDialogContext();
 
@@ -461,19 +460,27 @@ export const CommandMenu = () => {
           <CommandGroup heading="System">
             <CommandItem
               onSelect={() => {
-                run(() => toggleTernaryDarkMode());
+                run(() => setTernaryDarkMode("dark"));
               }}
             >
-              {ternaryDarkMode === "system" && (
-                <icons.System className="mr-2 h-4 w-4 text-primary/70" />
-              )}
-              {ternaryDarkMode === "light" && (
-                <icons.Sun className="mr-2 h-4 w-4 text-primary/70" />
-              )}
-              {ternaryDarkMode === "dark" && (
-                <icons.Moon className="mr-2 h-4 w-4 text-primary/70" />
-              )}
-              Toggle theme (to {nextToggleTernaryDarkMode})
+              <icons.Moon className="mr-2 h-4 w-4 text-primary/70" />
+              Set theme to dark
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                run(() => setTernaryDarkMode("light"));
+              }}
+            >
+              <icons.Sun className="mr-2 h-4 w-4 text-primary/70" />
+              Set theme to light
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                run(() => setTernaryDarkMode("system"));
+              }}
+            >
+              <icons.System className="mr-2 h-4 w-4 text-primary/70" />
+              Set theme to system
             </CommandItem>
             <CommandItem
               onSelect={() => {
