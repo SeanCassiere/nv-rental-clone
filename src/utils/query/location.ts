@@ -39,6 +39,6 @@ export function fetchLocationsListOptions(
         })
         .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
 }

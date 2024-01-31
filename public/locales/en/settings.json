@@ -55,6 +55,8 @@
     "youReceiveEmailsQuestion": "Do you want to receive emails?",
     "userToReceiveEmailsQuestion": "Should the user receive emails?",
     "selectARole": "Select a role",
-    "role": "Role"
+    "role": "Role",
+    "availableOnline": "Available online",
+    "notAvailableOnline": "Not available online"
   }
 }
