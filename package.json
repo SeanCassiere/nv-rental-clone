@@ -45,7 +45,7 @@
     "@ts-rest/core": "^3.33.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "cmdk": "^0.2.0",
+    "cmdk": "^0.2.1",
     "date-fns": "^3.3.1",
     "i18next": "^23.8.1",
     "i18next-browser-languagedetector": "^7.2.0",
