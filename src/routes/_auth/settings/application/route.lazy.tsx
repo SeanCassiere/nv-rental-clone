@@ -75,6 +75,18 @@ function ApplicationConfigurationLayout() {
       });
     }
 
+    if (incomplete_incompleteApplicationSettingsTabs) {
+      items.push({
+        pathname: "/settings/application/store-hours-and-holidays",
+        title: t("titles.storeHoursAndHolidays", { ns: "settings" }),
+        linkProps: {
+          to: "/settings/application/store-hours-and-holidays",
+          params: true,
+          search: true,
+        },
+      });
+    }
+
     return items;
   }, [
     incomplete_incompleteApplicationSettingsTabs,
