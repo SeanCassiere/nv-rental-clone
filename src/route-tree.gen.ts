@@ -41,6 +41,7 @@ import { Route as AuthFleetVehicleIdIndexRouteImport } from "./routes/_auth/flee
 import { Route as AuthCustomersCustomerIdIndexRouteImport } from "./routes/_auth/customers/$customerId/index.route"
 import { Route as AuthAgreementsAgreementIdIndexRouteImport } from "./routes/_auth/agreements/$agreementId/index.route"
 import { Route as AuthSettingsApplicationUsersImport } from "./routes/_auth/settings/application/users"
+import { Route as AuthSettingsApplicationStoreHoursAndHolidaysImport } from "./routes/_auth/settings/application/store-hours-and-holidays"
 import { Route as AuthSettingsApplicationPermissionsAndRolesImport } from "./routes/_auth/settings/application/permissions-and-roles"
 import { Route as AuthSettingsApplicationLocationsImport } from "./routes/_auth/settings/application/locations"
 import { Route as AuthReservationsReservationIdEditRouteImport } from "./routes/_auth/reservations/$reservationId/edit.route"
@@ -346,6 +347,16 @@ const AuthSettingsApplicationUsersRoute =
     ),
   )
 
+const AuthSettingsApplicationStoreHoursAndHolidaysRoute =
+  AuthSettingsApplicationStoreHoursAndHolidaysImport.update({
+    path: "/store-hours-and-holidays",
+    getParentRoute: () => AuthSettingsApplicationRouteRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/settings/application/store-hours-and-holidays.lazy"
+    ).then((d) => d.Route),
+  )
+
 const AuthSettingsApplicationPermissionsAndRolesRoute =
   AuthSettingsApplicationPermissionsAndRolesImport.update({
     path: "/permissions-and-roles",
@@ -580,6 +591,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthSettingsApplicationPermissionsAndRolesImport
       parentRoute: typeof AuthSettingsApplicationRouteImport
     }
+    "/_auth/settings/application/store-hours-and-holidays": {
+      preLoaderRoute: typeof AuthSettingsApplicationStoreHoursAndHolidaysImport
+      parentRoute: typeof AuthSettingsApplicationRouteImport
+    }
     "/_auth/settings/application/users": {
       preLoaderRoute: typeof AuthSettingsApplicationUsersImport
       parentRoute: typeof AuthSettingsApplicationRouteImport
@@ -658,6 +673,7 @@ export const routeTree = rootRoute.addChildren([
       AuthSettingsApplicationRouteRoute.addChildren([
         AuthSettingsApplicationLocationsRoute,
         AuthSettingsApplicationPermissionsAndRolesRoute,
+        AuthSettingsApplicationStoreHoursAndHolidaysRoute,
         AuthSettingsApplicationUsersRoute,
         AuthSettingsApplicationIndexLazyRoute,
       ]),

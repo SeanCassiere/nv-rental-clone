@@ -33,7 +33,7 @@ function SettingsLayout() {
   const { t } = useTranslation();
 
   const canSeeAdminTab = usePermission("VIEW_ADMIN_TAB");
-  const [experimental_allSettingsNavigation] = useLocalStorage(
+  const [incomplete_allSettingsNavigation] = useLocalStorage(
     incompleteSettingsNavigationFeatureFlag.id,
     incompleteSettingsNavigationFeatureFlag.default_value
   );
@@ -63,7 +63,7 @@ function SettingsLayout() {
       });
     }
 
-    if (canSeeAdminTab && experimental_allSettingsNavigation) {
+    if (canSeeAdminTab && incomplete_allSettingsNavigation) {
       items.push({
         id: "/settings/runtime-configuration",
         title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
@@ -94,7 +94,7 @@ function SettingsLayout() {
     }
 
     return items;
-  }, [canSeeAdminTab, experimental_allSettingsNavigation, t]);
+  }, [canSeeAdminTab, incomplete_allSettingsNavigation, t]);
 
   return (
     <>

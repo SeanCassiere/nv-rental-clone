@@ -10,6 +10,7 @@
     "systemUsers": "System users",
     "permissionsAndRoles": "Permissions and roles",
     "locations": "Locations",
+    "storeHoursAndHolidays": "Store hours and holidays",
     "emailTemplates": "Email templates",
     "globalDocuments": "Global documents",
     "idConfiguration": "Number sequencing",
@@ -30,6 +31,8 @@
     "application": "Customize the application settings.",
     "systemUsers": "Configure the users that have access to the system.",
     "permissionsAndRoles": "Manage user permissions and roles within the system.",
+    "locations": "Configure the rental locations that are available for use throughout the system.",
+    "storeHoursAndHolidays": "Configure the store hours and holidays that are used by online booking system.",
     "runtime": "Customize and manage your application runtime configuration with ease.",
     "emailTemplates": "Configure the email templates that are used by the system.",
     "globalDocuments": "Configure the global documents available for use throughout the system.",
@@ -46,6 +49,7 @@
   "labels": {
     "allRoles": "All roles",
     "addUser": "Add user",
+    "addLocation": "Add location",
     "deleteRole": "Delete role",
     "addUserRole": "Add user role",
     "resetPassword": "Reset password",
@@ -53,6 +57,8 @@
     "youReceiveEmailsQuestion": "Do you want to receive emails?",
     "userToReceiveEmailsQuestion": "Should the user receive emails?",
     "selectARole": "Select a role",
-    "role": "Role"
+    "role": "Role",
+    "availableOnline": "Available online",
+    "notAvailableOnline": "Not available online"
   }
 }

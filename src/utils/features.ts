@@ -37,8 +37,16 @@ export const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
   default_value: "v1",
   options: ["v1", "v2"],
 } as const;
+export const headerSharedCardBackgroundFeatureFlag: SwitchFeatureFlag = {
+  id: "experimental_app.header.cardBackground",
+  name: "Application header uses the card background",
+  description:
+    "Toggle this feature to enable the use of the card background on the application header.",
+  input_type: "switch",
+  default_value: false,
+} as const;
 export const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
-  id: "experimental_all.settings.navigation",
+  id: "incomplete_all.settings.navigation",
   name: "Incomplete settings navigation",
   description:
     "Toggle this feature to enable the incomplete settings navigation, which will display a list of settings routes that are incomplete provided your account has access to them.",
@@ -46,17 +54,28 @@ export const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   default_value: false,
 } as const;
 export const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
-  id: "experimental_all.application.settings.tabs",
-  name: "Incomplete application settings tabs",
+  id: "incomplete_application.settings.all",
+  name: "All incomplete application settings tabs",
   description:
     'Toggle this feature to enable the incomplete "application" settings tabs/panels, which will display a list of settings panels that are incomplete provided your account has access to them.',
   input_type: "switch",
   default_value: false,
 } as const;
+export const incompleteLocationsApplicationSettingsTabFeatureFlag: SwitchFeatureFlag =
+  {
+    id: "incomplete_application.settings.locations",
+    name: "Incomplete locations application settings tab",
+    description:
+      "Toggle this feature to enable the incomplete locations application settings tab, which will display a list of settings panels that are incomplete provided your account has access to them.",
+    input_type: "switch",
+    default_value: false,
+  } as const;
 // Features END
 
 export const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
+  headerSharedCardBackgroundFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
+  incompleteLocationsApplicationSettingsTabFeatureFlag,
 ] as const;
