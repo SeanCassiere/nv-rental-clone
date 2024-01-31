@@ -80,15 +80,17 @@ function PermissionsAndRolesPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
-          <div className="flex items-center justify-start gap-x-2 pb-2">
-            <Button size="sm" onClick={() => setShowNew(true)}>
+          <div className="flex flex-col justify-start gap-2 pb-4 md:flex-row md:items-center">
+            <Button
+              size="sm"
+              className="w-max"
+              onClick={() => setShowNew(true)}
+            >
               <icons.Plus className="h-4 w-4 sm:mr-2" />
               <span>{t("labels.addUserRole", { ns: "settings" })}</span>
             </Button>
-          </div>
-          <div className="flex items-center gap-x-2 pb-4">
             <Select value={filterMode} onValueChange={setFilterMode}>
-              <SelectTrigger className="w-full md:w-[180px]">
+              <SelectTrigger className="h-9 w-full md:w-[180px]">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
