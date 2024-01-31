@@ -30,6 +30,7 @@
     "application": "Customize the application settings.",
     "systemUsers": "Configure the users that have access to the system.",
     "permissionsAndRoles": "Manage user permissions and roles within the system.",
+    "locations": "Configure the rental locations that are available for use throughout the system.",
     "runtime": "Customize and manage your application runtime configuration with ease.",
     "emailTemplates": "Configure the email templates that are used by the system.",
     "globalDocuments": "Configure the global documents available for use throughout the system.",
@@ -46,6 +47,7 @@
   "labels": {
     "allRoles": "All roles",
     "addUser": "Add user",
+    "addLocation": "Add location",
     "deleteRole": "Delete role",
     "addUserRole": "Add user role",
     "resetPassword": "Reset password",
