@@ -4,9 +4,14 @@ import { useAuth } from "react-oidc-context";
 
 import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+
 import { getAuthFromAuthHook } from "@/utils/auth";
 import { UI_APPLICATION_NAME } from "@/utils/constants";
+import { headerSharedCardBackgroundFeatureFlag } from "@/utils/features";
 import { fetchDashboardMessagesOptions } from "@/utils/query/dashboard";
+
+import { cn } from "@/utils";
 
 import { AppNavigation } from "./app-navigation";
 import { BannerNotice } from "./banner-notice";
@@ -16,6 +21,11 @@ import { UserNavigationDropdown } from "./user-navigation-dropdown";
 export const HeaderLayout = () => {
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
+
+  const [isUsingCardBackground] = useLocalStorage(
+    headerSharedCardBackgroundFeatureFlag.id,
+    headerSharedCardBackgroundFeatureFlag.default_value
+  );
 
   const messagesList = useQuery(
     fetchDashboardMessagesOptions({ auth: authParams })
@@ -36,7 +46,12 @@ export const HeaderLayout = () => {
             ))}
           </section>
         )}
-        <div className="mx-auto max-w-[1700px] px-1 md:px-5">
+        <div
+          className={cn(
+            "mx-auto max-w-[1700px] px-1 md:px-5",
+            isUsingCardBackground ? "bg-card" : "bg-background"
+          )}
+        >
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to="/">
@@ -63,7 +78,12 @@ export const HeaderLayout = () => {
           </div>
         </div>
       </header>
-      <AppNavigation className="w-full border-b bg-background shadow-sm md:sticky md:top-0 md:z-20" />
+      <AppNavigation
+        className={cn(
+          "w-full border-b bg-background shadow-sm md:sticky md:top-0 md:z-20",
+          isUsingCardBackground ? "bg-card" : "bg-background"
+        )}
+      />
     </>
   );
 };
