@@ -46,5 +46,6 @@ export const AgreementSearchQuerySchema = z.object({
   page: z.coerce.number().min(1).default(1).optional(),
   size: z.coerce.number().min(1).default(10).optional(),
   filters: AgreementFiltersSchema.optional(),
+  agreement_id: z.coerce.string().optional(),
 });
 export type TAgreementSearchQuery = z.infer<typeof AgreementSearchQuerySchema>;

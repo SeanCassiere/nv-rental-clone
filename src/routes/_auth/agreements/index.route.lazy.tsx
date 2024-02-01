@@ -25,6 +25,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
@@ -33,6 +34,7 @@ import {
   AgreementDateTimeColumns,
   sortColOrderByOrderIndex,
 } from "@/utils/columns";
+import { incompletePrimaryModuleSheetPreviewFeatureFlag } from "@/utils/features";
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
@@ -63,6 +65,11 @@ function AgreementsSearchPage() {
     queryClient,
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
+
+  const [previewModuleSheet] = useLocalStorage(
+    incompletePrimaryModuleSheetPreviewFeatureFlag.id,
+    incompletePrimaryModuleSheetPreviewFeatureFlag.default_value
+  );
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -251,6 +258,19 @@ function AgreementsSearchPage() {
             <h1 className="text-2xl font-semibold leading-6">Agreements</h1>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
+            {previewModuleSheet && (
+              <Link
+                to="/agreements"
+                search={(prev) => ({
+                  ...prev,
+                  agreement_id: "167661",
+                })}
+                className={cn(buttonVariants({ size: "sm" }), "w-max")}
+              >
+                <icons.Plus className="h-4 w-4 sm:mr-2" />
+                <span>Trigger preview agreement</span>
+              </Link>
+            )}
             <Link
               to="/agreements/new"
               search={() => ({ stage: "rental-information" })}

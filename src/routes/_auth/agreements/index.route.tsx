@@ -6,6 +6,7 @@ import { getAuthFromRouterContext } from "@/utils/auth";
 import { STORAGE_DEFAULTS } from "@/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import {
+  fetchAgreementByIdOptions,
   fetchAgreementsSearchColumnsOptions,
   fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/_auth/agreements/")({
   validateSearch: AgreementSearchQuerySchema.parse,
   preSearchFilters: [
     (search) => ({
+      agreement_id: search?.agreement_id,
       page: search?.page || 1,
       size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
       ...(search.filters ? { filters: search.filters } : {}),
@@ -23,6 +25,10 @@ export const Route = createFileRoute("/_auth/agreements/")({
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
     const parsedSearch = normalizeAgreementListSearchParams(search);
+
+    const previewViewAgreementByIdOptions = search?.agreement_id
+      ? fetchAgreementByIdOptions({ auth, agreementId: search?.agreement_id })
+      : null;
 
     return {
       authParams: auth,
@@ -41,6 +47,7 @@ export const Route = createFileRoute("/_auth/agreements/")({
         },
       }),
       search: parsedSearch,
+      previewAgreementIdOptions: previewViewAgreementByIdOptions,
     };
   },
   loaderDeps: ({ search }) => ({
@@ -49,9 +56,12 @@ export const Route = createFileRoute("/_auth/agreements/")({
     filters: sortObjectKeys(search.filters),
   }),
   loader: async ({ context }) => {
-    const { queryClient, searchColumnsOptions, searchListOptions } = context;
-
-    if (!context.auth.isAuthenticated) return;
+    const {
+      queryClient,
+      searchColumnsOptions,
+      searchListOptions,
+      previewAgreementIdOptions,
+    } = context;
 
     const promises = [];
 
@@ -60,6 +70,11 @@ export const Route = createFileRoute("/_auth/agreements/")({
 
     // get list
     promises.push(queryClient.ensureQueryData(searchListOptions));
+
+    // get preview agreement
+    if (previewAgreementIdOptions) {
+      promises.push(queryClient.ensureQueryData(previewAgreementIdOptions));
+    }
 
     await Promise.all(promises);
     return;
