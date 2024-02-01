@@ -39,6 +39,7 @@ import {
   MoonIcon,
   MoreVerticalIcon,
   MoveDownLeftIcon,
+  MoveUpRightIcon,
   PencilIcon,
   PlayIcon,
   PlusCircleIcon,
@@ -123,4 +124,5 @@ export const icons = {
   Sheet: SheetIcon,
   User: User2Icon,
   Users: Users2Icon,
+  GoTo: MoveUpRightIcon,
 } as const;

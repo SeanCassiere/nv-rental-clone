@@ -17,12 +17,19 @@ import { useTranslation } from "react-i18next";
 
 import {
   PrimaryModuleTable,
-  PrimaryModuleTableCellWrap,
   PrimaryModuleTableColumnHeader,
 } from "@/components/primary-module/table";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -55,8 +62,9 @@ const routeApi = getRouteApi("/_auth/agreements/");
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/agreements" });
 
+  const routeSearch = routeApi.useSearch();
   const {
     searchColumnsOptions,
     searchListOptions,
@@ -66,6 +74,18 @@ function AgreementsSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
+  const previewAgreementId = routeSearch?.agreement_id;
+  const handleClosePreview = useCallback(
+    (open: boolean) => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          agreement_id: open ? previewAgreementId : undefined,
+        }),
+      });
+    },
+    [previewAgreementId, navigate]
+  );
   const [previewModuleSheet] = useLocalStorage(
     incompletePrimaryModuleSheetPreviewFeatureFlag.id,
     incompletePrimaryModuleSheetPreviewFeatureFlag.default_value
@@ -141,11 +161,43 @@ function AgreementsSearchPage() {
             ),
             cell: (item) => {
               const value = item.getValue();
+
               if (column.columnHeader === "AgreementNumber") {
                 const agreementId = item.table.getRow(item.row.id).original
                   .AgreementId;
-                return (
-                  <PrimaryModuleTableCellWrap>
+
+                return previewModuleSheet ? (
+                  <span className="flex items-center justify-start gap-x-4">
+                    <Link
+                      to="/agreements/$agreementId"
+                      params={{ agreementId: String(agreementId) }}
+                      search={() => ({ tab: "summary" })}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "group p-0"
+                      )}
+                    >
+                      <icons.GoTo className="h-4 w-4 border-b-2 border-transparent group-hover:border-primary" />
+                      <span className="sr-only">
+                        View the full agreement for agreement id {agreementId}
+                      </span>
+                    </Link>
+                    <Link
+                      to="/agreements"
+                      search={(prev) => ({
+                        ...prev,
+                        agreement_id: String(agreementId),
+                      })}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "p-0 text-base"
+                      )}
+                    >
+                      {value || "-"}
+                    </Link>
+                  </span>
+                ) : (
+                  <>
                     <Link
                       to="/agreements/$agreementId"
                       params={{ agreementId: String(agreementId) }}
@@ -157,35 +209,25 @@ function AgreementsSearchPage() {
                     >
                       {value || "-"}
                     </Link>
-                  </PrimaryModuleTableCellWrap>
+                  </>
                 );
               }
               if (column.columnHeader === "AgreementStatusName") {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    <Badge variant="outline">{String(value)}</Badge>
-                  </PrimaryModuleTableCellWrap>
-                );
+                return <Badge variant="outline">{String(value)}</Badge>;
               }
               if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    {t("intlDateTime", {
-                      value: new Date(value),
-                      ns: "format",
-                    })}
-                  </PrimaryModuleTableCellWrap>
-                );
+                return t("intlDateTime", {
+                  value: new Date(value),
+                  ns: "format",
+                });
               }
-              return (
-                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-              );
+              return value ?? "-";
             },
             enableSorting: false,
             enableHiding: column.columnHeader !== "AgreementNumber",
           })
         ),
-    [columnsData.data, t]
+    [columnsData.data.body, columnsData.data.status, previewModuleSheet, t]
   );
 
   const saveColumnsMutation = useMutation({
@@ -244,6 +286,18 @@ function AgreementsSearchPage() {
 
   return (
     <>
+      <Sheet open={!!previewAgreementId} onOpenChange={handleClosePreview}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Are you absolutely sure?</SheetTitle>
+            <SheetDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
+
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"

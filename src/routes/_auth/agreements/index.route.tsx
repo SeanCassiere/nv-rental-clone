@@ -54,6 +54,7 @@ export const Route = createFileRoute("/_auth/agreements/")({
     page: search.page,
     size: search.size,
     filters: sortObjectKeys(search.filters),
+    agreement_id: search?.agreement_id ?? "",
   }),
   loader: async ({ context }) => {
     const {
