@@ -95,6 +95,7 @@ export const AppNavigation = (props: Props) => {
         to: "/agreements",
         search: (current) => ({
           ...current,
+          agreement_id: undefined,
           page: 1,
           size: tableRowCount,
           filters: undefined,

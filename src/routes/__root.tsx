@@ -30,7 +30,7 @@ function RootComponent() {
     <React.Fragment>
       <Outlet />
       <FeatureTogglesDialog />
-      <RouterDevTools position="top-right" />
+      <RouterDevTools position="bottom-left" />
     </React.Fragment>
   );
 }

@@ -28,7 +28,7 @@ export type FeatureFlag =
 export type FeatureFlags<TFlag = FeatureFlag> = TFlag[];
 
 // Features START
-export const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
+const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
   id: "experimental_dashboard.layout",
   name: "Dashboard layout",
   description:
@@ -37,7 +37,15 @@ export const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
   default_value: "v1",
   options: ["v1", "v2"],
 } as const;
-export const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
+const experimentalPrimaryModuleSheetPreviewFeatureFlag: SwitchFeatureFlag = {
+  id: "experimental_primaryModule.sheet.preview",
+  name: "Primary module sheet preview",
+  description:
+    "Toggle this feature to view a preview of the pages in the primary modules (e.g. Customers, Fleet, Reservations, and Agreements) when clicking their links on the search pages.",
+  input_type: "switch",
+  default_value: false,
+} as const;
+const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   id: "incomplete_all.settings.navigation",
   name: "Incomplete settings navigation",
   description:
@@ -45,7 +53,7 @@ export const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   input_type: "switch",
   default_value: false,
 } as const;
-export const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
+const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
   id: "incomplete_application.settings.all",
   name: "All incomplete application settings tabs",
   description:
@@ -53,10 +61,10 @@ export const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
   input_type: "switch",
   default_value: false,
 } as const;
-export const incompleteLocationsApplicationSettingsTabFeatureFlag: SwitchFeatureFlag =
+const incompleteLocationsApplicationSettingsTabFeatureFlag: SwitchFeatureFlag =
   {
     id: "incomplete_application.settings.locations",
-    name: "Incomplete locations application settings tab",
+    name: "Unfinished locations application settings tab",
     description:
       "Toggle this feature to enable the incomplete locations application settings tab, which will display a list of settings panels that are incomplete provided your account has access to them.",
     input_type: "switch",
@@ -64,9 +72,19 @@ export const incompleteLocationsApplicationSettingsTabFeatureFlag: SwitchFeature
   } as const;
 // Features END
 
-export const featureFlags: FeatureFlags = [
+const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
+  experimentalPrimaryModuleSheetPreviewFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
   incompleteLocationsApplicationSettingsTabFeatureFlag,
 ] as const;
+
+export {
+  featureFlags, // the array of all the feature flags
+  dashboardLayoutFeatureFlag,
+  incompleteSettingsNavigationFeatureFlag,
+  incompleteApplicationSettingsTabsFeatureFlag,
+  incompleteLocationsApplicationSettingsTabFeatureFlag,
+  experimentalPrimaryModuleSheetPreviewFeatureFlag,
+};

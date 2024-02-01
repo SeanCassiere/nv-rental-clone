@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 
 import {
   PrimaryModuleTable,
-  PrimaryModuleTableCellWrap,
   PrimaryModuleTableColumnHeader,
 } from "@/components/primary-module/table";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +24,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
@@ -33,6 +33,7 @@ import {
   AgreementDateTimeColumns,
   sortColOrderByOrderIndex,
 } from "@/utils/columns";
+import { experimentalPrimaryModuleSheetPreviewFeatureFlag } from "@/utils/features";
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
@@ -47,14 +48,19 @@ export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,
 });
 
+const PreviewAgreementSheet = React.lazy(
+  () => import("./-components/preview-agreement-sheet")
+);
+
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
 const routeApi = getRouteApi("/_auth/agreements/");
 
 function AgreementsSearchPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: "/agreements" });
 
+  const routeSearch = routeApi.useSearch();
   const {
     searchColumnsOptions,
     searchListOptions,
@@ -63,6 +69,23 @@ function AgreementsSearchPage() {
     queryClient,
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
+
+  const previewAgreementId = routeSearch?.agreement_id;
+  const handleClosePreview = useCallback(
+    (open: boolean) => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          agreement_id: open ? previewAgreementId : undefined,
+        }),
+      });
+    },
+    [previewAgreementId, navigate]
+  );
+  const [isPreviewModuleSheetFeatureEnabled] = useLocalStorage(
+    experimentalPrimaryModuleSheetPreviewFeatureFlag.id,
+    experimentalPrimaryModuleSheetPreviewFeatureFlag.default_value
+  );
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
 
@@ -134,11 +157,43 @@ function AgreementsSearchPage() {
             ),
             cell: (item) => {
               const value = item.getValue();
+
               if (column.columnHeader === "AgreementNumber") {
                 const agreementId = item.table.getRow(item.row.id).original
                   .AgreementId;
-                return (
-                  <PrimaryModuleTableCellWrap>
+
+                return isPreviewModuleSheetFeatureEnabled ? (
+                  <span className="flex items-center justify-start gap-x-4">
+                    <Link
+                      to="/agreements/$agreementId"
+                      params={{ agreementId: String(agreementId) }}
+                      search={() => ({ tab: "summary" })}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "group px-2 py-2"
+                      )}
+                    >
+                      <icons.GoTo className="h-4 w-4 border-b-2 border-transparent group-hover:border-primary" />
+                      <span className="sr-only">
+                        View the full agreement for agreement id {agreementId}
+                      </span>
+                    </Link>
+                    <Link
+                      to="/agreements"
+                      search={(prev) => ({
+                        ...prev,
+                        agreement_id: String(agreementId),
+                      })}
+                      className={cn(
+                        buttonVariants({ variant: "link" }),
+                        "p-0 text-base"
+                      )}
+                    >
+                      {value || "-"}
+                    </Link>
+                  </span>
+                ) : (
+                  <>
                     <Link
                       to="/agreements/$agreementId"
                       params={{ agreementId: String(agreementId) }}
@@ -150,35 +205,30 @@ function AgreementsSearchPage() {
                     >
                       {value || "-"}
                     </Link>
-                  </PrimaryModuleTableCellWrap>
+                  </>
                 );
               }
               if (column.columnHeader === "AgreementStatusName") {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    <Badge variant="outline">{String(value)}</Badge>
-                  </PrimaryModuleTableCellWrap>
-                );
+                return <Badge variant="outline">{String(value)}</Badge>;
               }
               if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    {t("intlDateTime", {
-                      value: new Date(value),
-                      ns: "format",
-                    })}
-                  </PrimaryModuleTableCellWrap>
-                );
+                return t("intlDateTime", {
+                  value: new Date(value),
+                  ns: "format",
+                });
               }
-              return (
-                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-              );
+              return value ?? "-";
             },
             enableSorting: false,
             enableHiding: column.columnHeader !== "AgreementNumber",
           })
         ),
-    [columnsData.data, t]
+    [
+      columnsData.data.body,
+      columnsData.data.status,
+      isPreviewModuleSheetFeatureEnabled,
+      t,
+    ]
   );
 
   const saveColumnsMutation = useMutation({
@@ -237,6 +287,17 @@ function AgreementsSearchPage() {
 
   return (
     <>
+      <React.Suspense fallback={null}>
+        {isPreviewModuleSheetFeatureEnabled ? (
+          <PreviewAgreementSheet
+            agreementId={previewAgreementId}
+            open={!!previewAgreementId}
+            onOpenChange={handleClosePreview}
+            auth={authParams}
+          />
+        ) : null}
+      </React.Suspense>
+
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"

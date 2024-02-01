@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_auth/agreements/")({
   validateSearch: AgreementSearchQuerySchema.parse,
   preSearchFilters: [
     (search) => ({
+      agreement_id: search?.agreement_id,
       page: search?.page || 1,
       size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
       ...(search.filters ? { filters: search.filters } : {}),
@@ -47,11 +48,10 @@ export const Route = createFileRoute("/_auth/agreements/")({
     page: search.page,
     size: search.size,
     filters: sortObjectKeys(search.filters),
+    agreement_id: search?.agreement_id ?? "",
   }),
   loader: async ({ context }) => {
     const { queryClient, searchColumnsOptions, searchListOptions } = context;
-
-    if (!context.auth.isAuthenticated) return;
 
     const promises = [];
 
