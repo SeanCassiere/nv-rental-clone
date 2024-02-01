@@ -37,14 +37,6 @@ export const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
   default_value: "v1",
   options: ["v1", "v2"],
 } as const;
-export const headerSharedCardBackgroundFeatureFlag: SwitchFeatureFlag = {
-  id: "experimental_app.header.cardBackground",
-  name: "Application header uses the card background",
-  description:
-    "Toggle this feature to enable the use of the card background on the application header.",
-  input_type: "switch",
-  default_value: false,
-} as const;
 export const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   id: "incomplete_all.settings.navigation",
   name: "Incomplete settings navigation",
@@ -74,7 +66,6 @@ export const incompleteLocationsApplicationSettingsTabFeatureFlag: SwitchFeature
 
 export const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
-  headerSharedCardBackgroundFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
   incompleteLocationsApplicationSettingsTabFeatureFlag,
