@@ -33,7 +33,7 @@ import {
   AgreementDateTimeColumns,
   sortColOrderByOrderIndex,
 } from "@/utils/columns";
-import { incompletePrimaryModuleSheetPreviewFeatureFlag } from "@/utils/features";
+import { experimentalPrimaryModuleSheetPreviewFeatureFlag } from "@/utils/features";
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
@@ -82,9 +82,9 @@ function AgreementsSearchPage() {
     },
     [previewAgreementId, navigate]
   );
-  const [previewModuleSheet] = useLocalStorage(
-    incompletePrimaryModuleSheetPreviewFeatureFlag.id,
-    incompletePrimaryModuleSheetPreviewFeatureFlag.default_value
+  const [isPreviewModuleSheetFeatureEnabled] = useLocalStorage(
+    experimentalPrimaryModuleSheetPreviewFeatureFlag.id,
+    experimentalPrimaryModuleSheetPreviewFeatureFlag.default_value
   );
 
   const [_trackTableLoading, _setTrackTableLoading] = useState(false);
@@ -162,7 +162,7 @@ function AgreementsSearchPage() {
                 const agreementId = item.table.getRow(item.row.id).original
                   .AgreementId;
 
-                return previewModuleSheet ? (
+                return isPreviewModuleSheetFeatureEnabled ? (
                   <span className="flex items-center justify-start gap-x-4">
                     <Link
                       to="/agreements/$agreementId"
@@ -223,7 +223,12 @@ function AgreementsSearchPage() {
             enableHiding: column.columnHeader !== "AgreementNumber",
           })
         ),
-    [columnsData.data.body, columnsData.data.status, previewModuleSheet, t]
+    [
+      columnsData.data.body,
+      columnsData.data.status,
+      isPreviewModuleSheetFeatureEnabled,
+      t,
+    ]
   );
 
   const saveColumnsMutation = useMutation({
@@ -283,7 +288,7 @@ function AgreementsSearchPage() {
   return (
     <>
       <React.Suspense fallback={null}>
-        {previewModuleSheet ? (
+        {isPreviewModuleSheetFeatureEnabled ? (
           <PreviewAgreementSheet
             agreementId={previewAgreementId}
             open={!!previewAgreementId}
