@@ -1,7 +1,7 @@
 import React from "react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { format } from "date-fns";
+import { format } from "date-fns/format";
 
 import {
   PrimaryModulePreviewSheet,
@@ -18,9 +18,11 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDatePreference } from "@/hooks/useDatePreferences";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
 import type { Auth } from "@/utils/query/helpers";
+import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
@@ -57,8 +59,8 @@ function AgreementLinks(props: {
           "h-4 gap-1 p-0 text-sm opacity-75 hover:opacity-100"
         )}
       >
-        <icons.GoTo className="h-3.5 w-3.5" />
-        <span>View</span>
+        <icons.AltMaximize className="h-3.5 w-3.5" />
+        <span>Expand</span>
       </Link>
       {!isCheckedIn && (
         <Link
@@ -144,6 +146,11 @@ function AgreementSheetContent(props: AgreementSheetContentProps) {
       ? query.data.body
       : null;
 
+  useDocumentTitle(
+    titleMaker((data?.agreementNumber || "Loading") + " - Agreements"),
+    { preserveTitleOnUnmount: false }
+  );
+
   if (!data) {
     return <AgreementSheetSkeleton agreementId={agreementId} />;
   }
@@ -153,60 +160,6 @@ function AgreementSheetContent(props: AgreementSheetContentProps) {
   return (
     <>
       <AgreementLinks agreementId={agreementId} isCheckedIn={isCheckedIn} />
-      <div className="absolute left-4 top-4 flex gap-4 pl-2">
-        <Link
-          to="/agreements/$agreementId"
-          params={{ agreementId: String(agreementId) }}
-          className={cn(
-            buttonVariants({ variant: "link", size: "sm" }),
-            "h-4 gap-1 p-0 text-sm opacity-75 hover:opacity-100"
-          )}
-        >
-          <icons.GoTo className="h-3.5 w-3.5" />
-          <span>View</span>
-        </Link>
-        {!isCheckedIn && (
-          <Link
-            to="/agreements/$agreementId/check-in"
-            search={() => ({ stage: "rental-information" })}
-            params={{ agreementId: String(agreementId) }}
-            className={cn(
-              buttonVariants({ variant: "link", size: "sm" }),
-              "h-4 gap-1 p-0 text-sm opacity-75 hover:opacity-100"
-            )}
-          >
-            <icons.Checkin className="h-3.5 w-3.5" />
-            <span className="inline-block">Checkin</span>
-          </Link>
-        )}
-        {isCheckedIn ? (
-          <Link
-            to="/agreements/$agreementId/check-in"
-            search={() => ({ stage: "rental-information" })}
-            params={{ agreementId: String(agreementId) }}
-            className={cn(
-              buttonVariants({ variant: "link", size: "sm" }),
-              "h-4 gap-1 p-0 text-sm opacity-75 hover:opacity-100"
-            )}
-          >
-            <icons.Edit className="h-3.5 w-3.5" />
-            <span className="inline-block">Edit</span>
-          </Link>
-        ) : (
-          <Link
-            to="/agreements/$agreementId/edit"
-            search={() => ({ stage: "rental-information" })}
-            params={{ agreementId: String(agreementId) }}
-            className={cn(
-              buttonVariants({ variant: "link", size: "sm" }),
-              "h-4 gap-1 p-0 text-sm opacity-75 hover:opacity-100"
-            )}
-          >
-            <icons.Edit className="h-3.5 w-3.5" />
-            <span className="inline-block">Edit</span>
-          </Link>
-        )}
-      </div>
       <SheetHeader className="mt-8 text-start">
         <SheetTitle className="h-9 text-3xl">{data.agreementNumber}</SheetTitle>
         <SheetDescription className="h-6">

@@ -163,21 +163,7 @@ function AgreementsSearchPage() {
                   .AgreementId;
 
                 return isPreviewModuleSheetFeatureEnabled ? (
-                  <span className="flex items-center justify-start gap-x-4">
-                    <Link
-                      to="/agreements/$agreementId"
-                      params={{ agreementId: String(agreementId) }}
-                      search={() => ({ tab: "summary" })}
-                      className={cn(
-                        buttonVariants({ variant: "link" }),
-                        "group px-2 py-2"
-                      )}
-                    >
-                      <icons.GoTo className="h-4 w-4 border-b-2 border-transparent group-hover:border-primary" />
-                      <span className="sr-only">
-                        View the full agreement for agreement id {agreementId}
-                      </span>
-                    </Link>
+                  <>
                     <Link
                       to="/agreements"
                       search={(prev) => ({
@@ -191,7 +177,7 @@ function AgreementsSearchPage() {
                     >
                       {value || "-"}
                     </Link>
-                  </span>
+                  </>
                 ) : (
                   <>
                     <Link
