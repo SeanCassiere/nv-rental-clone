@@ -6,7 +6,6 @@ import { getAuthFromRouterContext } from "@/utils/auth";
 import { STORAGE_DEFAULTS } from "@/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
 import {
-  fetchAgreementByIdOptions,
   fetchAgreementsSearchColumnsOptions,
   fetchAgreementsSearchListOptions,
 } from "@/utils/query/agreement";
@@ -26,10 +25,6 @@ export const Route = createFileRoute("/_auth/agreements/")({
     const auth = getAuthFromRouterContext(context);
     const parsedSearch = normalizeAgreementListSearchParams(search);
 
-    const previewViewAgreementByIdOptions = search?.agreement_id
-      ? fetchAgreementByIdOptions({ auth, agreementId: search?.agreement_id })
-      : null;
-
     return {
       authParams: auth,
       searchColumnsOptions: fetchAgreementsSearchColumnsOptions({
@@ -47,7 +42,6 @@ export const Route = createFileRoute("/_auth/agreements/")({
         },
       }),
       search: parsedSearch,
-      previewAgreementIdOptions: previewViewAgreementByIdOptions,
     };
   },
   loaderDeps: ({ search }) => ({
@@ -57,12 +51,7 @@ export const Route = createFileRoute("/_auth/agreements/")({
     agreement_id: search?.agreement_id ?? "",
   }),
   loader: async ({ context }) => {
-    const {
-      queryClient,
-      searchColumnsOptions,
-      searchListOptions,
-      previewAgreementIdOptions,
-    } = context;
+    const { queryClient, searchColumnsOptions, searchListOptions } = context;
 
     const promises = [];
 
@@ -71,11 +60,6 @@ export const Route = createFileRoute("/_auth/agreements/")({
 
     // get list
     promises.push(queryClient.ensureQueryData(searchListOptions));
-
-    // get preview agreement
-    if (previewAgreementIdOptions) {
-      promises.push(queryClient.ensureQueryData(previewAgreementIdOptions));
-    }
 
     await Promise.all(promises);
     return;
