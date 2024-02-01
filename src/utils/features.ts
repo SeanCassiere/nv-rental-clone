@@ -37,6 +37,14 @@ const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
   default_value: "v1",
   options: ["v1", "v2"],
 } as const;
+const incompletePrimaryModuleSheetPreviewFeatureFlag: SwitchFeatureFlag = {
+  id: "incomplete_primaryModule.sheet.preview",
+  name: "Primary module sheet preview",
+  description:
+    "Toggle this feature to view a preview of the pages in the primary modules (e.g. Customers, Fleet, Reservations, and Agreements) when clicking their links on the search pages.",
+  input_type: "switch",
+  default_value: false,
+} as const;
 const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   id: "incomplete_all.settings.navigation",
   name: "Incomplete settings navigation",
@@ -77,4 +85,5 @@ export {
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
   incompleteLocationsApplicationSettingsTabFeatureFlag,
+  incompletePrimaryModuleSheetPreviewFeatureFlag,
 };
