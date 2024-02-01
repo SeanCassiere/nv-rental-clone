@@ -30,7 +30,7 @@ interface PreviewAgreementSheetProps extends Auth {
   onOpenChange: PrimaryModulePreviewSheetProps["onOpenChange"];
 }
 
-export function PreviewAgreementSheet(props: PreviewAgreementSheetProps) {
+function PreviewAgreementSheet(props: PreviewAgreementSheetProps) {
   const { open, onOpenChange } = props;
 
   return (
@@ -40,6 +40,7 @@ export function PreviewAgreementSheet(props: PreviewAgreementSheetProps) {
     </PrimaryModulePreviewSheet>
   );
 }
+export default PreviewAgreementSheet;
 
 function AgreementLinks(props: {
   agreementId: string | undefined;

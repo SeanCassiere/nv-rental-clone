@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -44,11 +44,13 @@ import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
 
-import { PreviewAgreementSheet } from "./-components/preview-agreement-sheet";
-
 export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,
 });
+
+const PreviewAgreementSheet = React.lazy(
+  () => import("./-components/preview-agreement-sheet")
+);
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -280,12 +282,16 @@ function AgreementsSearchPage() {
 
   return (
     <>
-      <PreviewAgreementSheet
-        agreementId={previewAgreementId}
-        open={!!previewAgreementId}
-        onOpenChange={handleClosePreview}
-        auth={authParams}
-      />
+      <React.Suspense fallback={null}>
+        {previewModuleSheet ? (
+          <PreviewAgreementSheet
+            agreementId={previewAgreementId}
+            open={!!previewAgreementId}
+            onOpenChange={handleClosePreview}
+            auth={authParams}
+          />
+        ) : null}
+      </React.Suspense>
 
       <section
         className={cn(
