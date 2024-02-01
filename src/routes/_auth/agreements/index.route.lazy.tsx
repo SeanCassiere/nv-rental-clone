@@ -22,14 +22,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -51,6 +43,8 @@ import { fetchVehiclesTypesOptions } from "@/utils/query/vehicle";
 import { titleMaker } from "@/utils/title-maker";
 
 import { cn, getXPaginationFromHeaders } from "@/utils";
+
+import { PreviewAgreementSheet } from "./-components/preview-agreement-sheet";
 
 export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,
@@ -286,17 +280,12 @@ function AgreementsSearchPage() {
 
   return (
     <>
-      <Sheet open={!!previewAgreementId} onOpenChange={handleClosePreview}>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Are you absolutely sure?</SheetTitle>
-            <SheetDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </SheetDescription>
-          </SheetHeader>
-        </SheetContent>
-      </Sheet>
+      <PreviewAgreementSheet
+        agreementId={previewAgreementId}
+        open={!!previewAgreementId}
+        onOpenChange={handleClosePreview}
+        auth={authParams}
+      />
 
       <section
         className={cn(
@@ -312,19 +301,6 @@ function AgreementsSearchPage() {
             <h1 className="text-2xl font-semibold leading-6">Agreements</h1>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
-            {previewModuleSheet && (
-              <Link
-                to="/agreements"
-                search={(prev) => ({
-                  ...prev,
-                  agreement_id: "167661",
-                })}
-                className={cn(buttonVariants({ size: "sm" }), "w-max")}
-              >
-                <icons.Plus className="h-4 w-4 sm:mr-2" />
-                <span>Trigger preview agreement</span>
-              </Link>
-            )}
             <Link
               to="/agreements/new"
               search={() => ({ stage: "rental-information" })}
