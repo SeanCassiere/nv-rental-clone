@@ -74,6 +74,7 @@ const incompleteLocationsApplicationSettingsTabFeatureFlag: SwitchFeatureFlag =
 
 const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
+  incompletePrimaryModuleSheetPreviewFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
   incompleteLocationsApplicationSettingsTabFeatureFlag,
