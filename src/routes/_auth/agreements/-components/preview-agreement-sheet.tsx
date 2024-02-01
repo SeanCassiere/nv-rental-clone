@@ -173,8 +173,17 @@ function AgreementSheetContent(props: AgreementSheetContentProps) {
           </span>
         </SheetDescription>
       </SheetHeader>
-      <div className="mt-4 flex flex-col space-y-2">
+      <div className="mt-4 flex h-[calc(100dvh-11rem)] flex-col space-y-2 overflow-y-hidden">
         <Separator />
+        <div className="flex flex-col gap-2 overflow-y-auto">
+          <p className="block">Content goes here</p>
+          {[...Array(75)].map((_, i) => (
+            <div key={i} className={cn("h-8 w-full shrink-0")}>
+              {JSON.stringify(i + 1)}
+            </div>
+          ))}
+          <p className="block">End of content</p>
+        </div>
       </div>
     </>
   );

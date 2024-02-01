@@ -27,7 +27,7 @@ export function PrimaryModulePreviewSheet(
       <SheetContent
         side="right"
         className={cn(
-          "bottom-2 right-2 top-2 h-auto w-5/6 rounded-lg border bg-card shadow-xl sm:bottom-2.5 sm:right-2.5 sm:top-2.5 sm:max-w-lg",
+          "bottom-2 right-2 top-2 h-auto w-11/12 rounded-lg border bg-card shadow-xl sm:bottom-2.5 sm:right-2.5 sm:top-2.5 sm:max-w-lg",
           className
         )}
         noBackdrop
