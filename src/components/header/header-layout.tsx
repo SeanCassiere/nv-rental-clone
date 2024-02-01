@@ -27,7 +27,7 @@ export const HeaderLayout = () => {
   return (
     <>
       <HiddenFeatureSetter />
-      <header>
+      <header className="bg-card">
         {messages.length > 0 && (
           <section className="grid w-full divide-y divide-bannerPromo-foreground/80 bg-bannerPromo">
             {messages.map((notice) => (
@@ -38,7 +38,7 @@ export const HeaderLayout = () => {
             ))}
           </section>
         )}
-        <div className={cn("mx-auto max-w-[1700px] bg-card px-1 md:px-5")}>
+        <div className={cn("mx-auto max-w-[1700px] px-1 md:px-5")}>
           <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to="/">
