@@ -174,7 +174,7 @@ function AgreementsSearchPage() {
                       search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
-                        "group p-0"
+                        "group px-2 py-2"
                       )}
                     >
                       <icons.GoTo className="h-4 w-4 border-b-2 border-transparent group-hover:border-primary" />

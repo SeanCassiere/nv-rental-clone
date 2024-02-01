@@ -74,7 +74,7 @@ export default function App() {
           <ReactQueryDevtools
             initialIsOpen={false}
             position="bottom"
-            buttonPosition="bottom-left"
+            buttonPosition="top-left"
           />
           <TailwindScreenDevTool />
         </AuthProvider>
