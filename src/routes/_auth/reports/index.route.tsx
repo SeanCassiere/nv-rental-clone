@@ -5,9 +5,12 @@ import { getAuthFromRouterContext } from "@/utils/auth";
 import { fetchReportsListOptions } from "@/utils/query/report";
 
 export const Route = createFileRoute("/_auth/reports/")({
-  validateSearch: z.object({
-    category: z.string().optional(),
-  }),
+  validateSearch: (search) =>
+    z
+      .object({
+        category: z.string().default("all").catch("all").optional(),
+      })
+      .parse(search),
   preSearchFilters: [(curr) => ({ category: curr?.category })],
   beforeLoad: ({ context }) => {
     const auth = getAuthFromRouterContext(context);
