@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -24,7 +24,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
@@ -33,7 +32,6 @@ import {
   AgreementDateTimeColumns,
   sortColOrderByOrderIndex,
 } from "@/utils/columns";
-import { experimentalPrimaryModuleSheetPreviewFeatureFlag } from "@/utils/features";
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
@@ -48,10 +46,6 @@ export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,
 });
 
-const PreviewAgreementSheet = React.lazy(
-  () => import("./-components/preview-agreement-sheet")
-);
-
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
 const routeApi = getRouteApi("/_auth/agreements/");
@@ -60,7 +54,6 @@ function AgreementsSearchPage() {
   const { t } = useTranslation();
   const navigate = useNavigate({ from: "/agreements" });
 
-  const routeSearch = routeApi.useSearch();
   const {
     searchColumnsOptions,
     searchListOptions,
@@ -70,24 +63,7 @@ function AgreementsSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const previewAgreementId = routeSearch?.agreement_id;
-  const handleClosePreview = useCallback(
-    (open: boolean) => {
-      navigate({
-        search: (prev) => ({
-          ...prev,
-          agreement_id: open ? previewAgreementId : undefined,
-        }),
-      });
-    },
-    [previewAgreementId, navigate]
-  );
-  const [isPreviewModuleSheetFeatureEnabled] = useLocalStorage(
-    experimentalPrimaryModuleSheetPreviewFeatureFlag.id,
-    experimentalPrimaryModuleSheetPreviewFeatureFlag.default_value
-  );
-
-  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+  const [_trackTableLoading, _setTrackTableLoading] = React.useState(false);
 
   const startChangingPage = () => {
     _setTrackTableLoading(true);
@@ -96,14 +72,15 @@ function AgreementsSearchPage() {
     _setTrackTableLoading(false);
   };
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
-    Object.entries(searchFilters).reduce(
-      (prev, [key, value]) => [...prev, { id: key, value }],
-      [] as ColumnFiltersState
-    )
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    () =>
+      Object.entries(searchFilters).reduce(
+        (prev, [key, value]) => [...prev, { id: key, value }],
+        [] as ColumnFiltersState
+      )
   );
 
-  const pagination: PaginationState = useMemo(
+  const pagination: PaginationState = React.useMemo(
     () => ({
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
@@ -139,7 +116,7 @@ function AgreementsSearchPage() {
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 
-  const columnDefs = useMemo(
+  const columnDefs = React.useMemo(
     () =>
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
@@ -162,23 +139,7 @@ function AgreementsSearchPage() {
                 const agreementId = item.table.getRow(item.row.id).original
                   .AgreementId;
 
-                return isPreviewModuleSheetFeatureEnabled ? (
-                  <>
-                    <Link
-                      to="/agreements"
-                      search={(prev) => ({
-                        ...prev,
-                        agreement_id: String(agreementId),
-                      })}
-                      className={cn(
-                        buttonVariants({ variant: "link" }),
-                        "p-0 text-base"
-                      )}
-                    >
-                      {value || "-"}
-                    </Link>
-                  </>
-                ) : (
+                return (
                   <>
                     <Link
                       to="/agreements/$agreementId"
@@ -209,12 +170,7 @@ function AgreementsSearchPage() {
             enableHiding: column.columnHeader !== "AgreementNumber",
           })
         ),
-    [
-      columnsData.data.body,
-      columnsData.data.status,
-      isPreviewModuleSheetFeatureEnabled,
-      t,
-    ]
+    [columnsData.data.body, columnsData.data.status, t]
   );
 
   const saveColumnsMutation = useMutation({
@@ -231,7 +187,7 @@ function AgreementsSearchPage() {
       }),
   });
 
-  const handleSaveColumnsOrder = useCallback(
+  const handleSaveColumnsOrder = React.useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
@@ -244,7 +200,7 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const handleSaveColumnVisibility = useCallback(
+  const handleSaveColumnVisibility = React.useCallback(
     (graph: VisibilityState) => {
       const newColumnsData = (
         columnsData.data.status === 200 ? columnsData.data.body : []
@@ -273,17 +229,6 @@ function AgreementsSearchPage() {
 
   return (
     <>
-      <React.Suspense fallback={null}>
-        {isPreviewModuleSheetFeatureEnabled ? (
-          <PreviewAgreementSheet
-            agreementId={previewAgreementId}
-            open={!!previewAgreementId}
-            onOpenChange={handleClosePreview}
-            auth={authParams}
-          />
-        ) : null}
-      </React.Suspense>
-
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
