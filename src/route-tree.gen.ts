@@ -16,8 +16,8 @@ import { Route as AuthReportsRouteImport } from "./routes/_auth/reports/route"
 import { Route as AuthFleetRouteImport } from "./routes/_auth/fleet/route"
 import { Route as AuthCustomersRouteImport } from "./routes/_auth/customers/route"
 import { Route as AuthAgreementsRouteImport } from "./routes/_auth/agreements/route"
+import { Route as AuthReportsIndexImport } from "./routes/_auth/reports/index"
 import { Route as AuthReservationsIndexRouteImport } from "./routes/_auth/reservations/index.route"
-import { Route as AuthReportsIndexRouteImport } from "./routes/_auth/reports/index.route"
 import { Route as AuthFleetIndexRouteImport } from "./routes/_auth/fleet/index.route"
 import { Route as AuthCustomersIndexRouteImport } from "./routes/_auth/customers/index.route"
 import { Route as AuthAgreementsIndexRouteImport } from "./routes/_auth/agreements/index.route"
@@ -35,8 +35,8 @@ import { Route as AuthCustomersNewRouteImport } from "./routes/_auth/customers/n
 import { Route as AuthCustomersCustomerIdRouteImport } from "./routes/_auth/customers/$customerId/route"
 import { Route as AuthAgreementsNewRouteImport } from "./routes/_auth/agreements/new.route"
 import { Route as AuthAgreementsAgreementIdRouteImport } from "./routes/_auth/agreements/$agreementId/route"
+import { Route as AuthReportsReportIdIndexImport } from "./routes/_auth/reports/$reportId/index"
 import { Route as AuthReservationsReservationIdIndexRouteImport } from "./routes/_auth/reservations/$reservationId/index.route"
-import { Route as AuthReportsReportIdIndexRouteImport } from "./routes/_auth/reports/$reportId/index.route"
 import { Route as AuthFleetVehicleIdIndexRouteImport } from "./routes/_auth/fleet/$vehicleId/index.route"
 import { Route as AuthCustomersCustomerIdIndexRouteImport } from "./routes/_auth/customers/$customerId/index.route"
 import { Route as AuthAgreementsAgreementIdIndexRouteImport } from "./routes/_auth/agreements/$agreementId/index.route"
@@ -137,6 +137,13 @@ const AuthSettingsIndexLazyRoute = AuthSettingsIndexLazyImport.update({
   import("./routes/_auth/settings/index.lazy").then((d) => d.Route),
 )
 
+const AuthReportsIndexRoute = AuthReportsIndexImport.update({
+  path: "/",
+  getParentRoute: () => AuthReportsRouteRoute,
+} as any).lazy(() =>
+  import("./routes/_auth/reports/index.lazy").then((d) => d.Route),
+)
+
 const AuthReservationsIndexRouteRoute = AuthReservationsIndexRouteImport.update(
   {
     path: "/",
@@ -144,13 +151,6 @@ const AuthReservationsIndexRouteRoute = AuthReservationsIndexRouteImport.update(
   } as any,
 ).lazy(() =>
   import("./routes/_auth/reservations/index.route.lazy").then((d) => d.Route),
-)
-
-const AuthReportsIndexRouteRoute = AuthReportsIndexRouteImport.update({
-  path: "/",
-  getParentRoute: () => AuthReportsRouteRoute,
-} as any).lazy(() =>
-  import("./routes/_auth/reports/index.route.lazy").then((d) => d.Route),
 )
 
 const AuthFleetIndexRouteRoute = AuthFleetIndexRouteImport.update({
@@ -287,22 +287,19 @@ const AuthSettingsApplicationIndexLazyRoute =
     ),
   )
 
+const AuthReportsReportIdIndexRoute = AuthReportsReportIdIndexImport.update({
+  path: "/",
+  getParentRoute: () => AuthReportsReportIdRouteRoute,
+} as any).lazy(() =>
+  import("./routes/_auth/reports/$reportId/index.lazy").then((d) => d.Route),
+)
+
 const AuthReservationsReservationIdIndexRouteRoute =
   AuthReservationsReservationIdIndexRouteImport.update({
     path: "/",
     getParentRoute: () => AuthReservationsReservationIdRouteRoute,
   } as any).lazy(() =>
     import("./routes/_auth/reservations/$reservationId/index.route.lazy").then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthReportsReportIdIndexRouteRoute =
-  AuthReportsReportIdIndexRouteImport.update({
-    path: "/",
-    getParentRoute: () => AuthReportsReportIdRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/reports/$reportId/index.route.lazy").then(
       (d) => d.Route,
     ),
   )
@@ -551,13 +548,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthFleetIndexRouteImport
       parentRoute: typeof AuthFleetRouteImport
     }
-    "/_auth/reports/": {
-      preLoaderRoute: typeof AuthReportsIndexRouteImport
-      parentRoute: typeof AuthReportsRouteImport
-    }
     "/_auth/reservations/": {
       preLoaderRoute: typeof AuthReservationsIndexRouteImport
       parentRoute: typeof AuthReservationsRouteImport
+    }
+    "/_auth/reports/": {
+      preLoaderRoute: typeof AuthReportsIndexImport
+      parentRoute: typeof AuthReportsRouteImport
     }
     "/_auth/settings/": {
       preLoaderRoute: typeof AuthSettingsIndexLazyImport
@@ -611,13 +608,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthFleetVehicleIdIndexRouteImport
       parentRoute: typeof AuthFleetVehicleIdRouteImport
     }
-    "/_auth/reports/$reportId/": {
-      preLoaderRoute: typeof AuthReportsReportIdIndexRouteImport
-      parentRoute: typeof AuthReportsReportIdRouteImport
-    }
     "/_auth/reservations/$reservationId/": {
       preLoaderRoute: typeof AuthReservationsReservationIdIndexRouteImport
       parentRoute: typeof AuthReservationsReservationIdRouteImport
+    }
+    "/_auth/reports/$reportId/": {
+      preLoaderRoute: typeof AuthReportsReportIdIndexImport
+      parentRoute: typeof AuthReportsReportIdRouteImport
     }
     "/_auth/settings/application/": {
       preLoaderRoute: typeof AuthSettingsApplicationIndexLazyImport
@@ -657,9 +654,9 @@ export const routeTree = rootRoute.addChildren([
     ]),
     AuthReportsRouteRoute.addChildren([
       AuthReportsReportIdRouteRoute.addChildren([
-        AuthReportsReportIdIndexRouteRoute,
+        AuthReportsReportIdIndexRoute,
       ]),
-      AuthReportsIndexRouteRoute,
+      AuthReportsIndexRoute,
     ]),
     AuthReservationsRouteRoute.addChildren([
       AuthReservationsReservationIdRouteRoute.addChildren([
