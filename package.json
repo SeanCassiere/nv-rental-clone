@@ -73,7 +73,7 @@
     "@tanstack/router-vite-plugin": "^1.15.11",
     "@types/jsurl2": "^2.1.4",
     "@types/node": "^20.11.16",
-    "@types/react": "^18.2.48",
+    "@types/react": "^18.2.52",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
