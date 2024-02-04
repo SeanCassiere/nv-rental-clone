@@ -31,7 +31,14 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { TLocationParsed } from "@/schemas/location";
+import type { TLocationParsed } from "@/schemas/location";
+
+import { fetchClientProfileOptions } from "@/utils/query/client";
+import {
+  fetchLocationByIdOptions,
+  fetchLocationCountriesListOptions,
+  fetchLocationStatesByCountryIdListOptions,
+} from "@/utils/query/location";
 
 import { cn } from "@/utils";
 
@@ -48,10 +55,93 @@ const routeApi = getRouteApi("/_auth/settings/application/locations");
 function LocationsPage() {
   const { t } = useTranslation();
 
-  const { authParams } = routeApi.useRouteContext();
+  const { authParams, queryClient } = routeApi.useRouteContext();
+
+  const clientProfileQuery = useSuspenseQuery(
+    fetchClientProfileOptions({ auth: authParams })
+  );
+  const locationsQuery = useSuspenseQuery(
+    fetchLocationCountriesListOptions({ auth: authParams })
+  );
+
+  const defaultCountry = React.useMemo(
+    function determineDefaultCountryId() {
+      if (
+        clientProfileQuery.data.status === 200 &&
+        locationsQuery.data.status === 200
+      ) {
+        const client = clientProfileQuery.data.body;
+        const countries = locationsQuery.data.body;
+
+        const country = countries.find(
+          (c) => c.countryName === client.clientCountry
+        );
+        if (country) {
+          return {
+            countryId: country.countryID,
+            countryName: country.countryName,
+          };
+        }
+      }
+      return {
+        countryId: "0",
+        countryName: "0",
+      };
+    },
+    [
+      clientProfileQuery.data.body,
+      clientProfileQuery.data.status,
+      locationsQuery.data.body,
+      locationsQuery.data.status,
+    ]
+  );
+
+  const statesQuery = useSuspenseQuery(
+    fetchLocationStatesByCountryIdListOptions({
+      auth: authParams,
+      countryId: defaultCountry.countryId,
+    })
+  );
+  const defaultState = React.useMemo(
+    function determineDefaultStateId() {
+      if (
+        clientProfileQuery.data.status === 200 &&
+        statesQuery.data.status === 200
+      ) {
+        const client = clientProfileQuery.data.body;
+        const states = statesQuery.data.body;
+        const state = states.find((s) => s.stateName === client.clientState);
+        if (state) {
+          return {
+            stateId: state.stateID,
+            stateName: state.stateName,
+          };
+        }
+      }
+      return {
+        stateId: "0",
+        stateName: "0",
+      };
+    },
+    [
+      clientProfileQuery.data.body,
+      clientProfileQuery.data.status,
+      statesQuery.data.body,
+      statesQuery.data.status,
+    ]
+  );
 
   const [filterMode, onChangeFilterMode] = React.useState("active");
   const [showNew, setShowNew] = React.useState(false);
+
+  const handlePrefetch = () => {
+    queryClient.prefetchQuery(
+      fetchLocationStatesByCountryIdListOptions({
+        auth: authParams,
+        countryId: defaultCountry.countryId,
+      })
+    );
+  };
 
   return (
     <>
@@ -61,7 +151,11 @@ function LocationsPage() {
         setOpen={setShowNew}
         clientId={authParams.clientId}
         userId={authParams.userId}
-        locationId=""
+        locationId="0"
+        countryId={defaultCountry.countryId}
+        countryName={defaultCountry.countryName}
+        stateId={defaultState.stateId}
+        stateName={defaultState.stateName}
       />
 
       <Card className="shadow-none">
@@ -78,6 +172,8 @@ function LocationsPage() {
             <Button
               size="sm"
               className="w-max"
+              onMouseOver={handlePrefetch}
+              onTouchStart={handlePrefetch}
               onClick={() => setShowNew(true)}
             >
               <icons.Plus className="h-4 w-4 sm:mr-2" />
@@ -201,9 +297,25 @@ function LocationItem(props: { location: TLocationParsed }) {
   const { location } = props;
   const { t } = useTranslation();
 
-  const { authParams } = routeApi.useRouteContext();
+  const { authParams, queryClient } = routeApi.useRouteContext();
 
   const [showEdit, setShowEdit] = React.useState(false);
+
+  const handlePrefetch = () => {
+    queryClient.prefetchQuery(
+      fetchLocationByIdOptions({
+        auth: authParams,
+        locationId: location.locationId,
+      })
+    );
+
+    queryClient.prefetchQuery(
+      fetchLocationStatesByCountryIdListOptions({
+        auth: authParams,
+        countryId: String(location.countryId) || "0",
+      })
+    );
+  };
 
   return (
     <>
@@ -214,6 +326,10 @@ function LocationItem(props: { location: TLocationParsed }) {
         clientId={authParams.clientId}
         userId={authParams.userId}
         locationId={location.locationId}
+        countryId={String(location.countryId) || "0"}
+        countryName={String(location.contactName) || "0"}
+        stateId={String(location.stateID) || "0"}
+        stateName={String(location.stateName) || "0"}
       />
 
       <li className="flex justify-between gap-x-6 py-5">
@@ -251,8 +367,8 @@ function LocationItem(props: { location: TLocationParsed }) {
           <div className="flex grow-0 items-center justify-center">
             <DropdownMenu>
               <DropdownMenuTrigger
-                // onMouseOver={handlePrefetch}
-                // onTouchStart={handlePrefetch}
+                onMouseOver={handlePrefetch}
+                onTouchStart={handlePrefetch}
                 asChild
               >
                 <Button
