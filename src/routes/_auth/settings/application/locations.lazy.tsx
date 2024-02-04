@@ -35,6 +35,8 @@ import { TLocationParsed } from "@/schemas/location";
 
 import { cn } from "@/utils";
 
+import { LocationEditDialog } from "./-components/location-edit-dialog";
+
 export const Route = createLazyFileRoute(
   "/_auth/settings/application/locations"
 )({
@@ -46,10 +48,22 @@ const routeApi = getRouteApi("/_auth/settings/application/locations");
 function LocationsPage() {
   const { t } = useTranslation();
 
+  const { authParams } = routeApi.useRouteContext();
+
   const [filterMode, onChangeFilterMode] = React.useState("active");
+  const [showNew, setShowNew] = React.useState(false);
 
   return (
     <>
+      <LocationEditDialog
+        mode="new"
+        open={showNew}
+        setOpen={setShowNew}
+        clientId={authParams.clientId}
+        userId={authParams.userId}
+        locationId=""
+      />
+
       <Card className="shadow-none">
         <CardHeader className="p-4 lg:p-6">
           <CardTitle className="text-lg">
@@ -64,7 +78,7 @@ function LocationsPage() {
             <Button
               size="sm"
               className="w-max"
-              // onClick={() => setShowNew(true)}
+              onClick={() => setShowNew(true)}
             >
               <icons.Plus className="h-4 w-4 sm:mr-2" />
               <span>{t("labels.addLocation", { ns: "settings" })}</span>
@@ -187,71 +201,84 @@ function LocationItem(props: { location: TLocationParsed }) {
   const { location } = props;
   const { t } = useTranslation();
 
+  const { authParams } = routeApi.useRouteContext();
+
+  const [showEdit, setShowEdit] = React.useState(false);
+
   return (
-    <li className="flex justify-between gap-x-6 py-5">
-      <div className="flex min-w-0 gap-x-4">
-        <div className="min-w-0 max-w-xl flex-auto text-sm">
-          <p className="flex items-baseline truncate font-semibold leading-6">
-            {location.locationName}
-          </p>
-          <p className="mt-1 truncate leading-5 text-muted-foreground">
-            {makeLocationAddress(location) || "No address"}
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center gap-x-4 text-sm">
-        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-          <p className={cn(badgeVariants({ variant: "outline" }))}>
-            {location.active ? "Active" : "Inactive"}
-          </p>
-          <div className="mt-1 flex items-center gap-x-1.5">
-            <div className="flex-none rounded-full bg-background/20 p-1">
-              <div
-                className={cn(
-                  "h-2 w-2 rounded-full",
-                  location.isReservation ? "bg-emerald-500" : "bg-destructive"
-                )}
-              />
-            </div>
-            <p className="select-none leading-5 text-muted-foreground">
-              {location.isReservation
-                ? t("labels.availableOnline", { ns: "settings" })
-                : t("labels.notAvailableOnline", { ns: "settings" })}
+    <>
+      <LocationEditDialog
+        mode="edit"
+        open={showEdit}
+        setOpen={setShowEdit}
+        clientId={authParams.clientId}
+        userId={authParams.userId}
+        locationId={location.locationId}
+      />
+
+      <li className="flex justify-between gap-x-6 py-5">
+        <div className="flex min-w-0 gap-x-4">
+          <div className="min-w-0 max-w-xl flex-auto text-sm">
+            <p className="flex items-baseline truncate font-semibold leading-6">
+              {location.locationName}
+            </p>
+            <p className="mt-1 truncate leading-5 text-muted-foreground">
+              {makeLocationAddress(location) || "No address"}
             </p>
           </div>
         </div>
-        <div className="flex grow-0 items-center justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              // onMouseOver={handlePrefetch}
-              // onTouchStart={handlePrefetch}
-              asChild
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                // disabled={isSystemRole}
-                className="h-8 w-8"
+        <div className="flex items-center gap-x-4 text-sm">
+          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+            <p className={cn(badgeVariants({ variant: "outline" }))}>
+              {location.active ? "Active" : "Inactive"}
+            </p>
+            <div className="mt-1 flex items-center gap-x-1.5">
+              <div className="flex-none rounded-full bg-background/20 p-1">
+                <div
+                  className={cn(
+                    "h-2 w-2 rounded-full",
+                    location.isReservation ? "bg-emerald-500" : "bg-destructive"
+                  )}
+                />
+              </div>
+              <p className="select-none leading-5 text-muted-foreground">
+                {location.isReservation
+                  ? t("labels.availableOnline", { ns: "settings" })
+                  : t("labels.notAvailableOnline", { ns: "settings" })}
+              </p>
+            </div>
+          </div>
+          <div className="flex grow-0 items-center justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                // onMouseOver={handlePrefetch}
+                // onTouchStart={handlePrefetch}
+                asChild
               >
-                <icons.More className="h-3 w-3 lg:h-4 lg:w-4" />
-                <span className="sr-only">
-                  {t("buttons.moreActions", { ns: "labels" })}
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuGroup>
-                <DropdownMenuItem
-                //  onClick={() => setShowEdit(true)}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  // disabled={isSystemRole}
+                  className="h-8 w-8"
                 >
-                  <icons.Edit className="mr-2 h-3 w-3" />
-                  <span>{t("buttons.edit", { ns: "labels" })}</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  <icons.More className="h-3 w-3 lg:h-4 lg:w-4" />
+                  <span className="sr-only">
+                    {t("buttons.moreActions", { ns: "labels" })}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => setShowEdit(true)}>
+                    <icons.Edit className="mr-2 h-3 w-3" />
+                    <span>{t("buttons.edit", { ns: "labels" })}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 }

@@ -15,7 +15,7 @@ export function buildUpdateUserSchema({ REQUIRED }: { REQUIRED: string }) {
     language: z.string(),
     locationList: z.array(
       z.object({
-        locationId: z.number(),
+        locationId: z.coerce.string(),
         locationName: z.string(),
         isSelected: z.boolean(),
       })
