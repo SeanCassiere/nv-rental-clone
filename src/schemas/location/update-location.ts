@@ -1,6 +1,12 @@
 import { z } from "zod";
 
-export function buildUpdateLocationSchema({ REQUIRED }: { REQUIRED: string }) {
+export function buildUpdateLocationSchema({
+  REQUIRED,
+  NOT_VALID_EMAIL,
+}: {
+  REQUIRED: string;
+  NOT_VALID_EMAIL: string;
+}) {
   return z.object({
     clientId: z.string(),
     lastUpdatedBy: z.string(),
@@ -25,7 +31,7 @@ export function buildUpdateLocationSchema({ REQUIRED }: { REQUIRED: string }) {
     isReservation: z.boolean(),
     contactName: z.string(),
     phone: z.string(),
-    email: z.string().email().min(1, REQUIRED),
+    email: z.string().email(NOT_VALID_EMAIL).min(1, REQUIRED),
     emailName: z.string().min(1, REQUIRED),
     latitude: z.coerce.number(),
     longitude: z.coerce.number(),
