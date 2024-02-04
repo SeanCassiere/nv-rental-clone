@@ -177,7 +177,7 @@ function LocationsPage() {
             {t("descriptions.locations", { ns: "settings" })}
           </CardDescription>
         </CardHeader>
-        <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
+        <CardContent className="px-4 pb-2 pt-0 lg:px-6">
           <div className="flex flex-col justify-start gap-2 pb-4 md:flex-row md:items-center">
             <Button
               size="sm"
