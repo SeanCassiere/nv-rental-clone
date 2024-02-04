@@ -35,7 +35,7 @@ export const UserProfileSchema = z
       z.object({
         isSelected: z.preprocess((val) => (val ? true : false), z.boolean()),
         locationName: z.preprocess((val) => val ?? "", z.string()),
-        locationId: z.number(),
+        locationId: z.coerce.string(),
       })
     ),
     userIdV3: z.string().nullable(),

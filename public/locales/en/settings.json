@@ -23,7 +23,9 @@
     "accountLock": "Account lock",
     "deleteUserRole": "Delete user role",
     "newUserRole": "New user role",
-    "editUserRole": "Edit user role"
+    "editUserRole": "Edit user role",
+    "newLocation": "New Location",
+    "editLocation": "Edit location"
   },
   "descriptions": {
     "settings": "Manage and configure your {{appName}} settings.",
@@ -44,7 +46,12 @@
     "accountLock": "Check this box to lock the user's account. When the account is locked, the user will not be able to log in or access the system.",
     "deleteUserRole": "Are you sure you want to delete this custom user role from the system? This action cannot be undone, and may impact user access and permissions associated with this role.",
     "newUserRole": "Create a new user role in the system",
-    "editUserRole": "Edit the user role for the system"
+    "editUserRole": "Edit the user role for the system",
+    "newLocation": "Create a new location for use in the system.",
+    "editLocation": "Edit the location details for the system.",
+    "locationCopyConfigurations": "You have the option to select a location and effortlessly replicate the current rental rates, miscellaneous charges, and taxes to the desired new location.",
+    "locationIndicateAvailableForUse": "Indicate if the location is active and available for use.",
+    "locationIndicateAvailableForOnlineReservations": "Indicate if the fleet from this location will be available for online bookings."
   },
   "labels": {
     "allRoles": "All roles",
@@ -59,6 +66,11 @@
     "selectARole": "Select a role",
     "role": "Role",
     "availableOnline": "Available online",
-    "notAvailableOnline": "Not available online"
+    "notAvailableOnline": "Not available online",
+    "emailAddress": "Email address",
+    "emailName": "Email name",
+    "copyFromPreviousLocation": "Copy from previous location?",
+    "availableForUse": "Available for use?",
+    "availableForOnlineReservations": "Available for online reservations?"
   }
 }

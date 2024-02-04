@@ -14,6 +14,8 @@
     "mobilePhone": "Mobile phone",
     "licenseNo": "License no.",
     "address": "Address",
+    "address1": "Address 1",
+    "address2": "Address 2",
     "city": "City",
     "zip": "Zip",
     "zipCode": "Zip code",
@@ -32,7 +34,14 @@
     "copyFromExisting": "Copy from existing",
     "vehicleNo": "Vehicle no.",
     "agreementNo": "Agreement no.",
-    "reservationNo": "Reservation no."
+    "reservationNo": "Reservation no.",
+    "contactName": "Contact name",
+    "country": "Country",
+    "state": "State",
+    "locationName": "Location name",
+    "selectCountry": "Select a country",
+    "selectState": "Select a state",
+    "selectLocation": "Select a location"
   },
   "buttons": {
     "save": "Save",

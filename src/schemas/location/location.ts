@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const LocationSchema = z.object({
-  locationId: z.number(),
+  locationId: z.coerce.string(),
   stateName: z.string().nullable(),
   countryName: z.string().nullable(),
   locationName: z.string().nullable(),
