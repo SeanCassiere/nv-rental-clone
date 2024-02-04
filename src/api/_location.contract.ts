@@ -7,6 +7,7 @@ import {
   LocationByIdSchema,
   LocationSchemaArray,
   StatesListSchema,
+  type UpdateLocationInput,
 } from "@/schemas/location";
 
 import {
@@ -54,6 +55,27 @@ const rootLocationContract = c.router({
     }),
     responses: {
       200: LocationSchemaArray,
+    },
+  },
+  createLocation: {
+    method: "POST",
+    path: "/v3/locations",
+    body: c.type<UpdateLocationInput>(),
+    responses: {
+      200: z.any(),
+      201: z.any(),
+      401: UnauthorizedErrorSchema,
+      404: StructuredErrorSchema,
+    },
+  },
+  updateLocationById: {
+    method: "PUT",
+    path: "/v3/locations/:locationId",
+    body: c.type<UpdateLocationInput>(),
+    responses: {
+      200: z.any(),
+      401: UnauthorizedErrorSchema,
+      404: StructuredErrorSchema,
     },
   },
 });

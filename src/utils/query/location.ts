@@ -128,3 +128,17 @@ export function fetchLocationByIdOptions(options: LocationId & Auth & Enabled) {
     staleTime: 1000 * 60 * 1, // 1 minute
   });
 }
+
+export function updateLocationMutationOptions(options: LocationId) {
+  return {
+    mutationKey: [SEGMENT, "update_location", options.locationId],
+    mutationFn: apiClient.location.updateLocationById,
+  } as const;
+}
+
+export function createLocationMutationOptions() {
+  return {
+    mutationKey: [SEGMENT, "create_location"],
+    mutationFn: apiClient.location.createLocation,
+  } as const;
+}

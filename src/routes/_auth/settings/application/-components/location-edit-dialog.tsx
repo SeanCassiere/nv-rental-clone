@@ -1,8 +1,9 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import {
   InputSelect,
@@ -40,10 +42,12 @@ import {
 
 import type { Auth } from "@/utils/query/helpers";
 import {
+  createLocationMutationOptions,
   fetchLocationByIdOptions,
   fetchLocationCountriesListOptions,
   fetchLocationsListOptions,
   fetchLocationStatesByCountryIdListOptions,
+  updateLocationMutationOptions,
 } from "@/utils/query/location";
 
 type FormMode = "new" | "edit";
@@ -64,15 +68,28 @@ interface LocationEditDialogProps {
 export function LocationEditDialog(props: LocationEditDialogProps) {
   const { open, setOpen } = props;
   const auth = { clientId: props.clientId, userId: props.userId };
+
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   const canCreateLocations = usePermission("VIEW_ADMIN_TAB");
 
+  const locationsQueryOptions = React.useMemo(
+    () =>
+      fetchLocationByIdOptions({
+        auth: { clientId: props.clientId, userId: props.userId },
+        locationId: props.locationId,
+      }),
+    [props.clientId, props.locationId, props.userId]
+  );
+
+  const locationsQueryKey: string[] = [
+    locationsQueryOptions.queryKey[0],
+    locationsQueryOptions.queryKey[1],
+  ];
+
   const locationQuery = useQuery({
-    ...fetchLocationByIdOptions({
-      auth: { clientId: props.clientId, userId: props.userId },
-      locationId: props.locationId,
-    }),
+    ...locationsQueryOptions,
     enabled: open && props.mode === "edit" && props.locationId !== "0",
   });
 
@@ -121,16 +138,77 @@ export function LocationEditDialog(props: LocationEditDialogProps) {
 
   const formId = React.useId();
 
-  const handleSubmitCreate = (data: UpdateLocationInput) => {
-    console.log("🚀 ~ handleSubmitCreate ~ data:", data);
+  const update = useMutation({
+    ...updateLocationMutationOptions({ locationId: props.locationId }),
+    onMutate: () => {
+      queryClient.cancelQueries({ queryKey: locationsQueryKey });
+    },
+    onError: (error, variables, context) => {
+      const message = "message" in error ? error.message : "An error occurred";
+      console.error("🚀 ~ updateLocationMutationOptions ~ error:", message, {
+        error,
+        variables,
+        context,
+      });
+      toast.error(message);
+    },
+    onSuccess: (response, variables) => {
+      if (response.status === 200) {
+        toast.success(`${variables.body.locationName} updated successfully`);
+        setOpen(false);
+        return;
+      }
+      toast.error("An error occurred");
+      console.error("🚀 ~ updateLocationMutationOptions ~ error:", response);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: locationsQueryKey });
+    },
+  });
+  const handleSubmitEdit = (data: UpdateLocationInput) => {
+    if (update.isPending) return;
+    update.mutate({
+      params: { locationId: props.locationId },
+      body: { ...data, lastUpdatedBy: auth.userId },
+    });
   };
 
-  const handleSubmitEdit = (data: UpdateLocationInput) => {
-    console.log("🚀 ~ handleSubmitEdit ~ data:", data);
+  const create = useMutation({
+    ...createLocationMutationOptions(),
+    onMutate: () => {
+      queryClient.cancelQueries({ queryKey: locationsQueryKey });
+    },
+    onError: (error, variables, context) => {
+      const message = "message" in error ? error.message : "An error occurred";
+      console.error("🚀 ~ createLocationMutationOptions ~ error:", message, {
+        error,
+        variables,
+        context,
+      });
+      toast.error(message);
+    },
+    onSuccess: (response, variables) => {
+      if (response.status === 200) {
+        toast.success(`${variables.body.locationName} created successfully`);
+        setOpen(false);
+        return;
+      }
+      toast.error("An error occurred");
+      console.error("🚀 ~ createLocationMutationOptions ~ error:", response);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: locationsQueryKey });
+    },
+  });
+  const handleSubmitCreate = (data: UpdateLocationInput) => {
+    if (create.isPending) return;
+    create.mutate({ body: { ...data, lastUpdatedBy: auth.userId } });
   };
 
   const createModeDisabled = !canCreateLocations;
   const editModeDisabled = !canCreateLocations;
+
+  const isSubmitting = update.isPending || create.isPending;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -187,9 +265,9 @@ export function LocationEditDialog(props: LocationEditDialogProps) {
               props.mode === "edit" ? editModeDisabled : createModeDisabled
             }
           >
-            {/* {isUpdateMutationActive && (
+            {isSubmitting && (
               <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-            )} */}
+            )}
             {props.mode === "edit"
               ? t("buttons.saveChanges", { ns: "labels" })
               : t("buttons.save", { ns: "labels" })}
@@ -222,6 +300,7 @@ function LocationForm(props: LocationFormProps) {
     resolver: zodResolver(formSchema),
     values: {
       clientId: props.auth.clientId,
+      lastUpdatedBy: "0",
       locationName: location.locationName || "",
       address1: location.address1 || "",
       address2: location.address2 || "",

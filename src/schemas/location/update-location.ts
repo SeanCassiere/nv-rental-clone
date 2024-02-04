@@ -3,6 +3,7 @@ import { z } from "zod";
 export function buildUpdateLocationSchema({ REQUIRED }: { REQUIRED: string }) {
   return z.object({
     clientId: z.string(),
+    lastUpdatedBy: z.string(),
     locationName: z.string().min(1, REQUIRED),
     address1: z.string().min(1, REQUIRED),
     address2: z.string(),
