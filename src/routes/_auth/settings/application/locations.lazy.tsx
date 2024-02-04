@@ -31,6 +31,8 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+
 import type { TLocationParsed } from "@/schemas/location";
 
 import { fetchClientProfileOptions } from "@/utils/query/client";
@@ -39,6 +41,7 @@ import {
   fetchLocationCountriesListOptions,
   fetchLocationStatesByCountryIdListOptions,
 } from "@/utils/query/location";
+import { titleMaker } from "@/utils/title-maker";
 
 import { cn } from "@/utils";
 
@@ -142,6 +145,15 @@ function LocationsPage() {
       })
     );
   };
+
+  useDocumentTitle(
+    titleMaker(
+      t("titles.page", {
+        ns: "settings",
+        pageTitle: t("titles.locations", { ns: "settings" }),
+      })
+    )
+  );
 
   return (
     <>
