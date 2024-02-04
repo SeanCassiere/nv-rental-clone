@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { fetchLocationsListOptions } from "@/utils/query/location";
+import {
+  fetchLocationCountriesListOptions,
+  fetchLocationsListOptions,
+} from "@/utils/query/location";
 
 export const Route = createFileRoute("/_auth/settings/application/locations")({
   beforeLoad: ({ context }) => ({
@@ -12,11 +15,20 @@ export const Route = createFileRoute("/_auth/settings/application/locations")({
       auth: context.authParams,
       filters: { withActive: false },
     }),
+    countriesListOptions: fetchLocationCountriesListOptions({
+      auth: context.authParams,
+    }),
   }),
   loader: async ({ context }) => {
-    const { queryClient, activeLocationsListOptions } = context;
+    const { queryClient, activeLocationsListOptions, countriesListOptions } =
+      context;
 
-    await queryClient.ensureQueryData(activeLocationsListOptions);
+    const promises = [
+      queryClient.ensureQueryData(activeLocationsListOptions),
+      queryClient.ensureQueryData(countriesListOptions),
+    ];
+
+    await Promise.all(promises);
 
     return;
   },

@@ -1,5 +1,5 @@
 import React from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
@@ -38,7 +38,6 @@ import type { TLocationParsed } from "@/schemas/location";
 import { fetchClientProfileOptions } from "@/utils/query/client";
 import {
   fetchLocationByIdOptions,
-  fetchLocationCountriesListOptions,
   fetchLocationStatesByCountryIdListOptions,
 } from "@/utils/query/location";
 import { titleMaker } from "@/utils/title-maker";
@@ -58,23 +57,22 @@ const routeApi = getRouteApi("/_auth/settings/application/locations");
 function LocationsPage() {
   const { t } = useTranslation();
 
-  const { authParams, queryClient } = routeApi.useRouteContext();
+  const { authParams, queryClient, countriesListOptions } =
+    routeApi.useRouteContext();
 
   const clientProfileQuery = useSuspenseQuery(
     fetchClientProfileOptions({ auth: authParams })
   );
-  const locationsQuery = useSuspenseQuery(
-    fetchLocationCountriesListOptions({ auth: authParams })
-  );
+  const countriesQuery = useSuspenseQuery(countriesListOptions);
 
   const defaultCountry = React.useMemo(
     function determineDefaultCountryId() {
       if (
         clientProfileQuery.data.status === 200 &&
-        locationsQuery.data.status === 200
+        countriesQuery.data.status === 200
       ) {
         const client = clientProfileQuery.data.body;
-        const countries = locationsQuery.data.body;
+        const countries = countriesQuery.data.body;
 
         const country = countries.find(
           (c) => c.countryName === client.clientCountry
@@ -94,12 +92,12 @@ function LocationsPage() {
     [
       clientProfileQuery.data.body,
       clientProfileQuery.data.status,
-      locationsQuery.data.body,
-      locationsQuery.data.status,
+      countriesQuery.data.body,
+      countriesQuery.data.status,
     ]
   );
 
-  const statesQuery = useSuspenseQuery(
+  const statesQuery = useQuery(
     fetchLocationStatesByCountryIdListOptions({
       auth: authParams,
       countryId: defaultCountry.countryId,
@@ -109,7 +107,7 @@ function LocationsPage() {
     function determineDefaultStateId() {
       if (
         clientProfileQuery.data.status === 200 &&
-        statesQuery.data.status === 200
+        statesQuery.data?.status === 200
       ) {
         const client = clientProfileQuery.data.body;
         const states = statesQuery.data.body;
@@ -129,8 +127,8 @@ function LocationsPage() {
     [
       clientProfileQuery.data.body,
       clientProfileQuery.data.status,
-      statesQuery.data.body,
-      statesQuery.data.status,
+      statesQuery.data?.body,
+      statesQuery.data?.status,
     ]
   );
 
