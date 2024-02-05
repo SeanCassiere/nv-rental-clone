@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useReportContext } from "@/context/view-report";
+import { useReportContext } from "@/lib/context/view-report";
 
 const JsonView = () => {
   const { resultState } = useReportContext();

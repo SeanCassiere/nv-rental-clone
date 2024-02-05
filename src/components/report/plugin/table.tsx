@@ -37,7 +37,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useReportContext } from "@/context/view-report";
+import { useReportContext } from "@/lib/context/view-report";
 import type { ReportTablePlugin } from "@/lib/types/report";
 import { cn } from "@/lib/utils";
 import { fuzzyFilter } from "@/lib/utils/table";

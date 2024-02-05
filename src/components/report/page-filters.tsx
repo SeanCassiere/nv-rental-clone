@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
 
-import { useReportContext } from "@/context/view-report";
+import { useReportContext } from "@/lib/context/view-report";
 import { useReportLookupLists } from "@/lib/hooks/useReportLookupLists";
 
 export const ReportFilters = () => {

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 
-import { useReportContext } from "@/context/view-report";
+import { useReportContext } from "@/lib/context/view-report";
 import type { ReportTablePlugin } from "@/lib/types/report";
 import { downloadDataToCsv, sanitizeFilename } from "@/lib/utils";
 

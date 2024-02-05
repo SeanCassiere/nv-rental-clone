@@ -16,7 +16,7 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGlobalDialogContext } from "@/context/modals";
+import { useGlobalDialogContext } from "@/lib/context/modals";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";

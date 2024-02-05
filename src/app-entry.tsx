@@ -13,10 +13,10 @@ import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 import { icons } from "@/components/ui/icons";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-import { GlobalDialogProvider } from "@/context/modals";
 import i18nextConfig from "@/lib/config/i18next";
 import { reactOidcContextConfig } from "@/lib/config/react-oidc-context";
 import { queryClient } from "@/lib/config/tanstack-query";
+import { GlobalDialogProvider } from "@/lib/context/modals";
 import { useEventListener } from "@/lib/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";

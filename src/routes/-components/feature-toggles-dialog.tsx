@@ -28,7 +28,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useGlobalDialogContext } from "@/context/modals";
+import { useGlobalDialogContext } from "@/lib/context/modals";
 import {
   notifyLocalStorageChange,
   useLocalStorage,

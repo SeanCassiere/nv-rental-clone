@@ -6,7 +6,7 @@ import { useAuth } from "react-oidc-context";
 import { ViewReport } from "@/components/report/page";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { ReportContextProvider } from "@/context/view-report";
+import { ReportContextProvider } from "@/lib/context/view-report";
 
 export const Route = createLazyFileRoute("/_auth/reports/$reportId/")({
   component: ViewReportPage,
