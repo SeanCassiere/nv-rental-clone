@@ -7,8 +7,10 @@ import {
   fetchCustomerByIdOptions,
   fetchCustomerSummaryByIdOptions,
 } from "@/lib/query/customer";
-import { sortObjectKeys } from "@/lib/utils";
+
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
+
+import { sortObjectKeys } from "@/lib/utils";
 
 interface CustomerSummaryTabProps {
   customerId: string;

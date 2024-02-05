@@ -6,11 +6,12 @@ import {
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+
 import {
   incompleteApplicationSettingsTabsFeatureFlag,
   incompleteLocationsApplicationSettingsTabFeatureFlag,
 } from "@/lib/config/features";
-import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { SettingsLayoutHeader } from "../-components/layout-header";
 import {
