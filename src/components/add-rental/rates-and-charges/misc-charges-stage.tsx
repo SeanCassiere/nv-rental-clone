@@ -19,16 +19,16 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 
-import type { MiscChargeListItem } from "@/schemas/misc-charge";
+import type { MiscChargeListItem } from "@/lib/schemas/misc-charge";
+import { fetchMiscChargesListOptions } from "@/lib/query/misc-charge";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
   localDateTimeToQueryYearMonthDay,
   localDateTimeWithoutSecondsToQueryYearMonthDay,
-} from "@/utils/date";
-import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
+} from "@/lib/utils/date";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 import type { RatesAndChargesTabProps } from ".";
 

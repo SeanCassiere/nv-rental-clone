@@ -9,9 +9,9 @@ import {
 
 import AddRentalParentForm from "@/components/add-rental";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
-import { titleMaker } from "@/utils/title-maker";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/agreements/$agreementId/edit")(
   {

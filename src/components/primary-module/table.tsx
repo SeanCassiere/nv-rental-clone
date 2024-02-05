@@ -55,12 +55,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { type TColumnHeaderItem } from "@/schemas/client/column";
+import { type TColumnHeaderItem } from "@/lib/schemas/client/column";
 
-import { sortColOrderByOrderIndex } from "@/utils/columns";
-import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
+import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
+import { getPaginationWithDoubleEllipsis } from "@/lib/utils/pagination";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 import { Separator } from "../ui/separator";
 

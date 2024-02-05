@@ -10,18 +10,18 @@ import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { TAgreementListItemParsed } from "@/schemas/agreement";
-
-import { getAuthFromAuthHook } from "@/utils/auth";
-import {
-  AgreementDateTimeColumns,
-  sortColumnsByOrderIndex,
-} from "@/utils/columns";
-import { normalizeAgreementListSearchParams } from "@/utils/normalize-search-params";
+import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
 import {
   fetchAgreementsSearchColumnsOptions,
   fetchAgreementsSearchListOptions,
-} from "@/utils/query/agreement";
+} from "@/lib/query/agreement";
+
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import {
+  AgreementDateTimeColumns,
+  sortColumnsByOrderIndex,
+} from "@/lib/utils/columns";
+import { normalizeAgreementListSearchParams } from "@/lib/utils/normalize-search-params";
 
 interface VehicleOccupiedAgreementsTabProps {
   vehicleId: string;

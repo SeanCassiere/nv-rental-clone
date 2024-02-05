@@ -20,11 +20,13 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-import { dateFormat } from "@/utils/report";
-import type { ReportFilterOption } from "@/types/report";
+import { useReportContext } from "@/lib/context/view-report";
 
-import { useReportContext } from "@/context/view-report";
-import { cn } from "@/utils";
+import { dateFormat } from "@/lib/utils/report";
+
+import type { ReportFilterOption } from "@/lib/types/report";
+
+import { cn } from "@/lib/utils";
 
 interface ReportFilterProps {
   accessor: string;

@@ -1,8 +1,3 @@
-import enDashboard from "../public/locales/en/dashboard.json";
-import enLabels from "../public/locales/en/labels.json";
-import enMessages from "../public/locales/en/messages.json";
-import enSettings from "../public/locales/en/settings.json";
-import enTranslation from "../public/locales/en/translation.json";
 import {
   formatNsResources,
   i18nextNsDashboard,
@@ -12,7 +7,13 @@ import {
   i18nextNsMessages,
   i18nextNsSettings,
   i18nextNsTranslation,
-} from "./i18next-config";
+} from "@/lib/config/i18next";
+
+import enDashboard from "../public/locales/en/dashboard.json";
+import enLabels from "../public/locales/en/labels.json";
+import enMessages from "../public/locales/en/messages.json";
+import enSettings from "../public/locales/en/settings.json";
+import enTranslation from "../public/locales/en/translation.json";
 
 const resources = {
   [i18nextNsFormat]: formatNsResources,

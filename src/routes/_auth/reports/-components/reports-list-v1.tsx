@@ -4,7 +4,7 @@ import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { icons } from "@/components/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import type { TReportsListItem } from "@/schemas/report";
+import type { TReportsListItem } from "@/lib/schemas/report";
 
 const PAYMENT_BREAKDOWN_REPORT_ID = "117";
 const BUSINESS_SUMMARY_REPORT_ID = "116";

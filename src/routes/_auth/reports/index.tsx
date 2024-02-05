@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthFromRouterContext } from "@/utils/auth";
-import { fetchReportsListOptions } from "@/utils/query/report";
+import { fetchReportsListOptions } from "@/lib/query/report";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/reports/")({
   validateSearch: (search) =>

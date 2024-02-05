@@ -12,12 +12,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import type { TVehicleListItemParsed } from "@/schemas/vehicle";
+import type { TVehicleListItemParsed } from "@/lib/schemas/vehicle";
+import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
-import { getXPaginationFromHeaders } from "@/utils";
+import { getXPaginationFromHeaders } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 

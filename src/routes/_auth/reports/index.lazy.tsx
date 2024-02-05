@@ -3,11 +3,11 @@ import { createLazyRoute, getRouteApi } from "@tanstack/react-router";
 
 import { Separator } from "@/components/ui/separator";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
-import { titleMaker } from "@/utils/title-maker";
+import { titleMaker } from "@/lib/utils/title-maker";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 export const Route = createLazyRoute("/_auth/reports/")({
   component: ReportSearchPage,

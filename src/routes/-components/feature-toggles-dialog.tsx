@@ -31,16 +31,15 @@ import {
 import {
   notifyLocalStorageChange,
   useLocalStorage,
-} from "@/hooks/useLocalStorage";
+} from "@/lib/hooks/useLocalStorage";
+import { useGlobalDialogContext } from "@/lib/context/modals";
 
 import {
   featureFlags,
   type DropdownFeatureFlag,
   type StringFeatureFlag,
   type SwitchFeatureFlag,
-} from "@/utils/features";
-
-import { useGlobalDialogContext } from "@/context/modals";
+} from "@/lib/config/features";
 
 export function FeatureTogglesDialog() {
   const { t } = useTranslation();

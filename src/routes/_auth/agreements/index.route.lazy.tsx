@@ -23,24 +23,24 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import { saveColumnSettings } from "@/api/save-column-settings";
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
-import type { TAgreementListItemParsed } from "@/schemas/agreement";
+import { saveColumnSettings } from "@/lib/api/save-column-settings";
+import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
+import {
+  fetchAgreementStatusesOptions,
+  fetchAgreementTypesOptions,
+} from "@/lib/query/agreement";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
 
 import {
   AgreementDateTimeColumns,
   sortColOrderByOrderIndex,
-} from "@/utils/columns";
-import {
-  fetchAgreementStatusesOptions,
-  fetchAgreementTypesOptions,
-} from "@/utils/query/agreement";
-import { fetchLocationsListOptions } from "@/utils/query/location";
-import { fetchVehiclesTypesOptions } from "@/utils/query/vehicle";
-import { titleMaker } from "@/utils/title-maker";
+} from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
 
-import { cn, getXPaginationFromHeaders } from "@/utils";
+import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,

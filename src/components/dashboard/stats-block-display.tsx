@@ -4,12 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { icons, type LucideIcon } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
-import type { TDashboardStats } from "@/schemas/dashboard";
+import type { TDashboardStats } from "@/lib/schemas/dashboard";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
-import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;

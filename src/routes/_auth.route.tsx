@@ -9,18 +9,19 @@ import { useAuth } from "react-oidc-context";
 import { LogoutDialog } from "@/components/common/logout-dialog";
 import { HeaderLayout } from "@/components/header/header-layout";
 
-import { getAuthFromRouterContext } from "@/utils/auth";
-import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
 import {
   fetchClientProfileOptions,
   fetchFeaturesForClientOptions,
   fetchScreenSettingsForClientOptions,
-} from "@/utils/query/client";
+} from "@/lib/query/client";
 import {
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
-} from "@/utils/query/user";
-import { removeTrailingSlash } from "@/utils/random";
+} from "@/lib/query/user";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
+import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
+import { removeTrailingSlash } from "@/lib/utils/random";
 
 import { Container } from "./-components/container";
 

@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CustomerSearchQuerySchema } from "@/schemas/customer";
-
-import { getAuthFromRouterContext } from "@/utils/auth";
-import { STORAGE_DEFAULTS } from "@/utils/constants";
-import { normalizeCustomerListSearchParams } from "@/utils/normalize-search-params";
+import { CustomerSearchQuerySchema } from "@/lib/schemas/customer";
 import {
   fetchCustomersSearchColumnsOptions,
   fetchCustomersSearchListOptions,
-} from "@/utils/query/customer";
+} from "@/lib/query/customer";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
+import { STORAGE_DEFAULTS } from "@/lib/utils/constants";
+import { normalizeCustomerListSearchParams } from "@/lib/utils/normalize-search-params";
 
 export const Route = createFileRoute("/_auth/customers/")({
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),

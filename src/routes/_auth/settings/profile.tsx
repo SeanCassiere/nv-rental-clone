@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   fetchLanguagesForUsersOptions,
   fetchUserByIdOptions,
-} from "@/utils/query/user";
+} from "@/lib/query/user";
 
 export const Route = createFileRoute("/_auth/settings/profile")({
   beforeLoad: ({ context }) => ({

@@ -4,11 +4,12 @@ import { useAuth } from "react-oidc-context";
 
 import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { UI_APPLICATION_NAME } from "@/utils/constants";
-import { fetchDashboardMessagesOptions } from "@/utils/query/dashboard";
+import { fetchDashboardMessagesOptions } from "@/lib/query/dashboard";
 
-import { cn } from "@/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
+
+import { cn } from "@/lib/utils";
 
 import { AppNavigation } from "./app-navigation";
 import { BannerNotice } from "./banner-notice";

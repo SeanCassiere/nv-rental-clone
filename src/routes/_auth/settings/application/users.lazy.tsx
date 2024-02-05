@@ -25,11 +25,10 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { TUserConfigurations } from "@/schemas/user";
+import type { TUserConfigurations } from "@/lib/schemas/user";
+import { fetchUserByIdOptions } from "@/lib/query/user";
 
-import { fetchUserByIdOptions } from "@/utils/query/user";
-
-import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
+import { cn, getAvatarFallbackText, getAvatarUrl } from "@/lib/utils";
 
 import { UserEditDialog } from "./-components/user-edit-dialog";
 import { UserResetPasswordDialog } from "./-components/user-reset-password-dialog";

@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 const InputSelectCtx = React.createContext<{
   value: string | undefined;

@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getAuthFromRouterContext } from "@/utils/auth";
-import { fetchCustomerByIdOptions } from "@/utils/query/customer";
+import { fetchCustomerByIdOptions } from "@/lib/query/customer";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/customers/$customerId/edit")({
   beforeLoad: ({ context, params: { customerId } }) => {

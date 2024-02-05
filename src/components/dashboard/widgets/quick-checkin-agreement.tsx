@@ -20,14 +20,15 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
-} from "@/utils/query/agreement";
-import type { Auth } from "@/utils/query/helpers";
+} from "@/lib/query/agreement";
+import type { Auth } from "@/lib/query/helpers";
+
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 const QuickCheckinAgreementWidget = (props: Auth) => {
   return (

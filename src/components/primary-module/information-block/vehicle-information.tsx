@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 import {
   EMPTY_KEY,

@@ -1,6 +1,5 @@
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { add } from "date-fns";
 
 import DashboardDndWidgetGrid from "@/components/dashboard/dnd-widget-display-grid";
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
@@ -18,19 +17,20 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { usePermission } from "@/hooks/usePermission";
-import { useScreenSetting } from "@/hooks/useScreenSetting";
+import { usePermission } from "@/lib/hooks/usePermission";
+import { useScreenSetting } from "@/lib/hooks/useScreenSetting";
 
-import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
-
+import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import {
   fetchDashboardRentalStatisticsOptions,
   fetchDashboardWidgetsOptions,
   saveDashboardWidgetsMutationOptions,
-} from "@/utils/query/dashboard";
-import type { Auth } from "@/utils/query/helpers";
+} from "@/lib/query/dashboard";
+import type { Auth } from "@/lib/query/helpers";
 
-import { cn } from "@/utils";
+import { add } from "@/lib/config/date-fns";
+
+import { cn } from "@/lib/utils";
 
 interface DefaultDashboardContentProps extends Auth {
   locations: string[];

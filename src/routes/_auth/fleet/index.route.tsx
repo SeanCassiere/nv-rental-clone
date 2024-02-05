@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
-
-import { getAuthFromRouterContext } from "@/utils/auth";
-import { STORAGE_DEFAULTS } from "@/utils/constants";
-import { normalizeVehicleListSearchParams } from "@/utils/normalize-search-params";
+import { VehicleSearchQuerySchema } from "@/lib/schemas/vehicle";
 import {
   fetchVehiclesSearchColumnsOptions,
   fetchVehiclesSearchListOptions,
-} from "@/utils/query/vehicle";
+} from "@/lib/query/vehicle";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
+import { STORAGE_DEFAULTS } from "@/lib/utils/constants";
+import { normalizeVehicleListSearchParams } from "@/lib/utils/normalize-search-params";
 
 export const Route = createFileRoute("/_auth/fleet/")({
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),

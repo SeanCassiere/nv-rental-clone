@@ -1,6 +1,6 @@
 import React from "react";
 
-import { cn } from "@/utils/styles";
+import { cn } from "@/lib/utils/styles";
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 

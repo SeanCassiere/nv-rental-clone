@@ -3,12 +3,14 @@ import { useAuth } from "react-oidc-context";
 
 import { CustomerSummary } from "@/components/primary-module/summary/customer";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
 import {
   fetchCustomerByIdOptions,
   fetchCustomerSummaryByIdOptions,
-} from "@/utils/query/customer";
-import { sortObjectKeys } from "@/utils/sort";
+} from "@/lib/query/customer";
+
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+
+import { sortObjectKeys } from "@/lib/utils";
 
 interface CustomerSummaryTabProps {
   customerId: string;

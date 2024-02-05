@@ -20,12 +20,12 @@ import { useAuth } from "react-oidc-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
+import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
+import type { Auth } from "@/lib/query/helpers";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import type { Auth } from "@/utils/query/helpers";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
 const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));

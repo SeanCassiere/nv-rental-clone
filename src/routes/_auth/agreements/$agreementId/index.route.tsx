@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthFromRouterContext } from "@/utils/auth";
 import {
   fetchAgreementByIdOptions,
   fetchAgreementExchangesByIdOptions,
   fetchAgreementNotesByIdOptions,
   fetchAgreementSummaryByIdOptions,
-} from "@/utils/query/agreement";
+} from "@/lib/query/agreement";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/agreements/$agreementId/")({
   validateSearch: (search) =>

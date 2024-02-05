@@ -28,16 +28,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { dashboardLayoutFeatureFlag } from "@/utils/features";
-import { fetchLocationsListOptions } from "@/utils/query/location";
-import { titleMaker } from "@/utils/title-maker";
+import { fetchLocationsListOptions } from "@/lib/query/location";
 
-import type { apiClient } from "@/api";
-import { cn } from "@/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { titleMaker } from "@/lib/utils/title-maker";
+
+import { dashboardLayoutFeatureFlag } from "@/lib/config/features";
+
+import type { apiClient } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 const DefaultDashboardContent = lazy(
   () => import("@/components/dashboard/default-content")

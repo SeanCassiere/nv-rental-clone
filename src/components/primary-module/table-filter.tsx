@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 export type FilterOption = {
   label: string;

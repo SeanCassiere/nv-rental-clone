@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
-import type { TCustomerSummarySchema } from "@/schemas/summary/customerSummary";
+import type { TCustomerSummarySchema } from "@/lib/schemas/summary/customerSummary";
 
 import {
   SummaryHeader,

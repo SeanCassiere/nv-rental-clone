@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { add } from "date-fns";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
 import { QuickCheckinAgreementForm } from "@/components/dashboard/widgets/quick-checkin-agreement";
@@ -11,13 +10,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { usePermission } from "@/hooks/usePermission";
-import { useScreenSetting } from "@/hooks/useScreenSetting";
+import { usePermission } from "@/lib/hooks/usePermission";
+import { useScreenSetting } from "@/lib/hooks/useScreenSetting";
 
-import { fetchDashboardRentalStatisticsOptions } from "@/utils/query/dashboard";
-import type { Auth } from "@/utils/query/helpers";
+import { fetchDashboardRentalStatisticsOptions } from "@/lib/query/dashboard";
+import type { Auth } from "@/lib/query/helpers";
 
-import { cn } from "@/utils";
+import { add } from "@/lib/config/date-fns";
+
+import { cn } from "@/lib/utils";
 
 interface V2DashboardContentProps extends Auth {
   locations: string[];

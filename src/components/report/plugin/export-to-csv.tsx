@@ -21,10 +21,11 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 
-import type { ReportTablePlugin } from "@/types/report";
+import { useReportContext } from "@/lib/context/view-report";
 
-import { useReportContext } from "@/context/view-report";
-import { downloadDataToCsv, sanitizeFilename } from "@/utils";
+import type { ReportTablePlugin } from "@/lib/types/report";
+
+import { downloadDataToCsv, sanitizeFilename } from "@/lib/utils";
 
 const DEFAULT_NAME = "report";
 const ALL = "all";

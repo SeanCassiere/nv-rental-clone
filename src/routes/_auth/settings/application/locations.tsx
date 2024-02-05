@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   fetchLocationCountriesListOptions,
   fetchLocationsListOptions,
-} from "@/utils/query/location";
+} from "@/lib/query/location";
 
 export const Route = createFileRoute("/_auth/settings/application/locations")({
   beforeLoad: ({ context }) => ({

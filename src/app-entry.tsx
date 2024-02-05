@@ -13,17 +13,18 @@ import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 import { icons } from "@/components/ui/icons";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-import { useEventListener } from "@/hooks/useEventListener";
-import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
+import { useEventListener } from "@/lib/hooks/useEventListener";
+import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
+import { GlobalDialogProvider } from "@/lib/context/modals";
 
-import { APP_VERSION, IS_DEV } from "@/utils/constants";
-import { parseSearchFn, stringifySearchFn } from "@/utils/router";
+import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
+import { parseSearchFn, stringifySearchFn } from "@/lib/utils/router";
 
-import { GlobalDialogProvider } from "@/context/modals";
-import i18nextConfig from "@/i18next-config";
-import { reactOidcContextConfig } from "@/react-oidc-context-config";
+import i18nextConfig from "@/lib/config/i18next";
+import { reactOidcContextConfig } from "@/lib/config/react-oidc-context";
+import { queryClient } from "@/lib/config/tanstack-query";
+
 import { routeTree } from "@/route-tree.gen";
-import { queryClient } from "@/tanstack-query-config";
 
 export const router = createRouter({
   routeTree,

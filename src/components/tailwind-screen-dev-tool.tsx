@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IS_DEV } from "@/utils/constants";
+import { IS_DEV } from "@/lib/utils/constants";
 
 export const TailwindScreenDevTool = () => {
   if (!IS_DEV) return null;

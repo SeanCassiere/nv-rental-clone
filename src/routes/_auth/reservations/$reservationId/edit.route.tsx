@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthFromRouterContext } from "@/utils/auth";
 import {
   fetchReservationByIdOptions,
   fetchReservationSummaryByIdOptions,
-} from "@/utils/query/reservation";
+} from "@/lib/query/reservation";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/reservations/$reservationId/edit")(
   {

@@ -7,12 +7,13 @@ import VehicleInformation from "@/components/primary-module/information-block/ve
 import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
+import { fetchAgreementByIdOptions } from "@/lib/query/agreement";
 import {
   fetchVehiclesByIdOptions,
   fetchVehiclesSummaryByIdOptions,
-} from "@/utils/query/vehicle";
+} from "@/lib/query/vehicle";
+
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 type VehicleSummaryTabProps = {
   vehicleId: string;

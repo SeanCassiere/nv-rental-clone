@@ -16,20 +16,22 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useDebounce } from "@/hooks/useDebounce";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
+import { useDebounce } from "@/lib/hooks/useDebounce";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
+import { useGlobalDialogContext } from "@/lib/context/modals";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
-import { fetchAgreementsSearchListOptions } from "@/utils/query/agreement";
-import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
-import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
-import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
-import type { GlobalSearchReturnType } from "@/types/search";
+import { fetchAgreementsSearchListOptions } from "@/lib/query/agreement";
+import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
+import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
+import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
 
-import { useGlobalDialogContext } from "@/context/modals";
-import { cn, IsMacLike } from "@/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+
+import type { GlobalSearchReturnType } from "@/lib/types/search";
+
+import { cn, IsMacLike } from "@/lib/utils";
 
 export const CommandMenu = () => {
   const router = useRouter();

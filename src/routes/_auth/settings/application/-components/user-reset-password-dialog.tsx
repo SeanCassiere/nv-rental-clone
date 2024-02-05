@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { icons } from "@/components/ui/icons";
 
-import type { TUserConfigurations } from "@/schemas/user";
+import type { TUserConfigurations } from "@/lib/schemas/user";
 
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
+import { localDateTimeToQueryYearMonthDay } from "@/lib/utils/date";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 
 interface UserResetPasswordDialogProps {
   open: boolean;

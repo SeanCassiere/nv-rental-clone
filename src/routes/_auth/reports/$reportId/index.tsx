@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getAuthFromRouterContext } from "@/utils/auth";
-import { fetchReportByIdOptions } from "@/utils/query/report";
+import { fetchReportByIdOptions } from "@/lib/query/report";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/reports/$reportId/")({
   beforeLoad: ({ context, params: { reportId } }) => {

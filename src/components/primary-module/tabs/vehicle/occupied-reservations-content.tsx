@@ -10,16 +10,16 @@ import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { TReservationListItemParsed } from "@/schemas/reservation";
+import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
+import { fetchAgreementsSearchColumnsOptions } from "@/lib/query/agreement";
+import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
   ReservationDateTimeColumns,
   sortColOrderByOrderIndex,
-} from "@/utils/columns";
-import { normalizeReservationListSearchParams } from "@/utils/normalize-search-params";
-import { fetchAgreementsSearchColumnsOptions } from "@/utils/query/agreement";
-import { fetchReservationsSearchListOptions } from "@/utils/query/reservation";
+} from "@/lib/utils/columns";
+import { normalizeReservationListSearchParams } from "@/lib/utils/normalize-search-params";
 
 interface VehicleOccupiedReservationsTabProps {
   vehicleId: string;

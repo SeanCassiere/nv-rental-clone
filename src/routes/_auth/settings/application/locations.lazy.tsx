@@ -31,18 +31,18 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
-import type { TLocationParsed } from "@/schemas/location";
-
-import { fetchClientProfileOptions } from "@/utils/query/client";
+import type { TLocationParsed } from "@/lib/schemas/location";
+import { fetchClientProfileOptions } from "@/lib/query/client";
 import {
   fetchLocationByIdOptions,
   fetchLocationStatesByCountryIdListOptions,
-} from "@/utils/query/location";
-import { titleMaker } from "@/utils/title-maker";
+} from "@/lib/query/location";
 
-import { cn } from "@/utils";
+import { titleMaker } from "@/lib/utils/title-maker";
+
+import { cn } from "@/lib/utils";
 
 import { LocationEditDialog } from "./-components/location-edit-dialog";
 

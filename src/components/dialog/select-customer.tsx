@@ -12,12 +12,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import type { TCustomerListItemParsed } from "@/schemas/customer";
+import type { TCustomerListItemParsed } from "@/lib/schemas/customer";
+import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
-import { getXPaginationFromHeaders } from "@/utils";
+import { getXPaginationFromHeaders } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 

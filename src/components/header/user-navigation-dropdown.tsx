@@ -22,13 +22,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { icons } from "@/components/ui/icons";
 
-import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
+import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
+import { useGlobalDialogContext } from "@/lib/context/modals";
 
-import { APP_VERSION, IS_DEV } from "@/utils/constants";
-import { fetchUserByIdOptions } from "@/utils/query/user";
+import { fetchUserByIdOptions } from "@/lib/query/user";
 
-import { useGlobalDialogContext } from "@/context/modals";
-import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/utils";
+import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
+
+import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/lib/utils";
 
 export const UserNavigationDropdown = () => {
   const auth = useAuth();

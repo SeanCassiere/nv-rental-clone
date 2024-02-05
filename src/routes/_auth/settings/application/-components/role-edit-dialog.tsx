@@ -39,15 +39,14 @@ import {
 } from "@/components/ui/input-select";
 import { Textarea } from "@/components/ui/textarea";
 
-import type { PermissionListItem, RoleListItem } from "@/schemas/role";
-
+import type { PermissionListItem, RoleListItem } from "@/lib/schemas/role";
 import {
   fetchRoleByIdOptions,
   fetchRolePermissionsListOptions,
   fetchRolesListOptions,
-} from "@/utils/query/role";
+} from "@/lib/query/role";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 
 interface RoleEditDialogProps {
   mode: "new" | "edit";

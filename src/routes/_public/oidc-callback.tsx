@@ -4,9 +4,9 @@ import { z } from "zod";
 
 import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
-import { LS_OIDC_REDIRECT_URI_KEY } from "@/utils/constants";
+import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 
-import { removeTrailingSlash } from "@/utils";
+import { removeTrailingSlash } from "@/lib/utils";
 
 export const Route = createFileRoute("/_public/oidc-callback")({
   validateSearch: z.object({

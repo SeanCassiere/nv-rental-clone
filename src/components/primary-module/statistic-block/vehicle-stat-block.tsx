@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
-import type { VehicleDataParsed } from "@/schemas/vehicle";
-
-import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
+import type { VehicleDataParsed } from "@/lib/schemas/vehicle";
+import { fetchVehiclesStatusesOptions } from "@/lib/query/vehicle";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
