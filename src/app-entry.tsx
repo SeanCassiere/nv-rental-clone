@@ -8,9 +8,10 @@ import { I18nextProvider, useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
-import { LoadingPlaceholder } from "@/components/loading-placeholder";
 import { notFoundRoute } from "@/components/not-found";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
+import { icons } from "@/components/ui/icons";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { useEventListener } from "@/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
@@ -19,12 +20,10 @@ import { APP_VERSION, IS_DEV } from "@/utils/constants";
 import { parseSearchFn, stringifySearchFn } from "@/utils/router";
 
 import { GlobalDialogProvider } from "@/context/modals";
+import i18nextConfig from "@/i18next-config";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { routeTree } from "@/route-tree.gen";
 import { queryClient } from "@/tanstack-query-config";
-
-import { TooltipProvider } from "./components/ui/tooltip";
-import i18n from "./i18next-config";
 
 export const router = createRouter({
   routeTree,
@@ -33,7 +32,7 @@ export const router = createRouter({
   defaultPreloadStaleTime: 0,
   parseSearch: parseSearchFn,
   stringifySearch: stringifySearchFn,
-  defaultPendingComponent: LoadingPlaceholder,
+  defaultPendingComponent: FullPageLoadingSpinner,
   context: {
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
@@ -54,15 +53,15 @@ broadcastQueryClient({
 export default function App() {
   return (
     <CacheBuster
-      loadingComponent={<LoadingPlaceholder />}
+      loadingComponent={<FullPageLoadingSpinner />}
       currentVersion={APP_VERSION}
       isVerboseMode={IS_DEV}
       isEnabled={IS_DEV === false}
     >
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>
-          <React.Suspense fallback={<LoadingPlaceholder />}>
-            <I18nextProvider i18n={i18n}>
+          <React.Suspense fallback={<FullPageLoadingSpinner />}>
+            <I18nextProvider i18n={i18nextConfig}>
               <GlobalDialogProvider>
                 <TooltipProvider>
                   <CacheDocumentFocusChecker />
@@ -93,7 +92,7 @@ function RouterWithInjectedAuth() {
   return (
     <>
       {auth.isLoading ? (
-        <LoadingPlaceholder />
+        <FullPageLoadingSpinner />
       ) : (
         <>
           <RouterProvider
@@ -142,4 +141,12 @@ function CacheDocumentFocusChecker() {
   useEventListener("visibilitychange", onVisibilityChange, documentRef);
 
   return null;
+}
+
+function FullPageLoadingSpinner() {
+  return (
+    <div className="grid min-h-[100dvh] place-items-center bg-background">
+      <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
+    </div>
+  );
 }
