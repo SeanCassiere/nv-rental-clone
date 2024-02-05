@@ -1,11 +1,12 @@
 /**
  * Get the URL to the avatar image for the given username.
- * @param username User's unique username.
- * @returns URL to the avatar image.
+ * @param {string | undefined} username User's unique username.
+ * @returns {string} URL to the avatar image.
  * @link https://www.dicebear.com/styles/miniavs/
- * @example "https://api.dicebear.com/7.x/miniavs/svg?seed=none&eyes=happy"
+ * @example
+ * `https://api.dicebear.com/7.x/miniavs/svg?seed=myUsername&eyes=happy`
  */
-export function getAvatarUrl(username: string | undefined) {
+export function getAvatarUrl(username: string | undefined): string {
   const url = new URL("https://api.dicebear.com/7.x/miniavs/svg");
   url.searchParams.append("seed", username ?? "none");
   url.searchParams.append("scale", "85");
