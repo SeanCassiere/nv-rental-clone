@@ -29,17 +29,16 @@ import {
 } from "@/components/ui/tooltip";
 
 import {
-  notifyLocalStorageChange,
-  useLocalStorage,
-} from "@/lib/hooks/useLocalStorage";
-import { useGlobalDialogContext } from "@/lib/context/modals";
-
-import {
   featureFlags,
   type DropdownFeatureFlag,
   type StringFeatureFlag,
   type SwitchFeatureFlag,
-} from "@/lib/utils/features";
+} from "@/lib/config/features";
+import { useGlobalDialogContext } from "@/lib/context/modals";
+import {
+  notifyLocalStorageChange,
+  useLocalStorage,
+} from "@/lib/hooks/useLocalStorage";
 
 export function FeatureTogglesDialog() {
   const { t } = useTranslation();

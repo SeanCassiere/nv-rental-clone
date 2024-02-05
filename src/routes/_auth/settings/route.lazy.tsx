@@ -8,13 +8,11 @@ import { useTranslation } from "react-i18next";
 
 import { Separator } from "@/components/ui/separator";
 
+import { incompleteSettingsNavigationFeatureFlag } from "@/lib/config/features";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { usePermission } from "@/lib/hooks/usePermission";
-
-import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
-import { incompleteSettingsNavigationFeatureFlag } from "@/lib/utils/features";
-
 import { cn } from "@/lib/utils";
+import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
 
 import { SidebarDesktopNavigation } from "./-components/sidebar-desktop-navigation";
 import { SidebarMobileNavigation } from "./-components/sidebar-mobile-navigation";
