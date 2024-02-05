@@ -48,9 +48,8 @@ import {
   type UpdateUserInput,
 } from "@/schemas/user";
 
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { fetchLocationsListOptions } from "@/utils/query/location";
-import { fetchRolesListOptions } from "@/utils/query/role";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { fetchRolesListOptions } from "@/lib/query/role";
 import {
   createUserMutationOptions,
   fetchActiveUsersCountOptions,
@@ -59,9 +58,9 @@ import {
   fetchUserByIdOptions,
   fetchUserConfigurationOptions,
   updateUserMutationOptions,
-} from "@/utils/query/user";
-
-import { cn } from "@/utils";
+} from "@/lib/query/user";
+import { cn } from "@/lib/utils";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
 
 interface UserEditDialogProps {
   mode: "new" | "edit";

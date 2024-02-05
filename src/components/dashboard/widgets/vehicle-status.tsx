@@ -16,10 +16,10 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
-import { fetchDashboardVehicleStatusCountsOptions } from "@/utils/query/dashboard";
-import type { Auth } from "@/utils/query/helpers";
-import { fetchVehiclesStatusesOptions } from "@/utils/query/vehicle";
+import { fetchDashboardVehicleStatusCountsOptions } from "@/lib/query/dashboard";
+import type { Auth } from "@/lib/query/helpers";
+import { fetchVehiclesStatusesOptions } from "@/lib/query/vehicle";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
 

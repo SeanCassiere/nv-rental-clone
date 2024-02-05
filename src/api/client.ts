@@ -2,8 +2,8 @@ import { initClient, tsRestFetchApi } from "@ts-rest/core";
 
 import { contract } from "@/api/_root.contract";
 
-import { getAuthFromOidcStorage } from "@/utils/auth";
-import { apiBaseUrl } from "@/utils/constants";
+import { getAuthFromOidcStorage } from "@/lib/utils/auth";
+import { apiBaseUrl } from "@/lib/utils/constants";
 
 const apiClient = initClient(contract, {
   baseUrl: apiBaseUrl,

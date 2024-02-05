@@ -3,7 +3,7 @@ import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { titleMaker } from "@/utils/title-maker";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_public/logged-out")({
   component: LoggedOutPage,

@@ -3,11 +3,10 @@ import { isBefore } from "date-fns/isBefore";
 
 import type { ServerMessage } from "@/schemas/dashboard";
 
-import { STORAGE_KEYS } from "@/utils/constants";
-import { tryParseJson } from "@/utils/parse";
-import type { Auth } from "@/utils/query/helpers";
-
 import { apiClient } from "@/api";
+import type { Auth } from "@/lib/query/helpers";
+import { STORAGE_KEYS } from "@/lib/utils/constants";
+import { tryParseJson } from "@/lib/utils/parse";
 
 /**
  * Retrieves dashboard messages and filters them based on their active status, sent date, and expiry date.

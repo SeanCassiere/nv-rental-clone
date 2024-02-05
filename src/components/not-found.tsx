@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Route as rootRoute } from "@/routes/__root";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 const NotFoundPage = () => {
   const { t } = useTranslation();

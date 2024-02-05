@@ -16,11 +16,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEventListener } from "@/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import { APP_VERSION, IS_DEV } from "@/utils/constants";
-import { parseSearchFn, stringifySearchFn } from "@/utils/router";
-
 import { GlobalDialogProvider } from "@/context/modals";
 import i18nextConfig from "@/i18next-config";
+import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
+import { parseSearchFn, stringifySearchFn } from "@/lib/utils/router";
 import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { routeTree } from "@/route-tree.gen";
 import { queryClient } from "@/tanstack-query-config";

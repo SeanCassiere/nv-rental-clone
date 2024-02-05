@@ -33,14 +33,13 @@ import {
   useLocalStorage,
 } from "@/hooks/useLocalStorage";
 
+import { useGlobalDialogContext } from "@/context/modals";
 import {
   featureFlags,
   type DropdownFeatureFlag,
   type StringFeatureFlag,
   type SwitchFeatureFlag,
-} from "@/utils/features";
-
-import { useGlobalDialogContext } from "@/context/modals";
+} from "@/lib/utils/features";
 
 export function FeatureTogglesDialog() {
   const { t } = useTranslation();

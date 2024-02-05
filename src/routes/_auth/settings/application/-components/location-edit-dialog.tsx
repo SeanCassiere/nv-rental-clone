@@ -40,7 +40,7 @@ import {
   type UpdateLocationInput,
 } from "@/schemas/location";
 
-import type { Auth } from "@/utils/query/helpers";
+import type { Auth } from "@/lib/query/helpers";
 import {
   createLocationMutationOptions,
   fetchLocationByIdOptions,
@@ -48,7 +48,7 @@ import {
   fetchLocationsListOptions,
   fetchLocationStatesByCountryIdListOptions,
   updateLocationMutationOptions,
-} from "@/utils/query/location";
+} from "@/lib/query/location";
 
 type FormMode = "new" | "edit";
 

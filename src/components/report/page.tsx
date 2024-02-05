@@ -8,10 +8,9 @@ import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { titleMaker } from "@/utils/title-maker";
-
 import { useReportContext } from "@/context/view-report";
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 import DefaultView from "./presentation/default-view";
 import JsonView from "./presentation/json-view";

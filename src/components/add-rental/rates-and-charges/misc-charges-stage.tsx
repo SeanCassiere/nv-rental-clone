@@ -21,14 +21,13 @@ import { Switch } from "@/components/ui/switch";
 
 import type { MiscChargeListItem } from "@/schemas/misc-charge";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
+import { fetchMiscChargesListOptions } from "@/lib/query/misc-charge";
+import { cn } from "@/lib/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
   localDateTimeToQueryYearMonthDay,
   localDateTimeWithoutSecondsToQueryYearMonthDay,
-} from "@/utils/date";
-import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
-
-import { cn } from "@/utils";
+} from "@/lib/utils/date";
 
 import type { RatesAndChargesTabProps } from ".";
 

@@ -24,11 +24,10 @@ import { icons } from "@/components/ui/icons";
 
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import { APP_VERSION, IS_DEV } from "@/utils/constants";
-import { fetchUserByIdOptions } from "@/utils/query/user";
-
 import { useGlobalDialogContext } from "@/context/modals";
-import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/utils";
+import { fetchUserByIdOptions } from "@/lib/query/user";
+import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/lib/utils";
+import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
 
 export const UserNavigationDropdown = () => {
   const auth = useAuth();

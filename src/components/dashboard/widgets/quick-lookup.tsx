@@ -29,24 +29,24 @@ import {
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
-} from "@/utils/query/agreement";
+} from "@/lib/query/agreement";
 import {
   fetchCustomersSearchListFn,
   fetchCustomersSearchListOptions,
-} from "@/utils/query/customer";
-import type { Auth } from "@/utils/query/helpers";
+} from "@/lib/query/customer";
+import type { Auth } from "@/lib/query/helpers";
 import {
   fetchReservationsSearchListFn,
   fetchReservationsSearchListOptions,
-} from "@/utils/query/reservation";
+} from "@/lib/query/reservation";
 import {
   fetchVehiclesSearchListFn,
   fetchVehiclesSearchListOptions,
-} from "@/utils/query/vehicle";
+} from "@/lib/query/vehicle";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 const QuickLookupWidget = (props: Auth) => {
   return (

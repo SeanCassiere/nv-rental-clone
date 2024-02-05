@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchFeaturesForClientOptions } from "@/utils/query/client";
+import { fetchFeaturesForClientOptions } from "@/lib/query/client";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 type FeatureValue = string | null;
 type IsFeaturePresent = boolean;

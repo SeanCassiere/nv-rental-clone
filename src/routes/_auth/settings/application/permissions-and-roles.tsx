@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { fetchRolesListOptions } from "@/utils/query/role";
+import { fetchRolesListOptions } from "@/lib/query/role";
 
 export const Route = createFileRoute(
   "/_auth/settings/application/permissions-and-roles"

@@ -41,13 +41,12 @@ import { Textarea } from "@/components/ui/textarea";
 
 import type { PermissionListItem, RoleListItem } from "@/schemas/role";
 
+import { apiClient } from "@/api";
 import {
   fetchRoleByIdOptions,
   fetchRolePermissionsListOptions,
   fetchRolesListOptions,
-} from "@/utils/query/role";
-
-import { apiClient } from "@/api";
+} from "@/lib/query/role";
 
 interface RoleEditDialogProps {
   mode: "new" | "edit";

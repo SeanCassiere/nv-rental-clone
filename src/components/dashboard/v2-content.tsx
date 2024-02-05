@@ -14,10 +14,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePermission } from "@/hooks/usePermission";
 import { useScreenSetting } from "@/hooks/useScreenSetting";
 
-import { fetchDashboardRentalStatisticsOptions } from "@/utils/query/dashboard";
-import type { Auth } from "@/utils/query/helpers";
-
-import { cn } from "@/utils";
+import { fetchDashboardRentalStatisticsOptions } from "@/lib/query/dashboard";
+import type { Auth } from "@/lib/query/helpers";
+import { cn } from "@/lib/utils";
 
 interface V2DashboardContentProps extends Auth {
   locations: string[];

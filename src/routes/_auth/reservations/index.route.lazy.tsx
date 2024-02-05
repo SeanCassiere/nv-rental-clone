@@ -29,19 +29,18 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TReservationListItemParsed } from "@/schemas/reservation";
 
-import {
-  ReservationDateTimeColumns,
-  sortColOrderByOrderIndex,
-} from "@/utils/columns";
-import { fetchLocationsListOptions } from "@/utils/query/location";
+import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchReservationStatusesOptions,
   fetchReservationTypesOptions,
-} from "@/utils/query/reservation";
-import { fetchVehiclesTypesOptions } from "@/utils/query/vehicle";
-import { titleMaker } from "@/utils/title-maker";
-
-import { cn, getXPaginationFromHeaders } from "@/utils";
+} from "@/lib/query/reservation";
+import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
+import { cn, getXPaginationFromHeaders } from "@/lib/utils";
+import {
+  ReservationDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 

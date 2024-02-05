@@ -31,13 +31,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { dashboardLayoutFeatureFlag } from "@/utils/features";
-import { fetchLocationsListOptions } from "@/utils/query/location";
-import { titleMaker } from "@/utils/title-maker";
-
 import type { apiClient } from "@/api";
-import { cn } from "@/utils";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { cn } from "@/lib/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { dashboardLayoutFeatureFlag } from "@/lib/utils/features";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 const DefaultDashboardContent = lazy(
   () => import("@/components/dashboard/default-content")

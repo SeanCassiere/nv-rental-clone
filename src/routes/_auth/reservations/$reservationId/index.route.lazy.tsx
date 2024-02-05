@@ -27,10 +27,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { titleMaker } from "@/utils/title-maker";
-
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 const SummaryTab = lazy(
   () => import("@/components/primary-module/tabs/reservation/summary-content")

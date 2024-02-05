@@ -27,10 +27,9 @@ import {
   fetchDashboardRentalStatisticsOptions,
   fetchDashboardWidgetsOptions,
   saveDashboardWidgetsMutationOptions,
-} from "@/utils/query/dashboard";
-import type { Auth } from "@/utils/query/helpers";
-
-import { cn } from "@/utils";
+} from "@/lib/query/dashboard";
+import type { Auth } from "@/lib/query/helpers";
+import { cn } from "@/lib/utils";
 
 interface DefaultDashboardContentProps extends Auth {
   locations: string[];

@@ -10,11 +10,12 @@ import { icons } from "@/components/ui/icons";
 
 import type { TNoteDataParsed } from "@/schemas/note";
 
-import { fetchAgreementNotesByIdOptions } from "@/utils/query/agreement";
-import { fetchCustomerNotesByIdOptions } from "@/utils/query/customer";
-import { fetchReservationNotesByIdOptions } from "@/utils/query/reservation";
-import { fetchVehiclesNotesByIdOptions } from "@/utils/query/vehicle";
 import type { AppModule } from "@/types/app-module";
+
+import { fetchAgreementNotesByIdOptions } from "@/lib/query/agreement";
+import { fetchCustomerNotesByIdOptions } from "@/lib/query/customer";
+import { fetchReservationNotesByIdOptions } from "@/lib/query/reservation";
+import { fetchVehiclesNotesByIdOptions } from "@/lib/query/vehicle";
 
 const EmptyIcon = icons.Files;
 

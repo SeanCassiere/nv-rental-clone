@@ -3,9 +3,8 @@ import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 import { getDashboardMessagesAndFilter } from "@/api/get-dashboard-messages";
 import { saveDashboardWidgets } from "@/api/save-dashboard-widgets";
 
-import { localDateToQueryYearMonthDay } from "@/utils/date";
-
 import { apiClient } from "@/api";
+import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
 
 import { isEnabled, makeQueryKey, type Auth } from "./helpers";
 

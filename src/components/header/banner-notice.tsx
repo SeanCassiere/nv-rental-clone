@@ -6,7 +6,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import type { ServerMessage } from "@/schemas/dashboard";
 
-import { STORAGE_KEYS } from "@/utils/constants";
+import { STORAGE_KEYS } from "@/lib/utils/constants";
 
 const MessageText = ({ message }: { message: ServerMessage }) => (
   <>

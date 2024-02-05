@@ -10,7 +10,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-import { IS_DEV, STORAGE_KEYS } from "@/utils/constants";
+import { IS_DEV, STORAGE_KEYS } from "@/lib/utils/constants";
 
 // START: date-fns formats
 export const dfnsTimeFormat = "hh:mm a";

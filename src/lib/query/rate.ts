@@ -1,9 +1,8 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { sortObjectKeys } from "@/utils/sort";
-
 import { apiClient } from "@/api";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
+import { sortObjectKeys } from "@/lib/utils/sort";
 
 import { isEnabled, makeQueryKey, type Auth } from "./helpers";
 

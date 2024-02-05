@@ -27,9 +27,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
-import { fetchUserByIdOptions } from "@/utils/query/user";
-
-import { cn, getAvatarFallbackText, getAvatarUrl } from "@/utils";
+import { fetchUserByIdOptions } from "@/lib/query/user";
+import { cn, getAvatarFallbackText, getAvatarUrl } from "@/lib/utils";
 
 import { UserEditDialog } from "./-components/user-edit-dialog";
 import { UserResetPasswordDialog } from "./-components/user-reset-password-dialog";

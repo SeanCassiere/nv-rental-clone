@@ -46,17 +46,16 @@ import {
   type UserLanguageItem,
 } from "@/schemas/user";
 
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { fetchLocationsListOptions } from "@/utils/query/location";
+import { apiClient } from "@/api";
+import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchActiveUsersCountOptions,
   fetchMaximumUsersCountOptions,
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
-} from "@/utils/query/user";
-import { titleMaker } from "@/utils/title-maker";
-
-import { apiClient } from "@/api";
+} from "@/lib/query/user";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/settings/profile")({
   component: SettingsProfilePage,

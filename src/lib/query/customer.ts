@@ -1,11 +1,10 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
-import { mutateColumnAccessors } from "@/utils/columns";
-import { sortObjectKeys } from "@/utils/sort";
-
 import { apiClient } from "@/api";
+import { mutateColumnAccessors } from "@/lib/utils/columns";
+import { sortObjectKeys } from "@/lib/utils/sort";
 
-import { getXPaginationFromHeaders } from "../headers";
+import { getXPaginationFromHeaders } from "../utils/headers";
 import {
   isEnabled,
   makeQueryKey,

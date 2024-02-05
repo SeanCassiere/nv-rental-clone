@@ -1,8 +1,7 @@
 import React from "react";
 
-import { STORAGE_KEYS } from "@/utils/constants";
-
 import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
+import { STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { useLocalStorage } from "./useLocalStorage";
 

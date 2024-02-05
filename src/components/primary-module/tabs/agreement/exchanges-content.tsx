@@ -13,7 +13,7 @@ import { icons } from "@/components/ui/icons";
 
 import { type TVehicleExchangeListItemParsed } from "@/schemas/vehicle-exchange";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();
 type TVehicleExchangeKeyHelp = {

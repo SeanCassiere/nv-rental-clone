@@ -3,9 +3,8 @@ import { queryOptions } from "@tanstack/react-query";
 import type { RentalRateParsed } from "@/schemas/rate";
 import type { CalculateRentalSummaryAmountsInput } from "@/schemas/summary";
 
-import { sortObjectKeys } from "@/utils/sort";
-
 import { apiClient } from "@/api";
+import { sortObjectKeys } from "@/lib/utils/sort";
 
 import { isEnabled, makeQueryKey, type Auth } from "./helpers";
 

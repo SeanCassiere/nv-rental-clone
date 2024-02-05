@@ -3,9 +3,8 @@ import { Link, type LinkOptions } from "@tanstack/react-router";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
-
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 type AppNavigationLinks = {
   name: string;

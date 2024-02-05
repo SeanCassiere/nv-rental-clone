@@ -27,11 +27,10 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
-import { sortColOrderByOrderIndex } from "@/utils/columns";
-import { fetchCustomerTypesOptions } from "@/utils/query/customer";
-import { titleMaker } from "@/utils/title-maker";
-
-import { cn, getXPaginationFromHeaders } from "@/utils";
+import { fetchCustomerTypesOptions } from "@/lib/query/customer";
+import { cn, getXPaginationFromHeaders } from "@/lib/utils";
+import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/customers/")({
   component: CustomerSearchPage,

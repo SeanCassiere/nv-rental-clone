@@ -10,8 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   fetchAgreementByIdOptions,
   fetchAgreementSummaryByIdOptions,
-} from "@/utils/query/agreement";
-import type { Auth } from "@/utils/query/helpers";
+} from "@/lib/query/agreement";
+import type { Auth } from "@/lib/query/helpers";
 
 type AgreementSummaryTabProps = {
   agreementId: string;

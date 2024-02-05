@@ -3,15 +3,16 @@ import { useAuth } from "react-oidc-context";
 
 import type { TReportDetail } from "@/schemas/report";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchAgreementStatusesOptions } from "@/utils/query/agreement";
-import { fetchLocationsListOptions } from "@/utils/query/location";
-import { fetchReservationStatusesOptions } from "@/utils/query/reservation";
+import type { ReportFilterOption } from "@/types/report";
+
+import { fetchAgreementStatusesOptions } from "@/lib/query/agreement";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { fetchReservationStatusesOptions } from "@/lib/query/reservation";
 import {
   fetchVehiclesStatusesOptions,
   fetchVehiclesTypesOptions,
-} from "@/utils/query/vehicle";
-import type { ReportFilterOption } from "@/types/report";
+} from "@/lib/query/vehicle";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 type CriteriaList = TReportDetail["searchCriteria"];
 

@@ -16,9 +16,8 @@ import { icons } from "@/components/ui/icons";
 
 import type { TUserConfigurations } from "@/schemas/user";
 
-import { localDateTimeToQueryYearMonthDay } from "@/utils/date";
-
 import { apiClient } from "@/api";
+import { localDateTimeToQueryYearMonthDay } from "@/lib/utils/date";
 
 interface UserResetPasswordDialogProps {
   open: boolean;

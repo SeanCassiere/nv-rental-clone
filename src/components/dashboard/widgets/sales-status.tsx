@@ -6,8 +6,8 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import { WidgetSkeleton } from "@/components/dashboard/dnd-widget-display-grid";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { fetchDashboardSalesStatisticsOptions } from "@/utils/query/dashboard";
-import type { Auth } from "@/utils/query/helpers";
+import { fetchDashboardSalesStatisticsOptions } from "@/lib/query/dashboard";
+import type { Auth } from "@/lib/query/helpers";
 
 const SalesStatus = (props: { locations: string[] } & Auth) => {
   return (

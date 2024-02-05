@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
 
-import { getAuthFromRouterContext } from "@/utils/auth";
 import {
   fetchDashboardMessagesOptions,
   fetchDashboardWidgetsOptions,
-} from "@/utils/query/dashboard";
-import { fetchLocationsListOptions } from "@/utils/query/location";
+} from "@/lib/query/dashboard";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/")({
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),

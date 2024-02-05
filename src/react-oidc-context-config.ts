@@ -7,8 +7,7 @@ import {
   OIDC_POST_LOGOUT_REDIRECT_URI,
   OIDC_REDIRECT_URI,
   OIDC_SILENT_REDIRECT_URI,
-} from "@/utils/constants";
-
+} from "@/lib/utils/constants";
 import { queryClient } from "@/tanstack-query-config";
 
 export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 export const SummaryHeader = ({
   title,

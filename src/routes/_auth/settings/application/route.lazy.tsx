@@ -11,7 +11,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {
   incompleteApplicationSettingsTabsFeatureFlag,
   incompleteLocationsApplicationSettingsTabFeatureFlag,
-} from "@/utils/features";
+} from "@/lib/utils/features";
 
 import { SettingsLayoutHeader } from "../-components/layout-header";
 import {

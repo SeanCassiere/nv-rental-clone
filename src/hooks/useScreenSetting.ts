@@ -3,8 +3,8 @@ import { useAuth } from "react-oidc-context";
 
 import type { TClientScreenSetting } from "@/schemas/client";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchScreenSettingsForClientOptions } from "@/utils/query/client";
+import { fetchScreenSettingsForClientOptions } from "@/lib/query/client";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 type ListOfSettings = TClientScreenSetting[];
 type SingleScreenSetting = TClientScreenSetting | null;

@@ -5,11 +5,11 @@ import RentalInformation from "@/components/primary-module/information-block/ren
 import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 
-import type { Auth } from "@/utils/query/helpers";
+import type { Auth } from "@/lib/query/helpers";
 import {
   fetchReservationByIdOptions,
   fetchReservationSummaryByIdOptions,
-} from "@/utils/query/reservation";
+} from "@/lib/query/reservation";
 
 type ReservationSummaryTabProps = {
   reservationId: string;

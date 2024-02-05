@@ -5,9 +5,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import { momentToDateFnsFormat } from "@/schemas/user";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
-
 import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 export function HiddenFeatureSetter() {
   // Set user's default date format

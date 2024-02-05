@@ -30,10 +30,9 @@ import { icons } from "@/components/ui/icons";
 
 import { type DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
-import { fetchDashboardWidgetsOptions } from "@/utils/query/dashboard";
-import type { Auth } from "@/utils/query/helpers";
-
-import { cn } from "@/utils";
+import { fetchDashboardWidgetsOptions } from "@/lib/query/dashboard";
+import type { Auth } from "@/lib/query/helpers";
+import { cn } from "@/lib/utils";
 
 interface WidgetPickerContentProps extends Auth {
   onModalStateChange: (show: boolean) => void;

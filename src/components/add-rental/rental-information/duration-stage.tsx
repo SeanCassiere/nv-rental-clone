@@ -29,14 +29,13 @@ import {
 
 import { useDatePreference } from "@/hooks/useDatePreferences";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
+import i18n from "@/i18next-config";
 import {
   fetchAgreementGeneratedNumberOptions,
   fetchAgreementTypesOptions,
-} from "@/utils/query/agreement";
-import { fetchLocationsListOptions } from "@/utils/query/location";
-
-import i18n from "@/i18next-config";
+} from "@/lib/query/agreement";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 const REQUIRED = i18n.t("labels:display.required");
 

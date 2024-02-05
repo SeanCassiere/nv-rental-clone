@@ -11,10 +11,9 @@ import { Separator } from "@/components/ui/separator";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePermission } from "@/hooks/usePermission";
 
-import { UI_APPLICATION_NAME } from "@/utils/constants";
-import { incompleteSettingsNavigationFeatureFlag } from "@/utils/features";
-
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
+import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
+import { incompleteSettingsNavigationFeatureFlag } from "@/lib/utils/features";
 
 import { SidebarDesktopNavigation } from "./-components/sidebar-desktop-navigation";
 import { SidebarMobileNavigation } from "./-components/sidebar-mobile-navigation";

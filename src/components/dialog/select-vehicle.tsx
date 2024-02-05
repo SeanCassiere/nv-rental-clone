@@ -14,10 +14,9 @@ import {
 
 import type { TVehicleListItemParsed } from "@/schemas/vehicle";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
-
-import { getXPaginationFromHeaders } from "@/utils";
+import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
+import { getXPaginationFromHeaders } from "@/lib/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();
 

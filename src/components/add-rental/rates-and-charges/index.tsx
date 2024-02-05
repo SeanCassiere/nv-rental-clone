@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import type { RentalRateParsed } from "@/schemas/rate";
 
-import type { CalculateRentalSummaryInput } from "@/utils/query/summary";
+import type { CalculateRentalSummaryInput } from "@/lib/query/summary";
 
 import { MiscChargesStage } from "./misc-charges-stage";
 import { RatesStage } from "./rates-stage";

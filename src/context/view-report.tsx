@@ -3,9 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 
 import type { TReportDetail, TReportResult } from "@/schemas/report";
 
-import { makeInitialSearchCriteria } from "@/utils/report";
-
 import { apiClient } from "@/api";
+import { makeInitialSearchCriteria } from "@/lib/utils/report";
 
 interface ReportContextProps {
   userId: string;

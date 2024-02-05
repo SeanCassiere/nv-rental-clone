@@ -3,7 +3,7 @@ import { Link, type LinkOptions } from "@tanstack/react-router";
 
 import { buttonVariants } from "@/components/ui/button";
 
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 
 interface SidebarDesktopNavigationProps {
   items: {

@@ -35,14 +35,13 @@ import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
 import type { TLocationParsed } from "@/schemas/location";
 
-import { fetchClientProfileOptions } from "@/utils/query/client";
+import { fetchClientProfileOptions } from "@/lib/query/client";
 import {
   fetchLocationByIdOptions,
   fetchLocationStatesByCountryIdListOptions,
-} from "@/utils/query/location";
-import { titleMaker } from "@/utils/title-maker";
-
-import { cn } from "@/utils";
+} from "@/lib/query/location";
+import { cn } from "@/lib/utils";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 import { LocationEditDialog } from "./-components/location-edit-dialog";
 

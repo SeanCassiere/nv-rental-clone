@@ -22,10 +22,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import type { Auth } from "@/utils/query/helpers";
-
-import { cn } from "@/utils";
+import type { Auth } from "@/lib/query/helpers";
+import { cn } from "@/lib/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
 const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));

@@ -8,8 +8,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 import type { TDashboardStats } from "@/schemas/dashboard";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
-import { localDateToQueryYearMonthDay } from "@/utils/date";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;

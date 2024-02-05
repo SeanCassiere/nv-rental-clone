@@ -4,8 +4,8 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useUpdateEffect } from "@/hooks/useUpdateEffect";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/utils/constants";
-import { setDomClass } from "@/utils/dom";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+import { setDomClass } from "@/lib/utils/dom";
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 

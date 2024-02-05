@@ -57,10 +57,9 @@ import {
 
 import { type TColumnHeaderItem } from "@/schemas/client/column";
 
-import { sortColOrderByOrderIndex } from "@/utils/columns";
-import { getPaginationWithDoubleEllipsis } from "@/utils/pagination";
-
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
+import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
+import { getPaginationWithDoubleEllipsis } from "@/lib/utils/pagination";
 
 import { Separator } from "../ui/separator";
 

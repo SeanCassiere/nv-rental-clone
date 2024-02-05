@@ -24,8 +24,8 @@ import {
 
 import { RentalRateSchema, type RentalRateParsed } from "@/schemas/rate";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchRateTypesListOptions } from "@/utils/query/rate-type";
+import { fetchRateTypesListOptions } from "@/lib/query/rate-type";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 import type { RatesAndChargesTabProps } from ".";
 

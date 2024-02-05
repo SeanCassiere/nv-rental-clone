@@ -14,10 +14,9 @@ import {
 
 import type { TCustomerListItemParsed } from "@/schemas/customer";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { fetchCustomersSearchListOptions } from "@/utils/query/customer";
-
-import { getXPaginationFromHeaders } from "@/utils";
+import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
+import { getXPaginationFromHeaders } from "@/lib/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();
 

@@ -20,24 +20,23 @@ import type { RentalRateParsed } from "@/schemas/rate";
 import type { ReservationDataParsed } from "@/schemas/reservation";
 import type { TRentalRatesSummarySchema } from "@/schemas/summary";
 
-import { getAuthFromAuthHook } from "@/utils/auth";
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/utils/date";
-import { fetchAgreementByIdOptions } from "@/utils/query/agreement";
-import { fetchMiscChargesListOptions } from "@/utils/query/misc-charge";
+import { fetchAgreementByIdOptions } from "@/lib/query/agreement";
+import { fetchMiscChargesListOptions } from "@/lib/query/misc-charge";
 import {
   fetchRatesListOptions,
   fetchRatesOptimalNameOptions,
-} from "@/utils/query/rate";
+} from "@/lib/query/rate";
 import {
   fetchSummaryForRentalOptions,
   type CalculateRentalSummaryInput,
-} from "@/utils/query/summary";
-import { fetchTaxesListOptions } from "@/utils/query/tax";
-import { fetchVehiclesSearchListOptions } from "@/utils/query/vehicle";
-import { fetchVehicleTypesListOptions } from "@/utils/query/vehicle-type";
-import { sortObjectKeys } from "@/utils/sort";
-
-import { cn } from "@/utils";
+} from "@/lib/query/summary";
+import { fetchTaxesListOptions } from "@/lib/query/tax";
+import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
+import { fetchVehicleTypesListOptions } from "@/lib/query/vehicle-type";
+import { cn } from "@/lib/utils";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
+import { sortObjectKeys } from "@/lib/utils/sort";
 
 import CustomerInformationTab, {
   type CustomerInformationTabProps as CI_TabProps,

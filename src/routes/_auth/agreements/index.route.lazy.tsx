@@ -29,18 +29,17 @@ import { saveColumnSettings } from "@/api/save-column-settings";
 import type { TAgreementListItemParsed } from "@/schemas/agreement";
 
 import {
-  AgreementDateTimeColumns,
-  sortColOrderByOrderIndex,
-} from "@/utils/columns";
-import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
-} from "@/utils/query/agreement";
-import { fetchLocationsListOptions } from "@/utils/query/location";
-import { fetchVehiclesTypesOptions } from "@/utils/query/vehicle";
-import { titleMaker } from "@/utils/title-maker";
-
-import { cn, getXPaginationFromHeaders } from "@/utils";
+} from "@/lib/query/agreement";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
+import { cn, getXPaginationFromHeaders } from "@/lib/utils";
+import {
+  AgreementDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,
