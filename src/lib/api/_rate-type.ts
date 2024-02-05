@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-import { c } from "@/api/c";
-
+import { c } from "@/lib/api/c";
 import { RentalRateTypeListSchema } from "@/lib/schemas/rate";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";

@@ -22,8 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 
-import { saveColumnSettings } from "@/api/save-column-settings";
-
+import { saveColumnSettings } from "@/lib/api/save-column-settings";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {

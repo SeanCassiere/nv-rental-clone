@@ -1,7 +1,7 @@
 import { isAfter } from "date-fns/isAfter";
 import { isBefore } from "date-fns/isBefore";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 import type { Auth } from "@/lib/query/helpers";
 import type { ServerMessage } from "@/lib/schemas/dashboard";
 import { STORAGE_KEYS } from "@/lib/utils/constants";

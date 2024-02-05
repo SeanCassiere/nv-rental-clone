@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 import { makeInitialSearchCriteria } from "@/lib/utils/report";
 

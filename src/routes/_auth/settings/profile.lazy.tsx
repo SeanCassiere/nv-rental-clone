@@ -36,7 +36,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { usePermission } from "@/lib/hooks/usePermission";
 import { fetchLocationsListOptions } from "@/lib/query/location";

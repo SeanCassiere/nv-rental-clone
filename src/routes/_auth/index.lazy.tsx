@@ -28,7 +28,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { apiClient } from "@/api";
+import type { apiClient } from "@/lib/api";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { fetchLocationsListOptions } from "@/lib/query/location";

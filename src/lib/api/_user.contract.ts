@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-import { c } from "@/api/c";
-
+import { c } from "@/lib/api/c";
 import {
   UpdateUserInput,
   UserConfigurationsListSchema,

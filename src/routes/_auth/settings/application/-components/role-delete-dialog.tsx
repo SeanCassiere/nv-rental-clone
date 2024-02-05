@@ -15,7 +15,7 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 import { fetchRolesListOptions } from "@/lib/query/role";
 
 interface RoleDeleteDialogProps {

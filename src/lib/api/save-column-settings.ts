@@ -1,4 +1,4 @@
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 import type { Auth } from "@/lib/query/helpers";
 import type { TColumnHeaderItem } from "@/lib/schemas/client/column";
 import type { AppModule } from "@/lib/types/app-module";

@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 import { STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { isEnabled, makeQueryKey, type Auth } from "./helpers";

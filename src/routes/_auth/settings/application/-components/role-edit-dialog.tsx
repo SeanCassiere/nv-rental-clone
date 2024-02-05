@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/input-select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
 import {
   fetchRoleByIdOptions,
   fetchRolePermissionsListOptions,

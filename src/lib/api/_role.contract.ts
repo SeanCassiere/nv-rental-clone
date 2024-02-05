@@ -1,5 +1,4 @@
-import { c } from "@/api/c";
-
+import { c } from "@/lib/api/c";
 import {
   PermissionListSchema,
   RoleListSchema,

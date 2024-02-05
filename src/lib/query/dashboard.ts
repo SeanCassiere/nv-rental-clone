@@ -1,9 +1,8 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 
-import { getDashboardMessagesAndFilter } from "@/api/get-dashboard-messages";
-import { saveDashboardWidgets } from "@/api/save-dashboard-widgets";
-
-import { apiClient } from "@/api";
+import { apiClient } from "@/lib/api";
+import { getDashboardMessagesAndFilter } from "@/lib/api/get-dashboard-messages";
+import { saveDashboardWidgets } from "@/lib/api/save-dashboard-widgets";
 import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
 
 import { isEnabled, makeQueryKey, type Auth } from "./helpers";
