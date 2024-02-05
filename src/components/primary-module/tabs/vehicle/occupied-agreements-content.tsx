@@ -11,6 +11,10 @@ import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
+import {
+  fetchAgreementsSearchColumnsOptions,
+  fetchAgreementsSearchListOptions,
+} from "@/lib/query/agreement";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
@@ -18,11 +22,6 @@ import {
   sortColumnsByOrderIndex,
 } from "@/lib/utils/columns";
 import { normalizeAgreementListSearchParams } from "@/lib/utils/normalize-search-params";
-
-import {
-  fetchAgreementsSearchColumnsOptions,
-  fetchAgreementsSearchListOptions,
-} from "@/lib/query/agreement";
 
 interface VehicleOccupiedAgreementsTabProps {
   vehicleId: string;

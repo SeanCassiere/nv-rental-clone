@@ -26,11 +26,11 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { saveColumnSettings } from "@/lib/api/save-column-settings";
 import type { TCustomerListItemParsed } from "@/lib/schemas/customer";
+import { fetchCustomerTypesOptions } from "@/lib/query/customer";
 
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
 import { titleMaker } from "@/lib/utils/title-maker";
 
-import { fetchCustomerTypesOptions } from "@/lib/query/customer";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 export const Route = createLazyFileRoute("/_auth/customers/")({

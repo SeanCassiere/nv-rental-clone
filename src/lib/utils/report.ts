@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import type { TReportDetail } from "@/lib/schemas/report";
+
 import {
   addDays,
   addMonths,
@@ -14,7 +16,6 @@ import {
   subWeeks,
   subYears,
 } from "@/lib/config/date-fns";
-import type { TReportDetail } from "@/lib/schemas/report";
 
 const stringBoolean = (value: unknown) =>
   z.enum(["0", "1"]).catch("0").parse(value);

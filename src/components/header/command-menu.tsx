@@ -21,15 +21,16 @@ import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { useGlobalDialogContext } from "@/lib/context/modals";
 
+import { fetchAgreementsSearchListOptions } from "@/lib/query/agreement";
+import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
+import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
+import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
+
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import type { GlobalSearchReturnType } from "@/lib/types/search";
 
-import { fetchAgreementsSearchListOptions } from "@/lib/query/agreement";
-import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
-import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
-import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
 import { cn, IsMacLike } from "@/lib/utils";
 
 export const CommandMenu = () => {

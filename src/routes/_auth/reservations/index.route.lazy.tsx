@@ -28,6 +28,12 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { saveColumnSettings } from "@/lib/api/save-column-settings";
 import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import {
+  fetchReservationStatusesOptions,
+  fetchReservationTypesOptions,
+} from "@/lib/query/reservation";
+import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
 
 import {
   ReservationDateTimeColumns,
@@ -35,12 +41,6 @@ import {
 } from "@/lib/utils/columns";
 import { titleMaker } from "@/lib/utils/title-maker";
 
-import { fetchLocationsListOptions } from "@/lib/query/location";
-import {
-  fetchReservationStatusesOptions,
-  fetchReservationTypesOptions,
-} from "@/lib/query/reservation";
-import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();

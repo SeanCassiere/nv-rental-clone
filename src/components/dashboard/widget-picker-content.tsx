@@ -29,9 +29,9 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { icons } from "@/components/ui/icons";
 
 import { type DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
-
 import { fetchDashboardWidgetsOptions } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
+
 import { cn } from "@/lib/utils";
 
 interface WidgetPickerContentProps extends Auth {

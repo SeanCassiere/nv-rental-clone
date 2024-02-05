@@ -30,16 +30,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { getAuthFromAuthHook } from "@/lib/utils/auth";
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
-
-import i18n from "@/lib/config/i18next";
-
 import {
   fetchVehiclesFuelLevelsOptions,
   fetchVehiclesSearchListOptions,
 } from "@/lib/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/lib/query/vehicle-type";
+
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
+
+import i18n from "@/lib/config/i18next";
 
 import type { AgreementRentalInformationSchemaParsed } from "./duration-stage";
 

@@ -34,14 +34,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import type { TLocationParsed } from "@/lib/schemas/location";
-
-import { titleMaker } from "@/lib/utils/title-maker";
-
 import { fetchClientProfileOptions } from "@/lib/query/client";
 import {
   fetchLocationByIdOptions,
   fetchLocationStatesByCountryIdListOptions,
 } from "@/lib/query/location";
+
+import { titleMaker } from "@/lib/utils/title-maker";
+
 import { cn } from "@/lib/utils";
 
 import { LocationEditDialog } from "./-components/location-edit-dialog";

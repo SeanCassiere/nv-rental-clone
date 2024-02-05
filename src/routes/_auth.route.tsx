@@ -9,10 +9,6 @@ import { useAuth } from "react-oidc-context";
 import { LogoutDialog } from "@/components/common/logout-dialog";
 import { HeaderLayout } from "@/components/header/header-layout";
 
-import { getAuthFromRouterContext } from "@/lib/utils/auth";
-import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
-import { removeTrailingSlash } from "@/lib/utils/random";
-
 import {
   fetchClientProfileOptions,
   fetchFeaturesForClientOptions,
@@ -22,6 +18,10 @@ import {
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
 } from "@/lib/query/user";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
+import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
+import { removeTrailingSlash } from "@/lib/utils/random";
 
 import { Container } from "./-components/container";
 

@@ -25,9 +25,10 @@ import { icons } from "@/components/ui/icons";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { useGlobalDialogContext } from "@/lib/context/modals";
 
+import { fetchUserByIdOptions } from "@/lib/query/user";
+
 import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
 
-import { fetchUserByIdOptions } from "@/lib/query/user";
 import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/lib/utils";
 
 export const UserNavigationDropdown = () => {

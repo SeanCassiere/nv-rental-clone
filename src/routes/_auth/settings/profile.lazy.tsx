@@ -45,11 +45,6 @@ import {
   type UpdateUserInput,
   type UserLanguageItem,
 } from "@/lib/schemas/user";
-
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
-import { titleMaker } from "@/lib/utils/title-maker";
-
-import { apiClient } from "@/lib/api";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchActiveUsersCountOptions,
@@ -57,6 +52,11 @@ import {
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
 } from "@/lib/query/user";
+
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
+import { titleMaker } from "@/lib/utils/title-maker";
+
+import { apiClient } from "@/lib/api";
 
 export const Route = createLazyFileRoute("/_auth/settings/profile")({
   component: SettingsProfilePage,

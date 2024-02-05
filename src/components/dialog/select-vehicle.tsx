@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/dialog";
 
 import type { TVehicleListItemParsed } from "@/lib/schemas/vehicle";
+import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
-import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
 import { getXPaginationFromHeaders } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TVehicleListItemParsed>();

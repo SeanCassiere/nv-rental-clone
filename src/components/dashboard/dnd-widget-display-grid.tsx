@@ -21,10 +21,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
+import type { Auth } from "@/lib/query/helpers";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
-import type { Auth } from "@/lib/query/helpers";
 import { cn } from "@/lib/utils";
 
 const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));

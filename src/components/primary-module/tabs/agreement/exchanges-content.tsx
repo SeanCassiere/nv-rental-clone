@@ -10,8 +10,10 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { parseISO } from "@/lib/config/date-fns";
 import { type TVehicleExchangeListItemParsed } from "@/lib/schemas/vehicle-exchange";
+
+import { parseISO } from "@/lib/config/date-fns";
+
 import { cn } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();

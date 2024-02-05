@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/dialog";
 
 import type { TCustomerListItemParsed } from "@/lib/schemas/customer";
+import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
-import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
 import { getXPaginationFromHeaders } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TCustomerListItemParsed>();

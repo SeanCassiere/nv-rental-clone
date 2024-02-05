@@ -20,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 
 import type { MiscChargeListItem } from "@/lib/schemas/misc-charge";
+import { fetchMiscChargesListOptions } from "@/lib/query/misc-charge";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
@@ -27,7 +28,6 @@ import {
   localDateTimeWithoutSecondsToQueryYearMonthDay,
 } from "@/lib/utils/date";
 
-import { fetchMiscChargesListOptions } from "@/lib/query/misc-charge";
 import { cn } from "@/lib/utils";
 
 import type { RatesAndChargesTabProps } from ".";

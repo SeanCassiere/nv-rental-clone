@@ -26,6 +26,7 @@ const config = {
     "",
     "^@/lib/api/(.*)$",
     "^@/lib/schemas/(.*)$",
+    "^@/lib/query/(.*)$",
     "",
     "^@/routes/(.*)$",
     "",

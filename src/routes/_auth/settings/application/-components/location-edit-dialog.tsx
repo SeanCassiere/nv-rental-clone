@@ -39,7 +39,6 @@ import {
   type TLocationById,
   type UpdateLocationInput,
 } from "@/lib/schemas/location";
-
 import type { Auth } from "@/lib/query/helpers";
 import {
   createLocationMutationOptions,

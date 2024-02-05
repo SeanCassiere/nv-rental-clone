@@ -47,9 +47,6 @@ import {
   type TUserProfile,
   type UpdateUserInput,
 } from "@/lib/schemas/user";
-
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
-
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchRolesListOptions } from "@/lib/query/role";
 import {
@@ -61,6 +58,9 @@ import {
   fetchUserConfigurationOptions,
   updateUserMutationOptions,
 } from "@/lib/query/user";
+
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
+
 import { cn } from "@/lib/utils";
 
 interface UserEditDialogProps {

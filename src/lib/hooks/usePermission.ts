@@ -1,9 +1,9 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import { getAuthFromAuthHook } from "@/lib/utils/auth";
-
 import { fetchPermissionsByUserIdOptions } from "@/lib/query/user";
+
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 export function usePermission(
   permission: string,

@@ -15,7 +15,9 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { parseISO } from "@/lib/config/date-fns";
+import type { RentalRateParsed } from "@/lib/schemas/rate";
+import type { ReservationDataParsed } from "@/lib/schemas/reservation";
+import type { TRentalRatesSummarySchema } from "@/lib/schemas/summary";
 import { fetchAgreementByIdOptions } from "@/lib/query/agreement";
 import { fetchMiscChargesListOptions } from "@/lib/query/misc-charge";
 import {
@@ -29,13 +31,14 @@ import {
 import { fetchTaxesListOptions } from "@/lib/query/tax";
 import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/lib/query/vehicle-type";
-import type { RentalRateParsed } from "@/lib/schemas/rate";
-import type { ReservationDataParsed } from "@/lib/schemas/reservation";
-import type { TRentalRatesSummarySchema } from "@/lib/schemas/summary";
-import { cn } from "@/lib/utils";
+
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
 import { sortObjectKeys } from "@/lib/utils/sort";
+
+import { parseISO } from "@/lib/config/date-fns";
+
+import { cn } from "@/lib/utils";
 
 import CustomerInformationTab, {
   type CustomerInformationTabProps as CI_TabProps,

@@ -26,15 +26,15 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { saveColumnSettings } from "@/lib/api/save-column-settings";
 import type { TVehicleListItemParsed } from "@/lib/schemas/vehicle";
-
-import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
-import { titleMaker } from "@/lib/utils/title-maker";
-
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchVehiclesStatusesOptions,
   fetchVehiclesTypesOptions,
 } from "@/lib/query/vehicle";
+
+import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
+
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 export const Route = createLazyFileRoute("/_auth/fleet/")({

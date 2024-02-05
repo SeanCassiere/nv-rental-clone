@@ -11,6 +11,8 @@ import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
+import { fetchAgreementsSearchColumnsOptions } from "@/lib/query/agreement";
+import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
@@ -18,9 +20,6 @@ import {
   sortColOrderByOrderIndex,
 } from "@/lib/utils/columns";
 import { normalizeReservationListSearchParams } from "@/lib/utils/normalize-search-params";
-
-import { fetchAgreementsSearchColumnsOptions } from "@/lib/query/agreement";
-import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
 
 interface VehicleOccupiedReservationsTabProps {
   vehicleId: string;

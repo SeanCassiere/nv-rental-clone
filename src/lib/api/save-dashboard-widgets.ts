@@ -1,7 +1,7 @@
 import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
+import type { Auth } from "@/lib/query/helpers";
 
 import { apiClient } from "@/lib/api";
-import type { Auth } from "@/lib/query/helpers";
 
 export async function saveDashboardWidgets(
   options: { widgets: DashboardWidgetItemParsed[] } & Auth

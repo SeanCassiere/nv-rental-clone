@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { getAuthFromRouterContext } from "@/lib/utils/auth";
-
 import {
   fetchVehiclesByIdOptions,
   fetchVehiclesSummaryByIdOptions,
 } from "@/lib/query/vehicle";
+
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/fleet/$vehicleId/")({
   validateSearch: (search) =>

@@ -29,8 +29,6 @@ import {
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
-
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,
@@ -48,6 +46,8 @@ import {
   fetchVehiclesSearchListFn,
   fetchVehiclesSearchListOptions,
 } from "@/lib/query/vehicle";
+
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 const QuickLookupWidget = (props: Auth) => {
   return (

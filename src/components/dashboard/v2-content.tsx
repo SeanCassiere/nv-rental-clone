@@ -10,11 +10,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { add } from "@/lib/config/date-fns";
 import { usePermission } from "@/lib/hooks/usePermission";
 import { useScreenSetting } from "@/lib/hooks/useScreenSetting";
+
 import { fetchDashboardRentalStatisticsOptions } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
+
+import { add } from "@/lib/config/date-fns";
+
 import { cn } from "@/lib/utils";
 
 interface V2DashboardContentProps extends Auth {

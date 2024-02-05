@@ -17,16 +17,19 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { add } from "@/lib/config/date-fns";
 import { usePermission } from "@/lib/hooks/usePermission";
 import { useScreenSetting } from "@/lib/hooks/useScreenSetting";
+
+import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import {
   fetchDashboardRentalStatisticsOptions,
   fetchDashboardWidgetsOptions,
   saveDashboardWidgetsMutationOptions,
 } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
-import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
+
+import { add } from "@/lib/config/date-fns";
+
 import { cn } from "@/lib/utils";
 
 interface DefaultDashboardContentProps extends Auth {
