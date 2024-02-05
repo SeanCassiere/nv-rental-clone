@@ -8,10 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
-import {
-  incompleteApplicationSettingsTabsFeatureFlag,
-  incompleteLocationsApplicationSettingsTabFeatureFlag,
-} from "@/lib/config/features";
+import { incompleteApplicationSettingsTabsFeatureFlag } from "@/lib/config/features";
 
 import { SettingsLayoutHeader } from "../-components/layout-header";
 import {
@@ -30,11 +27,6 @@ function ApplicationConfigurationLayout() {
   const [incomplete_incompleteApplicationSettingsTabs] = useLocalStorage(
     incompleteApplicationSettingsTabsFeatureFlag.id,
     incompleteApplicationSettingsTabsFeatureFlag.default_value
-  );
-
-  const [incomplete_allLocationsApplicationSettingsTab] = useLocalStorage(
-    incompleteLocationsApplicationSettingsTabFeatureFlag.id,
-    incompleteLocationsApplicationSettingsTabFeatureFlag.default_value
   );
 
   const tabs = React.useMemo(() => {
@@ -60,20 +52,15 @@ function ApplicationConfigurationLayout() {
       },
     });
 
-    if (
-      incomplete_incompleteApplicationSettingsTabs ||
-      incomplete_allLocationsApplicationSettingsTab
-    ) {
-      items.push({
-        pathname: "/settings/application/locations",
-        title: t("titles.locations", { ns: "settings" }),
-        linkProps: {
-          to: "/settings/application/locations",
-          params: true,
-          search: true,
-        },
-      });
-    }
+    items.push({
+      pathname: "/settings/application/locations",
+      title: t("titles.locations", { ns: "settings" }),
+      linkProps: {
+        to: "/settings/application/locations",
+        params: true,
+        search: true,
+      },
+    });
 
     if (incomplete_incompleteApplicationSettingsTabs) {
       items.push({
@@ -88,11 +75,7 @@ function ApplicationConfigurationLayout() {
     }
 
     return items;
-  }, [
-    incomplete_incompleteApplicationSettingsTabs,
-    incomplete_allLocationsApplicationSettingsTab,
-    t,
-  ]);
+  }, [incomplete_incompleteApplicationSettingsTabs, t]);
 
   return (
     <React.Fragment>
