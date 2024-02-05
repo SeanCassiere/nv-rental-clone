@@ -1,12 +1,17 @@
-import type { ServerMessage } from "@/lib/schemas/dashboard";
-import type { Auth } from "@/lib/query/helpers";
-
-import { STORAGE_KEYS } from "@/lib/utils/constants";
-import { tryParseJson } from "@/lib/utils/parse";
-
-import { isAfter, isBefore } from "@/lib/config/date-fns";
-
 import { apiClient } from "@/lib/api";
+import { isAfter, isBefore } from "@/lib/config/date-fns";
+import type { Auth } from "@/lib/query/helpers";
+import type { ServerMessage } from "@/lib/schemas/dashboard";
+import { STORAGE_KEYS } from "@/lib/utils/constants";
+
+function tryParseJson<TData>(json: string | null, defaultData: TData): TData {
+  if (!json) return defaultData;
+  try {
+    return JSON.parse(json);
+  } catch (e) {
+    return defaultData;
+  }
+}
 
 /**
  * Retrieves dashboard messages and filters them based on their active status, sent date, and expiry date.
