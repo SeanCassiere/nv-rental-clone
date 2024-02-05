@@ -1,13 +1,9 @@
-export function b64_encode(str: string) {
-  const encoded = window.btoa(encodeURIComponent(str));
-  return encoded;
-}
-
-export function b64_decode(str: string) {
-  const decoded = decodeURIComponent(window.atob(str));
-  return decoded;
-}
-
+/**
+ * Creates a promise that resolves after a specified number of milliseconds.
+ *
+ * @param {number} ms - The number of milliseconds to wait before the promise resolves.
+ * @returns {Promise<void>} A promise that resolves after the specified number of milliseconds.
+ */
 export function wait(ms: number): Promise<void> {
   return new Promise<void>((resolve) => {
     setTimeout(() => {
@@ -16,7 +12,14 @@ export function wait(ms: number): Promise<void> {
   });
 }
 
-export function removeTrailingSlash(path: string) {
+/**
+ * Removes the trailing slash from a given path, if present.
+ * Also handles the case where the trailing slash is followed by a query string.
+ *
+ * @param {string} path - The path from which to remove the trailing slash.
+ * @returns {string} The path without a trailing slash.
+ */
+export function removeTrailingSlash(path: string): string {
   return path.replace(/\/\?/, "?").replace(/\/$/, "");
 }
 
