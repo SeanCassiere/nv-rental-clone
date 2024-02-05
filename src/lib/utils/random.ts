@@ -45,3 +45,13 @@ export function sortObjectKeys<T>(obj: T): T {
       return result;
     }, {}) as T;
 }
+
+/**
+ * Determines if the user's device is a Mac or an iOS device.
+ * @type {boolean}
+ */
+export const IsMacLike: boolean = window.navigator.userAgent.match(
+  /(Mac|iPhone|iPod|iPad)/i
+)
+  ? true
+  : false;
