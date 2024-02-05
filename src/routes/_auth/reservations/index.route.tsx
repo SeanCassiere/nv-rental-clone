@@ -1,11 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ReservationSearchQuerySchema } from "@/schemas/reservation";
-
 import {
   fetchReservationsSearchColumnsOptions,
   fetchReservationsSearchListOptions,
 } from "@/lib/query/reservation";
+import { ReservationSearchQuerySchema } from "@/lib/schemas/reservation";
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 import { STORAGE_DEFAULTS } from "@/lib/utils/constants";
 import { normalizeReservationListSearchParams } from "@/lib/utils/normalize-search-params";

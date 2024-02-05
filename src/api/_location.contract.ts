@@ -8,7 +8,7 @@ import {
   LocationSchemaArray,
   StatesListSchema,
   type UpdateLocationInput,
-} from "@/schemas/location";
+} from "@/lib/schemas/location";
 
 import {
   StructuredErrorSchema,

@@ -10,12 +10,11 @@ import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { TAgreementListItemParsed } from "@/schemas/agreement";
-
 import {
   fetchAgreementsSearchColumnsOptions,
   fetchAgreementsSearchListOptions,
 } from "@/lib/query/agreement";
+import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
   AgreementDateTimeColumns,

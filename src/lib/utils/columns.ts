@@ -1,8 +1,6 @@
-import type { TColumnHeaderItem } from "@/schemas/client/column";
-
-import type { AppModule } from "@/types/app-module";
-
 import type { apiClient } from "@/api";
+import type { TColumnHeaderItem } from "@/lib/schemas/client/column";
+import type { AppModule } from "@/lib/types/app-module";
 
 export function sortColOrderByOrderIndex(
   col1: TColumnHeaderItem,

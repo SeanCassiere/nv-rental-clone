@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import { type AgreementDataParsed } from "../../../schemas/agreement";
+import { type AgreementDataParsed } from "../../../lib/schemas/agreement";
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
 const AgreementStatBlock = ({

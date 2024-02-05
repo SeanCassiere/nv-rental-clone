@@ -9,7 +9,7 @@ import {
   SalesStatusParse,
   ServerMessageListSchema,
   VehicleStatusCountListSchema,
-} from "@/schemas/dashboard";
+} from "@/lib/schemas/dashboard";
 
 import {
   ClientIdAuthSchema,

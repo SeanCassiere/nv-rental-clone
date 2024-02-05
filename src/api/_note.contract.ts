@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { NotesDataListSchema } from "@/schemas/note";
+import { NotesDataListSchema } from "@/lib/schemas/note";
 
 import {
   ClientIdAuthSchema,

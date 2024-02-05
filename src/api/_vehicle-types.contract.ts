@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { VehicleTypeSchemaArray } from "@/schemas/vehicle-type";
+import { VehicleTypeSchemaArray } from "@/lib/schemas/vehicle-type";
 
 import {
   StructuredErrorSchema,

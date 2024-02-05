@@ -40,14 +40,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-import type { RoleListItem } from "@/schemas/role";
-import {
-  buildUpdateUserSchema,
-  UserLanguageItem,
-  type TUserProfile,
-  type UpdateUserInput,
-} from "@/schemas/user";
-
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchRolesListOptions } from "@/lib/query/role";
 import {
@@ -59,6 +51,13 @@ import {
   fetchUserConfigurationOptions,
   updateUserMutationOptions,
 } from "@/lib/query/user";
+import type { RoleListItem } from "@/lib/schemas/role";
+import {
+  buildUpdateUserSchema,
+  UserLanguageItem,
+  type TUserProfile,
+  type UpdateUserInput,
+} from "@/lib/schemas/user";
 import { cn } from "@/lib/utils";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
 

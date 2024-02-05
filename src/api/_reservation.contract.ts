@@ -2,12 +2,12 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { AgreementStatusListSchema } from "@/schemas/agreement";
+import { AgreementStatusListSchema } from "@/lib/schemas/agreement";
 import {
   ReservationDataSchema,
   ReservationListItemListSchema,
   ReservationTypeArraySchema,
-} from "@/schemas/reservation";
+} from "@/lib/schemas/reservation";
 
 import {
   PaginationSchema,

@@ -1,10 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import type { TReportDetail } from "@/schemas/report";
-
-import type { ReportFilterOption } from "@/types/report";
-
 import { fetchAgreementStatusesOptions } from "@/lib/query/agreement";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchReservationStatusesOptions } from "@/lib/query/reservation";
@@ -12,6 +8,8 @@ import {
   fetchVehiclesStatusesOptions,
   fetchVehiclesTypesOptions,
 } from "@/lib/query/vehicle";
+import type { TReportDetail } from "@/lib/schemas/report";
+import type { ReportFilterOption } from "@/lib/types/report";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 type CriteriaList = TReportDetail["searchCriteria"];

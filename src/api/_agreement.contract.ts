@@ -8,7 +8,7 @@ import {
   AgreementStatusListSchema,
   AgreementTypeArraySchema,
   GenerateAgreementNumberSchema,
-} from "@/schemas/agreement";
+} from "@/lib/schemas/agreement";
 
 import {
   PaginationSchema,

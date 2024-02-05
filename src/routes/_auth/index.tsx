@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { DashboardSearchQuerySchema } from "@/schemas/dashboard";
-
 import {
   fetchDashboardMessagesOptions,
   fetchDashboardWidgetsOptions,
 } from "@/lib/query/dashboard";
 import { fetchLocationsListOptions } from "@/lib/query/location";
+import { DashboardSearchQuerySchema } from "@/lib/schemas/dashboard";
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/")({

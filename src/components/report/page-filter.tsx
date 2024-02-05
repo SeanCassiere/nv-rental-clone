@@ -20,9 +20,8 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-import type { ReportFilterOption } from "@/types/report";
-
 import { useReportContext } from "@/context/view-report";
+import type { ReportFilterOption } from "@/lib/types/report";
 import { cn } from "@/lib/utils";
 import { dateFormat } from "@/lib/utils/report";
 

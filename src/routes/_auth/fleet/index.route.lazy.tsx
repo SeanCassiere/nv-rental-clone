@@ -25,13 +25,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
-import type { TVehicleListItemParsed } from "@/schemas/vehicle";
-
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchVehiclesStatusesOptions,
   fetchVehiclesTypesOptions,
 } from "@/lib/query/vehicle";
+import type { TVehicleListItemParsed } from "@/lib/schemas/vehicle";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
 import { titleMaker } from "@/lib/utils/title-maker";

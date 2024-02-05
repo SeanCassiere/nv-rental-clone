@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { type ReservationDataParsed } from "@/schemas/reservation";
+import { type ReservationDataParsed } from "@/lib/schemas/reservation";
 
 import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 

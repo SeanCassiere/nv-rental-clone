@@ -26,14 +26,13 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
-import type { TAgreementListItemParsed } from "@/schemas/agreement";
-
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
 } from "@/lib/query/agreement";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
+import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 import {
   AgreementDateTimeColumns,

@@ -39,13 +39,6 @@ import { Switch } from "@/components/ui/switch";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { usePermission } from "@/hooks/usePermission";
 
-import {
-  buildUpdateUserSchema,
-  type TUserProfile,
-  type UpdateUserInput,
-  type UserLanguageItem,
-} from "@/schemas/user";
-
 import { apiClient } from "@/api";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
@@ -54,6 +47,12 @@ import {
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
 } from "@/lib/query/user";
+import {
+  buildUpdateUserSchema,
+  type TUserProfile,
+  type UpdateUserInput,
+  type UserLanguageItem,
+} from "@/lib/schemas/user";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
 import { titleMaker } from "@/lib/utils/title-maker";
 

@@ -11,11 +11,9 @@ import { icons } from "@/components/ui/icons";
 
 import { useReportValueFormatter } from "@/hooks/useReportValueFormatter";
 
-import type { TReportDetail, TReportResult } from "@/schemas/report";
-
-import type { ReportTablePlugin } from "@/types/report";
-
 import { useReportContext } from "@/context/view-report";
+import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
+import type { ReportTablePlugin } from "@/lib/types/report";
 
 type OutputField = TReportDetail["outputFields"][number];
 

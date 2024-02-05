@@ -2,14 +2,14 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { AgreementStatusListSchema } from "@/schemas/agreement";
-import { VehicleSummarySchema } from "@/schemas/summary";
+import { AgreementStatusListSchema } from "@/lib/schemas/agreement";
+import { VehicleSummarySchema } from "@/lib/schemas/summary";
 import {
   VehicleDataSchema,
   VehicleLevelListSchema,
   VehicleListItemListSchema,
   VehicleTypeLookupList,
-} from "@/schemas/vehicle";
+} from "@/lib/schemas/vehicle";
 
 import {
   PaginationSchema,

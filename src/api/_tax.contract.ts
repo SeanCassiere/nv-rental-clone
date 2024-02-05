@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { TaxListSchema } from "@/schemas/tax";
+import { TaxListSchema } from "@/lib/schemas/tax";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 

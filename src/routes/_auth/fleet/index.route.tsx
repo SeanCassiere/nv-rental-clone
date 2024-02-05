@@ -1,11 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { VehicleSearchQuerySchema } from "@/schemas/vehicle";
-
 import {
   fetchVehiclesSearchColumnsOptions,
   fetchVehiclesSearchListOptions,
 } from "@/lib/query/vehicle";
+import { VehicleSearchQuerySchema } from "@/lib/schemas/vehicle";
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 import { STORAGE_DEFAULTS } from "@/lib/utils/constants";
 import { normalizeVehicleListSearchParams } from "@/lib/utils/normalize-search-params";

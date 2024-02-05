@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
-import { type TRentalRatesSummarySchema } from "@/schemas/summary";
+import { type TRentalRatesSummarySchema } from "@/lib/schemas/summary";
 
 import {
   SummaryHeader,

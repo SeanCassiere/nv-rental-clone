@@ -22,9 +22,8 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 
-import { RentalRateSchema, type RentalRateParsed } from "@/schemas/rate";
-
 import { fetchRateTypesListOptions } from "@/lib/query/rate-type";
+import { RentalRateSchema, type RentalRateParsed } from "@/lib/schemas/rate";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 import type { RatesAndChargesTabProps } from ".";

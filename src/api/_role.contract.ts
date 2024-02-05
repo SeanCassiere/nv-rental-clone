@@ -4,7 +4,7 @@ import {
   PermissionListSchema,
   RoleListSchema,
   SingleRoleItemSchema,
-} from "@/schemas/role";
+} from "@/lib/schemas/role";
 
 import {
   StructuredErrorSchema,

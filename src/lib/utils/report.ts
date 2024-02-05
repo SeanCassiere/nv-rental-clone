@@ -14,7 +14,7 @@ import {
 } from "date-fns";
 import { z } from "zod";
 
-import type { TReportDetail } from "@/schemas/report";
+import type { TReportDetail } from "@/lib/schemas/report";
 
 const stringBoolean = (value: unknown) =>
   z.enum(["0", "1"]).catch("0").parse(value);

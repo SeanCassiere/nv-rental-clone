@@ -12,9 +12,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import type { TCustomerListItemParsed } from "@/schemas/customer";
-
 import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
+import type { TCustomerListItemParsed } from "@/lib/schemas/customer";
 import { getXPaginationFromHeaders } from "@/lib/utils";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 

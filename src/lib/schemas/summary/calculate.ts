@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { RentalRateSchema } from "@/schemas/rate";
+import { RentalRateSchema } from "@/lib/schemas/rate";
 
 export type CalculateRentalSummaryAmountsInput = z.infer<
   typeof CalculateRentalSummaryInputSchema

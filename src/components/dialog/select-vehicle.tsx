@@ -12,9 +12,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import type { TVehicleListItemParsed } from "@/schemas/vehicle";
-
 import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
+import type { TVehicleListItemParsed } from "@/lib/schemas/vehicle";
 import { getXPaginationFromHeaders } from "@/lib/utils";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 

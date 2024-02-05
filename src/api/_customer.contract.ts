@@ -6,8 +6,8 @@ import {
   CustomerDataSchema,
   CustomerListItemListSchema,
   CustomerTypeArraySchema,
-} from "@/schemas/customer";
-import { CustomerSummarySchema } from "@/schemas/summary";
+} from "@/lib/schemas/customer";
+import { CustomerSummarySchema } from "@/lib/schemas/summary";
 
 import {
   PaginationSchema,

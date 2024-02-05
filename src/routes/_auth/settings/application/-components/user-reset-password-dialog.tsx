@@ -14,9 +14,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { icons } from "@/components/ui/icons";
 
-import type { TUserConfigurations } from "@/schemas/user";
-
 import { apiClient } from "@/api";
+import type { TUserConfigurations } from "@/lib/schemas/user";
 import { localDateTimeToQueryYearMonthDay } from "@/lib/utils/date";
 
 interface UserResetPasswordDialogProps {

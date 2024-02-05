@@ -33,13 +33,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-import type { TLocationParsed } from "@/schemas/location";
-
 import { fetchClientProfileOptions } from "@/lib/query/client";
 import {
   fetchLocationByIdOptions,
   fetchLocationStatesByCountryIdListOptions,
 } from "@/lib/query/location";
+import type { TLocationParsed } from "@/lib/schemas/location";
 import { cn } from "@/lib/utils";
 import { titleMaker } from "@/lib/utils/title-maker";
 

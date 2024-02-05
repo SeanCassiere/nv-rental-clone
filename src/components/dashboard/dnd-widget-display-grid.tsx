@@ -20,9 +20,8 @@ import { useAuth } from "react-oidc-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
-
 import type { Auth } from "@/lib/query/helpers";
+import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import { cn } from "@/lib/utils";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 

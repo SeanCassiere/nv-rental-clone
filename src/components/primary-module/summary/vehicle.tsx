@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
-import { type TVehicleSummarySchema } from "@/schemas/summary/vehicleSummary";
+import { type TVehicleSummarySchema } from "@/lib/schemas/summary/vehicleSummary";
 
 import {
   SummaryHeader,

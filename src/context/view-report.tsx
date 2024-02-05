@@ -1,9 +1,8 @@
 import * as React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import type { TReportDetail, TReportResult } from "@/schemas/report";
-
 import { apiClient } from "@/api";
+import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 import { makeInitialSearchCriteria } from "@/lib/utils/report";
 
 interface ReportContextProps {

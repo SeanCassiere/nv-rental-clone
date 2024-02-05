@@ -25,9 +25,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
-import type { TCustomerListItemParsed } from "@/schemas/customer";
-
 import { fetchCustomerTypesOptions } from "@/lib/query/customer";
+import type { TCustomerListItemParsed } from "@/lib/schemas/customer";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
 import { titleMaker } from "@/lib/utils/title-maker";

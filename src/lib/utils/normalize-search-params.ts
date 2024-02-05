@@ -1,7 +1,7 @@
-import type { TAgreementSearchQuery } from "@/schemas/agreement";
-import type { TCustomerSearchQuery } from "@/schemas/customer";
-import type { TReservationSearchQuery } from "@/schemas/reservation";
-import type { TVehicleSearchQuery } from "@/schemas/vehicle";
+import type { TAgreementSearchQuery } from "@/lib/schemas/agreement";
+import type { TCustomerSearchQuery } from "@/lib/schemas/customer";
+import type { TReservationSearchQuery } from "@/lib/schemas/reservation";
+import type { TVehicleSearchQuery } from "@/lib/schemas/vehicle";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "./constants";
 

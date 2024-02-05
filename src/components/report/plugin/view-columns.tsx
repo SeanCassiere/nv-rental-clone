@@ -12,7 +12,7 @@ import {
 import { icons } from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import type { ReportTablePlugin } from "@/types/report";
+import type { ReportTablePlugin } from "@/lib/types/report";
 
 export const ViewColumns: ReportTablePlugin = (props) => {
   const { table, align } = props;

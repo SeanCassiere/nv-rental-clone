@@ -55,8 +55,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { type TColumnHeaderItem } from "@/schemas/client/column";
-
+import { type TColumnHeaderItem } from "@/lib/schemas/client/column";
 import { cn } from "@/lib/utils";
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
 import { getPaginationWithDoubleEllipsis } from "@/lib/utils/pagination";

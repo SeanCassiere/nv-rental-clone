@@ -9,7 +9,7 @@ import {
   ClientScreenSettingListSchema,
   SaveClientColumnHeaderInfoResponseSchema,
   SaveClientColumnHeaderInfoSchema,
-} from "@/schemas/client";
+} from "@/lib/schemas/client";
 
 import {
   StructuredErrorSchema,

@@ -20,13 +20,12 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
-import type { GlobalSearchReturnType } from "@/types/search";
-
 import { useGlobalDialogContext } from "@/context/modals";
 import { fetchAgreementsSearchListOptions } from "@/lib/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
 import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
 import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
+import type { GlobalSearchReturnType } from "@/lib/types/search";
 import { cn, IsMacLike } from "@/lib/utils";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";

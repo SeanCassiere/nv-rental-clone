@@ -34,12 +34,6 @@ import { Switch } from "@/components/ui/switch";
 
 import { usePermission } from "@/hooks/usePermission";
 
-import {
-  buildUpdateLocationSchema,
-  type TLocationById,
-  type UpdateLocationInput,
-} from "@/schemas/location";
-
 import type { Auth } from "@/lib/query/helpers";
 import {
   createLocationMutationOptions,
@@ -49,6 +43,11 @@ import {
   fetchLocationStatesByCountryIdListOptions,
   updateLocationMutationOptions,
 } from "@/lib/query/location";
+import {
+  buildUpdateLocationSchema,
+  type TLocationById,
+  type UpdateLocationInput,
+} from "@/lib/schemas/location";
 
 type FormMode = "new" | "edit";
 

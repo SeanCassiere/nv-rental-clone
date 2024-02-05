@@ -27,14 +27,13 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
-import type { TReservationListItemParsed } from "@/schemas/reservation";
-
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchReservationStatusesOptions,
   fetchReservationTypesOptions,
 } from "@/lib/query/reservation";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
+import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 import {
   ReservationDateTimeColumns,

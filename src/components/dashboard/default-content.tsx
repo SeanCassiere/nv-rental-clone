@@ -21,14 +21,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePermission } from "@/hooks/usePermission";
 import { useScreenSetting } from "@/hooks/useScreenSetting";
 
-import type { DashboardWidgetItemParsed } from "@/schemas/dashboard";
-
 import {
   fetchDashboardRentalStatisticsOptions,
   fetchDashboardWidgetsOptions,
   saveDashboardWidgetsMutationOptions,
 } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
+import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import { cn } from "@/lib/utils";
 
 interface DefaultDashboardContentProps extends Auth {

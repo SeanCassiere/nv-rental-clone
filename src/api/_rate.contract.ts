@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { c } from "@/api/c";
 
-import { OptimalRateSchema, RentalRateSchema } from "@/schemas/rate";
+import { OptimalRateSchema, RentalRateSchema } from "@/lib/schemas/rate";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 

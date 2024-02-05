@@ -1,9 +1,8 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import type { RentalRateParsed } from "@/schemas/rate";
-import type { CalculateRentalSummaryAmountsInput } from "@/schemas/summary";
-
 import { apiClient } from "@/api";
+import type { RentalRateParsed } from "@/lib/schemas/rate";
+import type { CalculateRentalSummaryAmountsInput } from "@/lib/schemas/summary";
 import { sortObjectKeys } from "@/lib/utils/sort";
 
 import { isEnabled, makeQueryKey, type Auth } from "./helpers";

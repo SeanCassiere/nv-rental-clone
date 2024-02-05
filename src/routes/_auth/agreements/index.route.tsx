@@ -1,11 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { AgreementSearchQuerySchema } from "@/schemas/agreement";
-
 import {
   fetchAgreementsSearchColumnsOptions,
   fetchAgreementsSearchListOptions,
 } from "@/lib/query/agreement";
+import { AgreementSearchQuerySchema } from "@/lib/schemas/agreement";
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 import { STORAGE_DEFAULTS } from "@/lib/utils/constants";
 import { normalizeAgreementListSearchParams } from "@/lib/utils/normalize-search-params";

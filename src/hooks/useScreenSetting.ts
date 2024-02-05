@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
-import type { TClientScreenSetting } from "@/schemas/client";
-
 import { fetchScreenSettingsForClientOptions } from "@/lib/query/client";
+import type { TClientScreenSetting } from "@/lib/schemas/client";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 type ListOfSettings = TClientScreenSetting[];

@@ -5,7 +5,7 @@ import { c } from "@/api/c";
 import {
   CalculateRentalSummaryInputSchema,
   RentalRatesSummarySchema,
-} from "@/schemas/summary";
+} from "@/lib/schemas/summary";
 
 import {
   StructuredErrorSchema,

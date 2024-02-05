@@ -4,7 +4,7 @@ import {
   ReportDetailSchema,
   ReportResultList,
   ReportsListSchema,
-} from "@/schemas/report";
+} from "@/lib/schemas/report";
 
 import { StructuredErrorSchema, UserAndClientIdAuthSchema } from "./helpers";
 

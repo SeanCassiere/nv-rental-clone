@@ -3,9 +3,8 @@ import React from "react";
 import { useFeature } from "@/hooks/useFeature";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-import { momentToDateFnsFormat } from "@/schemas/user";
-
 import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
+import { momentToDateFnsFormat } from "@/lib/schemas/user";
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 export function HiddenFeatureSetter() {

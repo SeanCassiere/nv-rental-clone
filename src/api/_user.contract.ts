@@ -7,7 +7,7 @@ import {
   UserConfigurationsListSchema,
   UserLanguageListSchema,
   UserProfileSchema,
-} from "@/schemas/user";
+} from "@/lib/schemas/user";
 
 import {
   ClientIdAuthSchema,
