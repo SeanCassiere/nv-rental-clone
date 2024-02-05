@@ -13,7 +13,14 @@ export function getAvatarUrl(username: string | undefined) {
   return url.toString();
 }
 
-export function getAvatarFallbackText(name: string) {
+/**
+ * Generates a fallback text for an avatar by taking the first character of the first two words in a name.
+ * If the name only contains one word, the first character of that word is returned.
+ *
+ * @param {string} name - The name to generate the fallback text from.
+ * @returns {string} The generated fallback text.
+ */
+export function getAvatarFallbackText(name: string): string {
   const nameParts = name.split(" ");
   if (nameParts.length === 1 && nameParts[0]) {
     return nameParts[0].charAt(0);
