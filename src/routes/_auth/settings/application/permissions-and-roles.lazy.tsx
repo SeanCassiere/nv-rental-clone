@@ -32,8 +32,12 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+
 import { RoleListItem } from "@/lib/schemas/role";
 import { fetchRoleByIdOptions } from "@/lib/query/role";
+
+import { titleMaker } from "@/lib/utils/title-maker";
 
 import { cn } from "@/lib/utils";
 
@@ -58,6 +62,15 @@ function PermissionsAndRolesPage() {
 
   const [filterMode, setFilterMode] = React.useState("all");
   const [showNew, setShowNew] = React.useState(false);
+
+  useDocumentTitle(
+    titleMaker(
+      t("titles.page", {
+        ns: "settings",
+        pageTitle: t("titles.permissionsAndRoles", { ns: "settings" }),
+      })
+    )
+  );
 
   return (
     <>
