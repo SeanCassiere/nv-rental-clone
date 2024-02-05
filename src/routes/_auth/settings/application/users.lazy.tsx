@@ -25,8 +25,12 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+
 import type { TUserConfigurations } from "@/lib/schemas/user";
 import { fetchUserByIdOptions } from "@/lib/query/user";
+
+import { titleMaker } from "@/lib/utils/title-maker";
 
 import { cn, getAvatarFallbackText, getAvatarUrl } from "@/lib/utils";
 
@@ -45,6 +49,15 @@ function ApplicationConfigurationUsersPage() {
   const auth = useAuth();
 
   const [showNewUser, setShowNewUser] = React.useState(false);
+
+  useDocumentTitle(
+    titleMaker(
+      t("titles.page", {
+        ns: "settings",
+        pageTitle: t("titles.systemUsers", { ns: "settings" }),
+      })
+    )
+  );
 
   return (
     <>
