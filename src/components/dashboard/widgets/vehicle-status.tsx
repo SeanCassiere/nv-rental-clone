@@ -15,10 +15,12 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
+
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+
 import { fetchDashboardVehicleStatusCountsOptions } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 import { fetchVehiclesStatusesOptions } from "@/lib/query/vehicle";
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { WidgetSkeleton } from "../dnd-widget-display-grid";
 

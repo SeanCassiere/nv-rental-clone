@@ -23,21 +23,24 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { saveColumnSettings } from "@/lib/api/save-column-settings";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+
+import { saveColumnSettings } from "@/lib/api/save-column-settings";
+import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
+
+import {
+  AgreementDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
+
 import {
   fetchAgreementStatusesOptions,
   fetchAgreementTypesOptions,
 } from "@/lib/query/agreement";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
-import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
-import {
-  AgreementDateTimeColumns,
-  sortColOrderByOrderIndex,
-} from "@/lib/utils/columns";
-import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,

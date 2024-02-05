@@ -16,18 +16,21 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGlobalDialogContext } from "@/lib/context/modals";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
+import { useGlobalDialogContext } from "@/lib/context/modals";
+
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+
+import type { GlobalSearchReturnType } from "@/lib/types/search";
+
 import { fetchAgreementsSearchListOptions } from "@/lib/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
 import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
 import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
-import type { GlobalSearchReturnType } from "@/lib/types/search";
 import { cn, IsMacLike } from "@/lib/utils";
-import { getAuthFromAuthHook } from "@/lib/utils/auth";
-import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 export const CommandMenu = () => {
   const router = useRouter();

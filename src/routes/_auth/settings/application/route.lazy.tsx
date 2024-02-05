@@ -7,6 +7,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+
 import {
   incompleteApplicationSettingsTabsFeatureFlag,
   incompleteLocationsApplicationSettingsTabFeatureFlag,

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+
 import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_public/dev")({

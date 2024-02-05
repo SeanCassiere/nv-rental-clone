@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { useDebounce } from "@/lib/hooks/useDebounce";
+
 import type { ReportTablePlugin } from "@/lib/types/report";
 
 export const GlobalFilter: ReportTablePlugin = (props) => {

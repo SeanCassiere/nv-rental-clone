@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
+
 import {
   fetchCustomerByIdOptions,
   fetchCustomerSummaryByIdOptions,
 } from "@/lib/query/customer";
-import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/customers/$customerId/")({
   validateSearch: (search) =>

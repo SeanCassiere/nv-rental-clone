@@ -1,6 +1,7 @@
 import { initClient, tsRestFetchApi } from "@ts-rest/core";
 
 import { contract } from "@/lib/api/_root.contract";
+
 import { getAuthFromOidcStorage } from "@/lib/utils/auth";
 import { apiBaseUrl } from "@/lib/utils/constants";
 

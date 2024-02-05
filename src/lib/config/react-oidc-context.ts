@@ -1,7 +1,6 @@
 import { WebStorageStateStore } from "oidc-client-ts";
 import type { AuthProviderNoUserManagerProps } from "react-oidc-context";
 
-import { queryClient } from "@/lib/config/tanstack-query";
 import {
   OIDC_AUTHORITY,
   OIDC_CLIENT_ID,
@@ -9,6 +8,8 @@ import {
   OIDC_REDIRECT_URI,
   OIDC_SILENT_REDIRECT_URI,
 } from "@/lib/utils/constants";
+
+import { queryClient } from "@/lib/config/tanstack-query";
 
 export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   authority: OIDC_AUTHORITY,

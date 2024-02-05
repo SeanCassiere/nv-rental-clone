@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { useGlobalDialogContext } from "@/lib/context/modals";
+
 import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
 
 export const LogoutDialog = () => {

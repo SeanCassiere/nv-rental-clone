@@ -1,8 +1,11 @@
+import type { TColumnHeaderItem } from "@/lib/schemas/client/column";
+
+import { getModuleApiName } from "@/lib/utils/columns";
+
+import type { AppModule } from "@/lib/types/app-module";
+
 import { apiClient } from "@/lib/api";
 import type { Auth } from "@/lib/query/helpers";
-import type { TColumnHeaderItem } from "@/lib/schemas/client/column";
-import type { AppModule } from "@/lib/types/app-module";
-import { getModuleApiName } from "@/lib/utils/columns";
 
 export async function saveColumnSettings(
   input: {

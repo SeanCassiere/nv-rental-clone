@@ -2,8 +2,10 @@ import React from "react";
 import { Link, type LinkOptions } from "@tanstack/react-router";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
-import { cn } from "@/lib/utils";
+
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+
+import { cn } from "@/lib/utils";
 
 type AppNavigationLinks = {
   name: string;

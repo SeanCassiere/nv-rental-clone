@@ -25,8 +25,10 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
-import { cn } from "@/lib/utils";
+
 import { titleMaker } from "@/lib/utils/title-maker";
+
+import { cn } from "@/lib/utils";
 
 const VehicleSummaryTab = lazy(
   () => import("@/components/primary-module/tabs/vehicle/summary-content")

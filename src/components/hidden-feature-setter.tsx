@@ -1,10 +1,13 @@
 import React from "react";
 
-import { dfnsDateFormat, dfnsTimeFormat } from "@/lib/config/i18next";
 import { useFeature } from "@/lib/hooks/useFeature";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+
 import { momentToDateFnsFormat } from "@/lib/schemas/user";
+
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+
+import { dfnsDateFormat, dfnsTimeFormat } from "@/lib/config/i18next";
 
 export function HiddenFeatureSetter() {
   // Set user's default date format

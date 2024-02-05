@@ -22,17 +22,20 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 
-import { saveColumnSettings } from "@/lib/api/save-column-settings";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+
+import { saveColumnSettings } from "@/lib/api/save-column-settings";
+import type { TVehicleListItemParsed } from "@/lib/schemas/vehicle";
+
+import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
+
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchVehiclesStatusesOptions,
   fetchVehiclesTypesOptions,
 } from "@/lib/query/vehicle";
-import type { TVehicleListItemParsed } from "@/lib/schemas/vehicle";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
-import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
-import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/fleet/")({
   component: VehicleSearchPage,

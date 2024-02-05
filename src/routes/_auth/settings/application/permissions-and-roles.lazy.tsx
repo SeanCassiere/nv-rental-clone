@@ -32,8 +32,9 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { fetchRoleByIdOptions } from "@/lib/query/role";
 import { RoleListItem } from "@/lib/schemas/role";
+
+import { fetchRoleByIdOptions } from "@/lib/query/role";
 import { cn } from "@/lib/utils";
 
 import { RoleDeleteDialog } from "./-components/role-delete-dialog";

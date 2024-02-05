@@ -6,8 +6,9 @@ import { useAuth } from "react-oidc-context";
 import { Button } from "@/components/ui/button";
 import { InputCheckbox } from "@/components/ui/input-checkbox";
 
-import { fetchTaxesListOptions } from "@/lib/query/tax";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
+
+import { fetchTaxesListOptions } from "@/lib/query/tax";
 
 import type { TaxesAndPaymentsTabProps } from ".";
 

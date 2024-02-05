@@ -28,14 +28,16 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import type { apiClient } from "@/lib/api";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
-import { fetchLocationsListOptions } from "@/lib/query/location";
-import { cn } from "@/lib/utils";
+
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { dashboardLayoutFeatureFlag } from "@/lib/utils/features";
 import { titleMaker } from "@/lib/utils/title-maker";
+
+import type { apiClient } from "@/lib/api";
+import { fetchLocationsListOptions } from "@/lib/query/location";
+import { cn } from "@/lib/utils";
 
 const DefaultDashboardContent = lazy(
   () => import("@/components/dashboard/default-content")

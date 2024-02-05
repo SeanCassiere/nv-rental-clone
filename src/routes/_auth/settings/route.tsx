@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { getAuthFromRouterContext } from "@/lib/utils/auth";
+
 import { fetchFeaturesForClientOptions } from "@/lib/query/client";
 import { fetchPermissionsByUserIdOptions } from "@/lib/query/user";
-import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
 export const Route = createFileRoute("/_auth/settings")({
   beforeLoad: ({ context }) => {

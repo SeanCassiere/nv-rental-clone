@@ -36,9 +36,20 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-import { apiClient } from "@/lib/api";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { usePermission } from "@/lib/hooks/usePermission";
+
+import {
+  buildUpdateUserSchema,
+  type TUserProfile,
+  type UpdateUserInput,
+  type UserLanguageItem,
+} from "@/lib/schemas/user";
+
+import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
+import { titleMaker } from "@/lib/utils/title-maker";
+
+import { apiClient } from "@/lib/api";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchActiveUsersCountOptions,
@@ -46,14 +57,6 @@ import {
   fetchPermissionsByUserIdOptions,
   fetchUserByIdOptions,
 } from "@/lib/query/user";
-import {
-  buildUpdateUserSchema,
-  type TUserProfile,
-  type UpdateUserInput,
-  type UserLanguageItem,
-} from "@/lib/schemas/user";
-import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
-import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/settings/profile")({
   component: SettingsProfilePage,

@@ -2,8 +2,9 @@ import React from "react";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import type { AuthContextProps } from "react-oidc-context";
 
-import type { queryClient } from "@/lib/config/tanstack-query";
 import { IS_DEV } from "@/lib/utils/constants";
+
+import type { queryClient } from "@/lib/config/tanstack-query";
 
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
 

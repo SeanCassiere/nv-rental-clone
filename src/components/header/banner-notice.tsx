@@ -3,7 +3,9 @@ import React from "react";
 import { icons } from "@/components/ui/icons";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+
 import type { ServerMessage } from "@/lib/schemas/dashboard";
+
 import { STORAGE_KEYS } from "@/lib/utils/constants";
 
 const MessageText = ({ message }: { message: ServerMessage }) => (

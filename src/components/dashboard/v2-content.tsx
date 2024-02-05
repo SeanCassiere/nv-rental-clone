@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { usePermission } from "@/lib/hooks/usePermission";
 import { useScreenSetting } from "@/lib/hooks/useScreenSetting";
+
 import { fetchDashboardRentalStatisticsOptions } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 import { cn } from "@/lib/utils";

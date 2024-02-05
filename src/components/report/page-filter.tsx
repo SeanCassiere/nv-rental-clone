@@ -21,9 +21,12 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { useReportContext } from "@/lib/context/view-report";
-import type { ReportFilterOption } from "@/lib/types/report";
-import { cn } from "@/lib/utils";
+
 import { dateFormat } from "@/lib/utils/report";
+
+import type { ReportFilterOption } from "@/lib/types/report";
+
+import { cn } from "@/lib/utils";
 
 interface ReportFilterProps {
   accessor: string;

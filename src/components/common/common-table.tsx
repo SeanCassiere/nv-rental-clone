@@ -18,8 +18,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { cn } from "@/lib/utils";
 import { getPaginationWithDoubleEllipsis } from "@/lib/utils/pagination";
+
+import { cn } from "@/lib/utils";
 
 interface TCommonTableProps<T> {
   data: T[];

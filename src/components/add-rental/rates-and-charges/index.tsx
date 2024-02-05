@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 
-import type { CalculateRentalSummaryInput } from "@/lib/query/summary";
 import type { RentalRateParsed } from "@/lib/schemas/rate";
+
+import type { CalculateRentalSummaryInput } from "@/lib/query/summary";
 
 import { MiscChargesStage } from "./misc-charges-stage";
 import { RatesStage } from "./rates-stage";

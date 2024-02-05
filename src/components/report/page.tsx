@@ -6,10 +6,12 @@ import { ReportFilters } from "@/components/report/page-filters";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
-import { useReportContext } from "@/lib/context/view-report";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
-import { cn } from "@/lib/utils";
+import { useReportContext } from "@/lib/context/view-report";
+
 import { titleMaker } from "@/lib/utils/title-maker";
+
+import { cn } from "@/lib/utils";
 
 import DefaultView from "./presentation/default-view";
 import JsonView from "./presentation/json-view";

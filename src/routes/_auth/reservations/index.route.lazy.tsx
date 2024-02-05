@@ -24,21 +24,24 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { saveColumnSettings } from "@/lib/api/save-column-settings";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+
+import { saveColumnSettings } from "@/lib/api/save-column-settings";
+import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
+
+import {
+  ReservationDateTimeColumns,
+  sortColOrderByOrderIndex,
+} from "@/lib/utils/columns";
+import { titleMaker } from "@/lib/utils/title-maker";
+
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchReservationStatusesOptions,
   fetchReservationTypesOptions,
 } from "@/lib/query/reservation";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
-import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";
-import {
-  ReservationDateTimeColumns,
-  sortColOrderByOrderIndex,
-} from "@/lib/utils/columns";
-import { titleMaker } from "@/lib/utils/title-maker";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 

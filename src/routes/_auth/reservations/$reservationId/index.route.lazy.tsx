@@ -26,9 +26,11 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
-import { cn } from "@/lib/utils";
+
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { titleMaker } from "@/lib/utils/title-maker";
+
+import { cn } from "@/lib/utils";
 
 const SummaryTab = lazy(
   () => import("@/components/primary-module/tabs/reservation/summary-content")
