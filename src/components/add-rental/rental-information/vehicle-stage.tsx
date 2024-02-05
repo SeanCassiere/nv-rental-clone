@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import i18n from "@/i18next-config";
+import i18n from "@/lib/config/i18next";
 import {
   fetchVehiclesFuelLevelsOptions,
   fetchVehiclesSearchListOptions,

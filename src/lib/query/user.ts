@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import { apiClient } from "@/api";
-import i18next, { i18nextChangeLanguage } from "@/i18next-config";
+import i18next, { i18nextChangeLanguage } from "@/lib/config/i18next";
 
 import { isEnabled, makeQueryKey, type Auth, type RefId } from "./helpers";
 

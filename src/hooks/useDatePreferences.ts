@@ -1,6 +1,6 @@
 import React from "react";
 
-import { dfnsDateFormat, dfnsTimeFormat } from "@/i18next-config";
+import { dfnsDateFormat, dfnsTimeFormat } from "@/lib/config/i18next";
 import { STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { useLocalStorage } from "./useLocalStorage";

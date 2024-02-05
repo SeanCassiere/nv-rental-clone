@@ -17,12 +17,12 @@ import { useEventListener } from "@/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
 
 import { GlobalDialogProvider } from "@/context/modals";
-import i18nextConfig from "@/i18next-config";
+import i18nextConfig from "@/lib/config/i18next";
+import { reactOidcContextConfig } from "@/lib/config/react-oidc-context";
+import { queryClient } from "@/lib/config/tanstack-query";
 import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
 import { parseSearchFn, stringifySearchFn } from "@/lib/utils/router";
-import { reactOidcContextConfig } from "@/react-oidc-context-config";
 import { routeTree } from "@/route-tree.gen";
-import { queryClient } from "@/tanstack-query-config";
 
 export const router = createRouter({
   routeTree,
