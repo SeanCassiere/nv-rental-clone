@@ -13,9 +13,8 @@ import type { PieSectorDataItem } from "recharts/types/polar/Pie";
 
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
-
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { fetchDashboardVehicleStatusCountsOptions } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 import { fetchVehiclesStatusesOptions } from "@/lib/query/vehicle";

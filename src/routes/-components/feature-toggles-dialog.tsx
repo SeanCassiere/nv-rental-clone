@@ -28,12 +28,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { useGlobalDialogContext } from "@/context/modals";
 import {
   notifyLocalStorageChange,
   useLocalStorage,
-} from "@/hooks/useLocalStorage";
-
-import { useGlobalDialogContext } from "@/context/modals";
+} from "@/lib/hooks/useLocalStorage";
 import {
   featureFlags,
   type DropdownFeatureFlag,

@@ -6,9 +6,8 @@ import { ReportFilters } from "@/components/report/page-filters";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-
 import { useReportContext } from "@/context/view-report";
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { cn } from "@/lib/utils";
 import { titleMaker } from "@/lib/utils/title-maker";
 

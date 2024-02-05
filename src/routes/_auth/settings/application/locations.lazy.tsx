@@ -31,8 +31,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { fetchClientProfileOptions } from "@/lib/query/client";
 import {
   fetchLocationByIdOptions,

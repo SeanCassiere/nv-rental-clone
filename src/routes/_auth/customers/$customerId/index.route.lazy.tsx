@@ -24,8 +24,7 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { cn } from "@/lib/utils";
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { titleMaker } from "@/lib/utils/title-maker";

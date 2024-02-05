@@ -6,8 +6,8 @@ import {
   useState,
 } from "react";
 
-import { useEventCallback } from "@/hooks/useEventCallback";
-import { useEventListener } from "@/hooks/useEventListener";
+import { useEventCallback } from "@/lib/hooks/useEventCallback";
+import { useEventListener } from "@/lib/hooks/useEventListener";
 
 declare global {
   interface WindowEventMap {

@@ -32,8 +32,7 @@ import {
 } from "@/components/ui/input-select";
 import { Switch } from "@/components/ui/switch";
 
-import { usePermission } from "@/hooks/usePermission";
-
+import { usePermission } from "@/lib/hooks/usePermission";
 import type { Auth } from "@/lib/query/helpers";
 import {
   createLocationMutationOptions,

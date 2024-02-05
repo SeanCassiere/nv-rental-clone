@@ -27,9 +27,8 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 
-import { useDatePreference } from "@/hooks/useDatePreferences";
-
 import i18n from "@/lib/config/i18next";
+import { useDatePreference } from "@/lib/hooks/useDatePreferences";
 import {
   fetchAgreementGeneratedNumberOptions,
   fetchAgreementTypesOptions,

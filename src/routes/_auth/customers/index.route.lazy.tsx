@@ -22,9 +22,9 @@ import {
 } from "@/components/primary-module/table";
 import { buttonVariants } from "@/components/ui/button";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { saveColumnSettings } from "@/api/save-column-settings";
 
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { fetchCustomerTypesOptions } from "@/lib/query/customer";
 import type { TCustomerListItemParsed } from "@/lib/schemas/customer";
 import { cn, getXPaginationFromHeaders } from "@/lib/utils";

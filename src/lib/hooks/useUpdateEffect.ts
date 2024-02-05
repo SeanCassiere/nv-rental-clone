@@ -1,6 +1,6 @@
 import { DependencyList, EffectCallback, useEffect } from "react";
 
-import { useIsFirstRender } from "@/hooks/useIsFirstRender";
+import { useIsFirstRender } from "@/lib/hooks/useIsFirstRender";
 
 /**
  * Custom hook that runs an effect only on updates (not on the initial render).

@@ -3,8 +3,7 @@ import { createLazyRoute, getRouteApi } from "@tanstack/react-router";
 
 import { Separator } from "@/components/ui/separator";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { cn } from "@/lib/utils";
 import { titleMaker } from "@/lib/utils/title-maker";
 

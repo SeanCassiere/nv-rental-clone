@@ -1,9 +1,8 @@
 import React from "react";
 
-import { useFeature } from "@/hooks/useFeature";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-
 import { dfnsDateFormat, dfnsTimeFormat } from "@/lib/config/i18next";
+import { useFeature } from "@/lib/hooks/useFeature";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { momentToDateFnsFormat } from "@/lib/schemas/user";
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 

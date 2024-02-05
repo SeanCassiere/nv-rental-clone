@@ -22,9 +22,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { icons } from "@/components/ui/icons";
 
-import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
-
 import { useGlobalDialogContext } from "@/context/modals";
+import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { fetchUserByIdOptions } from "@/lib/query/user";
 import { getAvatarFallbackText, getAvatarUrl, IsMacLike } from "@/lib/utils";
 import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";

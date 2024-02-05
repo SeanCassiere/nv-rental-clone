@@ -16,11 +16,10 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useDebounce } from "@/hooks/useDebounce";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { useTernaryDarkMode } from "@/hooks/useTernaryDarkMode";
-
 import { useGlobalDialogContext } from "@/context/modals";
+import { useDebounce } from "@/lib/hooks/useDebounce";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { fetchAgreementsSearchListOptions } from "@/lib/query/agreement";
 import { fetchCustomersSearchListOptions } from "@/lib/query/customer";
 import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";

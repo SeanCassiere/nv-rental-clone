@@ -1,8 +1,8 @@
 // https://usehooks-ts.com/react-hook/use-document-title
 import { useRef } from "react";
 
-import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
-import { useUnmount } from "@/hooks/useUnmount";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks/useIsomorphicLayoutEffect";
+import { useUnmount } from "@/lib/hooks/useUnmount";
 
 type Options = {
   preserveTitleOnUnmount?: boolean;

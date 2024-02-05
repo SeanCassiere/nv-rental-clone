@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
+import { useIsomorphicLayoutEffect } from "@/lib/hooks/useIsomorphicLayoutEffect";
 
 /**
  * A hook for creating a memoized event callback.

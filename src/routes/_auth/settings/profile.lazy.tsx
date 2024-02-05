@@ -36,10 +36,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
-import { useDocumentTitle } from "@/hooks/useDocumentTitle";
-import { usePermission } from "@/hooks/usePermission";
-
 import { apiClient } from "@/api";
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+import { usePermission } from "@/lib/hooks/usePermission";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchActiveUsersCountOptions,

@@ -27,8 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,

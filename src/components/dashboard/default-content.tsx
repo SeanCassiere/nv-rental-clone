@@ -18,9 +18,8 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { usePermission } from "@/hooks/usePermission";
-import { useScreenSetting } from "@/hooks/useScreenSetting";
-
+import { usePermission } from "@/lib/hooks/usePermission";
+import { useScreenSetting } from "@/lib/hooks/useScreenSetting";
 import {
   fetchDashboardRentalStatisticsOptions,
   fetchDashboardWidgetsOptions,

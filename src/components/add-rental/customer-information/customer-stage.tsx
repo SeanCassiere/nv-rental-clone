@@ -20,9 +20,8 @@ import {
   InputDatePickerSlot,
 } from "@/components/ui/input-datepicker";
 
-import { useDatePreference } from "@/hooks/useDatePreferences";
-
 import i18n from "@/lib/config/i18next";
+import { useDatePreference } from "@/lib/hooks/useDatePreferences";
 
 const REQUIRED = i18n.t("labels:display.required");
 

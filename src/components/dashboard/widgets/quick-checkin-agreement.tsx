@@ -20,8 +20,7 @@ import {
 import { icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import {
   fetchAgreementsSearchListFn,
   fetchAgreementsSearchListOptions,

@@ -9,9 +9,8 @@ import { ReportTable } from "@/components/report/plugin/table";
 import { ViewColumns } from "@/components/report/plugin/view-columns";
 import { icons } from "@/components/ui/icons";
 
-import { useReportValueFormatter } from "@/hooks/useReportValueFormatter";
-
 import { useReportContext } from "@/context/view-report";
+import { useReportValueFormatter } from "@/lib/hooks/useReportValueFormatter";
 import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 import type { ReportTablePlugin } from "@/lib/types/report";
 

@@ -8,9 +8,8 @@ import { useTranslation } from "react-i18next";
 
 import { Separator } from "@/components/ui/separator";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { usePermission } from "@/hooks/usePermission";
-
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+import { usePermission } from "@/lib/hooks/usePermission";
 import { cn } from "@/lib/utils";
 import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
 import { incompleteSettingsNavigationFeatureFlag } from "@/lib/utils/features";
