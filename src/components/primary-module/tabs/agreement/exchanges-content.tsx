@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
-import { parseISO } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
@@ -11,8 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
+import { parseISO } from "@/lib/config/date-fns";
 import { type TVehicleExchangeListItemParsed } from "@/lib/schemas/vehicle-exchange";
-
 import { cn } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TVehicleExchangeListItemParsed>();

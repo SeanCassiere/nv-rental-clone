@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import {
   addDays,
   addMonths,
@@ -11,9 +13,7 @@ import {
   subMonths,
   subWeeks,
   subYears,
-} from "date-fns";
-import { z } from "zod";
-
+} from "@/lib/config/date-fns";
 import type { TReportDetail } from "@/lib/schemas/report";
 
 const stringBoolean = (value: unknown) =>

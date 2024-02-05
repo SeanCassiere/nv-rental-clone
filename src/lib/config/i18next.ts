@@ -1,4 +1,3 @@
-import { format as dateFnsFormat } from "date-fns/format";
 import {
   enNZ as enNZLocale,
   enUS as enUSLocale,
@@ -10,6 +9,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
+import { format as dateFnsFormat } from "@/lib/config/date-fns";
 import { IS_DEV, STORAGE_KEYS } from "@/lib/utils/constants";
 
 // START: date-fns formats

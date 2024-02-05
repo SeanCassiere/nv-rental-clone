@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { add, differenceInMinutes, isBefore, isEqual } from "date-fns";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
@@ -27,17 +26,20 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 
-import { useDatePreference } from "@/lib/hooks/useDatePreferences";
-
-import { getAuthFromAuthHook } from "@/lib/utils/auth";
-
+import {
+  add,
+  differenceInMinutes,
+  isBefore,
+  isEqual,
+} from "@/lib/config/date-fns";
 import i18n from "@/lib/config/i18next";
-
+import { useDatePreference } from "@/lib/hooks/useDatePreferences";
 import {
   fetchAgreementGeneratedNumberOptions,
   fetchAgreementTypesOptions,
 } from "@/lib/query/agreement";
 import { fetchLocationsListOptions } from "@/lib/query/location";
+import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
 const REQUIRED = i18n.t("labels:display.required");
 

@@ -1,5 +1,6 @@
-import { isBefore, parse } from "date-fns";
 import { z } from "zod";
+
+import { isBefore, parse } from "@/lib/config/date-fns";
 
 export const ReservationFiltersSchema = z
   .object({

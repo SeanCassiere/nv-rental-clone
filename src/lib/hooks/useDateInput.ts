@@ -1,5 +1,13 @@
 // customized based on source: https://github.com/gpbl/react-day-picker/blob/HEAD/src/hooks/useInput/useInput.ts
 import React, { useEffect, useState } from "react";
+import { enUS } from "date-fns/locale";
+import type {
+  DayClickEventHandler,
+  DayPickerBase,
+  DayPickerSingleProps,
+  MonthChangeEventHandler,
+} from "react-day-picker/dist";
+
 import {
   format as _format,
   differenceInCalendarDays,
@@ -12,14 +20,7 @@ import {
   setMinutes,
   startOfDay,
   startOfMonth,
-} from "date-fns";
-import { enUS } from "date-fns/locale";
-import type {
-  DayClickEventHandler,
-  DayPickerBase,
-  DayPickerSingleProps,
-  MonthChangeEventHandler,
-} from "react-day-picker/dist";
+} from "@/lib/config/date-fns";
 
 function isValidDate(day: Date): boolean {
   return !isNaN(day.getTime());
