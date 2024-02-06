@@ -21,6 +21,7 @@ export const Route = createFileRoute("/_public/logout")({
         .forEach((key) => window.localStorage.removeItem(key));
     }
 
+    await auth.removeUser();
     await auth.signoutRedirect();
 
     return;
