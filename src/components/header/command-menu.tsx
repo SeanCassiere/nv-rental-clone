@@ -448,8 +448,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/agreements",
-                    search: () => ({ page: 1, size: defaultRowCount }),
+                    to: "/reports",
                   })
                 );
               }}
