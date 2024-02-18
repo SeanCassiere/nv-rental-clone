@@ -15,8 +15,6 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { PrimaryModuleTable } from "@/components/primary-module/table";
-import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
@@ -36,6 +34,7 @@ import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
 import {
   TableList,
   TableListColumnVisibility,
+  TableListContent,
   TableListToolbar,
   type TableListToolbarFilterItem,
 } from "@/routes/_auth/-modules/table-list";
@@ -414,6 +413,7 @@ function AgreementsSearchPage() {
         <TableList
           list={dataList}
           columnDefs={columnDefs}
+          isLoading={agreementsData.isLoading || _trackTableLoading}
           filtering={{
             columnFilters,
             onColumnFiltersChange: setColumnFilters,
@@ -429,8 +429,11 @@ function AgreementsSearchPage() {
             onClearFilters={handleClearFilters}
           />
           <Separator className="my-4" />
-          <div className="flex items-center justify-end">
-            <TableListColumnVisibility />
+          <div className="flex flex-col gap-2 overflow-hidden">
+            <div className="flex items-center justify-end p-2">
+              <TableListColumnVisibility />
+            </div>
+            <TableListContent className="rounded border bg-card" />
           </div>
           <Separator className="my-4" />
         </TableList>

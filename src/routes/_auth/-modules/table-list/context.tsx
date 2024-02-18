@@ -3,6 +3,7 @@ import { type Table } from "@tanstack/react-table";
 
 type TableListContextType<TData = any> = {
   table: Table<TData>;
+  isLoading?: boolean;
 };
 
 const tableListContext = React.createContext<TableListContextType | null>(null);

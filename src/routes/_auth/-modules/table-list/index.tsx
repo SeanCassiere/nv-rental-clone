@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table";
 
 import { TableListColumnVisibility } from "./column-visibility";
+import { TableListContent } from "./content";
 import { tableListContext } from "./context";
 import {
   TableListToolbar,
@@ -20,6 +21,7 @@ interface TableListProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   list: TData[];
   columnDefs: ColumnDef<TData, TValue>[];
+  isLoading?: boolean;
   filtering?: {
     columnFilters: ColumnFiltersState;
     onColumnFiltersChange: OnChangeFn<ColumnFiltersState>;
@@ -31,7 +33,8 @@ interface TableListProps<TData, TValue>
 }
 
 function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
-  const { list, columnDefs, filtering, visibility, ...props } = rootProps;
+  const { list, columnDefs, filtering, visibility, isLoading, ...props } =
+    rootProps;
 
   const { columnFilters = [], onColumnFiltersChange } = filtering || {};
   const { columnVisibility: _columnVisibility, onColumnVisibilityChange } =
@@ -66,7 +69,7 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
   const memoizedTable = React.useMemo(() => table, [table]);
 
   return (
-    <tableListContext.Provider value={{ table: memoizedTable }}>
+    <tableListContext.Provider value={{ table: memoizedTable, isLoading }}>
       <div {...props} />
     </tableListContext.Provider>
   );
@@ -75,6 +78,7 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
 export {
   TableList,
   TableListColumnVisibility,
+  TableListContent,
   TableListToolbar,
   TableListToolbarProps,
   TableListToolbarFilterItem,
