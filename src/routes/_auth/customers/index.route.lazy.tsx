@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -16,6 +16,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { PrimaryModuleTable } from "@/components/primary-module/table";
+import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 import { buttonVariants } from "@/components/ui/button";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
@@ -53,7 +54,7 @@ function CustomerSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+  const [_trackTableLoading, _setTrackTableLoading] = React.useState(false);
 
   const startChangingPage = () => {
     _setTrackTableLoading(true);
@@ -62,14 +63,15 @@ function CustomerSearchPage() {
     _setTrackTableLoading(false);
   };
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
-    Object.entries(searchFilters).reduce(
-      (prev, [key, value]) => [...prev, { id: key, value }],
-      [] as ColumnFiltersState
-    )
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    () =>
+      Object.entries(searchFilters).reduce(
+        (prev, [key, value]) => [...prev, { id: key, value }],
+        [] as ColumnFiltersState
+      )
   );
 
-  const pagination: PaginationState = useMemo(
+  const pagination: PaginationState = React.useMemo(
     () => ({
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
@@ -81,11 +83,14 @@ function CustomerSearchPage() {
   const customerTypesList = useQuery(
     fetchCustomerTypesOptions({ auth: authParams })
   );
-  const customerTypes = customerTypesList.data ?? [];
+  const customerTypes = React.useMemo(
+    () => customerTypesList.data ?? [],
+    [customerTypesList.data]
+  );
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 
-  const columnDefs = useMemo(
+  const columnDefs = React.useMemo(
     () =>
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
@@ -154,7 +159,7 @@ function CustomerSearchPage() {
       }),
   });
 
-  const handleSaveColumnsOrder = useCallback(
+  const handleSaveColumnsOrder = React.useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
@@ -167,7 +172,7 @@ function CustomerSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const handleSaveColumnVisibility = useCallback(
+  const handleSaveColumnVisibility = React.useCallback(
     (graph: VisibilityState) => {
       const newColumnsData = (
         columnsData.data.status === 200 ? columnsData.data.body : []
@@ -189,8 +194,54 @@ function CustomerSearchPage() {
       ? customersData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const customersList =
-    customersData.data?.status === 200 ? customersData.data?.body : [];
+  const tableFacetedFilters: PrimaryModuleTableFacetedFilterItem[] =
+    React.useMemo(
+      () => [
+        {
+          id: "Keyword",
+          title: "Search",
+          type: "text",
+          size: "large",
+        },
+        {
+          id: "CustomerTypes",
+          title: "Type",
+          type: "multi-select",
+          options: customerTypes.map((item) => ({
+            value: `${item.typeName}`,
+            label: item.typeName,
+          })),
+          defaultValue: [],
+        },
+        {
+          id: "DateOfbirth",
+          title: "DOB",
+          type: "date",
+        },
+        {
+          id: "Phone",
+          title: "Phone",
+          type: "text",
+          size: "normal",
+        },
+        {
+          id: "Active",
+          title: "Is active?",
+          type: "select",
+          options: [
+            { value: "true", label: "Yes" },
+            { value: "false", label: "No" },
+          ],
+          defaultValue: "true",
+        },
+      ],
+      [customerTypes]
+    );
+
+  const dataList = React.useMemo(
+    () => (customersData.data?.status === 200 ? customersData.data?.body : []),
+    [customersData.data?.body, customersData.data?.status]
+  );
 
   useDocumentTitle(titleMaker("Customers"));
 
@@ -211,7 +262,7 @@ function CustomerSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={customersList}
+          data={dataList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           isLoading={customersData.isLoading || _trackTableLoading}
@@ -279,45 +330,7 @@ function CustomerSearchPage() {
                 }),
               }).then(stopChangingPage);
             },
-            filterableColumns: [
-              {
-                id: "Keyword",
-                title: "Search",
-                type: "text",
-                size: "large",
-              },
-              {
-                id: "CustomerTypes",
-                title: "Type",
-                type: "multi-select",
-                options: customerTypes.map((item) => ({
-                  value: `${item.typeName}`,
-                  label: item.typeName,
-                })),
-                defaultValue: [],
-              },
-              {
-                id: "DateOfbirth",
-                title: "DOB",
-                type: "date",
-              },
-              {
-                id: "Phone",
-                title: "Phone",
-                type: "text",
-                size: "normal",
-              },
-              {
-                id: "Active",
-                title: "Is active?",
-                type: "select",
-                options: [
-                  { value: "true", label: "Yes" },
-                  { value: "false", label: "No" },
-                ],
-                defaultValue: "true",
-              },
-            ],
+            filterableColumns: tableFacetedFilters,
           }}
         />
       </section>

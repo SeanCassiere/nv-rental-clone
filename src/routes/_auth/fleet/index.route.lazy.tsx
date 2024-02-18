@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 
 import { PrimaryModuleTable } from "@/components/primary-module/table";
+import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -53,7 +54,7 @@ function VehicleSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+  const [_trackTableLoading, _setTrackTableLoading] = React.useState(false);
 
   const startChangingPage = () => {
     _setTrackTableLoading(true);
@@ -62,14 +63,15 @@ function VehicleSearchPage() {
     _setTrackTableLoading(false);
   };
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
-    Object.entries(searchFilters).reduce(
-      (prev, [key, value]) => [...prev, { id: key, value }],
-      [] as ColumnFiltersState
-    )
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    () =>
+      Object.entries(searchFilters).reduce(
+        (prev, [key, value]) => [...prev, { id: key, value }],
+        [] as ColumnFiltersState
+      )
   );
 
-  const pagination: PaginationState = useMemo(
+  const pagination: PaginationState = React.useMemo(
     () => ({
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
@@ -82,12 +84,18 @@ function VehicleSearchPage() {
   const vehicleStatusList = useQuery(
     fetchVehiclesStatusesOptions({ auth: authParams })
   );
-  const vehicleStatuses = vehicleStatusList.data ?? [];
+  const vehicleStatuses = React.useMemo(
+    () => vehicleStatusList.data ?? [],
+    [vehicleStatusList.data]
+  );
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
   );
-  const vehicleTypes = vehicleTypesList.data ?? [];
+  const vehicleTypes = React.useMemo(
+    () => vehicleTypesList.data ?? [],
+    [vehicleTypesList.data]
+  );
 
   const locationsList = useQuery(
     fetchLocationsListOptions({
@@ -95,12 +103,14 @@ function VehicleSearchPage() {
       filters: { withActive: true },
     })
   );
-  const locations =
-    locationsList.data?.status === 200 ? locationsList.data.body : [];
+  const locations = React.useMemo(
+    () => (locationsList.data?.status === 200 ? locationsList.data.body : []),
+    [locationsList.data?.body, locationsList.data?.status]
+  );
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 
-  const columnDefs = useMemo(
+  const columnDefs = React.useMemo(
     () =>
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
@@ -156,7 +166,7 @@ function VehicleSearchPage() {
       }),
   });
 
-  const handleSaveColumnsOrder = useCallback(
+  const handleSaveColumnsOrder = React.useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
@@ -169,7 +179,7 @@ function VehicleSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const handleSaveColumnVisibility = useCallback(
+  const handleSaveColumnVisibility = React.useCallback(
     (graph: VisibilityState) => {
       const newColumnsData = (
         columnsData.data.status === 200 ? columnsData.data.body : []
@@ -191,8 +201,69 @@ function VehicleSearchPage() {
       ? vehiclesData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const vehiclesList =
-    vehiclesData.data?.status === 200 ? vehiclesData.data?.body : [];
+  const tableFacetedFilters: PrimaryModuleTableFacetedFilterItem[] =
+    React.useMemo(
+      () => [
+        {
+          id: "VehicleStatus",
+          title: "Status",
+          type: "select",
+          options: vehicleStatuses.map((item) => ({
+            value: `${item.id}`,
+            label: item.name,
+          })),
+        },
+        {
+          id: "VehicleTypeId",
+          title: "Type",
+          type: "select",
+          options: vehicleTypes.map((item) => ({
+            value: `${item.id}`,
+            label: item.value,
+          })),
+        },
+        {
+          id: "VehicleNo",
+          title: "Vehicle no.",
+          type: "text",
+          size: "normal",
+        },
+        {
+          id: "OwningLocationId",
+          title: "Owning location",
+          type: "select",
+          options: locations.map((item) => ({
+            value: `${item.locationId}`,
+            label: `${item.locationName}`,
+          })),
+        },
+        {
+          id: "CurrentLocationId",
+          title: "Current location",
+          type: "select",
+          options: locations.map((item) => ({
+            value: `${item.locationId}`,
+            label: `${item.locationName}`,
+          })),
+        },
+        {
+          id: "Active",
+          title: "Is active?",
+          type: "select",
+          options: [
+            { value: "true", label: "Yes" },
+            { value: "false", label: "No" },
+          ],
+          defaultValue: "true",
+        },
+      ],
+      [locations, vehicleStatuses, vehicleTypes]
+    );
+
+  const dataList = React.useMemo(
+    () => (vehiclesData.data?.status === 200 ? vehiclesData.data?.body : []),
+    [vehiclesData.data?.body, vehiclesData.data?.status]
+  );
 
   useDocumentTitle(titleMaker("Fleet"));
 
@@ -213,7 +284,7 @@ function VehicleSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={vehiclesList}
+          data={dataList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           initialColumnVisibility={
@@ -280,60 +351,7 @@ function VehicleSearchPage() {
                 }),
               }).then(stopChangingPage);
             },
-            filterableColumns: [
-              {
-                id: "VehicleStatus",
-                title: "Status",
-                type: "select",
-                options: vehicleStatuses.map((item) => ({
-                  value: `${item.id}`,
-                  label: item.name,
-                })),
-              },
-              {
-                id: "VehicleTypeId",
-                title: "Type",
-                type: "select",
-                options: vehicleTypes.map((item) => ({
-                  value: `${item.id}`,
-                  label: item.value,
-                })),
-              },
-              {
-                id: "VehicleNo",
-                title: "Vehicle no.",
-                type: "text",
-                size: "normal",
-              },
-              {
-                id: "OwningLocationId",
-                title: "Owning location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-              {
-                id: "CurrentLocationId",
-                title: "Current location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-              {
-                id: "Active",
-                title: "Is active?",
-                type: "select",
-                options: [
-                  { value: "true", label: "Yes" },
-                  { value: "false", label: "No" },
-                ],
-                defaultValue: "true",
-              },
-            ],
+            filterableColumns: tableFacetedFilters,
           }}
         />
       </section>

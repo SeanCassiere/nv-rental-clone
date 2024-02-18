@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -16,6 +16,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { PrimaryModuleTable } from "@/components/primary-module/table";
+import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
@@ -61,7 +62,7 @@ function ReservationsSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+  const [_trackTableLoading, _setTrackTableLoading] = React.useState(false);
 
   const startChangingPage = () => {
     _setTrackTableLoading(true);
@@ -70,14 +71,15 @@ function ReservationsSearchPage() {
     _setTrackTableLoading(false);
   };
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
-    Object.entries(searchFilters).reduce(
-      (prev, [key, value]) => [...prev, { id: key, value }],
-      [] as ColumnFiltersState
-    )
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    () =>
+      Object.entries(searchFilters).reduce(
+        (prev, [key, value]) => [...prev, { id: key, value }],
+        [] as ColumnFiltersState
+      )
   );
 
-  const pagination: PaginationState = useMemo(
+  const pagination: PaginationState = React.useMemo(
     () => ({
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
@@ -90,12 +92,18 @@ function ReservationsSearchPage() {
   const reservationStatusList = useQuery(
     fetchReservationStatusesOptions({ auth: authParams })
   );
-  const reservationStatuses = reservationStatusList.data ?? [];
+  const reservationStatuses = React.useMemo(
+    () => reservationStatusList.data ?? [],
+    [reservationStatusList.data]
+  );
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
   );
-  const vehicleTypes = vehicleTypesList.data ?? [];
+  const vehicleTypes = React.useMemo(
+    () => vehicleTypesList.data ?? [],
+    [vehicleTypesList.data]
+  );
 
   const locationsList = useQuery(
     fetchLocationsListOptions({
@@ -103,16 +111,21 @@ function ReservationsSearchPage() {
       filters: { withActive: true },
     })
   );
-  const locations =
-    locationsList.data?.status === 200 ? locationsList.data.body : [];
+  const locations = React.useMemo(
+    () => (locationsList.data?.status === 200 ? locationsList.data.body : []),
+    [locationsList.data?.body, locationsList.data?.status]
+  );
 
   const reservationTypesList = useQuery(
     fetchReservationTypesOptions({ auth: authParams })
   );
-  const reservationTypes = reservationTypesList.data ?? [];
+  const reservationTypes = React.useMemo(
+    () => reservationTypesList.data ?? [],
+    [reservationTypesList.data]
+  );
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
-  const columnDefs = useMemo(
+  const columnDefs = React.useMemo(
     () =>
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
@@ -180,7 +193,7 @@ function ReservationsSearchPage() {
       }),
   });
 
-  const handleSaveColumnsOrder = useCallback(
+  const handleSaveColumnsOrder = React.useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
@@ -193,7 +206,7 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const handleSaveColumnVisibility = useCallback(
+  const handleSaveColumnVisibility = React.useCallback(
     (graph: VisibilityState) => {
       const newColumnsData = (
         columnsData.data.status === 200 ? columnsData.data.body : []
@@ -215,8 +228,81 @@ function ReservationsSearchPage() {
       ? reservationsData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const reservationsList =
-    reservationsData.data?.status === 200 ? reservationsData.data?.body : [];
+  const tableFacetedFilters: PrimaryModuleTableFacetedFilterItem[] =
+    React.useMemo(
+      () => [
+        {
+          id: "Keyword",
+          title: "Search",
+          type: "text",
+          size: "large",
+        },
+        {
+          id: "Statuses",
+          title: "Status",
+          type: "multi-select",
+          options: reservationStatuses.map((item) => ({
+            value: `${item.id}`,
+            label: item.name,
+          })),
+          defaultValue: [],
+        },
+        {
+          id: "ReservationTypes",
+          title: "Type",
+          type: "multi-select",
+          options: reservationTypes.map((item) => ({
+            value: `${item.typeName}`,
+            label: item.typeName,
+          })),
+          defaultValue: [],
+        },
+        {
+          id: "VehicleTypeId",
+          title: "Vehicle type",
+          type: "select",
+          options: vehicleTypes.map((item) => ({
+            value: `${item.id}`,
+            label: item.value,
+          })),
+        },
+        {
+          id: "CreatedDateFrom",
+          title: "Start date",
+          type: "date",
+        },
+        {
+          id: "CreatedDateTo",
+          title: "End date",
+          type: "date",
+        },
+        {
+          id: "CheckoutLocationId",
+          title: "Checkout location",
+          type: "select",
+          options: locations.map((item) => ({
+            value: `${item.locationId}`,
+            label: `${item.locationName}`,
+          })),
+        },
+        {
+          id: "CheckinLocationId",
+          title: "Checkin location",
+          type: "select",
+          options: locations.map((item) => ({
+            value: `${item.locationId}`,
+            label: `${item.locationName}`,
+          })),
+        },
+      ],
+      [locations, reservationStatuses, reservationTypes, vehicleTypes]
+    );
+
+  const dataList = React.useMemo(
+    () =>
+      reservationsData.data?.status === 200 ? reservationsData.data?.body : [],
+    [reservationsData.data?.body, reservationsData.data?.status]
+  );
 
   useDocumentTitle(titleMaker("Reservations"));
 
@@ -253,7 +339,7 @@ function ReservationsSearchPage() {
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
-          data={reservationsList}
+          data={dataList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           isLoading={reservationsData.isLoading || _trackTableLoading}
@@ -321,71 +407,7 @@ function ReservationsSearchPage() {
                 }),
               }).then(stopChangingPage);
             },
-            filterableColumns: [
-              {
-                id: "Keyword",
-                title: "Search",
-                type: "text",
-                size: "large",
-              },
-              {
-                id: "Statuses",
-                title: "Status",
-                type: "multi-select",
-                options: reservationStatuses.map((item) => ({
-                  value: `${item.id}`,
-                  label: item.name,
-                })),
-                defaultValue: [],
-              },
-              {
-                id: "ReservationTypes",
-                title: "Type",
-                type: "multi-select",
-                options: reservationTypes.map((item) => ({
-                  value: `${item.typeName}`,
-                  label: item.typeName,
-                })),
-                defaultValue: [],
-              },
-              {
-                id: "VehicleTypeId",
-                title: "Vehicle type",
-                type: "select",
-                options: vehicleTypes.map((item) => ({
-                  value: `${item.id}`,
-                  label: item.value,
-                })),
-              },
-              {
-                id: "CreatedDateFrom",
-                title: "Start date",
-                type: "date",
-              },
-              {
-                id: "CreatedDateTo",
-                title: "End date",
-                type: "date",
-              },
-              {
-                id: "CheckoutLocationId",
-                title: "Checkout location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-              {
-                id: "CheckinLocationId",
-                title: "Checkin location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-            ],
+            filterableColumns: tableFacetedFilters,
           }}
         />
       </section>
