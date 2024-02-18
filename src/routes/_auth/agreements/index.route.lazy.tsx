@@ -435,11 +435,11 @@ function AgreementsSearchPage() {
             <TableListToolbarActions className="inline-flex justify-start gap-2" />
           </TableListToolbar>
           <Separator className="my-4" />
-          <div className="flex flex-col gap-2 overflow-hidden">
-            <div className="flex items-center justify-end p-2">
+          <div className="flex flex-col overflow-hidden rounded border bg-card">
+            <div className="flex items-center justify-end px-2 py-3 md:px-4 md:py-4">
               <TableListColumnVisibility />
             </div>
-            <TableListContent className="rounded border bg-card" />
+            <TableListContent className="border-t" />
           </div>
           <Separator className="my-4" />
         </TableList>

@@ -84,7 +84,7 @@ function TableListContent(props: TableListContentProps) {
   );
 
   return (
-    <div className={cn("overflow-x-auto", className)} {...divProps}>
+    <div className={cn("overflow-x-scroll", className)} {...divProps}>
       <DndContext
         collisionDetection={closestCorners}
         modifiers={[restrictToHorizontalAxis]}

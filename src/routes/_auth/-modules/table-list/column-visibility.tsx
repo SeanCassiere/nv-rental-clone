@@ -17,11 +17,7 @@ function TableListColumnVisibility() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="ml-auto flex h-8 bg-card"
-        >
+        <Button variant="outline" size="sm" className="flex h-8 bg-card">
           <icons.Columns className="mr-2 h-4 w-4" />
           View
         </Button>
