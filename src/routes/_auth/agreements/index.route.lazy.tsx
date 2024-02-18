@@ -395,7 +395,7 @@ function AgreementsSearchPage() {
             columnFilters,
             setColumnFilters,
             onClearFilters: () => {
-              startChangingPage;
+              startChangingPage();
               navigate({
                 to: "/agreements",
                 params: {},
