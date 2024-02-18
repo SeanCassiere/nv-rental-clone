@@ -15,11 +15,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import {
-  PrimaryModuleTable,
-  PrimaryModuleTableCellWrap,
-  PrimaryModuleTableColumnHeader,
-} from "@/components/primary-module/table";
+import { PrimaryModuleTable } from "@/components/primary-module/table";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
@@ -121,24 +117,17 @@ function ReservationsSearchPage() {
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
         .map((column) =>
-          columnHelper.accessor(column.columnHeader as any, {
-            id: column.columnHeader,
-            meta: {
-              columnName: column.columnHeaderDescription ?? undefined,
-            },
-            header: ({ column: columnChild }) => (
-              <PrimaryModuleTableColumnHeader
-                column={columnChild}
-                title={column.columnHeaderDescription ?? ""}
-              />
-            ),
-            cell: (item) => {
-              const value = item.getValue();
-              if (column.columnHeader === "ReservationNumber") {
-                const reservationId = item.table.getRow(item.row.id).original
-                  .id;
-                return (
-                  <PrimaryModuleTableCellWrap>
+          columnHelper.accessor(
+            column.columnHeader as keyof TReservationListItemParsed,
+            {
+              id: column.columnHeader,
+              header: () => column.columnHeaderDescription ?? "",
+              cell: (item) => {
+                const value = item.getValue();
+                if (column.columnHeader === "ReservationNumber") {
+                  const reservationId = item.table.getRow(item.row.id).original
+                    .id;
+                  return (
                     <Link
                       to="/reservations/$reservationId"
                       params={{ reservationId: String(reservationId) }}
@@ -150,35 +139,29 @@ function ReservationsSearchPage() {
                     >
                       {value || "-"}
                     </Link>
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
-              if (column.columnHeader === "ReservationStatusName") {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    <Badge variant="outline">{value}</Badge>
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
+                  );
+                }
+                if (column.columnHeader === "ReservationStatusName") {
+                  return <Badge variant="outline">{value}</Badge>;
+                }
 
-              if (ReservationDateTimeColumns.includes(column.columnHeader)) {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    {t("intlDateTime", {
-                      value: new Date(value),
-                      ns: "format",
-                    })}
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
+                if (
+                  ReservationDateTimeColumns.includes(column.columnHeader) &&
+                  value &&
+                  typeof value !== "boolean"
+                ) {
+                  return t("intlDateTime", {
+                    value: new Date(value),
+                    ns: "format",
+                  });
+                }
 
-              return (
-                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-              );
-            },
-            enableHiding: column.columnHeader !== "ReservationNumber",
-            enableSorting: false,
-          })
+                return value ?? "-";
+              },
+              enableSorting: false,
+              enableHiding: column.columnHeader !== "ReservationNumber",
+            }
+          )
         ),
     [columnsData.data, t]
   );
@@ -274,8 +257,16 @@ function ReservationsSearchPage() {
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           isLoading={reservationsData.isLoading || _trackTableLoading}
-          rawColumnsData={
-            columnsData.data.status === 200 ? columnsData.data.body : []
+          initialColumnVisibility={
+            columnsData.data.status === 200
+              ? columnsData.data.body.reduce(
+                  (prev, current) => ({
+                    ...prev,
+                    [current.columnHeader]: current.isSelected,
+                  }),
+                  {}
+                )
+              : {}
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={

@@ -15,11 +15,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import {
-  PrimaryModuleTable,
-  PrimaryModuleTableCellWrap,
-  PrimaryModuleTableColumnHeader,
-} from "@/components/primary-module/table";
+import { PrimaryModuleTable } from "@/components/primary-module/table";
 import { buttonVariants } from "@/components/ui/button";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
@@ -94,27 +90,20 @@ function CustomerSearchPage() {
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
         .map((column) =>
-          columnHelper.accessor(column.columnHeader as any, {
-            id: column.columnHeader,
-            meta: {
-              columnName: column.columnHeaderDescription ?? undefined,
-            },
-            header: ({ column: columnChild }) => (
-              <PrimaryModuleTableColumnHeader
-                column={columnChild}
-                title={column.columnHeaderDescription ?? ""}
-              />
-            ),
-            cell: (item) => {
-              const value = item.getValue();
-              if (
-                column.columnHeader === "FirstName" &&
-                column.isSelected === true
-              ) {
-                const customerId = item.table.getRow(item.row.id).original
-                  .CustomerId;
-                return (
-                  <PrimaryModuleTableCellWrap>
+          columnHelper.accessor(
+            column.columnHeader as keyof TCustomerListItemParsed,
+            {
+              id: column.columnHeader,
+              header: () => column.columnHeaderDescription ?? "",
+              cell: (item) => {
+                const value = item.getValue();
+                if (
+                  column.columnHeader === "FirstName" &&
+                  column.isSelected === true
+                ) {
+                  const customerId = item.table.getRow(item.row.id).original
+                    .CustomerId;
+                  return (
                     <Link
                       to="/customers/$customerId"
                       params={{ customerId: String(customerId) }}
@@ -126,25 +115,27 @@ function CustomerSearchPage() {
                     >
                       {value || "-"}
                     </Link>
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
+                  );
+                }
 
-              if (DateColumns.includes(column.columnHeader)) {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    {t("intlDate", { value: new Date(value), ns: "format" })}
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
+                if (
+                  DateColumns.includes(column.columnHeader) &&
+                  value &&
+                  typeof value !== "boolean" &&
+                  Array.isArray(value) === false
+                ) {
+                  return t("intlDate", {
+                    value: new Date(value),
+                    ns: "format",
+                  });
+                }
 
-              return (
-                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-              );
-            },
-            enableHiding: column.columnHeader !== "FirstName",
-            enableSorting: false,
-          })
+                return value ?? "-";
+              },
+              enableSorting: false,
+              enableHiding: column.columnHeader !== "FirstName",
+            }
+          )
         ),
     [columnsData.data, t]
   );
@@ -224,8 +215,16 @@ function CustomerSearchPage() {
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           isLoading={customersData.isLoading || _trackTableLoading}
-          rawColumnsData={
-            columnsData.data.status === 200 ? columnsData.data.body : []
+          initialColumnVisibility={
+            columnsData.data.status === 200
+              ? columnsData.data.body.reduce(
+                  (prev, current) => ({
+                    ...prev,
+                    [current.columnHeader]: current.isSelected,
+                  }),
+                  {}
+                )
+              : {}
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
