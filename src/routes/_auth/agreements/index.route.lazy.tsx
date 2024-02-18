@@ -36,6 +36,8 @@ import {
   TableListColumnVisibility,
   TableListContent,
   TableListToolbar,
+  TableListToolbarActions,
+  TableListToolbarFilters,
   type TableListToolbarFilterItem,
 } from "@/routes/_auth/-modules/table-list";
 
@@ -427,7 +429,11 @@ function AgreementsSearchPage() {
             filterItems={tableFacetedFilters}
             onSearchWithFilters={handleSearchFilters}
             onClearFilters={handleClearFilters}
-          />
+            className="flex flex-wrap items-start justify-start gap-2"
+          >
+            <TableListToolbarFilters />
+            <TableListToolbarActions className="inline-flex justify-start gap-2" />
+          </TableListToolbar>
           <Separator className="my-4" />
           <div className="flex flex-col gap-2 overflow-hidden">
             <div className="flex items-center justify-end p-2">

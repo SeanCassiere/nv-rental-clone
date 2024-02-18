@@ -13,8 +13,9 @@ import { TableListContent } from "./content";
 import { tableListContext } from "./context";
 import {
   TableListToolbar,
+  TableListToolbarActions,
+  TableListToolbarFilters,
   type TableListToolbarFilterItem,
-  type TableListToolbarProps,
 } from "./toolbar";
 
 interface TableListProps<TData, TValue>
@@ -80,6 +81,7 @@ export {
   TableListColumnVisibility,
   TableListContent,
   TableListToolbar,
-  TableListToolbarProps,
+  TableListToolbarActions,
+  TableListToolbarFilters,
   TableListToolbarFilterItem,
 };

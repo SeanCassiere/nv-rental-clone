@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
   Command,
   CommandEmpty,
@@ -30,33 +29,43 @@ import { cn } from "@/lib/utils";
 
 import { useTableList } from "./context";
 
-export interface TableListToolbarProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+type TableListToolbarContextProps = {
   filterItems: TableListToolbarFilterItem[];
-  onSearchWithFilters: () => void;
-  onClearFilters: () => void;
+  handleReset: () => void;
+  handleSearch: () => void;
+};
+
+const tableListToolbarContext =
+  React.createContext<TableListToolbarContextProps | null>(null);
+
+function useTableListToolbar() {
+  const context = React.useContext(tableListToolbarContext);
+  if (!context) {
+    throw new Error(
+      "useTableListToolbar must be used within a TableListToolbar"
+    );
+  }
+  return context;
 }
 
-function TableListToolbar(props: TableListToolbarProps) {
-  const {
-    filterItems: filterableColumns = [],
-    onClearFilters: callClearFiltersFn,
-    onSearchWithFilters,
-    className,
-    ...otherProps
-  } = props;
-
+function TableListToolbar({
+  filterItems,
+  onSearchWithFilters,
+  onClearFilters,
+  children,
+  className,
+  ...props
+}: {
+  filterItems: TableListToolbarContextProps["filterItems"];
+  onSearchWithFilters: () => void;
+  onClearFilters: () => void;
+} & React.HTMLAttributes<HTMLDivElement>) {
   const { table } = useTableList();
 
-  const tableColumnFilters = table.getState().columnFilters;
-  const isFiltered = tableColumnFilters.length > 0;
-
-  const handleReset = () => {
+  const handleReset = React.useCallback(() => {
     const f = table.getState().columnFilters;
     const newState = f.reduce((prev, current) => {
-      const currentInFilterable = filterableColumns.find(
-        (i) => i.id === current.id
-      );
+      const currentInFilterable = filterItems.find((i) => i.id === current.id);
 
       if (currentInFilterable) {
         current.value = currentInFilterable?.defaultValue || undefined;
@@ -68,53 +77,83 @@ function TableListToolbar(props: TableListToolbarProps) {
 
     table.setColumnFilters(newState);
 
-    callClearFiltersFn();
-  };
+    onClearFilters();
+  }, [filterItems, onClearFilters, table]);
 
   return (
-    <Card className={cn("border shadow-none", className)} {...otherProps}>
-      <CardTitle className="sr-only">Table filters</CardTitle>
-      <CardContent className="flex flex-col justify-between gap-2 px-2 py-2 sm:flex-row sm:items-end">
-        <div className="flex flex-1 flex-wrap items-start justify-start gap-2">
-          {filterableColumns.length &&
-            filterableColumns.map((column) => (
-              <TableListToolbarFilter
-                key={`tableList_faceted_filter_${column.id}`}
-                data={column}
-              />
-            ))}
-
-          <div className="inline-flex justify-start gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onSearchWithFilters}
-              className="h-8 px-2 lg:px-3"
-            >
-              <icons.Search className="mr-2 h-3 w-3" />
-              Search
-            </Button>
-
-            {isFiltered && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleReset}
-                className="h-8 px-2 lg:px-3"
-              >
-                <icons.X className="mr-2 h-3 w-3" />
-                Clear
-              </Button>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <tableListToolbarContext.Provider
+      value={{
+        filterItems,
+        handleReset,
+        handleSearch: onSearchWithFilters,
+      }}
+    >
+      <div className={cn("rounded border bg-card p-2", className)} {...props}>
+        {children}
+      </div>
+    </tableListToolbarContext.Provider>
   );
 }
+TableListToolbar.displayName = "TableListToolbar";
 
-// Filter component
-type TableListFilterOption = {
+function TableListToolbarFilters() {
+  const { filterItems } = useTableListToolbar();
+
+  return (
+    <React.Fragment>
+      {filterItems.length &&
+        filterItems.map((column) => (
+          <ToolbarFilter
+            key={`tableList_faceted_filter_${column.id}`}
+            data={column}
+          />
+        ))}
+    </React.Fragment>
+  );
+}
+TableListToolbarFilters.displayName = "TableListToolbarFilters";
+
+function TableListToolbarActions({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  const { handleSearch, handleReset } = useTableListToolbar();
+  const { table } = useTableList();
+
+  const tableColumnFilters = table.getState().columnFilters;
+  const isFiltered = tableColumnFilters.length > 0;
+
+  return (
+    <div className={cn(className)} {...props}>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleSearch}
+        className="h-8 px-2 lg:px-3"
+      >
+        <icons.Search className="mr-2 h-3 w-3" />
+        Search
+      </Button>
+
+      {isFiltered && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleReset}
+          className="h-8 px-2 lg:px-3"
+        >
+          <icons.X className="mr-2 h-3 w-3" />
+          Clear
+        </Button>
+      )}
+    </div>
+  );
+}
+TableListToolbarActions.displayName = "TableListToolbarActions";
+
+// The stuff for the individual filter items is below
+type FilterOption = {
   label: string;
   value: string;
   icon?: React.ComponentType<{ className?: string }>;
@@ -132,13 +171,13 @@ export type TableListToolbarFilterItem = {
     }
   | {
       type: "select";
-      options: TableListFilterOption[];
+      options: FilterOption[];
       defaultValue?: string | undefined;
       size?: never;
     }
   | {
       type: "multi-select";
-      options: TableListFilterOption[];
+      options: FilterOption[];
       defaultValue?: string[] | undefined;
       size?: never;
     }
@@ -155,7 +194,7 @@ interface TableListToolbarFilterOption {
   isLargeSearchFullWidth?: boolean;
 }
 
-function TableListToolbarFilter({
+function ToolbarFilter({
   data: { id, title, type, options = [], size = "normal", defaultValue },
   isLargeSearchFullWidth = false,
 }: TableListToolbarFilterOption) {
@@ -462,5 +501,6 @@ function TableListToolbarFilter({
     </div>
   );
 }
+ToolbarFilter.displayName = "ToolbarFilter";
 
-export { TableListToolbar };
+export { TableListToolbar, TableListToolbarFilters, TableListToolbarActions };
