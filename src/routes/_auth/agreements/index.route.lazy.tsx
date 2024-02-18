@@ -20,6 +20,7 @@ import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-m
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
+import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
@@ -31,6 +32,13 @@ import {
 } from "@/lib/query/agreement";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
+
+import {
+  TableList,
+  TableListColumnVisibility,
+  TableListToolbar,
+  type TableListToolbarFilterItem,
+} from "@/routes/_auth/-modules/table-list";
 
 import {
   AgreementDateTimeColumns,
@@ -134,6 +142,9 @@ function AgreementsSearchPage() {
             column.columnHeader as keyof TAgreementListItemParsed,
             {
               id: column.columnHeader,
+              meta: {
+                columnName: column.columnHeaderDescription ?? "",
+              },
               header: () => column.columnHeaderDescription ?? "",
               cell: (item) => {
                 const value = item.getValue();
@@ -225,96 +236,127 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
+  const handleClearFilters = React.useCallback(() => {
+    startChangingPage();
+    navigate({
+      to: "/agreements",
+      params: {},
+      search: () => ({
+        page: 1,
+        size: pagination.pageSize,
+      }),
+    }).then(stopChangingPage);
+  }, [navigate, pagination.pageSize]);
+
+  const handleSearchFilters = React.useCallback(() => {
+    startChangingPage();
+    const filters = columnFilters.reduce(
+      (prev, current) => ({
+        ...prev,
+        [current.id]: current.value,
+      }),
+      {}
+    );
+    navigate({
+      to: "/agreements",
+      params: {},
+      search: () => ({
+        page: 1,
+        size: pagination.pageSize,
+        filters,
+      }),
+    }).then(stopChangingPage);
+  }, [columnFilters, navigate, pagination.pageSize]);
+
   const parsedPagination =
     agreementsData.status === "success"
       ? agreementsData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const tableFacetedFilters: PrimaryModuleTableFacetedFilterItem[] =
-    React.useMemo(
-      () => [
-        {
-          id: "Keyword",
-          title: "Search",
-          type: "text",
-          size: "large",
-        },
-        {
-          id: "Statuses",
-          title: "Status",
-          type: "multi-select",
-          options: agreementStatuses.map((item) => ({
-            value: `${item.id}`,
-            label: item.name,
-          })),
-          defaultValue: [],
-        },
-        {
-          id: "AgreementTypes",
-          title: "Type",
-          type: "multi-select",
-          options: agreementTypes.map((item) => ({
-            value: `${item.typeName}`,
-            label: item.typeName,
-          })),
-          defaultValue: [],
-        },
-        {
-          id: "StartDate",
-          title: "Start date",
-          type: "date",
-        },
-        {
-          id: "EndDate",
-          title: "End date",
-          type: "date",
-        },
-        {
-          id: "PickupLocationId",
-          title: "Checkout location",
-          type: "select",
-          options: locations.map((item) => ({
-            value: `${item.locationId}`,
-            label: `${item.locationName}`,
-          })),
-        },
-        {
-          id: "ReturnLocationId",
-          title: "Checkin location",
-          type: "select",
-          options: locations.map((item) => ({
-            value: `${item.locationId}`,
-            label: `${item.locationName}`,
-          })),
-        },
-        {
-          id: "VehicleTypeId",
-          title: "Vehicle type",
-          type: "select",
-          options: vehicleTypes.map((item) => ({
-            value: `${item.id}`,
-            label: item.value,
-          })),
-        },
-        {
-          id: "VehicleNo",
-          title: "Vehicle no.",
-          type: "text",
-          size: "normal",
-        },
-        {
-          id: "IsSearchOverdues",
-          title: "Only overdues?",
-          type: "select",
-          options: [
-            { value: "true", label: "Yes" },
-            { value: "false", label: "No" },
-          ],
-          defaultValue: "false",
-        },
-      ],
-      [agreementStatuses, agreementTypes, locations, vehicleTypes]
-    );
+  const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
+    () => [
+      {
+        id: "Keyword",
+        title: "Search",
+        type: "text",
+        size: "large",
+      },
+      {
+        id: "Statuses",
+        title: "Status",
+        type: "multi-select",
+        options: agreementStatuses.map((item) => ({
+          value: `${item.id}`,
+          label: item.name,
+        })),
+        defaultValue: [],
+      },
+      {
+        id: "AgreementTypes",
+        title: "Type",
+        type: "multi-select",
+        options: agreementTypes.map((item) => ({
+          value: `${item.typeName}`,
+          label: item.typeName,
+        })),
+        defaultValue: [],
+      },
+      {
+        id: "StartDate",
+        title: "Start date",
+        type: "date",
+      },
+      {
+        id: "EndDate",
+        title: "End date",
+        type: "date",
+      },
+      {
+        id: "PickupLocationId",
+        title: "Checkout location",
+        type: "select",
+        options: locations.map((item) => ({
+          value: `${item.locationId}`,
+          label: `${item.locationName}`,
+        })),
+      },
+      {
+        id: "ReturnLocationId",
+        title: "Checkin location",
+        type: "select",
+        options: locations.map((item) => ({
+          value: `${item.locationId}`,
+          label: `${item.locationName}`,
+        })),
+      },
+      {
+        id: "VehicleTypeId",
+        title: "Vehicle type",
+        type: "select",
+        options: vehicleTypes.map((item) => ({
+          value: `${item.id}`,
+          label: item.value,
+        })),
+      },
+      {
+        id: "VehicleNo",
+        title: "Vehicle no.",
+        type: "text",
+        size: "normal",
+      },
+      {
+        id: "IsSearchOverdues",
+        title: "Only overdues?",
+        type: "select",
+        options: [
+          { value: "true", label: "Yes" },
+          { value: "false", label: "No" },
+        ],
+        defaultValue: "false",
+      },
+    ],
+    [agreementStatuses, agreementTypes, locations, vehicleTypes]
+  );
 
   const dataList = React.useMemo(
     () => (agreementsData.data?.status === 200 ? agreementsData.data.body : []),
@@ -355,7 +397,23 @@ function AgreementsSearchPage() {
       </section>
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
-        <PrimaryModuleTable
+        <TableList
+          list={dataList}
+          columnDefs={columnDefs}
+          filtering={{ columnFilters, onColumnFiltersChange: setColumnFilters }}
+        >
+          <TableListToolbar
+            filterItems={tableFacetedFilters}
+            onSearchWithFilters={handleSearchFilters}
+            onClearFilters={handleClearFilters}
+          />
+          <Separator className="my-4" />
+          <div className="flex items-center justify-end">
+            <TableListColumnVisibility />
+          </div>
+          <Separator className="my-4" />
+        </TableList>
+        {/* <PrimaryModuleTable
           data={dataList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
@@ -426,7 +484,7 @@ function AgreementsSearchPage() {
             },
             filterableColumns: tableFacetedFilters,
           }}
-        />
+        /> */}
       </section>
     </>
   );
