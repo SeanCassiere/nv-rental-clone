@@ -25,15 +25,20 @@ interface TableListProps<TData, TValue>
     onColumnFiltersChange: OnChangeFn<ColumnFiltersState>;
   };
   visibility?: {
-    columns: VisibilityState;
-    onColumnVisibilityChange: OnChangeFn<VisibilityState>;
+    columnVisibility: VisibilityState;
+    onColumnVisibilityChange: (graph: VisibilityState) => void;
   };
 }
 
 function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
-  const { list, columnDefs, filtering, ...props } = rootProps;
+  const { list, columnDefs, filtering, visibility, ...props } = rootProps;
 
   const { columnFilters = [], onColumnFiltersChange } = filtering || {};
+  const { columnVisibility: _columnVisibility, onColumnVisibilityChange } =
+    visibility || {};
+
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>(() => _columnVisibility ?? {});
 
   const table = useReactTable({
     data: list,
@@ -41,12 +46,19 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
 
     state: {
       columnFilters,
+      columnVisibility,
     },
 
     manualFiltering: true,
     manualPagination: true,
 
     onColumnFiltersChange: onColumnFiltersChange,
+    onColumnVisibilityChange: (updater) => {
+      const updated =
+        typeof updater === "function" ? updater(columnVisibility) : updater;
+      setColumnVisibility(updated);
+      onColumnVisibilityChange?.(updated);
+    },
 
     getCoreRowModel: getCoreRowModel(),
   });

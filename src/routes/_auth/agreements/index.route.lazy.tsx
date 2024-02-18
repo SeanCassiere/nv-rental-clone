@@ -268,6 +268,20 @@ function AgreementsSearchPage() {
     }).then(stopChangingPage);
   }, [columnFilters, navigate, pagination.pageSize]);
 
+  const columnVisibility: VisibilityState = React.useMemo(
+    () =>
+      columnsData.data.status === 200
+        ? columnsData.data.body.reduce(
+            (prev, current) => ({
+              ...prev,
+              [current.columnHeader]: current.isSelected,
+            }),
+            {}
+          )
+        : {},
+    [columnsData.data?.body, columnsData.data?.status]
+  );
+
   const parsedPagination =
     agreementsData.status === "success"
       ? agreementsData.data.pagination
@@ -400,7 +414,14 @@ function AgreementsSearchPage() {
         <TableList
           list={dataList}
           columnDefs={columnDefs}
-          filtering={{ columnFilters, onColumnFiltersChange: setColumnFilters }}
+          filtering={{
+            columnFilters,
+            onColumnFiltersChange: setColumnFilters,
+          }}
+          visibility={{
+            columnVisibility,
+            onColumnVisibilityChange: handleSaveColumnVisibility,
+          }}
         >
           <TableListToolbar
             filterItems={tableFacetedFilters}
