@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import * as React from "react";
 import {
   closestCorners,
   DndContext,
@@ -26,10 +26,11 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
-  type Column,
+  type Cell,
   type ColumnDef,
   type ColumnFiltersState,
   type ColumnOrderState,
+  type Header,
   type OnChangeFn,
   type PaginationState,
   type VisibilityState,
@@ -38,14 +39,8 @@ import {
 import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 import { PrimaryModuleTableToolbar } from "@/components/primary-module/table-toolbar";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { icons } from "@/components/ui/icons";
+import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -55,14 +50,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { type TColumnHeaderItem } from "@/lib/schemas/client/column";
-
-import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
 import { getPaginationWithDoubleEllipsis } from "@/lib/utils/pagination";
 
 import { cn } from "@/lib/utils";
-
-import { Separator } from "../ui/separator";
 
 interface PrimaryModuleTableProps<
   TData,
@@ -71,11 +61,11 @@ interface PrimaryModuleTableProps<
 > {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
-  rawColumnsData: TColumnHeaderItem[];
   isLoading?: boolean;
 
   onColumnOrderChange?: (updatedValues: ColumnOrderState) => void;
 
+  initialColumnVisibility?: VisibilityState;
   onColumnVisibilityChange?: (visibilityGraph: VisibilityState) => void;
 
   pagination: PaginationState;
@@ -103,19 +93,12 @@ export function PrimaryModuleTable<
     onClearFilters,
     onSearchWithFilters,
   } = props.filters;
-  const [columns] = useState([...props.columns]);
 
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
-    columns.map((col) => col.id!)
+  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(() =>
+    props.columns.map((column) => column.id!)
   );
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    props.rawColumnsData
-      .sort(sortColOrderByOrderIndex)
-      .reduce(
-        (acc, col) => ({ ...acc, [col.columnHeader]: col.isSelected }),
-        {}
-      )
-  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>(props.initialColumnVisibility ?? {});
 
   const table = useReactTable({
     data: props.data,
@@ -164,20 +147,35 @@ export function PrimaryModuleTable<
     })
   );
 
-  const handleDndDragEnd = (evt: DragEndEvent) => {
-    if (!evt.over || evt.over.disabled || evt.active.id === evt.over.id) return;
+  const safeColumnOrderIds = React.useMemo(
+    () =>
+      table
+        .getAllColumns()
+        .filter((column) => !column.getCanSort() && !column.getCanHide())
+        .map((column) => column.id),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getAllColumns()]
+  );
 
-    const draggingId = evt.active.id;
-    const overId = evt.over.id;
-    const newOrder = arrayMove(
-      columnOrder,
-      columnOrder.indexOf(draggingId as string),
-      columnOrder.indexOf(overId as string)
-    );
-    table.setColumnOrder(newOrder);
+  const handleDndDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (
+      !over ||
+      over.disabled ||
+      active.id === over.id ||
+      safeColumnOrderIds.includes(over.id as string)
+    )
+      return;
+
+    table.setColumnOrder((currentColumnOrder) => {
+      const oldIndex = currentColumnOrder.indexOf(active.id as string);
+      const newIndex = currentColumnOrder.indexOf(over.id as string);
+      return arrayMove(currentColumnOrder, oldIndex, newIndex);
+    });
   };
 
-  const pageNumbers = useMemo(
+  const pageNumbers = React.useMemo(
     () =>
       getPaginationWithDoubleEllipsis(
         props.pagination.pageIndex + 1,
@@ -199,10 +197,10 @@ export function PrimaryModuleTable<
       <div className="overflow-hidden rounded border">
         <div className="overflow-x-auto bg-background">
           <DndContext
-            sensors={sensors}
             collisionDetection={closestCorners}
-            onDragEnd={handleDndDragEnd}
             modifiers={[restrictToHorizontalAxis]}
+            onDragEnd={handleDndDragEnd}
+            sensors={sensors}
           >
             <Table className="table-auto bg-card text-base">
               <TableHeader>
@@ -213,14 +211,10 @@ export function PrimaryModuleTable<
                       strategy={horizontalListSortingStrategy}
                     >
                       {headerGroup.headers.map((header) => (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
+                        <DraggablePrimaryModuleTableHeader
+                          key={header.id}
+                          header={header}
+                        />
                       ))}
                     </SortableContext>
                   </TableRow>
@@ -238,22 +232,28 @@ export function PrimaryModuleTable<
                       data-state={row.getIsSelected() && "selected"}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell className="whitespace-nowrap" key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
+                        <SortableContext
+                          key={cell.id}
+                          items={columnOrder}
+                          strategy={horizontalListSortingStrategy}
+                        >
+                          <DraggablePrimaryModuleTableCell
+                            key={cell.id}
+                            cell={cell}
+                          />
+                        </SortableContext>
                       ))}
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={columns.length}
+                      colSpan={table.getVisibleLeafColumns().length}
                       className={cn(
                         "h-24 px-4",
-                        columns.length > 5 ? "text-left" : "text-center"
+                        table.getVisibleLeafColumns().length > 5
+                          ? "text-left"
+                          : "text-center"
                       )}
                     >
                       No results.
@@ -336,111 +336,103 @@ export function PrimaryModuleTable<
   );
 }
 
-interface PrimaryModuleTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>;
-  title: string;
+interface DraggablePrimaryModuleTableHeaderProps<TData, TValue> {
+  header: Header<TData, TValue>;
 }
 
-export function PrimaryModuleTableColumnHeader<TData, TValue>({
-  column,
-  title,
-  className,
-}: PrimaryModuleTableColumnHeaderProps<TData, TValue>) {
-  const disabled = !column.getCanHide();
+function DraggablePrimaryModuleTableHeader<TData, TValue>({
+  header,
+}: DraggablePrimaryModuleTableHeaderProps<TData, TValue>) {
+  // my hack to make the header not draggable if it can't be sorted or hidden
+  const disabledReordering =
+    !header.column.getCanSort() && !header.column.getCanHide();
 
-  const {
-    attributes,
-    listeners,
-    transform,
-    transition,
-    setNodeRef,
-    setActivatorNodeRef,
-  } = useSortable({
-    id: column.id,
-    disabled,
-  });
+  const { attributes, isDragging, listeners, setNodeRef, transform } =
+    useSortable({
+      id: header.column.id,
+      disabled: disabledReordering,
+    });
+  const style: React.CSSProperties = {
+    opacity: isDragging ? 0.8 : 1,
+    position: "relative",
+    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transition: "width transform 0.2s ease-in-out",
+    whiteSpace: "nowrap",
+    width: header.column.getSize(),
+    zIndex: isDragging ? 1 : 0,
+  };
 
-  if (!column.getCanSort() && !column.getCanHide()) {
+  if (disabledReordering) {
     return (
-      <div
-        className={cn(
-          "flex items-center space-x-0.5 whitespace-nowrap text-left",
-          className
-        )}
-      >
-        {title}
-      </div>
+      <TableHead colSpan={header.colSpan} className={cn("whitespace-nowrap")}>
+        {header.isPlaceholder
+          ? null
+          : flexRender(header.column.columnDef.header, header.getContext())}
+      </TableHead>
     );
   }
 
   return (
-    <div
-      ref={!disabled ? setNodeRef : undefined}
-      className={cn("flex items-center space-x-0.5", className)}
-      style={{ transform: CSS.Translate.toString(transform), transition }}
+    <TableHead
+      ref={setNodeRef}
+      colSpan={header.colSpan}
+      className={cn("whitespace-nowrap")}
+      style={style}
     >
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            className="-ml-3 h-8 whitespace-nowrap text-left data-[state=open]:bg-accent"
-          >
-            <span>{title}</span>
-            {column.getCanSort() ? (
-              <>
-                {column.getIsSorted() === "desc" ? (
-                  <icons.SortDesc className="ml-2 h-3 w-3" />
-                ) : column.getIsSorted() === "asc" ? (
-                  <icons.SortAsc className="ml-2 h-3 w-3" />
-                ) : (
-                  <icons.ChevronsDownUp className="ml-2 h-3 w-3" />
-                )}
-              </>
-            ) : (
-              <>
-                <icons.ChevronsDownUp className="ml-2 h-3 w-3" />
-              </>
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          {column.getCanSort() && (
-            <>
-              <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-                <icons.SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Asc
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-                <icons.SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Desc
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-            </>
-          )}
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <icons.EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Hide
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <span className="mr-2">
+        {header.isPlaceholder
+          ? null
+          : flexRender(header.column.columnDef.header, header.getContext())}
+      </span>
       <Button
+        type="button"
         variant="ghost"
         className="h-8"
-        ref={setActivatorNodeRef}
-        {...listeners}
         {...attributes}
+        {...listeners}
       >
         <icons.GripVertical className="h-3 w-3" />
       </Button>
-    </div>
+    </TableHead>
   );
 }
 
-export function PrimaryModuleTableCellWrap({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <div className="flex min-w-[80px] justify-start">{children}</div>;
+interface DraggablePrimaryModuleTableCellProps<TData, TValue> {
+  cell: Cell<TData, TValue>;
+}
+
+function DraggablePrimaryModuleTableCell<TData, TValue>({
+  cell,
+}: DraggablePrimaryModuleTableCellProps<TData, TValue>) {
+  // my hack to make the cell not draggable if its header can't be sorted or hidden
+  const disabledReordering =
+    !cell.column.getCanSort() && !cell.column.getCanHide();
+
+  const { isDragging, setNodeRef, transform } = useSortable({
+    id: cell.column.id,
+    disabled: disabledReordering,
+  });
+
+  const style: React.CSSProperties = {
+    opacity: isDragging ? 0.8 : 1,
+    position: "relative",
+    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transition: "width transform 0.2s ease-in-out",
+    width: cell.column.getSize(),
+    zIndex: isDragging ? 1 : 0,
+  };
+
+  if (disabledReordering) {
+    return (
+      <TableCell ref={setNodeRef} className="whitespace-nowrap">
+        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      </TableCell>
+    );
+  }
+
+  return (
+    <TableCell ref={setNodeRef} className="whitespace-nowrap" style={style}>
+      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+    </TableCell>
+  );
 }

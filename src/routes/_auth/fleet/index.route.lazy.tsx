@@ -14,11 +14,7 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 
-import {
-  PrimaryModuleTable,
-  PrimaryModuleTableCellWrap,
-  PrimaryModuleTableColumnHeader,
-} from "@/components/primary-module/table";
+import { PrimaryModuleTable } from "@/components/primary-module/table";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -109,23 +105,16 @@ function VehicleSearchPage() {
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
         .map((column) =>
-          columnHelper.accessor(column.columnHeader as any, {
-            id: column.columnHeader,
-            meta: {
-              columnName: column.columnHeaderDescription ?? undefined,
-            },
-            header: ({ column: columnChild }) => (
-              <PrimaryModuleTableColumnHeader
-                column={columnChild}
-                title={column.columnHeaderDescription ?? ""}
-              />
-            ),
-            cell: (item) => {
-              const value = item.getValue();
-              if (column.columnHeader === "VehicleNo") {
-                const vehicleId = item.table.getRow(item.row.id).original.id;
-                return (
-                  <PrimaryModuleTableCellWrap>
+          columnHelper.accessor(
+            column.columnHeader as keyof TVehicleListItemParsed,
+            {
+              id: column.columnHeader,
+              header: () => column.columnHeaderDescription ?? "",
+              cell: (item) => {
+                const value = item.getValue();
+                if (column.columnHeader === "VehicleNo") {
+                  const vehicleId = item.table.getRow(item.row.id).original.id;
+                  return (
                     <Link
                       to="/fleet/$vehicleId"
                       params={{ vehicleId: String(vehicleId) }}
@@ -137,24 +126,18 @@ function VehicleSearchPage() {
                     >
                       {value || "-"}
                     </Link>
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
-              if (column.columnHeader === "VehicleStatus") {
-                return (
-                  <PrimaryModuleTableCellWrap>
-                    <Badge variant="outline">{value}</Badge>
-                  </PrimaryModuleTableCellWrap>
-                );
-              }
+                  );
+                }
+                if (column.columnHeader === "VehicleStatus") {
+                  return <Badge variant="outline">{value}</Badge>;
+                }
 
-              return (
-                <PrimaryModuleTableCellWrap>{value}</PrimaryModuleTableCellWrap>
-              );
-            },
-            enableHiding: column.columnHeader !== "VehicleNo",
-            enableSorting: false,
-          })
+                return value ?? "-";
+              },
+              enableSorting: false,
+              enableHiding: column.columnHeader !== "VehicleNo",
+            }
+          )
         ),
     [columnsData.data]
   );
@@ -233,8 +216,16 @@ function VehicleSearchPage() {
           data={vehiclesList}
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
-          rawColumnsData={
-            columnsData.data.status === 200 ? columnsData.data.body : []
+          initialColumnVisibility={
+            columnsData.data.status === 200
+              ? columnsData.data.body.reduce(
+                  (prev, current) => ({
+                    ...prev,
+                    [current.columnHeader]: current.isSelected,
+                  }),
+                  {}
+                )
+              : {}
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={

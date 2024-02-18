@@ -15,10 +15,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import {
-  PrimaryModuleTable,
-  PrimaryModuleTableColumnHeader,
-} from "@/components/primary-module/table";
+import { PrimaryModuleTable } from "@/components/primary-module/table";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
@@ -121,26 +118,19 @@ function AgreementsSearchPage() {
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
         .map((column) =>
-          columnHelper.accessor(column.columnHeader as any, {
-            id: column.columnHeader,
-            meta: {
-              columnName: column.columnHeaderDescription ?? undefined,
-            },
-            header: ({ column: columnChild }) => (
-              <PrimaryModuleTableColumnHeader
-                column={columnChild}
-                title={column.columnHeaderDescription ?? ""}
-              />
-            ),
-            cell: (item) => {
-              const value = item.getValue();
+          columnHelper.accessor(
+            column.columnHeader as keyof TAgreementListItemParsed,
+            {
+              id: column.columnHeader,
+              header: () => column.columnHeaderDescription ?? "",
+              cell: (item) => {
+                const value = item.getValue();
 
-              if (column.columnHeader === "AgreementNumber") {
-                const agreementId = item.table.getRow(item.row.id).original
-                  .AgreementId;
+                if (column.columnHeader === "AgreementNumber") {
+                  const agreementId = item.table.getRow(item.row.id).original
+                    .AgreementId;
 
-                return (
-                  <>
+                  return (
                     <Link
                       to="/agreements/$agreementId"
                       params={{ agreementId: String(agreementId) }}
@@ -152,23 +142,29 @@ function AgreementsSearchPage() {
                     >
                       {value || "-"}
                     </Link>
-                  </>
-                );
-              }
-              if (column.columnHeader === "AgreementStatusName") {
-                return <Badge variant="outline">{String(value)}</Badge>;
-              }
-              if (AgreementDateTimeColumns.includes(column.columnHeader)) {
-                return t("intlDateTime", {
-                  value: new Date(value),
-                  ns: "format",
-                });
-              }
-              return value ?? "-";
-            },
-            enableSorting: false,
-            enableHiding: column.columnHeader !== "AgreementNumber",
-          })
+                  );
+                }
+
+                if (column.columnHeader === "AgreementStatusName") {
+                  return <Badge variant="outline">{String(value)}</Badge>;
+                }
+
+                if (
+                  AgreementDateTimeColumns.includes(column.columnHeader) &&
+                  value
+                ) {
+                  return t("intlDateTime", {
+                    value: new Date(value),
+                    ns: "format",
+                  });
+                }
+
+                return value ?? "-";
+              },
+              enableSorting: false,
+              enableHiding: column.columnHeader !== "AgreementNumber",
+            }
+          )
         ),
     [columnsData.data.body, columnsData.data.status, t]
   );
@@ -264,8 +260,16 @@ function AgreementsSearchPage() {
           columns={columnDefs}
           onColumnOrderChange={handleSaveColumnsOrder}
           isLoading={agreementsData.isLoading || _trackTableLoading}
-          rawColumnsData={
-            columnsData.data.status === 200 ? columnsData.data.body : []
+          initialColumnVisibility={
+            columnsData.data.status === 200
+              ? columnsData.data.body.reduce(
+                  (prev, current) => ({
+                    ...prev,
+                    [current.columnHeader]: current.isSelected,
+                  }),
+                  {}
+                )
+              : {}
           }
           onColumnVisibilityChange={handleSaveColumnVisibility}
           totalPages={
