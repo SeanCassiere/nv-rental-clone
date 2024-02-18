@@ -8,11 +8,11 @@
 
 A recreation of the Car Rental Management platforms [Navotar](https://navotar.com) and [RENTALL](https://rentallsoftware.com) for educational purposes.
 
+**⚠️ Important: This project is solely an exercise in education and is not intended for commercial purposes. It does not use production data.**
+
 <img width="1314" alt="Screenshot 2024-02-12 at 13 39 54" src="https://github.com/SeanCassiere/nv-rental-clone/assets/33615041/60716a00-f99c-4eac-9194-a786e27e5ed0">
 
 This project is written in Typescript, using React for the UI library, and Tailwindcss for styling. UI components from [ui.shadcn.com](https://ui.shadcn.com) are integrated throughout the web app. The web app employs OAuth2 OIDC authentication, Tanstack Router for routing, and Tanstack Query for server-state management.
-
-**⚠️ Note: This project is solely an exercise in education and is not intended for commercial purposes. It does not use production data.**
 
 ## Table of Contents
 
