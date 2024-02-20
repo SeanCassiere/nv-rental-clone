@@ -80,15 +80,6 @@ function AgreementsSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const [_trackTableLoading, _setTrackTableLoading] = React.useState(false);
-
-  const startChangingPage = () => {
-    _setTrackTableLoading(true);
-  };
-  const stopChangingPage = () => {
-    _setTrackTableLoading(false);
-  };
-
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     () =>
       Object.entries(searchFilters).reduce(
@@ -248,7 +239,6 @@ function AgreementsSearchPage() {
   );
 
   const handleClearFilters = React.useCallback(() => {
-    startChangingPage();
     navigate({
       to: "/agreements",
       params: {},
@@ -256,11 +246,10 @@ function AgreementsSearchPage() {
         page: 1,
         size: pagination.pageSize,
       }),
-    }).then(stopChangingPage);
+    });
   }, [navigate, pagination.pageSize]);
 
   const handleSearchFilters = React.useCallback(() => {
-    startChangingPage();
     const filters = columnFilters.reduce(
       (prev, current) => ({
         ...prev,
@@ -276,12 +265,11 @@ function AgreementsSearchPage() {
         size: pagination.pageSize,
         filters,
       }),
-    }).then(stopChangingPage);
+    });
   }, [columnFilters, navigate, pagination.pageSize]);
 
   const handlePaginationChange = React.useCallback(
     (newPagination: PaginationState) => {
-      startChangingPage();
       navigate({
         to: "/agreements",
         params: {},
@@ -291,7 +279,7 @@ function AgreementsSearchPage() {
           size: newPagination.pageSize,
           filters: searchFilters,
         }),
-      }).then(stopChangingPage);
+      });
     },
     [navigate, searchFilters]
   );
@@ -442,7 +430,7 @@ function AgreementsSearchPage() {
         <TableList
           list={dataList}
           columnDefs={columnDefs}
-          isLoading={agreementsData.isLoading || _trackTableLoading}
+          isLoading={agreementsData.isLoading}
           filtering={{
             columnFilters,
             onColumnFiltersChange: setColumnFilters,
@@ -468,11 +456,11 @@ function AgreementsSearchPage() {
             <TableListToolbarActions className="inline-flex justify-start gap-2" />
           </TableListToolbar>
           <Separator className="my-4" />
-          <div className="flex flex-col overflow-hidden rounded border bg-card">
-            <div className="flex items-center justify-end px-2 py-3 md:px-4 md:py-4">
-              <TableListColumnVisibility />
-            </div>
-            <TableListContent className="border-t" />
+          <div className="flex items-center justify-end">
+            <TableListColumnVisibility />
+          </div>
+          <div className="mt-4 overflow-hidden rounded border bg-card">
+            <TableListContent />
           </div>
           <Pagination className="mt-3.5">
             <PaginationContent className="rounded border bg-card px-1 py-0.5 md:px-2 md:py-1">
