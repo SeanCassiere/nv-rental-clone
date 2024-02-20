@@ -1,5 +1,5 @@
 import React from "react";
-import { type Table } from "@tanstack/react-table";
+import type { ColumnFiltersState } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
@@ -27,13 +27,139 @@ import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
 
 import { cn } from "@/lib/utils";
 
-export type FilterOption = {
+import { useTableList } from "./context";
+
+type TableListToolbarContextProps = {
+  filterItems: TableListToolbarFilterItem[];
+  handleReset: () => void;
+  handleSearch: () => void;
+};
+
+const tableListToolbarContext =
+  React.createContext<TableListToolbarContextProps | null>(null);
+
+function useTableListToolbar() {
+  const context = React.useContext(tableListToolbarContext);
+  if (!context) {
+    throw new Error(
+      "useTableListToolbar must be used within a TableListToolbar"
+    );
+  }
+  return context;
+}
+
+function TableListToolbar({
+  filterItems,
+  onSearchWithFilters,
+  onClearFilters,
+  children,
+  className,
+  ...props
+}: {
+  filterItems: TableListToolbarContextProps["filterItems"];
+  onSearchWithFilters: () => void;
+  onClearFilters: () => void;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  const { table } = useTableList();
+
+  const handleReset = React.useCallback(() => {
+    const f = table.getState().columnFilters;
+    const newState = f.reduce((prev, current) => {
+      const currentInFilterable = filterItems.find((i) => i.id === current.id);
+
+      if (currentInFilterable) {
+        current.value = currentInFilterable?.defaultValue || undefined;
+      }
+
+      prev.push(current);
+      return prev;
+    }, [] as ColumnFiltersState);
+
+    table.setColumnFilters(newState);
+
+    onClearFilters();
+  }, [filterItems, onClearFilters, table]);
+
+  return (
+    <tableListToolbarContext.Provider
+      value={{
+        filterItems,
+        handleReset,
+        handleSearch: onSearchWithFilters,
+      }}
+    >
+      <div className={cn("rounded border bg-card p-2", className)} {...props}>
+        {children}
+      </div>
+    </tableListToolbarContext.Provider>
+  );
+}
+TableListToolbar.displayName = "TableListToolbar";
+
+function TableListToolbarFilters() {
+  const { filterItems } = useTableListToolbar();
+
+  return (
+    <React.Fragment>
+      {filterItems.length &&
+        filterItems.map((column) => (
+          <ToolbarFilter
+            key={`tableList_faceted_filter_${column.id}`}
+            data={column}
+          />
+        ))}
+    </React.Fragment>
+  );
+}
+TableListToolbarFilters.displayName = "TableListToolbarFilters";
+
+function TableListToolbarActions({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  const { handleSearch, handleReset } = useTableListToolbar();
+  const { table } = useTableList();
+
+  const tableColumnFilters = table.getState().columnFilters;
+  const isFiltered = tableColumnFilters.length > 0;
+
+  return (
+    <div className={cn(className)} {...props}>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleSearch}
+        className="h-8 px-2 lg:px-3"
+      >
+        <icons.Search className="mr-2 h-3 w-3" />
+        Search
+      </Button>
+
+      {isFiltered && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleReset}
+          className="h-8 px-2 lg:px-3"
+        >
+          <icons.X className="mr-2 h-3 w-3" />
+          Clear
+        </Button>
+      )}
+    </div>
+  );
+}
+TableListToolbarActions.displayName = "TableListToolbarActions";
+
+// The stuff for the individual filter items is below
+type FilterOption = {
   label: string;
   value: string;
   icon?: React.ComponentType<{ className?: string }>;
 };
 
-export type PrimaryModuleTableFacetedFilterItem = {
+export type TableListToolbarFilterItem = {
   id: string;
   title: string;
 } & (
@@ -63,17 +189,16 @@ export type PrimaryModuleTableFacetedFilterItem = {
     }
 );
 
-interface PrimaryModuleTableFacetedFilterProps<TData, TValue> {
-  table: Table<TData>;
-  data: PrimaryModuleTableFacetedFilterItem;
+interface TableListToolbarFilterOption {
+  data: TableListToolbarFilterItem;
   isLargeSearchFullWidth?: boolean;
 }
 
-export function PrimaryModuleTableFacetedFilter<TData, TValue>({
-  table,
+function ToolbarFilter({
   data: { id, title, type, options = [], size = "normal", defaultValue },
   isLargeSearchFullWidth = false,
-}: PrimaryModuleTableFacetedFilterProps<TData, TValue>) {
+}: TableListToolbarFilterOption) {
+  const { table } = useTableList();
   const clearFilterText = "Clear filter";
 
   const { t } = useTranslation();
@@ -176,7 +301,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                     <>
                       {arrayState.map((item, idx) => (
                         <Badge
-                          key={`${id}_${item}_${idx}`}
+                          key={`table_list_${id}_${item}_${idx}`}
                           variant="secondary"
                           className="rounded-sm px-1 font-normal"
                         >
@@ -235,7 +360,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                     const isSelected = baseState?.value === option.value;
                     return (
                       <CommandItem
-                        key={`col-${id}-select-${index}`}
+                        key={`table_list_col-${id}-select-${index}`}
                         onSelect={() => {
                           handleSaveValue(option.value);
                         }}
@@ -283,7 +408,7 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
                     const isSelected = arrayState.includes(option.value);
                     return (
                       <CommandItem
-                        key={`col-${id}-multi-select-${index}`}
+                        key={`table_list_col-${id}-multi-select-${index}`}
                         onSelect={() => {
                           if (isSelected) {
                             handleSaveValue(
@@ -376,3 +501,6 @@ export function PrimaryModuleTableFacetedFilter<TData, TValue>({
     </div>
   );
 }
+ToolbarFilter.displayName = "ToolbarFilter";
+
+export { TableListToolbar, TableListToolbarFilters, TableListToolbarActions };

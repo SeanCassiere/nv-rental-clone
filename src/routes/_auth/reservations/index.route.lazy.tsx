@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React from "react";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -15,10 +15,17 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { PrimaryModuleTable } from "@/components/primary-module/table";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationLinkNext,
+  PaginationLinkPrevious,
+} from "@/components/ui/pagination";
+import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
@@ -30,6 +37,19 @@ import {
   fetchReservationTypesOptions,
 } from "@/lib/query/reservation";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
+
+import {
+  TableList,
+  TableListColumnVisibilityDropdown,
+  TableListContent,
+  TableListPaginationItems,
+  TableListPaginationNext,
+  TableListPaginationPrevious,
+  TableListToolbar,
+  TableListToolbarActions,
+  TableListToolbarFilters,
+  type TableListToolbarFilterItem,
+} from "@/routes/_auth/-modules/table-list";
 
 import {
   ReservationDateTimeColumns,
@@ -61,23 +81,15 @@ function ReservationsSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const [_trackTableLoading, _setTrackTableLoading] = useState(false);
+  const [columnFilters, handleColumnFiltersChange] =
+    React.useState<ColumnFiltersState>(() =>
+      Object.entries(searchFilters).reduce(
+        (prev, [key, value]) => [...prev, { id: key, value }],
+        [] as ColumnFiltersState
+      )
+    );
 
-  const startChangingPage = () => {
-    _setTrackTableLoading(true);
-  };
-  const stopChangingPage = () => {
-    _setTrackTableLoading(false);
-  };
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(() =>
-    Object.entries(searchFilters).reduce(
-      (prev, [key, value]) => [...prev, { id: key, value }],
-      [] as ColumnFiltersState
-    )
-  );
-
-  const pagination: PaginationState = useMemo(
+  const pagination: PaginationState = React.useMemo(
     () => ({
       pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
       pageSize: size,
@@ -90,12 +102,18 @@ function ReservationsSearchPage() {
   const reservationStatusList = useQuery(
     fetchReservationStatusesOptions({ auth: authParams })
   );
-  const reservationStatuses = reservationStatusList.data ?? [];
+  const reservationStatuses = React.useMemo(
+    () => reservationStatusList.data ?? [],
+    [reservationStatusList.data]
+  );
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
   );
-  const vehicleTypes = vehicleTypesList.data ?? [];
+  const vehicleTypes = React.useMemo(
+    () => vehicleTypesList.data ?? [],
+    [vehicleTypesList.data]
+  );
 
   const locationsList = useQuery(
     fetchLocationsListOptions({
@@ -103,16 +121,21 @@ function ReservationsSearchPage() {
       filters: { withActive: true },
     })
   );
-  const locations =
-    locationsList.data?.status === 200 ? locationsList.data.body : [];
+  const locations = React.useMemo(
+    () => (locationsList.data?.status === 200 ? locationsList.data.body : []),
+    [locationsList.data?.body, locationsList.data?.status]
+  );
 
   const reservationTypesList = useQuery(
     fetchReservationTypesOptions({ auth: authParams })
   );
-  const reservationTypes = reservationTypesList.data ?? [];
+  const reservationTypes = React.useMemo(
+    () => reservationTypesList.data ?? [],
+    [reservationTypesList.data]
+  );
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
-  const columnDefs = useMemo(
+  const columnDefs = React.useMemo(
     () =>
       (columnsData.data.status === 200 ? columnsData.data.body : [])
         .sort(sortColOrderByOrderIndex)
@@ -121,6 +144,9 @@ function ReservationsSearchPage() {
             column.columnHeader as keyof TReservationListItemParsed,
             {
               id: column.columnHeader,
+              meta: {
+                columnName: column.columnHeaderDescription ?? "",
+              },
               header: () => column.columnHeaderDescription ?? "",
               cell: (item) => {
                 const value = item.getValue();
@@ -180,7 +206,7 @@ function ReservationsSearchPage() {
       }),
   });
 
-  const handleSaveColumnsOrder = useCallback(
+  const handleColumnOrderChange = React.useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
@@ -193,7 +219,7 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const handleSaveColumnVisibility = useCallback(
+  const handleColumnVisibilityChange = React.useCallback(
     (graph: VisibilityState) => {
       const newColumnsData = (
         columnsData.data.status === 200 ? columnsData.data.body : []
@@ -210,13 +236,129 @@ function ReservationsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
+  const handleClearFilters = React.useCallback(() => {
+    navigate({
+      to: "/reservations",
+      params: {},
+      search: () => ({
+        page: 1,
+        size: pagination.pageSize,
+      }),
+    });
+  }, [navigate, pagination.pageSize]);
+
+  const handleSearchFilters = React.useCallback(() => {
+    const filters = columnFilters.reduce(
+      (prev, current) => ({
+        ...prev,
+        [current.id]: current.value,
+      }),
+      {}
+    );
+    navigate({
+      to: "/reservations",
+      params: {},
+      search: () => ({
+        page: 1,
+        size: pagination.pageSize,
+        filters,
+      }),
+    });
+  }, [columnFilters, navigate, pagination.pageSize]);
+
+  const columnVisibility: VisibilityState = React.useMemo(
+    () =>
+      columnsData.data.status === 200
+        ? columnsData.data.body.reduce(
+            (prev, current) => ({
+              ...prev,
+              [current.columnHeader]: current.isSelected,
+            }),
+            {}
+          )
+        : {},
+    [columnsData.data?.body, columnsData.data?.status]
+  );
+
   const parsedPagination =
     reservationsData.status === "success"
       ? reservationsData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const reservationsList =
-    reservationsData.data?.status === 200 ? reservationsData.data?.body : [];
+  const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
+    () => [
+      {
+        id: "Keyword",
+        title: "Search",
+        type: "text",
+        size: "large",
+      },
+      {
+        id: "Statuses",
+        title: "Status",
+        type: "multi-select",
+        options: reservationStatuses.map((item) => ({
+          value: `${item.id}`,
+          label: item.name,
+        })),
+        defaultValue: [],
+      },
+      {
+        id: "ReservationTypes",
+        title: "Type",
+        type: "multi-select",
+        options: reservationTypes.map((item) => ({
+          value: `${item.typeName}`,
+          label: item.typeName,
+        })),
+        defaultValue: [],
+      },
+      {
+        id: "VehicleTypeId",
+        title: "Vehicle type",
+        type: "select",
+        options: vehicleTypes.map((item) => ({
+          value: `${item.id}`,
+          label: item.value,
+        })),
+      },
+      {
+        id: "CreatedDateFrom",
+        title: "Start date",
+        type: "date",
+      },
+      {
+        id: "CreatedDateTo",
+        title: "End date",
+        type: "date",
+      },
+      {
+        id: "CheckoutLocationId",
+        title: "Checkout location",
+        type: "select",
+        options: locations.map((item) => ({
+          value: `${item.locationId}`,
+          label: `${item.locationName}`,
+        })),
+      },
+      {
+        id: "CheckinLocationId",
+        title: "Checkin location",
+        type: "select",
+        options: locations.map((item) => ({
+          value: `${item.locationId}`,
+          label: `${item.locationName}`,
+        })),
+      },
+    ],
+    [locations, reservationStatuses, reservationTypes, vehicleTypes]
+  );
+
+  const dataList = React.useMemo(
+    () =>
+      reservationsData.data?.status === 200 ? reservationsData.data?.body : [],
+    [reservationsData.data?.body, reservationsData.data?.status]
+  );
 
   useDocumentTitle(titleMaker("Reservations"));
 
@@ -252,142 +394,104 @@ function ReservationsSearchPage() {
       </section>
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
-        <PrimaryModuleTable
-          data={reservationsList}
-          columns={columnDefs}
-          onColumnOrderChange={handleSaveColumnsOrder}
-          isLoading={reservationsData.isLoading || _trackTableLoading}
-          initialColumnVisibility={
-            columnsData.data.status === 200
-              ? columnsData.data.body.reduce(
-                  (prev, current) => ({
-                    ...prev,
-                    [current.columnHeader]: current.isSelected,
-                  }),
-                  {}
-                )
-              : {}
-          }
-          onColumnVisibilityChange={handleSaveColumnVisibility}
-          totalPages={
-            parsedPagination?.totalRecords
-              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
-              : 0
-          }
-          pagination={pagination}
-          onPaginationChange={(newPaginationState) => {
-            startChangingPage();
-            navigate({
-              to: "/reservations",
-              params: {},
-              search: (current) => ({
-                ...current,
-                page: newPaginationState.pageIndex + 1,
-                size: newPaginationState.pageSize,
-                filters: searchFilters,
-              }),
-            }).then(stopChangingPage);
-          }}
-          filters={{
+        <TableList
+          list={dataList}
+          columnDefs={columnDefs}
+          isLoading={reservationsData.isLoading}
+          filtering={{
             columnFilters,
-            setColumnFilters,
-            onClearFilters: () => {
-              startChangingPage();
-              navigate({
-                to: "/reservations",
-                params: {},
-                search: () => ({
-                  page: 1,
-                  size: pagination.pageSize,
-                }),
-              }).then(stopChangingPage);
-            },
-            onSearchWithFilters: () => {
-              const filters = columnFilters.reduce(
-                (prev, current) => ({
-                  ...prev,
-                  [current.id]: current.value,
-                }),
-                {}
-              );
-              startChangingPage();
-              navigate({
-                to: "/reservations",
-                params: {},
-                search: () => ({
-                  page: 1,
-                  size: pagination.pageSize,
-                  filters,
-                }),
-              }).then(stopChangingPage);
-            },
-            filterableColumns: [
-              {
-                id: "Keyword",
-                title: "Search",
-                type: "text",
-                size: "large",
-              },
-              {
-                id: "Statuses",
-                title: "Status",
-                type: "multi-select",
-                options: reservationStatuses.map((item) => ({
-                  value: `${item.id}`,
-                  label: item.name,
-                })),
-                defaultValue: [],
-              },
-              {
-                id: "ReservationTypes",
-                title: "Type",
-                type: "multi-select",
-                options: reservationTypes.map((item) => ({
-                  value: `${item.typeName}`,
-                  label: item.typeName,
-                })),
-                defaultValue: [],
-              },
-              {
-                id: "VehicleTypeId",
-                title: "Vehicle type",
-                type: "select",
-                options: vehicleTypes.map((item) => ({
-                  value: `${item.id}`,
-                  label: item.value,
-                })),
-              },
-              {
-                id: "CreatedDateFrom",
-                title: "Start date",
-                type: "date",
-              },
-              {
-                id: "CreatedDateTo",
-                title: "End date",
-                type: "date",
-              },
-              {
-                id: "CheckoutLocationId",
-                title: "Checkout location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-              {
-                id: "CheckinLocationId",
-                title: "Checkin location",
-                type: "select",
-                options: locations.map((item) => ({
-                  value: `${item.locationId}`,
-                  label: `${item.locationName}`,
-                })),
-              },
-            ],
+            onColumnFiltersChange: handleColumnFiltersChange,
           }}
-        />
+          visibility={{
+            columnVisibility,
+            onColumnVisibilityChange: handleColumnVisibilityChange,
+          }}
+          ordering={{
+            onColumnOrderChange: handleColumnOrderChange,
+          }}
+          pagination={{
+            pagination,
+            totalPages: parsedPagination.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
+              : 0,
+          }}
+        >
+          <TableListToolbar
+            filterItems={tableFacetedFilters}
+            onSearchWithFilters={handleSearchFilters}
+            onClearFilters={handleClearFilters}
+            className="flex flex-wrap items-start justify-start gap-2"
+          >
+            <TableListToolbarFilters />
+            <TableListToolbarActions className="inline-flex justify-start gap-2" />
+          </TableListToolbar>
+          <Separator className="my-4" />
+          <div className="flex items-center justify-end">
+            <TableListColumnVisibilityDropdown />
+          </div>
+          <div className="mt-2.5 overflow-hidden rounded border bg-card">
+            <TableListContent />
+          </div>
+          <Pagination className="mt-2.5">
+            <PaginationContent className="rounded border bg-card px-1 py-0.5 md:px-2 md:py-1">
+              <TableListPaginationPrevious>
+                {(state) => (
+                  <PaginationLinkPrevious
+                    disabled={state.disabled}
+                    className={cn(
+                      state.disabled ? "cursor-not-allowed opacity-60" : ""
+                    )}
+                    to="/reservations"
+                    search={(prev) => ({
+                      ...prev,
+                      page: state.pagination.pageIndex + 1,
+                      size: state.pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    params
+                  />
+                )}
+              </TableListPaginationPrevious>
+
+              <TableListPaginationItems className="hidden sm:inline-block">
+                {({ pagination, isActive }) => (
+                  <PaginationLink
+                    to="/reservations"
+                    search={(prev) => ({
+                      ...prev,
+                      page: pagination.pageIndex + 1,
+                      size: pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    isActive={isActive}
+                    params
+                  >
+                    {pagination.pageIndex + 1}
+                  </PaginationLink>
+                )}
+              </TableListPaginationItems>
+
+              <TableListPaginationNext>
+                {(state) => (
+                  <PaginationLinkNext
+                    disabled={state.disabled}
+                    className={cn(
+                      state.disabled ? "cursor-not-allowed opacity-60" : ""
+                    )}
+                    to="/reservations"
+                    search={(prev) => ({
+                      ...prev,
+                      page: state.pagination.pageIndex + 1,
+                      size: state.pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    params
+                  />
+                )}
+              </TableListPaginationNext>
+            </PaginationContent>
+          </Pagination>
+        </TableList>
       </section>
     </>
   );
