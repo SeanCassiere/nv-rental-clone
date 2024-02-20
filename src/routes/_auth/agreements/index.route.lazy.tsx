@@ -80,13 +80,13 @@ function AgreementsSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    () =>
+  const [columnFilters, handleColumnFiltersChange] =
+    React.useState<ColumnFiltersState>(() =>
       Object.entries(searchFilters).reduce(
         (prev, [key, value]) => [...prev, { id: key, value }],
         [] as ColumnFiltersState
       )
-  );
+    );
 
   const pagination: PaginationState = React.useMemo(
     () => ({
@@ -208,7 +208,7 @@ function AgreementsSearchPage() {
       }),
   });
 
-  const handleSaveColumnsOrder = React.useCallback(
+  const handleColumnOrderChange = React.useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
@@ -221,7 +221,7 @@ function AgreementsSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const handleSaveColumnVisibility = React.useCallback(
+  const handleColumnVisibilityChange = React.useCallback(
     (graph: VisibilityState) => {
       const newColumnsData = (
         columnsData.data.status === 200 ? columnsData.data.body : []
@@ -267,22 +267,6 @@ function AgreementsSearchPage() {
       }),
     });
   }, [columnFilters, navigate, pagination.pageSize]);
-
-  const handlePaginationChange = React.useCallback(
-    (newPagination: PaginationState) => {
-      navigate({
-        to: "/agreements",
-        params: {},
-        search: (current) => ({
-          ...current,
-          page: newPagination.pageIndex + 1,
-          size: newPagination.pageSize,
-          filters: searchFilters,
-        }),
-      });
-    },
-    [navigate, searchFilters]
-  );
 
   const columnVisibility: VisibilityState = React.useMemo(
     () =>
@@ -433,11 +417,14 @@ function AgreementsSearchPage() {
           isLoading={agreementsData.isLoading}
           filtering={{
             columnFilters,
-            onColumnFiltersChange: setColumnFilters,
+            onColumnFiltersChange: handleColumnFiltersChange,
           }}
           visibility={{
             columnVisibility,
-            onColumnVisibilityChange: handleSaveColumnVisibility,
+            onColumnVisibilityChange: handleColumnVisibilityChange,
+          }}
+          ordering={{
+            onColumnOrderChange: handleColumnOrderChange,
           }}
           pagination={{
             pagination,

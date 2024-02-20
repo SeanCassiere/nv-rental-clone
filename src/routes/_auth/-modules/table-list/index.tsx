@@ -1,12 +1,13 @@
 import React from "react";
 import {
   getCoreRowModel,
-  PaginationState,
   useReactTable,
-  VisibilityState,
   type ColumnDef,
   type ColumnFiltersState,
+  type ColumnOrderState,
   type OnChangeFn,
+  type PaginationState,
+  type VisibilityState,
 } from "@tanstack/react-table";
 
 import { TableListColumnVisibility } from "./column-visibility";
@@ -30,6 +31,10 @@ interface TableListProps<TData, TValue> {
   list: TData[];
   columnDefs: ColumnDef<TData, TValue>[];
   isLoading?: boolean;
+  ordering?: {
+    columnOrder?: ColumnOrderState;
+    onColumnOrderChange?: (columnOrder: ColumnOrderState) => void;
+  };
   pagination?: {
     pagination: PaginationState;
     onPaginationChange?: (pagination: PaginationState) => void;
@@ -52,20 +57,24 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
     filtering,
     visibility,
     pagination,
+    ordering,
     isLoading,
     children,
   } = rootProps;
 
   const { columnFilters = [], onColumnFiltersChange } = filtering || {};
+  const { columnOrder: _columnOrder, onColumnOrderChange } = ordering || {};
   const { columnVisibility: _columnVisibility, onColumnVisibilityChange } =
     visibility || {};
-
   const {
     pagination: _pagination = { pageIndex: 0, pageSize: 10 },
     onPaginationChange,
     totalPages = 1,
   } = pagination || {};
 
+  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(
+    () => _columnOrder ?? columnDefs.map((column) => column.id!)
+  );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>(() => _columnVisibility ?? {});
 
@@ -74,6 +83,7 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
     columns: columnDefs,
 
     state: {
+      columnOrder,
       columnFilters,
       columnVisibility,
       pagination: _pagination,
@@ -85,6 +95,12 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
     pageCount: totalPages,
 
     onColumnFiltersChange: onColumnFiltersChange,
+    onColumnOrderChange: (updater) => {
+      const updated =
+        typeof updater === "function" ? updater(columnOrder) : updater;
+      setColumnOrder(updated);
+      onColumnOrderChange?.(updated);
+    },
     onColumnVisibilityChange: (updater) => {
       const updated =
         typeof updater === "function" ? updater(columnVisibility) : updater;
