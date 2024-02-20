@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
-import { ButtonProps, buttonVariants } from "@/components/ui/button";
+import { Button, ButtonProps, buttonVariants } from "@/components/ui/button";
 
 import { cn } from "@/lib/utils";
 
@@ -10,7 +10,7 @@ const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
     role="navigation"
     aria-label="pagination"
-    className={cn("mx-auto flex w-full justify-center", className)}
+    className={cn("mx-auto flex w-full justify-start", className)}
     {...props}
   />
 );
@@ -39,7 +39,7 @@ PaginationItem.displayName = "PaginationItem";
 type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<ButtonProps, "size"> &
-  React.ComponentProps<typeof Link>;
+  LinkProps;
 
 const PaginationLink = ({
   className,
@@ -50,6 +50,7 @@ const PaginationLink = ({
   <Link
     aria-current={isActive ? "page" : undefined}
     className={cn(
+      "tabular-nums",
       buttonVariants({
         variant: isActive ? "outline" : "ghost",
         size,
@@ -61,6 +62,32 @@ const PaginationLink = ({
 );
 PaginationLink.displayName = "PaginationLink";
 
+type PaginationButtonProps = {
+  isActive?: boolean;
+} & Pick<ButtonProps, "size"> &
+  React.ComponentProps<typeof Button>;
+
+const PaginationButton = ({
+  className,
+  isActive,
+  size = "icon",
+  ...props
+}: PaginationButtonProps) => (
+  <Button
+    aria-current={isActive ? "page" : undefined}
+    className={cn(
+      "tabular-nums",
+      buttonVariants({
+        variant: isActive ? "outline" : "ghost",
+        size,
+      }),
+      className
+    )}
+    {...props}
+  />
+);
+PaginationButton.displayName = "PaginationButton";
+
 const PaginationPrevious = ({
   className,
   ...props
@@ -68,7 +95,7 @@ const PaginationPrevious = ({
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn("gap-1 pl-2.5", className)}
+    className={cn("cursor-pointer gap-1 pl-2.5", className)}
     {...props}
   >
     <ChevronLeft className="h-4 w-4" />
@@ -110,6 +137,7 @@ PaginationEllipsis.displayName = "PaginationEllipsis";
 
 export {
   Pagination,
+  PaginationButton,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
