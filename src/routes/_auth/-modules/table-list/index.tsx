@@ -24,8 +24,9 @@ import {
   type TableListToolbarFilterItem,
 } from "./toolbar";
 
-interface TableListProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface TableListProps<TData, TValue> {
+  children: React.ReactNode;
+
   list: TData[];
   columnDefs: ColumnDef<TData, TValue>[];
   isLoading?: boolean;
@@ -52,7 +53,7 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
     visibility,
     pagination,
     isLoading,
-    ...props
+    children,
   } = rootProps;
 
   const { columnFilters = [], onColumnFiltersChange } = filtering || {};
@@ -103,7 +104,7 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
 
   return (
     <tableListContext.Provider value={{ table: memoizedTable, isLoading }}>
-      <div {...props} />
+      {children}
     </tableListContext.Provider>
   );
 }
