@@ -474,8 +474,7 @@ function AgreementsSearchPage() {
             </div>
             <TableListContent className="border-t" />
           </div>
-          <Separator className="my-4" />
-          <Pagination>
+          <Pagination className="mt-3.5">
             <PaginationContent className="rounded border bg-card px-2 py-1">
               <TableListPaginationPrevious>
                 {(state) => (
