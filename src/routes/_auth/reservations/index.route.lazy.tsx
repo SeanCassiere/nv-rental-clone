@@ -40,7 +40,7 @@ import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
 
 import {
   TableList,
-  TableListColumnVisibility,
+  TableListColumnVisibilityDropdown,
   TableListContent,
   TableListPaginationItems,
   TableListPaginationNext,
@@ -427,7 +427,7 @@ function ReservationsSearchPage() {
           </TableListToolbar>
           <Separator className="my-4" />
           <div className="flex items-center justify-end">
-            <TableListColumnVisibility />
+            <TableListColumnVisibilityDropdown />
           </div>
           <div className="mt-2.5 overflow-hidden rounded border bg-card">
             <TableListContent />

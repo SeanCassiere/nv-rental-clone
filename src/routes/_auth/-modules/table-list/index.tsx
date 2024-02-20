@@ -10,7 +10,7 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 
-import { TableListColumnVisibility } from "./column-visibility";
+import { TableListColumnVisibilityDropdown } from "./column-visibility";
 import { TableListContent } from "./content";
 import { tableListContext } from "./context";
 import {
@@ -127,7 +127,7 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
 
 export {
   TableList,
-  TableListColumnVisibility,
+  TableListColumnVisibilityDropdown,
   TableListContent,
   TableListToolbar,
   TableListToolbarActions,

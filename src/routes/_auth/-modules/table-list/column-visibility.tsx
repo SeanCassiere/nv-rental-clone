@@ -12,7 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { useTableList } from "./context";
 
-function TableListColumnVisibility() {
+function TableListColumnVisibilityDropdown() {
   const { table } = useTableList();
   return (
     <DropdownMenu>
@@ -57,4 +57,4 @@ function TableListColumnVisibility() {
   );
 }
 
-export { TableListColumnVisibility };
+export { TableListColumnVisibilityDropdown };
