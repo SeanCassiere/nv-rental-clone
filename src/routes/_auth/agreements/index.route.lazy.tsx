@@ -18,6 +18,13 @@ import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
@@ -35,6 +42,9 @@ import {
   TableList,
   TableListColumnVisibility,
   TableListContent,
+  TableListPaginationItems,
+  TableListPaginationNext,
+  TableListPaginationPrevious,
   TableListToolbar,
   TableListToolbarActions,
   TableListToolbarFilters,
@@ -269,6 +279,23 @@ function AgreementsSearchPage() {
     }).then(stopChangingPage);
   }, [columnFilters, navigate, pagination.pageSize]);
 
+  const handlePaginationChange = React.useCallback(
+    (newPagination: PaginationState) => {
+      startChangingPage();
+      navigate({
+        to: "/agreements",
+        params: {},
+        search: (current) => ({
+          ...current,
+          page: newPagination.pageIndex + 1,
+          size: newPagination.pageSize,
+          filters: searchFilters,
+        }),
+      }).then(stopChangingPage);
+    },
+    [navigate, searchFilters]
+  );
+
   const columnVisibility: VisibilityState = React.useMemo(
     () =>
       columnsData.data.status === 200
@@ -424,6 +451,12 @@ function AgreementsSearchPage() {
             columnVisibility,
             onColumnVisibilityChange: handleSaveColumnVisibility,
           }}
+          pagination={{
+            pagination,
+            totalPages: parsedPagination.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
+              : 0,
+          }}
         >
           <TableListToolbar
             filterItems={tableFacetedFilters}
@@ -442,79 +475,64 @@ function AgreementsSearchPage() {
             <TableListContent className="border-t" />
           </div>
           <Separator className="my-4" />
+          <Pagination>
+            <PaginationContent className="rounded border bg-card px-2 py-1">
+              <TableListPaginationPrevious>
+                {(state) => (
+                  <PaginationPrevious
+                    disabled={state.disabled}
+                    className={cn(
+                      state.disabled ? "cursor-not-allowed opacity-60" : ""
+                    )}
+                    to="/agreements"
+                    search={(prev) => ({
+                      ...prev,
+                      page: state.pagination.pageIndex + 1,
+                      size: state.pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    params
+                  />
+                )}
+              </TableListPaginationPrevious>
+              <TableListPaginationItems>
+                {({ pagination, isActive }) => (
+                  <PaginationLink
+                    to="/agreements"
+                    search={(prev) => ({
+                      ...prev,
+                      page: pagination.pageIndex + 1,
+                      size: pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    isActive={isActive}
+                    params
+                  >
+                    {pagination.pageIndex + 1}
+                  </PaginationLink>
+                )}
+              </TableListPaginationItems>
+              <TableListPaginationNext>
+                {(state) => (
+                  <PaginationNext
+                    disabled={state.disabled}
+                    className={cn(
+                      state.disabled ? "cursor-not-allowed opacity-60" : ""
+                    )}
+                    to="/agreements"
+                    search={(prev) => ({
+                      ...prev,
+                      page: state.pagination.pageIndex + 1,
+                      size: state.pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    params
+                  />
+                )}
+              </TableListPaginationNext>
+            </PaginationContent>
+          </Pagination>
         </TableList>
-        {/* <PrimaryModuleTable
-          data={dataList}
-          columns={columnDefs}
-          onColumnOrderChange={handleSaveColumnsOrder}
-          isLoading={agreementsData.isLoading || _trackTableLoading}
-          initialColumnVisibility={
-            columnsData.data.status === 200
-              ? columnsData.data.body.reduce(
-                  (prev, current) => ({
-                    ...prev,
-                    [current.columnHeader]: current.isSelected,
-                  }),
-                  {}
-                )
-              : {}
-          }
-          onColumnVisibilityChange={handleSaveColumnVisibility}
-          totalPages={
-            parsedPagination.totalRecords
-              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
-              : 0
-          }
-          pagination={pagination}
-          onPaginationChange={(newPaginationState) => {
-            startChangingPage();
-            navigate({
-              to: "/agreements",
-              params: {},
-              search: (current) => ({
-                ...current,
-                page: newPaginationState.pageIndex + 1,
-                size: newPaginationState.pageSize,
-                filters: searchFilters,
-              }),
-            }).then(stopChangingPage);
-          }}
-          filters={{
-            columnFilters,
-            setColumnFilters,
-            onClearFilters: () => {
-              startChangingPage();
-              navigate({
-                to: "/agreements",
-                params: {},
-                search: () => ({
-                  page: 1,
-                  size: pagination.pageSize,
-                }),
-              }).then(stopChangingPage);
-            },
-            onSearchWithFilters: () => {
-              startChangingPage();
-              const filters = columnFilters.reduce(
-                (prev, current) => ({
-                  ...prev,
-                  [current.id]: current.value,
-                }),
-                {}
-              );
-              navigate({
-                to: "/agreements",
-                params: {},
-                search: () => ({
-                  page: 1,
-                  size: pagination.pageSize,
-                  filters,
-                }),
-              }).then(stopChangingPage);
-            },
-            filterableColumns: tableFacetedFilters,
-          }}
-        /> */}
       </section>
     </>
   );
