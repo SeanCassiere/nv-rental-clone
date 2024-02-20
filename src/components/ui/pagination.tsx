@@ -88,7 +88,7 @@ const PaginationButton = ({
 );
 PaginationButton.displayName = "PaginationButton";
 
-const PaginationPrevious = ({
+const PaginationLinkPrevious = ({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) => (
@@ -102,9 +102,25 @@ const PaginationPrevious = ({
     <span>Previous</span>
   </PaginationLink>
 );
-PaginationPrevious.displayName = "PaginationPrevious";
+PaginationLinkPrevious.displayName = "PaginationLinkPrevious";
 
-const PaginationNext = ({
+const PaginationButtonPrevious = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationButton>) => (
+  <PaginationButton
+    aria-label="Go to previous page"
+    size="default"
+    className={cn("cursor-pointer gap-1 pl-2.5", className)}
+    {...props}
+  >
+    <ChevronLeft className="h-4 w-4" />
+    <span>Previous</span>
+  </PaginationButton>
+);
+PaginationButtonPrevious.displayName = "PaginationButtonPrevious";
+
+const PaginationLinkNext = ({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) => (
@@ -118,7 +134,23 @@ const PaginationNext = ({
     <ChevronRight className="h-4 w-4" />
   </PaginationLink>
 );
-PaginationNext.displayName = "PaginationNext";
+PaginationLinkNext.displayName = "PaginationLinkNext";
+
+const PaginationButtonNext = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationButton>) => (
+  <PaginationButton
+    aria-label="Go to next page"
+    size="default"
+    className={cn("gap-1 pr-2.5", className)}
+    {...props}
+  >
+    <span>Next</span>
+    <ChevronRight className="h-4 w-4" />
+  </PaginationButton>
+);
+PaginationButtonNext.displayName = "PaginationButtonNext";
 
 const PaginationEllipsis = ({
   className,
@@ -137,11 +169,13 @@ PaginationEllipsis.displayName = "PaginationEllipsis";
 
 export {
   Pagination,
-  PaginationButton,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
+  PaginationButton,
+  PaginationButtonNext,
+  PaginationButtonPrevious,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationLinkNext,
+  PaginationLinkPrevious,
 };

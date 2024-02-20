@@ -22,8 +22,8 @@ import {
   Pagination,
   PaginationContent,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationLinkNext,
+  PaginationLinkPrevious,
 } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 
@@ -475,10 +475,10 @@ function AgreementsSearchPage() {
             <TableListContent className="border-t" />
           </div>
           <Pagination className="mt-3.5">
-            <PaginationContent className="rounded border bg-card px-2 py-1">
+            <PaginationContent className="rounded border bg-card px-1 py-0.5 md:px-2 md:py-1">
               <TableListPaginationPrevious>
                 {(state) => (
-                  <PaginationPrevious
+                  <PaginationLinkPrevious
                     disabled={state.disabled}
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
@@ -494,6 +494,7 @@ function AgreementsSearchPage() {
                   />
                 )}
               </TableListPaginationPrevious>
+
               <TableListPaginationItems>
                 {({ pagination, isActive }) => (
                   <PaginationLink
@@ -511,9 +512,10 @@ function AgreementsSearchPage() {
                   </PaginationLink>
                 )}
               </TableListPaginationItems>
+
               <TableListPaginationNext>
                 {(state) => (
-                  <PaginationNext
+                  <PaginationLinkNext
                     disabled={state.disabled}
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
