@@ -459,10 +459,10 @@ function AgreementsSearchPage() {
           <div className="flex items-center justify-end">
             <TableListColumnVisibility />
           </div>
-          <div className="mt-4 overflow-hidden rounded border bg-card">
+          <div className="mt-2.5 overflow-hidden rounded border bg-card">
             <TableListContent />
           </div>
-          <Pagination className="mt-3.5">
+          <Pagination className="mt-2.5">
             <PaginationContent className="rounded border bg-card px-1 py-0.5 md:px-2 md:py-1">
               <TableListPaginationPrevious>
                 {(state) => (
@@ -483,7 +483,7 @@ function AgreementsSearchPage() {
                 )}
               </TableListPaginationPrevious>
 
-              <TableListPaginationItems>
+              <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
                     to="/agreements"

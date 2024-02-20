@@ -68,7 +68,7 @@ function TableListPaginationItems({
       {items.map((Comp, idx) => (
         <PaginationItem
           key={`table_list_pagination_item_${idx}`}
-          className={cn("hidden sm:inline-block", className)}
+          className={cn("", className)}
           {...props}
         >
           <Comp />
