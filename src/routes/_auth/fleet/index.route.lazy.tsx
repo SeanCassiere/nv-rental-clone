@@ -14,10 +14,16 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 
-import { PrimaryModuleTable } from "@/components/primary-module/table";
-import type { PrimaryModuleTableFacetedFilterItem } from "@/components/primary-module/table-filter";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationLinkNext,
+  PaginationLinkPrevious,
+} from "@/components/ui/pagination";
+import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
@@ -28,6 +34,19 @@ import {
   fetchVehiclesStatusesOptions,
   fetchVehiclesTypesOptions,
 } from "@/lib/query/vehicle";
+
+import {
+  TableList,
+  TableListColumnVisibility,
+  TableListContent,
+  TableListPaginationItems,
+  TableListPaginationNext,
+  TableListPaginationPrevious,
+  TableListToolbar,
+  TableListToolbarActions,
+  TableListToolbarFilters,
+  type TableListToolbarFilterItem,
+} from "@/routes/_auth/-modules/table-list";
 
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
 import { titleMaker } from "@/lib/utils/title-maker";
@@ -54,22 +73,13 @@ function VehicleSearchPage() {
   } = routeApi.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
-  const [_trackTableLoading, _setTrackTableLoading] = React.useState(false);
-
-  const startChangingPage = () => {
-    _setTrackTableLoading(true);
-  };
-  const stopChangingPage = () => {
-    _setTrackTableLoading(false);
-  };
-
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    () =>
+  const [columnFilters, handleColumnFiltersChange] =
+    React.useState<ColumnFiltersState>(() =>
       Object.entries(searchFilters).reduce(
         (prev, [key, value]) => [...prev, { id: key, value }],
         [] as ColumnFiltersState
       )
-  );
+    );
 
   const pagination: PaginationState = React.useMemo(
     () => ({
@@ -119,6 +129,9 @@ function VehicleSearchPage() {
             column.columnHeader as keyof TVehicleListItemParsed,
             {
               id: column.columnHeader,
+              meta: {
+                columnName: column.columnHeaderDescription ?? "",
+              },
               header: () => column.columnHeaderDescription ?? "",
               cell: (item) => {
                 const value = item.getValue();
@@ -166,7 +179,7 @@ function VehicleSearchPage() {
       }),
   });
 
-  const handleSaveColumnsOrder = React.useCallback(
+  const handleColumnOrderChange = React.useCallback(
     (newColumnOrder: ColumnOrderState) => {
       saveColumnsMutation.mutate({
         auth: authParams,
@@ -179,7 +192,7 @@ function VehicleSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
-  const handleSaveColumnVisibility = React.useCallback(
+  const handleColumnVisibilityChange = React.useCallback(
     (graph: VisibilityState) => {
       const newColumnsData = (
         columnsData.data.status === 200 ? columnsData.data.body : []
@@ -196,69 +209,112 @@ function VehicleSearchPage() {
     [columnsData.data, saveColumnsMutation, authParams]
   );
 
+  const handleClearFilters = React.useCallback(() => {
+    navigate({
+      to: "/fleet",
+      params: {},
+      search: () => ({
+        page: 1,
+        size: pagination.pageSize,
+      }),
+    });
+  }, [navigate, pagination.pageSize]);
+
+  const handleSearchFilters = React.useCallback(() => {
+    const filters = columnFilters.reduce(
+      (prev, current) => ({
+        ...prev,
+        [current.id]: current.value,
+      }),
+      {}
+    );
+    navigate({
+      to: "/fleet",
+      params: {},
+      search: () => ({
+        page: 1,
+        size: pagination.pageSize,
+        filters,
+      }),
+    });
+  }, [columnFilters, navigate, pagination.pageSize]);
+
+  const columnVisibility: VisibilityState = React.useMemo(
+    () =>
+      columnsData.data.status === 200
+        ? columnsData.data.body.reduce(
+            (prev, current) => ({
+              ...prev,
+              [current.columnHeader]: current.isSelected,
+            }),
+            {}
+          )
+        : {},
+    [columnsData.data?.body, columnsData.data?.status]
+  );
+
   const parsedPagination =
     vehiclesData.status === "success"
       ? vehiclesData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const tableFacetedFilters: PrimaryModuleTableFacetedFilterItem[] =
-    React.useMemo(
-      () => [
-        {
-          id: "VehicleStatus",
-          title: "Status",
-          type: "select",
-          options: vehicleStatuses.map((item) => ({
-            value: `${item.id}`,
-            label: item.name,
-          })),
-        },
-        {
-          id: "VehicleTypeId",
-          title: "Type",
-          type: "select",
-          options: vehicleTypes.map((item) => ({
-            value: `${item.id}`,
-            label: item.value,
-          })),
-        },
-        {
-          id: "VehicleNo",
-          title: "Vehicle no.",
-          type: "text",
-          size: "normal",
-        },
-        {
-          id: "OwningLocationId",
-          title: "Owning location",
-          type: "select",
-          options: locations.map((item) => ({
-            value: `${item.locationId}`,
-            label: `${item.locationName}`,
-          })),
-        },
-        {
-          id: "CurrentLocationId",
-          title: "Current location",
-          type: "select",
-          options: locations.map((item) => ({
-            value: `${item.locationId}`,
-            label: `${item.locationName}`,
-          })),
-        },
-        {
-          id: "Active",
-          title: "Is active?",
-          type: "select",
-          options: [
-            { value: "true", label: "Yes" },
-            { value: "false", label: "No" },
-          ],
-          defaultValue: "true",
-        },
-      ],
-      [locations, vehicleStatuses, vehicleTypes]
-    );
+  const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
+    () => [
+      {
+        id: "VehicleStatus",
+        title: "Status",
+        type: "select",
+        options: vehicleStatuses.map((item) => ({
+          value: `${item.id}`,
+          label: item.name,
+        })),
+      },
+      {
+        id: "VehicleTypeId",
+        title: "Type",
+        type: "select",
+        options: vehicleTypes.map((item) => ({
+          value: `${item.id}`,
+          label: item.value,
+        })),
+      },
+      {
+        id: "VehicleNo",
+        title: "Vehicle no.",
+        type: "text",
+        size: "normal",
+      },
+      {
+        id: "OwningLocationId",
+        title: "Owning location",
+        type: "select",
+        options: locations.map((item) => ({
+          value: `${item.locationId}`,
+          label: `${item.locationName}`,
+        })),
+      },
+      {
+        id: "CurrentLocationId",
+        title: "Current location",
+        type: "select",
+        options: locations.map((item) => ({
+          value: `${item.locationId}`,
+          label: `${item.locationName}`,
+        })),
+      },
+      {
+        id: "Active",
+        title: "Is active?",
+        type: "select",
+        options: [
+          { value: "true", label: "Yes" },
+          { value: "false", label: "No" },
+        ],
+        defaultValue: "true",
+      },
+    ],
+    [locations, vehicleStatuses, vehicleTypes]
+  );
 
   const dataList = React.useMemo(
     () => (vehiclesData.data?.status === 200 ? vehiclesData.data?.body : []),
@@ -283,10 +339,111 @@ function VehicleSearchPage() {
       </section>
 
       <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
+        <TableList
+          list={dataList}
+          columnDefs={columnDefs}
+          isLoading={vehiclesData.isLoading}
+          filtering={{
+            columnFilters,
+            onColumnFiltersChange: handleColumnFiltersChange,
+          }}
+          visibility={{
+            columnVisibility,
+            onColumnVisibilityChange: handleColumnVisibilityChange,
+          }}
+          ordering={{
+            onColumnOrderChange: handleColumnOrderChange,
+          }}
+          pagination={{
+            pagination,
+            totalPages: parsedPagination.totalRecords
+              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
+              : 0,
+          }}
+        >
+          <TableListToolbar
+            filterItems={tableFacetedFilters}
+            onSearchWithFilters={handleSearchFilters}
+            onClearFilters={handleClearFilters}
+            className="flex flex-wrap items-start justify-start gap-2"
+          >
+            <TableListToolbarFilters />
+            <TableListToolbarActions className="inline-flex justify-start gap-2" />
+          </TableListToolbar>
+          <Separator className="my-4" />
+          <div className="flex items-center justify-end">
+            <TableListColumnVisibility />
+          </div>
+          <div className="mt-2.5 overflow-hidden rounded border bg-card">
+            <TableListContent />
+          </div>
+          <Pagination className="mt-2.5">
+            <PaginationContent className="rounded border bg-card px-1 py-0.5 md:px-2 md:py-1">
+              <TableListPaginationPrevious>
+                {(state) => (
+                  <PaginationLinkPrevious
+                    disabled={state.disabled}
+                    className={cn(
+                      state.disabled ? "cursor-not-allowed opacity-60" : ""
+                    )}
+                    to="/fleet"
+                    search={(prev) => ({
+                      ...prev,
+                      page: state.pagination.pageIndex + 1,
+                      size: state.pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    params
+                  />
+                )}
+              </TableListPaginationPrevious>
+
+              <TableListPaginationItems className="hidden sm:inline-block">
+                {({ pagination, isActive }) => (
+                  <PaginationLink
+                    to="/fleet"
+                    search={(prev) => ({
+                      ...prev,
+                      page: pagination.pageIndex + 1,
+                      size: pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    isActive={isActive}
+                    params
+                  >
+                    {pagination.pageIndex + 1}
+                  </PaginationLink>
+                )}
+              </TableListPaginationItems>
+
+              <TableListPaginationNext>
+                {(state) => (
+                  <PaginationLinkNext
+                    disabled={state.disabled}
+                    className={cn(
+                      state.disabled ? "cursor-not-allowed opacity-60" : ""
+                    )}
+                    to="/fleet"
+                    search={(prev) => ({
+                      ...prev,
+                      page: state.pagination.pageIndex + 1,
+                      size: state.pagination.pageSize,
+                      filters: searchFilters,
+                    })}
+                    params
+                  />
+                )}
+              </TableListPaginationNext>
+            </PaginationContent>
+          </Pagination>
+        </TableList>
+      </section>
+
+      {/* <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
         <PrimaryModuleTable
           data={dataList}
           columns={columnDefs}
-          onColumnOrderChange={handleSaveColumnsOrder}
+          onColumnOrderChange={handleColumnsOrderChange}
           initialColumnVisibility={
             columnsData.data.status === 200
               ? columnsData.data.body.reduce(
@@ -298,7 +455,7 @@ function VehicleSearchPage() {
                 )
               : {}
           }
-          onColumnVisibilityChange={handleSaveColumnVisibility}
+          onColumnVisibilityChange={handleColumnVisibilityChange}
           totalPages={
             parsedPagination?.totalRecords
               ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
@@ -354,7 +511,7 @@ function VehicleSearchPage() {
             filterableColumns: tableFacetedFilters,
           }}
         />
-      </section>
+      </section> */}
     </>
   );
 }
