@@ -240,7 +240,7 @@ function ReportTableContent<TData, TValue>(
               </TableRow>
             ))}
           </TableHeader>
-          <MemoedReportTableContent
+          <MemoedReportTableBody
             table={table}
             tableContainerRef={tableContainerRef}
             columnVirtualizer={columnVirtualizer}
@@ -397,7 +397,7 @@ function ReportTableBody<TData, TValue>({
   );
 }
 
-const MemoedReportTableContent = React.memo(
+const MemoedReportTableBody = React.memo(
   ReportTableBody,
   (prev, next) =>
     prev.table.options.data === next.table.options.data &&
