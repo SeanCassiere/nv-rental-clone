@@ -13,9 +13,10 @@ import {
   type Header,
   type Row,
   type SortingState,
+  type Table,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { useVirtualizer, type Virtualizer } from "@tanstack/react-virtual";
 
 import {
   TableBody,
@@ -101,7 +102,7 @@ function ReportTableContent<TData, TValue>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table.getState().columnSizingInfo]);
 
-  const { rows } = table.getRowModel();
+  // const { rows } = table.getRowModel();
 
   const visibleColumns = table.getVisibleLeafColumns();
 
@@ -115,21 +116,21 @@ function ReportTableContent<TData, TValue>(
     overscan: 3, //how many columns to render on each side off screen each way (adjust this for performance)
   });
 
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length,
-    estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
-    getScrollElement: () => tableContainerRef.current,
-    //measure dynamic row height, except in firefox because it measures table border height incorrectly
-    measureElement:
-      typeof window !== "undefined" &&
-      navigator.userAgent.indexOf("Firefox") === -1
-        ? (element) => element?.getBoundingClientRect().height
-        : undefined,
-    overscan: 5,
-  });
+  // const rowVirtualizer = useVirtualizer({
+  //   count: rows.length,
+  //   estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
+  //   getScrollElement: () => tableContainerRef.current,
+  //   //measure dynamic row height, except in firefox because it measures table border height incorrectly
+  //   measureElement:
+  //     typeof window !== "undefined" &&
+  //     navigator.userAgent.indexOf("Firefox") === -1
+  //       ? (element) => element?.getBoundingClientRect().height
+  //       : undefined,
+  //   overscan: 5,
+  // });
 
   const virtualColumns = columnVirtualizer.getVirtualItems();
-  const virtualRows = rowVirtualizer.getVirtualItems();
+  // const virtualRows = rowVirtualizer.getVirtualItems();
 
   //different virtualization strategy for columns - instead of absolute and translateY, we add empty columns to the left and right
   let virtualPaddingLeft: number | undefined;
@@ -239,7 +240,14 @@ function ReportTableContent<TData, TValue>(
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody
+          <MemoedReportTableContent
+            table={table}
+            tableContainerRef={tableContainerRef}
+            columnVirtualizer={columnVirtualizer}
+            virtualPaddingLeft={virtualPaddingLeft}
+            virtualPaddingRight={virtualPaddingRight}
+          />
+          {/* <TableBody
             className="relative grid"
             style={{
               height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
@@ -297,12 +305,107 @@ function ReportTableContent<TData, TValue>(
                 </TableRow>
               );
             })}
-          </TableBody>
+          </TableBody> */}
         </table>
       </div>
     </div>
   );
 }
+
+function ReportTableBody<TData, TValue>({
+  table,
+  tableContainerRef,
+  columnVirtualizer,
+  virtualPaddingLeft,
+  virtualPaddingRight,
+}: {
+  table: Table<TData>;
+  tableContainerRef: React.MutableRefObject<HTMLDivElement | null>;
+  columnVirtualizer: Virtualizer<HTMLDivElement, Element>;
+  virtualPaddingLeft: number | undefined;
+  virtualPaddingRight: number | undefined;
+}) {
+  const { rows } = table.getRowModel();
+
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
+    getScrollElement: () => tableContainerRef.current,
+    //measure dynamic row height, except in firefox because it measures table border height incorrectly
+    measureElement:
+      typeof window !== "undefined" &&
+      navigator.userAgent.indexOf("Firefox") === -1
+        ? (element) => element?.getBoundingClientRect().height
+        : undefined,
+    overscan: 5,
+  });
+
+  const virtualColumns = columnVirtualizer.getVirtualItems();
+  const virtualRows = rowVirtualizer.getVirtualItems();
+
+  return (
+    <TableBody
+      className="relative grid"
+      style={{
+        height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
+      }}
+    >
+      {virtualRows.map((virtualRow) => {
+        const row = rows[virtualRow.index] as Row<TData>;
+        const visibleCells = row.getVisibleCells();
+        return (
+          <TableRow
+            data-index={virtualRow.index} //needed for dynamic row height measurement
+            ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
+            key={row.id}
+            className="absolute flex w-full"
+            style={{
+              transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
+            }}
+          >
+            {virtualPaddingLeft ? (
+              //fake empty column to the left for virtualization scroll padding
+              <td className="flex" style={{ width: virtualPaddingLeft }} />
+            ) : null}
+            {virtualColumns.map((vc) => {
+              const cell = visibleCells[vc.index] as Cell<TData, TValue>;
+              return (
+                <TableCell
+                  key={cell.id}
+                  className={cn(
+                    "flex w-full truncate whitespace-nowrap border-x",
+                    cell.column.getIsResizing()
+                      ? "border-border"
+                      : "border-transparent"
+                  )}
+                  style={{
+                    width: `calc(var(--col-${clean(cell.column.id)}-size) * 1px)`,
+                  }}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              );
+            })}
+            {virtualPaddingRight ? (
+              //fake empty column to the right for virtualization scroll padding
+              <td className="flex" style={{ width: virtualPaddingRight }} />
+            ) : null}
+          </TableRow>
+        );
+      })}
+    </TableBody>
+  );
+}
+
+const MemoedReportTableContent = React.memo(
+  ReportTableBody,
+  (prev, next) =>
+    prev.table.options.data === next.table.options.data &&
+    prev.tableContainerRef.current === next.tableContainerRef.current &&
+    prev.columnVirtualizer === next.columnVirtualizer &&
+    prev.virtualPaddingLeft === next.virtualPaddingLeft &&
+    prev.virtualPaddingRight === next.virtualPaddingRight
+) as typeof ReportTableBody;
 
 const ReportTableV2 = React.memo(
   ReportTableContent
