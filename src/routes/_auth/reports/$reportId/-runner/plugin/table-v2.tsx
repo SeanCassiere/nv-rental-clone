@@ -164,24 +164,28 @@ function ReportTableContent<TData, TValue>(
                   return (
                     <TableHead
                       key={header.id}
-                      className="flex h-auto"
+                      className="flex h-auto gap-2 whitespace-nowrap"
                       style={{ width: header.getSize() }}
                     >
-                      <div
-                        {...{
-                          className: header.column.getCanSort()
-                            ? "cursor-pointer select-none"
-                            : "",
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
-                      >
+                      <div className="inline select-none">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                      </div>
+                      <div
+                        className={cn(
+                          "inline",
+                          header.column.getCanSort()
+                            ? "cursor-pointer select-none"
+                            : ""
+                        )}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
                         {{
                           asc: " 🔼",
                           desc: " 🔽",
+                          false: " ↕️",
                         }[header.column.getIsSorted() as string] ?? null}
                       </div>
                     </TableHead>
@@ -229,7 +233,7 @@ function ReportTableContent<TData, TValue>(
                     return (
                       <TableCell
                         key={cell.id}
-                        className="flex"
+                        className="flex whitespace-nowrap"
                         style={{ width: cell.column.getSize() }}
                       >
                         {flexRender(
