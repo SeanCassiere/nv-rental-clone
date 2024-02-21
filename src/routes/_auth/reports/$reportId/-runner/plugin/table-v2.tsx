@@ -244,13 +244,23 @@ function ReportTableContent<TData, TValue>(
               </TableRow>
             ))}
           </TableHeader>
-          <MemoedReportTableBody
-            table={table}
-            tableContainerRef={tableContainerRef}
-            columnVirtualizer={columnVirtualizer}
-            virtualPaddingLeft={virtualPaddingLeft}
-            virtualPaddingRight={virtualPaddingRight}
-          />
+          {table.getState().columnSizingInfo.isResizingColumn ? (
+            <MemoedReportTableBody
+              table={table}
+              tableContainerRef={tableContainerRef}
+              columnVirtualizer={columnVirtualizer}
+              virtualPaddingLeft={virtualPaddingLeft}
+              virtualPaddingRight={virtualPaddingRight}
+            />
+          ) : (
+            <ReportTableBody
+              table={table}
+              tableContainerRef={tableContainerRef}
+              columnVirtualizer={columnVirtualizer}
+              virtualPaddingLeft={virtualPaddingLeft}
+              virtualPaddingRight={virtualPaddingRight}
+            />
+          )}
         </table>
       </div>
       {isPending ? (
@@ -356,13 +366,8 @@ function ReportTableBody<TData, TValue>({
 }
 
 const MemoedReportTableBody = React.memo(
-  ReportTableBody
-  // (prev, next) =>
-  //   prev.table.options.data === next.table.options.data &&
-  //   prev.tableContainerRef.current === next.tableContainerRef.current &&
-  //   prev.columnVirtualizer === next.columnVirtualizer &&
-  //   prev.virtualPaddingLeft === next.virtualPaddingLeft &&
-  //   prev.virtualPaddingRight === next.virtualPaddingRight
+  ReportTableBody,
+  (prev, next) => prev.table.options.data === next.table.options.data
 ) as typeof ReportTableBody;
 
 const ReportTableV2 = React.memo(
