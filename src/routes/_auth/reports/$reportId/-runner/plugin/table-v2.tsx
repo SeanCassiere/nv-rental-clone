@@ -143,10 +143,21 @@ function ReportTableContent<TData, TValue>(
   }, [props.rows]);
 
   return (
-    <div>
-      <div className="mb-4 flex justify-end">
-        <p>Plugins go here</p>
-      </div>
+    <div className="grid grid-cols-1">
+      {topRowPlugins.length > 0 && (
+        <div
+          className={cn(
+            "mb-2 flex flex-col flex-wrap items-center gap-2 sm:flex-row",
+            topRowPluginsAlignment === "end" ? "justify-end" : "justify-start"
+          )}
+        >
+          {topRowPlugins.map((Plugin, idx) => (
+            <React.Fragment key={`report_table_top_plugin_${idx}`}>
+              <Plugin table={table} align={topRowPluginsAlignment} />
+            </React.Fragment>
+          ))}
+        </div>
+      )}
       {isPending ? (
         <Skeleton
           className={cn("w-full rounded-b-none bg-foreground/10")}
