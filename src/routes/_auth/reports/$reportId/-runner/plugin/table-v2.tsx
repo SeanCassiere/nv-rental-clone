@@ -191,7 +191,7 @@ function ReportTableContent<TData, TValue>(
                 {virtualPaddingLeft ? (
                   //fake empty column to the left for virtualization scroll padding
                   <TableHead
-                    className="flex h-auto"
+                    className="flex h-auto py-2"
                     style={{ width: virtualPaddingLeft }}
                   />
                 ) : null}
@@ -205,7 +205,7 @@ function ReportTableContent<TData, TValue>(
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "relative flex h-auto justify-between gap-2 whitespace-nowrap border-x",
+                        "relative flex h-auto justify-between whitespace-nowrap border-x py-2",
                         header.column.getIsResizing()
                           ? "border-border"
                           : "border-transparent"
@@ -214,7 +214,7 @@ function ReportTableContent<TData, TValue>(
                         width: `calc(var(--header-${clean(header?.id)}-size) * 1px)`,
                       }}
                     >
-                      <div className="inline-flex w-full flex-col whitespace-nowrap">
+                      <div className="inline-flex w-full grow flex-col whitespace-nowrap">
                         <div className="inline w-full select-none truncate">
                           {flexRender(
                             header.column.columnDef.header,
@@ -243,7 +243,7 @@ function ReportTableContent<TData, TValue>(
                           onMouseDown={header.getResizeHandler()}
                           onTouchStart={header.getResizeHandler()}
                           className={cn(
-                            "mt-2 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
+                            "-mr-2.5 mt-2.5 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
                             header.column.getIsResizing()
                               ? "bg-foreground/75"
                               : "bg-foreground/15 hover:bg-foreground/45"
@@ -256,7 +256,7 @@ function ReportTableContent<TData, TValue>(
                 {virtualPaddingRight ? (
                   //fake empty column to the right for virtualization scroll padding
                   <TableHead
-                    className="flex h-auto"
+                    className="flex h-auto py-2"
                     style={{ width: virtualPaddingRight }}
                   />
                 ) : null}
