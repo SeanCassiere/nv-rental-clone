@@ -18,6 +18,8 @@ import {
 } from "@tanstack/react-table";
 import { useVirtualizer, type Virtualizer } from "@tanstack/react-virtual";
 
+import { icons } from "@/components/ui/icons";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   TableBody,
   TableCell,
@@ -25,12 +27,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { fuzzyFilter } from "@/lib/utils/table";
 
 import type { ReportTablePlugin } from "@/lib/types/report";
 
 import { cn } from "@/lib/utils";
+
+import { useReportContext } from "../view-report-context";
 
 interface ReportTableProps<TData, TValue> {
   columnDefinitions: ColumnDef<TData, TValue>[];
@@ -51,6 +60,9 @@ function clean(id: string) {
 function ReportTableContent<TData, TValue>(
   props: ReportTableProps<TData, TValue>
 ) {
+  const { topRowPlugins = [], topRowPluginsAlignment = "end" } = props;
+  const { isPending } = useReportContext();
+
   const [globalFilter, onGlobalFilterChange] = React.useState("");
   const [sorting, onSortingChange] = React.useState<SortingState>([]);
   const [columnVisibility, onColumnVisibilityChange] =
@@ -102,8 +114,6 @@ function ReportTableContent<TData, TValue>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table.getState().columnSizingInfo]);
 
-  // const { rows } = table.getRowModel();
-
   const visibleColumns = table.getVisibleLeafColumns();
 
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
@@ -115,19 +125,6 @@ function ReportTableContent<TData, TValue>(
     horizontal: true,
     overscan: 3, //how many columns to render on each side off screen each way (adjust this for performance)
   });
-
-  // const rowVirtualizer = useVirtualizer({
-  //   count: rows.length,
-  //   estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
-  //   getScrollElement: () => tableContainerRef.current,
-  //   //measure dynamic row height, except in firefox because it measures table border height incorrectly
-  //   measureElement:
-  //     typeof window !== "undefined" &&
-  //     navigator.userAgent.indexOf("Firefox") === -1
-  //       ? (element) => element?.getBoundingClientRect().height
-  //       : undefined,
-  //   overscan: 5,
-  // });
 
   const virtualColumns = columnVirtualizer.getVirtualItems();
   // const virtualRows = rowVirtualizer.getVirtualItems();
@@ -143,11 +140,43 @@ function ReportTableContent<TData, TValue>(
       (virtualColumns[virtualColumns.length - 1]?.end ?? 0);
   }
 
+  React.useEffect(() => {
+    onSortingChange([]);
+  }, [props.rows]);
+
+  React.useEffect(() => {
+    onGlobalFilterChange("");
+  }, [props.rows]);
+
   return (
-    <div>
-      <div className="mb-4 flex justify-end">
-        <p>Plugins go here</p>
-      </div>
+    <div className="grid grid-cols-1">
+      {topRowPlugins.length > 0 && (
+        <div
+          className={cn(
+            "mb-2 flex flex-col flex-wrap items-center gap-2 sm:flex-row",
+            topRowPluginsAlignment === "end" ? "justify-end" : "justify-start"
+          )}
+        >
+          {topRowPlugins.map((Plugin, idx) => (
+            <React.Fragment key={`report_table_top_plugin_${idx}`}>
+              <Plugin table={table} align={topRowPluginsAlignment} />
+            </React.Fragment>
+          ))}
+        </div>
+      )}
+      {isPending ? (
+        <Skeleton
+          className={cn("w-full rounded-b-none bg-foreground/10")}
+          aria-label="Report loading"
+          style={{ height: "3px" }}
+        />
+      ) : (
+        <div
+          className="w-full bg-transparent"
+          aria-label="Report loaded"
+          style={{ height: "3px" }}
+        />
+      )}
       <div
         ref={tableContainerRef}
         className="relative h-[700px] overflow-auto rounded border bg-card"
@@ -168,7 +197,7 @@ function ReportTableContent<TData, TValue>(
                 {virtualPaddingLeft ? (
                   //fake empty column to the left for virtualization scroll padding
                   <TableHead
-                    className="flex h-auto"
+                    className="flex h-auto py-2"
                     style={{ width: virtualPaddingLeft }}
                   />
                 ) : null}
@@ -182,7 +211,7 @@ function ReportTableContent<TData, TValue>(
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "relative flex h-auto justify-between gap-2 whitespace-nowrap border-x",
+                        "relative flex h-auto justify-between whitespace-nowrap border-x py-2",
                         header.column.getIsResizing()
                           ? "border-border"
                           : "border-transparent"
@@ -191,27 +220,58 @@ function ReportTableContent<TData, TValue>(
                         width: `calc(var(--header-${clean(header?.id)}-size) * 1px)`,
                       }}
                     >
-                      <div className="inline-flex w-full flex-col whitespace-nowrap">
+                      <div className="inline-flex w-full grow flex-col whitespace-nowrap">
                         <div className="inline w-full select-none truncate">
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
                         </div>
-                        <div
-                          className={cn(
-                            "inline",
-                            header.column.getCanSort()
-                              ? "cursor-pointer select-none"
-                              : ""
-                          )}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {{
-                            asc: " 🔼",
-                            desc: " 🔽",
-                            false: " ↕️",
-                          }[header.column.getIsSorted() as string] ?? null}
+                        <div>
+                          {header.column.getCanSort() ? (
+                            <Tooltip delayDuration={250}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  className={cn(
+                                    "inline",
+                                    header.column.getCanSort()
+                                      ? "cursor-pointer select-none"
+                                      : ""
+                                  )}
+                                  onClick={header.column.getToggleSortingHandler()}
+                                  aria-label="Toggle sorting"
+                                >
+                                  {{
+                                    asc: (
+                                      <icons.SortAsc className="h-3.5 w-3.5 text-foreground" />
+                                    ),
+                                    desc: (
+                                      <icons.SortDesc className="h-3.5 w-3.5 text-foreground" />
+                                    ),
+                                  }[header.column.getIsSorted() as string] ?? (
+                                    <icons.SortUnsorted className="h-3.5 w-3.5 text-foreground/30" />
+                                  )}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>
+                                  {header.column.getIsSorted()
+                                    ? "Sorted"
+                                    : "Sort"}
+                                  &nbsp;
+                                  {flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                                  &nbsp;in&nbsp;
+                                  {header.column.getIsSorted() === "desc"
+                                    ? "descending"
+                                    : "ascending"}
+                                  &nbsp;order.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          ) : null}
                         </div>
                       </div>
                       {header.column.getCanResize() ? (
@@ -220,7 +280,7 @@ function ReportTableContent<TData, TValue>(
                           onMouseDown={header.getResizeHandler()}
                           onTouchStart={header.getResizeHandler()}
                           className={cn(
-                            "mt-2 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
+                            "-mr-2.5 mt-2.5 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
                             header.column.getIsResizing()
                               ? "bg-foreground/75"
                               : "bg-foreground/15 hover:bg-foreground/45"
@@ -233,81 +293,45 @@ function ReportTableContent<TData, TValue>(
                 {virtualPaddingRight ? (
                   //fake empty column to the right for virtualization scroll padding
                   <TableHead
-                    className="flex h-auto"
+                    className="flex h-auto py-2"
                     style={{ width: virtualPaddingRight }}
                   />
                 ) : null}
               </TableRow>
             ))}
           </TableHeader>
-          <MemoedReportTableBody
-            table={table}
-            tableContainerRef={tableContainerRef}
-            columnVirtualizer={columnVirtualizer}
-            virtualPaddingLeft={virtualPaddingLeft}
-            virtualPaddingRight={virtualPaddingRight}
-          />
-          {/* <TableBody
-            className="relative grid"
-            style={{
-              height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
-            }}
-          >
-            {virtualRows.map((virtualRow) => {
-              const row = rows[virtualRow.index] as Row<TData>;
-              const visibleCells = row.getVisibleCells();
-              return (
-                <TableRow
-                  data-index={virtualRow.index} //needed for dynamic row height measurement
-                  ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
-                  key={row.id}
-                  className="absolute flex w-full"
-                  style={{
-                    transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
-                  }}
-                >
-                  {virtualPaddingLeft ? (
-                    //fake empty column to the left for virtualization scroll padding
-                    <td
-                      className="flex"
-                      style={{ width: virtualPaddingLeft }}
-                    />
-                  ) : null}
-                  {virtualColumns.map((vc) => {
-                    const cell = visibleCells[vc.index] as Cell<TData, TValue>;
-                    return (
-                      <TableCell
-                        key={cell.id}
-                        className={cn(
-                          "flex w-full truncate whitespace-nowrap border-x",
-                          cell.column.getIsResizing()
-                            ? "border-border"
-                            : "border-transparent"
-                        )}
-                        style={{
-                          width: `calc(var(--col-${clean(cell.column.id)}-size) * 1px)`,
-                        }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                  {virtualPaddingRight ? (
-                    //fake empty column to the right for virtualization scroll padding
-                    <td
-                      className="flex"
-                      style={{ width: virtualPaddingRight }}
-                    />
-                  ) : null}
-                </TableRow>
-              );
-            })}
-          </TableBody> */}
+          {table.getState().columnSizingInfo.isResizingColumn ? (
+            <MemoedReportTableBody
+              table={table}
+              tableContainerRef={tableContainerRef}
+              columnVirtualizer={columnVirtualizer}
+              virtualPaddingLeft={virtualPaddingLeft}
+              virtualPaddingRight={virtualPaddingRight}
+            />
+          ) : (
+            <ReportTableBody
+              table={table}
+              tableContainerRef={tableContainerRef}
+              columnVirtualizer={columnVirtualizer}
+              virtualPaddingLeft={virtualPaddingLeft}
+              virtualPaddingRight={virtualPaddingRight}
+            />
+          )}
         </table>
       </div>
+      {isPending ? (
+        <Skeleton
+          className={cn("w-full rounded-t-none bg-foreground/10")}
+          aria-label="Report loading"
+          style={{ height: "3px" }}
+        />
+      ) : (
+        <div
+          className="w-full bg-transparent"
+          aria-label="Report loaded"
+          style={{ height: "3px" }}
+        />
+      )}
     </div>
   );
 }
@@ -399,12 +423,7 @@ function ReportTableBody<TData, TValue>({
 
 const MemoedReportTableBody = React.memo(
   ReportTableBody,
-  (prev, next) =>
-    prev.table.options.data === next.table.options.data &&
-    prev.tableContainerRef.current === next.tableContainerRef.current &&
-    prev.columnVirtualizer === next.columnVirtualizer &&
-    prev.virtualPaddingLeft === next.virtualPaddingLeft &&
-    prev.virtualPaddingRight === next.virtualPaddingRight
+  (prev, next) => prev.table.options.data === next.table.options.data
 ) as typeof ReportTableBody;
 
 const ReportTableV2 = React.memo(
