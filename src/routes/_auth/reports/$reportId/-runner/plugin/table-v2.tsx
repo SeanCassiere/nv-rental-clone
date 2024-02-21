@@ -102,8 +102,6 @@ function ReportTableContent<TData, TValue>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table.getState().columnSizingInfo]);
 
-  // const { rows } = table.getRowModel();
-
   const visibleColumns = table.getVisibleLeafColumns();
 
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
@@ -115,19 +113,6 @@ function ReportTableContent<TData, TValue>(
     horizontal: true,
     overscan: 3, //how many columns to render on each side off screen each way (adjust this for performance)
   });
-
-  // const rowVirtualizer = useVirtualizer({
-  //   count: rows.length,
-  //   estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
-  //   getScrollElement: () => tableContainerRef.current,
-  //   //measure dynamic row height, except in firefox because it measures table border height incorrectly
-  //   measureElement:
-  //     typeof window !== "undefined" &&
-  //     navigator.userAgent.indexOf("Firefox") === -1
-  //       ? (element) => element?.getBoundingClientRect().height
-  //       : undefined,
-  //   overscan: 5,
-  // });
 
   const virtualColumns = columnVirtualizer.getVirtualItems();
   // const virtualRows = rowVirtualizer.getVirtualItems();
@@ -247,65 +232,6 @@ function ReportTableContent<TData, TValue>(
             virtualPaddingLeft={virtualPaddingLeft}
             virtualPaddingRight={virtualPaddingRight}
           />
-          {/* <TableBody
-            className="relative grid"
-            style={{
-              height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
-            }}
-          >
-            {virtualRows.map((virtualRow) => {
-              const row = rows[virtualRow.index] as Row<TData>;
-              const visibleCells = row.getVisibleCells();
-              return (
-                <TableRow
-                  data-index={virtualRow.index} //needed for dynamic row height measurement
-                  ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
-                  key={row.id}
-                  className="absolute flex w-full"
-                  style={{
-                    transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
-                  }}
-                >
-                  {virtualPaddingLeft ? (
-                    //fake empty column to the left for virtualization scroll padding
-                    <td
-                      className="flex"
-                      style={{ width: virtualPaddingLeft }}
-                    />
-                  ) : null}
-                  {virtualColumns.map((vc) => {
-                    const cell = visibleCells[vc.index] as Cell<TData, TValue>;
-                    return (
-                      <TableCell
-                        key={cell.id}
-                        className={cn(
-                          "flex w-full truncate whitespace-nowrap border-x",
-                          cell.column.getIsResizing()
-                            ? "border-border"
-                            : "border-transparent"
-                        )}
-                        style={{
-                          width: `calc(var(--col-${clean(cell.column.id)}-size) * 1px)`,
-                        }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                  {virtualPaddingRight ? (
-                    //fake empty column to the right for virtualization scroll padding
-                    <td
-                      className="flex"
-                      style={{ width: virtualPaddingRight }}
-                    />
-                  ) : null}
-                </TableRow>
-              );
-            })}
-          </TableBody> */}
         </table>
       </div>
     </div>
