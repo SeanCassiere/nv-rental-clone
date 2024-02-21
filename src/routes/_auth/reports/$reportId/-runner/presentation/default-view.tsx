@@ -160,6 +160,7 @@ const DefaultView = () => {
         accessorFn: (data) => data[field.name],
         cell: (info) => format(report.name, field, info.getValue() as any),
         size: field.size,
+        minSize: 50,
         sortingFn:
           field.dataType === "date" || field.dataType === "datetime"
             ? "datetime"
