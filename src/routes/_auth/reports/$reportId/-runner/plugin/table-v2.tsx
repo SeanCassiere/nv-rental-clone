@@ -134,6 +134,14 @@ function ReportTableContent<TData, TValue>(
       (virtualColumns[virtualColumns.length - 1]?.end ?? 0);
   }
 
+  React.useEffect(() => {
+    onSortingChange([]);
+  }, [props.rows]);
+
+  React.useEffect(() => {
+    onGlobalFilterChange("");
+  }, [props.rows]);
+
   return (
     <div>
       <div className="mb-4 flex justify-end">
