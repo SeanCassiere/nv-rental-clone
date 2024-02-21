@@ -244,10 +244,6 @@ function ReportTableContent<TData, TValue>(
             {virtualRows.map((virtualRow) => {
               const row = rows[virtualRow.index] as Row<TData>;
               const visibleCells = row.getVisibleCells();
-
-              if (virtualRow.index === 1) {
-                console.log(visibleCells);
-              }
               return (
                 <TableRow
                   data-index={virtualRow.index} //needed for dynamic row height measurement
@@ -261,18 +257,12 @@ function ReportTableContent<TData, TValue>(
                   {virtualPaddingLeft ? (
                     //fake empty column to the left for virtualization scroll padding
                     <td
-                      className="leftCol flex"
+                      className="flex"
                       style={{ width: virtualPaddingLeft }}
                     />
                   ) : null}
                   {virtualColumns.map((vc) => {
                     const cell = visibleCells[vc.index] as Cell<TData, TValue>;
-                    if (
-                      virtualRow.index === 1 &&
-                      cell.column.id === "Base Rate"
-                    ) {
-                      console.log("cell", cell);
-                    }
                     return (
                       <TableCell
                         key={cell.id}
@@ -291,7 +281,7 @@ function ReportTableContent<TData, TValue>(
                   {virtualPaddingRight ? (
                     //fake empty column to the right for virtualization scroll padding
                     <td
-                      className="rightCol flex"
+                      className="flex"
                       style={{ width: virtualPaddingRight }}
                     />
                   ) : null}
