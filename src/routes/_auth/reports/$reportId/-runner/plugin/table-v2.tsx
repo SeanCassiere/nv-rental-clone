@@ -182,13 +182,19 @@ function ReportTableContent<TData, TValue>(
                   return (
                     <TableHead
                       key={header.id}
-                      className="relative flex h-auto justify-between gap-2 whitespace-nowrap"
+                      colSpan={header.colSpan}
+                      className={cn(
+                        "relative flex h-auto justify-between gap-2 whitespace-nowrap border-x",
+                        header.column.getIsResizing()
+                          ? "border-border"
+                          : "border-transparent"
+                      )}
                       style={{
                         width: `calc(var(--header-${clean(header?.id)}-size) * 1px)`,
                       }}
                     >
-                      <div className="inline-flex flex-col whitespace-nowrap">
-                        <div className="inline select-none">
+                      <div className="inline-flex w-full flex-col whitespace-nowrap">
+                        <div className="inline w-full select-none truncate">
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
@@ -215,10 +221,10 @@ function ReportTableContent<TData, TValue>(
                         onMouseDown={header.getResizeHandler()}
                         onTouchStart={header.getResizeHandler()}
                         className={cn(
-                          "height-full inline-block shrink-0 cursor-col-resize bg-black",
+                          "mt-2 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
                           header.column.getIsResizing()
-                            ? "w-1 bg-red-500"
-                            : "w-0.5"
+                            ? "bg-foreground/75"
+                            : "bg-foreground/15 hover:bg-foreground/45"
                         )}
                       />
                     </TableHead>
@@ -265,7 +271,12 @@ function ReportTableContent<TData, TValue>(
                     return (
                       <TableCell
                         key={cell.id}
-                        className="flex whitespace-nowrap"
+                        className={cn(
+                          "flex w-full truncate whitespace-nowrap border-x",
+                          cell.column.getIsResizing()
+                            ? "border-border"
+                            : "border-transparent"
+                        )}
                         style={{
                           width: `calc(var(--col-${clean(cell.column.id)}-size) * 1px)`,
                         }}
