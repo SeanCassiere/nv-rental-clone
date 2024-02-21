@@ -37,7 +37,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useReportContext } from "@/lib/context/view-report";
+import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 import { fuzzyFilter } from "@/lib/utils/table";
 

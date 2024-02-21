@@ -1,18 +1,19 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  DateReportFilter,
-  DropDownReportFilter,
-  ListBoxReportFilter,
-  TextBoxReportFilter,
-} from "@/components/report/page-filter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
 
 import { useReportLookupLists } from "@/lib/hooks/useReportLookupLists";
-import { useReportContext } from "@/lib/context/view-report";
+
+import {
+  DateReportFilter,
+  DropDownReportFilter,
+  ListBoxReportFilter,
+  TextBoxReportFilter,
+} from "@/routes/_auth/reports/$reportId/-runner/page-filter";
+import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 export const ReportFilters = () => {
   const { t } = useTranslation();

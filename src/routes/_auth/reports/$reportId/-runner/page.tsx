@@ -2,12 +2,13 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 
 import { EmptyState } from "@/components/layouts/empty-state";
-import { ReportFilters } from "@/components/report/page-filters";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
-import { useReportContext } from "@/lib/context/view-report";
+
+import { ReportFilters } from "@/routes/_auth/reports/$reportId/-runner/page-filters";
+import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 

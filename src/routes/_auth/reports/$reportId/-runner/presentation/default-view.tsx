@@ -3,16 +3,17 @@ import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
-import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
-import { GlobalFilter } from "@/components/report/plugin/global-search";
-import { ReportTable } from "@/components/report/plugin/table";
-import { ViewColumns } from "@/components/report/plugin/view-columns";
 import { icons } from "@/components/ui/icons";
 
 import { useReportValueFormatter } from "@/lib/hooks/useReportValueFormatter";
-import { useReportContext } from "@/lib/context/view-report";
 
 import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
+
+import { ExportToCsv } from "@/routes/_auth/reports/$reportId/-runner/plugin/export-to-csv";
+import { GlobalFilter } from "@/routes/_auth/reports/$reportId/-runner/plugin/global-search";
+import { ReportTable } from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
+import { ViewColumns } from "@/routes/_auth/reports/$reportId/-runner/plugin/view-columns";
+import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 import type { ReportTablePlugin } from "@/lib/types/report";
 
