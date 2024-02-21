@@ -53,12 +53,6 @@ interface ReportTableProps<TData, TValue> {
   topRowPluginsAlignment?: "start" | "end";
 }
 
-export function ReportTableV2<TData, TValue>(
-  props: ReportTableProps<TData, TValue>
-) {
-  return <div>ReportTablePerformant</div>;
-}
-
 export function ReportTableV1<TData, TValue>(
   props: ReportTableProps<TData, TValue>
 ) {

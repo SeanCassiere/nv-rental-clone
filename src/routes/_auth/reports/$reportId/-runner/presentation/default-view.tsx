@@ -12,10 +12,8 @@ import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 
 import { ExportToCsv } from "@/routes/_auth/reports/$reportId/-runner/plugin/export-to-csv";
 import { GlobalFilter } from "@/routes/_auth/reports/$reportId/-runner/plugin/global-search";
-import {
-  ReportTableV1,
-  ReportTableV2,
-} from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
+import { ReportTableV1 } from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
+import { ReportTableV2 } from "@/routes/_auth/reports/$reportId/-runner/plugin/table-v2";
 import { ViewColumns } from "@/routes/_auth/reports/$reportId/-runner/plugin/view-columns";
 import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
