@@ -18,6 +18,7 @@ import {
 } from "@tanstack/react-table";
 import { useVirtualizer, type Virtualizer } from "@tanstack/react-virtual";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   TableBody,
   TableCell,
@@ -31,6 +32,8 @@ import { fuzzyFilter } from "@/lib/utils/table";
 import type { ReportTablePlugin } from "@/lib/types/report";
 
 import { cn } from "@/lib/utils";
+
+import { useReportContext } from "../view-report-context";
 
 interface ReportTableProps<TData, TValue> {
   columnDefinitions: ColumnDef<TData, TValue>[];
@@ -51,6 +54,9 @@ function clean(id: string) {
 function ReportTableContent<TData, TValue>(
   props: ReportTableProps<TData, TValue>
 ) {
+  const { topRowPlugins = [], topRowPluginsAlignment = "end" } = props;
+  const { isPending } = useReportContext();
+
   const [globalFilter, onGlobalFilterChange] = React.useState("");
   const [sorting, onSortingChange] = React.useState<SortingState>([]);
   const [columnVisibility, onColumnVisibilityChange] =
@@ -133,6 +139,19 @@ function ReportTableContent<TData, TValue>(
       <div className="mb-4 flex justify-end">
         <p>Plugins go here</p>
       </div>
+      {isPending ? (
+        <Skeleton
+          className={cn("w-full rounded-b-none bg-foreground/10")}
+          aria-label="Report loading"
+          style={{ height: "3px" }}
+        />
+      ) : (
+        <div
+          className="w-full bg-transparent"
+          aria-label="Report loaded"
+          style={{ height: "3px" }}
+        />
+      )}
       <div
         ref={tableContainerRef}
         className="relative h-[700px] overflow-auto rounded border bg-card"
@@ -234,6 +253,19 @@ function ReportTableContent<TData, TValue>(
           />
         </table>
       </div>
+      {isPending ? (
+        <Skeleton
+          className={cn("w-full rounded-t-none bg-foreground/10")}
+          aria-label="Report loading"
+          style={{ height: "3px" }}
+        />
+      ) : (
+        <div
+          className="w-full bg-transparent"
+          aria-label="Report loaded"
+          style={{ height: "3px" }}
+        />
+      )}
     </div>
   );
 }
