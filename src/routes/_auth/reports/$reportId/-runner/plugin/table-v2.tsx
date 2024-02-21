@@ -213,17 +213,19 @@ function ReportTableContent<TData, TValue>(
                           }[header.column.getIsSorted() as string] ?? null}
                         </div>
                       </div>
-                      <button
-                        onDoubleClick={() => header.column.resetSize()}
-                        onMouseDown={header.getResizeHandler()}
-                        onTouchStart={header.getResizeHandler()}
-                        className={cn(
-                          "mt-2 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
-                          header.column.getIsResizing()
-                            ? "bg-foreground/75"
-                            : "bg-foreground/15 hover:bg-foreground/45"
-                        )}
-                      />
+                      {header.column.getCanResize() ? (
+                        <div
+                          onDoubleClick={() => header.column.resetSize()}
+                          onMouseDown={header.getResizeHandler()}
+                          onTouchStart={header.getResizeHandler()}
+                          className={cn(
+                            "mt-2 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
+                            header.column.getIsResizing()
+                              ? "bg-foreground/75"
+                              : "bg-foreground/15 hover:bg-foreground/45"
+                          )}
+                        />
+                      ) : null}
                     </TableHead>
                   );
                 })}
