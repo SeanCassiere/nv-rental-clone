@@ -53,6 +53,14 @@ interface ReportTableProps<TData, TValue> {
   topRowPluginsAlignment?: "start" | "end";
 }
 
+/**
+ * Removes any spaces and special characters from the id
+ * @param id
+ */
+function clean(id: string) {
+  return id.replace(/[^a-zA-Z0-9]/g, "");
+}
+
 function ReportTableContent<TData, TValue>(
   props: ReportTableProps<TData, TValue>
 ) {
@@ -87,6 +95,25 @@ function ReportTableContent<TData, TValue>(
     enableColumnResizing: true,
     enableSorting: true,
   });
+
+  /**
+   * Instead of calling `column.getSize()` on every render for every header
+   * and especially every data cell (very expensive),
+   * we will calculate all column sizes at once at the root table level in a useMemo
+   * and pass the column sizes down as CSS variables to the <table> element.
+   */
+  const columnSizeVars = React.useMemo(() => {
+    const headers = table.getFlatHeaders();
+    const colSizes: { [key: string]: number } = {};
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i]!;
+      colSizes[`--header-${clean(header.id)}-size`] = header.getSize();
+      colSizes[`--col-${clean(header.column.id)}-size`] =
+        header.column.getSize();
+    }
+    return colSizes;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [table.getState().columnSizingInfo]);
 
   const { rows } = table.getRowModel();
 
@@ -142,7 +169,12 @@ function ReportTableContent<TData, TValue>(
         className="relative h-[700px] overflow-auto rounded border bg-card"
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
-        <table className="grid w-auto caption-bottom">
+        <table
+          className="grid w-fit caption-bottom"
+          style={{
+            ...columnSizeVars,
+          }}
+        >
           <TableHeader
             className="sticky top-0 grid bg-card"
             style={{ zIndex: 1 }}
@@ -165,7 +197,9 @@ function ReportTableContent<TData, TValue>(
                     <TableHead
                       key={header.id}
                       className="flex h-auto gap-2 whitespace-nowrap"
-                      style={{ width: header.getSize() }}
+                      style={{
+                        width: `calc(var(--header-${clean(header?.id)}-size) * 1px)`,
+                      }}
                     >
                       <div className="inline select-none">
                         {flexRender(
@@ -211,6 +245,9 @@ function ReportTableContent<TData, TValue>(
               const row = rows[virtualRow.index] as Row<TData>;
               const visibleCells = row.getVisibleCells();
 
+              if (virtualRow.index === 1) {
+                console.log(visibleCells);
+              }
               return (
                 <TableRow
                   data-index={virtualRow.index} //needed for dynamic row height measurement
@@ -223,18 +260,26 @@ function ReportTableContent<TData, TValue>(
                 >
                   {virtualPaddingLeft ? (
                     //fake empty column to the left for virtualization scroll padding
-                    <TableCell
-                      className="flex"
+                    <td
+                      className="leftCol flex"
                       style={{ width: virtualPaddingLeft }}
                     />
                   ) : null}
                   {virtualColumns.map((vc) => {
                     const cell = visibleCells[vc.index] as Cell<TData, TValue>;
+                    if (
+                      virtualRow.index === 1 &&
+                      cell.column.id === "Base Rate"
+                    ) {
+                      console.log("cell", cell);
+                    }
                     return (
                       <TableCell
                         key={cell.id}
                         className="flex whitespace-nowrap"
-                        style={{ width: cell.column.getSize() }}
+                        style={{
+                          width: `calc(var(--col-${clean(cell.column.id)}-size) * 1px)`,
+                        }}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -245,8 +290,8 @@ function ReportTableContent<TData, TValue>(
                   })}
                   {virtualPaddingRight ? (
                     //fake empty column to the right for virtualization scroll padding
-                    <TableCell
-                      className="flex"
+                    <td
+                      className="rightCol flex"
                       style={{ width: virtualPaddingRight }}
                     />
                   ) : null}
@@ -260,6 +305,8 @@ function ReportTableContent<TData, TValue>(
   );
 }
 
-const ReportTableV2 = React.memo(ReportTableContent);
+const ReportTableV2 = React.memo(
+  ReportTableContent
+) as typeof ReportTableContent;
 
 export { ReportTableV2 };
