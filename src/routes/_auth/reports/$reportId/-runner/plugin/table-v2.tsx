@@ -18,6 +18,7 @@ import {
 } from "@tanstack/react-table";
 import { useVirtualizer, type Virtualizer } from "@tanstack/react-virtual";
 
+import { icons } from "@/components/ui/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   TableBody,
@@ -26,6 +27,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { fuzzyFilter } from "@/lib/utils/table";
 
@@ -221,20 +227,51 @@ function ReportTableContent<TData, TValue>(
                             header.getContext()
                           )}
                         </div>
-                        <div
-                          className={cn(
-                            "inline",
-                            header.column.getCanSort()
-                              ? "cursor-pointer select-none"
-                              : ""
-                          )}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {{
-                            asc: " 🔼",
-                            desc: " 🔽",
-                            false: " ↕️",
-                          }[header.column.getIsSorted() as string] ?? null}
+                        <div>
+                          {header.column.getCanSort() ? (
+                            <Tooltip delayDuration={250}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  className={cn(
+                                    "inline",
+                                    header.column.getCanSort()
+                                      ? "cursor-pointer select-none"
+                                      : ""
+                                  )}
+                                  onClick={header.column.getToggleSortingHandler()}
+                                  aria-label="Toggle sorting"
+                                >
+                                  {{
+                                    asc: (
+                                      <icons.SortAsc className="h-3.5 w-3.5 text-foreground" />
+                                    ),
+                                    desc: (
+                                      <icons.SortDesc className="h-3.5 w-3.5 text-foreground" />
+                                    ),
+                                  }[header.column.getIsSorted() as string] ?? (
+                                    <icons.SortUnsorted className="h-3.5 w-3.5 text-foreground/30" />
+                                  )}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>
+                                  {header.column.getIsSorted()
+                                    ? "Sorted"
+                                    : "Sort"}
+                                  &nbsp;
+                                  {flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                                  &nbsp;in&nbsp;
+                                  {header.column.getIsSorted() === "desc"
+                                    ? "descending"
+                                    : "ascending"}
+                                  &nbsp;order.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          ) : null}
                         </div>
                       </div>
                       {header.column.getCanResize() ? (
