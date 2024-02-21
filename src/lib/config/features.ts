@@ -53,10 +53,19 @@ const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
   input_type: "switch",
   default_value: false,
 } as const;
+const performantReportTableFeatureFlag: DropdownFeatureFlag = {
+  id: "experimental_report.table.performant",
+  name: "Performant report table",
+  description: "Select the version of the performant report table to use.",
+  input_type: "dropdown",
+  default_value: "v1",
+  options: ["v1", "v2"],
+} as const;
 // Features END
 
 const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
+  performantReportTableFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 ] as const;
@@ -64,6 +73,7 @@ const featureFlags: FeatureFlags = [
 export {
   featureFlags, // the array of all the feature flags
   dashboardLayoutFeatureFlag,
+  performantReportTableFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 };

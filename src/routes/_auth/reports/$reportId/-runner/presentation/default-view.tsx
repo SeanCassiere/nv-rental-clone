@@ -5,15 +5,21 @@ import { useTranslation } from "react-i18next";
 import { EmptyState } from "@/components/layouts/empty-state";
 import { icons } from "@/components/ui/icons";
 
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { useReportValueFormatter } from "@/lib/hooks/useReportValueFormatter";
 
 import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 
 import { ExportToCsv } from "@/routes/_auth/reports/$reportId/-runner/plugin/export-to-csv";
 import { GlobalFilter } from "@/routes/_auth/reports/$reportId/-runner/plugin/global-search";
-import { ReportTable } from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
+import {
+  ReportTableV1,
+  ReportTableV2,
+} from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
 import { ViewColumns } from "@/routes/_auth/reports/$reportId/-runner/plugin/view-columns";
 import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
+
+import { performantReportTableFeatureFlag } from "@/lib/config/features";
 
 import type { ReportTablePlugin } from "@/lib/types/report";
 
@@ -40,6 +46,11 @@ const DefaultView = () => {
       'DefaultView should only be rendered when useReportContext().resultState.status is "success"'
     );
   }
+
+  const [tableVersion] = useLocalStorage(
+    performantReportTableFeatureFlag.id,
+    performantReportTableFeatureFlag.default_value
+  );
 
   const data = React.useMemo(() => state.rows ?? [], [state.rows]);
 
@@ -196,8 +207,15 @@ const DefaultView = () => {
             onClick: runReport,
           }}
         />
+      ) : tableVersion === "v2" ? (
+        <ReportTableV2
+          columnDefinitions={tableDefs.columns}
+          columnVisibility={tableDefs.visibility}
+          rows={sanitizedRows.rows}
+          topRowPlugins={topRowPlugins}
+        />
       ) : (
-        <ReportTable
+        <ReportTableV1
           columnDefinitions={tableDefs.columns}
           columnVisibility={tableDefs.visibility}
           rows={sanitizedRows.rows}
