@@ -118,14 +118,10 @@ const DefaultView = () => {
         const headerSize = Math.max(120, accessor.displayName.length * 10 + 25);
 
         const size = cellSize < headerSize ? headerSize : cellSize;
-        const minSize = headerSize < cellSize ? cellSize : headerSize;
-        const maxSize = size * 2;
 
         return {
           ...accessor,
           size,
-          minSize,
-          maxSize,
         };
       })
       .sort((a, b) => a.displayOrder - b.displayOrder);
@@ -163,9 +159,8 @@ const DefaultView = () => {
         header: field.displayName,
         accessorFn: (data) => data[field.name],
         cell: (info) => format(report.name, field, info.getValue() as any),
-        size: field.size + 20,
-        minSize: field.minSize + 20,
-        maxSize: field.maxSize + 20,
+        size: field.size,
+        minSize: 50,
         sortingFn:
           field.dataType === "date" || field.dataType === "datetime"
             ? "datetime"
