@@ -15,14 +15,8 @@ import {
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import {
-  useVirtualizer,
-  type VirtualItem,
-  type Virtualizer,
-} from "@tanstack/react-virtual";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
-import { icons } from "@/components/ui/icons";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   TableBody,
   TableCell,
@@ -30,14 +24,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipPortal,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 import { fuzzyFilter } from "@/lib/utils/table";
 
@@ -161,7 +147,7 @@ function ReportTableContent<TData, TValue>(
 
   return (
     <div>
-      <div>
+      <div className="mb-4 flex justify-end">
         <p>Plugins go here</p>
       </div>
       <div
@@ -196,32 +182,45 @@ function ReportTableContent<TData, TValue>(
                   return (
                     <TableHead
                       key={header.id}
-                      className="flex h-auto gap-2 whitespace-nowrap"
+                      className="relative flex h-auto justify-between gap-2 whitespace-nowrap"
                       style={{
                         width: `calc(var(--header-${clean(header?.id)}-size) * 1px)`,
                       }}
                     >
-                      <div className="inline select-none">
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      <div className="inline-flex flex-col whitespace-nowrap">
+                        <div className="inline select-none">
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </div>
+                        <div
+                          className={cn(
+                            "inline",
+                            header.column.getCanSort()
+                              ? "cursor-pointer select-none"
+                              : ""
+                          )}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {{
+                            asc: " 🔼",
+                            desc: " 🔽",
+                            false: " ↕️",
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </div>
                       </div>
-                      <div
+                      <button
+                        onDoubleClick={() => header.column.resetSize()}
+                        onMouseDown={header.getResizeHandler()}
+                        onTouchStart={header.getResizeHandler()}
                         className={cn(
-                          "inline",
-                          header.column.getCanSort()
-                            ? "cursor-pointer select-none"
-                            : ""
+                          "height-full inline-block shrink-0 cursor-col-resize bg-black",
+                          header.column.getIsResizing()
+                            ? "w-1 bg-red-500"
+                            : "w-0.5"
                         )}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {{
-                          asc: " 🔼",
-                          desc: " 🔽",
-                          false: " ↕️",
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
+                      />
                     </TableHead>
                   );
                 })}
