@@ -105,10 +105,8 @@ function ReportTableContent<TData, TValue>(
 
   const visibleColumns = table.getVisibleLeafColumns();
 
-  //The virtualizers need to know the scrollable container element
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
 
-  //we are using a slightly different virtualization strategy for columns (compared to virtual rows) in order to support dynamic row heights
   const columnVirtualizer = useVirtualizer({
     count: visibleColumns.length,
     estimateSize: (index) => visibleColumns[index]!.getSize(), //estimate width of each column for accurate scrollbar dragging
@@ -117,7 +115,6 @@ function ReportTableContent<TData, TValue>(
     overscan: 3, //how many columns to render on each side off screen each way (adjust this for performance)
   });
 
-  //dynamic row height virtualization - alternatively you could use a simpler fixed row height strategy without the need for `measureElement`
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
