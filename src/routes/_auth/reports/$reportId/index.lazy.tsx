@@ -3,10 +3,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
-import { ViewReport } from "@/components/report/page";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { ReportContextProvider } from "@/lib/context/view-report";
+import { ViewReport } from "@/routes/_auth/reports/$reportId/-runner/page";
+import { ReportContextProvider } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 export const Route = createLazyFileRoute("/_auth/reports/$reportId/")({
   component: ViewReportPage,

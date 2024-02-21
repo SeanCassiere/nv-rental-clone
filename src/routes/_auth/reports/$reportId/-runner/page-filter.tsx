@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-import { useReportContext } from "@/lib/context/view-report";
+import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 import { dateFormat } from "@/lib/utils/report";
 

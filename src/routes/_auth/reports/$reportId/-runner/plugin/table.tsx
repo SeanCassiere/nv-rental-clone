@@ -37,7 +37,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useReportContext } from "@/lib/context/view-report";
+import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 import { fuzzyFilter } from "@/lib/utils/table";
 
@@ -53,7 +53,7 @@ interface ReportTableProps<TData, TValue> {
   topRowPluginsAlignment?: "start" | "end";
 }
 
-export function ReportTable<TData, TValue>(
+export function ReportTableV1<TData, TValue>(
   props: ReportTableProps<TData, TValue>
 ) {
   const { topRowPlugins = [], topRowPluginsAlignment = "end" } = props;
@@ -161,10 +161,7 @@ export function ReportTable<TData, TValue>(
       <div
         ref={parentRef}
         className={cn(
-          "relative overflow-auto rounded border",
-          topRowPlugins.length > 0
-            ? "h-[550px] sm:h-[520px]"
-            : "h-[600px] sm:h-[550px]"
+          "relative h-[550px] overflow-auto rounded border sm:h-[780px]"
         )}
       >
         {isPending ? (
@@ -205,7 +202,7 @@ export function ReportTable<TData, TValue>(
                   ] as Header<TData, TValue>;
 
                   return (
-                    <ReportTableColumnHeader
+                    <ReportTableColumnHeaderV1
                       key={`head_${virtualColumn.key}`}
                       header={header}
                       columnVirtualizer={columnVirtualizer}
@@ -281,14 +278,14 @@ export function ReportTable<TData, TValue>(
   );
 }
 
-interface ReportTableColumnHeaderProps<TData, TValue> {
+interface ReportTableColumnHeaderV1Props<TData, TValue> {
   header: Header<TData, TValue>;
   virtualColumn: VirtualItem;
   columnVirtualizer: Virtualizer<HTMLTableSectionElement, Element>;
 }
 
-function ReportTableColumnHeader<TData, TValue>(
-  props: ReportTableColumnHeaderProps<TData, TValue>
+function ReportTableColumnHeaderV1<TData, TValue>(
+  props: ReportTableColumnHeaderV1Props<TData, TValue>
 ) {
   const { header, virtualColumn, columnVirtualizer } = props;
 

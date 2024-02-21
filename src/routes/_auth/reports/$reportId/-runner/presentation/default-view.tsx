@@ -3,16 +3,21 @@ import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
-import { ExportToCsv } from "@/components/report/plugin/export-to-csv";
-import { GlobalFilter } from "@/components/report/plugin/global-search";
-import { ReportTable } from "@/components/report/plugin/table";
-import { ViewColumns } from "@/components/report/plugin/view-columns";
 import { icons } from "@/components/ui/icons";
 
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { useReportValueFormatter } from "@/lib/hooks/useReportValueFormatter";
-import { useReportContext } from "@/lib/context/view-report";
 
 import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
+
+import { ExportToCsv } from "@/routes/_auth/reports/$reportId/-runner/plugin/export-to-csv";
+import { GlobalFilter } from "@/routes/_auth/reports/$reportId/-runner/plugin/global-search";
+import { ReportTableV1 } from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
+import { ReportTableV2 } from "@/routes/_auth/reports/$reportId/-runner/plugin/table-v2";
+import { ViewColumns } from "@/routes/_auth/reports/$reportId/-runner/plugin/view-columns";
+import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
+
+import { performantReportTableFeatureFlag } from "@/lib/config/features";
 
 import type { ReportTablePlugin } from "@/lib/types/report";
 
@@ -39,6 +44,11 @@ const DefaultView = () => {
       'DefaultView should only be rendered when useReportContext().resultState.status is "success"'
     );
   }
+
+  const [tableVersion] = useLocalStorage(
+    performantReportTableFeatureFlag.id,
+    performantReportTableFeatureFlag.default_value
+  );
 
   const data = React.useMemo(() => state.rows ?? [], [state.rows]);
 
@@ -153,9 +163,9 @@ const DefaultView = () => {
         header: field.displayName,
         accessorFn: (data) => data[field.name],
         cell: (info) => format(report.name, field, info.getValue() as any),
-        size: field.size,
-        minSize: field.minSize,
-        maxSize: field.maxSize,
+        size: field.size + 20,
+        minSize: field.minSize + 20,
+        maxSize: field.maxSize + 20,
         sortingFn:
           field.dataType === "date" || field.dataType === "datetime"
             ? "datetime"
@@ -195,8 +205,15 @@ const DefaultView = () => {
             onClick: runReport,
           }}
         />
+      ) : tableVersion === "v2" ? (
+        <ReportTableV2
+          columnDefinitions={tableDefs.columns}
+          columnVisibility={tableDefs.visibility}
+          rows={sanitizedRows.rows}
+          topRowPlugins={topRowPlugins}
+        />
       ) : (
-        <ReportTable
+        <ReportTableV1
           columnDefinitions={tableDefs.columns}
           columnVisibility={tableDefs.visibility}
           rows={sanitizedRows.rows}
