@@ -356,13 +356,13 @@ function ReportTableBody<TData, TValue>({
 }
 
 const MemoedReportTableBody = React.memo(
-  ReportTableBody,
-  (prev, next) =>
-    prev.table.options.data === next.table.options.data &&
-    prev.tableContainerRef.current === next.tableContainerRef.current &&
-    prev.columnVirtualizer === next.columnVirtualizer &&
-    prev.virtualPaddingLeft === next.virtualPaddingLeft &&
-    prev.virtualPaddingRight === next.virtualPaddingRight
+  ReportTableBody
+  // (prev, next) =>
+  //   prev.table.options.data === next.table.options.data &&
+  //   prev.tableContainerRef.current === next.tableContainerRef.current &&
+  //   prev.columnVirtualizer === next.columnVirtualizer &&
+  //   prev.virtualPaddingLeft === next.virtualPaddingLeft &&
+  //   prev.virtualPaddingRight === next.virtualPaddingRight
 ) as typeof ReportTableBody;
 
 const ReportTableV2 = React.memo(
