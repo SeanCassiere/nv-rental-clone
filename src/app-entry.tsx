@@ -58,6 +58,7 @@ export default function App() {
       currentVersion={APP_VERSION}
       isVerboseMode={IS_DEV}
       isEnabled={IS_DEV === false}
+      reloadOnDowngrade
     >
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...reactOidcContextConfig}>
