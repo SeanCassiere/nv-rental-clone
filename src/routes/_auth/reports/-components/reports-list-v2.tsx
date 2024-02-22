@@ -1,12 +1,24 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRouteApi, Link } from "@tanstack/react-router";
+import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
+import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import type { TReportsListItem } from "@/lib/schemas/report";
+
+import { cn } from "@/lib/utils";
 
 const PAYMENT_BREAKDOWN_REPORT_ID = "117";
 const BUSINESS_SUMMARY_REPORT_ID = "116";
@@ -63,7 +75,9 @@ interface ReportsListV2Props {
 
 export default function ReportsListV2(props: ReportsListV2Props) {
   const { currentCategory, internationalization } = props;
+
   const { t } = useTranslation();
+  const navigate = useNavigate({ from: "/reports" });
 
   const { searchListOptions } = routeApi.useRouteContext();
   const query = useSuspenseQuery(searchListOptions);
@@ -76,37 +90,94 @@ export default function ReportsListV2(props: ReportsListV2Props) {
     () => reportsList.filter(tenantReportFilterFn),
     [reportsList]
   );
+
+  const isFiltered = React.useMemo(
+    () =>
+      currentCategory.length > 0 &&
+      currentCategory !== internationalization.all,
+    [currentCategory, internationalization.all]
+  );
+
   const reports = React.useMemo(() => {
     const transformed = transformReportsList(tenantFiltered);
 
-    if (!currentCategory || currentCategory === internationalization.all) {
+    if (!isFiltered) {
       return transformed;
     }
 
     return transformed.filter((report) =>
       report.categories.includes(currentCategory)
     );
-  }, [currentCategory, internationalization.all, tenantFiltered]);
+  }, [isFiltered, currentCategory, tenantFiltered]);
+
+  const categories = React.useMemo(() => {
+    const allCategories = tenantFiltered.reduce((acc, report) => {
+      if (report.reportCategory) {
+        acc.add(report.reportCategory);
+      }
+      return acc;
+    }, new Set<string>());
+
+    return [internationalization.all, ...Array.from(allCategories)];
+  }, [internationalization.all, tenantFiltered]);
+
+  const onValueChange = React.useCallback(
+    (value: string) => {
+      navigate({ search: (search) => ({ ...search, category: value }) });
+    },
+    [navigate]
+  );
 
   return (
-    <section className="mx-auto mb-4 mt-4 max-w-full px-2 pt-1.5 sm:mx-4 sm:px-1 md:mb-8">
-      {/* <h4>Reports List V2</h4> */}
+    <section className="mx-auto mb-4 mt-2 grid max-w-full gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1 md:mb-8">
+      <div className="flex items-center justify-start">
+        <Select
+          value={currentCategory || internationalization.all}
+          onValueChange={onValueChange}
+        >
+          <SelectTrigger className="w-full truncate whitespace-nowrap sm:h-8 sm:w-[220px]">
+            <SelectValue placeholder="Select a category" className="truncate" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Categories</SelectLabel>
+              {categories.map((category) => (
+                <SelectItem key={`category_${category}`} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
       <nav>
-        <ul className="-mx-px grid grid-cols-2 overflow-hidden rounded border-l border-t border-border sm:mx-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <ul
+          className={cn(
+            "-mx-px grid grid-cols-1 overflow-hidden rounded border-l border-border sm:mx-0 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+            reports.length > 2 ? "border-t" : ""
+          )}
+        >
           {reports.length > 0 ? (
             reports.map((report, idx) => (
               <li
                 key={`report_item_${report.id}_${idx}`}
-                className="group relative flex min-h-[5rem] flex-col items-start justify-between border-b border-r border-border bg-card p-4 sm:p-6"
+                className={cn(
+                  "relative flex min-h-[5rem] flex-col items-start justify-between border-b border-r border-border bg-card p-4 sm:p-6",
+                  reports.length > 2 ? "" : "border-t"
+                )}
               >
                 <Link
                   to="/reports/$reportId"
                   params={{ reportId: report.id }}
-                  className="w-full text-balance py-2 sm:px-6"
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "flex grow justify-start text-balance px-0 py-2"
+                  )}
                 >
                   {report.title}
                 </Link>
-                <p className="text-sm text-foreground/60 sm:px-6">
+                <p className="text-sm text-foreground/60">
                   {report.categories.join(", ")}
                 </p>
               </li>
