@@ -92,7 +92,7 @@ const DefaultView = () => {
         displayName: accessor,
         isVisible: true,
         displayOrder: outputAccessorsLength + idx + 1,
-        dataType: ["name", "note"].some((key) =>
+        dataType: ["name", "note", "status"].some((key) =>
           accessor.toLowerCase().includes(key)
         )
           ? "string"
