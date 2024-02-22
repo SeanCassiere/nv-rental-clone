@@ -135,7 +135,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
           value={currentCategory || internationalization.all}
           onValueChange={onValueChange}
         >
-          <SelectTrigger className="w-full truncate whitespace-nowrap sm:h-8 sm:w-[220px]">
+          <SelectTrigger className="w-full truncate whitespace-nowrap sm:w-[220px]">
             <SelectValue placeholder="Select a category" className="truncate" />
           </SelectTrigger>
           <SelectContent>
@@ -155,17 +155,16 @@ export default function ReportsListV2(props: ReportsListV2Props) {
         <ul
           className={cn(
             "-mx-px grid grid-cols-1 overflow-hidden rounded border-l border-border sm:mx-0 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
-            reports.length > 2 ? "border-t" : ""
+            reports.length > 2
+              ? "border-t"
+              : "[&>li:nth-child(1)]:border-t [&>li]:sm:border-t"
           )}
         >
           {reports.length > 0 ? (
             reports.map((report, idx) => (
               <li
                 key={`report_item_${report.id}_${idx}`}
-                className={cn(
-                  "relative flex min-h-[5rem] flex-col items-start justify-between border-b border-r border-border bg-card p-4 sm:p-6",
-                  reports.length > 2 ? "" : "border-t"
-                )}
+                className="relative flex min-h-[5rem] flex-col items-start justify-between border-b border-r border-border bg-card p-4 sm:p-6"
               >
                 <Link
                   to="/reports/$reportId"
@@ -178,7 +177,18 @@ export default function ReportsListV2(props: ReportsListV2Props) {
                   {report.title}
                 </Link>
                 <p className="text-sm text-foreground/60">
-                  {report.categories.join(", ")}
+                  {report.categories.map((category, idx) => (
+                    <React.Fragment key={`${report.id}_${category}_${idx}`}>
+                      <Link
+                        to="/reports"
+                        className="underline-offset-4 hover:text-muted-foreground hover:underline"
+                        search={(s) => ({ ...s, category })}
+                      >
+                        {category}
+                      </Link>
+                      {idx < report.categories.length - 1 && ", "}
+                    </React.Fragment>
+                  ))}
                 </p>
               </li>
             ))
