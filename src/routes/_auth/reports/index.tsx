@@ -29,4 +29,5 @@ export const Route = createFileRoute("/_auth/reports/")({
 
     return;
   },
+  loaderDeps: ({ search: { category } }) => ({ category }),
 });
