@@ -33,7 +33,7 @@ export const EmptyState = ({
   return (
     <div
       className={cn(
-        "flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed bg-card",
+        "flex h-[450px] shrink-0 items-center justify-center rounded border bg-card",
         containerClassName
       )}
     >
