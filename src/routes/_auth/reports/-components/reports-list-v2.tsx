@@ -133,31 +133,36 @@ export default function ReportsListV2(props: ReportsListV2Props) {
 
   return (
     <section className="mx-auto mb-4 mt-2 grid max-w-full gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1 md:mb-8">
-      <div className="flex items-center justify-start">
-        <Label htmlFor={selectId} className="sr-only">
-          Filter down the reports by their category
-        </Label>
-        <Select
-          value={currentCategory || internationalization.all}
-          onValueChange={onValueChange}
-        >
-          <SelectTrigger
-            id={selectId}
-            className="w-full truncate whitespace-nowrap bg-card sm:w-[220px]"
+      <div className="grid grid-cols-1 space-y-2 sm:grid-cols-2 sm:space-x-2 sm:space-y-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div>
+          <Label htmlFor={selectId} className="sr-only">
+            Filter down the reports by their category
+          </Label>
+          <Select
+            value={currentCategory || internationalization.all}
+            onValueChange={onValueChange}
           >
-            <SelectValue placeholder="Select a category" className="truncate" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Categories</SelectLabel>
-              {categories.map((category) => (
-                <SelectItem key={`category_${category}`} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+            <SelectTrigger
+              id={selectId}
+              className="w-full truncate whitespace-nowrap bg-card"
+            >
+              <SelectValue
+                placeholder="Select a category"
+                className="truncate"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Report categories</SelectLabel>
+                {categories.map((category) => (
+                  <SelectItem key={`category_${category}`} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <nav>
