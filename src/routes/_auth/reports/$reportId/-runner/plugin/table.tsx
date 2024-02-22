@@ -41,6 +41,14 @@ import type { ReportTablePlugin } from "@/lib/types/report";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Removes any spaces and special characters from the id
+ * @param id
+ */
+const parseCSSVarId = (id: string) => id.replace(/[^a-zA-Z0-9]/g, "_");
+
+const PENDING_UI_ROW_COUNT = 14;
+
 interface ReportTableProps<TData, TValue> {
   columnDefinitions: ColumnDef<TData, TValue>[];
   columnVisibility?: VisibilityState;
@@ -48,12 +56,6 @@ interface ReportTableProps<TData, TValue> {
   topRowPlugins?: ReportTablePlugin[];
   topRowPluginsAlignment?: "start" | "end";
 }
-
-/**
- * Removes any spaces and special characters from the id
- * @param id
- */
-const parseCSSVarId = (id: string) => id.replace(/[^a-zA-Z0-9]/g, "_");
 
 function ReportTableContent<TData, TValue>(
   props: ReportTableProps<TData, TValue>
@@ -67,7 +69,7 @@ function ReportTableContent<TData, TValue>(
     React.useState<VisibilityState>(props?.columnVisibility ?? {});
 
   const table = useReactTable({
-    data: props.rows,
+    data: isPending ? Array.from({ length: PENDING_UI_ROW_COUNT }) : props.rows,
     columns: props.columnDefinitions,
     state: {
       columnVisibility,
@@ -349,6 +351,7 @@ function ReportTableBody<TData, TValue>({
   virtualPaddingLeft: number | undefined;
   virtualPaddingRight: number | undefined;
 }) {
+  const { isPending } = useReportContext();
   const { rows } = table.getRowModel();
 
   const rowVirtualizer = useVirtualizer({
@@ -382,7 +385,10 @@ function ReportTableBody<TData, TValue>({
             data-index={virtualRow.index} //needed for dynamic row height measurement
             ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
             key={row.id}
-            className="absolute flex w-full"
+            className={cn(
+              "absolute flex w-full",
+              isPending ? "hover:bg-transparent" : ""
+            )}
             style={{
               transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
             }}
@@ -406,7 +412,16 @@ function ReportTableBody<TData, TValue>({
                     width: `calc(var(--col-${parseCSSVarId(cell.column.id)}-size) * 1px)`,
                   }}
                 >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {isPending ? (
+                    <Skeleton
+                      className="h-8"
+                      style={{
+                        width: `calc((var(--col-${parseCSSVarId(cell.column.id)}-size) * 1px) / ${virtualRow.index % 2 === 0 ? 2 : 2.7})`,
+                      }}
+                    />
+                  ) : (
+                    flexRender(cell.column.columnDef.cell, cell.getContext())
+                  )}
                 </TableCell>
               );
             })}
