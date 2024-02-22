@@ -336,6 +336,8 @@ function ReportTableContent<TData, TValue>(
   );
 }
 
+const ReportTable = React.memo(ReportTableContent) as typeof ReportTableContent;
+
 function ReportTableBody<TData, TValue>({
   table,
   tableContainerRef,
@@ -426,8 +428,4 @@ const MemoedReportTableBody = React.memo(
   (prev, next) => prev.table.options.data === next.table.options.data
 ) as typeof ReportTableBody;
 
-const ReportTableV2 = React.memo(
-  ReportTableContent
-) as typeof ReportTableContent;
-
-export { ReportTableV2 };
+export { ReportTable };

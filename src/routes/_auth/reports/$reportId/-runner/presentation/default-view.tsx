@@ -11,7 +11,7 @@ import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 
 import { ExportToCsv } from "@/routes/_auth/reports/$reportId/-runner/plugin/export-to-csv";
 import { GlobalFilter } from "@/routes/_auth/reports/$reportId/-runner/plugin/global-search";
-import { ReportTableV2 } from "@/routes/_auth/reports/$reportId/-runner/plugin/table-v2";
+import { ReportTable } from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
 import { ViewColumns } from "@/routes/_auth/reports/$reportId/-runner/plugin/view-columns";
 import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
@@ -192,7 +192,7 @@ const DefaultView = () => {
           }}
         />
       ) : (
-        <ReportTableV2
+        <ReportTable
           columnDefinitions={tableDefs.columns}
           columnVisibility={tableDefs.visibility}
           rows={sanitizedRows.rows}
