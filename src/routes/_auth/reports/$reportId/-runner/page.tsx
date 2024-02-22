@@ -86,6 +86,7 @@ export const ViewReport = () => {
               ),
               onClick: runReport,
             }}
+            styles={{ containerClassName: cn("h-[650px]") }}
           />
         </section>
       )}
@@ -97,6 +98,7 @@ export const ViewReport = () => {
               resultState?.error ??
               "Something went wrong, please try again later."
             }
+            styles={{ containerClassName: cn("h-[650px]") }}
           />
         </section>
       )}

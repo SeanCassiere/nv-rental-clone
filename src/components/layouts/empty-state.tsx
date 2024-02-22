@@ -11,6 +11,7 @@ export const EmptyState = ({
   icon: Icon,
   extraContent,
   buttonOptions,
+  styles,
 }: {
   title: string;
   subtitle: string;
@@ -22,11 +23,20 @@ export const EmptyState = ({
     variant?: ButtonProps["variant"];
     className?: ButtonProps["className"];
   };
+  styles?: {
+    containerClassName?: string;
+  };
 }) => {
+  const { containerClassName = "" } = styles || {};
   const RenderedIcon = Icon ?? icons.Alert;
 
   return (
-    <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed bg-card">
+    <div
+      className={cn(
+        "flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed bg-card",
+        containerClassName
+      )}
+    >
       <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
         <RenderedIcon className="h-10 w-10 text-muted-foreground" />
 

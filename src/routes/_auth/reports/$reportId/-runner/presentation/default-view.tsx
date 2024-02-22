@@ -17,6 +17,8 @@ import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-
 
 import type { ReportTablePlugin } from "@/lib/types/report";
 
+import { cn } from "@/lib/utils";
+
 type OutputField = TReportDetail["outputFields"][number];
 
 const KNOWN_REMOVAL_ACCESSORS = [
@@ -143,7 +145,7 @@ const DefaultView = () => {
     const columns: ColumnDef<TReportResult>[] = [];
     const visibility: VisibilityState = {};
 
-    sanitizedRows.outputFields.forEach((field, idx) => {
+    sanitizedRows.outputFields.forEach((field) => {
       // building the column definition
       const col: ColumnDef<TReportResult> = {
         id: field.name,
@@ -190,6 +192,7 @@ const DefaultView = () => {
             ),
             onClick: runReport,
           }}
+          styles={{ containerClassName: cn("h-[650px]") }}
         />
       ) : (
         <ReportTable
