@@ -19,8 +19,6 @@ function tenantReportFilterFn(report: TReportsListItem) {
   return !tenantReports.includes(report.reportId);
 }
 
-const allSearchCategory = "all";
-
 interface ReportsListV1Props {
   currentCategory: string;
   internationalization: {
@@ -56,7 +54,7 @@ export default function ReportsListV1(props: ReportsListV1Props) {
     {} as Record<string, TReportsListItem[]>
   );
 
-  const chips = [allSearchCategory, ...Object.keys(grouped)];
+  const chips = [i18_all, ...Object.keys(grouped)];
 
   return (
     <section className="mx-auto mt-4 flex max-w-full flex-col gap-5 px-2 pt-1.5 sm:mx-4 sm:px-1">
@@ -67,7 +65,7 @@ export default function ReportsListV1(props: ReportsListV1Props) {
             to: "/reports",
             search: (prev) => ({
               ...prev,
-              category: value === allSearchCategory ? undefined : value,
+              category: value === i18_all ? undefined : value,
             }),
           });
         }}
@@ -75,7 +73,7 @@ export default function ReportsListV1(props: ReportsListV1Props) {
         <TabsList className="mb-4 w-full sm:max-w-max">
           {chips.map((chip, idx) => (
             <TabsTrigger key={`tab-trigger-${idx}`} value={chip}>
-              {chip === allSearchCategory ? i18_all : chip}
+              {chip === i18_all ? i18_all : chip}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -84,7 +82,7 @@ export default function ReportsListV1(props: ReportsListV1Props) {
             <div className="mb-6 flex flex-col gap-5">
               {[...Object.entries(grouped)]
                 .filter(([category]) =>
-                  currentCategory !== allSearchCategory
+                  currentCategory !== i18_all
                     ? category.includes(currentCategory)
                     : true
                 )
