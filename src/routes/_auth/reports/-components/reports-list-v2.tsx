@@ -143,7 +143,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
         >
           <SelectTrigger
             id={selectId}
-            className="w-full truncate whitespace-nowrap sm:w-[220px]"
+            className="w-full truncate whitespace-nowrap bg-card sm:w-[220px]"
           >
             <SelectValue placeholder="Select a category" className="truncate" />
           </SelectTrigger>
@@ -180,7 +180,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
                   params={{ reportId: report.id }}
                   className={cn(
                     buttonVariants({ variant: "link" }),
-                    "flex grow justify-start text-balance px-0 py-2"
+                    "flex w-full grow justify-start text-balance px-0 py-2"
                   )}
                 >
                   {report.title}
