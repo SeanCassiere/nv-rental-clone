@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { EmptyState } from "@/components/layouts/empty-state";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -76,6 +77,8 @@ interface ReportsListV2Props {
 export default function ReportsListV2(props: ReportsListV2Props) {
   const { currentCategory, internationalization } = props;
 
+  const selectId = React.useId();
+
   const { t } = useTranslation();
   const navigate = useNavigate({ from: "/reports" });
 
@@ -131,11 +134,17 @@ export default function ReportsListV2(props: ReportsListV2Props) {
   return (
     <section className="mx-auto mb-4 mt-2 grid max-w-full gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1 md:mb-8">
       <div className="flex items-center justify-start">
+        <Label htmlFor={selectId} className="sr-only">
+          Filter down the reports by their category
+        </Label>
         <Select
           value={currentCategory || internationalization.all}
           onValueChange={onValueChange}
         >
-          <SelectTrigger className="w-full truncate whitespace-nowrap sm:w-[220px]">
+          <SelectTrigger
+            id={selectId}
+            className="w-full truncate whitespace-nowrap sm:w-[220px]"
+          >
             <SelectValue placeholder="Select a category" className="truncate" />
           </SelectTrigger>
           <SelectContent>
