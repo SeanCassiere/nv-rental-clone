@@ -53,9 +53,7 @@ interface ReportTableProps<TData, TValue> {
  * Removes any spaces and special characters from the id
  * @param id
  */
-function clean(id: string) {
-  return id.replace(/[^a-zA-Z0-9]/g, "");
-}
+const parseCSSVarId = (id: string) => id.replace(/[^a-zA-Z0-9]/g, "_");
 
 function ReportTableContent<TData, TValue>(
   props: ReportTableProps<TData, TValue>
@@ -106,8 +104,8 @@ function ReportTableContent<TData, TValue>(
     const colSizes: { [key: string]: number } = {};
     for (let i = 0; i < headers.length; i++) {
       const header = headers[i]!;
-      colSizes[`--header-${clean(header.id)}-size`] = header.getSize();
-      colSizes[`--col-${clean(header.column.id)}-size`] =
+      colSizes[`--header-${parseCSSVarId(header.id)}-size`] = header.getSize();
+      colSizes[`--col-${parseCSSVarId(header.column.id)}-size`] =
         header.column.getSize();
     }
     return colSizes;
@@ -217,7 +215,7 @@ function ReportTableContent<TData, TValue>(
                           : "border-transparent"
                       )}
                       style={{
-                        width: `calc(var(--header-${clean(header?.id)}-size) * 1px)`,
+                        width: `calc(var(--header-${parseCSSVarId(header?.id)}-size) * 1px)`,
                       }}
                     >
                       <div className="inline-flex w-full grow flex-col whitespace-nowrap">
@@ -405,7 +403,7 @@ function ReportTableBody<TData, TValue>({
                       : "border-transparent"
                   )}
                   style={{
-                    width: `calc(var(--col-${clean(cell.column.id)}-size) * 1px)`,
+                    width: `calc(var(--col-${parseCSSVarId(cell.column.id)}-size) * 1px)`,
                   }}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
