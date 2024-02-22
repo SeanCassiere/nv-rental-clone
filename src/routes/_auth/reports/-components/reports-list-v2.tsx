@@ -54,7 +54,15 @@ function transformReportsList(
 
 const routeApi = getRouteApi("/_auth/reports/");
 
-export default function ReportsListV2() {
+interface ReportsListV2Props {
+  currentCategory: string;
+  internationalization: {
+    all: string;
+  };
+}
+
+export default function ReportsListV2(props: ReportsListV2Props) {
+  const { currentCategory, internationalization } = props;
   const { t } = useTranslation();
 
   const { searchListOptions } = routeApi.useRouteContext();
@@ -68,16 +76,23 @@ export default function ReportsListV2() {
     () => reportsList.filter(tenantReportFilterFn),
     [reportsList]
   );
-  const reports = React.useMemo(
-    () => transformReportsList(tenantFiltered),
-    [tenantFiltered]
-  );
+  const reports = React.useMemo(() => {
+    const transformed = transformReportsList(tenantFiltered);
+
+    if (!currentCategory || currentCategory === internationalization.all) {
+      return transformed;
+    }
+
+    return transformed.filter((report) =>
+      report.categories.includes(currentCategory)
+    );
+  }, [currentCategory, internationalization.all, tenantFiltered]);
 
   return (
-    <section className="mx-auto my-4 max-w-full px-2 pt-1.5 sm:mx-4 sm:px-1">
+    <section className="mx-auto mb-4 mt-4 max-w-full px-2 pt-1.5 sm:mx-4 sm:px-1 md:mb-8">
       {/* <h4>Reports List V2</h4> */}
       <nav>
-        <ul className="-mx-px grid grid-cols-2 overflow-hidden rounded border-l border-t border-border sm:mx-0 md:grid-cols-2 xl:grid-cols-3">
+        <ul className="-mx-px grid grid-cols-2 overflow-hidden rounded border-l border-t border-border sm:mx-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {reports.length > 0 ? (
             reports.map((report, idx) => (
               <li

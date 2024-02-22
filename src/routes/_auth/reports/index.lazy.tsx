@@ -25,7 +25,7 @@ function ReportSearchPage() {
   // TODO: Replace with a value from the useTranslation() hook
   const ALL_KEY = "All";
 
-  const { category = "all" } = routeApi.useSearch();
+  const { category = ALL_KEY } = routeApi.useSearch();
 
   const [showNewLayout] = useLocalStorage(
     incompleteReportsListPageFeatureFlag.id,
@@ -51,7 +51,10 @@ function ReportSearchPage() {
       </section>
 
       {showNewLayout ? (
-        <ReportsListV2 />
+        <ReportsListV2
+          currentCategory={category}
+          internationalization={{ all: ALL_KEY }}
+        />
       ) : (
         <ReportsListV1
           currentCategory={category}
