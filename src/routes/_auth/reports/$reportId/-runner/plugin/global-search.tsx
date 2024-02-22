@@ -32,7 +32,7 @@ export const GlobalFilter: ReportTablePlugin = (props) => {
         placeholder="Filter..."
         value={input}
         onChange={(evt) => setInput(evt.target.value)}
-        className="h-8"
+        className="h-8 bg-card"
       />
     </div>
   );

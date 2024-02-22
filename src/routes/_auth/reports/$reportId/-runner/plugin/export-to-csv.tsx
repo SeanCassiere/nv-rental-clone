@@ -111,7 +111,7 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
         <Button
           variant="outline"
           size="sm"
-          className="flex h-8 w-full sm:w-fit"
+          className="flex h-8 w-full bg-card sm:w-fit"
         >
           <icons.Sheet className="mr-2 h-4 w-4" />
           Export to CSV
