@@ -47,7 +47,7 @@ function ReportSearchPage() {
         <p className={cn("text-base text-foreground/80")}>
           Select and run a report from the list available to you.
         </p>
-        <Separator className="mt-3.5" />
+        {!showNewLayout ? <Separator className="mt-3.5" /> : null}
       </section>
 
       {showNewLayout ? (
