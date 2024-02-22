@@ -23,7 +23,7 @@ export const ReportFilters = () => {
   const lookup = useReportLookupLists(report);
 
   return (
-    <Card className="mt-4 border-none shadow-none">
+    <Card className="mt-4 rounded border shadow-none">
       <CardTitle className="sr-only">Report filters</CardTitle>
       <CardContent className="px-2 py-2">
         <ul
