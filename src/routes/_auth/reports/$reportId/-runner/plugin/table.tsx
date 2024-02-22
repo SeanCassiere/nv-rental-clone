@@ -211,7 +211,7 @@ function ReportTableContent<TData, TValue>(
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "relative flex h-auto justify-between whitespace-nowrap border-x py-2",
+                        "relative flex h-auto justify-between whitespace-nowrap border-x-2 py-2",
                         header.column.getIsResizing()
                           ? "border-border"
                           : "border-transparent"
@@ -403,7 +403,7 @@ function ReportTableBody<TData, TValue>({
                 <TableCell
                   key={cell.id}
                   className={cn(
-                    "flex w-full truncate whitespace-nowrap border-x",
+                    "flex w-full truncate whitespace-nowrap border-x-2",
                     cell.column.getIsResizing()
                       ? "border-border"
                       : "border-transparent"
