@@ -53,10 +53,19 @@ const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
   input_type: "switch",
   default_value: false,
 } as const;
+const incompleteReportsListPageFeatureFlag: SwitchFeatureFlag = {
+  id: "incomplete_reports.list.page",
+  name: "Incomplete reports list page",
+  description:
+    "Toggle this feature to enable the incomplete reports list page, which will display the new layout for the reports list page.",
+  input_type: "switch",
+  default_value: false,
+} as const;
 // Features END
 
 const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
+  incompleteReportsListPageFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 ] as const;
@@ -64,6 +73,7 @@ const featureFlags: FeatureFlags = [
 export {
   featureFlags, // the array of all the feature flags
   dashboardLayoutFeatureFlag,
+  incompleteReportsListPageFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 };
