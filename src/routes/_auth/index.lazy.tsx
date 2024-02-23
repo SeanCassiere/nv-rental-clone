@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   createLazyFileRoute,
@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
+import DefaultDashboardContent from "@/components/dashboard/default-content";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -26,27 +27,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
-import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { fetchLocationsListOptions } from "@/lib/query/location";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { titleMaker } from "@/lib/utils/title-maker";
 
-import { dashboardLayoutFeatureFlag } from "@/lib/config/features";
-
 import type { apiClient } from "@/lib/api";
 import { cn } from "@/lib/utils";
-
-const DefaultDashboardContent = lazy(
-  () => import("@/components/dashboard/default-content")
-);
-const V2DashboardContent = lazy(
-  () => import("@/components/dashboard/v2-content")
-);
 
 const routeApi = getRouteApi("/_auth/");
 
@@ -60,9 +50,11 @@ function DashboardPage() {
 
   const authParams = getAuthFromAuthHook(auth);
 
-  const [currentLocationIds, setCurrentLocationIds] = useState<string[]>([]);
+  const [currentLocationIds, setCurrentLocationIds] = React.useState<string[]>(
+    []
+  );
 
-  const setLocations = useCallback((ids: string[]) => {
+  const setLocations = React.useCallback((ids: string[]) => {
     setCurrentLocationIds(ids);
   }, []);
 
@@ -78,12 +70,7 @@ function DashboardPage() {
   const locations =
     locationsList.data?.status === 200 ? locationsList.data.body : [];
 
-  const [dashboardVersion] = useLocalStorage(
-    dashboardLayoutFeatureFlag.id,
-    dashboardLayoutFeatureFlag.default_value
-  );
-
-  const handleSetShowWidgetPickerModal = useCallback(
+  const handleSetShowWidgetPickerModal = React.useCallback(
     (show: boolean) => {
       navigate({
         search: () => ({ ...(show ? { "show-widget-picker": show } : {}) }),
@@ -133,36 +120,13 @@ function DashboardPage() {
         </p>
         <Separator className="mt-3.5" />
       </section>
-      <Suspense
-        fallback={
-          <div className="mx-auto mb-4 mt-2.5 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mb-2 sm:px-4 sm:pb-4">
-            <Skeleton className="min-h-[400px] w-full" />
-          </div>
-        }
-      >
-        {dashboardVersion === "v1" && (
-          <DefaultDashboardContent
-            locations={currentLocationIds}
-            showWidgetsPicker={showWidgetPickerModal}
-            onShowWidgetPicker={handleSetShowWidgetPickerModal}
-            auth={authParams}
-          />
-        )}
-      </Suspense>
-      <Suspense
-        fallback={
-          <div className="mx-auto mb-4 mt-2.5 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mb-2 sm:px-4 sm:pb-4">
-            <Skeleton className="min-h-[400px] w-full" />
-          </div>
-        }
-      >
-        {dashboardVersion === "v2" && (
-          <V2DashboardContent
-            locations={currentLocationIds}
-            auth={authParams}
-          />
-        )}
-      </Suspense>
+
+      <DefaultDashboardContent
+        locations={currentLocationIds}
+        showWidgetsPicker={showWidgetPickerModal}
+        onShowWidgetPicker={handleSetShowWidgetPickerModal}
+        auth={authParams}
+      />
     </>
   );
 }
