@@ -11,7 +11,7 @@ export const Route = createLazyRoute("/_auth/reports/")({
   component: ReportSearchPage,
 });
 
-const ReportsList = React.lazy(() => import("./-components/reports-list-v2"));
+const ReportsList = React.lazy(() => import("./-components/reports-list"));
 
 const routeApi = getRouteApi("/_auth/reports/");
 
