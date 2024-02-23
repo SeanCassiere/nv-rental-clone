@@ -28,14 +28,6 @@ export type FeatureFlag =
 export type FeatureFlags<TFlag = FeatureFlag> = TFlag[];
 
 // Features START
-const dashboardNewFleetStatusWidgetFeatureFlag: SwitchFeatureFlag = {
-  id: "experimental_dashboard.new_fleet_status_widget",
-  name: "New fleet status widget",
-  description:
-    "Toggle this feature to enable the new fleet status widget, which will display an alternate view of your fleet's status.",
-  input_type: "switch",
-  default_value: false,
-} as const;
 const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   id: "incomplete_all.settings.navigation",
   name: "Incomplete settings navigation",
@@ -55,14 +47,12 @@ const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
 // Features END
 
 const featureFlags: FeatureFlags = [
-  dashboardNewFleetStatusWidgetFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 ] as const;
 
 export {
   featureFlags, // the array of all the feature flags
-  dashboardNewFleetStatusWidgetFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 };

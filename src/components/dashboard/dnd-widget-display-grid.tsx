@@ -20,19 +20,14 @@ import { useAuth } from "react-oidc-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
-
 import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
-import { dashboardNewFleetStatusWidgetFeatureFlag } from "@/lib/config/features";
-
 import { cn } from "@/lib/utils";
 
-const VehicleStatusV1Widget = lazy(() => import("./widgets/vehicle-status"));
-const VehicleStatusV2Widget = lazy(() => import("./widgets/vehicle-status-v2"));
+const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
 const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));
 const QuickCheckinAgreementWidget = lazy(
   () => import("./widgets/quick-checkin-agreement")
@@ -182,19 +177,11 @@ function RenderWidgetView({
   auth,
   widget,
 }: { locations: string[]; widget: DashboardWidgetItemParsed } & Auth) {
-  const [showNewVehicleStatusWidget] = useLocalStorage(
-    dashboardNewFleetStatusWidgetFeatureFlag.id,
-    dashboardNewFleetStatusWidgetFeatureFlag.default_value
-  );
   const widgetId = widget.widgetID;
 
   switch (widgetId) {
     case "VehicleStatus":
-      return showNewVehicleStatusWidget ? (
-        <VehicleStatusV2Widget locations={locations} auth={auth} />
-      ) : (
-        <VehicleStatusV1Widget locations={locations} auth={auth} />
-      );
+      return <VehicleStatusWidget locations={locations} auth={auth} />;
     case "SalesStatus":
       return <SalesStatusWidget locations={locations} auth={auth} />;
     case "QuickCheckin":
