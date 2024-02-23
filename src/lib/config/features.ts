@@ -37,6 +37,14 @@ const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
   default_value: "v1",
   options: ["v1", "v2"],
 } as const;
+const dashboardNewFleetStatusWidgetFeatureFlag: SwitchFeatureFlag = {
+  id: "experimental_dashboard.new_fleet_status_widget",
+  name: "New fleet status widget",
+  description:
+    "Toggle this feature to enable the new fleet status widget, which will display an alternate view of your fleet's status.",
+  input_type: "switch",
+  default_value: false,
+} as const;
 const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   id: "incomplete_all.settings.navigation",
   name: "Incomplete settings navigation",
@@ -57,6 +65,7 @@ const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
 
 const featureFlags: FeatureFlags = [
   dashboardLayoutFeatureFlag,
+  dashboardNewFleetStatusWidgetFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 ] as const;
@@ -64,6 +73,7 @@ const featureFlags: FeatureFlags = [
 export {
   featureFlags, // the array of all the feature flags
   dashboardLayoutFeatureFlag,
+  dashboardNewFleetStatusWidgetFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 };
