@@ -28,15 +28,6 @@ export type FeatureFlag =
 export type FeatureFlags<TFlag = FeatureFlag> = TFlag[];
 
 // Features START
-const dashboardLayoutFeatureFlag: DropdownFeatureFlag = {
-  id: "experimental_dashboard.layout",
-  name: "Dashboard layout",
-  description:
-    "Toggle this feature to dynamically change the structure and arrangement of the dashboard, enhancing the overall user experience and making relevant information more accessible.",
-  input_type: "dropdown",
-  default_value: "v1",
-  options: ["v1", "v2"],
-} as const;
 const incompleteSettingsNavigationFeatureFlag: SwitchFeatureFlag = {
   id: "incomplete_all.settings.navigation",
   name: "Incomplete settings navigation",
@@ -56,14 +47,12 @@ const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
 // Features END
 
 const featureFlags: FeatureFlags = [
-  dashboardLayoutFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 ] as const;
 
 export {
   featureFlags, // the array of all the feature flags
-  dashboardLayoutFeatureFlag,
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
 };

@@ -58,3 +58,17 @@ export const IsMacLike: boolean = window.navigator.userAgent.match(
 )
   ? true
   : false;
+
+/**
+ * Calculates the percentage of a candidate number relative to a maximum number.
+ *
+ * @param {number} candidateNumber - The number for which to calculate the percentage.
+ * @param {number} maxNumber - The maximum number (representing 100%).
+ * @returns {number} The calculated percentage.
+ */
+export function calculatePercentage(
+  candidateNumber: number,
+  maxNumber: number
+): number {
+  return (candidateNumber / maxNumber) * 100;
+}

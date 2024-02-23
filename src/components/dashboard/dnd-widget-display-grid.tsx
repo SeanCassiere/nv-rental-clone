@@ -172,11 +172,13 @@ export function sortWidgetsByUserPositionFn(
   return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
 }
 
-function renderWidgetView(
-  widget: DashboardWidgetItemParsed,
-  { locations, auth }: { locations: string[] } & Auth
-) {
+function RenderWidgetView({
+  locations,
+  auth,
+  widget,
+}: { locations: string[]; widget: DashboardWidgetItemParsed } & Auth) {
   const widgetId = widget.widgetID;
+
   switch (widgetId) {
     case "VehicleStatus":
       return <VehicleStatusWidget locations={locations} auth={auth} />;
@@ -256,15 +258,25 @@ function WidgetSizingContainer({
         {...attributes}
       >
         <Suspense fallback={<WidgetSkeleton />}>
-          {renderWidgetView(widget, { locations: currentLocations, auth })}
+          {
+            <RenderWidgetView
+              widget={widget}
+              locations={currentLocations}
+              auth={auth}
+            />
+          }
         </Suspense>
       </Card>
     </li>
   );
 }
 
-export function WidgetSkeleton() {
-  return <Skeleton className="h-full min-h-[250px] w-full rounded-sm" />;
+export function WidgetSkeleton({ className }: { className?: string }) {
+  return (
+    <Skeleton
+      className={cn("h-full min-h-[250px] w-full rounded-md", className)}
+    />
+  );
 }
 
 export default DashboardDndWidgetGrid;
