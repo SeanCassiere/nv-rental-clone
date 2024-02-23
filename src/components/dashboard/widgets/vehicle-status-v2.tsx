@@ -2,6 +2,7 @@ import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
+import { WidgetSkeleton } from "@/components/dashboard/dnd-widget-display-grid";
 import { EmptyState } from "@/components/layouts/empty-state";
 import { buttonVariants } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,45 +16,13 @@ import {
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
+import { fetchDashboardVehicleStatusCountsOptions } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 import { fetchVehiclesStatusesOptions } from "@/lib/query/vehicle";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { cn } from "@/lib/utils";
-
-const data: { name: string; total: number }[] = [
-  {
-    total: 20,
-    name: "Accident",
-  },
-  {
-    total: 41,
-    name: "Available",
-  },
-  // {
-  //   total: 1,
-  //   name: "ForSale",
-  // },
-  // {
-  //   total: 4,
-  //   name: "Grounded",
-  // },
-  // {
-  //   total: 1,
-  //   name: "InService",
-  // },
-  // {
-  //   total: 2,
-  //   name: "OnRent",
-  // },
-  // {
-  //   total: 1,
-  //   name: "Sold",
-  // },
-];
-
-// const data: { name: string; total: number }[] = [];
 
 interface VehicleStatusWidgetProps extends Auth {
   locations: string[];
@@ -75,6 +44,22 @@ export default function VehicleStatusWidget(props: VehicleStatusWidgetProps) {
 export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
   const vehicleTypeId = "0";
 
+  const statusCounts = useQuery(
+    fetchDashboardVehicleStatusCountsOptions({
+      auth: props.auth,
+      filters: {
+        vehicleTypeId,
+        locationIds: props.locations,
+        clientDate: new Date(),
+      },
+    })
+  );
+
+  const data = React.useMemo(
+    () => (statusCounts.data?.status === 200 ? statusCounts.data?.body : []),
+    [statusCounts.data?.status, statusCounts.data?.body]
+  );
+
   const vehicleStatuses = useQuery(
     fetchVehiclesStatusesOptions({ auth: props.auth })
   );
@@ -91,7 +76,7 @@ export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
         if (a.total > b.total) return -1;
         return 0;
       }),
-    []
+    [data]
   );
 
   const totalVehicles = React.useMemo(
@@ -105,20 +90,24 @@ export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
   );
   const defaultRowCount = parseInt(rowCountStr, 10);
 
+  if (statusCounts.status === "pending") {
+    return <WidgetSkeleton className="h-[260px]" />;
+  }
+
   if (totalVehicles <= 0) {
     return (
       <EmptyState
         title="No vehicles"
         subtitle="You've got no vehicles in your fleet"
         styles={{
-          containerClassName: cn("h-auto pt-4 sm:h-[270px] sm:pt-0"),
+          containerClassName: cn("h-auto pt-4 sm:h-[260px] sm:pt-0"),
         }}
       />
     );
   }
 
   return (
-    <ScrollArea className="h-[300px] sm:h-[270px]">
+    <ScrollArea className="h-[300px] sm:h-[260px]">
       <div className="grid grid-cols-3 items-center">
         {data.map((item, idx) => (
           <React.Fragment key={`status_widget_${item.name}_${idx}`}>

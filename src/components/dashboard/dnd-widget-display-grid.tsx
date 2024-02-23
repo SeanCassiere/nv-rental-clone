@@ -284,8 +284,12 @@ function WidgetSizingContainer({
   );
 }
 
-export function WidgetSkeleton() {
-  return <Skeleton className="h-full min-h-[250px] w-full rounded-sm" />;
+export function WidgetSkeleton({ className }: { className?: string }) {
+  return (
+    <Skeleton
+      className={cn("h-full min-h-[250px] w-full rounded-md", className)}
+    />
+  );
 }
 
 export default DashboardDndWidgetGrid;
