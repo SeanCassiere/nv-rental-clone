@@ -137,7 +137,8 @@ export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
                 </TooltipTrigger>
                 <TooltipContent align="start">
                   <p>
-                    View the {item.total} fleet that are in {item.name} status.
+                    View the {item.total} fleet that's{" "}
+                    {(item.name || "").toLowerCase()}.
                   </p>
                 </TooltipContent>
               </Tooltip>
