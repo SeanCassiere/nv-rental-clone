@@ -179,7 +179,7 @@ function ReportTableContent<TData, TValue>(
       )}
       <div
         ref={tableContainerRef}
-        className="relative h-[600px] overflow-auto rounded border bg-card"
+        className="relative h-[600px] overflow-auto rounded-md border bg-card"
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
         <table

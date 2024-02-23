@@ -195,7 +195,7 @@ const WidgetOption = ({
     >
       <div
         className={cn(
-          "my-0.5 flex items-center justify-between rounded border px-4 py-2 transition-all",
+          "my-0.5 flex items-center justify-between rounded-md border px-4 py-2 transition-all",
           isDragging ? "bg-primary/10" : "bg-background"
         )}
       >

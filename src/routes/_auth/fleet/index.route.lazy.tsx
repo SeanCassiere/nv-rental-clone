@@ -374,11 +374,11 @@ function VehicleSearchPage() {
           <div className="flex items-center justify-end">
             <TableListColumnVisibilityDropdown />
           </div>
-          <div className="mt-2.5 overflow-hidden rounded border bg-card">
+          <div className="mt-2.5 overflow-hidden rounded-md border bg-card">
             <TableListContent />
           </div>
           <Pagination className="mt-2.5">
-            <PaginationContent className="rounded border bg-card px-1 py-0.5 md:px-2 md:py-1">
+            <PaginationContent className="rounded-md border bg-card px-1 py-0.5 md:px-2 md:py-1">
               <TableListPaginationPrevious>
                 {(state) => (
                   <PaginationLinkPrevious
