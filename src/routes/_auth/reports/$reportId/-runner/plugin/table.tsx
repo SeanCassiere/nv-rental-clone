@@ -48,6 +48,7 @@ import { cn } from "@/lib/utils";
 const parseCSSVarId = (id: string) => id.replace(/[^a-zA-Z0-9]/g, "_");
 
 const PENDING_UI_ROW_COUNT = 14;
+const PENDING_ROWS = Array.from({ length: PENDING_UI_ROW_COUNT });
 
 interface ReportTableProps<TData, TValue> {
   columnDefinitions: ColumnDef<TData, TValue>[];
@@ -69,7 +70,7 @@ function ReportTableContent<TData, TValue>(
     React.useState<VisibilityState>(props?.columnVisibility ?? {});
 
   const table = useReactTable({
-    data: isPending ? Array.from({ length: PENDING_UI_ROW_COUNT }) : props.rows,
+    data: isPending ? (PENDING_ROWS as TData[]) : props.rows,
     columns: props.columnDefinitions,
     state: {
       columnVisibility,
