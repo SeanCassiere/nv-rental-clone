@@ -88,7 +88,10 @@ function TableListToolbar({
         handleSearch: onSearchWithFilters,
       }}
     >
-      <div className={cn("rounded border bg-card p-2", className)} {...props}>
+      <div
+        className={cn("rounded-md border bg-card p-2", className)}
+        {...props}
+      >
         {children}
       </div>
     </tableListToolbarContext.Provider>
