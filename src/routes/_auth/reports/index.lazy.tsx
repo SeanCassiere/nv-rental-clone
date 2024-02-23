@@ -16,8 +16,7 @@ export const Route = createLazyRoute("/_auth/reports/")({
   component: ReportSearchPage,
 });
 
-const ReportsListV1 = React.lazy(() => import("./-components/reports-list-v1"));
-const ReportsListV2 = React.lazy(() => import("./-components/reports-list-v2"));
+const ReportsList = React.lazy(() => import("./-components/reports-list-v2"));
 
 const routeApi = getRouteApi("/_auth/reports/");
 
@@ -50,17 +49,10 @@ function ReportSearchPage() {
         {!showNewLayout ? <Separator className="mt-3.5" /> : null}
       </section>
 
-      {showNewLayout ? (
-        <ReportsListV2
-          currentCategory={category}
-          internationalization={{ all: ALL_KEY }}
-        />
-      ) : (
-        <ReportsListV1
-          currentCategory={category}
-          internationalization={{ all: ALL_KEY }}
-        />
-      )}
+      <ReportsList
+        currentCategory={category}
+        internationalization={{ all: ALL_KEY }}
+      />
     </>
   );
 }
