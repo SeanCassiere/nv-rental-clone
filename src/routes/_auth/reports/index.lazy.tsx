@@ -1,14 +1,9 @@
 import React from "react";
 import { createLazyRoute, getRouteApi } from "@tanstack/react-router";
 
-import { Separator } from "@/components/ui/separator";
-
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
-import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { titleMaker } from "@/lib/utils/title-maker";
-
-import { incompleteReportsListPageFeatureFlag } from "@/lib/config/features";
 
 import { cn } from "@/lib/utils";
 
@@ -16,8 +11,7 @@ export const Route = createLazyRoute("/_auth/reports/")({
   component: ReportSearchPage,
 });
 
-const ReportsListV1 = React.lazy(() => import("./-components/reports-list-v1"));
-const ReportsListV2 = React.lazy(() => import("./-components/reports-list-v2"));
+const ReportsList = React.lazy(() => import("./-components/reports-list"));
 
 const routeApi = getRouteApi("/_auth/reports/");
 
@@ -26,11 +20,6 @@ function ReportSearchPage() {
   const ALL_KEY = "All";
 
   const { category = ALL_KEY } = routeApi.useSearch();
-
-  const [showNewLayout] = useLocalStorage(
-    incompleteReportsListPageFeatureFlag.id,
-    incompleteReportsListPageFeatureFlag.default_value
-  );
 
   useDocumentTitle(titleMaker("Reports"));
 
@@ -47,20 +36,12 @@ function ReportSearchPage() {
         <p className={cn("text-base text-foreground/80")}>
           Select and run a report from the list available to you.
         </p>
-        {!showNewLayout ? <Separator className="mt-3.5" /> : null}
       </section>
 
-      {showNewLayout ? (
-        <ReportsListV2
-          currentCategory={category}
-          internationalization={{ all: ALL_KEY }}
-        />
-      ) : (
-        <ReportsListV1
-          currentCategory={category}
-          internationalization={{ all: ALL_KEY }}
-        />
-      )}
+      <ReportsList
+        currentCategory={category}
+        internationalization={{ all: ALL_KEY }}
+      />
     </>
   );
 }
