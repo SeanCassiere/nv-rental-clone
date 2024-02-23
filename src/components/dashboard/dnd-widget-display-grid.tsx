@@ -20,14 +20,19 @@ import { useAuth } from "react-oidc-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+
 import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 
+import { dashboardNewFleetStatusWidgetFeatureFlag } from "@/lib/config/features";
+
 import { cn } from "@/lib/utils";
 
-const VehicleStatusWidget = lazy(() => import("./widgets/vehicle-status"));
+const VehicleStatusV1Widget = lazy(() => import("./widgets/vehicle-status"));
+const VehicleStatusV2Widget = lazy(() => import("./widgets/vehicle-status-v2"));
 const SalesStatusWidget = lazy(() => import("./widgets/sales-status"));
 const QuickCheckinAgreementWidget = lazy(
   () => import("./widgets/quick-checkin-agreement")
@@ -172,14 +177,24 @@ export function sortWidgetsByUserPositionFn(
   return widgetA.widgetUserPosition - widgetB.widgetUserPosition;
 }
 
-function renderWidgetView(
-  widget: DashboardWidgetItemParsed,
-  { locations, auth }: { locations: string[] } & Auth
-) {
+function RenderWidgetView({
+  locations,
+  auth,
+  widget,
+}: { locations: string[]; widget: DashboardWidgetItemParsed } & Auth) {
+  const [showNewVehicleStatusWidget] = useLocalStorage(
+    dashboardNewFleetStatusWidgetFeatureFlag.id,
+    dashboardNewFleetStatusWidgetFeatureFlag.default_value
+  );
   const widgetId = widget.widgetID;
+
   switch (widgetId) {
     case "VehicleStatus":
-      return <VehicleStatusWidget locations={locations} auth={auth} />;
+      return showNewVehicleStatusWidget ? (
+        <VehicleStatusV2Widget locations={locations} auth={auth} />
+      ) : (
+        <VehicleStatusV1Widget locations={locations} auth={auth} />
+      );
     case "SalesStatus":
       return <SalesStatusWidget locations={locations} auth={auth} />;
     case "QuickCheckin":
@@ -256,7 +271,13 @@ function WidgetSizingContainer({
         {...attributes}
       >
         <Suspense fallback={<WidgetSkeleton />}>
-          {renderWidgetView(widget, { locations: currentLocations, auth })}
+          {
+            <RenderWidgetView
+              widget={widget}
+              locations={currentLocations}
+              auth={auth}
+            />
+          }
         </Suspense>
       </Card>
     </li>
