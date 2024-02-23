@@ -22,7 +22,7 @@ import { fetchVehiclesStatusesOptions } from "@/lib/query/vehicle";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
-import { cn } from "@/lib/utils";
+import { calculatePercentage, cn } from "@/lib/utils";
 
 interface VehicleStatusWidgetProps extends Auth {
   locations: string[];
@@ -137,8 +137,7 @@ export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
                 </TooltipTrigger>
                 <TooltipContent align="start">
                   <p>
-                    View details of the {item.total} fleet in {item.name}{" "}
-                    status.
+                    View the {item.total} fleet that are in {item.name} status.
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -150,8 +149,8 @@ export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
                 </TooltipTrigger>
                 <TooltipContent align="start">
                   <p>
-                    {item.total} out of your fleet of {totalVehicles} are{" "}
-                    {item.name}
+                    {calculatePercentage(item.total, totalVehicles).toFixed(1)}%
+                    of your fleet is in the {item.name} status.
                   </p>
                 </TooltipContent>
               </Tooltip>
