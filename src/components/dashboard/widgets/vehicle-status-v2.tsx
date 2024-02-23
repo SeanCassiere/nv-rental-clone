@@ -138,7 +138,11 @@ export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
                 <TooltipContent align="start">
                   <p>
                     View the {item.total} fleet that's{" "}
-                    {(item.name || "").toLowerCase()}.
+                    {(item.name || "")
+                      .replace(/([A-Z])/g, " $1")
+                      .trim()
+                      .toLowerCase()}
+                    .
                   </p>
                 </TooltipContent>
               </Tooltip>
