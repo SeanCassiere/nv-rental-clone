@@ -24,6 +24,10 @@ import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { calculatePercentage, cn } from "@/lib/utils";
 
+function vehicleStatusToReadable(status: string) {
+  return status.replace(/([A-Z])/g, " $1").trim();
+}
+
 interface VehicleStatusWidgetProps extends Auth {
   locations: string[];
 }
@@ -132,17 +136,13 @@ export function VehicleStatusWidgetContent(props: VehicleStatusWidgetProps) {
                       },
                     })}
                   >
-                    {item.name}
+                    {vehicleStatusToReadable(item.name || "")}
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent align="start">
                   <p>
-                    View the {item.total} fleet that's{" "}
-                    {(item.name || "")
-                      .replace(/([A-Z])/g, " $1")
-                      .trim()
-                      .toLowerCase()}
-                    .
+                    View the {item.total} fleet in status:{" "}
+                    {vehicleStatusToReadable(item.name || "").toLowerCase()}
                   </p>
                 </TooltipContent>
               </Tooltip>
