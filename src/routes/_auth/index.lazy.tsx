@@ -332,7 +332,6 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
   const canViewTomorrowTab = tomorrowTabScreenSetting?.isVisible || false;
   const canViewRentalSummary = usePermission("VIEW_RENTAL_SUMMARY?");
 
-  const [isWidgetsLocked, setIsWidgetsLocked] = React.useState(true);
   const [statisticsTab, setStatisticsTab] = React.useState("today");
 
   const currentDate = new Date();
@@ -417,22 +416,8 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
           </TabsContent>
         </Tabs>
       )}
-      <div className="mb-2 mt-3.5 flex space-x-2">
-        <Button
-          size="sm"
-          variant={isWidgetsLocked ? "outline" : "secondary"}
-          onClick={() => setIsWidgetsLocked((prev) => !prev)}
-        >
-          {isWidgetsLocked ? (
-            <icons.Lock className="h-5 w-5 sm:h-4 sm:w-4" />
-          ) : (
-            <icons.Unlock className="h-5 w-5 sm:h-4 sm:w-4" />
-          )}
-          <span className="sr-only">
-            {isWidgetsLocked ? "Locked widgets" : "Unlocked widgets"}
-          </span>
-        </Button>
 
+      <div className="mb-2 mt-3.5 flex space-x-2">
         <Dialog open={showWidgetsPicker} onOpenChange={onShowWidgetPicker}>
           <DialogTrigger asChild>
             <Button
@@ -480,7 +465,6 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
           widgets={widgets}
           selectedLocationIds={locations}
           onWidgetSortingEnd={handleWidgetSortingEnd}
-          isLocked={isWidgetsLocked}
           auth={props.auth}
         />
       )}

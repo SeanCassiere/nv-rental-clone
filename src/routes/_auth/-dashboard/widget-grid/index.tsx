@@ -28,7 +28,6 @@ interface WidgetGridProps extends Auth {
   widgets: DashboardWidgetItemParsed[];
   selectedLocationIds: string[];
   onWidgetSortingEnd: (widgets: DashboardWidgetItemParsed[]) => void;
-  isLocked: boolean;
 }
 
 export default function WidgetGrid(props: WidgetGridProps) {
