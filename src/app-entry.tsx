@@ -8,7 +8,6 @@ import { I18nextProvider, useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
-import { notFoundRoute } from "@/components/not-found";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 import { icons } from "@/components/ui/icons";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,7 +27,6 @@ import { routeTree } from "@/route-tree.gen";
 
 export const router = createRouter({
   routeTree,
-  notFoundRoute,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   parseSearch: parseSearchFn,
