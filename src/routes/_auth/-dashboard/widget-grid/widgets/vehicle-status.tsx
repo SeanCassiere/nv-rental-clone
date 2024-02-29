@@ -86,7 +86,7 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
   return (
     <React.Fragment>
       <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
-        <span className="font-medium">Fleet Status</span>
+        <span className="font-medium">Fleet status</span>
         <Button
           type="button"
           variant="ghost"

@@ -29,7 +29,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
   return (
     <React.Fragment>
       <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
-        <span className="font-medium">Sales Status</span>
+        <span className="font-medium">Sales status</span>
         <Button
           type="button"
           variant="ghost"
