@@ -7,6 +7,7 @@ import { IS_DEV } from "@/lib/utils/constants";
 import type { queryClient } from "@/lib/config/tanstack-query";
 
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
+import { PageNotFound } from "./-components/page-not-found";
 
 export interface MyRouterContext {
   queryClient: typeof queryClient;
@@ -15,6 +16,7 @@ export interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
+  notFoundComponent: () => <PageNotFound />,
 });
 
 const RouterDevTools = IS_DEV
