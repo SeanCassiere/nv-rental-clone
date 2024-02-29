@@ -20,10 +20,6 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  reorderBasedOnWidgetIdPositions,
-  sortWidgetsByUserPositionFn,
-} from "@/components/dashboard/dnd-widget-display-grid";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { icons } from "@/components/ui/icons";
@@ -31,6 +27,11 @@ import { icons } from "@/components/ui/icons";
 import { type DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import { fetchDashboardWidgetsOptions } from "@/lib/query/dashboard";
 import type { Auth } from "@/lib/query/helpers";
+
+import {
+  complexWidgetOrderByNewPositionList,
+  widgetSortByUserPosition,
+} from "@/lib/utils/dashboard";
 
 import { cn } from "@/lib/utils";
 
@@ -65,7 +66,7 @@ const WidgetPickerContent = (props: WidgetPickerContentProps) => {
         if (local.length === 0) {
           return (
             widgetsQuery.data?.status === 200 ? widgetsQuery.data.body : []
-          ).sort(sortWidgetsByUserPositionFn);
+          ).sort(widgetSortByUserPosition);
         }
         return local;
       });
@@ -111,7 +112,7 @@ const WidgetPickerContent = (props: WidgetPickerContentProps) => {
       widgetIdsList.indexOf(String(overId))
     );
 
-    const reorderedWidgetsList = reorderBasedOnWidgetIdPositions({
+    const reorderedWidgetsList = complexWidgetOrderByNewPositionList({
       widgets: currentWidgets,
       orderedWidgetIds: newWidgetIdOrder,
     }); // return using sortByUserPositionFn;
