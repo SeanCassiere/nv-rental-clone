@@ -119,7 +119,7 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
                         to="/fleet"
                         className={cn(
                           buttonVariants({ variant: "link", size: "sm" }),
-                          "w-full justify-start truncate p-0"
+                          "h-4 w-full justify-start truncate p-0"
                         )}
                         search={() => ({
                           page: 1,
