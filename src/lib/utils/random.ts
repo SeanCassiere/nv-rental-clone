@@ -72,3 +72,19 @@ export function calculatePercentage(
 ): number {
   return (candidateNumber / maxNumber) * 100;
 }
+
+/**
+ * Compare two arrays to see if they are the same
+ * @param arr1
+ * @param arr2
+ * @returns boolean
+ */
+export function compareStringArrays<TData = string | number>(
+  arr1: TData[],
+  arr2: TData[]
+): boolean {
+  return (
+    arr1.every((item) => arr2.includes(item)) &&
+    arr2.every((item) => arr1.includes(item))
+  );
+}

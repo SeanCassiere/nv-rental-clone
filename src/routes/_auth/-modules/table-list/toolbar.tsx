@@ -25,7 +25,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
 
-import { cn } from "@/lib/utils";
+import { cn, compareStringArrays } from "@/lib/utils";
 
 import { useTableList } from "./context";
 
@@ -102,10 +102,12 @@ TableListToolbar.displayName = "TableListToolbar";
 function TableListToolbarFilters() {
   const { filterItems } = useTableListToolbar();
 
+  const publicFilters = filterItems.filter((item) => item.type !== "hidden");
+
   return (
     <React.Fragment>
-      {filterItems.length &&
-        filterItems.map((column) => (
+      {publicFilters.length &&
+        publicFilters.map((column) => (
           <ToolbarFilter
             key={`tableList_faceted_filter_${column.id}`}
             data={column}
@@ -121,11 +123,73 @@ function TableListToolbarActions({
   children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const { handleSearch, handleReset } = useTableListToolbar();
+  const { handleSearch, handleReset, filterItems } = useTableListToolbar();
   const { table } = useTableList();
 
-  const tableColumnFilters = table.getState().columnFilters;
-  const isFiltered = tableColumnFilters.length > 0;
+  const tableFilters = React.useMemo(
+    () => table.getState().columnFilters,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getState().columnFilters]
+  );
+
+  const isFiltered = React.useMemo(() => {
+    let isDirty = false;
+
+    tableFilters.forEach((filter) => {
+      const schema = filterItems.find((item) => item.id === filter.id);
+
+      if (!schema) {
+        if (typeof filter.value !== "undefined") {
+          console.warn(
+            `TableListToolbarActions.isFiltered ~ filter schema not found for "${filter.id}" and value`,
+            filter.value
+          );
+          isDirty = true;
+        }
+        return;
+      }
+
+      switch (schema.type) {
+        case "select":
+          const selectDefault = schema.defaultValue;
+          if (filter.value !== selectDefault) {
+            isDirty = true;
+          }
+          break;
+        case "multi-select":
+          const multiSelectDefault = schema.defaultValue;
+          if (Array.isArray(filter.value)) {
+            const isBothArraysEqual = compareStringArrays(
+              filter.value,
+              multiSelectDefault || []
+            );
+            if (!isBothArraysEqual) {
+              isDirty = true;
+            }
+          }
+          break;
+        case "date":
+          if (filter.value) {
+            isDirty = true;
+          }
+          break;
+        case "text":
+          if (filter.value) {
+            isDirty = true;
+          }
+          break;
+        case "hidden":
+          if (filter.value) {
+            isDirty = true;
+          }
+          break;
+        default:
+          break;
+      }
+    });
+
+    return isDirty;
+  }, [filterItems, tableFilters]);
 
   return (
     <div className={cn(className)} {...props}>
@@ -166,6 +230,12 @@ export type TableListToolbarFilterItem = {
   id: string;
   title: string;
 } & (
+  | {
+      type: "hidden";
+      options?: never;
+      defaultValue?: string | undefined;
+      size?: never;
+    }
   | {
       type: "text";
       options?: never;
@@ -217,18 +287,24 @@ function ToolbarFilter({
 
   const handleSaveValue = (
     updateValue: string | string[] | Date | undefined,
-    handleType?: "date"
+    handleType: "date" | "date-time" | "array" | "text" = "text"
   ) => {
     table.setColumnFilters((prev) => {
       const newFiltersList = prev.filter((item) => item.id !== id);
 
-      if (handleType === "date" && updateValue instanceof Date) {
-        newFiltersList.push({
-          id,
-          value: localDateToQueryYearMonthDay(updateValue),
-        });
-      } else {
-        newFiltersList.push({ id, value: updateValue });
+      switch (handleType) {
+        case "date":
+          newFiltersList.push({
+            id,
+            value:
+              updateValue instanceof Date
+                ? localDateToQueryYearMonthDay(updateValue)
+                : undefined,
+          });
+          break;
+        default:
+          newFiltersList.push({ id, value: updateValue });
+          break;
       }
 
       return newFiltersList;
