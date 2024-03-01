@@ -261,6 +261,11 @@ function VehicleSearchPage() {
   const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
     () => [
       {
+        id: "VehicleId",
+        title: "Vehicle ID",
+        type: "hidden",
+      },
+      {
         id: "VehicleStatus",
         title: "Status",
         type: "select",
@@ -311,6 +316,16 @@ function VehicleSearchPage() {
           { value: "false", label: "No" },
         ],
         defaultValue: "true",
+      },
+      {
+        id: "SortDirection",
+        title: "Sort direction",
+        type: "select",
+        options: [
+          { value: "ASC", label: "Asc" },
+          { value: "DESC", label: "Desc" },
+        ],
+        defaultValue: "DESC",
       },
     ],
     [locations, vehicleStatuses, vehicleTypes]
