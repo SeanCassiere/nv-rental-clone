@@ -4,14 +4,13 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { useReportLookupLists } from "@/lib/hooks/useReportLookupLists";
-
 import {
   DateReportFilter,
-  DropDownReportFilter,
-  ListBoxReportFilter,
+  MultiSelectDropdownReportFilter,
+  SelectDropdownReportFilter,
   TextBoxReportFilter,
 } from "@/routes/_auth/reports/$reportId/-runner/page-filter";
+import { useReportLookupLists } from "@/routes/_auth/reports/$reportId/-runner/useReportLookupLists";
 import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 export const ReportFilters = () => {
@@ -52,7 +51,7 @@ export const ReportFilters = () => {
 
           if (filter.fieldType === "CheckBox") {
             Comp = (
-              <DropDownReportFilter
+              <SelectDropdownReportFilter
                 accessor={accessor}
                 displayName={displayName}
                 options={[
@@ -65,7 +64,7 @@ export const ReportFilters = () => {
 
           if (filter.fieldType === "ListBox") {
             Comp = (
-              <ListBoxReportFilter
+              <MultiSelectDropdownReportFilter
                 accessor={accessor}
                 displayName={displayName}
                 options={lookup.getList(filter.name)}
@@ -75,7 +74,7 @@ export const ReportFilters = () => {
 
           if (filter.fieldType === "DropDown") {
             Comp = (
-              <DropDownReportFilter
+              <SelectDropdownReportFilter
                 accessor={accessor}
                 displayName={displayName}
                 options={lookup.getList(filter.name)}

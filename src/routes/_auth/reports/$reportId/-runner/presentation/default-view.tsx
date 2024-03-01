@@ -5,14 +5,13 @@ import { useTranslation } from "react-i18next";
 import { EmptyState } from "@/components/layouts/empty-state";
 import { icons } from "@/components/ui/icons";
 
-import { useReportValueFormatter } from "@/lib/hooks/useReportValueFormatter";
-
 import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 
 import { ExportToCsv } from "@/routes/_auth/reports/$reportId/-runner/plugin/export-to-csv";
 import { GlobalFilter } from "@/routes/_auth/reports/$reportId/-runner/plugin/global-search";
 import { ReportTable } from "@/routes/_auth/reports/$reportId/-runner/plugin/table";
 import { ViewColumns } from "@/routes/_auth/reports/$reportId/-runner/plugin/view-columns";
+import { useReportValueFormatter } from "@/routes/_auth/reports/$reportId/-runner/useReportValueFormatter";
 import { useReportContext } from "@/routes/_auth/reports/$reportId/-runner/view-report-context";
 
 import type { ReportTablePlugin } from "@/lib/types/report";
@@ -27,6 +26,8 @@ const KNOWN_REMOVAL_ACCESSORS = [
   "Totals",
   "TotalsName",
 ];
+
+const CHART_WIDTH = 10;
 
 const DefaultView = () => {
   const { t } = useTranslation();
@@ -56,10 +57,10 @@ const DefaultView = () => {
       const totalsPresent =
         (typeof row?.Totals !== "undefined" && row?.Totals !== null) ||
         (typeof row?.TotalsName !== "undefined" && row?.TotalsName !== null);
-      return amountsPresent && totalsPresent;
+      return amountsPresent || totalsPresent;
     });
 
-    // should not contain the above summary items
+    // reconstruct the row object so that it does not contain the keys for the above summary items
     const normalRows = data
       .filter((row) => !filteredSummaryItems.includes(row))
       .map(
@@ -104,13 +105,14 @@ const DefaultView = () => {
     const outputFields = [...report.outputFields, ...additionalAccessors]
       .map((accessor) => {
         // calculate starting, min, and max sizing for the columns
-        const rowValues = normalRows
-          .map((row) => String(row[accessor.name]))
-          .map((item) => item.length);
-        const cellSize = Math.max(...rowValues) * 10;
-        const headerSize = Math.max(120, accessor.displayName.length * 10 + 25);
+        const rowValues = normalRows.map(
+          (row) => String(row[accessor.name]).length
+        );
 
-        const size = cellSize < headerSize ? headerSize : cellSize;
+        const cellSize = Math.max(...rowValues) * 10;
+        const headerSize = Math.max(120, accessor.displayName.length * 10);
+
+        const size = (cellSize < headerSize ? headerSize : cellSize) + 25;
 
         return {
           ...accessor,
@@ -175,7 +177,7 @@ const DefaultView = () => {
 
   return (
     <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
-      {sanitizedRows.rows.length === 0 ? (
+      {state.status === "success" && sanitizedRows.rows.length === 0 ? (
         <EmptyState
           title={t("display.noResultsFound", { ns: "labels" })}
           subtitle={t("noResultsWereFoundForThisSearch", { ns: "messages" })}

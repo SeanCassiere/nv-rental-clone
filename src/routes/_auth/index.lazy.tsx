@@ -172,136 +172,134 @@ function LocationPicker({
   const isAllSelectedEmpty = isEmpty || selected.length === locations.length;
 
   return (
-    <div className="inline-flex items-center">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-8 whitespace-nowrap border"
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          size="sm"
+          variant="outline"
+          className="h-8 whitespace-nowrap border"
+        >
+          <icons.PlusCircle className="mr-2 h-3 w-3" />
+          Locations
+          <Separator orientation="vertical" className="mx-2 h-4" />
+          <Badge
+            variant="secondary"
+            className="rounded-sm px-1 font-normal lg:hidden"
           >
-            <icons.PlusCircle className="mr-2 h-3 w-3" />
-            Locations
-            <Separator orientation="vertical" className="mx-2 h-4" />
-            <Badge
-              variant="secondary"
-              className="rounded-sm px-1 font-normal lg:hidden"
-            >
-              {selected.length === 0 ? "All" : selected.length}
-            </Badge>
-            <div className="hidden space-x-1 lg:flex">
-              {selected.length > 2 ? (
-                <>
-                  <Badge
-                    variant="secondary"
-                    className="rounded-sm px-1 font-normal"
-                  >
-                    {selected.length} selected
-                  </Badge>
-                </>
-              ) : selected.length === 0 ? (
+            {selected.length === 0 ? "All" : selected.length}
+          </Badge>
+          <div className="hidden space-x-1 lg:flex">
+            {selected.length > 2 ? (
+              <>
                 <Badge
                   variant="secondary"
                   className="rounded-sm px-1 font-normal"
                 >
-                  All
+                  {selected.length} selected
                 </Badge>
-              ) : (
-                <>
-                  {selected.map((item, idx) => (
-                    <Badge
-                      key={`location_${item}_${idx}`}
-                      variant="secondary"
-                      className="rounded-sm px-1 font-normal"
-                    >
-                      {
-                        locations.find((i) => `${i.locationId}` === item)
-                          ?.locationName
-                      }
-                    </Badge>
-                  ))}
-                </>
-              )}
-            </div>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0" align="end">
-          <Command>
-            <CommandInput className="h-8" placeholder="Search locations..." />
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup>
-                <CommandItem
-                  onSelect={() => {
-                    onSelect([]);
-                  }}
-                >
-                  <div
-                    className={cn(
-                      "mr-2 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
-                      isAllSelectedEmpty
-                        ? "bg-primary text-primary-foreground"
-                        : "opacity-50 [&_svg]:invisible"
-                    )}
+              </>
+            ) : selected.length === 0 ? (
+              <Badge
+                variant="secondary"
+                className="rounded-sm px-1 font-normal"
+              >
+                All
+              </Badge>
+            ) : (
+              <>
+                {selected.map((item, idx) => (
+                  <Badge
+                    key={`location_${item}_${idx}`}
+                    variant="secondary"
+                    className="rounded-sm px-1 font-normal"
                   >
-                    <icons.Check className={cn("h-4 w-4")} />
-                  </div>
-                  <span>All</span>
-                </CommandItem>
-                {locations.map((location, idx) => {
-                  const isSelected = selected.includes(
-                    `${location.locationId}`
-                  );
-                  return (
-                    <CommandItem
-                      key={`cmd_item_${location.locationId}_${idx}`}
-                      onSelect={() => {
-                        if (isSelected) {
-                          onSelect(
-                            selected.filter(
-                              (item) => item !== `${location.locationId}`
-                            )
-                          );
-                        } else {
-                          onSelect([...selected, `${location.locationId}`]);
-                        }
-                      }}
+                    {
+                      locations.find((i) => `${i.locationId}` === item)
+                        ?.locationName
+                    }
+                  </Badge>
+                ))}
+              </>
+            )}
+          </div>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0" align="end">
+        <Command>
+          <CommandInput placeholder="Search locations..." />
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup>
+              <CommandItem
+                className="text-base"
+                onSelect={() => {
+                  onSelect([]);
+                }}
+              >
+                <div
+                  className={cn(
+                    "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                    isAllSelectedEmpty
+                      ? "bg-primary text-primary-foreground"
+                      : "opacity-50 [&_svg]:invisible"
+                  )}
+                >
+                  <icons.Check className={cn("h-4 w-4")} />
+                </div>
+                <span>All</span>
+              </CommandItem>
+              {locations.map((location, idx) => {
+                const isSelected = selected.includes(`${location.locationId}`);
+                return (
+                  <CommandItem
+                    key={`cmd_item_${location.locationId}_${idx}`}
+                    className="text-base"
+                    onSelect={() => {
+                      if (isSelected) {
+                        onSelect(
+                          selected.filter(
+                            (item) => item !== `${location.locationId}`
+                          )
+                        );
+                      } else {
+                        onSelect([...selected, `${location.locationId}`]);
+                      }
+                    }}
+                  >
+                    <div
+                      className={cn(
+                        "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                        isSelected
+                          ? "bg-primary text-primary-foreground"
+                          : "opacity-50 [&_svg]:invisible"
+                      )}
                     >
-                      <div
-                        className={cn(
-                          "mr-2 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
-                          isSelected
-                            ? "bg-primary text-primary-foreground"
-                            : "opacity-50 [&_svg]:invisible"
-                        )}
-                      >
-                        <icons.Check className={cn("h-4 w-4")} />
-                      </div>
-                      <span>{location.locationName}</span>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-              {!isEmpty && (
-                <>
-                  <CommandSeparator />
-                  <CommandGroup>
-                    <CommandItem
-                      onSelect={() => {
-                        onSelect([]);
-                      }}
-                      className="justify-center"
-                    >
-                      Clear
-                    </CommandItem>
-                  </CommandGroup>
-                </>
-              )}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+                      <icons.Check className={cn("h-4 w-4")} />
+                    </div>
+                    <span>{location.locationName}</span>
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+            {!isEmpty && (
+              <>
+                <CommandSeparator />
+                <CommandGroup>
+                  <CommandItem
+                    onSelect={() => {
+                      onSelect([]);
+                    }}
+                    className="justify-center"
+                  >
+                    Clear
+                  </CommandItem>
+                </CommandGroup>
+              </>
+            )}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
 

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
 import type { TReportDetail } from "@/lib/schemas/report";
@@ -11,6 +12,7 @@ import {
 } from "@/lib/query/vehicle";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { insertSpacesBeforeCaps } from "@/lib/utils/random";
 
 import type { ReportFilterOption } from "@/lib/types/report";
 
@@ -21,6 +23,7 @@ function confirmRequirement(criteria: CriteriaList, lookup: string) {
 }
 
 export function useReportLookupLists(report: TReportDetail) {
+  const { t } = useTranslation();
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
@@ -56,7 +59,7 @@ export function useReportLookupLists(report: TReportDetail) {
   const agreementStatusOptions: ReportFilterOption[] =
     agreementStatusesList.map((status) => ({
       value: `${status.id}`,
-      display: `${status.name}`,
+      display: insertSpacesBeforeCaps(`${status.name}`),
     }));
   // END - lookup for agreement statuses
 
@@ -75,7 +78,7 @@ export function useReportLookupLists(report: TReportDetail) {
   const reservationStatusOptions: ReportFilterOption[] =
     reservationStatusesList.map((status) => ({
       value: `${status.id}`,
-      display: `${status.name}`,
+      display: insertSpacesBeforeCaps(`${status.name}`),
     }));
   // END - lookup for reservation statuses
 
@@ -114,7 +117,7 @@ export function useReportLookupLists(report: TReportDetail) {
   const vehicleStatusOptions: ReportFilterOption[] = vehicleStatusesList.map(
     (status) => ({
       value: `${status.id}`,
-      display: `${status.name}`,
+      display: insertSpacesBeforeCaps(`${status.name}`),
     })
   );
   // END - lookup for vehicle statuses
@@ -128,6 +131,10 @@ export function useReportLookupLists(report: TReportDetail) {
 
   // dynamically get list of options
   const getList = (name: string): ReportFilterOption[] => {
+    const AllKey = t("display.all", { ns: "labels" });
+
+    // if the report has a default value, then add it to the list
+    // currently that value is being set as "0"
     const defaultValue = report.searchCriteria.find(
       (c) => c.name === name
     )?.defaultValue;
@@ -135,32 +142,32 @@ export function useReportLookupLists(report: TReportDetail) {
     switch (name.toLowerCase().trim()) {
       case "locationid":
         if (defaultValue === "0") {
-          return [{ value: "0", display: "All" }, ...locationOptions];
+          return [{ value: "0", display: AllKey }, ...locationOptions];
         }
         return locationOptions;
       case "vehicleactivestatus":
         if (defaultValue === "0") {
-          return [{ value: "0", display: "All" }, ...activeInactiveOptions];
+          return [{ value: "0", display: AllKey }, ...activeInactiveOptions];
         }
         return activeInactiveOptions;
       case "vehiclestatus":
         if (defaultValue === "0") {
-          return [{ value: "0", display: "All" }, ...vehicleStatusOptions];
+          return [{ value: "0", display: AllKey }, ...vehicleStatusOptions];
         }
         return vehicleStatusOptions;
       case "reservationstatus":
         if (defaultValue === "0") {
-          return [{ value: "0", display: "All" }, ...reservationStatusOptions];
+          return [{ value: "0", display: AllKey }, ...reservationStatusOptions];
         }
         return reservationStatusOptions;
       case "agreementstatus":
         if (defaultValue === "0") {
-          return [{ value: "0", display: "All" }, ...agreementStatusOptions];
+          return [{ value: "0", display: AllKey }, ...agreementStatusOptions];
         }
         return agreementStatusOptions;
       case "vehicletypeid":
         if (defaultValue === "0") {
-          return [{ value: "0", display: "All" }, ...vehicleTypeOptions];
+          return [{ value: "0", display: AllKey }, ...vehicleTypeOptions];
         }
         return vehicleTypeOptions;
       default:

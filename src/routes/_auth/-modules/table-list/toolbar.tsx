@@ -272,9 +272,9 @@ function ToolbarFilter({
   isLargeSearchFullWidth = false,
 }: TableListToolbarFilterOption) {
   const { table } = useTableList();
-  const clearFilterText = "Clear filter";
-
   const { t } = useTranslation();
+
+  const clearText = t("buttons.clear", { ns: "labels" });
 
   const baseState = table
     .getState()
@@ -431,7 +431,7 @@ function ToolbarFilter({
         >
           {type === "select" && (
             <Command>
-              <CommandInput className="h-8" placeholder={title} />
+              <CommandInput placeholder={title} />
               <CommandList>
                 <CommandEmpty>No results found</CommandEmpty>
                 <CommandGroup>
@@ -440,13 +440,14 @@ function ToolbarFilter({
                     return (
                       <CommandItem
                         key={`table_list_col-${id}-select-${index}`}
+                        className="text-base"
                         onSelect={() => {
                           handleSaveValue(option.value);
                         }}
                       >
                         <div
                           className={cn(
-                            "mr-2 flex h-3 w-3 items-center justify-center rounded-full border border-primary/70",
+                            "mr-3 flex h-3 w-3 items-center justify-center rounded-full border border-primary/70",
                             isSelected
                               ? "bg-primary text-primary-foreground"
                               : "opacity-50 [&_svg]:invisible"
@@ -463,15 +464,11 @@ function ToolbarFilter({
                 <CommandGroup>
                   <CommandItem
                     onSelect={() => {
-                      if (defaultValue) {
-                        handleSaveValue(defaultValue);
-                      } else {
-                        handleSaveValue(undefined);
-                      }
+                      handleSaveValue(defaultValue || undefined);
                     }}
                     className="justify-center"
                   >
-                    {clearFilterText}
+                    {clearText}
                   </CommandItem>
                 </CommandGroup>
               </CommandList>
@@ -479,7 +476,7 @@ function ToolbarFilter({
           )}
           {type === "multi-select" && (
             <Command>
-              <CommandInput className="h-8" placeholder={title} />
+              <CommandInput placeholder={title} />
               <CommandList>
                 <CommandEmpty>No results found</CommandEmpty>
                 <CommandGroup>
@@ -488,6 +485,7 @@ function ToolbarFilter({
                     return (
                       <CommandItem
                         key={`table_list_col-${id}-multi-select-${index}`}
+                        className="text-base"
                         onSelect={() => {
                           if (isSelected) {
                             handleSaveValue(
@@ -500,7 +498,7 @@ function ToolbarFilter({
                       >
                         <div
                           className={cn(
-                            "mr-2 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                            "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
                             isSelected
                               ? "bg-primary text-primary-foreground"
                               : "opacity-50 [&_svg]:invisible"
@@ -517,15 +515,11 @@ function ToolbarFilter({
                 <CommandGroup>
                   <CommandItem
                     onSelect={() => {
-                      if (defaultValue) {
-                        handleSaveValue(defaultValue);
-                      } else {
-                        handleSaveValue([]);
-                      }
+                      handleSaveValue(defaultValue || []);
                     }}
                     className="justify-center"
                   >
-                    {clearFilterText}
+                    {clearText}
                   </CommandItem>
                 </CommandGroup>
               </CommandList>

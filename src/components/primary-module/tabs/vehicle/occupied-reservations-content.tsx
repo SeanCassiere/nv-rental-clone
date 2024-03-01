@@ -11,8 +11,10 @@ import { DataTableColumnHeader } from "@/components/ui/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
-import { fetchAgreementsSearchColumnsOptions } from "@/lib/query/agreement";
-import { fetchReservationsSearchListOptions } from "@/lib/query/reservation";
+import {
+  fetchReservationsSearchColumnsOptions,
+  fetchReservationsSearchListOptions,
+} from "@/lib/query/reservation";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import {
@@ -55,7 +57,7 @@ const VehicleOccupiedReservationsTab = (
   });
 
   const columnsData = useSuspenseQuery(
-    fetchAgreementsSearchColumnsOptions({ auth: authParams })
+    fetchReservationsSearchColumnsOptions({ auth: authParams })
   );
   const dataList = useQuery(
     fetchReservationsSearchListOptions({
@@ -98,7 +100,7 @@ const VehicleOccupiedReservationsTab = (
                     to="/reservations/$reservationId"
                     params={{ reservationId: String(reservationId) }}
                     search={() => ({ tab: "summary" })}
-                    className="font-semibold text-slate-800"
+                    className="font-semibold"
                   >
                     {value as any}
                   </Link>

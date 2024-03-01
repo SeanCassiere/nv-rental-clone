@@ -25,6 +25,7 @@ interface ReportContextProps {
 const reportContext = React.createContext<ReportContextProps | null>(null);
 
 type DataState =
+  | { error: null; status: "fetching"; rows: null }
   | { error: null; status: "idle"; rows: null }
   | { error: string; status: "error"; rows: null }
   | { error: null; status: "success"; rows: TReportResult[] };
@@ -58,8 +59,9 @@ export function ReportContextProvider(
       (s.name ?? "").toLowerCase() !== "customerid"
   );
 
-  const initialSearchCriteria = makeInitialSearchCriteria(
-    props.report.searchCriteria
+  const initialSearchCriteria = React.useMemo(
+    () => makeInitialSearchCriteria(props.report.searchCriteria),
+    [props.report.searchCriteria]
   );
 
   const [searchCriteria, setSearchCriteria] = React.useState(

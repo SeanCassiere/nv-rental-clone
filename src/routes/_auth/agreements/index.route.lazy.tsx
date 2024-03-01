@@ -55,9 +55,10 @@ import {
   AgreementDateTimeColumns,
   sortColOrderByOrderIndex,
 } from "@/lib/utils/columns";
+import { getXPaginationFromHeaders } from "@/lib/utils/headers";
+import { insertSpacesBeforeCaps } from "@/lib/utils/random";
+import { cn } from "@/lib/utils/styles";
 import { titleMaker } from "@/lib/utils/title-maker";
-
-import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 export const Route = createLazyFileRoute("/_auth/agreements/")({
   component: AgreementsSearchPage,
@@ -171,7 +172,11 @@ function AgreementsSearchPage() {
                 }
 
                 if (column.columnHeader === "AgreementStatusName") {
-                  return <Badge variant="outline">{String(value)}</Badge>;
+                  return (
+                    <Badge variant="outline">
+                      {insertSpacesBeforeCaps(String(value))}
+                    </Badge>
+                  );
                 }
 
                 if (
@@ -316,7 +321,7 @@ function AgreementsSearchPage() {
         type: "multi-select",
         options: agreementStatuses.map((item) => ({
           value: `${item.id}`,
-          label: item.name,
+          label: insertSpacesBeforeCaps(item.name),
         })),
         defaultValue: [],
       },

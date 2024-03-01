@@ -33,6 +33,9 @@ interface ReportFilterProps {
   displayName: string;
 }
 
+/**
+ * Used for selecting a single date
+ */
 export function DateReportFilter(props: ReportFilterProps) {
   const { t } = useTranslation();
   const { searchCriteria, initialSearchCriteria, setCriteriaValue } =
@@ -110,6 +113,9 @@ export function DateReportFilter(props: ReportFilterProps) {
   );
 }
 
+/**
+ * Used for entering a single line of text
+ */
 export function TextBoxReportFilter(props: ReportFilterProps) {
   const { searchCriteria, setCriteriaValue } = useReportContext();
 
@@ -175,7 +181,10 @@ export function TextBoxReportFilter(props: ReportFilterProps) {
   );
 }
 
-export function DropDownReportFilter(
+/**
+ * Used for selecting multiple options from a list
+ */
+export function SelectDropdownReportFilter(
   props: ReportFilterProps & { options: ReportFilterOption[] }
 ) {
   const { searchCriteria, initialSearchCriteria, setCriteriaValue } =
@@ -223,7 +232,7 @@ export function DropDownReportFilter(
         </PopoverTrigger>
         <PopoverContent className={cn("p-0", "max-w-[250px]")} align="start">
           <Command>
-            <CommandInput className="h-8" placeholder={props.displayName} />
+            <CommandInput placeholder={props.displayName} />
             <CommandList>
               <CommandEmpty>No results found</CommandEmpty>
               <CommandGroup>
@@ -232,13 +241,14 @@ export function DropDownReportFilter(
                   return (
                     <CommandItem
                       key={`report_filter_${props.accessor}-select-${index}`}
+                      className="text-base"
                       onSelect={() => {
                         setCriteriaValue(props.accessor, option.value);
                       }}
                     >
                       <div
                         className={cn(
-                          "mr-2 flex h-3 w-3 items-center justify-center rounded-full border border-primary/70",
+                          "mr-3 flex h-3 w-3 items-center justify-center rounded-full border border-primary/70",
                           isSelected
                             ? "bg-primary text-primary-foreground"
                             : "opacity-50 [&_svg]:invisible"
@@ -271,7 +281,10 @@ export function DropDownReportFilter(
   );
 }
 
-export function ListBoxReportFilter(
+/**
+ * Used for selecting a single option from a list
+ */
+export function MultiSelectDropdownReportFilter(
   props: ReportFilterProps & { options: ReportFilterOption[] }
 ) {
   const { searchCriteria, initialSearchCriteria, setCriteriaValue } =
@@ -339,7 +352,7 @@ export function ListBoxReportFilter(
         </PopoverTrigger>
         <PopoverContent className={cn("p-0", "max-w-[250px]")} align="start">
           <Command>
-            <CommandInput className="h-8" placeholder={props.displayName} />
+            <CommandInput placeholder={props.displayName} />
             <CommandList>
               <CommandEmpty>No results found</CommandEmpty>
               <CommandGroup>
@@ -348,6 +361,7 @@ export function ListBoxReportFilter(
                   return (
                     <CommandItem
                       key={`report_filter_${props.accessor}-multi-select-${index}`}
+                      className="text-base"
                       onSelect={() => {
                         if (isSelected) {
                           setCriteriaValue(
@@ -366,7 +380,7 @@ export function ListBoxReportFilter(
                     >
                       <div
                         className={cn(
-                          "mr-2 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                          "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
                           isSelected
                             ? "bg-primary text-primary-foreground"
                             : "opacity-50 [&_svg]:invisible"

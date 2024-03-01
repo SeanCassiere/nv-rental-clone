@@ -88,3 +88,16 @@ export function compareStringArrays<TData = string | number>(
     arr2.every((item) => arr1.includes(item))
   );
 }
+
+/**
+ * Inserts a space before each capital letter in a string.
+ * @param {string} str - The string to be transformed.
+ * @returns {string} The transformed string.
+ * @example
+ * ```
+ * insertSpacesBeforeCaps("helloWorld"); // "hello World"
+ * ```
+ */
+export function insertSpacesBeforeCaps(str: string): string {
+  return str.replace(/([A-Z])/g, " $1").trim();
+}

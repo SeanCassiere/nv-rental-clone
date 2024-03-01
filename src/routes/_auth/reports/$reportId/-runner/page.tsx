@@ -102,7 +102,7 @@ export const ViewReport = () => {
           />
         </section>
       )}
-      {resultState.status === "success" && <PresentationView />}
+      {resultState.status === "success" ? <PresentationView /> : null}
     </>
   );
 };

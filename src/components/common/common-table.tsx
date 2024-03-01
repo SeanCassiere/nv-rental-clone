@@ -87,7 +87,6 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
         props.stickyHeader ? "mr-2 max-h-[650px]" : ""
       )}
     >
-      {/* <div className="overflow-x-auto"> */}
       <Table className="table-auto overflow-x-auto bg-card">
         <TableHeader
           className={cn(props.stickyHeader ? "sticky top-0 z-10" : "")}
@@ -95,7 +94,12 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} scope="col" colSpan={header.colSpan}>
+                <TableHead
+                  key={header.id}
+                  scope="col"
+                  className="text-base"
+                  colSpan={header.colSpan}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -107,7 +111,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="divide-y divide-slate-200">
+        <TableBody className="text-base">
           {table.getRowModel()?.rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
@@ -136,7 +140,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
           )}
         </TableBody>
       </Table>
-      {/* </div> */}
+
       {hasPagination && (
         <>
           <div className="flex flex-1 justify-between px-2 py-2.5 sm:hidden">

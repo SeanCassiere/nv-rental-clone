@@ -1,5 +1,6 @@
 {
   "display": {
+    "all": "All",
     "name": "Name",
     "firstName": "First name",
     "lastName": "Last name",
@@ -57,6 +58,7 @@
     "checkin": "Checkin",
     "lookup": "Lookup",
     "resetFilters": "Reset filters",
-    "run": "Run"
+    "run": "Run",
+    "clear": "Clear"
   }
 }

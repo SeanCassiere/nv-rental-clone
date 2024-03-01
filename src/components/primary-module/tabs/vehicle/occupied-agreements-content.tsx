@@ -102,7 +102,7 @@ const VehicleOccupiedAgreementsTab = (
                     to="/agreements/$agreementId"
                     params={{ agreementId: String(agreementId) }}
                     search={() => ({ tab: "summary" })}
-                    className="font-semibold text-slate-800"
+                    className="font-semibold"
                   >
                     {value as any}
                   </Link>

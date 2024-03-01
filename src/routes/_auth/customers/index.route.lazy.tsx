@@ -45,9 +45,10 @@ import {
 } from "@/routes/_auth/-modules/table-list";
 
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
+import { getXPaginationFromHeaders } from "@/lib/utils/headers";
+import { insertSpacesBeforeCaps } from "@/lib/utils/random";
+import { cn } from "@/lib/utils/styles";
 import { titleMaker } from "@/lib/utils/title-maker";
-
-import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 export const Route = createLazyFileRoute("/_auth/customers/")({
   component: CustomerSearchPage,
@@ -265,7 +266,7 @@ function CustomerSearchPage() {
         type: "multi-select",
         options: customerTypes.map((item) => ({
           value: `${item.typeName}`,
-          label: item.typeName,
+          label: insertSpacesBeforeCaps(item.typeName),
         })),
         defaultValue: [],
       },

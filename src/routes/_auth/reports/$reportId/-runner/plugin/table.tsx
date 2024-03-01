@@ -404,7 +404,7 @@ function ReportTableBody<TData, TValue>({
                 <TableCell
                   key={cell.id}
                   className={cn(
-                    "flex w-full truncate whitespace-nowrap border-x-2",
+                    "flex w-full whitespace-nowrap border-x-2",
                     cell.column.getIsResizing()
                       ? "border-border"
                       : "border-transparent"
@@ -415,13 +415,18 @@ function ReportTableBody<TData, TValue>({
                 >
                   {isPending ? (
                     <Skeleton
-                      className="h-8"
+                      className="h-6"
                       style={{
                         width: `calc((var(--col-${parseCSSVarId(cell.column.id)}-size) * 1px) / ${virtualRow.index % 2 === 0 ? 2 : 2.7})`,
                       }}
                     />
                   ) : (
-                    flexRender(cell.column.columnDef.cell, cell.getContext())
+                    <span className="w-full truncate tabular-nums">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </span>
                   )}
                 </TableCell>
               );

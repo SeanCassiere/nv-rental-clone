@@ -49,9 +49,10 @@ import {
 } from "@/routes/_auth/-modules/table-list";
 
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
+import { getXPaginationFromHeaders } from "@/lib/utils/headers";
+import { insertSpacesBeforeCaps } from "@/lib/utils/random";
+import { cn } from "@/lib/utils/styles";
 import { titleMaker } from "@/lib/utils/title-maker";
-
-import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 export const Route = createLazyFileRoute("/_auth/fleet/")({
   component: VehicleSearchPage,
@@ -152,7 +153,11 @@ function VehicleSearchPage() {
                   );
                 }
                 if (column.columnHeader === "VehicleStatus") {
-                  return <Badge variant="outline">{value}</Badge>;
+                  return (
+                    <Badge variant="outline">
+                      {insertSpacesBeforeCaps(String(value))}
+                    </Badge>
+                  );
                 }
 
                 return value ?? "-";
@@ -271,7 +276,7 @@ function VehicleSearchPage() {
         type: "select",
         options: vehicleStatuses.map((item) => ({
           value: `${item.id}`,
-          label: item.name,
+          label: insertSpacesBeforeCaps(item.name),
         })),
       },
       {

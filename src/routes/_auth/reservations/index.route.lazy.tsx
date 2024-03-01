@@ -55,9 +55,10 @@ import {
   ReservationDateTimeColumns,
   sortColOrderByOrderIndex,
 } from "@/lib/utils/columns";
+import { getXPaginationFromHeaders } from "@/lib/utils/headers";
+import { insertSpacesBeforeCaps } from "@/lib/utils/random";
+import { cn } from "@/lib/utils/styles";
 import { titleMaker } from "@/lib/utils/title-maker";
-
-import { cn, getXPaginationFromHeaders } from "@/lib/utils";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -168,7 +169,11 @@ function ReservationsSearchPage() {
                   );
                 }
                 if (column.columnHeader === "ReservationStatusName") {
-                  return <Badge variant="outline">{value}</Badge>;
+                  return (
+                    <Badge variant="outline">
+                      {insertSpacesBeforeCaps(String(value))}
+                    </Badge>
+                  );
                 }
 
                 if (
@@ -309,7 +314,7 @@ function ReservationsSearchPage() {
         type: "multi-select",
         options: reservationStatuses.map((item) => ({
           value: `${item.id}`,
-          label: item.name,
+          label: insertSpacesBeforeCaps(item.name),
         })),
         defaultValue: [],
       },

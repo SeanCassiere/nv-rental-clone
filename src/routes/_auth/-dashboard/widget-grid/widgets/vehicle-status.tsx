@@ -31,15 +31,13 @@ import {
 } from "@/lib/query/vehicle";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
+import {
+  calculatePercentage,
+  insertSpacesBeforeCaps,
+} from "@/lib/utils/random";
 import { cn } from "@/lib/utils/styles";
 
-import { calculatePercentage } from "@/lib/utils";
-
 import { WidgetSkeleton, type CommonWidgetProps } from "./_common";
-
-function vehicleStatusToReadable(status: string) {
-  return status.replace(/([A-Z])/g, " $1").trim();
-}
 
 export default function VehicleStatusWidget(props: CommonWidgetProps) {
   const { auth, selectedLocationIds } = props;
@@ -155,7 +153,7 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
         <ScrollArea className="h-[260px]">
           <div className="grid grid-cols-3 items-center">
             {data.map((item, idx) => {
-              const readableVehicleStatus = vehicleStatusToReadable(item.name);
+              const readableVehicleStatus = insertSpacesBeforeCaps(item.name);
               return (
                 <React.Fragment key={`status_widget_${item.name}_${idx}`}>
                   <div className="truncate py-1.5">
