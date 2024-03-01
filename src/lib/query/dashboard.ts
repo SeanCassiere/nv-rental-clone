@@ -147,6 +147,7 @@ export function fetchDashboardVehicleStatusCountsOptions(
             ClientDate: localDateToQueryYearMonthDay(
               options.filters.clientDate
             ),
+            VehicleType: options.filters.vehicleTypeId,
             ...(options.filters.locationIds.length === 0
               ? {
                   LocationId: "0",
