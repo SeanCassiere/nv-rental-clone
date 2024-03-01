@@ -288,6 +288,16 @@ function ReservationsSearchPage() {
   const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
     () => [
       {
+        id: "CustomerId",
+        title: "CustomerId",
+        type: "hidden",
+      },
+      {
+        id: "VehicleId",
+        title: "VehicleId",
+        type: "hidden",
+      },
+      {
         id: "Keyword",
         title: "Search",
         type: "text",
@@ -323,6 +333,12 @@ function ReservationsSearchPage() {
         })),
       },
       {
+        id: "VehicleNo",
+        title: "Vehicle no.",
+        type: "text",
+        size: "normal",
+      },
+      {
         id: "CreatedDateFrom",
         title: "Start date",
         type: "date",
@@ -349,6 +365,16 @@ function ReservationsSearchPage() {
           value: `${item.locationId}`,
           label: `${item.locationName}`,
         })),
+      },
+      {
+        id: "SortDirection",
+        title: "Sort direction",
+        type: "select",
+        options: [
+          { value: "ASC", label: "Asc" },
+          { value: "DESC", label: "Desc" },
+        ],
+        defaultValue: "ASC",
       },
     ],
     [locations, reservationStatuses, reservationTypes, vehicleTypes]

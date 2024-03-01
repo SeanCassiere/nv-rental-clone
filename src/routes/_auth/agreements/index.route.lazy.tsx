@@ -290,6 +290,21 @@ function AgreementsSearchPage() {
   const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
     () => [
       {
+        id: "CustomerId",
+        title: "CustomerId",
+        type: "hidden",
+      },
+      {
+        id: "VehicleId",
+        title: "VehicleId",
+        type: "hidden",
+      },
+      {
+        id: "AgreementNumber",
+        title: "AgreementNumber",
+        type: "hidden",
+      },
+      {
         id: "Keyword",
         title: "Search",
         type: "text",
@@ -367,6 +382,23 @@ function AgreementsSearchPage() {
           { value: "false", label: "No" },
         ],
         defaultValue: "false",
+      },
+      {
+        id: "SortBy",
+        title: "Sort by",
+        type: "select",
+        options: [{ value: "CreatedDate", label: "Created date" }],
+        defaultValue: "CreatedDate",
+      },
+      {
+        id: "SortDirection",
+        title: "Sort direction",
+        type: "select",
+        options: [
+          { value: "ASC", label: "Asc" },
+          { value: "DESC", label: "Desc" },
+        ],
+        defaultValue: "DESC",
       },
     ],
     [agreementStatuses, agreementTypes, locations, vehicleTypes]

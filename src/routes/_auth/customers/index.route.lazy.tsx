@@ -290,6 +290,16 @@ function CustomerSearchPage() {
         ],
         defaultValue: "true",
       },
+      {
+        id: "SortDirection",
+        title: "Sort direction",
+        type: "select",
+        options: [
+          { value: "ASC", label: "Asc" },
+          { value: "DESC", label: "Desc" },
+        ],
+        defaultValue: "ASC",
+      },
     ],
     [customerTypes]
   );
