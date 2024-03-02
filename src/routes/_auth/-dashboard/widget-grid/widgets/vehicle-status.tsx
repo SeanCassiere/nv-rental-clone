@@ -24,6 +24,7 @@ import {
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
+import type { VehicleStatusCountResponse } from "@/lib/schemas/dashboard";
 import { fetchDashboardVehicleStatusCountsOptions } from "@/lib/query/dashboard";
 import {
   fetchVehiclesStatusesOptions,
@@ -64,10 +65,13 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
     fetchVehiclesStatusesOptions({ auth: props.auth })
   );
 
-  const getStatusIdByName = (name: string) => {
-    const status = vehicleStatuses.data?.find((s) => s.name === name);
-    return status?.id || 0;
-  };
+  const getStatusIdByName = React.useCallback(
+    (name: string) => {
+      const status = vehicleStatuses.data?.find((s) => s.name === name);
+      return status?.id || 0;
+    },
+    [vehicleStatuses.data]
+  );
 
   const sortedData = React.useMemo(
     () =>
@@ -151,68 +155,89 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
         />
       ) : (
         <ScrollArea className="h-[260px]">
-          <div className="grid grid-cols-3 items-center">
-            {data.map((item, idx) => {
-              const readableVehicleStatus = insertSpacesBeforeCaps(item.name);
-              return (
-                <React.Fragment key={`status_widget_${item.name}_${idx}`}>
-                  <div className="truncate py-1.5">
-                    <Tooltip delayDuration={250}>
-                      <TooltipTrigger asChild>
-                        <Link
-                          to="/fleet"
-                          className={cn(
-                            buttonVariants({ variant: "link", size: "sm" }),
-                            "h-4 w-full justify-start truncate p-0 underline-offset-1"
-                          )}
-                          search={() => ({
-                            page: 1,
-                            size: defaultRowCount,
-                            filters: {
-                              Active: "true",
-                              VehicleStatus: getStatusIdByName(
-                                item.name
-                              ).toString(),
-                              ...(vehicleTypeId !== "0"
-                                ? { VehicleTypeId: String(vehicleTypeId) }
-                                : {}),
-                            },
-                          })}
-                        >
-                          {readableVehicleStatus || ""}
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent align="start">
-                        <p>
-                          View the {item.total} fleet in status:{" "}
-                          {(readableVehicleStatus || "").toLowerCase()}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <div className="col-span-2 py-1.5">
-                    <Tooltip delayDuration={60}>
-                      <TooltipTrigger asChild>
-                        <Progress value={item.total} max={totalVehicles} />
-                      </TooltipTrigger>
-                      <TooltipContent align="start">
-                        <p>
-                          {calculatePercentage(
-                            item.total,
-                            totalVehicles
-                          ).toFixed(1)}
-                          % of your fleet is in the "{readableVehicleStatus}"
-                          status.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                </React.Fragment>
-              );
-            })}
+          <div className="grid gap-5 pt-4 md:gap-4">
+            {sortedData.map((item, idx) => (
+              <VehicleStatusItem
+                key={`status_widget_${item.name}_${idx}`}
+                item={item}
+                totalItems={totalVehicles}
+                getVehicleStatusIdByName={getStatusIdByName}
+                vehiclePageRowCount={defaultRowCount}
+                selectedVehicleTypeId={vehicleTypeId}
+              />
+            ))}
           </div>
         </ScrollArea>
       )}
     </React.Fragment>
+  );
+}
+
+interface VehicleStatusItemProps {
+  item: VehicleStatusCountResponse;
+  totalItems: number;
+  getVehicleStatusIdByName: (name: string) => number;
+  vehiclePageRowCount: number;
+  selectedVehicleTypeId: string;
+}
+
+function VehicleStatusItem(props: VehicleStatusItemProps) {
+  const {
+    item,
+    totalItems,
+    getVehicleStatusIdByName,
+    vehiclePageRowCount,
+    selectedVehicleTypeId,
+  } = props;
+
+  const readableVehicleStatus = insertSpacesBeforeCaps(item.name);
+  const percentage = `${calculatePercentage(item.total, totalItems).toFixed(1)}%`;
+
+  return (
+    <div className="grid gap-1.5">
+      <div className="flex items-center justify-between">
+        <div className="inline-flex grow gap-2">
+          <Link
+            to="/fleet"
+            className={cn(
+              buttonVariants({ variant: "link", size: "sm" }),
+              "h-4 justify-start truncate p-0 underline-offset-1"
+            )}
+            search={() => ({
+              page: 1,
+              size: vehiclePageRowCount,
+              filters: {
+                Active: "true",
+                VehicleStatus: getVehicleStatusIdByName(item.name).toString(),
+                ...(selectedVehicleTypeId !== "0"
+                  ? { VehicleTypeId: selectedVehicleTypeId }
+                  : {}),
+              },
+            })}
+          >
+            {readableVehicleStatus || ""} - {item.total}
+          </Link>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger>
+              <span>
+                <icons.Alert className="h-3.5 w-3.5" />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent align="start">
+              <p>
+                {percentage} of your fleet is in the status of "
+                {readableVehicleStatus}"
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+        <span className="inline-block truncate text-sm font-light">
+          {percentage}
+        </span>
+      </div>
+      <div>
+        <Progress className="h-2.5" value={item.total} max={totalItems} />
+      </div>
+    </div>
   );
 }
