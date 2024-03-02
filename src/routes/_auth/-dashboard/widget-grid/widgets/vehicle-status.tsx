@@ -155,7 +155,7 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
         />
       ) : (
         <ScrollArea className="h-[260px]">
-          <div className="grid gap-3 pt-4">
+          <div className="grid gap-5 pt-4 md:gap-4">
             {sortedData.map((item, idx) => (
               <VehicleStatusItem
                 key={`status_widget_${item.name}_${idx}`}
