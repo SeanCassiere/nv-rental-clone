@@ -5,3 +5,6 @@ const VehicleStatusCountSchema = z.object({
   total: z.number(),
 });
 export const VehicleStatusCountListSchema = z.array(VehicleStatusCountSchema);
+export type VehicleStatusCountResponse = z.infer<
+  typeof VehicleStatusCountSchema
+>;
