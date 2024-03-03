@@ -42,6 +42,7 @@ export const AppNavigation = (props: Props) => {
         to: "/",
         activeOptions: {
           exact: true,
+          includeSearch: false,
         },
         params: false,
         search: false,
