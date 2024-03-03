@@ -26,6 +26,8 @@ import {
   fetchAgreementsSearchListOptions,
 } from "@/lib/query/agreement";
 
+import { useWidgetName } from "@/routes/_auth/-dashboard/useWidgetName";
+
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import type { CommonWidgetProps } from "./_common";
@@ -38,7 +40,9 @@ function buildFormSchema() {
 }
 
 export default function QuickCheckinAgreementWidget(props: CommonWidgetProps) {
-  const { auth } = props;
+  const { auth, widgetId } = props;
+
+  const widgetName = useWidgetName(widgetId);
 
   const { t } = useTranslation();
 
@@ -101,7 +105,7 @@ export default function QuickCheckinAgreementWidget(props: CommonWidgetProps) {
   return (
     <React.Fragment>
       <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
-        <span className="font-medium">Quick rental checkin</span>
+        <span className="font-medium">{widgetName}</span>
         <Button
           type="button"
           variant="ghost"

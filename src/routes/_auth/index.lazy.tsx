@@ -9,7 +9,6 @@ import {
 import { useAuth } from "react-oidc-context";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
-import WidgetPickerContent from "@/components/dashboard/widget-picker-content";
 import { EmptyState } from "@/components/layouts/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -22,14 +21,6 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { icons } from "@/components/ui/icons";
 import {
   Popover,
@@ -61,6 +52,7 @@ import type { apiClient } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 import WidgetGrid from "./-dashboard/widget-grid";
+import WidgetPicker from "./-dashboard/widget-picker";
 
 const routeApi = getRouteApi("/_auth/");
 
@@ -82,7 +74,7 @@ function DashboardPage() {
     setCurrentLocationIds(ids);
   }, []);
 
-  const { "show-widget-picker": showWidgetPickerModal = false } =
+  const { show_widget_picker: showWidgetPickerModal = false } =
     routeApi.useSearch();
 
   const locationsList = useQuery(
@@ -97,7 +89,7 @@ function DashboardPage() {
   const handleSetShowWidgetPickerModal = React.useCallback(
     (show: boolean) => {
       navigate({
-        search: () => ({ ...(show ? { "show-widget-picker": show } : {}) }),
+        search: () => ({ ...(show ? { show_widget_picker: show } : {}) }),
         replace: true,
       });
     },
@@ -312,12 +304,7 @@ interface DefaultDashboardContentProps extends Auth {
 }
 
 const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
-  const {
-    locations,
-    showWidgetsPicker,
-    onShowWidgetPicker,
-    auth: authParams,
-  } = props;
+  const { locations, onShowWidgetPicker, auth: authParams } = props;
 
   const queryClient = useQueryClient();
 
@@ -415,30 +402,8 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
         </Tabs>
       )}
 
-      <div className="mb-2 mt-3.5 flex space-x-2">
-        <Dialog open={showWidgetsPicker} onOpenChange={onShowWidgetPicker}>
-          <DialogTrigger asChild>
-            <Button
-              size="sm"
-              variant={!showWidgetsPicker ? "outline" : "secondary"}
-            >
-              <icons.Settings className="h-5 w-5 sm:h-4 sm:w-4" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Customize widgets</DialogTitle>
-              <DialogDescription>
-                Select and order the widgets you want to see on your dashboard.
-              </DialogDescription>
-            </DialogHeader>
-            <WidgetPickerContent
-              onModalStateChange={onShowWidgetPicker}
-              onWidgetSave={handleWidgetSortingEnd}
-              auth={authParams}
-            />
-          </DialogContent>
-        </Dialog>
+      <div className="mt-3.5 flex justify-end space-x-2">
+        <WidgetPicker auth={authParams} />
       </div>
 
       {isEmpty ? (
@@ -460,6 +425,7 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
         />
       ) : (
         <WidgetGrid
+          key={JSON.stringify(widgets)}
           widgets={widgets}
           selectedLocationIds={locations}
           onWidgetSortingEnd={handleWidgetSortingEnd}

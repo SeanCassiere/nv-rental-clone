@@ -31,6 +31,8 @@ import {
   fetchVehiclesTypesOptions,
 } from "@/lib/query/vehicle";
 
+import { useWidgetName } from "@/routes/_auth/-dashboard/useWidgetName";
+
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 import {
   calculatePercentage,
@@ -41,7 +43,9 @@ import { cn } from "@/lib/utils/styles";
 import { WidgetSkeleton, type CommonWidgetProps } from "./_common";
 
 export default function VehicleStatusWidget(props: CommonWidgetProps) {
-  const { auth, selectedLocationIds } = props;
+  const { auth, selectedLocationIds, widgetId } = props;
+
+  const widgetName = useWidgetName(widgetId);
 
   const [vehicleTypeId, setVehicleTypeId] = React.useState("0");
 
@@ -105,7 +109,7 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
     <React.Fragment>
       <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
         <div className="flex grow items-center justify-between">
-          <span className="font-medium">Fleet status</span>
+          <span className="font-medium">{widgetName}</span>
           <Tooltip delayDuration={250}>
             <Select value={vehicleTypeId} onValueChange={setVehicleTypeId}>
               <TooltipTrigger asChild>

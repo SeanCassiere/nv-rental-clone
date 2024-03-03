@@ -45,6 +45,8 @@ import {
   fetchVehiclesSearchListOptions,
 } from "@/lib/query/vehicle";
 
+import { useWidgetName } from "@/routes/_auth/-dashboard/useWidgetName";
+
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import type { CommonWidgetProps } from "./_common";
@@ -60,7 +62,9 @@ function buildFormSchema() {
 }
 
 export default function SalesStatusWidget(props: CommonWidgetProps) {
-  const { auth, selectedLocationIds } = props;
+  const { widgetId } = props;
+
+  const widgetName = useWidgetName(widgetId);
 
   const { t } = useTranslation();
   const qc = useQueryClient();
@@ -246,7 +250,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
   return (
     <React.Fragment>
       <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
-        <span className="font-medium">Quick lookup</span>
+        <span className="font-medium">{widgetName}</span>
         <Button
           type="button"
           variant="ghost"
