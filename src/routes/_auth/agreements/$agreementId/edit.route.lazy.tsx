@@ -56,10 +56,10 @@ function EditAgreementPage() {
   }, [agreementId, navigate]);
 
   const handleCancelEditAgreement = useCallback(() => {
-    router.navigate({
+    navigate({
       to: "..",
     });
-  }, [router]);
+  }, [navigate]);
 
   const agreement =
     agreementData.data?.status === 200 ? agreementData.data.body : null;

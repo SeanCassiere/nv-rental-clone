@@ -46,4 +46,5 @@ export const Route = createFileRoute("/_auth/fleet/$vehicleId/")({
 
     return;
   },
+  loaderDeps: ({ search }) => ({ tab: search.tab || "summary" }),
 });

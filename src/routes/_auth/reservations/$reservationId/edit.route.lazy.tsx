@@ -60,10 +60,10 @@ function EditReservationPage() {
   }, [reservationId, navigate]);
 
   const handleCancelEditReservation = useCallback(() => {
-    router.navigate({
+    navigate({
       to: "..",
     });
-  }, [router]);
+  }, [navigate]);
 
   useDocumentTitle(
     titleMaker(

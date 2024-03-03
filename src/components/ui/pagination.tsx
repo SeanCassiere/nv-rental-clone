@@ -57,6 +57,7 @@ const PaginationLink = ({
       }),
       className
     )}
+    params={true}
     {...props}
   />
 );

@@ -45,10 +45,10 @@ function AddReservationPage() {
   );
 
   const handleCancelAddReservation = useCallback(() => {
-    router.navigate({
+    navigate({
       to: "..",
     });
-  }, [router]);
+  }, [navigate]);
 
   useDocumentTitle(titleMaker("New - Reservation"));
   return (

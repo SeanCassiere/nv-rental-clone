@@ -43,7 +43,6 @@ export const CustomerSummary = ({
             CustomerId: `${summaryData?.customerId}`,
           },
         }),
-        params: false,
       },
     },
     {
@@ -59,7 +58,6 @@ export const CustomerSummary = ({
             CustomerId: `${summaryData?.customerId}`,
           },
         }),
-        params: false,
       },
     },
     {
@@ -75,7 +73,6 @@ export const CustomerSummary = ({
             CustomerId: `${summaryData?.customerId}`,
           },
         }),
-        params: false,
       },
     },
     {
@@ -91,7 +88,6 @@ export const CustomerSummary = ({
             CustomerId: `${summaryData?.customerId}`,
           },
         }),
-        params: false,
       },
     },
     {
@@ -108,7 +104,6 @@ export const CustomerSummary = ({
             IsSearchOverdues: "false",
           },
         }),
-        params: false,
       },
     },
     {
@@ -125,7 +120,6 @@ export const CustomerSummary = ({
             IsSearchOverdues: "false",
           },
         }),
-        params: false,
       },
     },
     {
@@ -147,7 +141,6 @@ export const CustomerSummary = ({
             IsSearchOverdues: "false",
           },
         }),
-        params: false,
       },
     },
     {
@@ -164,7 +157,6 @@ export const CustomerSummary = ({
             IsSearchOverdues: "false",
           },
         }),
-        params: false,
       },
     },
   ];

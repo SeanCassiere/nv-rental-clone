@@ -132,7 +132,11 @@ function ReservationViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link to=".." className="text-2xl font-semibold leading-6">
+            <Link
+              from="/reservations/$reservationId"
+              to=".."
+              className="text-2xl font-semibold leading-6"
+            >
               Reservations
             </Link>
             <icons.ChevronRight

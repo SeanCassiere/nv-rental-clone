@@ -150,7 +150,11 @@ function VehicleViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link to=".." className="text-2xl font-semibold leading-6">
+            <Link
+              from="/fleet/$vehicleId"
+              to=".."
+              className="text-2xl font-semibold leading-6"
+            >
               Fleet
             </Link>
             <icons.ChevronRight

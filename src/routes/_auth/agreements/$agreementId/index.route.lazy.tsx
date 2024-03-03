@@ -90,10 +90,8 @@ function AgreementViewPage() {
       ),
       preloadFn: () =>
         router.preloadRoute({
-          to: "/agreements/$agreementId",
-          params: {
-            agreementId,
-          },
+          to: "/agreements/$agreementId" as const,
+          params: true,
           search: (current) => ({
             ...current,
             tab: "notes",
@@ -107,9 +105,7 @@ function AgreementViewPage() {
       preloadFn: () =>
         router.preloadRoute({
           to: "/agreements/$agreementId",
-          params: {
-            agreementId,
-          },
+          params: true,
           search: (current) => ({
             ...current,
             tab: "payments",
@@ -123,9 +119,7 @@ function AgreementViewPage() {
       preloadFn: () =>
         router.preloadRoute({
           to: "/agreements/$agreementId",
-          params: {
-            agreementId,
-          },
+          params: true,
           search: (current) => ({
             ...current,
             tab: "invoices",
@@ -139,9 +133,7 @@ function AgreementViewPage() {
       preloadFn: () =>
         router.preloadRoute({
           to: "/agreements/$agreementId",
-          params: {
-            agreementId,
-          },
+          params: true,
           search: (current) => ({
             ...current,
             tab: "documents",
@@ -155,9 +147,7 @@ function AgreementViewPage() {
       preloadFn: () =>
         router.preloadRoute({
           to: "/agreements/$agreementId",
-          params: {
-            agreementId,
-          },
+          params: true,
           search: (current) => ({
             ...current,
             tab: "charges",
@@ -171,9 +161,7 @@ function AgreementViewPage() {
       preloadFn: () =>
         router.preloadRoute({
           to: "/agreements/$agreementId",
-          params: {
-            agreementId,
-          },
+          params: true,
           search: (current) => ({
             ...current,
             tab: "exchanges",
@@ -220,7 +208,11 @@ function AgreementViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link to=".." className="text-2xl font-semibold leading-6">
+            <Link
+              from="/agreements/$agreementId"
+              to=".."
+              className="text-2xl font-semibold leading-6"
+            >
               Agreements
             </Link>
             <icons.ChevronRight

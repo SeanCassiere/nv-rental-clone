@@ -126,7 +126,11 @@ function CustomerViewPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <Link to=".." className="text-2xl font-semibold leading-6">
+            <Link
+              from="/customers/$customerId"
+              to=".."
+              className="text-2xl font-semibold leading-6"
+            >
               Customers
             </Link>
             <icons.ChevronRight
