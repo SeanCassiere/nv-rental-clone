@@ -3,7 +3,6 @@ import {
   createLazyFileRoute,
   getRouteApi,
   useNavigate,
-  useRouter,
 } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
@@ -20,7 +19,6 @@ const routeApi = getRouteApi("/_auth/agreements/new");
 
 function AddAgreementPage() {
   const navigate = useNavigate({ from: "/agreements/new" });
-  const router = useRouter();
 
   const { stage = "rental-information" } = routeApi.useSearch();
 
@@ -45,10 +43,10 @@ function AddAgreementPage() {
   );
 
   const handleCancelAddAgreement = useCallback(() => {
-    router.navigate({
+    navigate({
       to: "..",
     });
-  }, [router]);
+  }, [navigate]);
 
   useDocumentTitle(titleMaker("New - Agreement"));
 

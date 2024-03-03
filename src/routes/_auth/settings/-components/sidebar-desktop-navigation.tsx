@@ -34,6 +34,7 @@ export function SidebarDesktopNavigation({
                 "border border-transparent bg-background text-muted-foreground hover:bg-background hover:text-foreground hover:underline"
               ),
             }}
+            params={true}
             {...item.linkProps}
           >
             {item.title}

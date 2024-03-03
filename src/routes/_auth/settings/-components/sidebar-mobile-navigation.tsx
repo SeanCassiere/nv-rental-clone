@@ -92,7 +92,11 @@ export function SidebarMobileNavigation({
                     <CommandItem
                       key={`settings_selector_${idx}_${item.title}`}
                       onSelect={() => {
-                        navigate(item.linkProps);
+                        navigate({
+                          to: item.linkProps.to,
+                          search: item.linkProps.search,
+                          params: item.linkProps.params ?? true,
+                        });
                         setOpen(false);
                       }}
                       className="text-base font-normal"

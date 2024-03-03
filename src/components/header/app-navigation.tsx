@@ -44,8 +44,6 @@ export const AppNavigation = (props: Props) => {
           exact: true,
           includeSearch: false,
         },
-        params: false,
-        search: false,
       },
     },
     {
@@ -59,7 +57,6 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
-        params: false,
       },
     },
     {
@@ -73,7 +70,6 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
-        params: false,
       },
     },
     {
@@ -87,7 +83,6 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
-        params: false,
       },
     },
     {
@@ -102,7 +97,6 @@ export const AppNavigation = (props: Props) => {
           filters: undefined,
         }),
         activeOptions: defaultActiveOptions,
-        params: false,
       },
     },
     {
@@ -110,7 +104,6 @@ export const AppNavigation = (props: Props) => {
       props: {
         to: "/reports",
         activeOptions: defaultActiveOptions,
-        params: false,
         search: false,
       },
     },
@@ -119,11 +112,10 @@ export const AppNavigation = (props: Props) => {
       props: {
         to: "/settings",
         activeOptions: defaultActiveOptions,
-        params: false,
         search: false,
       },
     },
-  ];
+  ] as const;
 
   return (
     <nav className={cn(className)} {...navProps}>
@@ -141,6 +133,7 @@ export const AppNavigation = (props: Props) => {
               inactiveProps={{
                 className: cn("border-transparent hover:border-foreground/20"),
               }}
+              params={true}
             >
               {item.name}
             </Link>

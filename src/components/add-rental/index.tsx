@@ -904,7 +904,10 @@ const AddRentalParentForm = ({
           <div className="flex w-full items-center justify-start gap-2">
             {!isEdit && module === "agreement" && (
               <>
-                <Link to=".." className="text-2xl font-semibold leading-6">
+                <Link
+                  to="/agreements"
+                  className="text-2xl font-semibold leading-6"
+                >
                   Agreements
                 </Link>
                 <icons.ChevronRight
@@ -922,7 +925,11 @@ const AddRentalParentForm = ({
             )}
             {isEdit && module === "agreement" && (
               <>
-                <Link to=".." className="text-2xl font-semibold leading-6">
+                <Link
+                  from="/agreements/$agreementId/edit"
+                  to=".."
+                  className="text-2xl font-semibold leading-6"
+                >
                   Agreements
                 </Link>
                 <icons.ChevronRight
@@ -963,7 +970,10 @@ const AddRentalParentForm = ({
             )}
             {!isEdit && module === "reservation" && (
               <>
-                <Link to=".." className="text-2xl font-semibold leading-6">
+                <Link
+                  to="/reservations"
+                  className="text-2xl font-semibold leading-6"
+                >
                   Reservations
                 </Link>
                 <icons.ChevronRight
@@ -981,7 +991,11 @@ const AddRentalParentForm = ({
             )}
             {isEdit && module === "reservation" && (
               <>
-                <Link to=".." className="text-2xl font-semibold leading-6">
+                <Link
+                  from="/reservations/$reservationId/edit"
+                  to=".."
+                  className="text-2xl font-semibold leading-6"
+                >
                   Reservations
                 </Link>
                 <icons.ChevronRight

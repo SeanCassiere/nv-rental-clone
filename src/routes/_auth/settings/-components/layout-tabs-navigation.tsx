@@ -25,7 +25,9 @@ export function LayoutTabsNavigation(props: LayoutTabsNavigationProps) {
               value={item.pathname}
               asChild
             >
-              <Link {...item.linkProps}>{item.title}</Link>
+              <Link params={true} {...item.linkProps}>
+                {item.title}
+              </Link>
             </TabsTrigger>
           );
         })}

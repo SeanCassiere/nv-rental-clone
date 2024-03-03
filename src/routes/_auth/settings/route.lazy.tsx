@@ -46,7 +46,6 @@ function SettingsLayout() {
         title: t("titles.profile", { ns: "settings" }),
         linkProps: {
           to: "/settings/profile",
-          params: false,
           search: false,
         },
       },
@@ -58,7 +57,6 @@ function SettingsLayout() {
         title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
         linkProps: {
           to: "/settings/application",
-          params: false,
           search: false,
         },
       });
@@ -70,7 +68,6 @@ function SettingsLayout() {
         title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
         linkProps: {
           to: "/settings/runtime-configuration",
-          params: false,
           search: false,
         },
       });
@@ -79,7 +76,6 @@ function SettingsLayout() {
         title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
         linkProps: {
           to: "/settings/vehicles-and-categories",
-          params: false,
           search: false,
         },
       });
@@ -88,7 +84,6 @@ function SettingsLayout() {
         title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
         linkProps: {
           to: "/settings/rates-and-charges",
-          params: false,
           search: false,
         },
       });

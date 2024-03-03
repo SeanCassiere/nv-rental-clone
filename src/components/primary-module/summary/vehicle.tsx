@@ -97,11 +97,11 @@ export const VehicleSummary = ({
       type: summaryData?.totalNoOfReservation ? "link" : "text",
       amount: Number(summaryData?.totalNoOfReservation || 0).toString(),
       linkProps: {
-        to: "/fleet/$vehicleId",
+        to: "/fleet/$vehicleId/",
         search: () => ({
           tab: "reservations",
         }),
-        params: { vehicleId: vehicleId },
+        params: { vehicleId: vehicleId } as any,
       },
     },
 
@@ -121,8 +121,8 @@ export const VehicleSummary = ({
           ? "View"
           : "None",
       linkProps: {
-        to: "/reservations/$reservationId",
-        params: { reservationId: `${summaryData?.currentReservation}` },
+        to: "/reservations/$reservationId/",
+        params: { reservationId: `${summaryData?.currentReservation}` } as any,
         search: false,
       },
     },
@@ -140,7 +140,6 @@ export const VehicleSummary = ({
             Statuses: ["2", "7"],
           },
         }),
-        params: false,
       },
     },
 
@@ -154,7 +153,7 @@ export const VehicleSummary = ({
         search: () => ({
           tab: "agreements",
         }),
-        params: { vehicleId: vehicleId },
+        params: { vehicleId: vehicleId } as any,
       },
     },
 
@@ -175,7 +174,9 @@ export const VehicleSummary = ({
           : "None",
       linkProps: {
         to: "/agreements/$agreementId",
-        params: { agreementId: `${summaryData?.currentAgreement}` },
+        params: {
+          agreementId: `${summaryData?.currentAgreement}`,
+        } as any,
         search: false,
       },
     },
@@ -219,7 +220,6 @@ export const VehicleSummary = ({
         search: () => ({
           filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
         }),
-        params: false,
       },
     },
 
