@@ -62,9 +62,11 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
-export const Route = createLazyFileRoute("/_auth/(reservations)/reservations/")({
-  component: ReservationsSearchPage,
-});
+export const Route = createLazyFileRoute("/_auth/(reservations)/reservations/")(
+  {
+    component: ReservationsSearchPage,
+  }
+);
 
 const routeApi = getRouteApi("/_auth/reservations/");
 

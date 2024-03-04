@@ -151,7 +151,8 @@ const StatBlock = ({
       <CardContent>
         <Link
           className="block text-2xl font-bold tabular-nums underline-offset-4 focus-within:underline hover:underline"
-          {...(linkProps as any)}
+          params
+          {...linkProps}
         >
           {value ?? <Skeleton className="h-8 w-full" />}
         </Link>
