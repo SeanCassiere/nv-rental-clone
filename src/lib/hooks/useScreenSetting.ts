@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import type { TClientScreenSetting } from "@/lib/schemas/client";
@@ -32,7 +32,7 @@ function useScreenSetting(
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
-  const settingsQuery = useQuery(
+  const settingsQuery = useSuspenseQuery(
     fetchScreenSettingsForClientOptions({ auth: authParams })
   );
 

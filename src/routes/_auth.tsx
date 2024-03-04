@@ -6,9 +6,6 @@ import {
 } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
-import { LogoutDialog } from "@/components/common/logout-dialog";
-import { HeaderLayout } from "@/components/header/header-layout";
-
 import {
   fetchClientProfileOptions,
   fetchFeaturesForClientOptions,
@@ -23,7 +20,13 @@ import { getAuthFromRouterContext } from "@/lib/utils/auth";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 import { removeTrailingSlash } from "@/lib/utils/random";
 
+import { useConfigureLocalFeatures } from "./-components/auth/useConfigureLocalFeatures";
 import { Container } from "./-components/container";
+
+const AuthHeader = React.lazy(() => import("@/routes/-components/auth/header"));
+const LogoutDialog = React.lazy(
+  () => import("@/routes/-components/auth/logout-dialog")
+);
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context, location }) => {
@@ -98,6 +101,8 @@ function AuthLayout() {
   const auth = useAuth();
   const redirectUri = useRouterState({ select: (s) => s.location.href });
 
+  useConfigureLocalFeatures();
+
   React.useEffect(() => {
     return auth.events.addAccessTokenExpiring(() => {
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirectUri);
@@ -122,7 +127,7 @@ function AuthLayout() {
   return (
     <React.Fragment>
       <LogoutDialog />
-      <HeaderLayout />
+      <AuthHeader />
       <Container>
         <Outlet />
       </Container>

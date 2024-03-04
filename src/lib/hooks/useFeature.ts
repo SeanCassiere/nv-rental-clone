@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAuth } from "react-oidc-context";
 
 import { fetchFeaturesForClientOptions } from "@/lib/query/client";
@@ -15,7 +15,7 @@ export function useFeature(
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
-  const features = useQuery(
+  const features = useSuspenseQuery(
     fetchFeaturesForClientOptions({ auth: authParams })
   );
 

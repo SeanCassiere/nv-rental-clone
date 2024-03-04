@@ -16,7 +16,7 @@ import { useGlobalDialogContext } from "@/lib/context/modals";
 
 import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
 
-export const LogoutDialog = () => {
+export default function LogoutDialog() {
   const navigate = useNavigate();
   const { showLogout, setShowLogout } = useGlobalDialogContext();
 
@@ -41,4 +41,4 @@ export const LogoutDialog = () => {
       </AlertDialogContent>
     </AlertDialog>
   );
-};
+}

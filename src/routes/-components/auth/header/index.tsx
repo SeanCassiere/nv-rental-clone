@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
-import { HiddenFeatureSetter } from "@/components/hidden-feature-setter";
-
 import { fetchDashboardMessagesOptions } from "@/lib/query/dashboard";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
@@ -16,7 +14,7 @@ import { BannerNotice } from "./banner-notice";
 import { CommandMenu } from "./command-menu";
 import { UserNavigationDropdown } from "./user-navigation-dropdown";
 
-export const HeaderLayout = () => {
+export default function AuthHeader() {
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
@@ -27,7 +25,6 @@ export const HeaderLayout = () => {
 
   return (
     <>
-      <HiddenFeatureSetter />
       <header className="bg-card">
         {messages.length > 0 && (
           <section className="grid w-full divide-y divide-bannerPromo-foreground/80 bg-bannerPromo">
@@ -73,4 +70,4 @@ export const HeaderLayout = () => {
       />
     </>
   );
-};
+}
