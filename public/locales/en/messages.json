@@ -10,7 +10,7 @@
   "labelError": "{{label}} error",
   "labelFeatureUpdated": "{{label}} feature updated",
   "labelFeatureReset": "{{label}} feature reset",
-  "notFound": "Not found.",
+  "notFound": "Not found",
   "pleaseTryAgain": "Please try again later.",
   "somethingWentWrong": "Something went wrong.",
   "inputValidationFailed": "Input validation failed.",
