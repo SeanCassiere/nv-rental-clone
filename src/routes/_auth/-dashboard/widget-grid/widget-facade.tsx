@@ -8,6 +8,8 @@ import { icons } from "@/components/ui/icons";
 import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 
+import { useWidgetName } from "@/routes/_auth/-dashboard/useWidgetName";
+
 import { cn } from "@/lib/utils";
 
 import { CommonWidgetProps } from "./widgets/_common";
@@ -76,22 +78,27 @@ function RenderWidget(props: CommonWidgetProps) {
     case "QuickLookup":
       return <QuickLookupWidget {...props} />;
     default:
-      return (
-        <React.Fragment>
-          <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
-            <span>{props.widgetId}</span>
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-8"
-              {...props.draggableAttributes}
-              {...props.draggableListeners}
-            >
-              <icons.GripVertical className="h-3 w-3" />
-            </Button>
-          </div>
-          <div>No widget available for "{props.widgetId}"</div>
-        </React.Fragment>
-      );
+      return <NoWidgetAvailable {...props} />;
   }
+}
+
+function NoWidgetAvailable(props: CommonWidgetProps) {
+  const widgetName = useWidgetName(props.widgetId);
+  return (
+    <React.Fragment>
+      <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
+        <span>{widgetName}</span>
+        <Button
+          type="button"
+          variant="ghost"
+          className="h-8"
+          {...props.draggableAttributes}
+          {...props.draggableListeners}
+        >
+          <icons.GripVertical className="h-3 w-3" />
+        </Button>
+      </div>
+      <div>No widget available for "{widgetName}".</div>
+    </React.Fragment>
+  );
 }

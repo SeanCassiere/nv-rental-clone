@@ -3,5 +3,11 @@
     "rentalAgreementNotFound": "Rental agreement not found",
     "foundMultipleMatches": "Found multiple matches",
     "enterVehicleOrAgreementNo": "Please enter a vehicle or agreement number"
+  },
+  "widgets": {
+    "salesStatus": "Sales status",
+    "vehicleStatus": "Fleet status",
+    "quickCheckin": "Quick rental checkin",
+    "quickLookup": "Quick lookup"
   }
 }
