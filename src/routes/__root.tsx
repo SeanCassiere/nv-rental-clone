@@ -4,6 +4,7 @@ import type { AuthContextProps } from "react-oidc-context";
 
 import type { queryClient } from "@/lib/config/tanstack-query";
 
+import { Container } from "./-components/container";
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
 import { PageNotFound } from "./-components/page-not-found";
 import { RouterDevTools } from "./-components/router-devtools";
@@ -14,16 +15,24 @@ export interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: RootComponent,
-  notFoundComponent: () => <PageNotFound renderRouterDevtools />,
+  component: Component,
+  notFoundComponent: NotFoundComponent,
 });
 
-function RootComponent() {
+function Component() {
   return (
     <React.Fragment>
       <Outlet />
       <FeatureTogglesDialog />
       <RouterDevTools position="bottom-left" />
     </React.Fragment>
+  );
+}
+
+function NotFoundComponent() {
+  return (
+    <Container className="flex">
+      <PageNotFound renderRouterDevtools />
+    </Container>
   );
 }
