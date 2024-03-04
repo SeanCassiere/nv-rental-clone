@@ -41,7 +41,7 @@ function NotFoundComponent() {
 
   return (
     <Container className="flex">
-      <PageNotFound renderRouterDevtools />
+      <PageNotFound className="px-2" renderRouterDevtools />
     </Container>
   );
 }
