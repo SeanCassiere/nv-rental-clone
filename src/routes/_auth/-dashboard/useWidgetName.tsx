@@ -1,9 +1,6 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-/**
- * @todo integrate with i18next
- */
 export function useWidgetName(widgetId: string) {
   const { t } = useTranslation();
 
