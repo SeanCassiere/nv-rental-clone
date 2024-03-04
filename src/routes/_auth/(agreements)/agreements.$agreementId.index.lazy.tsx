@@ -43,7 +43,9 @@ const AgreementExchangesTab = lazy(
   () => import("@/components/primary-module/tabs/agreement/exchanges-content")
 );
 
-export const Route = createLazyFileRoute("/_auth/(agreements)/agreements/$agreementId/")({
+export const Route = createLazyFileRoute(
+  "/_auth/(agreements)/agreements/$agreementId/"
+)({
   component: AgreementViewPage,
 });
 

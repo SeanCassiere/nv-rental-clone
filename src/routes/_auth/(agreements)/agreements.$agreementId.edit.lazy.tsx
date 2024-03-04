@@ -13,11 +13,11 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
-export const Route = createLazyFileRoute("/_auth/(agreements)/agreements/$agreementId/edit")(
-  {
-    component: EditAgreementPage,
-  }
-);
+export const Route = createLazyFileRoute(
+  "/_auth/(agreements)/agreements/$agreementId/edit"
+)({
+  component: EditAgreementPage,
+});
 
 const routeApi = getRouteApi("/_auth/agreements/$agreementId/edit");
 

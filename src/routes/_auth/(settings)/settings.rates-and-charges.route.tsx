@@ -1,6 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_auth/(settings)/settings/rates-and-charges")({
+export const Route = createFileRoute(
+  "/_auth/(settings)/settings/rates-and-charges"
+)({
   loader: async ({ context }) => {
     const { queryClient, userPermissionsOptions } = context;
 

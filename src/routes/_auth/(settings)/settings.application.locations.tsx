@@ -5,7 +5,9 @@ import {
   fetchLocationsListOptions,
 } from "@/lib/query/location";
 
-export const Route = createFileRoute("/_auth/(settings)/settings/application/locations")({
+export const Route = createFileRoute(
+  "/_auth/(settings)/settings/application/locations"
+)({
   beforeLoad: ({ context }) => ({
     activeLocationsListOptions: fetchLocationsListOptions({
       auth: context.authParams,

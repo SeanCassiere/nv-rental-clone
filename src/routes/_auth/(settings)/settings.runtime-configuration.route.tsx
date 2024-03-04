@@ -1,6 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_auth/(settings)/settings/runtime-configuration")({
+export const Route = createFileRoute(
+  "/_auth/(settings)/settings/runtime-configuration"
+)({
   loader: async ({ context }) => {
     const { queryClient, userPermissionsOptions } = context;
 

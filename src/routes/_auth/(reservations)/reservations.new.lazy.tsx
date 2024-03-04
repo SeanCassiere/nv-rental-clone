@@ -12,7 +12,9 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
-export const Route = createLazyFileRoute("/_auth/(reservations)/reservations/new")({
+export const Route = createLazyFileRoute(
+  "/_auth/(reservations)/reservations/new"
+)({
   component: AddReservationPage,
 });
 
