@@ -11,13 +11,6 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormDescription,
@@ -58,6 +51,8 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 import { apiClient } from "@/lib/api";
 
+import { SettingsLayoutHeader } from "./-components/layout-header";
+
 export const Route = createLazyFileRoute("/_auth/(settings)/settings/profile")({
   component: SettingsProfilePage,
 });
@@ -83,34 +78,28 @@ function SettingsProfilePage() {
   );
 
   return (
-    <Card className="shadow-none lg:w-[600px]">
-      <CardHeader className="p-4 lg:p-6">
-        <CardTitle className="text-xl">
-          {t("titles.profile", { ns: "settings" })}
-        </CardTitle>
-        <CardDescription className="text-base text-foreground/80">
-          {t("descriptions.profile", { ns: "settings" })}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-4 pt-0 lg:p-6">
-        {userQuery.status === "success" &&
-          languagesQuery.status === "success" &&
-          userQuery.data.status === 200 && (
-            <article className="w-full lg:max-w-2xl">
-              <ProfileForm
-                user={userQuery.data.body}
-                languages={
-                  languagesQuery.data.status === 200
-                    ? languagesQuery.data.body
-                    : []
-                }
-                clientId={authParams.clientId}
-                userId={authParams.userId}
-              />
-            </article>
-          )}
-      </CardContent>
-    </Card>
+    <>
+      <SettingsLayoutHeader
+        title={t("titles.profile", { ns: "settings" })}
+        subtitle={t("descriptions.profile", { ns: "settings" })}
+      />
+      {userQuery.status === "success" &&
+        languagesQuery.status === "success" &&
+        userQuery.data.status === 200 && (
+          <article className="mt-6 w-full max-w-2xl rounded-md border bg-card p-6">
+            <ProfileForm
+              user={userQuery.data.body}
+              languages={
+                languagesQuery.data.status === 200
+                  ? languagesQuery.data.body
+                  : []
+              }
+              clientId={authParams.clientId}
+              userId={authParams.userId}
+            />
+          </article>
+        )}
+    </>
   );
 }
 
@@ -218,7 +207,7 @@ function ProfileForm(props: {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-5 rounded"
+        className="flex flex-col gap-5"
         onSubmit={form.handleSubmit(async (values) => {
           if (isSubmitBtnFrozen) return;
 
