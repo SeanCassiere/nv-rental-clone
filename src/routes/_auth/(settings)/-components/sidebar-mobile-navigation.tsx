@@ -2,7 +2,8 @@ import React from "react";
 import {
   useMatches,
   useNavigate,
-  type LinkOptions,
+  type LinkProps,
+  type RegisteredRouter,
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
@@ -29,7 +30,7 @@ interface SidebarMobileNavigationProps {
   items: {
     id: string;
     title: string;
-    linkProps: LinkOptions;
+    linkProps: LinkProps<RegisteredRouter["routeTree"]>;
   }[];
 }
 
