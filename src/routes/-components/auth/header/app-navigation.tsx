@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, type LinkOptions } from "@tanstack/react-router";
+import { Link, RegisteredRouter, type LinkProps } from "@tanstack/react-router";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
@@ -10,18 +10,18 @@ import { cn } from "@/lib/utils";
 type AppNavigationLinks = {
   name: string;
   props: Omit<
-    LinkOptions,
+    LinkProps<RegisteredRouter["routeTree"]>,
     "children" | "className" | "activeProps" | "inactiveProps"
   >;
 }[];
 
-const defaultActiveOptions: LinkOptions["activeOptions"] = {
+const defaultActiveOptions: LinkProps["activeOptions"] = {
   exact: false,
   includeHash: false,
   includeSearch: false,
 } as const;
 
-type Props = React.JSX.IntrinsicElements["nav"];
+type Props = React.ComponentPropsWithoutRef<"nav">;
 
 export const AppNavigation = (props: Props) => {
   const { className = "", ...navProps } = props;
@@ -125,7 +125,7 @@ export const AppNavigation = (props: Props) => {
             <Link
               {...item.props}
               className={cn(
-                "inline-block whitespace-nowrap border-b pb-4 pt-3 leading-none transition-all sm:px-4"
+                "inline-block whitespace-nowrap border-b py-4 leading-none transition-all sm:px-4"
               )}
               activeProps={{
                 className: cn("border-foreground font-semibold"),

@@ -64,9 +64,7 @@ export default function AuthHeader() {
         </div>
       </header>
       <AppNavigation
-        className={cn(
-          "w-full border-b bg-card shadow-sm md:sticky md:top-0 md:z-20"
-        )}
+        className={cn("sticky top-0 z-20 w-full border-b bg-card md:shadow-sm")}
       />
     </>
   );
