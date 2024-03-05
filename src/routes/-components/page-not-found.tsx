@@ -39,7 +39,7 @@ function PageNotFound({
         </p>
         {children || (
           <p className="mt-4">
-            <Link to="/" className={cn(buttonVariants())} preload={false}>
+            <Link to="/" className={cn(buttonVariants())}>
               <icons.ChevronLeft className="mr-2 h-4 w-4" />
               <span>
                 {t("goBack", { ns: "messages", context: "dashboard" })}
