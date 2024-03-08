@@ -14,6 +14,7 @@ import { useTableList } from "./context";
 
 function TableListColumnVisibilityDropdown() {
   const { table } = useTableList();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,17 +23,23 @@ function TableListColumnVisibilityDropdown() {
           View
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[150px] px-1.5">
+      <DropdownMenuContent
+        align="end"
+        className="w-full sm:max-w-[16rem]"
+        onCloseAutoFocus={(evt) => evt.preventDefault()}
+      >
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem
+          className="capitalize"
+          checked={table.getIsAllColumnsVisible()}
+          onCheckedChange={(value) => table.toggleAllColumnsVisible(!!value)}
+          onSelect={(evt) => evt.preventDefault()}
+        >
+          All
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuSeparator />
         <ScrollArea className="h-80">
-          <DropdownMenuCheckboxItem
-            className="capitalize"
-            checked={table.getIsAllColumnsVisible()}
-            onCheckedChange={(value) => table.toggleAllColumnsVisible(!!value)}
-          >
-            All
-          </DropdownMenuCheckboxItem>
           {table
             .getAllColumns()
             .filter(
@@ -46,6 +53,7 @@ function TableListColumnVisibilityDropdown() {
                   className="capitalize"
                   checked={column.getIsVisible()}
                   onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  onSelect={(evt) => evt.preventDefault()}
                 >
                   {column.columnDef?.meta?.columnName ?? column.id}
                 </DropdownMenuCheckboxItem>
