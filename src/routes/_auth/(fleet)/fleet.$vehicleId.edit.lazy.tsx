@@ -1,5 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
+import { Container } from "@/routes/-components/container";
+
 export const Route = createLazyFileRoute(
   "/_auth/(fleet)/fleet/$vehicleId/edit"
 )({
@@ -7,5 +9,9 @@ export const Route = createLazyFileRoute(
 });
 
 function EditVehiclePage() {
-  return "Edit Fleet Route";
+  return (
+    <Container>
+      <p>EditVehiclePage works!</p>
+    </Container>
+  );
 }

@@ -15,9 +15,9 @@ import { createFileRoute } from "@tanstack/react-router"
 import { Route as rootRoute } from "./routes/__root"
 import { Route as PublicImport } from "./routes/_public"
 import { Route as AuthImport } from "./routes/_auth"
-import { Route as AuthIndexImport } from "./routes/_auth/index"
 import { Route as PublicOidcCallbackImport } from "./routes/_public/oidc-callback"
 import { Route as PublicLogoutImport } from "./routes/_public/logout"
+import { Route as AuthdashboardIndexImport } from "./routes/_auth/(dashboard)/index"
 import { Route as AuthsettingsSettingsRouteImport } from "./routes/_auth/(settings)/settings.route"
 import { Route as AuthreservationsReservationsRouteImport } from "./routes/_auth/(reservations)/reservations.route"
 import { Route as AuthreportsReportsRouteImport } from "./routes/_auth/(reports)/reports.route"
@@ -81,11 +81,6 @@ const AuthRoute = AuthImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthIndexRoute = AuthIndexImport.update({
-  path: "/",
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() => import("./routes/_auth/index.lazy").then((d) => d.Route))
-
 const PublicLoggedOutLazyRoute = PublicLoggedOutLazyImport.update({
   path: "/logged-out",
   getParentRoute: () => PublicRoute,
@@ -107,6 +102,13 @@ const PublicLogoutRoute = PublicLogoutImport.update({
   path: "/logout",
   getParentRoute: () => PublicRoute,
 } as any)
+
+const AuthdashboardIndexRoute = AuthdashboardIndexImport.update({
+  path: "/",
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+  import("./routes/_auth/(dashboard)/index.lazy").then((d) => d.Route),
+)
 
 const AuthsettingsSettingsRouteRoute = AuthsettingsSettingsRouteImport.update({
   path: "/settings",
@@ -489,10 +491,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PublicLoggedOutLazyImport
       parentRoute: typeof PublicImport
     }
-    "/_auth/": {
-      preLoaderRoute: typeof AuthIndexImport
-      parentRoute: typeof AuthImport
-    }
     "/_auth/(agreements)/agreements": {
       preLoaderRoute: typeof AuthagreementsAgreementsRouteImport
       parentRoute: typeof AuthImport
@@ -515,6 +513,10 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/(settings)/settings": {
       preLoaderRoute: typeof AuthsettingsSettingsRouteImport
+      parentRoute: typeof AuthImport
+    }
+    "/_auth/(dashboard)/": {
+      preLoaderRoute: typeof AuthdashboardIndexImport
       parentRoute: typeof AuthImport
     }
     "/_auth/(agreements)/agreements/$agreementId": {
@@ -664,7 +666,6 @@ declare module "@tanstack/react-router" {
 
 export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([
-    AuthIndexRoute,
     AuthagreementsAgreementsRouteRoute.addChildren([
       AuthagreementsAgreementsAgreementIdRouteRoute.addChildren([
         AuthagreementsAgreementsAgreementIdCheckInRoute,
@@ -718,6 +719,7 @@ export const routeTree = rootRoute.addChildren([
       AuthsettingsSettingsProfileRoute,
       AuthsettingsSettingsIndexLazyRoute,
     ]),
+    AuthdashboardIndexRoute,
   ]),
   PublicRoute.addChildren([
     PublicLogoutRoute,

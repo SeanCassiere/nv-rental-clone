@@ -50,6 +50,7 @@ import {
   TableListToolbarFilters,
   type TableListToolbarFilterItem,
 } from "@/routes/_auth/-modules/table-list";
+import { Container } from "@/routes/-components/container";
 
 import {
   ReservationDateTimeColumns,
@@ -396,7 +397,7 @@ function ReservationsSearchPage() {
   useDocumentTitle(titleMaker("Reservations"));
 
   return (
-    <>
+    <Container>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -526,6 +527,6 @@ function ReservationsSearchPage() {
           </Pagination>
         </TableList>
       </section>
-    </>
+    </Container>
   );
 }

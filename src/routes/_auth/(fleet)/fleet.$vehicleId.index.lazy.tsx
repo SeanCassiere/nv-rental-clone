@@ -26,6 +26,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
+import { Container } from "@/routes/-components/container";
+
 import { titleMaker } from "@/lib/utils/title-maker";
 
 import { cn } from "@/lib/utils";
@@ -138,7 +140,7 @@ function VehicleViewPage() {
   }, [router.history, vehicleData.status]);
 
   return (
-    <>
+    <Container>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
@@ -254,6 +256,6 @@ function VehicleViewPage() {
           ))}
         </Tabs>
       </section>
-    </>
+    </Container>
   );
 }
