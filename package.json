@@ -52,7 +52,7 @@
     "i18next-browser-languagedetector": "^7.2.0",
     "i18next-http-backend": "^2.5.0",
     "jsurl2": "^2.1.1",
-    "lucide-react": "^0.350.0",
+    "lucide-react": "^0.352.0",
     "oidc-client-ts": "^3.0.1",
     "react": "18.2.0",
     "react-cache-buster": "^0.1.8",
