@@ -11,6 +11,8 @@ import AddRentalParentForm from "@/components/add-rental";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
+import { Container } from "@/routes/-components/container";
+
 import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute(
@@ -75,15 +77,17 @@ function EditAgreementPage() {
   }, [router.history, agreementData.status]);
 
   return (
-    <AddRentalParentForm
-      referenceId={parseInt(agreementId)}
-      currentStage={stage}
-      module="agreement"
-      onStageTabClick={handleStageTabClick}
-      onRentalSaveClick={handleAgreementSaveComplete}
-      onRentalCancelClick={handleCancelEditAgreement}
-      referenceNumber={agreement?.agreementNumber || undefined}
-      summaryData={summaryData}
-    />
+    <Container>
+      <AddRentalParentForm
+        referenceId={parseInt(agreementId)}
+        currentStage={stage}
+        module="agreement"
+        onStageTabClick={handleStageTabClick}
+        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalCancelClick={handleCancelEditAgreement}
+        referenceNumber={agreement?.agreementNumber || undefined}
+        summaryData={summaryData}
+      />
+    </Container>
   );
 }

@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { ViewReport } from "@/routes/_auth/(reports)/-components/view-report/page";
 import { ReportContextProvider } from "@/routes/_auth/(reports)/-components/view-report/view-report-context";
+import { Container } from "@/routes/-components/container";
 
 export const Route = createLazyFileRoute("/_auth/(reports)/reports/$reportId/")(
   {
@@ -24,30 +25,32 @@ function ViewReportPage() {
   const userId = auth.user?.profile?.navotar_userid;
 
   return (
-    <React.Suspense fallback={<Skeleton className="h-48" />}>
-      {clientId && userId && reportId ? (
-        <FetchReportLayer
-          clientId={clientId}
-          userId={userId}
-          reportId={reportId}
-        />
-      ) : (
-        <div>
-          <h2>Something is missing</h2>
-          <pre>
-            {JSON.stringify(
-              {
-                clientId: clientId ?? `typeof ${typeof clientId} ${clientId}`,
-                userId: userId ?? `typeof ${typeof userId} ${userId}`,
-                reportId: reportId ?? `typeof ${typeof reportId} ${reportId}`,
-              },
-              null,
-              2
-            )}
-          </pre>
-        </div>
-      )}
-    </React.Suspense>
+    <Container>
+      <React.Suspense fallback={<Skeleton className="h-48" />}>
+        {clientId && userId && reportId ? (
+          <FetchReportLayer
+            clientId={clientId}
+            userId={userId}
+            reportId={reportId}
+          />
+        ) : (
+          <div>
+            <h2>Something is missing</h2>
+            <pre>
+              {JSON.stringify(
+                {
+                  clientId: clientId ?? `typeof ${typeof clientId} ${clientId}`,
+                  userId: userId ?? `typeof ${typeof userId} ${userId}`,
+                  reportId: reportId ?? `typeof ${typeof reportId} ${reportId}`,
+                },
+                null,
+                2
+              )}
+            </pre>
+          </div>
+        )}
+      </React.Suspense>
+    </Container>
   );
 }
 

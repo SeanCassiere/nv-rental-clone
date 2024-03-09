@@ -8,7 +8,7 @@ import { icons } from "@/components/ui/icons";
 
 import { fetchDashboardSalesStatisticsOptions } from "@/lib/query/dashboard";
 
-import { useWidgetName } from "@/routes/_auth/-dashboard/useWidgetName";
+import { useWidgetName } from "@/routes/_auth/(dashboard)/-components/useWidgetName";
 
 import { WidgetSkeleton, type CommonWidgetProps } from "./_common";
 

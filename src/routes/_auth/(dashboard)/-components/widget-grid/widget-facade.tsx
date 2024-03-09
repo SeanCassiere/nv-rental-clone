@@ -8,7 +8,7 @@ import { icons } from "@/components/ui/icons";
 import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import type { Auth } from "@/lib/query/helpers";
 
-import { useWidgetName } from "@/routes/_auth/-dashboard/useWidgetName";
+import { useWidgetName } from "@/routes/_auth/(dashboard)/-components/useWidgetName";
 
 import { cn } from "@/lib/utils";
 

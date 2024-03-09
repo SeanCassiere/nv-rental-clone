@@ -45,7 +45,7 @@ import {
   fetchVehiclesSearchListOptions,
 } from "@/lib/query/vehicle";
 
-import { useWidgetName } from "@/routes/_auth/-dashboard/useWidgetName";
+import { useWidgetName } from "@/routes/_auth/(dashboard)/-components/useWidgetName";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 

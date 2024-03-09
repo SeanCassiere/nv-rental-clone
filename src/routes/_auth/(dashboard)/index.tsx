@@ -9,7 +9,7 @@ import { fetchLocationsListOptions } from "@/lib/query/location";
 
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
-export const Route = createFileRoute("/_auth/")({
+export const Route = createFileRoute("/_auth/(dashboard)/")({
   validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
   beforeLoad: ({ context }) => {
     const auth = getAuthFromRouterContext(context);

@@ -3,12 +3,13 @@ import {
   createLazyFileRoute,
   getRouteApi,
   useNavigate,
-  useRouter,
 } from "@tanstack/react-router";
 
 import AddRentalParentForm from "@/components/add-rental";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
+
+import { Container } from "@/routes/-components/container";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
@@ -22,7 +23,6 @@ const routeApi = getRouteApi("/_auth/reservations/new");
 
 function AddReservationPage() {
   const navigate = useNavigate({ from: "/reservations/new" });
-  const router = useRouter();
 
   const { stage = "rental-information" } = routeApi.useSearch();
 
@@ -54,13 +54,15 @@ function AddReservationPage() {
 
   useDocumentTitle(titleMaker("New - Reservation"));
   return (
-    <AddRentalParentForm
-      referenceId={0}
-      currentStage={stage}
-      module="reservation"
-      onStageTabClick={handleStageTabClick}
-      onRentalSaveClick={handleReservationSaveComplete}
-      onRentalCancelClick={handleCancelAddReservation}
-    />
+    <Container>
+      <AddRentalParentForm
+        referenceId={0}
+        currentStage={stage}
+        module="reservation"
+        onStageTabClick={handleStageTabClick}
+        onRentalSaveClick={handleReservationSaveComplete}
+        onRentalCancelClick={handleCancelAddReservation}
+      />
+    </Container>
   );
 }

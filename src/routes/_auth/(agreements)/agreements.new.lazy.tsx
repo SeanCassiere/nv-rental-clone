@@ -9,6 +9,8 @@ import AddRentalParentForm from "@/components/add-rental";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
+import { Container } from "@/routes/-components/container";
+
 import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createLazyFileRoute("/_auth/(agreements)/agreements/new")({
@@ -51,13 +53,15 @@ function AddAgreementPage() {
   useDocumentTitle(titleMaker("New - Agreement"));
 
   return (
-    <AddRentalParentForm
-      referenceId={0}
-      currentStage={stage}
-      module="agreement"
-      onStageTabClick={handleStageTabClick}
-      onRentalSaveClick={handleAgreementSaveComplete}
-      onRentalCancelClick={handleCancelAddAgreement}
-    />
+    <Container>
+      <AddRentalParentForm
+        referenceId={0}
+        currentStage={stage}
+        module="agreement"
+        onStageTabClick={handleStageTabClick}
+        onRentalSaveClick={handleAgreementSaveComplete}
+        onRentalCancelClick={handleCancelAddAgreement}
+      />
+    </Container>
   );
 }

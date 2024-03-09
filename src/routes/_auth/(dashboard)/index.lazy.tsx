@@ -43,6 +43,8 @@ import {
 import type { Auth } from "@/lib/query/helpers";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 
+import { Container } from "@/routes/-components/container";
+
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { titleMaker } from "@/lib/utils/title-maker";
 
@@ -51,12 +53,12 @@ import { add } from "@/lib/config/date-fns";
 import type { apiClient } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
-import WidgetGrid from "./-dashboard/widget-grid";
-import WidgetPicker from "./-dashboard/widget-picker";
+import WidgetGrid from "./-components/widget-grid";
+import WidgetPicker from "./-components/widget-picker";
 
 const routeApi = getRouteApi("/_auth/");
 
-export const Route = createLazyFileRoute("/_auth/")({
+export const Route = createLazyFileRoute("/_auth/(dashboard)/")({
   component: DashboardPage,
 });
 
@@ -99,7 +101,7 @@ function DashboardPage() {
   useDocumentTitle(titleMaker("Dashboard"));
 
   return (
-    <>
+    <Container>
       <section
         className={cn(
           "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:px-4 sm:pb-2"
@@ -143,7 +145,7 @@ function DashboardPage() {
         onShowWidgetPicker={handleSetShowWidgetPickerModal}
         auth={authParams}
       />
-    </>
+    </Container>
   );
 }
 

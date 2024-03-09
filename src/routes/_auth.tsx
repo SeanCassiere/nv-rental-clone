@@ -21,7 +21,6 @@ import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 import { removeTrailingSlash } from "@/lib/utils/random";
 
 import { useConfigureLocalFeatures } from "./-components/auth/useConfigureLocalFeatures";
-import { Container } from "./-components/container";
 
 const AuthHeader = React.lazy(() => import("@/routes/-components/auth/header"));
 const LogoutDialog = React.lazy(
@@ -128,9 +127,7 @@ function AuthLayout() {
     <React.Fragment>
       <LogoutDialog />
       <AuthHeader />
-      <Container>
-        <Outlet />
-      </Container>
+      <Outlet />
     </React.Fragment>
   );
 }
