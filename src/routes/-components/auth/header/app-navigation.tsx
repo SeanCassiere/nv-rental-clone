@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, RegisteredRouter, type LinkProps } from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 type AppNavigationLinks = {
   name: string;
   props: Omit<
-    LinkProps<RegisteredRouter["routeTree"]>,
+    LinkProps,
     "children" | "className" | "activeProps" | "inactiveProps"
   >;
 }[];
@@ -133,7 +133,6 @@ export const AppNavigation = (props: Props) => {
               inactiveProps={{
                 className: cn("border-transparent hover:border-foreground/20"),
               }}
-              params={true}
             >
               {item.name}
             </Link>
