@@ -90,7 +90,7 @@
     "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5.4.2",
+    "typescript": "^5.3.2",
     "vite": "^5.1.6",
     "vite-plugin-eslint": "^1.8.1"
   }
