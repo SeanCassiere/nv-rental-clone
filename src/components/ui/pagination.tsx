@@ -40,7 +40,6 @@ type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<ButtonProps, "size"> &
   LinkProps & { className?: string };
-// React.ComponentPropsWithoutRef<'a'> &
 
 const PaginationLink = ({
   className,
