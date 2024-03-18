@@ -1,11 +1,5 @@
 import { useState, type ReactNode } from "react";
-import {
-  Link,
-  type AnyRoute,
-  type LinkOptions,
-  type RegisteredRouter,
-  type RoutePaths,
-} from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 import {
   Accordion,
@@ -32,17 +26,11 @@ export const SummaryHeader = ({
   );
 };
 
-export type TSummaryLineItemProps<
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
-  TMaskTo extends string = "",
-> = {
+export type TSummaryLineItemProps = {
   id: string;
   label: string;
   type?: "text" | "link";
-  linkProps?: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
+  linkProps?: LinkProps;
   amount: string | number | null;
   shown?: boolean;
   redHighlight?: boolean;
@@ -137,12 +125,11 @@ export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
           )}
           {lineItemType === "link" && (
             <Link
-              {...(data?.linkProps || {})}
+              {...((data?.linkProps || {}) as LinkProps)}
               className={cn(
                 makeSummaryDataStyles(data),
                 "text-primary underline underline-offset-4"
               )}
-              params={true}
             >
               {data.amount}
             </Link>

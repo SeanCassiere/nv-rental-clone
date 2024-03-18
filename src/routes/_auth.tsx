@@ -28,11 +28,12 @@ const LogoutDialog = React.lazy(
 );
 
 export const Route = createFileRoute("/_auth")({
-  beforeLoad: async ({ context, location }) => {
+  beforeLoad: async ({ context, location, preload }) => {
     const navigator = context.auth.activeNavigator;
 
     // if there isn't an authentication flow currently in-flight
     if (
+      !preload &&
       !context.auth.isLoading &&
       navigator !== "signinSilent" &&
       navigator !== "signinRedirect"

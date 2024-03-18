@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Link,
-  type LinkProps,
-  type RegisteredRouter,
-} from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 import { cn } from "@/lib/utils";
 
@@ -11,7 +7,7 @@ interface SidebarDesktopNavigationProps {
   items: {
     id: string;
     title: string;
-    linkProps: LinkProps<RegisteredRouter["routeTree"]>;
+    linkProps: LinkProps;
   }[];
 }
 
@@ -21,6 +17,7 @@ export function SidebarDesktopNavigation({
   return (
     <nav className="hidden lg:flex lg:flex-col lg:space-y-1.5">
       {items.map((item, idx) => {
+        const { activeProps, inactiveProps, ...linkProps } = item.linkProps;
         return (
           <Link
             key={`settings_sidebar_${idx}_${item.title}`}
@@ -29,14 +26,15 @@ export function SidebarDesktopNavigation({
             )}
             activeProps={{
               className: cn("border-border bg-muted text-foreground underline"),
+              ...activeProps,
             }}
             inactiveProps={{
               className: cn(
                 "border-transparent text-muted-foreground hover:bg-muted/90 hover:text-foreground hover:underline"
               ),
+              ...inactiveProps,
             }}
-            params={true}
-            {...item.linkProps}
+            {...linkProps}
           >
             {item.title}
           </Link>

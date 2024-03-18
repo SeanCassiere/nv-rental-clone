@@ -1,4 +1,4 @@
-import { Link, type LinkOptions } from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { icons, type LucideIcon } from "@/components/ui/icons";
@@ -137,7 +137,7 @@ const StatBlock = ({
   title: string;
   value: string | null;
   icon: LucideIcon;
-  linkProps: LinkOptions;
+  linkProps: LinkProps;
 }) => {
   return (
     <Card className="flex h-full flex-col justify-between">
@@ -151,7 +151,6 @@ const StatBlock = ({
       <CardContent>
         <Link
           className="block text-2xl font-bold tabular-nums underline-offset-4 focus-within:underline hover:underline"
-          params
           {...linkProps}
         >
           {value ?? <Skeleton className="h-8 w-full" />}
