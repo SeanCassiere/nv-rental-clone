@@ -1,8 +1,18 @@
 import * as React from "react";
-import { Link, type LinkProps } from "@tanstack/react-router";
+import {
+  Link,
+  type AnyRoute,
+  type LinkProps,
+  type RegisteredRouter,
+  type RoutePaths,
+} from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
-import { Button, ButtonProps, buttonVariants } from "@/components/ui/button";
+import {
+  Button,
+  buttonVariants,
+  type ButtonProps,
+} from "@/components/ui/button";
 
 import { cn } from "@/lib/utils";
 
@@ -36,30 +46,43 @@ const PaginationItem = React.forwardRef<
 ));
 PaginationItem.displayName = "PaginationItem";
 
-type PaginationLinkProps = {
-  isActive?: boolean;
-} & Pick<ButtonProps, "size"> &
-  LinkProps & { className?: string };
+type PaginationLinkProps<
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+> = Pick<ButtonProps, "size"> & { isActive?: boolean } & React.PropsWithoutRef<
+    LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
+      Omit<React.ComponentPropsWithoutRef<"a">, "children" | "preload">
+  >;
 
-const PaginationLink = ({
-  className,
-  isActive,
-  size = "icon",
-  ...props
-}: PaginationLinkProps) => (
-  <Link
-    aria-current={isActive ? "page" : undefined}
-    className={cn(
-      "tabular-nums",
-      buttonVariants({
-        variant: isActive ? "outline" : "ghost",
-        size,
-      }),
-      className
-    )}
-    {...props}
-  />
-);
+const PaginationLink = <
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+>(
+  props: PaginationLinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>
+) => {
+  const { size, className, isActive = false, ...rest } = props;
+
+  return (
+    <Link
+      aria-current={isActive ? "page" : undefined}
+      className={cn(
+        "tabular-nums",
+        buttonVariants({
+          variant: isActive ? "outline" : "ghost",
+          size,
+        }),
+        className
+      )}
+      {...rest}
+    />
+  );
+};
 PaginationLink.displayName = "PaginationLink";
 
 type PaginationButtonProps = {
@@ -88,20 +111,28 @@ const PaginationButton = ({
 );
 PaginationButton.displayName = "PaginationButton";
 
-const PaginationLinkPrevious = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
-  <PaginationLink
-    aria-label="Go to previous page"
-    size="default"
-    className={cn("cursor-pointer gap-1 pl-2.5", className)}
-    {...props}
-  >
-    <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
-  </PaginationLink>
-);
+const PaginationLinkPrevious = <
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+>(
+  props: PaginationLinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>
+) => {
+  const { className, ...rest } = props;
+  return (
+    <PaginationLink
+      aria-label="Go to previous page"
+      size="default"
+      className={cn("cursor-pointer gap-1 pl-2.5", className)}
+      {...rest}
+    >
+      <ChevronLeft className="h-4 w-4" />
+      <span>Previous</span>
+    </PaginationLink>
+  );
+};
 PaginationLinkPrevious.displayName = "PaginationLinkPrevious";
 
 const PaginationButtonPrevious = ({
@@ -120,20 +151,28 @@ const PaginationButtonPrevious = ({
 );
 PaginationButtonPrevious.displayName = "PaginationButtonPrevious";
 
-const PaginationLinkNext = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
-  <PaginationLink
-    aria-label="Go to next page"
-    size="default"
-    className={cn("gap-1 pr-2.5", className)}
-    {...props}
-  >
-    <span>Next</span>
-    <ChevronRight className="h-4 w-4" />
-  </PaginationLink>
-);
+const PaginationLinkNext = <
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+>(
+  props: PaginationLinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>
+) => {
+  const { className, ...rest } = props;
+  return (
+    <PaginationLink
+      aria-label="Go to next page"
+      size="default"
+      className={cn("gap-1 pr-2.5", className)}
+      {...rest}
+    >
+      <span>Next</span>
+      <ChevronRight className="h-4 w-4" />
+    </PaginationLink>
+  );
+};
 PaginationLinkNext.displayName = "PaginationLinkNext";
 
 const PaginationButtonNext = ({

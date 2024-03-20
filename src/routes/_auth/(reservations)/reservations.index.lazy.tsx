@@ -482,7 +482,6 @@ function ReservationsSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationPrevious>
@@ -498,7 +497,6 @@ function ReservationsSearchPage() {
                       filters: searchFilters,
                     })}
                     isActive={isActive}
-                    params
                   >
                     {pagination.pageIndex + 1}
                   </PaginationLink>
@@ -519,7 +517,6 @@ function ReservationsSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationNext>

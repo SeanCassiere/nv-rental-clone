@@ -414,7 +414,6 @@ function VehicleSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationPrevious>
@@ -430,7 +429,6 @@ function VehicleSearchPage() {
                       filters: searchFilters,
                     })}
                     isActive={isActive}
-                    params
                   >
                     {pagination.pageIndex + 1}
                   </PaginationLink>
@@ -451,7 +449,6 @@ function VehicleSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationNext>

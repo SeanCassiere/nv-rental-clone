@@ -503,7 +503,6 @@ function AgreementsSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationPrevious>
@@ -519,7 +518,6 @@ function AgreementsSearchPage() {
                       filters: searchFilters,
                     })}
                     isActive={isActive}
-                    params
                   >
                     {pagination.pageIndex + 1}
                   </PaginationLink>
@@ -540,7 +538,6 @@ function AgreementsSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationNext>
