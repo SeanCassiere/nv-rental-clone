@@ -12,8 +12,8 @@ import { incompleteApplicationSettingsTabsFeatureFlag } from "@/lib/config/featu
 
 import { SettingsLayoutHeader } from "./-components/layout-header";
 import {
+  LayoutTabNavigationItem,
   LayoutTabsNavigation,
-  LayoutTabsNavigationTabListItem,
 } from "./-components/layout-tabs-navigation";
 
 export const Route = createLazyFileRoute(
@@ -32,52 +32,56 @@ function ApplicationConfigurationLayout() {
   );
 
   const tabs = React.useMemo(() => {
-    const items: LayoutTabsNavigationTabListItem[] = [];
+    const items: (() => JSX.Element)[] = [];
 
-    items.push({
-      pathname: "/settings/application/users",
-      title: t("titles.systemUsers", { ns: "settings" }),
-      linkProps: {
-        to: "/settings/application/users",
-        params: true,
-        search: true,
-      },
-    });
+    items.push(() => (
+      <LayoutTabNavigationItem
+        pathname="/settings/application/users"
+        linkProps={{
+          to: "/settings/application/users",
+        }}
+      >
+        {t("titles.systemUsers", { ns: "settings" })}
+      </LayoutTabNavigationItem>
+    ));
 
-    items.push({
-      pathname: "/settings/application/permissions-and-roles",
-      title: t("titles.permissionsAndRoles", { ns: "settings" }),
-      linkProps: {
-        to: "/settings/application/permissions-and-roles",
-        params: true,
-        search: true,
-      },
-    });
+    items.push(() => (
+      <LayoutTabNavigationItem
+        pathname="/settings/application/permissions-and-roles"
+        linkProps={{
+          to: "/settings/application/permissions-and-roles",
+        }}
+      >
+        {t("titles.permissionsAndRoles", { ns: "settings" })}
+      </LayoutTabNavigationItem>
+    ));
 
-    items.push({
-      pathname: "/settings/application/locations",
-      title: t("titles.locations", { ns: "settings" }),
-      linkProps: {
-        to: "/settings/application/locations",
-        params: true,
-        search: true,
-      },
-    });
+    items.push(() => (
+      <LayoutTabNavigationItem
+        pathname="/settings/application/locations"
+        linkProps={{
+          to: "/settings/application/locations",
+        }}
+      >
+        {t("titles.locations", { ns: "settings" })}
+      </LayoutTabNavigationItem>
+    ));
 
     if (incomplete_incompleteApplicationSettingsTabs) {
-      items.push({
-        pathname: "/settings/application/store-hours-and-holidays",
-        title: t("titles.storeHoursAndHolidays", { ns: "settings" }),
-        linkProps: {
-          to: "/settings/application/store-hours-and-holidays",
-          params: true,
-          search: true,
-        },
-      });
+      items.push(() => (
+        <LayoutTabNavigationItem
+          pathname="/settings/application/store-hours-and-holidays"
+          linkProps={{
+            to: "/settings/application/store-hours-and-holidays",
+          }}
+        >
+          {t("titles.storeHoursAndHolidays", { ns: "settings" })}
+        </LayoutTabNavigationItem>
+      ));
     }
 
     return items;
-  }, [incomplete_incompleteApplicationSettingsTabs, t]);
+  }, [t, incomplete_incompleteApplicationSettingsTabs]);
 
   return (
     <React.Fragment>
