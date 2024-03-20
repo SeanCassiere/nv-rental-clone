@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  createLazyFileRoute,
-  LinkOptions,
-  Outlet,
-} from "@tanstack/react-router";
+import { createLazyFileRoute, Outlet } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { Separator } from "@/components/ui/separator";
