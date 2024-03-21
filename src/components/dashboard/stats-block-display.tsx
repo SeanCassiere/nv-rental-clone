@@ -1,4 +1,11 @@
-import { Link, type LinkProps } from "@tanstack/react-router";
+import React from "react";
+import {
+  Link,
+  type AnyRoute,
+  type LinkProps,
+  type RegisteredRouter,
+  type RoutePaths,
+} from "@tanstack/react-router";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { icons, type LucideIcon } from "@/components/ui/icons";
@@ -128,17 +135,26 @@ const DashboardStatsBlock = ({
   );
 };
 
-const StatBlock = ({
-  title,
-  value,
-  icon: Icon,
-  linkProps,
-}: {
+const StatBlock = <
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+>(props: {
   title: string;
   value: string | null;
   icon: LucideIcon;
-  linkProps: LinkProps;
+  linkProps: Omit<
+    React.PropsWithoutRef<
+      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
+        Omit<React.ComponentPropsWithoutRef<"a">, "preload" | "className">
+    >,
+    "children"
+  >;
 }) => {
+  const { title, value, icon: Icon, linkProps } = props;
+
   return (
     <Card className="flex h-full flex-col justify-between">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

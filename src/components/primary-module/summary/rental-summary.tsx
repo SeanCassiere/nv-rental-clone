@@ -1,18 +1,13 @@
-import { Fragment, useMemo } from "react";
+import * as React from "react";
 import { type TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
-import { Separator } from "@/components/ui/separator";
 
-import { type TRentalRatesSummarySchema } from "@/lib/schemas/summary";
+import type { TRentalRatesSummarySchema } from "@/lib/schemas/summary";
 
-import {
-  SummaryHeader,
-  SummaryLineItem,
-  type TSummaryLineItemProps,
-} from "./common";
+import { isFalsy, SummaryHeader, SummaryLineItem } from "./common";
 
 function makeChargeItemText(
   charge: TRentalRatesSummarySchema["miscCharges"][number],
@@ -68,8 +63,8 @@ export const RentalSummary = ({
 }) => {
   const { t } = useTranslation();
 
-  const defaultLineItemsList = useMemo(() => {
-    let lineItems: Omit<TSummaryLineItemProps, "id">[] = [];
+  const itemsList = React.useMemo(() => {
+    let items: { component: React.ReactNode; shown?: boolean }[] = [];
 
     const taxableMischarges = (summaryData?.miscCharges || [])
       .sort((chg1, chg2) => chg1.id - chg2.id)
@@ -79,666 +74,372 @@ export const RentalSummary = ({
       .filter((charge) => !charge.isTaxable);
     const taxes = summaryData?.taxes || [];
 
-    if (module === "agreements" || module === "reservations") {
-      lineItems = [
-        {
-          label: "Base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.baseRate,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.baseRate),
-        },
-        {
-          label: "Discount on base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.promotionDiscount,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.promotionDiscount),
-        },
-        {
-          label: "Final base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.finalBaseRate,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.finalBaseRate),
-        },
-        {
-          label: "Total miscellaneous charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalMiscChargesTaxable,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
-          hasDropdownContent: Boolean(taxableMischarges.length > 0),
-          dropdownContent: taxableMischarges.map((charge) => (
-            <span
-              key={`taxable-charge-${charge.id}`}
-              className="block break-all text-sm text-foreground/70"
-            >
-              {makeChargeItemText(charge, t)}
-            </span>
-          )),
-        },
-        {
-          label: "Total miscellaneous charges (non-taxable)",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalMiscChargesNonTaxable,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(
-            summaryData?.totalMiscChargesNonTaxable
-          ),
-          hasDropdownContent: Boolean(nonTaxableMischarges.length > 0),
-          dropdownContent: nonTaxableMischarges.map((charge) => (
-            <span
-              key={`non-taxable-charge-${charge.id}`}
-              className="block break-all text-sm text-foreground/70"
-            >
-              {makeChargeItemText(charge, t)}
-            </span>
-          )),
-        },
-        {
-          label: "Extra mileage charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraMilesCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
-          shown: summaryData?.isExtraMileageChargeTaxable || false,
-        },
-        {
-          label: "Extra duration charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraDayCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
-          shown: summaryData?.isExtraDayChargeTaxable || false,
-        },
-        {
-          label: "Fuel charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraFuelCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
-          shown: summaryData?.isFuelChargeTaxable || false,
-        },
-        {
-          label: "Pre-tax adjustments",
-          amount: t("intlCurrency", {
-            value: summaryData?.preAdjustment,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.preAdjustment),
-          shown: Boolean(summaryData?.preAdjustment),
-        },
-        {
-          label: "Pre-discount on subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.preSubTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.preSubTotal),
-          shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
-        },
-        {
-          label: "Discount on subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.promotionDiscountOnSubTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(
-            summaryData?.promotionDiscountOnSubTotal
-          ),
-          shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
-        },
-        {
-          label: "Subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.subTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.subTotal),
-        },
-        {
-          label: "Total taxes",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalTax,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.totalTax),
-          hasDropdownContent: Boolean(taxes.length > 0),
-          dropdownContent: taxes.map((tax) => (
-            <span
-              key={`tax-charge-${tax.taxId}`}
-              className="block break-all text-sm text-foreground/70"
-            >
-              {makeTaxItemText(tax)}
-            </span>
-          )),
-        },
-        {
-          label: "Extra mileage charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraMilesCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
-          shown: !summaryData?.isExtraMileageChargeTaxable || false,
-        },
-        {
-          label: "Extra duration charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraDayCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
-          shown: !summaryData?.isExtraDayChargeTaxable || false,
-        },
-        {
-          label: "Fuel charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraFuelCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
-          shown: !summaryData?.isFuelChargeTaxable || false,
-        },
-        {
-          label: "Additional charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.additionalCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.additionalCharge),
-          shown: Boolean(summaryData?.additionalCharge),
-        },
-        {
-          label: "Post-tax adjustments",
-          amount: t("intlCurrency", {
-            value: summaryData?.postAdjustment,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.postAdjustment),
-          shown: Boolean(summaryData?.postAdjustment),
-        },
-        {
-          label: "Grand total",
-          amount: t("intlCurrency", {
-            value: summaryData?.total,
-            ns: "format",
-          }),
-          primaryBlockHighlight: true,
-          biggerText: true,
-        },
-        {
-          label: "Amount paid",
-          amount: t("intlCurrency", {
-            value: summaryData?.amountPaid,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.amountPaid),
-        },
-        {
-          label: "Balance due",
-          amount: t("intlCurrency", {
-            value: summaryData?.balanceDue,
-            ns: "format",
-          }),
-          redHighlight: Boolean(summaryData?.balanceDue),
-        },
-        {
-          label: "Security deposit",
-          amount: t("intlCurrency", {
-            value: summaryData?.securityDeposit,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.securityDeposit),
-        },
-      ];
-    }
+    items = [
+      {
+        component: (
+          <SummaryLineItem
+            label="Base rate"
+            value={t("intlCurrency", {
+              value: summaryData?.baseRate,
+              ns: "format",
+            })}
+            valueColor={isFalsy(summaryData?.baseRate) ? "muted" : "default"}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Discount on base rate"
+            value={t("intlCurrency", {
+              value: summaryData?.promotionDiscount,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.promotionDiscount) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Final base rate"
+            value={t("intlCurrency", {
+              value: summaryData?.finalBaseRate,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.finalBaseRate) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Total miscellaneous charges"
+            value={t("intlCurrency", {
+              value: summaryData?.totalMiscChargesTaxable,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.totalMiscChargesTaxable)
+                ? "muted"
+                : "default"
+            }
+            initialDropdownExpanded={
+              module === "add-edit-agreement" ||
+              module === "add-edit-reservation"
+            }
+          >
+            {taxableMischarges.length ? (
+              <div className="pt-2">
+                {taxableMischarges.map((charge) => (
+                  <span
+                    key={`taxable-charge-${charge.id}`}
+                    className="block break-all text-sm text-foreground/70"
+                  >
+                    {makeChargeItemText(charge, t)}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </SummaryLineItem>
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Total miscellaneous charges (non-taxable)"
+            value={t("intlCurrency", {
+              value: summaryData?.totalMiscChargesNonTaxable,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.totalMiscChargesNonTaxable)
+                ? "muted"
+                : "default"
+            }
+            initialDropdownExpanded={
+              module === "add-edit-agreement" ||
+              module === "add-edit-reservation"
+            }
+          >
+            {nonTaxableMischarges.length ? (
+              <div className="pt-2">
+                {nonTaxableMischarges.map((charge) => (
+                  <span
+                    key={`non-taxable-charge-${charge.id}`}
+                    className="block break-all text-sm text-foreground/70"
+                  >
+                    {makeChargeItemText(charge, t)}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </SummaryLineItem>
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Extra mileage charges"
+            value={t("intlCurrency", {
+              value: summaryData?.extraMilesCharge,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.extraMilesCharge) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: summaryData?.isExtraMileageChargeTaxable || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Extra duration charges"
+            value={t("intlCurrency", {
+              value: summaryData?.extraDayCharge,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.extraDayCharge) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: summaryData?.isExtraDayChargeTaxable || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Fuel charges"
+            value={t("intlCurrency", {
+              value: summaryData?.extraFuelCharge,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.extraFuelCharge) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: summaryData?.isFuelChargeTaxable || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Pre-tax adjustments"
+            value={t("intlCurrency", {
+              value: summaryData?.preAdjustment,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.preAdjustment) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: !!summaryData?.preAdjustment,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Pre-discount on subtotal"
+            value={t("intlCurrency", {
+              value: summaryData?.preSubTotal,
+              ns: "format",
+            })}
+            valueColor={isFalsy(summaryData?.preSubTotal) ? "muted" : "default"}
+          />
+        ),
+        shown: !!summaryData?.promotionDiscountOnSubTotal,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Discount on subtotal"
+            value={t("intlCurrency", {
+              value: summaryData?.promotionDiscountOnSubTotal,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.promotionDiscountOnSubTotal)
+                ? "muted"
+                : "default"
+            }
+          />
+        ),
+        shown: !!summaryData?.promotionDiscountOnSubTotal,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Subtotal"
+            value={t("intlCurrency", {
+              value: summaryData?.subTotal,
+              ns: "format",
+            })}
+            valueColor={isFalsy(summaryData?.subTotal) ? "muted" : "default"}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Total taxes"
+            value={t("intlCurrency", {
+              value: summaryData?.totalTax,
+              ns: "format",
+            })}
+            valueColor={isFalsy(summaryData?.totalTax) ? "muted" : "default"}
+          >
+            {taxes.length ? (
+              <div className="pt-2">
+                {taxes.map((tax) => (
+                  <span
+                    key={`tax-charge-${tax.taxId}`}
+                    className="block break-all text-sm text-foreground/70"
+                  >
+                    {makeTaxItemText(tax)}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </SummaryLineItem>
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Extra mileage charges"
+            value={t("intlCurrency", {
+              value: summaryData?.extraMilesCharge,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.extraMilesCharge) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: !summaryData?.isExtraMileageChargeTaxable || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Extra duration charges"
+            value={t("intlCurrency", {
+              value: summaryData?.extraDayCharge,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.extraDayCharge) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: !summaryData?.isExtraDayChargeTaxable || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Fuel charges"
+            value={t("intlCurrency", {
+              value: summaryData?.extraFuelCharge,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.extraFuelCharge) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: !summaryData?.isFuelChargeTaxable || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Additional charges"
+            value={t("intlCurrency", {
+              value: summaryData?.additionalCharge,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.additionalCharge) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: !!summaryData?.additionalCharge || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Post-tax adjustments"
+            value={t("intlCurrency", {
+              value: summaryData?.postAdjustment,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.postAdjustment) ? "muted" : "default"
+            }
+          />
+        ),
+        shown: !!summaryData?.postAdjustment || false,
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Grand total"
+            value={t("intlCurrency", {
+              value: summaryData?.total,
+              ns: "format",
+            })}
+            contentSize="lg"
+            contentColor="primary"
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Amount paid"
+            value={t("intlCurrency", {
+              value: summaryData?.amountPaid,
+              ns: "format",
+            })}
+            valueColor={isFalsy(summaryData?.amountPaid) ? "muted" : "default"}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Balance due"
+            value={t("intlCurrency", {
+              value: summaryData?.balanceDue,
+              ns: "format",
+            })}
+            valueColor={!!summaryData?.balanceDue ? "negative" : "muted"}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Security deposit"
+            value={t("intlCurrency", {
+              value: summaryData?.securityDeposit,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.securityDeposit) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+    ];
 
-    if (module === "add-edit-agreement") {
-      lineItems = [
-        {
-          label: "Base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.baseRate,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.baseRate),
-        },
-        {
-          label: "Discount on base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.promotionDiscount,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.promotionDiscount),
-        },
-        {
-          label: "Final base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.finalBaseRate,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.finalBaseRate),
-        },
-        {
-          label: "Total miscellaneous charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalMiscChargesTaxable,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
-          hasDropdownContent: Boolean(taxableMischarges.length > 0),
-          dropdownContent: taxableMischarges.map((charge) => (
-            <span
-              key={`taxable-charge-${charge.id}`}
-              className="block break-all text-sm text-foreground/70"
-            >
-              {makeChargeItemText(charge, t)}
-            </span>
-          )),
-          isDropdownContentInitiallyShown: true,
-        },
-        {
-          label: "Total miscellaneous charges (non-taxable)",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalMiscChargesNonTaxable,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(
-            summaryData?.totalMiscChargesNonTaxable
-          ),
-          hasDropdownContent: Boolean(nonTaxableMischarges.length > 0),
-          dropdownContent: nonTaxableMischarges.map((charge) => (
-            <span
-              key={`non-taxable-charge-${charge.id}`}
-              className="block break-all text-sm text-foreground/70"
-            >
-              {makeChargeItemText(charge, t)}
-            </span>
-          )),
-          isDropdownContentInitiallyShown: true,
-        },
-        {
-          label: "Extra mileage charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraMilesCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
-          shown: summaryData?.isExtraMileageChargeTaxable || false,
-        },
-        {
-          label: "Extra duration charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraDayCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
-          shown: summaryData?.isExtraDayChargeTaxable || false,
-        },
-        {
-          label: "Fuel charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraFuelCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
-          shown: summaryData?.isFuelChargeTaxable || false,
-        },
-        {
-          label: "Pre-tax adjustments",
-          amount: t("intlCurrency", {
-            value: summaryData?.preAdjustment,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.preAdjustment),
-          shown: Boolean(summaryData?.preAdjustment),
-        },
-        {
-          label: "Pre-discount on subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.preSubTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.preSubTotal),
-          shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
-        },
-        {
-          label: "Discount on subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.promotionDiscountOnSubTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(
-            summaryData?.promotionDiscountOnSubTotal
-          ),
-          shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
-        },
-        {
-          label: "Subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.subTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.subTotal),
-        },
-        {
-          label: "Total taxes",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalTax,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.totalTax),
-          hasDropdownContent: Boolean(taxes.length > 0),
-          dropdownContent: taxes.map((tax) => (
-            <span
-              key={`tax-charge-${tax.taxId}`}
-              className="block break-all text-sm text-foreground/70"
-            >
-              {makeTaxItemText(tax)}
-            </span>
-          )),
-          isDropdownContentInitiallyShown: true,
-        },
-        {
-          label: "Extra mileage charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraMilesCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
-          shown: !summaryData?.isExtraMileageChargeTaxable || false,
-        },
-        {
-          label: "Extra duration charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraDayCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
-          shown: !summaryData?.isExtraDayChargeTaxable || false,
-        },
-        {
-          label: "Fuel charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraFuelCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
-          shown: !summaryData?.isFuelChargeTaxable || false,
-        },
-        {
-          label: "Additional charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.additionalCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.additionalCharge),
-          shown: Boolean(summaryData?.additionalCharge),
-        },
-        {
-          label: "Post-tax adjustments",
-          amount: t("intlCurrency", {
-            value: summaryData?.postAdjustment,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.postAdjustment),
-          shown: Boolean(summaryData?.postAdjustment),
-        },
-        {
-          label: "Grand total",
-          amount: t("intlCurrency", {
-            value: summaryData?.total,
-            ns: "format",
-          }),
-          primaryBlockHighlight: true,
-          biggerText: true,
-        },
-        {
-          label: "Amount paid",
-          amount: t("intlCurrency", {
-            value: summaryData?.amountPaid,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.amountPaid),
-        },
-        {
-          label: "Balance due",
-          amount: t("intlCurrency", {
-            value: summaryData?.balanceDue,
-            ns: "format",
-          }),
-          redHighlight: Boolean(summaryData?.balanceDue),
-        },
-        {
-          label: "Security deposit",
-          amount: t("intlCurrency", {
-            value: summaryData?.securityDeposit,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.securityDeposit),
-        },
-      ];
-    }
-
-    if (module === "add-edit-reservation") {
-      lineItems = [
-        {
-          label: "Base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.baseRate,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.baseRate),
-        },
-        {
-          label: "Discount on base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.promotionDiscount,
-
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.promotionDiscount),
-        },
-        {
-          label: "Final base rate",
-          amount: t("intlCurrency", {
-            value: summaryData?.finalBaseRate,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.finalBaseRate),
-        },
-        {
-          label: "Total miscellaneous charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalMiscChargesTaxable,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.totalMiscChargesTaxable),
-          dropdownContent: <></>,
-        },
-        {
-          label: "Total miscellaneous charges (non-taxable)",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalMiscChargesNonTaxable,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(
-            summaryData?.totalMiscChargesNonTaxable
-          ),
-        },
-        {
-          label: "Extra mileage charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraMilesCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
-          shown: summaryData?.isExtraMileageChargeTaxable || false,
-        },
-        {
-          label: "Extra duration charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraDayCharge,
-
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
-          shown: summaryData?.isExtraDayChargeTaxable || false,
-        },
-        {
-          label: "Fuel charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraFuelCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
-          shown: summaryData?.isFuelChargeTaxable || false,
-        },
-        {
-          label: "Pre-tax adjustments",
-          amount: t("intlCurrency", {
-            value: summaryData?.preAdjustment,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.preAdjustment),
-          shown: Boolean(summaryData?.preAdjustment),
-        },
-        {
-          label: "Pre-discount on subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.preSubTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.preSubTotal),
-          shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
-        },
-        {
-          label: "Discount on subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.promotionDiscountOnSubTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(
-            summaryData?.promotionDiscountOnSubTotal
-          ),
-          shown: Boolean(summaryData?.promotionDiscountOnSubTotal),
-        },
-        {
-          label: "Subtotal",
-          amount: t("intlCurrency", {
-            value: summaryData?.subTotal,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.subTotal),
-        },
-        {
-          label: "Total taxes",
-          amount: t("intlCurrency", {
-            value: summaryData?.totalTax,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.totalTax),
-        },
-        {
-          label: "Extra mileage charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraMilesCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraMilesCharge),
-          shown: !summaryData?.isExtraMileageChargeTaxable || false,
-        },
-        {
-          label: "Extra duration charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraDayCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraDayCharge),
-          shown: !summaryData?.isExtraDayChargeTaxable || false,
-        },
-        {
-          label: "Fuel charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.extraFuelCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.extraFuelCharge),
-          shown: !summaryData?.isFuelChargeTaxable || false,
-        },
-        {
-          label: "Additional charges",
-          amount: t("intlCurrency", {
-            value: summaryData?.additionalCharge,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.additionalCharge),
-          shown: Boolean(summaryData?.additionalCharge),
-        },
-        {
-          label: "Post-tax adjustments",
-          amount: t("intlCurrency", {
-            value: summaryData?.postAdjustment,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.postAdjustment),
-          shown: Boolean(summaryData?.postAdjustment),
-        },
-        {
-          label: "Grand total",
-          amount: t("intlCurrency", {
-            value: summaryData?.total,
-            ns: "format",
-          }),
-          primaryBlockHighlight: true,
-          biggerText: true,
-        },
-        {
-          label: "Amount paid",
-          amount: t("intlCurrency", {
-            value: summaryData?.amountPaid,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.amountPaid),
-        },
-        {
-          label: "Balance due",
-          amount: t("intlCurrency", {
-            value: summaryData?.balanceDue,
-            ns: "format",
-          }),
-          redHighlight: Boolean(summaryData?.balanceDue),
-        },
-        {
-          label: "Security deposit",
-          amount: t("intlCurrency", {
-            value: summaryData?.securityDeposit,
-            ns: "format",
-          }),
-          primaryTextHighlight: Boolean(summaryData?.securityDeposit),
-        },
-      ];
-    }
-
-    return lineItems;
+    return items;
   }, [t, module, summaryData]);
 
-  const lineItems = defaultLineItemsList.map((item, idx) => ({
-    ...item,
-    id: `${module}-summary-${idx}`,
-  }));
-
-  const viewableLineItems = lineItems.filter(
+  const visibleLineItems = itemsList.filter(
     (item) => item.shown === true || item.shown === undefined
   );
 
@@ -749,14 +450,9 @@ export const RentalSummary = ({
         icon={<icons.DollarSign className="h-6 w-6" />}
       />
       <CardContent className="px-0 py-0">
-        <ul className="flex flex-col">
-          {viewableLineItems.map((item, idx) => (
-            <Fragment key={item.id}>
-              <li>
-                <SummaryLineItem data={item} />
-                {viewableLineItems.length !== idx + 1 && <Separator />}
-              </li>
-            </Fragment>
+        <ul className="grid divide-y">
+          {visibleLineItems.map(({ component }, idx) => (
+            <li key={`${module}-summary-${idx}`}>{component}</li>
           ))}
         </ul>
       </CardContent>

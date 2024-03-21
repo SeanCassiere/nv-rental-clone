@@ -1,17 +1,12 @@
-import { Fragment } from "react";
+import * as React from "react";
 import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
-import { Separator } from "@/components/ui/separator";
 
 import type { TCustomerSummarySchema } from "@/lib/schemas/summary/customerSummary";
 
-import {
-  SummaryHeader,
-  SummaryLineItem,
-  type TSummaryLineItemProps,
-} from "./common";
+import { isFalsy, SummaryHeader, SummaryLineItem } from "./common";
 
 export const CustomerSummary = ({
   summaryData,
@@ -20,155 +15,207 @@ export const CustomerSummary = ({
 }) => {
   const { t } = useTranslation();
 
-  const lineItems: Omit<TSummaryLineItemProps, "id">[] = [
-    {
-      label: "Total revenue",
-      amount: t("intlCurrency", {
-        value: summaryData?.totalRevenue,
-        ns: "format",
-      }),
-      biggerText: true,
-      primaryTextHighlight: Boolean(summaryData?.totalRevenue),
-    },
-    {
-      label: "Open reservations",
-      amount: summaryData?.openedReservation || 0,
-      primaryTextHighlight: Boolean(summaryData?.openedReservation),
-      type: Boolean(summaryData?.openedReservation) ? "link" : "text",
-      linkProps: {
-        to: "/reservations",
-        search: () => ({
-          filters: {
-            Statuses: ["2"],
-            CustomerId: `${summaryData?.customerId}`,
-          },
-        }),
+  const itemsList = React.useMemo(() => {
+    const items: { component: React.ReactNode }[] = [
+      {
+        component: (
+          <SummaryLineItem
+            label="Total revenue"
+            value={t("intlCurrency", {
+              value: summaryData?.totalRevenue,
+              ns: "format",
+            })}
+            contentSize="lg"
+          />
+        ),
       },
-    },
-    {
-      label: "Confirmed reservations",
-      amount: summaryData?.confirmedReservation || 0,
-      primaryTextHighlight: Boolean(summaryData?.confirmedReservation),
-      type: Boolean(summaryData?.confirmedReservation) ? "link" : "text",
-      linkProps: {
-        to: "/reservations",
-        search: () => ({
-          filters: {
-            Statuses: ["3"],
-            CustomerId: `${summaryData?.customerId}`,
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Open reservations"
+            value={summaryData?.openedReservation || 0}
+            valueType={!!summaryData?.openedReservation ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.openedReservation) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/reservations",
+              search: () => ({
+                filters: {
+                  Statuses: ["2"],
+                  CustomerId: `${summaryData?.customerId}`,
+                },
+              }),
+            }}
+          />
+        ),
       },
-    },
-    {
-      label: "No-show reservations",
-      amount: summaryData?.noShowReservation || 0,
-      primaryTextHighlight: Boolean(summaryData?.noShowReservation),
-      type: Boolean(summaryData?.noShowReservation) ? "link" : "text",
-      linkProps: {
-        to: "/reservations",
-        search: () => ({
-          filters: {
-            Statuses: ["4"],
-            CustomerId: `${summaryData?.customerId}`,
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Confirmed reservations"
+            value={summaryData?.confirmedReservation || 0}
+            valueType={!!summaryData?.confirmedReservation ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.confirmedReservation) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/reservations",
+              search: () => ({
+                filters: {
+                  Statuses: ["3"],
+                  CustomerId: `${summaryData?.customerId}`,
+                },
+              }),
+            }}
+          />
+        ),
       },
-    },
-    {
-      label: "Cancelled reservations",
-      amount: summaryData?.cancelledReservation || 0,
-      primaryTextHighlight: Boolean(summaryData?.cancelledReservation),
-      type: Boolean(summaryData?.cancelledReservation) ? "link" : "text",
-      linkProps: {
-        to: "/reservations",
-        search: () => ({
-          filters: {
-            Statuses: ["5"],
-            CustomerId: `${summaryData?.customerId}`,
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="No-show reservations"
+            value={summaryData?.noShowReservation || 0}
+            valueType={!!summaryData?.noShowReservation ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.noShowReservation) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/reservations",
+              search: () => ({
+                filters: {
+                  Statuses: ["4"],
+                  CustomerId: `${summaryData?.customerId}`,
+                },
+              }),
+            }}
+          />
+        ),
       },
-    },
-    {
-      label: "Opened agreements",
-      amount: summaryData?.openedAgreements || 0,
-      primaryTextHighlight: Boolean(summaryData?.openedAgreements),
-      type: Boolean(summaryData?.openedAgreements) ? "link" : "text",
-      linkProps: {
-        to: "/agreements",
-        search: () => ({
-          filters: {
-            Statuses: ["2"],
-            CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: "false",
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Cancelled reservations"
+            value={summaryData?.cancelledReservation || 0}
+            valueType={!!summaryData?.cancelledReservation ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.cancelledReservation) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/reservations",
+              search: () => ({
+                filters: {
+                  Statuses: ["5"],
+                  CustomerId: `${summaryData?.customerId}`,
+                },
+              }),
+            }}
+          />
+        ),
       },
-    },
-    {
-      label: "Closed agreements",
-      amount: summaryData?.closedAgreements || 0,
-      primaryTextHighlight: Boolean(summaryData?.closedAgreements),
-      type: Boolean(summaryData?.closedAgreements) ? "link" : "text",
-      linkProps: {
-        to: "/agreements",
-        search: () => ({
-          filters: {
-            Statuses: ["3"],
-            CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: "false",
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Open agreements"
+            value={summaryData?.openedAgreements || 0}
+            valueType={!!summaryData?.openedAgreements ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.openedAgreements) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/agreements",
+              search: () => ({
+                filters: {
+                  Statuses: ["2"],
+                  CustomerId: `${summaryData?.customerId}`,
+                  IsSearchOverdues: "false",
+                },
+              }),
+            }}
+          />
+        ),
       },
-    },
-    {
-      label: "Total traffic tickets",
-      amount: summaryData?.totalTrafficTickets || 0,
-      primaryTextHighlight: Boolean(summaryData?.totalTrafficTickets),
-    },
-    {
-      label: "Pending payments",
-      amount: summaryData?.pendingPayments || 0,
-      primaryTextHighlight: Boolean(summaryData?.pendingPayments),
-      type: Boolean(summaryData?.pendingPayments) ? "link" : "text",
-      linkProps: {
-        to: "/agreements",
-        search: () => ({
-          filters: {
-            Statuses: ["5"],
-            CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: "false",
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Closed agreements"
+            value={summaryData?.closedAgreements || 0}
+            valueType={!!summaryData?.closedAgreements ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.closedAgreements) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/agreements",
+              search: () => ({
+                filters: {
+                  Statuses: ["3"],
+                  CustomerId: `${summaryData?.customerId}`,
+                  IsSearchOverdues: "false",
+                },
+              }),
+            }}
+          />
+        ),
       },
-    },
-    {
-      label: "Pending deposits",
-      amount: summaryData?.pendingDeposit || 0,
-      primaryTextHighlight: Boolean(summaryData?.pendingDeposit),
-      type: Boolean(summaryData?.pendingDeposit) ? "link" : "text",
-      linkProps: {
-        to: "/agreements",
-        search: () => ({
-          filters: {
-            Statuses: ["7"],
-            CustomerId: `${summaryData?.customerId}`,
-            IsSearchOverdues: "false",
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Total traffic tickets"
+            value={summaryData?.totalTrafficTickets || 0}
+            valueColor={
+              isFalsy(summaryData?.totalTrafficTickets) ? "muted" : "default"
+            }
+          />
+        ),
       },
-    },
-  ];
+      {
+        component: (
+          <SummaryLineItem
+            label="Pending payments"
+            value={summaryData?.pendingPayments || 0}
+            valueType={!!summaryData?.pendingPayments ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.pendingPayments) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/agreements",
+              search: () => ({
+                filters: {
+                  Statuses: ["5"],
+                  CustomerId: `${summaryData?.customerId}`,
+                  IsSearchOverdues: "false",
+                },
+              }),
+            }}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Pending deposits"
+            value={summaryData?.pendingDeposit || 0}
+            valueType={!!summaryData?.pendingDeposit ? "link" : "default"}
+            valueColor={
+              isFalsy(summaryData?.pendingDeposit) ? "muted" : "default"
+            }
+            linkOptions={{
+              to: "/agreements",
+              search: () => ({
+                filters: {
+                  Statuses: ["7"],
+                  CustomerId: `${summaryData?.customerId}`,
+                  IsSearchOverdues: "false",
+                },
+              }),
+            }}
+          />
+        ),
+      },
+    ];
 
-  const defaultLineItemsList = lineItems.map((item, idx) => ({
-    ...item,
-    id: `customer-summary-${idx}`,
-  }));
-
-  const viewableLineItems = defaultLineItemsList.filter(
-    (item) => item.shown === true || item.shown === undefined
-  );
+    return items;
+  }, [t, summaryData]);
 
   return (
     <Card>
@@ -177,14 +224,9 @@ export const CustomerSummary = ({
         icon={<icons.DollarSign className="h-6 w-6" />}
       />
       <CardContent className="px-0 py-0">
-        <ul className="flex flex-col">
-          {viewableLineItems.map((item, idx) => (
-            <Fragment key={item.id}>
-              <li>
-                <SummaryLineItem data={item} />
-                {viewableLineItems.length !== idx + 1 && <Separator />}
-              </li>
-            </Fragment>
+        <ul className="grid divide-y">
+          {itemsList.map(({ component }, idx) => (
+            <li key={`customer-summary-${idx}`}>{component}</li>
           ))}
         </ul>
       </CardContent>

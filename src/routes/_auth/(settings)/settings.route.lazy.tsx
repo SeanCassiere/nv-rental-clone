@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  createLazyFileRoute,
-  LinkOptions,
-  Outlet,
-} from "@tanstack/react-router";
+import { createLazyFileRoute, Outlet } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { Separator } from "@/components/ui/separator";
@@ -19,18 +15,14 @@ import { incompleteSettingsNavigationFeatureFlag } from "@/lib/config/features";
 
 import { cn } from "@/lib/utils";
 
-import { SidebarDesktopNavigation } from "./-components/sidebar-desktop-navigation";
-import { SidebarMobileNavigation } from "./-components/sidebar-mobile-navigation";
+import {
+  SidebarNavigation,
+  SidebarNavigationItem,
+} from "./-components/sidebar-navigation";
 
 export const Route = createLazyFileRoute("/_auth/(settings)/settings")({
   component: SettingsLayout,
 });
-
-type SettingsNavigationDestination = {
-  id: string;
-  title: string;
-  linkProps: LinkOptions;
-};
 
 function SettingsLayout() {
   const { t } = useTranslation();
@@ -42,57 +34,55 @@ function SettingsLayout() {
   );
 
   const destinations = React.useMemo(() => {
-    const items: SettingsNavigationDestination[] = [
-      {
-        id: "/settings/profile",
-        title: t("titles.profile", { ns: "settings" }),
-        linkProps: {
-          to: "/settings/profile",
-          search: false,
-        },
-      },
-    ];
+    const items: (() => JSX.Element)[] = [];
+
+    // user profile
+    items.push(() => (
+      <SidebarNavigationItem to="/settings/profile" search={false}>
+        {t("titles.profile", { ns: "settings" })}
+      </SidebarNavigationItem>
+    ));
 
     if (canSeeAdminTab) {
-      items.push({
-        id: "/settings/application",
-        title: t("titles.application", { ns: "settings" }), // users, locations, taxes,
-        linkProps: {
-          to: "/settings/application",
-          search: false,
-        },
-      });
+      // users, locations, taxes,
+      items.push(() => (
+        <SidebarNavigationItem to="/settings/application" search={false}>
+          {t("titles.application", { ns: "settings" })}
+        </SidebarNavigationItem>
+      ));
     }
 
     if (canSeeAdminTab && incomplete_allSettingsNavigation) {
-      items.push({
-        id: "/settings/runtime-configuration",
-        title: t("titles.runtime", { ns: "settings" }), // email, global documents, id configuration, compatibility, etc.
-        linkProps: {
-          to: "/settings/runtime-configuration",
-          search: false,
-        },
-      });
-      items.push({
-        id: "/settings/vehicles-and-categories",
-        title: t("titles.vehiclesAndCategories", { ns: "settings" }), // vehicle types, vehicle makes, vehicle models, options, etc.
-        linkProps: {
-          to: "/settings/vehicles-and-categories",
-          search: false,
-        },
-      });
-      items.push({
-        id: "/settings/rates-and-charges",
-        title: t("titles.ratesAndCharges", { ns: "settings" }), // rates, rules, promotions, miscellaneous charges
-        linkProps: {
-          to: "/settings/rates-and-charges",
-          search: false,
-        },
-      });
+      // email, global documents, id configuration, compatibility, etc.
+      items.push(() => (
+        <SidebarNavigationItem
+          to="/settings/runtime-configuration"
+          search={false}
+        >
+          {t("titles.runtime", { ns: "settings" })}
+        </SidebarNavigationItem>
+      ));
+
+      // vehicle types, vehicle makes, vehicle models, options, etc.
+      items.push(() => (
+        <SidebarNavigationItem
+          to="/settings/vehicles-and-categories"
+          search={false}
+        >
+          {t("titles.vehiclesAndCategories", { ns: "settings" })}
+        </SidebarNavigationItem>
+      ));
+
+      // rates, rules, promotions, miscellaneous charges
+      items.push(() => (
+        <SidebarNavigationItem to="/settings/rates-and-charges" search={false}>
+          {t("titles.ratesAndCharges", { ns: "settings" })}
+        </SidebarNavigationItem>
+      ));
     }
 
     return items;
-  }, [canSeeAdminTab, incomplete_allSettingsNavigation, t]);
+  }, [t, canSeeAdminTab, incomplete_allSettingsNavigation]);
 
   return (
     <Container>
@@ -120,8 +110,7 @@ function SettingsLayout() {
         )}
       >
         <aside className="shrink-0 border-b pb-4 lg:w-1/5 lg:border-b-0 lg:pb-0">
-          <SidebarMobileNavigation items={destinations} />
-          <SidebarDesktopNavigation items={destinations} />
+          <SidebarNavigation items={destinations} />
         </aside>
         <div className="flex-1">
           <Outlet />

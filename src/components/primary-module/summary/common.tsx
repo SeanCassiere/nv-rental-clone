@@ -1,5 +1,12 @@
-import { useState, type ReactNode } from "react";
-import { Link, type LinkProps } from "@tanstack/react-router";
+import * as React from "react";
+import {
+  Link,
+  type AnyRoute,
+  type LinkProps,
+  type RegisteredRouter,
+  type RoutePaths,
+} from "@tanstack/react-router";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import {
   Accordion,
@@ -16,7 +23,7 @@ export const SummaryHeader = ({
   icon,
 }: {
   title: string;
-  icon: ReactNode;
+  icon: React.ReactNode;
 }) => {
   return (
     <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4">
@@ -26,119 +33,141 @@ export const SummaryHeader = ({
   );
 };
 
-export type TSummaryLineItemProps = {
-  id: string;
+export function isFalsy(val: string | number | null | undefined) {
+  return !val;
+}
+
+const accordionVariants = cva("font-medium", {
+  variants: {
+    contentSize: {
+      default: "px-5 py-3 text-base",
+      lg: "px-5 py-4 text-lg",
+    },
+    contentColor: {
+      default: "",
+      primary: "bg-foreground text-background",
+    },
+  },
+  defaultVariants: {
+    contentSize: "default",
+    contentColor: "default",
+  },
+  compoundVariants: [],
+});
+
+const accordionValueVariants = cva("font-semibold", {
+  variants: {
+    valueType: {
+      default: "",
+      link: "underline underline-offset-4 hover:opacity-90",
+    },
+    valueColor: {
+      default: "",
+      muted: "opacity-60",
+      negative: "text-destructive",
+    },
+  },
+  defaultVariants: {
+    valueType: "default",
+    valueColor: "default",
+  },
+});
+
+interface SummaryLineItemProps<
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+> extends VariantProps<typeof accordionVariants>,
+    VariantProps<typeof accordionValueVariants> {
   label: string;
-  type?: "text" | "link";
-  linkProps?: LinkProps;
-  amount: string | number | null;
-  shown?: boolean;
-  redHighlight?: boolean;
-  primaryTextHighlight?: boolean;
-  primaryBlockHighlight?: boolean;
-  biggerText?: boolean;
-  dropdownContent?: ReactNode;
-  hasDropdownContent?: boolean;
-  isDropdownContentInitiallyShown?: boolean;
-};
+  value: React.ReactNode;
+  initialDropdownExpanded?: boolean;
+  children?: React.ReactNode | undefined;
+  linkOptions?: Omit<
+    React.PropsWithoutRef<
+      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
+        Omit<React.ComponentPropsWithoutRef<"a">, "preload">
+    >,
+    "children" | "className" | "activeProps" | "inactiveProps"
+  >;
+}
 
-export const makeSummaryDataStyles = (
-  data: Pick<
-    TSummaryLineItemProps,
-    | "primaryTextHighlight"
-    | "redHighlight"
-    | "primaryBlockHighlight"
-    | "biggerText"
-    | "label"
-  >
-) => {
-  const colorMode = data.primaryBlockHighlight
-    ? "primary-block-only"
-    : data.redHighlight
-      ? "red-highlight"
-      : data.primaryTextHighlight
-        ? "primary-text-only"
-        : ("" as const);
-
-  return cn(
-    "text-base font-semibold",
-    data.biggerText ? "text-lg" : "text-base",
-    colorMode === "" ? "text-foreground/80" : "",
-    colorMode === "primary-block-only" ? "text-background" : "",
-    colorMode === "primary-text-only" ? "text-foreground" : "",
-    colorMode === "red-highlight" ? "text-destructive" : ""
-  );
-};
-
-export const SummaryLineItem = ({ data }: { data: TSummaryLineItemProps }) => {
+export function SummaryLineItem<
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+>(props: SummaryLineItemProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>) {
   const {
-    type: lineItemType = "text",
-    hasDropdownContent = false,
-    isDropdownContentInitiallyShown = false,
-    dropdownContent,
-  } = data;
+    // main
+    label,
+    value,
+    // styling
+    contentSize,
+    contentColor,
+    valueType,
+    valueColor,
+    // optionals
+    children = undefined,
+    initialDropdownExpanded = false,
+    linkOptions = undefined,
+  } = props;
 
-  const [value, onValueChange] = useState(
-    isDropdownContentInitiallyShown ? "value-1" : undefined
+  const [accordionState, onAccordionStateChange] = React.useState(
+    initialDropdownExpanded ? "panel-1" : undefined
   );
 
   return (
     <Accordion
       type="single"
-      value={value}
-      onValueChange={onValueChange}
+      value={accordionState}
+      onValueChange={onAccordionStateChange}
       collapsible
-      className={cn("flex w-full flex-col")}
+      className={cn("grid w-full")}
     >
       <AccordionItem
-        value="value-1"
-        className={cn(
-          "px-5",
-          !data.primaryTextHighlight && data.primaryBlockHighlight
-            ? "bg-foreground text-card"
-            : ""
-        )}
+        value="panel-1"
+        className={cn(accordionVariants({ contentSize, contentColor }))}
         hideBorder
       >
         <div className="flex items-center justify-between gap-2">
-          {hasDropdownContent && dropdownContent ? (
-            <AccordionTrigger
+          {children ? (
+            <AccordionTrigger className="p-0">{label}</AccordionTrigger>
+          ) : (
+            <span>{label}</span>
+          )}
+          {valueType === "link" && linkOptions ? (
+            <Link
               className={cn(
-                "w-full py-3 text-left",
-                data.biggerText ? "text-lg" : "text-base"
+                accordionValueVariants({
+                  valueType,
+                  valueColor,
+                })
               )}
+              {...linkOptions}
             >
-              {data.label}
-            </AccordionTrigger>
+              {value}
+            </Link>
           ) : (
             <span
               className={cn(
-                "flex flex-1 items-center justify-between py-3 font-medium transition-all",
-                data.biggerText ? "text-lg" : "text-base"
+                accordionValueVariants({
+                  valueType,
+                  valueColor,
+                })
               )}
             >
-              {data.label}
+              {value}
             </span>
           )}
-          {lineItemType === "text" && (
-            <span className={makeSummaryDataStyles(data)}>{data.amount}</span>
-          )}
-          {lineItemType === "link" && (
-            <Link
-              {...((data?.linkProps || {}) as LinkProps)}
-              className={cn(
-                makeSummaryDataStyles(data),
-                "text-primary underline underline-offset-4"
-              )}
-            >
-              {data.amount}
-            </Link>
-          )}
         </div>
-        {hasDropdownContent && dropdownContent && (
-          <AccordionContent>{dropdownContent}</AccordionContent>
-        )}
+        {children ? (
+          <AccordionContent className="p-0">{children}</AccordionContent>
+        ) : null}
       </AccordionItem>
     </Accordion>
   );
-};
+}

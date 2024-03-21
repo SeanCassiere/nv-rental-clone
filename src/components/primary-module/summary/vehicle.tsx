@@ -1,17 +1,12 @@
-import { Fragment } from "react";
+import * as React from "react";
 import { useTranslation } from "react-i18next";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
-import { Separator } from "@/components/ui/separator";
 
-import { type TVehicleSummarySchema } from "@/lib/schemas/summary/vehicleSummary";
+import type { TVehicleSummarySchema } from "@/lib/schemas/summary/vehicleSummary";
 
-import {
-  SummaryHeader,
-  SummaryLineItem,
-  type TSummaryLineItemProps,
-} from "./common";
+import { isFalsy, SummaryHeader, SummaryLineItem } from "./common";
 
 export const VehicleSummary = ({
   summaryData,
@@ -24,224 +19,308 @@ export const VehicleSummary = ({
 }) => {
   const { t } = useTranslation();
 
-  const lineItems: Omit<TSummaryLineItemProps, "id">[] = [
-    {
-      label: "Total revenue",
-      amount: t("intlCurrency", {
-        value: summaryData?.totalRevenue,
-        ns: "format",
-      }),
-      biggerText: true,
-      primaryTextHighlight: Boolean(summaryData?.totalRevenue),
-    },
-
-    {
-      label: "Total expenses",
-      amount: t("intlCurrency", {
-        value: summaryData?.totalExpense,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.totalExpense),
-    },
-
-    {
-      label: "Total profits",
-      amount: t("intlCurrency", {
-        value: summaryData?.totalProfit,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.totalProfit),
-    },
-
-    {
-      label: "Balances owing",
-      amount: t("intlCurrency", {
-        value: summaryData?.balanceOwing,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.balanceOwing),
-    },
-
-    {
-      label: "Monthly payment",
-      amount: t("intlCurrency", {
-        value: summaryData?.monthlyPayment,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.monthlyPayment),
-    },
-
-    {
-      label: "Lease payout",
-      amount: t("intlCurrency", {
-        value: summaryData?.leasePayoutAmount,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.leasePayoutAmount),
-    },
-
-    {
-      label: "Final payment date",
-      amount: summaryData?.finalPaymentDate
-        ? t("intlDate", {
-            value: summaryData?.finalPaymentDate,
-            ns: "format",
-          })
-        : "No date",
-      primaryTextHighlight: Boolean(summaryData?.finalPaymentDate),
-    },
-
-    {
-      label: "Total reservations",
-      primaryTextHighlight: Boolean(summaryData?.totalNoOfReservation),
-      type: summaryData?.totalNoOfReservation ? "link" : "text",
-      amount: Number(summaryData?.totalNoOfReservation || 0).toString(),
-      linkProps: {
-        to: "/fleet/$vehicleId/",
-        search: () => ({
-          tab: "reservations",
-        }),
-        params: { vehicleId: vehicleId } as any,
+  const itemsList = React.useMemo(() => {
+    const items: { component: React.ReactNode }[] = [
+      {
+        component: (
+          <SummaryLineItem
+            label="Total revenue"
+            value={t("intlCurrency", {
+              value: summaryData?.totalRevenue,
+              ns: "format",
+            })}
+            contentSize="lg"
+          />
+        ),
       },
-    },
-
-    {
-      label: "Current reservation",
-      primaryTextHighlight:
-        summaryData?.currentReservation !== "" &&
-        summaryData?.currentReservation !== "0",
-      type:
-        summaryData?.currentReservation !== "" &&
-        summaryData?.currentReservation !== "0"
-          ? "link"
-          : "text",
-      amount:
-        summaryData?.currentReservation !== "" &&
-        summaryData?.currentReservation !== "0"
-          ? "View"
-          : "None",
-      linkProps: {
-        to: "/reservations/$reservationId/",
-        params: { reservationId: `${summaryData?.currentReservation}` } as any,
-        search: false,
+      {
+        component: (
+          <SummaryLineItem
+            label="Total expenses"
+            value={t("intlCurrency", {
+              value: summaryData?.totalExpense,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.totalExpense) ? "muted" : "default"
+            }
+          />
+        ),
       },
-    },
-
-    {
-      label: "Future reservations",
-      primaryTextHighlight: Boolean(summaryData?.futureNoOfReservation),
-      type: summaryData?.futureNoOfReservation ? "link" : "text",
-      amount: Number(summaryData?.futureNoOfReservation || 0).toString(),
-      linkProps: {
-        to: "/reservations",
-        search: () => ({
-          filters: {
-            VehicleNo: vehicleNo ?? "",
-            Statuses: ["2", "7"],
-          },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Total profits"
+            value={t("intlCurrency", {
+              value: summaryData?.totalProfit,
+              ns: "format",
+            })}
+            valueColor={isFalsy(summaryData?.totalProfit) ? "muted" : "default"}
+          />
+        ),
       },
-    },
-
-    {
-      label: "Total agreements",
-      primaryTextHighlight: Boolean(summaryData?.totalNoOfAgreement),
-      type: summaryData?.totalNoOfAgreement ? "link" : "text",
-      amount: summaryData?.totalNoOfAgreement || null,
-      linkProps: {
-        to: "/fleet/$vehicleId",
-        search: () => ({
-          tab: "agreements",
-        }),
-        params: { vehicleId: vehicleId } as any,
+      {
+        component: (
+          <SummaryLineItem
+            label="Balance owing"
+            value={t("intlCurrency", {
+              value: summaryData?.balanceOwing,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.balanceOwing) ? "muted" : "default"
+            }
+          />
+        ),
       },
-    },
-
-    {
-      label: "Current agreement",
-      primaryTextHighlight:
-        summaryData?.currentAgreement !== "" &&
-        summaryData?.currentAgreement !== "0",
-      type:
-        summaryData?.currentAgreement !== "" &&
-        summaryData?.currentAgreement !== "0"
-          ? "link"
-          : "text",
-      amount:
-        summaryData?.currentAgreement !== "" &&
-        summaryData?.currentAgreement !== "0"
-          ? "View"
-          : "None",
-      linkProps: {
-        to: "/agreements/$agreementId",
-        params: {
-          agreementId: `${summaryData?.currentAgreement}`,
-        } as any,
-        search: false,
+      {
+        component: (
+          <SummaryLineItem
+            label="Monthly payment"
+            value={t("intlCurrency", {
+              value: summaryData?.monthlyPayment,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.monthlyPayment) ? "muted" : "default"
+            }
+          />
+        ),
       },
-    },
-
-    {
-      label: "Current net value",
-      amount: t("intlCurrency", {
-        value: summaryData?.currentNetValue,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.currentNetValue),
-    },
-
-    {
-      label: "Monthly depreciation",
-      amount: t("intlCurrency", {
-        value: summaryData?.monthlyDepreciation,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.monthlyDepreciation),
-    },
-
-    {
-      label: "Total depreciation",
-      amount: t("intlCurrency", {
-        value: summaryData?.totalAmountDepreciated,
-        ns: "format",
-      }),
-      primaryTextHighlight: Boolean(summaryData?.totalAmountDepreciated),
-    },
-
-    {
-      label: "Pending payments",
-      primaryTextHighlight: Boolean(summaryData?.pendingPayment),
-      type: summaryData?.pendingPayment ? "link" : "text",
-      amount: summaryData?.pendingPayment
-        ? summaryData?.pendingPayment
-        : "None",
-      linkProps: {
-        to: "/agreements",
-        search: () => ({
-          filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
-        }),
+      {
+        component: (
+          <SummaryLineItem
+            label="Lease payout"
+            value={t("intlCurrency", {
+              value: summaryData?.leasePayoutAmount,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.leasePayoutAmount) ? "muted" : "default"
+            }
+          />
+        ),
       },
-    },
+      {
+        component: (
+          <SummaryLineItem
+            label="Final payment date"
+            value={
+              summaryData?.finalPaymentDate
+                ? t("intlDate", {
+                    value: summaryData?.finalPaymentDate,
+                    ns: "format",
+                  })
+                : "No date"
+            }
+            valueColor={
+              isFalsy(summaryData?.finalPaymentDate) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Total reservations"
+            value={Number(summaryData?.totalNoOfReservation || 0).toString()}
+            valueColor={
+              isFalsy(summaryData?.totalNoOfReservation) ? "muted" : "default"
+            }
+            valueType={!!summaryData?.totalNoOfReservation ? "link" : "default"}
+            linkOptions={{
+              to: "/fleet/$vehicleId/",
+              search: () => ({ tab: "reservations" }),
+              params: { vehicleId },
+            }}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Current reservation"
+            value={
+              summaryData?.currentReservation !== "" &&
+              summaryData?.currentReservation !== "0"
+                ? "View"
+                : "None"
+            }
+            valueColor={
+              summaryData?.currentReservation !== "" &&
+              summaryData?.currentReservation !== "0"
+                ? "default"
+                : "muted"
+            }
+            valueType={
+              summaryData?.currentReservation !== "" &&
+              summaryData?.currentReservation !== "0"
+                ? "link"
+                : "default"
+            }
+            linkOptions={{
+              to: "/reservations/$reservationId/",
+              params: { reservationId: `${summaryData?.currentReservation}` },
+            }}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Future reservations"
+            value={Number(summaryData?.futureNoOfReservation || 0).toString()}
+            valueColor={
+              isFalsy(summaryData?.futureNoOfReservation) ? "muted" : "default"
+            }
+            valueType={
+              !!summaryData?.futureNoOfReservation ? "link" : "default"
+            }
+            linkOptions={{
+              to: "/reservations",
+              search: () => ({
+                filters: {
+                  VehicleNo: vehicleNo ?? "",
+                  Statuses: ["2", "7"],
+                },
+              }),
+            }}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Total agreements"
+            value={Number(summaryData?.totalNoOfAgreement || 0).toString()}
+            valueColor={
+              isFalsy(summaryData?.totalNoOfAgreement) ? "muted" : "default"
+            }
+            valueType={!!summaryData?.totalNoOfAgreement ? "link" : "default"}
+            linkOptions={{
+              to: "/fleet/$vehicleId",
+              search: () => ({
+                tab: "agreements",
+              }),
+              params: { vehicleId },
+            }}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Current agreement"
+            value={
+              summaryData?.currentAgreement !== "" &&
+              summaryData?.currentAgreement !== "0"
+                ? "View"
+                : "None"
+            }
+            valueColor={
+              summaryData?.currentAgreement !== "" &&
+              summaryData?.currentAgreement !== "0"
+                ? "default"
+                : "muted"
+            }
+            valueType={
+              summaryData?.currentAgreement !== "" &&
+              summaryData?.currentAgreement !== "0"
+                ? "link"
+                : "default"
+            }
+            linkOptions={{
+              to: "/agreements/$agreementId/",
+              params: { agreementId: `${summaryData?.currentAgreement}` },
+            }}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Current net value"
+            value={t("intlCurrency", {
+              value: summaryData?.currentNetValue,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.currentNetValue) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Monthly depreciation"
+            value={t("intlCurrency", {
+              value: summaryData?.monthlyDepreciation,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.monthlyDepreciation) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Total depreciation"
+            value={t("intlCurrency", {
+              value: summaryData?.totalAmountDepreciated,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.totalAmountDepreciated) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Pending payments"
+            value={t("intlCurrency", {
+              value: summaryData?.pendingPayment,
+              ns: "format",
+            })}
+            valueColor={
+              isFalsy(summaryData?.pendingPayment) ? "muted" : "default"
+            }
+            valueType={!!summaryData?.pendingPayment ? "link" : "default"}
+            linkOptions={{
+              to: "/agreements",
+              search: () => ({
+                filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
+              }),
+            }}
+          />
+        ),
+      },
+      {
+        component: (
+          <SummaryLineItem
+            label="Last rental date"
+            value={
+              summaryData?.lastRentalDate
+                ? t("intlDate", {
+                    value: summaryData?.lastRentalDate,
+                    ns: "format",
+                  })
+                : "No date"
+            }
+            valueColor={
+              isFalsy(summaryData?.lastRentalDate) ? "muted" : "default"
+            }
+          />
+        ),
+      },
+    ];
 
-    {
-      label: "Last rental date",
-      amount: summaryData?.lastRentalDate
-        ? t("intlDate", {
-            value: summaryData?.lastRentalDate,
-            ns: "format",
-          })
-        : "None",
-    },
-  ];
-
-  const defaultLineItemsList = lineItems.map((item, idx) => ({
-    ...item,
-    id: `customer-summary-${idx}`,
-  }));
-
-  const viewableLineItems = defaultLineItemsList.filter(
-    (item) => item.shown === true || item.shown === undefined
-  );
+    return items;
+  }, [t, summaryData, vehicleId, vehicleNo]);
 
   return (
     <Card>
@@ -250,14 +329,9 @@ export const VehicleSummary = ({
         icon={<icons.DollarSign className="h-6 w-6" />}
       />
       <CardContent className="px-0 py-0">
-        <ul className="flex flex-col">
-          {viewableLineItems.map((item, idx) => (
-            <Fragment key={item.id}>
-              <li>
-                <SummaryLineItem data={item} />
-                {viewableLineItems.length !== idx + 1 && <Separator />}
-              </li>
-            </Fragment>
+        <ul className="grid divide-y">
+          {itemsList.map(({ component }, idx) => (
+            <li key={`vehicle-summary-${idx}`}>{component}</li>
           ))}
         </ul>
       </CardContent>

@@ -383,7 +383,6 @@ function CustomerSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationPrevious>
@@ -399,7 +398,6 @@ function CustomerSearchPage() {
                       filters: searchFilters,
                     })}
                     isActive={isActive}
-                    params
                   >
                     {pagination.pageIndex + 1}
                   </PaginationLink>
@@ -420,7 +418,6 @@ function CustomerSearchPage() {
                       size: state.pagination.pageSize,
                       filters: searchFilters,
                     })}
-                    params
                   />
                 )}
               </TableListPaginationNext>

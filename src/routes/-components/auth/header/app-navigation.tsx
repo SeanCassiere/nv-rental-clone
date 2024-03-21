@@ -1,19 +1,17 @@
 import React from "react";
-import { Link, type LinkProps } from "@tanstack/react-router";
+import {
+  Link,
+  type AnyRoute,
+  type LinkProps,
+  type RegisteredRouter,
+  type RoutePaths,
+} from "@tanstack/react-router";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { cn } from "@/lib/utils";
-
-type AppNavigationLinks = {
-  name: string;
-  props: Omit<
-    LinkProps,
-    "children" | "className" | "activeProps" | "inactiveProps"
-  >;
-}[];
 
 const defaultActiveOptions: LinkProps["activeOptions"] = {
   exact: false,
@@ -35,110 +33,125 @@ export const AppNavigation = (props: Props) => {
     [tableRowCountStr]
   );
 
-  const links: AppNavigationLinks = [
-    {
-      name: "Dashboard",
-      props: {
-        to: "/",
-        activeOptions: {
-          exact: true,
-          includeSearch: false,
-        },
-      },
-    },
-    {
-      name: "Fleet",
-      props: {
-        to: "/fleet",
-        search: (current) => ({
-          ...current,
-          page: 1,
-          size: tableRowCount,
-          filters: undefined,
-        }),
-        activeOptions: defaultActiveOptions,
-      },
-    },
-    {
-      name: "Customers",
-      props: {
-        to: "/customers",
-        search: (current) => ({
-          ...current,
-          page: 1,
-          size: tableRowCount,
-          filters: undefined,
-        }),
-        activeOptions: defaultActiveOptions,
-      },
-    },
-    {
-      name: "Reservations",
-      props: {
-        to: "/reservations",
-        search: (current) => ({
-          ...current,
-          page: 1,
-          size: tableRowCount,
-          filters: undefined,
-        }),
-        activeOptions: defaultActiveOptions,
-      },
-    },
-    {
-      name: "Agreements",
-      props: {
-        to: "/agreements",
-        search: (current) => ({
-          ...current,
-          agreement_id: undefined,
-          page: 1,
-          size: tableRowCount,
-          filters: undefined,
-        }),
-        activeOptions: defaultActiveOptions,
-      },
-    },
-    {
-      name: "Reports",
-      props: {
-        to: "/reports",
-        activeOptions: defaultActiveOptions,
-        search: false,
-      },
-    },
-    {
-      name: "Settings",
-      props: {
-        to: "/settings",
-        activeOptions: defaultActiveOptions,
-        search: false,
-      },
-    },
-  ] as const;
-
   return (
     <nav className={cn(className)} {...navProps}>
       <ul className="relative mx-auto -mb-px flex max-w-[1700px] space-x-5 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:space-x-0.5 md:px-12 [&::-webkit-scrollbar]:hidden">
-        {links.map((item, idx) => (
-          <li key={`header_app_nav_${idx}`}>
-            <Link
-              {...item.props}
-              className={cn(
-                "inline-block whitespace-nowrap border-b py-4 leading-none transition-all sm:px-4"
-              )}
-              activeProps={{
-                className: cn("border-foreground font-semibold"),
-              }}
-              inactiveProps={{
-                className: cn("border-transparent hover:border-foreground/20"),
-              }}
-            >
-              {item.name}
-            </Link>
-          </li>
-        ))}
+        <AppNavigationLink
+          name="Dashboard"
+          props={{
+            to: "/",
+            activeOptions: {
+              exact: true,
+              includeSearch: false,
+            },
+          }}
+        />
+        <AppNavigationLink
+          name="Fleet"
+          props={{
+            to: "/fleet",
+            search: (current) => ({
+              ...current,
+              page: 1,
+              size: tableRowCount,
+              filters: undefined,
+            }),
+            activeOptions: defaultActiveOptions,
+          }}
+        />
+        <AppNavigationLink
+          name="Customers"
+          props={{
+            to: "/customers",
+            search: (current) => ({
+              ...current,
+              page: 1,
+              size: tableRowCount,
+              filters: undefined,
+            }),
+            activeOptions: defaultActiveOptions,
+          }}
+        />
+        <AppNavigationLink
+          name="Reservations"
+          props={{
+            to: "/reservations",
+            search: (current) => ({
+              ...current,
+              page: 1,
+              size: tableRowCount,
+              filters: undefined,
+            }),
+            activeOptions: defaultActiveOptions,
+          }}
+        />
+        <AppNavigationLink
+          name="Agreements"
+          props={{
+            to: "/agreements",
+            search: (current) => ({
+              ...current,
+              page: 1,
+              size: tableRowCount,
+              filters: undefined,
+            }),
+            activeOptions: defaultActiveOptions,
+          }}
+        />
+        <AppNavigationLink
+          name="Reports"
+          props={{
+            to: "/reports",
+            search: false,
+            activeOptions: defaultActiveOptions,
+          }}
+        />
+        <AppNavigationLink
+          name="Settings"
+          props={{
+            to: "/settings",
+            search: false,
+            activeOptions: defaultActiveOptions,
+          }}
+        />
       </ul>
     </nav>
+  );
+};
+
+const AppNavigationLink = <
+  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
+  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TTo extends string = "",
+  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskTo extends string = "",
+>(props: {
+  name: string;
+  props: Omit<
+    React.PropsWithoutRef<
+      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
+        Omit<React.ComponentPropsWithoutRef<"a">, "preload">
+    >,
+    "children" | "className" | "activeProps" | "inactiveProps"
+  >;
+}) => {
+  const { name, props: linkProps } = props;
+  return (
+    <li>
+      <Link
+        className={cn(
+          "inline-block whitespace-nowrap border-b py-4 leading-none transition-all sm:px-4"
+        )}
+        activeProps={{
+          className: cn("border-foreground font-semibold"),
+        }}
+        inactiveProps={{
+          className: cn("border-transparent hover:border-foreground/20"),
+        }}
+        {...linkProps}
+      >
+        {name}
+      </Link>
+    </li>
   );
 };
