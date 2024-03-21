@@ -40,7 +40,7 @@ const AccordionTrigger = React.forwardRef<
     >
       {children}
       {!hideChevron ? (
-        <icons.ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+        <icons.ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
       ) : null}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
