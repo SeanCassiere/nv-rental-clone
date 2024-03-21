@@ -63,7 +63,7 @@
     "react-oidc-context": "^3.0.0",
     "recharts": "^2.12.2",
     "sonner": "^1.4.32",
-    "tailwind-merge": "^2.2.1",
+    "tailwind-merge": "^2.2.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
