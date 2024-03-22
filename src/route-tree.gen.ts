@@ -24,6 +24,7 @@ import { Route as AuthreportsReportsRouteImport } from "./routes/_auth/(reports)
 import { Route as AuthfleetFleetRouteImport } from "./routes/_auth/(fleet)/fleet.route"
 import { Route as AuthcustomersCustomersRouteImport } from "./routes/_auth/(customers)/customers.route"
 import { Route as AuthagreementsAgreementsRouteImport } from "./routes/_auth/(agreements)/agreements.route"
+import { Route as AuthsettingsSettingsIndexImport } from "./routes/_auth/(settings)/settings.index"
 import { Route as AuthreservationsReservationsIndexImport } from "./routes/_auth/(reservations)/reservations.index"
 import { Route as AuthreportsReportsIndexImport } from "./routes/_auth/(reports)/reports.index"
 import { Route as AuthfleetFleetIndexImport } from "./routes/_auth/(fleet)/fleet.index"
@@ -43,6 +44,7 @@ import { Route as AuthreportsReportsReportIdRouteImport } from "./routes/_auth/(
 import { Route as AuthfleetFleetVehicleIdRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.route"
 import { Route as AuthcustomersCustomersCustomerIdRouteImport } from "./routes/_auth/(customers)/customers.$customerId.route"
 import { Route as AuthagreementsAgreementsAgreementIdRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId.route"
+import { Route as AuthsettingsSettingsApplicationIndexImport } from "./routes/_auth/(settings)/settings.application.index"
 import { Route as AuthreservationsReservationsReservationIdIndexImport } from "./routes/_auth/(reservations)/reservations.$reservationId.index"
 import { Route as AuthreportsReportsReportIdIndexImport } from "./routes/_auth/(reports)/reports.$reportId.index"
 import { Route as AuthfleetFleetVehicleIdIndexImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.index"
@@ -62,12 +64,6 @@ import { Route as AuthagreementsAgreementsAgreementIdCheckInImport } from "./rou
 
 const PublicLoggedOutLazyImport = createFileRoute("/_public/logged-out")()
 const PublicDevLazyImport = createFileRoute("/_public/dev")()
-const AuthsettingsSettingsIndexLazyImport = createFileRoute(
-  "/_auth/(settings)/settings/",
-)()
-const AuthsettingsSettingsApplicationIndexLazyImport = createFileRoute(
-  "/_auth/(settings)/settings/application/",
-)()
 
 // Create/Update Routes
 
@@ -145,15 +141,10 @@ const AuthagreementsAgreementsRouteRoute =
     getParentRoute: () => AuthRoute,
   } as any)
 
-const AuthsettingsSettingsIndexLazyRoute =
-  AuthsettingsSettingsIndexLazyImport.update({
-    path: "/",
-    getParentRoute: () => AuthsettingsSettingsRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/(settings)/settings.index.lazy").then(
-      (d) => d.Route,
-    ),
-  )
+const AuthsettingsSettingsIndexRoute = AuthsettingsSettingsIndexImport.update({
+  path: "/",
+  getParentRoute: () => AuthsettingsSettingsRouteRoute,
+} as any)
 
 const AuthreservationsReservationsIndexRoute =
   AuthreservationsReservationsIndexImport.update({
@@ -313,15 +304,11 @@ const AuthagreementsAgreementsAgreementIdRouteRoute =
     getParentRoute: () => AuthagreementsAgreementsRouteRoute,
   } as any)
 
-const AuthsettingsSettingsApplicationIndexLazyRoute =
-  AuthsettingsSettingsApplicationIndexLazyImport.update({
+const AuthsettingsSettingsApplicationIndexRoute =
+  AuthsettingsSettingsApplicationIndexImport.update({
     path: "/",
     getParentRoute: () => AuthsettingsSettingsApplicationRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/(settings)/settings.application.index.lazy").then(
-      (d) => d.Route,
-    ),
-  )
+  } as any)
 
 const AuthreservationsReservationsReservationIdIndexRoute =
   AuthreservationsReservationsReservationIdIndexImport.update({
@@ -596,7 +583,7 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof AuthreservationsReservationsRouteImport
     }
     "/_auth/(settings)/settings/": {
-      preLoaderRoute: typeof AuthsettingsSettingsIndexLazyImport
+      preLoaderRoute: typeof AuthsettingsSettingsIndexImport
       parentRoute: typeof AuthsettingsSettingsRouteImport
     }
     "/_auth/(agreements)/agreements/$agreementId/check-in": {
@@ -656,7 +643,7 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof AuthreservationsReservationsReservationIdRouteImport
     }
     "/_auth/(settings)/settings/application/": {
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexLazyImport
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexImport
       parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
     }
   }
@@ -711,13 +698,13 @@ export const routeTree = rootRoute.addChildren([
         AuthsettingsSettingsApplicationPermissionsAndRolesRoute,
         AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute,
         AuthsettingsSettingsApplicationUsersRoute,
-        AuthsettingsSettingsApplicationIndexLazyRoute,
+        AuthsettingsSettingsApplicationIndexRoute,
       ]),
       AuthsettingsSettingsRatesAndChargesRouteRoute,
       AuthsettingsSettingsRuntimeConfigurationRouteRoute,
       AuthsettingsSettingsVehiclesAndCategoriesRouteRoute,
       AuthsettingsSettingsProfileRoute,
-      AuthsettingsSettingsIndexLazyRoute,
+      AuthsettingsSettingsIndexRoute,
     ]),
     AuthdashboardIndexRoute,
   ]),
