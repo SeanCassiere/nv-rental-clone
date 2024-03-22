@@ -44,7 +44,7 @@ export const BannerNotice = React.memo(
         {message.link ? (
           <a
             href={message.link}
-            className="[text-wrap=balance] group flex flex-1 flex-col flex-wrap items-start gap-1 text-sm leading-tight sm:flex-row sm:items-center md:items-center md:gap-0"
+            className="group flex flex-1 flex-col flex-wrap items-start gap-1 text-balance text-sm leading-tight sm:flex-row sm:items-center md:items-center md:gap-0"
             target={message.link.startsWith("http") ? "_blank" : "_self"}
             rel="noopener noreferrer"
           >

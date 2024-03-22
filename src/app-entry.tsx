@@ -143,7 +143,7 @@ function CacheDocumentFocusChecker() {
 
 function FullPageLoadingSpinner() {
   return (
-    <div className="grid min-h-[100dvh] place-items-center bg-background">
+    <div className="grid min-h-dvh place-items-center bg-background">
       <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
     </div>
   );

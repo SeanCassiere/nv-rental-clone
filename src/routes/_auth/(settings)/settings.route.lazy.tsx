@@ -96,7 +96,7 @@ function SettingsLayout() {
             {t("titles.settings", { ns: "settings" })}
           </h1>
         </div>
-        <p className={cn("text-base text-foreground/80 [text-wrap:balance]")}>
+        <p className={cn("text-balance text-base text-foreground/80")}>
           {t("descriptions.settings", {
             ns: "settings",
             appName: UI_APPLICATION_NAME,
