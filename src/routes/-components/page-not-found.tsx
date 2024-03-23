@@ -7,15 +7,11 @@ import { icons } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 
-import { RouterDevTools } from "./router-devtools";
-
 function PageNotFound({
   children,
-  renderRouterDevtools = false,
   className,
 }: {
   children?: React.ReactNode;
-  renderRouterDevtools?: boolean;
   className?: string;
 }) {
   const { t } = useTranslation();
@@ -48,7 +44,6 @@ function PageNotFound({
           </p>
         )}
       </section>
-      {renderRouterDevtools ? <RouterDevTools position="bottom-left" /> : null}
     </React.Fragment>
   );
 }

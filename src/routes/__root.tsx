@@ -24,13 +24,21 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   notFoundComponent: NotFoundComponent,
 });
 
-function Component() {
+function RootComponent({ children }: { children: React.ReactNode }) {
   return (
     <React.Fragment>
-      <Outlet />
-      <FeatureTogglesDialog />
+      {children}
       <RouterDevTools position="bottom-left" />
     </React.Fragment>
+  );
+}
+
+function Component() {
+  return (
+    <RootComponent>
+      <Outlet />
+      <FeatureTogglesDialog />
+    </RootComponent>
   );
 }
 
@@ -40,8 +48,10 @@ function NotFoundComponent() {
   useDocumentTitle(titleMaker(t("notFound", { ns: "messages" })));
 
   return (
-    <Container className="flex">
-      <PageNotFound className="px-2" renderRouterDevtools />
-    </Container>
+    <RootComponent>
+      <Container className="flex">
+        <PageNotFound className="px-2" />
+      </Container>
+    </RootComponent>
   );
 }
