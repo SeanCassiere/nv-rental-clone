@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 export function SidebarNavigation({ items }: { items: (() => JSX.Element)[] }) {
   return (
     <nav className="w-full">
-      <ul className="grid gap-4 text-muted-foreground hover:text-foreground md:text-sm">
+      <ul className="grid gap-4 md:text-sm">
         {items.map((Item, idx) => {
           return (
             <li key={`settings_sidebar_${idx}`}>
@@ -47,6 +47,9 @@ export function SidebarNavigationItem<
       className="py-2"
       activeProps={{
         className: cn("font-semibold text-foreground"),
+      }}
+      inactiveProps={{
+        className: cn("text-muted-foreground hover:text-foreground"),
       }}
       {...rest}
     >
