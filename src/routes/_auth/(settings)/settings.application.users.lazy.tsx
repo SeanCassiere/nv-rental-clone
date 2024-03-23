@@ -74,16 +74,14 @@ function ApplicationConfigurationUsersPage() {
             userId={auth.user?.profile?.navotar_userid}
           />
         )}
-      <Card className="shadow-none">
-        <CardHeader className="p-4 lg:p-6">
-          <CardTitle className="text-lg">
-            {t("titles.systemUsers", { ns: "settings" })}
-          </CardTitle>
-          <CardDescription className="text-base">
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("titles.systemUsers", { ns: "settings" })}</CardTitle>
+          <CardDescription>
             {t("descriptions.systemUsers", { ns: "settings" })}
           </CardDescription>
         </CardHeader>
-        <CardContent className="px-4 pb-4 pt-0 lg:px-6 lg:pb-5">
+        <CardContent className="pb-4">
           <div className="flex items-center justify-start pb-4">
             <Button size="sm" onClick={() => setShowNewUser(true)}>
               <icons.Plus className="h-4 w-4 sm:mr-2" />

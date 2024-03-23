@@ -1,5 +1,7 @@
+import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  useIsMutating,
   useMutation,
   useQueryClient,
   useSuspenseQuery,
@@ -10,6 +12,14 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -51,18 +61,24 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 import { apiClient } from "@/lib/api";
 
-import { SettingsLayoutHeader } from "./-components/layout-header";
-
 export const Route = createLazyFileRoute("/_auth/(settings)/settings/profile")({
   component: SettingsProfilePage,
 });
 
 const routeApi = getRouteApi("/_auth/settings/profile");
 
+const mutationKey = ["settings", "profile", "updating"];
+
 function SettingsProfilePage() {
   const context = routeApi.useRouteContext();
   const { authParams } = context;
   const { t } = useTranslation();
+
+  const submitId = React.useId();
+  const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
+
+  const mutationCount = useIsMutating({ mutationKey });
+  const isMutating = mutationCount > 0;
 
   const userQuery = useSuspenseQuery(context.currentUserProfileOptions);
 
@@ -78,28 +94,48 @@ function SettingsProfilePage() {
   );
 
   return (
-    <>
-      <SettingsLayoutHeader
-        title={t("titles.profile", { ns: "settings" })}
-        subtitle={t("descriptions.profile", { ns: "settings" })}
-      />
-      {userQuery.status === "success" &&
-        languagesQuery.status === "success" &&
-        userQuery.data.status === 200 && (
-          <article className="mt-6 w-full max-w-2xl rounded-md border bg-card p-6">
-            <ProfileForm
-              user={userQuery.data.body}
-              languages={
-                languagesQuery.data.status === 200
-                  ? languagesQuery.data.body
-                  : []
-              }
-              clientId={authParams.clientId}
-              userId={authParams.userId}
-            />
-          </article>
-        )}
-    </>
+    <article className="w-full max-w-2xl">
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("titles.profile", { ns: "settings" })}</CardTitle>
+          <CardDescription>
+            {t("descriptions.profile", { ns: "settings" })}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {userQuery.status === "success" &&
+            languagesQuery.status === "success" &&
+            userQuery.data.status === 200 && (
+              <ProfileForm
+                user={userQuery.data.body}
+                languages={
+                  languagesQuery.data.status === 200
+                    ? languagesQuery.data.body
+                    : []
+                }
+                clientId={authParams.clientId}
+                userId={authParams.userId}
+                submitId={submitId}
+                isDisabled={!canViewAdminTab || isMutating}
+              />
+            )}
+        </CardContent>
+        <CardFooter className="border-t pt-6">
+          <Button
+            type="submit"
+            form={submitId}
+            className="w-full lg:w-max"
+            disabled={canViewAdminTab === false}
+            aria-disabled={!canViewAdminTab === false || isMutating}
+          >
+            {isMutating && (
+              <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {t("buttons.save", { ns: "labels" })}
+          </Button>
+        </CardFooter>
+      </Card>
+    </article>
   );
 }
 
@@ -108,6 +144,8 @@ function ProfileForm(props: {
   languages: UserLanguageItem[];
   clientId: string;
   userId: string;
+  submitId: string;
+  isDisabled: boolean;
 }) {
   const { user, languages } = props;
   const authParams = {
@@ -117,8 +155,6 @@ function ProfileForm(props: {
 
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-
-  const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
 
   const languagesList = languages
     .filter((item) => item.key)
@@ -149,7 +185,8 @@ function ProfileForm(props: {
     },
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
+    mutationKey,
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
@@ -201,13 +238,14 @@ function ProfileForm(props: {
     },
   });
 
-  const isSubmitBtnFrozen = isPending;
-  const isFieldsReadonly = canViewAdminTab === false || isSubmitBtnFrozen;
+  const isSubmitBtnFrozen = props.isDisabled;
+  const isFieldsReadonly = props.isDisabled;
 
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-5"
+        id={props.submitId}
+        className="grid gap-5"
         onSubmit={form.handleSubmit(async (values) => {
           if (isSubmitBtnFrozen) return;
 
@@ -273,7 +311,7 @@ function ProfileForm(props: {
             </FormItem>
           )}
         />
-        <div className="flex flex-col gap-5 md:flex-row">
+        <div className="grid gap-5 md:grid-cols-2">
           <FormField
             control={form.control}
             name="firstName"
@@ -313,7 +351,7 @@ function ProfileForm(props: {
             )}
           />
         </div>
-        <div className="flex flex-col gap-5 md:flex-row">
+        <div className="grid gap-5 md:grid-cols-2">
           <FormField
             control={form.control}
             name="language"
@@ -389,16 +427,6 @@ function ProfileForm(props: {
             </FormItem>
           )}
         />
-        <Separator className="mt-0.5" />
-        <Button
-          type="submit"
-          className="w-full lg:w-max"
-          disabled={!canViewAdminTab}
-          aria-disabled={!canViewAdminTab || isSubmitBtnFrozen}
-        >
-          {isPending && <icons.Loading className="mr-2 h-4 w-4 animate-spin" />}
-          {t("buttons.saveProfileDetails", { ns: "labels" })}
-        </Button>
       </form>
     </Form>
   );

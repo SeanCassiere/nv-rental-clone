@@ -6,11 +6,18 @@ import {
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { incompleteApplicationSettingsTabsFeatureFlag } from "@/lib/config/features";
 
-import { SettingsLayoutHeader } from "./-components/layout-header";
 import {
   LayoutTabNavigationItem,
   LayoutTabsNavigation,
@@ -84,19 +91,23 @@ function ApplicationConfigurationLayout() {
   }, [t, incomplete_incompleteApplicationSettingsTabs]);
 
   return (
-    <React.Fragment>
-      <SettingsLayoutHeader
-        title={t("titles.application", { ns: "settings" })}
-        subtitle={t("descriptions.application", { ns: "settings" })}
-      />
-      <LayoutTabsNavigation
-        items={tabs}
-        currentPathname={location.pathname}
-        className="mt-6 overflow-x-hidden"
-      />
-      <div className="mt-2">
-        <Outlet />
-      </div>
-    </React.Fragment>
+    <article className="grid gap-6">
+      <Card className="overflow-hidden">
+        <CardHeader>
+          <CardTitle>{t("titles.application", { ns: "settings" })}</CardTitle>
+          <CardDescription>
+            {t("descriptions.application", { ns: "settings" })}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LayoutTabsNavigation
+            items={tabs}
+            currentPathname={location.pathname}
+            className="overflow-x-hidden"
+          />
+        </CardContent>
+      </Card>
+      <Outlet />
+    </article>
   );
 }

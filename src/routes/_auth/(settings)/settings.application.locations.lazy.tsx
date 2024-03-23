@@ -168,16 +168,14 @@ function LocationsPage() {
         stateName={defaultState.stateName}
       />
 
-      <Card className="shadow-none">
-        <CardHeader className="p-4 lg:p-6">
-          <CardTitle className="text-lg">
-            {t("titles.locations", { ns: "settings" })}
-          </CardTitle>
-          <CardDescription className="text-base">
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("titles.locations", { ns: "settings" })}</CardTitle>
+          <CardDescription>
             {t("descriptions.locations", { ns: "settings" })}
           </CardDescription>
         </CardHeader>
-        <CardContent className="px-4 pb-2 pt-0 lg:px-6">
+        <CardContent className="pb-4">
           <div className="flex flex-col justify-start gap-2 pb-4 md:flex-row md:items-center">
             <Button
               size="sm"
