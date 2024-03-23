@@ -91,15 +91,15 @@ function ApplicationConfigurationLayout() {
   }, [t, incomplete_incompleteApplicationSettingsTabs]);
 
   return (
-    <article className="grid gap-6">
+    <article className="grid gap-5">
       <Card className="overflow-hidden">
-        <CardHeader>
+        <CardHeader className="pb-4">
           <CardTitle>{t("titles.application", { ns: "settings" })}</CardTitle>
           <CardDescription>
             {t("descriptions.application", { ns: "settings" })}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="border-t p-4">
           <LayoutTabsNavigation
             items={tabs}
             currentPathname={location.pathname}
