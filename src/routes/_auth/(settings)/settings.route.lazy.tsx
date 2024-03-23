@@ -111,10 +111,10 @@ function SettingsLayout() {
       <Container className="max-w-screen-xl" as="div">
         <section
           className={cn(
-            "mx-auto mb-5 flex max-w-full flex-col space-y-5 px-2 pt-6 sm:px-4 lg:flex-row lg:space-x-12 lg:space-y-0"
+            "relative mx-auto mb-5 flex max-w-full flex-col space-y-5 px-2 pt-6 sm:px-4 lg:flex-row lg:space-x-12 lg:space-y-0"
           )}
         >
-          <aside className="shrink-0 pb-4 sm:px-1 lg:w-1/5">
+          <aside className="block h-full shrink-0 pb-4 sm:px-1 lg:sticky lg:top-16 lg:w-1/5">
             <SidebarNavigation items={destinations} />
           </aside>
           <div className="flex-1">
