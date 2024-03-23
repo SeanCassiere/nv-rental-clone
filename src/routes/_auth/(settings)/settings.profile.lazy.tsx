@@ -94,7 +94,7 @@ function SettingsProfilePage() {
   );
 
   return (
-    <article className="w-full max-w-2xl">
+    <article>
       <Card>
         <CardHeader>
           <CardTitle>{t("titles.profile", { ns: "settings" })}</CardTitle>

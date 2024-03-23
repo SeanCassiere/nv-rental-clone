@@ -85,37 +85,43 @@ function SettingsLayout() {
   }, [t, canSeeAdminTab, incomplete_allSettingsNavigation]);
 
   return (
-    <Container>
-      <section
-        className={cn(
-          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
-        )}
-      >
-        <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6">
-            {t("titles.settings", { ns: "settings" })}
-          </h1>
-        </div>
-        <p className={cn("text-balance text-base text-foreground/80")}>
-          {t("descriptions.settings", {
-            ns: "settings",
-            appName: UI_APPLICATION_NAME,
-          })}
-        </p>
-        <Separator className="mt-3.5" />
-      </section>
-      <section
-        className={cn(
-          "mx-auto mb-5 mt-4 flex max-w-full flex-col space-y-5 px-2 sm:px-4 lg:flex-row lg:space-x-12 lg:space-y-0"
-        )}
-      >
-        <aside className="shrink-0 border-b pb-4 sm:px-1 lg:w-1/5 lg:border-b-0 lg:pb-0">
-          <SidebarNavigation items={destinations} />
-        </aside>
-        <div className="flex-1">
-          <Outlet />
-        </div>
-      </section>
-    </Container>
+    <main>
+      <Container className="max-w-screen-xl pb-4" as="div">
+        <section
+          className={cn(
+            "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+          )}
+        >
+          <div
+            className={cn("flex min-h-[2.5rem] items-center justify-between")}
+          >
+            <h1 className="text-2xl font-semibold leading-6">
+              {t("titles.settings", { ns: "settings" })}
+            </h1>
+          </div>
+          <p className={cn("text-balance text-base text-foreground/80")}>
+            {t("descriptions.settings", {
+              ns: "settings",
+              appName: UI_APPLICATION_NAME,
+            })}
+          </p>
+        </section>
+      </Container>
+      <Separator />
+      <Container className="max-w-screen-xl" as="div">
+        <section
+          className={cn(
+            "mx-auto mb-5 flex max-w-full flex-col space-y-5 px-2 pt-6 sm:px-4 lg:flex-row lg:space-x-12 lg:space-y-0"
+          )}
+        >
+          <aside className="shrink-0 pb-4 sm:px-1 lg:w-1/5">
+            <SidebarNavigation items={destinations} />
+          </aside>
+          <div className="flex-1">
+            <Outlet />
+          </div>
+        </section>
+      </Container>
+    </main>
   );
 }
