@@ -1,11 +1,11 @@
 import React from "react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
+import { createLazyFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
 import { badgeVariants } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -154,7 +154,7 @@ function LocationsPage() {
   );
 
   return (
-    <>
+    <article className="grid gap-4">
       <LocationEditDialog
         mode="new"
         open={showNew}
@@ -167,7 +167,16 @@ function LocationsPage() {
         stateId={defaultState.stateId}
         stateName={defaultState.stateName}
       />
-
+      <div>
+        <Link
+          from="/settings/application/locations"
+          to="../"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+        >
+          <icons.ChevronLeft className="mr-2 h-3 w-3" />
+          <span>{t("buttons.back", { ns: "labels" })}</span>
+        </Link>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>{t("titles.locations", { ns: "settings" })}</CardTitle>
@@ -214,7 +223,7 @@ function LocationsPage() {
           </React.Suspense>
         </CardContent>
       </Card>
-    </>
+    </article>
   );
 }
 

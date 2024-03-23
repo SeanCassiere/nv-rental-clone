@@ -44,7 +44,6 @@ import { Route as AuthreportsReportsReportIdRouteImport } from "./routes/_auth/(
 import { Route as AuthfleetFleetVehicleIdRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.route"
 import { Route as AuthcustomersCustomersCustomerIdRouteImport } from "./routes/_auth/(customers)/customers.$customerId.route"
 import { Route as AuthagreementsAgreementsAgreementIdRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId.route"
-import { Route as AuthsettingsSettingsApplicationIndexImport } from "./routes/_auth/(settings)/settings.application.index"
 import { Route as AuthreservationsReservationsReservationIdIndexImport } from "./routes/_auth/(reservations)/reservations.$reservationId.index"
 import { Route as AuthreportsReportsReportIdIndexImport } from "./routes/_auth/(reports)/reports.$reportId.index"
 import { Route as AuthfleetFleetVehicleIdIndexImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.index"
@@ -64,6 +63,9 @@ import { Route as AuthagreementsAgreementsAgreementIdCheckInImport } from "./rou
 
 const PublicLoggedOutLazyImport = createFileRoute("/_public/logged-out")()
 const PublicDevLazyImport = createFileRoute("/_public/dev")()
+const AuthsettingsSettingsApplicationIndexLazyImport = createFileRoute(
+  "/_auth/(settings)/settings/application/",
+)()
 
 // Create/Update Routes
 
@@ -268,11 +270,7 @@ const AuthsettingsSettingsApplicationRouteRoute =
   AuthsettingsSettingsApplicationRouteImport.update({
     path: "/application",
     getParentRoute: () => AuthsettingsSettingsRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/(settings)/settings.application.route.lazy").then(
-      (d) => d.Route,
-    ),
-  )
+  } as any)
 
 const AuthreservationsReservationsReservationIdRouteRoute =
   AuthreservationsReservationsReservationIdRouteImport.update({
@@ -304,11 +302,15 @@ const AuthagreementsAgreementsAgreementIdRouteRoute =
     getParentRoute: () => AuthagreementsAgreementsRouteRoute,
   } as any)
 
-const AuthsettingsSettingsApplicationIndexRoute =
-  AuthsettingsSettingsApplicationIndexImport.update({
+const AuthsettingsSettingsApplicationIndexLazyRoute =
+  AuthsettingsSettingsApplicationIndexLazyImport.update({
     path: "/",
     getParentRoute: () => AuthsettingsSettingsApplicationRouteRoute,
-  } as any)
+  } as any).lazy(() =>
+    import("./routes/_auth/(settings)/settings.application.index.lazy").then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthreservationsReservationsReservationIdIndexRoute =
   AuthreservationsReservationsReservationIdIndexImport.update({
@@ -643,7 +645,7 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof AuthreservationsReservationsReservationIdRouteImport
     }
     "/_auth/(settings)/settings/application/": {
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexImport
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexLazyImport
       parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
     }
   }
@@ -698,7 +700,7 @@ export const routeTree = rootRoute.addChildren([
         AuthsettingsSettingsApplicationPermissionsAndRolesRoute,
         AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute,
         AuthsettingsSettingsApplicationUsersRoute,
-        AuthsettingsSettingsApplicationIndexRoute,
+        AuthsettingsSettingsApplicationIndexLazyRoute,
       ]),
       AuthsettingsSettingsRatesAndChargesRouteRoute,
       AuthsettingsSettingsRuntimeConfigurationRouteRoute,

@@ -1,11 +1,11 @@
 import React, { Suspense } from "react";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
+import { createLazyFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -73,7 +73,7 @@ function PermissionsAndRolesPage() {
   );
 
   return (
-    <>
+    <article className="grid gap-4">
       <RoleEditDialog
         mode="new"
         open={showNew}
@@ -82,6 +82,16 @@ function PermissionsAndRolesPage() {
         userId={auth.userId}
         roleId={""}
       />
+      <div>
+        <Link
+          from="/settings/application/permissions-and-roles"
+          to="../"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+        >
+          <icons.ChevronLeft className="mr-2 h-3 w-3" />
+          <span>{t("buttons.back", { ns: "labels" })}</span>
+        </Link>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>
@@ -125,7 +135,7 @@ function PermissionsAndRolesPage() {
           </Suspense>
         </CardContent>
       </Card>
-    </>
+    </article>
   );
 }
 

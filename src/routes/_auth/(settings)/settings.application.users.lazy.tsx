@@ -1,12 +1,12 @@
 import React, { Suspense } from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
+import { createLazyFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -62,7 +62,7 @@ function ApplicationConfigurationUsersPage() {
   );
 
   return (
-    <>
+    <article className="grid gap-4">
       {auth.user?.profile?.navotar_userid &&
         auth.user?.profile?.navotar_clientid && (
           <UserEditDialog
@@ -74,6 +74,16 @@ function ApplicationConfigurationUsersPage() {
             userId={auth.user?.profile?.navotar_userid}
           />
         )}
+      <div>
+        <Link
+          from="/settings/application/users"
+          to="../"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+        >
+          <icons.ChevronLeft className="mr-2 h-3 w-3" />
+          <span>{t("buttons.back", { ns: "labels" })}</span>
+        </Link>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>{t("titles.systemUsers", { ns: "settings" })}</CardTitle>
@@ -93,7 +103,7 @@ function ApplicationConfigurationUsersPage() {
           </Suspense>
         </CardContent>
       </Card>
-    </>
+    </article>
   );
 }
 
