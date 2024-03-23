@@ -1,5 +1,10 @@
 import React from "react";
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  ErrorComponent,
+  Outlet,
+  ScrollRestoration,
+} from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { AuthContextProps } from "react-oidc-context";
 
@@ -20,38 +25,48 @@ export interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: Component,
-  notFoundComponent: NotFoundComponent,
+  component: RootComponent,
+  notFoundComponent: RootNotFoundComponent,
+  errorComponent: function RootErrorComponent(props) {
+    return (
+      <RootDocument>
+        <Container>
+          <ErrorComponent {...props} />
+        </Container>
+      </RootDocument>
+    );
+  },
 });
 
-function RootComponent({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <React.Fragment>
       {children}
+      <ScrollRestoration />
       <RouterDevTools position="bottom-left" />
     </React.Fragment>
   );
 }
 
-function Component() {
+function RootComponent() {
   return (
-    <RootComponent>
+    <RootDocument>
       <Outlet />
       <FeatureTogglesDialog />
-    </RootComponent>
+    </RootDocument>
   );
 }
 
-function NotFoundComponent() {
+function RootNotFoundComponent() {
   const { t } = useTranslation();
 
   useDocumentTitle(titleMaker(t("notFound", { ns: "messages" })));
 
   return (
-    <RootComponent>
+    <RootDocument>
       <Container className="flex">
         <PageNotFound className="px-2" />
       </Container>
-    </RootComponent>
+    </RootDocument>
   );
 }
