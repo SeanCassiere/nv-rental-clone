@@ -10,7 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+
+import { titleMaker } from "@/lib/utils/title-maker";
 
 import { incompleteApplicationSettingsTabsFeatureFlag } from "@/lib/config/features";
 
@@ -35,6 +38,15 @@ function SettingsApplicationIndex() {
   const canSeeLocations = true;
   const canSeeStoreHoursAndHolidays =
     incomplete_incompleteApplicationSettingsTabs;
+
+  useDocumentTitle(
+    titleMaker(
+      t("titles.page", {
+        ns: "settings",
+        pageTitle: t("titles.application", { ns: "settings" }),
+      })
+    )
+  );
 
   return (
     <article>
