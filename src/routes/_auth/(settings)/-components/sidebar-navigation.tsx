@@ -12,10 +12,10 @@ import { cn } from "@/lib/utils";
 export function SidebarNavigation({ items }: { items: (() => JSX.Element)[] }) {
   return (
     <nav className="w-full">
-      <ul className="flex flex-col space-y-1.5">
+      <ul className="grid gap-4 text-muted-foreground hover:text-foreground md:text-sm">
         {items.map((Item, idx) => {
           return (
-            <li className="w-full" key={`settings_sidebar_${idx}`}>
+            <li key={`settings_sidebar_${idx}`}>
               <Item />
             </li>
           );
@@ -44,16 +44,9 @@ export function SidebarNavigationItem<
 
   return (
     <Link
-      className={cn(
-        "flex h-10 items-center justify-start rounded-md border px-3 text-sm font-medium underline-offset-2"
-      )}
+      className="py-2"
       activeProps={{
-        className: cn("border-border bg-muted text-foreground underline"),
-      }}
-      inactiveProps={{
-        className: cn(
-          "border-transparent text-muted-foreground hover:bg-muted/90 hover:text-foreground hover:underline"
-        ),
+        className: cn("font-semibold text-foreground"),
       }}
       {...rest}
     >
