@@ -269,9 +269,7 @@ function SortableWidgetList(props: SortableWidgetListProps) {
         <Button type="button" onClick={handleSave}>
           {saveFn.isPending ? (
             <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <icons.Save className="mr-2 h-4 w-4" />
-          )}
+          ) : null}
           <span>{t("buttons.save", { ns: "labels" })}</span>
         </Button>
       </DialogFooter>
