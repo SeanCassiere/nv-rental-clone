@@ -106,14 +106,6 @@ export const AppNavigation = (props: Props) => {
             activeOptions: defaultActiveOptions,
           }}
         />
-        <AppNavigationLink
-          name="Settings"
-          props={{
-            to: "/settings",
-            search: false,
-            activeOptions: defaultActiveOptions,
-          }}
-        />
       </ul>
     </nav>
   );
