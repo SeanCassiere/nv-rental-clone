@@ -38,7 +38,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
+import { useCopyToClipboard } from "@/lib/hooks/useCopyToClipboard";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { usePermission } from "@/lib/hooks/usePermission";
 
@@ -294,10 +300,28 @@ type BlockProps = ProfileFormProps & {
   isMutating: boolean;
 };
 
+const COPY_TIMEOUT = 1500;
+
 function UsernameBlock({ form }: BlockProps) {
   const { t } = useTranslation();
-
   const username = form.watch("userName");
+
+  const [hidden, setHidden] = React.useState(false);
+  const [_, copy] = useCopyToClipboard();
+
+  const handleCopy = React.useCallback(() => {
+    setHidden(true);
+    copy(username).catch(() => {
+      console.error(`Failed to copy: ${username}`);
+    });
+  }, [copy, username]);
+
+  React.useEffect(() => {
+    const t = hidden ? setTimeout(() => setHidden(false), COPY_TIMEOUT) : null;
+    return () => {
+      if (t) clearTimeout(t);
+    };
+  }, [hidden, setHidden]);
 
   return (
     <Card>
@@ -314,9 +338,26 @@ function UsernameBlock({ form }: BlockProps) {
           <span className="grow cursor-not-allowed truncate text-muted-foreground">
             {username}
           </span>
-          <Button type="button" variant="ghost" size="icon" className="h-9">
-            <icons.Copy className="h-3 w-3" />
-          </Button>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                onClick={handleCopy}
+                variant="ghost"
+                size="icon"
+                className="h-9"
+              >
+                {hidden ? (
+                  <icons.Check className="h-3 w-3" />
+                ) : (
+                  <icons.Copy className="h-3 w-3" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </CardContent>
     </Card>
