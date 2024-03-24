@@ -154,7 +154,7 @@ function LocationsPage() {
   );
 
   return (
-    <article className="grid gap-4">
+    <article className="flex flex-col gap-4">
       <LocationEditDialog
         mode="new"
         open={showNew}

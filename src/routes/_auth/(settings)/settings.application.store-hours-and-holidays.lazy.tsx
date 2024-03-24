@@ -22,7 +22,7 @@ export const Route = createLazyFileRoute(
 function StoreHoursAndHolidaysPage() {
   const { t } = useTranslation();
   return (
-    <article className="grid gap-4">
+    <article className="flex flex-col gap-4">
       <div>
         <Link
           from="/settings/application/store-hours-and-holidays"

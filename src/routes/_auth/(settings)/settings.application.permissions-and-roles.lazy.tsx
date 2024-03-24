@@ -73,7 +73,7 @@ function PermissionsAndRolesPage() {
   );
 
   return (
-    <article className="grid gap-4">
+    <article className="flex flex-col gap-4">
       <RoleEditDialog
         mode="new"
         open={showNew}

@@ -62,7 +62,7 @@ function ApplicationConfigurationUsersPage() {
   );
 
   return (
-    <article className="grid gap-4">
+    <article className="flex flex-col gap-4">
       {auth.user?.profile?.navotar_userid &&
         auth.user?.profile?.navotar_clientid && (
           <UserEditDialog
