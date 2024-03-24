@@ -17,7 +17,6 @@
   "somethingFailedValidation": "Something failed during validation.",
   "usernameCannotBeChanged": "Username cannot be changed.",
   "usernameCannotBeChangedLater": "Username cannot be changed later.",
-  "usernameCannotBeChanged_me": "This is your username and cannot be changed.",
   "enterAStrongPassword": "Enter a strong password.",
   "passwordRules": "Minimum eight characters with at least one letter, one number and one special character.",
   "maxLength": "Maximum length is {{length}} characters.",

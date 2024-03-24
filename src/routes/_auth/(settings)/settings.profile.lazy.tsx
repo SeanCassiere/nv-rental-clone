@@ -109,12 +109,14 @@ function SettingsProfilePage() {
         />
       ) : (
         <React.Fragment>
-          {[...Array(5)].map((_, idx) => (
+          {[...Array(4)].map((_, idx) => (
             <Card key={`skeleton_${idx}`}>
               <CardHeader>
-                <CardTitle>{t("titles.profile", { ns: "settings" })}</CardTitle>
+                <CardTitle>
+                  <Skeleton className="h-8 w-4/5" />
+                </CardTitle>
                 <CardDescription>
-                  {t("descriptions.profile", { ns: "settings" })}
+                  <Skeleton className="h-12 w-4/5" />
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -327,10 +329,13 @@ function UsernameBlock({ form }: BlockProps) {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg">
-          {t("display.username", { ns: "labels" })}
+          {t("titles.profileUsername", { ns: "settings" })}
         </CardTitle>
         <CardDescription>
-          This is the username you use to log in with {UI_APPLICATION_NAME}.
+          {t("descriptions.profileUsername", {
+            ns: "settings",
+            appName: UI_APPLICATION_NAME,
+          })}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -352,10 +357,13 @@ function UsernameBlock({ form }: BlockProps) {
                 ) : (
                   <icons.Copy className="h-3 w-3" />
                 )}
+                <span className="sr-only">
+                  {t("buttons.copy", { ns: "labels" })}
+                </span>
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Copy</p>
+              <p>{t("buttons.copy", { ns: "labels" })}</p>
             </TooltipContent>
           </Tooltip>
         </div>
@@ -371,10 +379,14 @@ function EmailBlock({ form, onFormSubmit, isLocked, isMutating }: BlockProps) {
       <form onSubmit={onFormSubmit}>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Email</CardTitle>
+            <CardTitle className="text-lg">
+              {t("titles.profileEmail", { ns: "settings" })}
+            </CardTitle>
             <CardDescription>
-              Please enter the email address you want to use to log in with{" "}
-              {UI_APPLICATION_NAME}.
+              {t("descriptions.profileEmail", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -432,7 +444,7 @@ function EmailBlock({ form, onFormSubmit, isLocked, isMutating }: BlockProps) {
               {isMutating ? (
                 <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              <span>Save</span>
+              <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
         </Card>
@@ -453,10 +465,14 @@ function DisplayNameBlock({
       <form onSubmit={onFormSubmit}>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Display Name</CardTitle>
+            <CardTitle className="text-lg">
+              {t("titles.profileDisplayName", { ns: "settings" })}
+            </CardTitle>
             <CardDescription>
-              Please enter the name you want to be displayed as in{" "}
-              {UI_APPLICATION_NAME}.
+              {t("descriptions.profileDisplayName", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -515,7 +531,7 @@ function DisplayNameBlock({
               {isMutating ? (
                 <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              <span>Save</span>
+              <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
         </Card>
@@ -540,10 +556,14 @@ function LanguageBlock({
       <form onSubmit={onFormSubmit}>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Language</CardTitle>
+            <CardTitle className="text-lg">
+              {t("titles.profileLanguage", { ns: "settings" })}
+            </CardTitle>
             <CardDescription>
-              Please select the language you want to use with{" "}
-              {UI_APPLICATION_NAME}.
+              {t("descriptions.profileLanguage", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -588,7 +608,7 @@ function LanguageBlock({
               {isMutating ? (
                 <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              <span>Save</span>
+              <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
         </Card>
@@ -609,11 +629,17 @@ function PhoneNumberBlock({
       <form onSubmit={onFormSubmit}>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Phone Number</CardTitle>
+            <CardTitle className="text-lg">
+              {t("titles.profilePhoneNumber", { ns: "settings" })}
+            </CardTitle>
             <CardDescription>
-              Please enter your phone number. This is optional.
+              {t("descriptions.profilePhoneNumber", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
             </CardDescription>
           </CardHeader>
+
           <CardContent>
             <FormField
               control={form.control}
@@ -647,7 +673,7 @@ function PhoneNumberBlock({
               {isMutating ? (
                 <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              <span>Save</span>
+              <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
         </Card>
