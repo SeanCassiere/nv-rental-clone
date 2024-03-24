@@ -1,13 +1,12 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  useIsMutating,
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createLazyFileRoute, getRouteApi } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -37,8 +36,15 @@ import {
   InputSelectTrigger,
 } from "@/components/ui/input-select";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
+import { useCopyToClipboard } from "@/lib/hooks/useCopyToClipboard";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { usePermission } from "@/lib/hooks/usePermission";
 
@@ -56,6 +62,7 @@ import {
   fetchUserByIdOptions,
 } from "@/lib/query/user";
 
+import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";
 import { titleMaker } from "@/lib/utils/title-maker";
 
@@ -74,12 +81,6 @@ function SettingsProfilePage() {
   const { authParams } = context;
   const { t } = useTranslation();
 
-  const submitId = React.useId();
-  const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
-
-  const mutationCount = useIsMutating({ mutationKey });
-  const isMutating = mutationCount > 0;
-
   const userQuery = useSuspenseQuery(context.currentUserProfileOptions);
 
   const languagesQuery = useSuspenseQuery(context.availableLanguagesOptions);
@@ -94,71 +95,68 @@ function SettingsProfilePage() {
   );
 
   return (
-    <article>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("titles.profile", { ns: "settings" })}</CardTitle>
-          <CardDescription>
-            {t("descriptions.profile", { ns: "settings" })}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {userQuery.status === "success" &&
-            languagesQuery.status === "success" &&
-            userQuery.data.status === 200 && (
-              <ProfileForm
-                user={userQuery.data.body}
-                languages={
-                  languagesQuery.data.status === 200
-                    ? languagesQuery.data.body
-                    : []
-                }
-                clientId={authParams.clientId}
-                userId={authParams.userId}
-                submitId={submitId}
-                isDisabled={!canViewAdminTab || isMutating}
-              />
-            )}
-        </CardContent>
-        <CardFooter className="border-t pt-6">
-          <Button
-            type="submit"
-            form={submitId}
-            className="w-full lg:w-max"
-            disabled={canViewAdminTab === false}
-            aria-disabled={!canViewAdminTab === false || isMutating}
-          >
-            {isMutating && (
-              <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {t("buttons.save", { ns: "labels" })}
-          </Button>
-        </CardFooter>
-      </Card>
+    <article className="flex flex-col gap-4">
+      {userQuery.status === "success" &&
+      languagesQuery.status === "success" &&
+      userQuery.data.status === 200 ? (
+        <ProfileForm
+          user={userQuery.data.body}
+          languages={
+            languagesQuery.data.status === 200 ? languagesQuery.data.body : []
+          }
+          clientId={authParams.clientId}
+          userId={authParams.userId}
+        />
+      ) : (
+        <React.Fragment>
+          {[...Array(4)].map((_, idx) => (
+            <Card key={`skeleton_${idx}`}>
+              <CardHeader>
+                <CardTitle>
+                  <Skeleton className="h-8 w-4/5" />
+                </CardTitle>
+                <CardDescription>
+                  <Skeleton className="h-12 w-4/5" />
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-12 w-4/5" />
+              </CardContent>
+              <CardFooter className="justify-end border-t pt-6">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="bg-transparent"
+                  disabled
+                >
+                  Save
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </React.Fragment>
+      )}
     </article>
   );
 }
 
-function ProfileForm(props: {
+interface ProfileFormProps {
   user: TUserProfile;
   languages: UserLanguageItem[];
   clientId: string;
   userId: string;
-  submitId: string;
-  isDisabled: boolean;
-}) {
-  const { user, languages } = props;
-  const authParams = {
-    clientId: props.clientId,
-    userId: props.userId,
-  };
+}
 
+function ProfileForm(props: ProfileFormProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const canViewAdminTab = usePermission("VIEW_ADMIN_TAB");
+  const { user, clientId, userId } = props;
 
-  const languagesList = languages
-    .filter((item) => item.key)
-    .sort((a, b) => a.key.localeCompare(b.key));
+  const authParams = {
+    clientId,
+    userId,
+  };
 
   const form = useForm<UpdateUserInput>({
     resolver: zodResolver(
@@ -180,12 +178,12 @@ function ProfileForm(props: {
       isActive: user.isActive ?? false,
       lockOut: user.lockOut ?? false,
       isReservationEmail: user.isReservationEmail ?? false,
-      createdBy: Number(authParams.userId),
+      createdBy: Number(userId),
       createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(new Date()),
     },
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey,
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
@@ -238,195 +236,447 @@ function ProfileForm(props: {
     },
   });
 
-  const isSubmitBtnFrozen = props.isDisabled;
-  const isFieldsReadonly = props.isDisabled;
+  const isLocked = canViewAdminTab === false || isPending;
+
+  const handleFormSubmit = form.handleSubmit(async (values) => {
+    if (isLocked) return;
+
+    mutate({
+      params: {
+        userId: authParams.userId,
+      },
+      body: {
+        ...values,
+        createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(new Date()),
+      },
+    });
+  });
 
   return (
-    <Form {...form}>
-      <form
-        id={props.submitId}
-        className="grid gap-5"
-        onSubmit={form.handleSubmit(async (values) => {
-          if (isSubmitBtnFrozen) return;
+    <React.Fragment>
+      <UsernameBlock
+        {...props}
+        form={form}
+        onFormSubmit={handleFormSubmit}
+        isLocked={isLocked}
+        isMutating={isPending}
+      />
+      <EmailBlock
+        {...props}
+        form={form}
+        onFormSubmit={handleFormSubmit}
+        isLocked={isLocked}
+        isMutating={isPending}
+      />
+      <DisplayNameBlock
+        {...props}
+        form={form}
+        onFormSubmit={handleFormSubmit}
+        isLocked={isLocked}
+        isMutating={isPending}
+      />
+      <LanguageBlock
+        {...props}
+        form={form}
+        onFormSubmit={handleFormSubmit}
+        isLocked={isLocked}
+        isMutating={isPending}
+      />
+      <PhoneNumberBlock
+        {...props}
+        form={form}
+        onFormSubmit={handleFormSubmit}
+        isLocked={isLocked}
+        isMutating={isPending}
+      />
+    </React.Fragment>
+  );
+}
 
-          mutate({
-            params: {
-              userId: authParams.userId,
-            },
-            body: {
-              ...values,
-              createdDate: localDateTimeWithoutSecondsToQueryYearMonthDay(
-                new Date()
-              ),
-            },
-          });
-        })}
-      >
-        <FormField
-          control={form.control}
-          name="userName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("display.username", { ns: "labels" })}</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder={t("display.username", { ns: "labels" })}
-                  autoComplete="username"
-                  readOnly
-                />
-              </FormControl>
-              <FormMessage />
-              <FormDescription>
-                {t("usernameCannotBeChanged", {
-                  context: "me",
-                  ns: "messages",
-                })}
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <Separator />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("display.email", { ns: "labels" })}</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder={t("display.email", { ns: "labels" })}
-                  readOnly={isFieldsReadonly}
-                  autoComplete="email"
-                />
-              </FormControl>
-              <FormMessage />
-              <FormDescription>
-                {t("emailAssociatedWithAccount", {
-                  context: "me",
-                  ns: "messages",
-                })}
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <div className="grid gap-5 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>
-                  {t("display.firstName", { ns: "labels" })}
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder={t("display.firstName", { ns: "labels" })}
-                    readOnly={isFieldsReadonly}
-                    autoComplete="given-name"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t("display.lastName", { ns: "labels" })}</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder={t("display.lastName", { ns: "labels" })}
-                    readOnly={isFieldsReadonly}
-                    autoComplete="family-name"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+type BlockProps = ProfileFormProps & {
+  form: UseFormReturn<UpdateUserInput, any, undefined>;
+  onFormSubmit: ReturnType<
+    UseFormReturn<UpdateUserInput, any, undefined>["handleSubmit"]
+  >;
+  isLocked: boolean;
+  isMutating: boolean;
+};
+
+const COPY_TIMEOUT = 1500;
+
+function UsernameBlock({ form }: BlockProps) {
+  const { t } = useTranslation();
+  const username = form.watch("userName");
+
+  const [hidden, setHidden] = React.useState(false);
+  const [_, copy] = useCopyToClipboard();
+
+  const handleCopy = React.useCallback(() => {
+    setHidden(true);
+    copy(username).catch(() => {
+      console.error(`Failed to copy: ${username}`);
+    });
+  }, [copy, username]);
+
+  React.useEffect(() => {
+    const t = hidden ? setTimeout(() => setHidden(false), COPY_TIMEOUT) : null;
+    return () => {
+      if (t) clearTimeout(t);
+    };
+  }, [hidden, setHidden]);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg">
+          {t("titles.profileUsername", { ns: "settings" })}
+        </CardTitle>
+        <CardDescription>
+          {t("descriptions.profileUsername", {
+            ns: "settings",
+            appName: UI_APPLICATION_NAME,
+          })}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex h-10 items-center justify-between rounded-md border border-border pl-3 opacity-90 lg:w-72">
+          <span className="grow cursor-not-allowed truncate text-muted-foreground">
+            {username}
+          </span>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                onClick={handleCopy}
+                variant="ghost"
+                size="icon"
+                className="h-9"
+              >
+                {hidden ? (
+                  <icons.Check className="h-3 w-3" />
+                ) : (
+                  <icons.Copy className="h-3 w-3" />
+                )}
+                <span className="sr-only">
+                  {t("buttons.copy", { ns: "labels" })}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t("buttons.copy", { ns: "labels" })}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
-        <div className="grid gap-5 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="language"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t("display.language", { ns: "labels" })}</FormLabel>
-                <InputSelect
-                  placeholder={t("selectYourLocalization", {
-                    ns: "messages",
-                  })}
-                  disabled={isFieldsReadonly}
-                  defaultValue={String(field.value)}
-                  onValueChange={field.onChange}
-                  items={languagesList.map((lang, idx) => ({
-                    id: `role_${idx}_${lang.key}`,
-                    value: String(lang.key),
-                    label: `${lang.value}`,
-                  }))}
-                >
+      </CardContent>
+    </Card>
+  );
+}
+
+function EmailBlock({ form, onFormSubmit, isLocked, isMutating }: BlockProps) {
+  const { t } = useTranslation();
+  return (
+    <Form {...form}>
+      <form onSubmit={onFormSubmit}>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">
+              {t("titles.profileEmail", { ns: "settings" })}
+            </CardTitle>
+            <CardDescription>
+              {t("descriptions.profileEmail", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel className="sr-only">
+                    {t("display.email", { ns: "labels" })}
+                  </FormLabel>
                   <FormControl>
-                    <InputSelectTrigger />
+                    <Input
+                      {...field}
+                      className="bg-transparent lg:w-72"
+                      placeholder={t("display.email", { ns: "labels" })}
+                      readOnly={isLocked}
+                      autoComplete="email"
+                    />
                   </FormControl>
-                  <InputSelectContent />
-                </InputSelect>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>
-                  {t("display.phoneNo", { ns: "labels" })}&nbsp;
-                  <span className="text-xs text-foreground/70">
-                    {t("display.bracketOptional", { ns: "labels" })}
-                  </span>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder={t("display.phoneNo", { ns: "labels" })}
-                    readOnly={isFieldsReadonly}
-                    autoComplete="tel"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="isReservationEmail"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between gap-2 rounded-lg border bg-background p-4">
-              <div className="space-y-0.5">
-                <FormLabel>
-                  {t("labels.youReceiveEmailsQuestion", { ns: "settings" })}
-                </FormLabel>
-                <FormDescription>
-                  {t("receiveReservationEmails", { ns: "messages" })}
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  disabled={isFieldsReadonly}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Separator />
+            <FormField
+              control={form.control}
+              name="isReservationEmail"
+              render={({ field }) => (
+                <FormItem className="grid gap-2 space-y-0">
+                  <FormLabel className="sr-only">
+                    {t("labels.youReceiveEmailsQuestion", { ns: "settings" })}
+                  </FormLabel>
+                  <FormDescription>
+                    {t("receiveReservationEmails", { ns: "messages" })}
+                  </FormDescription>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isLocked}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </CardContent>
+          <CardFooter className="justify-end border-t py-2.5">
+            <Button
+              type="submit"
+              size="sm"
+              variant="outline"
+              className="bg-transparent"
+            >
+              {isMutating ? (
+                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              <span>{t("buttons.save", { ns: "labels" })}</span>
+            </Button>
+          </CardFooter>
+        </Card>
+      </form>
+    </Form>
+  );
+}
+
+function DisplayNameBlock({
+  onFormSubmit,
+  form,
+  isLocked,
+  isMutating,
+}: BlockProps) {
+  const { t } = useTranslation();
+  return (
+    <Form {...form}>
+      <form onSubmit={onFormSubmit}>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">
+              {t("titles.profileDisplayName", { ns: "settings" })}
+            </CardTitle>
+            <CardDescription>
+              {t("descriptions.profileDisplayName", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-4 md:flex-row lg:flex-wrap">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="mb-2 text-muted-foreground">
+                      {t("display.firstName", { ns: "labels" })}
+                    </FormLabel>
+                    <FormControl className="mb-0">
+                      <Input
+                        {...field}
+                        className="bg-transparent lg:w-72"
+                        placeholder={t("display.firstName", { ns: "labels" })}
+                        autoComplete="given-name"
+                        readOnly={isLocked}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="mb-2 text-muted-foreground">
+                      {t("display.lastName", { ns: "labels" })}
+                    </FormLabel>
+                    <FormControl className="mb-0">
+                      <Input
+                        {...field}
+                        className="bg-transparent lg:w-72"
+                        placeholder={t("display.lastName", { ns: "labels" })}
+                        autoComplete="family-name"
+                        readOnly={isLocked}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+          <CardFooter className="justify-end border-t py-2.5">
+            <Button
+              type="submit"
+              size="sm"
+              variant="outline"
+              className="bg-transparent"
+            >
+              {isMutating ? (
+                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              <span>{t("buttons.save", { ns: "labels" })}</span>
+            </Button>
+          </CardFooter>
+        </Card>
+      </form>
+    </Form>
+  );
+}
+
+function LanguageBlock({
+  form,
+  languages,
+  onFormSubmit,
+  isLocked,
+  isMutating,
+}: BlockProps) {
+  const { t } = useTranslation();
+  const languagesList = languages
+    .filter((item) => item.key)
+    .sort((a, b) => a.key.localeCompare(b.key));
+  return (
+    <Form {...form}>
+      <form onSubmit={onFormSubmit}>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">
+              {t("titles.profileLanguage", { ns: "settings" })}
+            </CardTitle>
+            <CardDescription>
+              {t("descriptions.profileLanguage", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel className="sr-only space-y-0">
+                    {t("display.language", { ns: "labels" })}
+                  </FormLabel>
+                  <InputSelect
+                    placeholder={t("selectYourLocalization", {
+                      ns: "messages",
+                    })}
+                    disabled={isLocked}
+                    defaultValue={String(field.value)}
+                    onValueChange={field.onChange}
+                    items={languagesList.map((lang, idx) => ({
+                      id: `lang_${idx}_${lang.key}`,
+                      value: String(lang.key),
+                      label: `${lang.value}`,
+                    }))}
+                  >
+                    <FormControl>
+                      <InputSelectTrigger className="bg-transparent lg:w-72" />
+                    </FormControl>
+                    <InputSelectContent />
+                  </InputSelect>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+          <CardFooter className="justify-end border-t py-2.5">
+            <Button
+              type="submit"
+              size="sm"
+              variant="outline"
+              className="bg-transparent"
+            >
+              {isMutating ? (
+                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              <span>{t("buttons.save", { ns: "labels" })}</span>
+            </Button>
+          </CardFooter>
+        </Card>
+      </form>
+    </Form>
+  );
+}
+
+function PhoneNumberBlock({
+  onFormSubmit,
+  form,
+  isLocked,
+  isMutating,
+}: BlockProps) {
+  const { t } = useTranslation();
+  return (
+    <Form {...form}>
+      <form onSubmit={onFormSubmit}>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">
+              {t("titles.profilePhoneNumber", { ns: "settings" })}
+            </CardTitle>
+            <CardDescription>
+              {t("descriptions.profilePhoneNumber", {
+                ns: "settings",
+                appName: UI_APPLICATION_NAME,
+              })}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel className="sr-only">
+                    {t("display.phoneNo", { ns: "labels" })}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      className="m-0 bg-transparent lg:w-72"
+                      placeholder={t("display.phoneNo", { ns: "labels" })}
+                      autoComplete="tel"
+                      readOnly={isLocked}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+          <CardFooter className="justify-end border-t py-2.5">
+            <Button
+              type="submit"
+              size="sm"
+              variant="outline"
+              className="bg-transparent"
+            >
+              {isMutating ? (
+                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              <span>{t("buttons.save", { ns: "labels" })}</span>
+            </Button>
+          </CardFooter>
+        </Card>
       </form>
     </Form>
   );

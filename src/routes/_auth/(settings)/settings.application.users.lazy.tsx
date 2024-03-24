@@ -86,7 +86,9 @@ function ApplicationConfigurationUsersPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t("titles.systemUsers", { ns: "settings" })}</CardTitle>
+          <CardTitle className="text-lg">
+            {t("titles.systemUsers", { ns: "settings" })}
+          </CardTitle>
           <CardDescription>
             {t("descriptions.systemUsers", { ns: "settings" })}
           </CardDescription>

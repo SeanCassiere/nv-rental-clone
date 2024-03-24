@@ -35,7 +35,7 @@ function StoreHoursAndHolidaysPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="text-lg">
             {t("titles.storeHoursAndHolidays", { ns: "settings" })}
           </CardTitle>
           <CardDescription>

@@ -52,7 +52,9 @@ function SettingsApplicationIndex() {
     <article>
       <Card>
         <CardHeader className="pb-4">
-          <CardTitle>{t("titles.application", { ns: "settings" })}</CardTitle>
+          <CardTitle className="text-lg">
+            {t("titles.application", { ns: "settings" })}
+          </CardTitle>
           <CardDescription>
             {t("descriptions.application", { ns: "settings" })}
           </CardDescription>

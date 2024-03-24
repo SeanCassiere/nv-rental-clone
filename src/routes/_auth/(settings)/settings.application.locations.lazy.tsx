@@ -179,7 +179,9 @@ function LocationsPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>{t("titles.locations", { ns: "settings" })}</CardTitle>
+          <CardTitle className="text-lg">
+            {t("titles.locations", { ns: "settings" })}
+          </CardTitle>
           <CardDescription>
             {t("descriptions.locations", { ns: "settings" })}
           </CardDescription>

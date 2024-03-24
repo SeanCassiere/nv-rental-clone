@@ -94,7 +94,7 @@ function PermissionsAndRolesPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="text-lg">
             {t("titles.permissionsAndRoles", { ns: "settings" })}
           </CardTitle>
           <CardDescription>
