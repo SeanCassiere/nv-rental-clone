@@ -104,7 +104,7 @@ function DashboardPage() {
     <Container>
       <section
         className={cn(
-          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:px-4 sm:pb-2"
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 sm:px-4 sm:pb-2"
         )}
       >
         <div
