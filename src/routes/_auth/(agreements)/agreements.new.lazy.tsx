@@ -36,7 +36,7 @@ function AddAgreementPage() {
   const handleAgreementSaveComplete = useCallback(
     (agreementId: number) => {
       navigate({
-        to: "/agreements/$agreementId",
+        to: "/agreements/$agreementId/summary",
         params: { agreementId: String(agreementId) },
         search: () => ({ tab: "summary" }),
       });

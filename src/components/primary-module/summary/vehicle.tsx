@@ -230,7 +230,7 @@ export const VehicleSummary = ({
                 : "default"
             }
             linkOptions={{
-              to: "/agreements/$agreementId/",
+              to: "/agreements/$agreementId/summary",
               params: { agreementId: `${summaryData?.currentAgreement}` },
             }}
           />

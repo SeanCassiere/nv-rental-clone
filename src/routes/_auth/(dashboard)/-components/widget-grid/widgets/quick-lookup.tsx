@@ -157,7 +157,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
 
       const agreement = data.body[0];
       navigate({
-        to: "/agreements/$agreementId",
+        to: "/agreements/$agreementId/summary",
         params: { agreementId: String(agreement.id) },
         search: () => ({ tab: "summary" }),
       });

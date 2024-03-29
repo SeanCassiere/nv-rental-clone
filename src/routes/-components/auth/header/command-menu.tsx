@@ -366,7 +366,7 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: "/agreements/$agreementId",
+                        to: "/agreements/$agreementId/summary",
                         params: { agreementId: item.referenceId },
                         search: () => ({ tab: "summary" }),
                       })

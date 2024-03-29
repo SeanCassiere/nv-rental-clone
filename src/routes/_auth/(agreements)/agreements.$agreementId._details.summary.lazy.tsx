@@ -1,5 +1,6 @@
-import { useMemo, useState, type ReactNode } from "react";
-import { useQuery } from "@tanstack/react-query";
+import * as React from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
 import RentalInformation from "@/components/primary-module/information-block/rental-information";
@@ -7,48 +8,35 @@ import VehicleInformation from "@/components/primary-module/information-block/ve
 import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import {
-  fetchAgreementByIdOptions,
-  fetchAgreementSummaryByIdOptions,
-} from "@/lib/query/agreement";
-import type { Auth } from "@/lib/query/helpers";
+import { Container } from "@/routes/-components/container";
 
-type AgreementSummaryTabProps = {
-  agreementId: string;
-} & Auth;
+export const Route = createLazyFileRoute(
+  "/_auth/(agreements)/agreements/$agreementId/_details/summary"
+)({
+  component: Component,
+});
 
-const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
-  const { auth: authParams } = props;
+function Component() {
+  const { viewAgreementOptions, viewAgreementSummaryOptions } =
+    Route.useRouteContext();
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
 
-  const [currentTab, setCurrentTab] = useState("vehicle");
-
-  const agreementQuery = useQuery(
-    fetchAgreementByIdOptions({
-      auth: authParams,
-      agreementId: props.agreementId,
-    })
-  );
+  const agreementQuery = useSuspenseQuery(viewAgreementOptions);
   const agreement =
     agreementQuery.data?.status === 200 ? agreementQuery.data.body : null;
-
   const isCheckedIn = agreement?.returnDate ? true : false;
 
-  const rentalRatesSummary = useQuery(
-    fetchAgreementSummaryByIdOptions({
-      auth: authParams,
-      agreementId: props.agreementId,
-    })
-  );
+  const summaryQuery = useSuspenseQuery(viewAgreementSummaryOptions);
   const summaryData =
-    rentalRatesSummary.data?.status === 200
-      ? rentalRatesSummary.data?.body
-      : undefined;
+    summaryQuery.data?.status === 200 ? summaryQuery.data?.body : undefined;
 
-  const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: ReactNode }[] = [];
+  const [currentTab, setCurrentTab] = React.useState("vehicle");
+
+  const tabsConfig = React.useMemo(() => {
+    const tabs: { id: string; label: string; component: React.ReactNode }[] =
+      [];
 
     tabs.push({
       id: "vehicle",
@@ -122,59 +110,59 @@ const AgreementSummaryTab = (props: AgreementSummaryTabProps) => {
   ]);
 
   return (
-    <div className="grid max-w-full grid-cols-1 gap-4 focus:ring-0 lg:grid-cols-12">
-      <div className="flex flex-col gap-4 lg:col-span-8">
-        {canViewCustomerInformation && (
-          <CustomerInformation
-            mode="agreement"
-            data={{
-              customerId: agreement?.customerDetails?.customerId,
-              firstName: agreement?.customerDetails?.firstName,
-              middleName: agreement?.customerDetails?.middleName,
-              lastName: agreement?.customerDetails?.lastName,
-              email: agreement?.customerEmail,
-              dateOfBirth: agreement?.customerDetails?.dateOfbirth,
-              mobileNumber: agreement?.customerDetails?.cPhone,
-              homeNumber: agreement?.customerDetails?.hPhone,
-              driverLicenseNumber: agreement?.customerDetails?.licenseNumber,
-              creditCardType: agreement?.customerDetails?.creditCardType,
-              creditCardNumber: agreement?.customerDetails?.creditCardNo,
-              creditCardExpirationDate:
-                agreement?.customerDetails?.creditCardExpiryDate,
-              creditCardSecurityCode:
-                agreement?.customerDetails?.creditCardCVSNo,
-              checkoutDate: agreement?.checkoutDate,
-              checkinDate: agreement?.checkinDate,
-            }}
-            isLoading={agreementQuery.isLoading}
-          />
-        )}
+    <Container as="div">
+      <div className="mb-6 grid max-w-full grid-cols-1 gap-4 px-2 sm:px-4 lg:grid-cols-12">
+        <div className="flex flex-col gap-4 lg:col-span-8">
+          {canViewCustomerInformation && (
+            <CustomerInformation
+              mode="agreement"
+              data={{
+                customerId: agreement?.customerDetails?.customerId,
+                firstName: agreement?.customerDetails?.firstName,
+                middleName: agreement?.customerDetails?.middleName,
+                lastName: agreement?.customerDetails?.lastName,
+                email: agreement?.customerEmail,
+                dateOfBirth: agreement?.customerDetails?.dateOfbirth,
+                mobileNumber: agreement?.customerDetails?.cPhone,
+                homeNumber: agreement?.customerDetails?.hPhone,
+                driverLicenseNumber: agreement?.customerDetails?.licenseNumber,
+                creditCardType: agreement?.customerDetails?.creditCardType,
+                creditCardNumber: agreement?.customerDetails?.creditCardNo,
+                creditCardExpirationDate:
+                  agreement?.customerDetails?.creditCardExpiryDate,
+                creditCardSecurityCode:
+                  agreement?.customerDetails?.creditCardCVSNo,
+                checkoutDate: agreement?.checkoutDate,
+                checkinDate: agreement?.checkinDate,
+              }}
+              isLoading={agreementQuery.isLoading}
+            />
+          )}
 
-        <Tabs value={currentTab} onValueChange={setCurrentTab}>
-          <TabsList className="w-full sm:max-w-max">
+          <Tabs value={currentTab} onValueChange={setCurrentTab}>
+            <TabsList className="w-full sm:max-w-max">
+              {tabsConfig.map((tab, idx) => (
+                <TabsTrigger key={`tab-summary-trigger-${idx}`} value={tab.id}>
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
             {tabsConfig.map((tab, idx) => (
-              <TabsTrigger key={`tab-summary-trigger-${idx}`} value={tab.id}>
-                {tab.label}
-              </TabsTrigger>
+              <TabsContent
+                key={`tab-summary-content-${idx}`}
+                value={tab.id}
+                className="min-h-[180px]"
+              >
+                {tab.component}
+              </TabsContent>
             ))}
-          </TabsList>
-          {tabsConfig.map((tab, idx) => (
-            <TabsContent
-              key={`tab-summary-content-${idx}`}
-              value={tab.id}
-              className="min-h-[180px]"
-            >
-              {tab.component}
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
+          </Tabs>
+        </div>
 
-      <div className="flex flex-col gap-4 lg:col-span-4">
-        <RentalSummary module="agreements" summaryData={summaryData} />
+        <div className="flex flex-col gap-4 lg:col-span-4">
+          <RentalSummary module="agreements" summaryData={summaryData} />
+        </div>
       </div>
-    </div>
+    </Container>
   );
-};
-
-export default AgreementSummaryTab;
+}

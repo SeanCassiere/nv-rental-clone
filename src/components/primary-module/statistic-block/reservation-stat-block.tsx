@@ -81,11 +81,10 @@ const ReservationStatBlock = ({
             header="Agreement no."
             stat={
               <Link
-                to="/agreements/$agreementId"
+                to="/agreements/$agreementId/summary"
                 params={{
                   agreementId: String(reservation.reservationview.agreementId),
                 }}
-                search={() => ({ tab: "summary" })}
                 className="focus-within:underline focus-within:underline-offset-4 hover:underline hover:underline-offset-4"
               >
                 {reservation?.reservationview.agreementNumber ?? "-"}

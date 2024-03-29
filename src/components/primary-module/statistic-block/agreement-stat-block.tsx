@@ -6,14 +6,16 @@ import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 const AgreementStatBlock = ({
   agreement,
   isCheckedIn,
+  className,
 }: {
   agreement?: AgreementDataParsed | null;
   isCheckedIn?: boolean;
+  className?: string;
 }) => {
   const { t } = useTranslation();
 
   return (
-    <ModuleStatBlockContainer>
+    <ModuleStatBlockContainer className={className}>
       <ModuleStatBlock
         header="Status"
         stat={

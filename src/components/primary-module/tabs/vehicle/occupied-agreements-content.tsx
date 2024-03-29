@@ -99,9 +99,8 @@ const VehicleOccupiedAgreementsTab = (
                   .AgreementId;
                 return (
                   <Link
-                    to="/agreements/$agreementId"
+                    to="/agreements/$agreementId/summary"
                     params={{ agreementId: String(agreementId) }}
-                    search={() => ({ tab: "summary" })}
                     className="font-semibold"
                   >
                     {value as any}

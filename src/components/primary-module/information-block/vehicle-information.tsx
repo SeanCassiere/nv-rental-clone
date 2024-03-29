@@ -38,7 +38,7 @@ interface TVehicleInformationProps {
     odometerIn?: TAnyCustomerValueType;
     vin?: TAnyCustomerValueType;
   };
-  isLoading: boolean;
+  isLoading?: boolean;
   mode:
     | "vehicle"
     | "agreement-checked-out"
@@ -47,7 +47,7 @@ interface TVehicleInformationProps {
 }
 
 const VehicleInformation = (props: TVehicleInformationProps) => {
-  const { data, isLoading, mode } = props;
+  const { data, isLoading = false, mode } = props;
 
   const title = useMemo(() => {
     let currentTitle = "Vehicle information";

@@ -937,7 +937,7 @@ const AddRentalParentForm = ({
                   aria-hidden="true"
                 />
                 <Link
-                  to="/agreements/$agreementId"
+                  to="/agreements/$agreementId/summary"
                   params={{ agreementId: String(referenceId) }}
                   className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
                 >

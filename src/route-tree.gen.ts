@@ -48,7 +48,6 @@ import { Route as AuthreservationsReservationsReservationIdIndexImport } from ".
 import { Route as AuthreportsReportsReportIdIndexImport } from "./routes/_auth/(reports)/reports.$reportId.index"
 import { Route as AuthfleetFleetVehicleIdIndexImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.index"
 import { Route as AuthcustomersCustomersCustomerIdIndexImport } from "./routes/_auth/(customers)/customers.$customerId.index"
-import { Route as AuthagreementsAgreementsAgreementIdIndexImport } from "./routes/_auth/(agreements)/agreements.$agreementId.index"
 import { Route as AuthsettingsSettingsApplicationUsersImport } from "./routes/_auth/(settings)/settings.application.users"
 import { Route as AuthsettingsSettingsApplicationStoreHoursAndHolidaysImport } from "./routes/_auth/(settings)/settings.application.store-hours-and-holidays"
 import { Route as AuthsettingsSettingsApplicationPermissionsAndRolesImport } from "./routes/_auth/(settings)/settings.application.permissions-and-roles"
@@ -58,6 +57,10 @@ import { Route as AuthfleetFleetVehicleIdEditImport } from "./routes/_auth/(flee
 import { Route as AuthcustomersCustomersCustomerIdEditImport } from "./routes/_auth/(customers)/customers.$customerId.edit"
 import { Route as AuthagreementsAgreementsAgreementIdEditImport } from "./routes/_auth/(agreements)/agreements.$agreementId.edit"
 import { Route as AuthagreementsAgreementsAgreementIdCheckInImport } from "./routes/_auth/(agreements)/agreements.$agreementId.check-in"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsIndexImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.index"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsNotesImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.notes"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsExchangesImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.exchanges"
 
 // Create Virtual Routes
 
@@ -66,6 +69,10 @@ const PublicDevLazyImport = createFileRoute("/_public/dev")()
 const AuthsettingsSettingsApplicationIndexLazyImport = createFileRoute(
   "/_auth/(settings)/settings/application/",
 )()
+const AuthagreementsAgreementsAgreementIdDetailsSummaryLazyImport =
+  createFileRoute(
+    "/_auth/(agreements)/agreements/$agreementId/_details/summary",
+  )()
 
 // Create/Update Routes
 
@@ -352,16 +359,6 @@ const AuthcustomersCustomersCustomerIdIndexRoute =
     ),
   )
 
-const AuthagreementsAgreementsAgreementIdIndexRoute =
-  AuthagreementsAgreementsAgreementIdIndexImport.update({
-    path: "/",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
-  } as any).lazy(() =>
-    import(
-      "./routes/_auth/(agreements)/agreements.$agreementId.index.lazy"
-    ).then((d) => d.Route),
-  )
-
 const AuthsettingsSettingsApplicationUsersRoute =
   AuthsettingsSettingsApplicationUsersImport.update({
     path: "/users",
@@ -449,6 +446,52 @@ const AuthagreementsAgreementsAgreementIdCheckInRoute =
   } as any).lazy(() =>
     import(
       "./routes/_auth/(agreements)/agreements.$agreementId.check-in.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsRoute =
+  AuthagreementsAgreementsAgreementIdDetailsImport.update({
+    id: "/_details",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsIndexRoute =
+  AuthagreementsAgreementsAgreementIdDetailsIndexImport.update({
+    path: "/",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any)
+
+const AuthagreementsAgreementsAgreementIdDetailsSummaryLazyRoute =
+  AuthagreementsAgreementsAgreementIdDetailsSummaryLazyImport.update({
+    path: "/summary",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.summary.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsNotesRoute =
+  AuthagreementsAgreementsAgreementIdDetailsNotesImport.update({
+    path: "/notes",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.notes.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsExchangesRoute =
+  AuthagreementsAgreementsAgreementIdDetailsExchangesImport.update({
+    path: "/exchanges",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.exchanges.lazy"
     ).then((d) => d.Route),
   )
 
@@ -588,6 +631,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthsettingsSettingsIndexImport
       parentRoute: typeof AuthsettingsSettingsRouteImport
     }
+    "/_auth/(agreements)/agreements/$agreementId/_details": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+    }
     "/_auth/(agreements)/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdCheckInImport
       parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
@@ -624,10 +671,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationUsersImport
       parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
     }
-    "/_auth/(agreements)/agreements/$agreementId/": {
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdIndexImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
-    }
     "/_auth/(customers)/customers/$customerId/": {
       preLoaderRoute: typeof AuthcustomersCustomersCustomerIdIndexImport
       parentRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
@@ -648,6 +691,22 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexLazyImport
       parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
     }
+    "/_auth/(agreements)/agreements/$agreementId/_details/exchanges": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsExchangesImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/notes": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsNotesImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/summary": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsSummaryLazyImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsIndexImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
   }
 }
 
@@ -657,9 +716,14 @@ export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([
     AuthagreementsAgreementsRouteRoute.addChildren([
       AuthagreementsAgreementsAgreementIdRouteRoute.addChildren([
+        AuthagreementsAgreementsAgreementIdDetailsRoute.addChildren([
+          AuthagreementsAgreementsAgreementIdDetailsExchangesRoute,
+          AuthagreementsAgreementsAgreementIdDetailsNotesRoute,
+          AuthagreementsAgreementsAgreementIdDetailsSummaryLazyRoute,
+          AuthagreementsAgreementsAgreementIdDetailsIndexRoute,
+        ]),
         AuthagreementsAgreementsAgreementIdCheckInRoute,
         AuthagreementsAgreementsAgreementIdEditRoute,
-        AuthagreementsAgreementsAgreementIdIndexRoute,
       ]),
       AuthagreementsAgreementsNewRoute,
       AuthagreementsAgreementsIndexRoute,
