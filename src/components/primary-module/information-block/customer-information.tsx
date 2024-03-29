@@ -64,9 +64,8 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
           heading: "Full name",
           value: (
             <Link
-              to="/customers/$customerId"
+              to="/customers/$customerId/summary"
               params={{ customerId: String(data.customerId) }}
-              search={() => ({ tab: "summary" })}
               className={cn(
                 buttonVariants({ variant: "link" }),
                 "h-auto p-0 text-base underline"

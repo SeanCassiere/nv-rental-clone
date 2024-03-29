@@ -119,9 +119,8 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
 
       const customer = data.body[0];
       navigate({
-        to: "/customers/$customerId",
+        to: "/customers/$customerId/summary",
         params: { customerId: String(customer.CustomerId) },
-        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {
