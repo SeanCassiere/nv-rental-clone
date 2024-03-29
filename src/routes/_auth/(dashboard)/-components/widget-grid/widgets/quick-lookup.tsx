@@ -230,9 +230,8 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
 
       const vehicle = data.body[0];
       navigate({
-        to: "/fleet/$vehicleId",
+        to: "/fleet/$vehicleId/summary",
         params: { vehicleId: String(vehicle.id) },
-        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {

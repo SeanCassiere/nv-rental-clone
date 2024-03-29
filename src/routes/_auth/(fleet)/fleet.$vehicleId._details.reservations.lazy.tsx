@@ -1,32 +1,27 @@
-import { useMemo } from "react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import * as React from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 
 import { CommonTable } from "@/components/common/common-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TReservationListItemParsed } from "@/lib/schemas/reservation";
-import {
-  fetchReservationsSearchColumnsOptions,
-  fetchReservationsSearchListOptions,
-} from "@/lib/query/reservation";
 
-import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { Container } from "@/routes/-components/container";
+
 import {
   ReservationDateTimeColumns,
   sortColOrderByOrderIndex,
 } from "@/lib/utils/columns";
-import { normalizeReservationListSearchParams } from "@/lib/utils/normalize-search-params";
 
-interface VehicleOccupiedReservationsTabProps {
-  vehicleId: string;
-  vehicleNo: string | undefined;
-}
+export const Route = createLazyFileRoute(
+  "/_auth/(fleet)/fleet/$vehicleId/_details/reservations"
+)({
+  component: Component,
+});
 
 const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
@@ -44,39 +39,19 @@ const acceptedColumns = [
 
 const pageSize = 50;
 
-const VehicleOccupiedReservationsTab = (
-  props: VehicleOccupiedReservationsTabProps
-) => {
+function Component() {
+  const { vehicleNo, reservationColumnsOptions, reservationListOptions } =
+    Route.useRouteContext();
+
   const { t } = useTranslation();
-  const auth = useAuth();
-  const authParams = getAuthFromAuthHook(auth);
-  const items = normalizeReservationListSearchParams({
-    page: 1,
-    size: pageSize,
-    filters: { VehicleNo: props.vehicleNo },
-  });
 
-  const columnsData = useSuspenseQuery(
-    fetchReservationsSearchColumnsOptions({ auth: authParams })
-  );
-  const dataList = useQuery(
-    fetchReservationsSearchListOptions({
-      auth: authParams,
-      pagination: {
-        page: items.pageNumber,
-        pageSize: items.size,
-      },
-      filters: {
-        ...items.searchFilters,
-        clientDate: new Date(),
-      },
-    })
-  );
+  const reservationsQuery = useSuspenseQuery(reservationListOptions);
+  const columnsQuery = useSuspenseQuery(reservationColumnsOptions);
 
-  const columnDefs = useMemo(() => {
+  const columnDefs = React.useMemo(() => {
     const columns: ColumnDef<TReservationListItemParsed>[] = [];
 
-    (columnsData.data.status === 200 ? columnsData.data.body : [])
+    (columnsQuery.data.status === 200 ? columnsQuery.data.body : [])
       .sort(sortColOrderByOrderIndex)
       .forEach((column) => {
         if (acceptedColumns.includes(column.columnHeader) === false) return;
@@ -125,39 +100,37 @@ const VehicleOccupiedReservationsTab = (
       });
 
     return columns;
-  }, [columnsData.data, t]);
+  }, [columnsQuery.data, t]);
 
   const reservationsList =
-    dataList.data?.status === 200 ? dataList.data.body : [];
-
-  if (!props.vehicleNo) return null;
+    reservationsQuery.data?.status === 200 ? reservationsQuery.data.body : [];
 
   return (
-    <div className="max-w-full focus:ring-0">
-      {dataList.status === "pending" && <Skeleton className="h-56" />}
-      {dataList.status === "success" && (
-        <CommonTable data={reservationsList} columns={columnDefs} />
-      )}
+    <Container as="div">
+      <div className="mb-6 max-w-full px-2 sm:px-4">
+        {reservationsQuery.status === "success" && (
+          <CommonTable data={reservationsList} columns={columnDefs} />
+        )}
 
-      {dataList.status === "success" && reservationsList.length > 0 && (
-        <div className="py-4">
-          <p className="text-muted-foreground">
-            Showing a maximum of {pageSize} records.
-          </p>
-          <Link
-            to="/reservations"
-            search={(prev) => ({
-              ...prev,
-              filters: { VehicleNo: props.vehicleNo },
-            })}
-            className="text-muted-foreground underline"
-          >
-            Need more? Click here to search for reservations.
-          </Link>
-        </div>
-      )}
-    </div>
+        {reservationsQuery.status === "success" &&
+          reservationsList.length > 0 && (
+            <div className="py-4">
+              <p className="text-muted-foreground">
+                Showing a maximum of {pageSize} records.
+              </p>
+              <Link
+                to="/reservations"
+                search={(prev) => ({
+                  ...prev,
+                  filters: { VehicleNo: vehicleNo },
+                })}
+                className="text-muted-foreground underline"
+              >
+                Need more? Click here to search for reservations.
+              </Link>
+            </div>
+          )}
+      </div>
+    </Container>
   );
-};
-
-export default VehicleOccupiedReservationsTab;
+}

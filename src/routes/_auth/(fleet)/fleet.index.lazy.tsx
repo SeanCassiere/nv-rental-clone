@@ -141,9 +141,8 @@ function VehicleSearchPage() {
                   const vehicleId = item.table.getRow(item.row.id).original.id;
                   return (
                     <Link
-                      to="/fleet/$vehicleId"
+                      to="/fleet/$vehicleId/summary"
                       params={{ vehicleId: String(vehicleId) }}
-                      search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"

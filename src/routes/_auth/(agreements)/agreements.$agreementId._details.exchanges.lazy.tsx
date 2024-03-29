@@ -126,9 +126,8 @@ function Component() {
 
                 return (
                   <Link
-                    to="/fleet/$vehicleId"
+                    to="/fleet/$vehicleId/summary"
                     params={{ vehicleId: `${vehicleId}` }}
-                    search={() => ({ tab: "summary" })}
                     className={cn(buttonVariants({ variant: "link" }), "px-0")}
                   >
                     {String(value)}

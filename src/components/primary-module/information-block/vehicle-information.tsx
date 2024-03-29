@@ -67,9 +67,8 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
           heading: "Vehicle no.",
           value: (
             <Link
-              to="/fleet/$vehicleId"
+              to="/fleet/$vehicleId/summary"
               params={{ vehicleId: String(data.vehicleId) }}
-              search={() => ({ tab: "summary" })}
               className={cn(
                 buttonVariants({ variant: "link" }),
                 "h-auto p-0 text-base underline"

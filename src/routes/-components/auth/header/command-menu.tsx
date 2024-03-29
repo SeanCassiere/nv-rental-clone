@@ -252,9 +252,8 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: "/fleet/$vehicleId",
+                        to: "/fleet/$vehicleId/summary",
                         params: { vehicleId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
                       })
                     );
                   }}

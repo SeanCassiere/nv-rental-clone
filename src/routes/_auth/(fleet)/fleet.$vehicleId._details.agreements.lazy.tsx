@@ -1,32 +1,27 @@
-import { useMemo } from "react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import * as React from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 
 import { CommonTable } from "@/components/common/common-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
-import {
-  fetchAgreementsSearchColumnsOptions,
-  fetchAgreementsSearchListOptions,
-} from "@/lib/query/agreement";
 
-import { getAuthFromAuthHook } from "@/lib/utils/auth";
+import { Container } from "@/routes/-components/container";
+
 import {
   AgreementDateTimeColumns,
   sortColumnsByOrderIndex,
 } from "@/lib/utils/columns";
-import { normalizeAgreementListSearchParams } from "@/lib/utils/normalize-search-params";
 
-interface VehicleOccupiedAgreementsTabProps {
-  vehicleId: string;
-  vehicleNo: string | undefined;
-}
+export const Route = createLazyFileRoute(
+  "/_auth/(fleet)/fleet/$vehicleId/_details/agreements"
+)({
+  component: Component,
+});
 
 const columnHelper = createColumnHelper<TAgreementListItemParsed>();
 
@@ -43,42 +38,19 @@ const acceptedColumns = [
 
 const pageSize = 50;
 
-const VehicleOccupiedAgreementsTab = (
-  props: VehicleOccupiedAgreementsTabProps
-) => {
+function Component() {
+  const { vehicleNo, agreementColumnsOptions, agreementListOptions } =
+    Route.useRouteContext();
+
   const { t } = useTranslation();
-  const auth = useAuth();
 
-  const authParams = getAuthFromAuthHook(auth);
+  const agreementsQuery = useSuspenseQuery(agreementListOptions);
+  const columnsQuery = useSuspenseQuery(agreementColumnsOptions);
 
-  const items = normalizeAgreementListSearchParams({
-    page: 1,
-    size: pageSize,
-    filters: { VehicleNo: props.vehicleNo },
-  });
-
-  const columnsData = useSuspenseQuery(
-    fetchAgreementsSearchColumnsOptions({ auth: authParams })
-  );
-
-  const dataList = useQuery(
-    fetchAgreementsSearchListOptions({
-      auth: authParams,
-      pagination: {
-        page: items.pageNumber,
-        pageSize: items.size,
-      },
-      filters: {
-        ...items.searchFilters,
-        currentDate: new Date(),
-      },
-    })
-  );
-
-  const columnDefs = useMemo(() => {
+  const columnDefs = React.useMemo(() => {
     const columns: ColumnDef<TAgreementListItemParsed>[] = [];
 
-    (columnsData.data.status === 200 ? columnsData.data.body : [])
+    (columnsQuery.data.status === 200 ? columnsQuery.data.body : [])
       .sort(sortColumnsByOrderIndex)
       .forEach((column) => {
         if (acceptedColumns.includes(column.columnHeader) === false) return;
@@ -127,39 +99,36 @@ const VehicleOccupiedAgreementsTab = (
       });
 
     return columns;
-  }, [columnsData.data, t]);
+  }, [columnsQuery.data, t]);
 
   const agreementsList =
-    dataList.data?.status === 200 ? dataList.data?.body : [];
-
-  if (!props.vehicleNo) return null;
+    agreementsQuery.data?.status === 200 ? agreementsQuery.data?.body : [];
 
   return (
-    <div className="max-w-full focus:ring-0">
-      {dataList.status === "pending" && <Skeleton className="h-56" />}
-      {dataList.status === "success" && (
-        <CommonTable data={agreementsList} columns={columnDefs} />
-      )}
+    <Container as="div">
+      <div className="mb-6 max-w-full px-2 sm:px-4">
+        {agreementsQuery.status === "success" && (
+          <CommonTable data={agreementsList} columns={columnDefs} />
+        )}
 
-      {dataList.status === "success" && agreementsList.length > 0 && (
-        <div className="py-4">
-          <p className="text-muted-foreground">
-            Showing a maximum of {pageSize} records.
-          </p>
-          <Link
-            to="/agreements"
-            search={(prev) => ({
-              ...prev,
-              filters: { VehicleNo: props.vehicleNo },
-            })}
-            className="text-muted-foreground underline"
-          >
-            Need more? Click here to search for agreements.
-          </Link>
-        </div>
-      )}
-    </div>
+        {agreementsQuery.status === "success" && agreementsList.length > 0 && (
+          <div className="py-4">
+            <p className="text-muted-foreground">
+              Showing a maximum of {pageSize} records.
+            </p>
+            <Link
+              to="/agreements"
+              search={(prev) => ({
+                ...prev,
+                filters: { VehicleNo: vehicleNo },
+              })}
+              className="text-muted-foreground underline"
+            >
+              Need more? Click here to search for agreements.
+            </Link>
+          </div>
+        )}
+      </div>
+    </Container>
   );
-};
-
-export default VehicleOccupiedAgreementsTab;
+}
