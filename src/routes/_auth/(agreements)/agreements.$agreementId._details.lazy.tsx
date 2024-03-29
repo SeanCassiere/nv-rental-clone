@@ -48,6 +48,7 @@ function Component() {
     if (!firstMatch) return "summary";
     const pathname = firstMatch.pathname;
 
+    if (pathname.endsWith("exchanges")) return "exchanges";
     if (pathname.endsWith("notes")) return "notes";
 
     return "summary";
@@ -180,8 +181,8 @@ function Component() {
           className="px-2 sm:px-4"
         />
       </Container>
-      <Container as="div">
-        <Tabs defaultValue={currentTab}>
+      <Container as="div" className="overflow-hidden">
+        <Tabs defaultValue={currentTab} className="overflow-x-auto">
           <TabsList className="mx-2 sm:mx-4">
             <TabsTrigger value="summary" asChild>
               <Link
