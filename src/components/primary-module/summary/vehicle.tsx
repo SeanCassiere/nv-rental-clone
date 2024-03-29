@@ -159,7 +159,7 @@ export const VehicleSummary = ({
                 : "default"
             }
             linkOptions={{
-              to: "/reservations/$reservationId/",
+              to: "/reservations/$reservationId/summary",
               params: { reservationId: `${summaryData?.currentReservation}` },
             }}
           />

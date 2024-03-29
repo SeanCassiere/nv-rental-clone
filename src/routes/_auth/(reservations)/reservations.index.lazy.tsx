@@ -159,9 +159,8 @@ function ReservationsSearchPage() {
                     .id;
                   return (
                     <Link
-                      to="/reservations/$reservationId"
+                      to="/reservations/$reservationId/summary"
                       params={{ reservationId: String(reservationId) }}
-                      search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"

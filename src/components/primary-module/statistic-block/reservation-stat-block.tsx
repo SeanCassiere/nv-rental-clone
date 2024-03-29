@@ -7,13 +7,15 @@ import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
 const ReservationStatBlock = ({
   reservation,
+  className,
 }: {
   reservation?: ReservationDataParsed | null;
+  className?: string;
 }) => {
   const { t } = useTranslation();
 
   return (
-    <ModuleStatBlockContainer>
+    <ModuleStatBlockContainer className={className}>
       <ModuleStatBlock
         header="Status"
         stat={

@@ -327,9 +327,8 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: "/reservations/$reservationId",
+                        to: "/reservations/$reservationId/summary",
                         params: { reservationId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
                       })
                     );
                   }}

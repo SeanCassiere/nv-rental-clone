@@ -97,9 +97,8 @@ const VehicleOccupiedReservationsTab = (
                   .id;
                 return (
                   <Link
-                    to="/reservations/$reservationId"
+                    to="/reservations/$reservationId/summary"
                     params={{ reservationId: String(reservationId) }}
-                    search={() => ({ tab: "summary" })}
                     className="font-semibold"
                   >
                     {value as any}
