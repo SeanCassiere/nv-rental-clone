@@ -14,6 +14,7 @@ export const Route = createFileRoute(
     const auth = getAuthFromRouterContext(context);
 
     return {
+      authParams: auth,
       viewAgreementOptions: fetchAgreementByIdOptions({
         auth,
         agreementId,

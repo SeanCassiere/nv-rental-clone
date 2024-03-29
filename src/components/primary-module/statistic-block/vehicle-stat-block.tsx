@@ -13,12 +13,14 @@ export const getVehicleStatusNameFromRaw = (status: string) => {
 const VehicleStatBlock = ({
   vehicle,
   auth: authParams,
+  className,
 }: {
   vehicle?: VehicleDataParsed | null;
   auth: {
     clientId: string;
     userId: string;
   };
+  className?: string;
 }) => {
   const vehicleStatusList = useQuery(
     fetchVehiclesStatusesOptions({ auth: authParams })
@@ -41,7 +43,7 @@ const VehicleStatBlock = ({
     return `${vehicle?.vehicle.vehicleMakeName} ${vehicle?.vehicle.modelName}`;
   };
   return (
-    <ModuleStatBlockContainer>
+    <ModuleStatBlockContainer className={className}>
       <ModuleStatBlock
         header="Fleet status"
         stat={getVehicleStatusNameFromRaw(

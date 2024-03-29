@@ -159,9 +159,8 @@ function ReservationsSearchPage() {
                     .id;
                   return (
                     <Link
-                      to="/reservations/$reservationId"
+                      to="/reservations/$reservationId/summary"
                       params={{ reservationId: String(reservationId) }}
-                      search={() => ({ tab: "summary" })}
                       className={cn(
                         buttonVariants({ variant: "link" }),
                         "p-0 text-base"
@@ -400,7 +399,7 @@ function ReservationsSearchPage() {
     <Container>
       <section
         className={cn(
-          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+          "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:px-1"
         )}
       >
         <div

@@ -44,20 +44,31 @@ import { Route as AuthreportsReportsReportIdRouteImport } from "./routes/_auth/(
 import { Route as AuthfleetFleetVehicleIdRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.route"
 import { Route as AuthcustomersCustomersCustomerIdRouteImport } from "./routes/_auth/(customers)/customers.$customerId.route"
 import { Route as AuthagreementsAgreementsAgreementIdRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId.route"
-import { Route as AuthreservationsReservationsReservationIdIndexImport } from "./routes/_auth/(reservations)/reservations.$reservationId.index"
 import { Route as AuthreportsReportsReportIdIndexImport } from "./routes/_auth/(reports)/reports.$reportId.index"
-import { Route as AuthfleetFleetVehicleIdIndexImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.index"
-import { Route as AuthcustomersCustomersCustomerIdIndexImport } from "./routes/_auth/(customers)/customers.$customerId.index"
-import { Route as AuthagreementsAgreementsAgreementIdIndexImport } from "./routes/_auth/(agreements)/agreements.$agreementId.index"
 import { Route as AuthsettingsSettingsApplicationUsersImport } from "./routes/_auth/(settings)/settings.application.users"
 import { Route as AuthsettingsSettingsApplicationStoreHoursAndHolidaysImport } from "./routes/_auth/(settings)/settings.application.store-hours-and-holidays"
 import { Route as AuthsettingsSettingsApplicationPermissionsAndRolesImport } from "./routes/_auth/(settings)/settings.application.permissions-and-roles"
 import { Route as AuthsettingsSettingsApplicationLocationsImport } from "./routes/_auth/(settings)/settings.application.locations"
 import { Route as AuthreservationsReservationsReservationIdEditImport } from "./routes/_auth/(reservations)/reservations.$reservationId.edit"
+import { Route as AuthreservationsReservationsReservationIdDetailsImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details"
 import { Route as AuthfleetFleetVehicleIdEditImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.edit"
+import { Route as AuthfleetFleetVehicleIdDetailsImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details"
 import { Route as AuthcustomersCustomersCustomerIdEditImport } from "./routes/_auth/(customers)/customers.$customerId.edit"
+import { Route as AuthcustomersCustomersCustomerIdDetailsImport } from "./routes/_auth/(customers)/customers.$customerId._details"
 import { Route as AuthagreementsAgreementsAgreementIdEditImport } from "./routes/_auth/(agreements)/agreements.$agreementId.edit"
 import { Route as AuthagreementsAgreementsAgreementIdCheckInImport } from "./routes/_auth/(agreements)/agreements.$agreementId.check-in"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details"
+import { Route as AuthreservationsReservationsReservationIdDetailsIndexImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details.index"
+import { Route as AuthfleetFleetVehicleIdDetailsIndexImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.index"
+import { Route as AuthcustomersCustomersCustomerIdDetailsIndexImport } from "./routes/_auth/(customers)/customers.$customerId._details.index"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsIndexImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.index"
+import { Route as AuthreservationsReservationsReservationIdDetailsNotesImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details.notes"
+import { Route as AuthfleetFleetVehicleIdDetailsReservationsImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.reservations"
+import { Route as AuthfleetFleetVehicleIdDetailsNotesImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.notes"
+import { Route as AuthfleetFleetVehicleIdDetailsAgreementsImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.agreements"
+import { Route as AuthcustomersCustomersCustomerIdDetailsNotesImport } from "./routes/_auth/(customers)/customers.$customerId._details.notes"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsNotesImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.notes"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsExchangesImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.exchanges"
 
 // Create Virtual Routes
 
@@ -66,6 +77,19 @@ const PublicDevLazyImport = createFileRoute("/_public/dev")()
 const AuthsettingsSettingsApplicationIndexLazyImport = createFileRoute(
   "/_auth/(settings)/settings/application/",
 )()
+const AuthreservationsReservationsReservationIdDetailsSummaryLazyImport =
+  createFileRoute(
+    "/_auth/(reservations)/reservations/$reservationId/_details/summary",
+  )()
+const AuthfleetFleetVehicleIdDetailsSummaryLazyImport = createFileRoute(
+  "/_auth/(fleet)/fleet/$vehicleId/_details/summary",
+)()
+const AuthcustomersCustomersCustomerIdDetailsSummaryLazyImport =
+  createFileRoute("/_auth/(customers)/customers/$customerId/_details/summary")()
+const AuthagreementsAgreementsAgreementIdDetailsSummaryLazyImport =
+  createFileRoute(
+    "/_auth/(agreements)/agreements/$agreementId/_details/summary",
+  )()
 
 // Create/Update Routes
 
@@ -312,16 +336,6 @@ const AuthsettingsSettingsApplicationIndexLazyRoute =
     ),
   )
 
-const AuthreservationsReservationsReservationIdIndexRoute =
-  AuthreservationsReservationsReservationIdIndexImport.update({
-    path: "/",
-    getParentRoute: () => AuthreservationsReservationsReservationIdRouteRoute,
-  } as any).lazy(() =>
-    import(
-      "./routes/_auth/(reservations)/reservations.$reservationId.index.lazy"
-    ).then((d) => d.Route),
-  )
-
 const AuthreportsReportsReportIdIndexRoute =
   AuthreportsReportsReportIdIndexImport.update({
     path: "/",
@@ -330,36 +344,6 @@ const AuthreportsReportsReportIdIndexRoute =
     import("./routes/_auth/(reports)/reports.$reportId.index.lazy").then(
       (d) => d.Route,
     ),
-  )
-
-const AuthfleetFleetVehicleIdIndexRoute =
-  AuthfleetFleetVehicleIdIndexImport.update({
-    path: "/",
-    getParentRoute: () => AuthfleetFleetVehicleIdRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/(fleet)/fleet.$vehicleId.index.lazy").then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthcustomersCustomersCustomerIdIndexRoute =
-  AuthcustomersCustomersCustomerIdIndexImport.update({
-    path: "/",
-    getParentRoute: () => AuthcustomersCustomersCustomerIdRouteRoute,
-  } as any).lazy(() =>
-    import("./routes/_auth/(customers)/customers.$customerId.index.lazy").then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthagreementsAgreementsAgreementIdIndexRoute =
-  AuthagreementsAgreementsAgreementIdIndexImport.update({
-    path: "/",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
-  } as any).lazy(() =>
-    import(
-      "./routes/_auth/(agreements)/agreements.$agreementId.index.lazy"
-    ).then((d) => d.Route),
   )
 
 const AuthsettingsSettingsApplicationUsersRoute =
@@ -412,12 +396,32 @@ const AuthreservationsReservationsReservationIdEditRoute =
     ).then((d) => d.Route),
   )
 
+const AuthreservationsReservationsReservationIdDetailsRoute =
+  AuthreservationsReservationsReservationIdDetailsImport.update({
+    id: "/_details",
+    getParentRoute: () => AuthreservationsReservationsReservationIdRouteRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(reservations)/reservations.$reservationId._details.lazy"
+    ).then((d) => d.Route),
+  )
+
 const AuthfleetFleetVehicleIdEditRoute =
   AuthfleetFleetVehicleIdEditImport.update({
     path: "/edit",
     getParentRoute: () => AuthfleetFleetVehicleIdRouteRoute,
   } as any).lazy(() =>
     import("./routes/_auth/(fleet)/fleet.$vehicleId.edit.lazy").then(
+      (d) => d.Route,
+    ),
+  )
+
+const AuthfleetFleetVehicleIdDetailsRoute =
+  AuthfleetFleetVehicleIdDetailsImport.update({
+    id: "/_details",
+    getParentRoute: () => AuthfleetFleetVehicleIdRouteRoute,
+  } as any).lazy(() =>
+    import("./routes/_auth/(fleet)/fleet.$vehicleId._details.lazy").then(
       (d) => d.Route,
     ),
   )
@@ -430,6 +434,16 @@ const AuthcustomersCustomersCustomerIdEditRoute =
     import("./routes/_auth/(customers)/customers.$customerId.edit.lazy").then(
       (d) => d.Route,
     ),
+  )
+
+const AuthcustomersCustomersCustomerIdDetailsRoute =
+  AuthcustomersCustomersCustomerIdDetailsImport.update({
+    id: "/_details",
+    getParentRoute: () => AuthcustomersCustomersCustomerIdRouteRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(customers)/customers.$customerId._details.lazy"
+    ).then((d) => d.Route),
   )
 
 const AuthagreementsAgreementsAgreementIdEditRoute =
@@ -449,6 +463,150 @@ const AuthagreementsAgreementsAgreementIdCheckInRoute =
   } as any).lazy(() =>
     import(
       "./routes/_auth/(agreements)/agreements.$agreementId.check-in.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsRoute =
+  AuthagreementsAgreementsAgreementIdDetailsImport.update({
+    id: "/_details",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthreservationsReservationsReservationIdDetailsIndexRoute =
+  AuthreservationsReservationsReservationIdDetailsIndexImport.update({
+    path: "/",
+    getParentRoute: () => AuthreservationsReservationsReservationIdDetailsRoute,
+  } as any)
+
+const AuthfleetFleetVehicleIdDetailsIndexRoute =
+  AuthfleetFleetVehicleIdDetailsIndexImport.update({
+    path: "/",
+    getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
+  } as any)
+
+const AuthcustomersCustomersCustomerIdDetailsIndexRoute =
+  AuthcustomersCustomersCustomerIdDetailsIndexImport.update({
+    path: "/",
+    getParentRoute: () => AuthcustomersCustomersCustomerIdDetailsRoute,
+  } as any)
+
+const AuthagreementsAgreementsAgreementIdDetailsIndexRoute =
+  AuthagreementsAgreementsAgreementIdDetailsIndexImport.update({
+    path: "/",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any)
+
+const AuthreservationsReservationsReservationIdDetailsSummaryLazyRoute =
+  AuthreservationsReservationsReservationIdDetailsSummaryLazyImport.update({
+    path: "/summary",
+    getParentRoute: () => AuthreservationsReservationsReservationIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(reservations)/reservations.$reservationId._details.summary.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthfleetFleetVehicleIdDetailsSummaryLazyRoute =
+  AuthfleetFleetVehicleIdDetailsSummaryLazyImport.update({
+    path: "/summary",
+    getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(fleet)/fleet.$vehicleId._details.summary.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthcustomersCustomersCustomerIdDetailsSummaryLazyRoute =
+  AuthcustomersCustomersCustomerIdDetailsSummaryLazyImport.update({
+    path: "/summary",
+    getParentRoute: () => AuthcustomersCustomersCustomerIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(customers)/customers.$customerId._details.summary.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsSummaryLazyRoute =
+  AuthagreementsAgreementsAgreementIdDetailsSummaryLazyImport.update({
+    path: "/summary",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.summary.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthreservationsReservationsReservationIdDetailsNotesRoute =
+  AuthreservationsReservationsReservationIdDetailsNotesImport.update({
+    path: "/notes",
+    getParentRoute: () => AuthreservationsReservationsReservationIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(reservations)/reservations.$reservationId._details.notes.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthfleetFleetVehicleIdDetailsReservationsRoute =
+  AuthfleetFleetVehicleIdDetailsReservationsImport.update({
+    path: "/reservations",
+    getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(fleet)/fleet.$vehicleId._details.reservations.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthfleetFleetVehicleIdDetailsNotesRoute =
+  AuthfleetFleetVehicleIdDetailsNotesImport.update({
+    path: "/notes",
+    getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
+  } as any).lazy(() =>
+    import("./routes/_auth/(fleet)/fleet.$vehicleId._details.notes.lazy").then(
+      (d) => d.Route,
+    ),
+  )
+
+const AuthfleetFleetVehicleIdDetailsAgreementsRoute =
+  AuthfleetFleetVehicleIdDetailsAgreementsImport.update({
+    path: "/agreements",
+    getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(fleet)/fleet.$vehicleId._details.agreements.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthcustomersCustomersCustomerIdDetailsNotesRoute =
+  AuthcustomersCustomersCustomerIdDetailsNotesImport.update({
+    path: "/notes",
+    getParentRoute: () => AuthcustomersCustomersCustomerIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(customers)/customers.$customerId._details.notes.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsNotesRoute =
+  AuthagreementsAgreementsAgreementIdDetailsNotesImport.update({
+    path: "/notes",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.notes.lazy"
+    ).then((d) => d.Route),
+  )
+
+const AuthagreementsAgreementsAgreementIdDetailsExchangesRoute =
+  AuthagreementsAgreementsAgreementIdDetailsExchangesImport.update({
+    path: "/exchanges",
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
+  } as any).lazy(() =>
+    import(
+      "./routes/_auth/(agreements)/agreements.$agreementId._details.exchanges.lazy"
     ).then((d) => d.Route),
   )
 
@@ -588,6 +746,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthsettingsSettingsIndexImport
       parentRoute: typeof AuthsettingsSettingsRouteImport
     }
+    "/_auth/(agreements)/agreements/$agreementId/_details": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+    }
     "/_auth/(agreements)/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdCheckInImport
       parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
@@ -596,13 +758,25 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdEditImport
       parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
     }
+    "/_auth/(customers)/customers/$customerId/_details": {
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
+    }
     "/_auth/(customers)/customers/$customerId/edit": {
       preLoaderRoute: typeof AuthcustomersCustomersCustomerIdEditImport
       parentRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
     }
+    "/_auth/(fleet)/fleet/$vehicleId/_details": {
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+      parentRoute: typeof AuthfleetFleetVehicleIdRouteImport
+    }
     "/_auth/(fleet)/fleet/$vehicleId/edit": {
       preLoaderRoute: typeof AuthfleetFleetVehicleIdEditImport
       parentRoute: typeof AuthfleetFleetVehicleIdRouteImport
+    }
+    "/_auth/(reservations)/reservations/$reservationId/_details": {
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdRouteImport
     }
     "/_auth/(reservations)/reservations/$reservationId/edit": {
       preLoaderRoute: typeof AuthreservationsReservationsReservationIdEditImport
@@ -624,29 +798,73 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationUsersImport
       parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
     }
-    "/_auth/(agreements)/agreements/$agreementId/": {
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdIndexImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
-    }
-    "/_auth/(customers)/customers/$customerId/": {
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdIndexImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
-    }
-    "/_auth/(fleet)/fleet/$vehicleId/": {
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdIndexImport
-      parentRoute: typeof AuthfleetFleetVehicleIdRouteImport
-    }
     "/_auth/(reports)/reports/$reportId/": {
       preLoaderRoute: typeof AuthreportsReportsReportIdIndexImport
       parentRoute: typeof AuthreportsReportsReportIdRouteImport
     }
-    "/_auth/(reservations)/reservations/$reservationId/": {
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdIndexImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdRouteImport
-    }
     "/_auth/(settings)/settings/application/": {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexLazyImport
       parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/exchanges": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsExchangesImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/notes": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsNotesImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
+    "/_auth/(customers)/customers/$customerId/_details/notes": {
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsNotesImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/agreements": {
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsAgreementsImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/notes": {
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsNotesImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/reservations": {
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsReservationsImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    }
+    "/_auth/(reservations)/reservations/$reservationId/_details/notes": {
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsNotesImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/summary": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsSummaryLazyImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
+    "/_auth/(customers)/customers/$customerId/_details/summary": {
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsSummaryLazyImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/summary": {
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsSummaryLazyImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    }
+    "/_auth/(reservations)/reservations/$reservationId/_details/summary": {
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsSummaryLazyImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsIndexImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    }
+    "/_auth/(customers)/customers/$customerId/_details/": {
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsIndexImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/": {
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsIndexImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    }
+    "/_auth/(reservations)/reservations/$reservationId/_details/": {
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsIndexImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
     }
   }
 }
@@ -657,25 +875,40 @@ export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([
     AuthagreementsAgreementsRouteRoute.addChildren([
       AuthagreementsAgreementsAgreementIdRouteRoute.addChildren([
+        AuthagreementsAgreementsAgreementIdDetailsRoute.addChildren([
+          AuthagreementsAgreementsAgreementIdDetailsExchangesRoute,
+          AuthagreementsAgreementsAgreementIdDetailsNotesRoute,
+          AuthagreementsAgreementsAgreementIdDetailsSummaryLazyRoute,
+          AuthagreementsAgreementsAgreementIdDetailsIndexRoute,
+        ]),
         AuthagreementsAgreementsAgreementIdCheckInRoute,
         AuthagreementsAgreementsAgreementIdEditRoute,
-        AuthagreementsAgreementsAgreementIdIndexRoute,
       ]),
       AuthagreementsAgreementsNewRoute,
       AuthagreementsAgreementsIndexRoute,
     ]),
     AuthcustomersCustomersRouteRoute.addChildren([
       AuthcustomersCustomersCustomerIdRouteRoute.addChildren([
+        AuthcustomersCustomersCustomerIdDetailsRoute.addChildren([
+          AuthcustomersCustomersCustomerIdDetailsNotesRoute,
+          AuthcustomersCustomersCustomerIdDetailsSummaryLazyRoute,
+          AuthcustomersCustomersCustomerIdDetailsIndexRoute,
+        ]),
         AuthcustomersCustomersCustomerIdEditRoute,
-        AuthcustomersCustomersCustomerIdIndexRoute,
       ]),
       AuthcustomersCustomersNewRoute,
       AuthcustomersCustomersIndexRoute,
     ]),
     AuthfleetFleetRouteRoute.addChildren([
       AuthfleetFleetVehicleIdRouteRoute.addChildren([
+        AuthfleetFleetVehicleIdDetailsRoute.addChildren([
+          AuthfleetFleetVehicleIdDetailsAgreementsRoute,
+          AuthfleetFleetVehicleIdDetailsNotesRoute,
+          AuthfleetFleetVehicleIdDetailsReservationsRoute,
+          AuthfleetFleetVehicleIdDetailsSummaryLazyRoute,
+          AuthfleetFleetVehicleIdDetailsIndexRoute,
+        ]),
         AuthfleetFleetVehicleIdEditRoute,
-        AuthfleetFleetVehicleIdIndexRoute,
       ]),
       AuthfleetFleetNewRoute,
       AuthfleetFleetIndexRoute,
@@ -688,8 +921,12 @@ export const routeTree = rootRoute.addChildren([
     ]),
     AuthreservationsReservationsRouteRoute.addChildren([
       AuthreservationsReservationsReservationIdRouteRoute.addChildren([
+        AuthreservationsReservationsReservationIdDetailsRoute.addChildren([
+          AuthreservationsReservationsReservationIdDetailsNotesRoute,
+          AuthreservationsReservationsReservationIdDetailsSummaryLazyRoute,
+          AuthreservationsReservationsReservationIdDetailsIndexRoute,
+        ]),
         AuthreservationsReservationsReservationIdEditRoute,
-        AuthreservationsReservationsReservationIdIndexRoute,
       ]),
       AuthreservationsReservationsNewRoute,
       AuthreservationsReservationsIndexRoute,

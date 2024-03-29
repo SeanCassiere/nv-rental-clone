@@ -129,8 +129,7 @@ export const VehicleSummary = ({
             }
             valueType={!!summaryData?.totalNoOfReservation ? "link" : "default"}
             linkOptions={{
-              to: "/fleet/$vehicleId/",
-              search: () => ({ tab: "reservations" }),
+              to: "/fleet/$vehicleId/reservations",
               params: { vehicleId },
             }}
           />
@@ -159,7 +158,7 @@ export const VehicleSummary = ({
                 : "default"
             }
             linkOptions={{
-              to: "/reservations/$reservationId/",
+              to: "/reservations/$reservationId/summary",
               params: { reservationId: `${summaryData?.currentReservation}` },
             }}
           />
@@ -198,10 +197,7 @@ export const VehicleSummary = ({
             }
             valueType={!!summaryData?.totalNoOfAgreement ? "link" : "default"}
             linkOptions={{
-              to: "/fleet/$vehicleId",
-              search: () => ({
-                tab: "agreements",
-              }),
+              to: "/fleet/$vehicleId/agreements",
               params: { vehicleId },
             }}
           />
@@ -230,7 +226,7 @@ export const VehicleSummary = ({
                 : "default"
             }
             linkOptions={{
-              to: "/agreements/$agreementId/",
+              to: "/agreements/$agreementId/summary",
               params: { agreementId: `${summaryData?.currentAgreement}` },
             }}
           />

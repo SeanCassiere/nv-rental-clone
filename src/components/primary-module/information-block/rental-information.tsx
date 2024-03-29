@@ -28,12 +28,12 @@ interface TRentalInformationProps {
     additionalMileageFee?: TAnyCustomerValueType;
     destination?: TAnyCustomerValueType;
   };
-  isLoading: boolean;
+  isLoading?: boolean;
   mode: "agreement" | "reservation";
 }
 
 const RentalInformation = (props: TRentalInformationProps) => {
-  const { data, mode, isLoading } = props;
+  const { data, mode, isLoading = false } = props;
   const { t } = useTranslation();
 
   const infoBlocks = useMemo(() => {

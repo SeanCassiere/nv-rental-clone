@@ -119,9 +119,8 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
 
       const customer = data.body[0];
       navigate({
-        to: "/customers/$customerId",
+        to: "/customers/$customerId/summary",
         params: { customerId: String(customer.CustomerId) },
-        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {
@@ -157,7 +156,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
 
       const agreement = data.body[0];
       navigate({
-        to: "/agreements/$agreementId",
+        to: "/agreements/$agreementId/summary",
         params: { agreementId: String(agreement.id) },
         search: () => ({ tab: "summary" }),
       });
@@ -231,9 +230,8 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
 
       const vehicle = data.body[0];
       navigate({
-        to: "/fleet/$vehicleId",
+        to: "/fleet/$vehicleId/summary",
         params: { vehicleId: String(vehicle.id) },
-        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {

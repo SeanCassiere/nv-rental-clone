@@ -38,7 +38,7 @@ interface TVehicleInformationProps {
     odometerIn?: TAnyCustomerValueType;
     vin?: TAnyCustomerValueType;
   };
-  isLoading: boolean;
+  isLoading?: boolean;
   mode:
     | "vehicle"
     | "agreement-checked-out"
@@ -47,7 +47,7 @@ interface TVehicleInformationProps {
 }
 
 const VehicleInformation = (props: TVehicleInformationProps) => {
-  const { data, isLoading, mode } = props;
+  const { data, isLoading = false, mode } = props;
 
   const title = useMemo(() => {
     let currentTitle = "Vehicle information";
@@ -67,9 +67,8 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
           heading: "Vehicle no.",
           value: (
             <Link
-              to="/fleet/$vehicleId"
+              to="/fleet/$vehicleId/summary"
               params={{ vehicleId: String(data.vehicleId) }}
-              search={() => ({ tab: "summary" })}
               className={cn(
                 buttonVariants({ variant: "link" }),
                 "h-auto p-0 text-base underline"

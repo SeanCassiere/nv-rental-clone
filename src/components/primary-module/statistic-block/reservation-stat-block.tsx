@@ -7,13 +7,15 @@ import { ModuleStatBlock, ModuleStatBlockContainer } from "./common";
 
 const ReservationStatBlock = ({
   reservation,
+  className,
 }: {
   reservation?: ReservationDataParsed | null;
+  className?: string;
 }) => {
   const { t } = useTranslation();
 
   return (
-    <ModuleStatBlockContainer>
+    <ModuleStatBlockContainer className={className}>
       <ModuleStatBlock
         header="Status"
         stat={
@@ -81,11 +83,10 @@ const ReservationStatBlock = ({
             header="Agreement no."
             stat={
               <Link
-                to="/agreements/$agreementId"
+                to="/agreements/$agreementId/summary"
                 params={{
                   agreementId: String(reservation.reservationview.agreementId),
                 }}
-                search={() => ({ tab: "summary" })}
                 className="focus-within:underline focus-within:underline-offset-4 hover:underline hover:underline-offset-4"
               >
                 {reservation?.reservationview.agreementNumber ?? "-"}

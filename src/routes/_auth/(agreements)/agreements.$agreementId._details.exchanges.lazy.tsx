@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRouteApi, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +10,9 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import { type TVehicleExchangeListItemParsed } from "@/lib/schemas/vehicle-exchange";
+import type { TVehicleExchangeListItemParsed } from "@/lib/schemas/vehicle-exchange";
+
+import { Container } from "@/routes/-components/container";
 
 import { parseISO } from "@/lib/config/date-fns";
 
@@ -23,15 +25,23 @@ type TVehicleExchangeKeyHelp = {
   header: string;
 };
 
-const routeApi = getRouteApi("/_auth/agreements/$agreementId/");
+export const Route = createLazyFileRoute(
+  "/_auth/(agreements)/agreements/$agreementId/_details/exchanges"
+)({
+  component: Component,
+});
 
-const AgreementExchangesTab = () => {
+function Component() {
+  const authParams = Route.useRouteContext({ select: (s) => s.authParams });
+  const viewAgreementExchangesOptions = Route.useRouteContext({
+    select: (s) => s.viewAgreementExchangesOptions,
+  });
+  const { agreementId } = Route.useParams();
   const { t } = useTranslation();
 
-  const { viewAgreementExchangesOptions } = routeApi.useRouteContext();
   const dataList = useSuspenseQuery(viewAgreementExchangesOptions);
 
-  const agreementExchangeColumns = useMemo(() => {
+  const agreementExchangeColumns = React.useMemo(() => {
     const cols: TVehicleExchangeKeyHelp[] = [
       {
         type: "link-old-vehicle",
@@ -70,7 +80,7 @@ const AgreementExchangesTab = () => {
     return cols;
   }, []);
 
-  const colDefs = useMemo(() => {
+  const colDefs = React.useMemo(() => {
     const columns: ColumnDef<TVehicleExchangeListItemParsed>[] = [];
 
     const pushToColumns = (localColumns: TVehicleExchangeKeyHelp[]) => {
@@ -116,9 +126,8 @@ const AgreementExchangesTab = () => {
 
                 return (
                   <Link
-                    to="/fleet/$vehicleId"
+                    to="/fleet/$vehicleId/summary"
                     params={{ vehicleId: `${vehicleId}` }}
-                    search={() => ({ tab: "summary" })}
                     className={cn(buttonVariants({ variant: "link" }), "px-0")}
                   >
                     {String(value)}
@@ -151,20 +160,20 @@ const AgreementExchangesTab = () => {
   const list = dataList.data?.status === 200 ? dataList.data?.body : [];
 
   return (
-    <div className="max-w-full focus:ring-0">
-      {dataList.status === "error" ||
-      dataList.data?.status !== 200 ||
-      dataList?.data.body?.length === 0 ? (
-        <EmptyState
-          title="No exchanges"
-          subtitle="You haven't made any fleet exchanges for this rental agreement."
-          icon={icons.Files}
-        />
-      ) : (
-        <CommonTable columns={colDefs} data={list} />
-      )}
-    </div>
+    <Container as="div">
+      <div className="mb-6 max-w-full px-2 sm:px-4">
+        {dataList.status === "error" ||
+        dataList.data?.status !== 200 ||
+        dataList?.data.body?.length === 0 ? (
+          <EmptyState
+            title="No exchanges"
+            subtitle="You haven't made any fleet exchanges for this rental agreement."
+            icon={icons.Files}
+          />
+        ) : (
+          <CommonTable columns={colDefs} data={list} />
+        )}
+      </div>
+    </Container>
   );
-};
-
-export default AgreementExchangesTab;
+}

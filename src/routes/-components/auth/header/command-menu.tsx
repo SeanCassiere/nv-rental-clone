@@ -252,9 +252,8 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: "/fleet/$vehicleId",
+                        to: "/fleet/$vehicleId/summary",
                         params: { vehicleId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
                       })
                     );
                   }}
@@ -290,9 +289,8 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: "/customers/$customerId",
+                        to: "/customers/$customerId/summary",
                         params: { customerId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
                       })
                     );
                   }}
@@ -328,9 +326,8 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: "/reservations/$reservationId",
+                        to: "/reservations/$reservationId/summary",
                         params: { reservationId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
                       })
                     );
                   }}
@@ -366,7 +363,7 @@ export const CommandMenu = () => {
                   onSelect={() => {
                     run(() =>
                       navigate({
-                        to: "/agreements/$agreementId",
+                        to: "/agreements/$agreementId/summary",
                         params: { agreementId: item.referenceId },
                         search: () => ({ tab: "summary" }),
                       })

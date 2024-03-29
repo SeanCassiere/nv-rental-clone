@@ -89,7 +89,7 @@ function SettingsLayout() {
       <Container className="max-w-screen-xl pb-4" as="div">
         <section
           className={cn(
-            "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1"
+            "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:px-1"
           )}
         >
           <div

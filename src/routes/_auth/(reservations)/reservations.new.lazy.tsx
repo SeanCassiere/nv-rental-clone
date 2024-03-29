@@ -38,9 +38,8 @@ function AddReservationPage() {
   const handleReservationSaveComplete = useCallback(
     (reservationId: number) => {
       navigate({
-        to: "/reservations/$reservationId",
+        to: "/reservations/$reservationId/summary",
         params: { reservationId: String(reservationId) },
-        search: () => ({ tab: "summary" }),
       });
     },
     [navigate]
