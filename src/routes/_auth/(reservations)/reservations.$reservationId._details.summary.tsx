@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
 import RentalInformation from "@/components/primary-module/information-block/rental-information";
@@ -8,7 +8,7 @@ import { RentalSummary } from "@/components/primary-module/summary/rental-summar
 
 import { Container } from "@/routes/-components/container";
 
-export const Route = createLazyFileRoute(
+export const Route = createFileRoute(
   "/_auth/(reservations)/reservations/$reservationId/_details/summary"
 )({
   component: Component,

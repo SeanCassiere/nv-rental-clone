@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import ModuleNotesTabContent from "@/components/primary-module/tabs/notes-content";
+
 import { fetchVehiclesByIdOptions } from "@/lib/query/vehicle";
+
+import { Container } from "@/routes/-components/container";
 
 export const Route = createFileRoute(
   "/_auth/(fleet)/fleet/$vehicleId/_details/notes"
@@ -20,4 +24,23 @@ export const Route = createFileRoute(
 
     return;
   },
+  component: Component,
 });
+
+function Component() {
+  const { authParams } = Route.useRouteContext();
+  const { vehicleId } = Route.useParams();
+
+  return (
+    <Container as="div">
+      <div className="mb-6 px-2 sm:px-4">
+        <ModuleNotesTabContent
+          module="vehicles"
+          referenceId={vehicleId}
+          clientId={authParams.clientId}
+          userId={authParams.userId}
+        />
+      </div>
+    </Container>
+  );
+}

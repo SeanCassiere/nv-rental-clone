@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import CustomerInformation from "@/components/primary-module/information-block/customer-information";
 import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
@@ -11,7 +11,7 @@ import { fetchAgreementByIdOptions } from "@/lib/query/agreement";
 
 import { Container } from "@/routes/-components/container";
 
-export const Route = createLazyFileRoute(
+export const Route = createFileRoute(
   "/_auth/(fleet)/fleet/$vehicleId/_details/summary"
 )({
   component: Component,

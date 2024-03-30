@@ -23,7 +23,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 
@@ -55,13 +55,11 @@ import { useWidgetName } from "../useWidgetName";
 
 interface WidgetPickerProps extends Auth {}
 
-const routeApi = getRouteApi("/_auth/");
-
 export default function WidgetPicker(props: WidgetPickerProps) {
   const { auth } = props;
 
   const navigate = useNavigate({ from: "/" });
-  const { show_widget_picker } = routeApi.useSearch();
+  const { show_widget_picker } = useSearch({ from: "/_auth/" });
 
   const onShowWidgetPicker = React.useCallback(
     (open: boolean) => {

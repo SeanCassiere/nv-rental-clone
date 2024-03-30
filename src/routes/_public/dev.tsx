@@ -1,5 +1,5 @@
 import React from "react";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import JSURL from "jsurl2";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
-export const Route = createLazyFileRoute("/_public/dev")({
+export const Route = createFileRoute("/_public/dev")({
   component: DevPage,
 });
 

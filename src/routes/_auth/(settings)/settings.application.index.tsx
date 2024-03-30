@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -19,11 +19,11 @@ import { incompleteApplicationSettingsTabsFeatureFlag } from "@/lib/config/featu
 
 import { SubPageNavItem } from "./-components/sub-page-nav-item";
 
-export const Route = createLazyFileRoute(
-  "/_auth/(settings)/settings/application/"
-)({
-  component: SettingsApplicationIndex,
-});
+export const Route = createFileRoute("/_auth/(settings)/settings/application/")(
+  {
+    component: SettingsApplicationIndex,
+  }
+);
 
 function SettingsApplicationIndex() {
   const { t } = useTranslation();

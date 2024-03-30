@@ -1,6 +1,11 @@
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
+import ModuleNotesTabContent from "@/components/primary-module/tabs/notes-content";
+
 import { fetchAgreementNotesByIdOptions } from "@/lib/query/agreement";
+
+import { Container } from "@/routes/-components/container";
 
 export const Route = createFileRoute(
   "/_auth/(agreements)/agreements/$agreementId/_details/notes"
@@ -22,4 +27,23 @@ export const Route = createFileRoute(
 
     return;
   },
+  component: Component,
 });
+
+function Component() {
+  const authParams = Route.useRouteContext({ select: (s) => s.authParams });
+  const { agreementId } = Route.useParams();
+
+  return (
+    <Container as="div">
+      <div className="mb-6 px-2 sm:px-4">
+        <ModuleNotesTabContent
+          module="agreements"
+          referenceId={agreementId}
+          clientId={authParams.clientId}
+          userId={authParams.userId}
+        />
+      </div>
+    </Container>
+  );
+}
