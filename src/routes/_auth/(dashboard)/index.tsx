@@ -113,8 +113,12 @@ function DashboardPage() {
     setCurrentLocationIds(ids);
   }, []);
 
-  const { show_widget_picker: showWidgetPickerModal = false } =
-    Route.useSearch();
+  const showWidgetPickerModal = Route.useSearch({
+    select: (s) =>
+      typeof s?.show_widget_picker !== "undefined"
+        ? s.show_widget_picker
+        : false,
+  });
 
   const locationsList = useQuery(
     fetchLocationsListOptions({
