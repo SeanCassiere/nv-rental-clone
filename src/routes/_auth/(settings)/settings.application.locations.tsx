@@ -77,10 +77,10 @@ export const Route = createFileRoute(
 
     return;
   },
-  component: LocationsPage,
+  component: Component,
 });
 
-function LocationsPage() {
+function Component() {
   const { t } = useTranslation();
 
   const { authParams, queryClient, countriesListOptions } =
@@ -91,37 +91,34 @@ function LocationsPage() {
   );
   const countriesQuery = useSuspenseQuery(countriesListOptions);
 
-  const defaultCountry = React.useMemo(
-    function determineDefaultCountryId() {
-      if (
-        clientProfileQuery.data.status === 200 &&
-        countriesQuery.data.status === 200
-      ) {
-        const client = clientProfileQuery.data.body;
-        const countries = countriesQuery.data.body;
+  const defaultCountry = React.useMemo(() => {
+    if (
+      clientProfileQuery.data.status === 200 &&
+      countriesQuery.data.status === 200
+    ) {
+      const client = clientProfileQuery.data.body;
+      const countries = countriesQuery.data.body;
 
-        const country = countries.find(
-          (c) => c.countryName === client.clientCountry
-        );
-        if (country) {
-          return {
-            countryId: country.countryID,
-            countryName: country.countryName,
-          };
-        }
+      const country = countries.find(
+        (c) => c.countryName === client.clientCountry
+      );
+      if (country) {
+        return {
+          countryId: country.countryID,
+          countryName: country.countryName,
+        };
       }
-      return {
-        countryId: "0",
-        countryName: "0",
-      };
-    },
-    [
-      clientProfileQuery.data.body,
-      clientProfileQuery.data.status,
-      countriesQuery.data.body,
-      countriesQuery.data.status,
-    ]
-  );
+    }
+    return {
+      countryId: "0",
+      countryName: "0",
+    };
+  }, [
+    clientProfileQuery.data.body,
+    clientProfileQuery.data.status,
+    countriesQuery.data.body,
+    countriesQuery.data.status,
+  ]);
 
   const statesQuery = useQuery(
     fetchLocationStatesByCountryIdListOptions({
@@ -129,34 +126,31 @@ function LocationsPage() {
       countryId: defaultCountry.countryId,
     })
   );
-  const defaultState = React.useMemo(
-    function determineDefaultStateId() {
-      if (
-        clientProfileQuery.data.status === 200 &&
-        statesQuery.data?.status === 200
-      ) {
-        const client = clientProfileQuery.data.body;
-        const states = statesQuery.data.body;
-        const state = states.find((s) => s.stateName === client.clientState);
-        if (state) {
-          return {
-            stateId: state.stateID,
-            stateName: state.stateName,
-          };
-        }
+  const defaultState = React.useMemo(() => {
+    if (
+      clientProfileQuery.data.status === 200 &&
+      statesQuery.data?.status === 200
+    ) {
+      const client = clientProfileQuery.data.body;
+      const states = statesQuery.data.body;
+      const state = states.find((s) => s.stateName === client.clientState);
+      if (state) {
+        return {
+          stateId: state.stateID,
+          stateName: state.stateName,
+        };
       }
-      return {
-        stateId: "0",
-        stateName: "0",
-      };
-    },
-    [
-      clientProfileQuery.data.body,
-      clientProfileQuery.data.status,
-      statesQuery.data?.body,
-      statesQuery.data?.status,
-    ]
-  );
+    }
+    return {
+      stateId: "0",
+      stateName: "0",
+    };
+  }, [
+    clientProfileQuery.data.body,
+    clientProfileQuery.data.status,
+    statesQuery.data?.body,
+    statesQuery.data?.status,
+  ]);
 
   const [filterMode, onChangeFilterMode] = React.useState("active");
   const [showNew, setShowNew] = React.useState(false);
