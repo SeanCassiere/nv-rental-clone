@@ -1,5 +1,6 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
@@ -44,10 +45,12 @@ export const Route = createFileRoute("/_auth/(reports)/reports/")({
 const ReportsList = React.lazy(() => import("./-components/reports-list"));
 
 function ReportSearchPage() {
-  // TODO: Replace with a value from the useTranslation() hook
-  const ALL_KEY = "All";
+  const { t } = useTranslation();
+  const ALL_KEY = t("display.all", { ns: "labels" });
 
-  const { category = ALL_KEY } = Route.useSearch();
+  const category = Route.useSearch({
+    select: (s) => (typeof s?.category === "undefined" ? ALL_KEY : s.category),
+  });
 
   useDocumentTitle(titleMaker("Reports"));
 
