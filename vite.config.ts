@@ -16,7 +16,15 @@ const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [eslintPlugin(), react(), TanStackRouterVite()],
+  plugins: [
+    eslintPlugin(),
+    TanStackRouterVite({
+      experimental: {
+        enableCodeSplitting: true,
+      },
+    }),
+    react(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

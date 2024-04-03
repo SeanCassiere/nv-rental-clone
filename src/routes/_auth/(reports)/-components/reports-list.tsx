@@ -1,6 +1,6 @@
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "@/components/layouts/empty-state";
@@ -65,8 +65,6 @@ function transformReportsList(
   }, [] as TransformedReportItem[]);
 }
 
-const routeApi = getRouteApi("/_auth/reports/");
-
 interface ReportsListV2Props {
   currentCategory: string;
   internationalization: {
@@ -80,9 +78,9 @@ export default function ReportsListV2(props: ReportsListV2Props) {
   const selectId = React.useId();
 
   const { t } = useTranslation();
-  const navigate = useNavigate({ from: "/reports" });
+  const navigate = useNavigate({ from: "/reports/" });
 
-  const { searchListOptions } = routeApi.useRouteContext();
+  const { searchListOptions } = useRouteContext({ from: "/_auth/reports/" });
   const query = useSuspenseQuery(searchListOptions);
 
   const reportsList = React.useMemo(

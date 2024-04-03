@@ -1,11 +1,11 @@
 import React from "react";
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
-export const Route = createLazyFileRoute("/_public/logged-out")({
+export const Route = createFileRoute("/_public/logged-out")({
   component: LoggedOutPage,
 });
 

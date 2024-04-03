@@ -29,4 +29,5 @@ export const Route = createFileRoute(
 
     return;
   },
+  component: () => <div>Hello /_auth/settings/runtime-configuration!</div>,
 });
