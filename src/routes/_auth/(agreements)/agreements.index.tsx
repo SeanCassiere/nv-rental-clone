@@ -65,7 +65,7 @@ import { titleMaker } from "@/lib/utils/title-maker";
 import { sortObjectKeys } from "@/lib/utils";
 
 export const Route = createFileRoute("/_auth/(agreements)/agreements/")({
-  validateSearch: (s) => AgreementSearchQuerySchema.parse(s),
+  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
       page: search?.page || 1,
@@ -296,8 +296,6 @@ function AgreementsSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/agreements",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,

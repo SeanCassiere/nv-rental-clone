@@ -252,8 +252,6 @@ function CustomerSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/customers",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,

@@ -264,8 +264,6 @@ function VehicleSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/fleet",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,

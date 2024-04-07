@@ -62,8 +62,6 @@ import { insertSpacesBeforeCaps } from "@/lib/utils/random";
 import { cn } from "@/lib/utils/styles";
 import { titleMaker } from "@/lib/utils/title-maker";
 
-const columnHelper = createColumnHelper<TReservationListItemParsed>();
-
 export const Route = createFileRoute("/_auth/(reservations)/reservations/")({
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
@@ -114,6 +112,8 @@ export const Route = createFileRoute("/_auth/(reservations)/reservations/")({
   },
   component: ReservationsSearchPage,
 });
+
+const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
@@ -289,8 +289,6 @@ function ReservationsSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/reservations",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,
