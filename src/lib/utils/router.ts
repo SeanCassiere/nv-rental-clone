@@ -1,5 +1,5 @@
 import { parseSearchWith, stringifySearchWith } from "@tanstack/react-router";
-import JSURL from "jsurl2";
+import * as JSURL from "jsurl2";
 
 export function decodeFromBinary(str: string): string {
   return decodeURIComponent(
