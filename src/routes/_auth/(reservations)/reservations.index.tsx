@@ -70,7 +70,7 @@ export const Route = createFileRoute("/_auth/(reservations)/reservations/")({
     (search) => ({
       page: search?.page || 1,
       size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
-      ...(search.filters ? { filters: search.filters } : {}),
+      filters: search?.filters ?? undefined,
     }),
   ],
   beforeLoad: ({ context, search }) => {

@@ -110,7 +110,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
           to: "/customers",
           search: () => ({
             page: variables.pagination.page,
-            pageSize: variables.pagination.pageSize,
+            size: variables.pagination.pageSize,
             filters: variables.filters,
           }),
         });
