@@ -13,17 +13,6 @@ export function wait(ms: number): Promise<void> {
 }
 
 /**
- * Removes the trailing slash from a given path, if present.
- * Also handles the case where the trailing slash is followed by a query string.
- *
- * @param {string} path - The path from which to remove the trailing slash.
- * @returns {string} The path without a trailing slash.
- */
-export function removeTrailingSlash(path: string): string {
-  return path.replace(/\/\?/, "?").replace(/\/$/, "");
-}
-
-/**
  * Recursively sorts the keys of an object in alphabetical order.
  * If the input is an array, it maps over the array and recursively sorts each item.
  * If the input is an object, it sorts the keys, then reduces over the keys to create a new object with sorted keys.

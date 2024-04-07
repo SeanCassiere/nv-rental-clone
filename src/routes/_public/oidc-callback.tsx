@@ -6,8 +6,6 @@ import { LoadingPlaceholder } from "@/components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 
-import { removeTrailingSlash } from "@/lib/utils";
-
 export const Route = createFileRoute("/_public/oidc-callback")({
   validateSearch: z.object({
     redirect: z.string().optional(),
@@ -52,11 +50,7 @@ export const Route = createFileRoute("/_public/oidc-callback")({
 
     // if there are no auth params, begin the sign-in process
     if (!isAuthParams) {
-      let safeRoute = redirectPath ?? "/";
-
-      if (safeRoute && safeRoute !== "/") {
-        safeRoute = removeTrailingSlash(safeRoute);
-      }
+      const safeRoute = redirectPath ?? "/";
 
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, safeRoute);
       await auth.signinRedirect();
