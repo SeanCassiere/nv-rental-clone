@@ -312,7 +312,7 @@ function AgreementsSearchPage() {
       {}
     );
     navigate({
-      to: "/agreements",
+      to: "/agreements/",
       params: {},
       search: () => ({
         page: 1,
@@ -544,7 +544,7 @@ function AgreementsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/agreements"
+                    to="/agreements/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -558,7 +558,7 @@ function AgreementsSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/agreements"
+                    to="/agreements/"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -579,7 +579,7 @@ function AgreementsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/agreements"
+                    to="/agreements/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,

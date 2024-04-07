@@ -381,7 +381,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/fleet",
+                    to: "/fleet/",
                     search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
@@ -394,7 +394,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/customers",
+                    to: "/customers/",
                     search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
@@ -407,7 +407,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/reservations",
+                    to: "/reservations/",
                     search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );
@@ -420,7 +420,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/agreements",
+                    to: "/agreements/",
                     search: () => ({ page: 1, size: defaultRowCount }),
                   })
                 );

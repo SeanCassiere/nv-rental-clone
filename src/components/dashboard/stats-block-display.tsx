@@ -43,7 +43,7 @@ const DashboardStatsBlock = ({
             icon={icons.CreditCard}
             value={formatDisplayValue(statistics?.todaysReservationCount)}
             linkProps={{
-              to: "/reservations",
+              to: "/reservations/",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -62,7 +62,7 @@ const DashboardStatsBlock = ({
             icon={icons.ArrowDownLeft}
             value={formatDisplayValue(statistics?.todaysArrivalsCount)}
             linkProps={{
-              to: "/agreements",
+              to: "/agreements/",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -81,7 +81,7 @@ const DashboardStatsBlock = ({
             icon={icons.Car}
             value={formatDisplayValue(statistics?.openAgreement)}
             linkProps={{
-              to: "/agreements",
+              to: "/agreements/",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -96,7 +96,7 @@ const DashboardStatsBlock = ({
             icon={icons.CreditCard}
             value={formatDisplayValue(statistics?.overDues)}
             linkProps={{
-              to: "/agreements",
+              to: "/agreements/",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -111,7 +111,7 @@ const DashboardStatsBlock = ({
             icon={icons.Banknote}
             value={formatDisplayValue(statistics?.pendingPayment)}
             linkProps={{
-              to: "/agreements",
+              to: "/agreements/",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,

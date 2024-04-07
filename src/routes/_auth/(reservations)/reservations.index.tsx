@@ -305,8 +305,6 @@ function ReservationsSearchPage() {
       {}
     );
     navigate({
-      to: "/reservations",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,
@@ -516,7 +514,7 @@ function ReservationsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/reservations"
+                    to="/reservations/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -530,7 +528,7 @@ function ReservationsSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/reservations"
+                    to="/reservations/"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -551,7 +549,7 @@ function ReservationsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/reservations"
+                    to="/reservations/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,

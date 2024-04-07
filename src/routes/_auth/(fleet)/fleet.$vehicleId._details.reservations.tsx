@@ -178,7 +178,7 @@ function Component() {
                 Showing a maximum of {pageSize} records.
               </p>
               <Link
-                to="/reservations"
+                to="/reservations/"
                 search={(prev) => ({
                   ...prev,
                   filters: { VehicleNo: vehicleNo },
