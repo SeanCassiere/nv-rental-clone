@@ -102,7 +102,6 @@ export const AppNavigation = (props: Props) => {
           name="Reports"
           props={{
             to: "/reports",
-            search: false,
             activeOptions: defaultActiveOptions,
           }}
         />
@@ -110,7 +109,6 @@ export const AppNavigation = (props: Props) => {
           name="Settings"
           props={{
             to: "/settings",
-            search: false,
             activeOptions: defaultActiveOptions,
           }}
         />
