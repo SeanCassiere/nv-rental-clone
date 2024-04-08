@@ -49,7 +49,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Fleet"
           props={{
-            to: "/fleet/",
+            to: "/fleet",
             search: (current) => ({
               ...current,
               page: 1,
@@ -62,7 +62,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Customers"
           props={{
-            to: "/customers/",
+            to: "/customers",
             search: (current) => ({
               ...current,
               page: 1,
@@ -75,7 +75,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Reservations"
           props={{
-            to: "/reservations/",
+            to: "/reservations",
             search: (current) => ({
               ...current,
               page: 1,
@@ -88,7 +88,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Agreements"
           props={{
-            to: "/agreements/",
+            to: "/agreements",
             search: (current) => ({
               ...current,
               page: 1,
