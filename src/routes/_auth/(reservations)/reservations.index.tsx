@@ -62,15 +62,13 @@ import { insertSpacesBeforeCaps } from "@/lib/utils/random";
 import { cn } from "@/lib/utils/styles";
 import { titleMaker } from "@/lib/utils/title-maker";
 
-const columnHelper = createColumnHelper<TReservationListItemParsed>();
-
 export const Route = createFileRoute("/_auth/(reservations)/reservations/")({
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
       page: search?.page || 1,
       size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
-      ...(search.filters ? { filters: search.filters } : {}),
+      filters: search?.filters ?? undefined,
     }),
   ],
   beforeLoad: ({ context, search }) => {
@@ -114,6 +112,8 @@ export const Route = createFileRoute("/_auth/(reservations)/reservations/")({
   },
   component: ReservationsSearchPage,
 });
+
+const columnHelper = createColumnHelper<TReservationListItemParsed>();
 
 function ReservationsSearchPage() {
   const { t } = useTranslation();
@@ -289,8 +289,6 @@ function ReservationsSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/reservations",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,
@@ -307,8 +305,6 @@ function ReservationsSearchPage() {
       {}
     );
     navigate({
-      to: "/reservations",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,
@@ -518,7 +514,7 @@ function ReservationsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/reservations"
+                    to="/reservations/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -532,7 +528,7 @@ function ReservationsSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/reservations"
+                    to="/reservations/"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -553,7 +549,7 @@ function ReservationsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/reservations"
+                    to="/reservations/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,

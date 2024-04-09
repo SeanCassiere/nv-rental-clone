@@ -176,7 +176,7 @@ export const VehicleSummary = ({
               !!summaryData?.futureNoOfReservation ? "link" : "default"
             }
             linkOptions={{
-              to: "/reservations",
+              to: "/reservations/",
               search: () => ({
                 filters: {
                   VehicleNo: vehicleNo ?? "",
@@ -287,7 +287,7 @@ export const VehicleSummary = ({
             }
             valueType={!!summaryData?.pendingPayment ? "link" : "default"}
             linkOptions={{
-              to: "/agreements",
+              to: "/agreements/",
               search: () => ({
                 filters: { VehicleNo: vehicleNo ?? "", Statuses: ["5"] },
               }),

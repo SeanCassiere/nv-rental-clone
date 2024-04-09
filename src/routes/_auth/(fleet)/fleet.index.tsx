@@ -64,7 +64,7 @@ export const Route = createFileRoute("/_auth/(fleet)/fleet/")({
     (search) => ({
       page: search?.page || 1,
       size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
-      ...(search.filters ? { filters: search.filters } : {}),
+      filters: search?.filters ?? undefined,
     }),
   ],
   beforeLoad: ({ context, search }) => {
@@ -264,8 +264,6 @@ function VehicleSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/fleet",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,
@@ -282,7 +280,7 @@ function VehicleSearchPage() {
       {}
     );
     navigate({
-      to: "/fleet",
+      to: "/fleet/",
       params: {},
       search: () => ({
         page: 1,
@@ -454,7 +452,7 @@ function VehicleSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/fleet"
+                    to="/fleet/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -468,7 +466,7 @@ function VehicleSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/fleet"
+                    to="/fleet/"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -489,7 +487,7 @@ function VehicleSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/fleet"
+                    to="/fleet/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -503,80 +501,6 @@ function VehicleSearchPage() {
           </Pagination>
         </TableList>
       </section>
-
-      {/* <section className="mx-auto my-4 max-w-full px-2 sm:my-6 sm:mb-2 sm:px-4 sm:pb-4">
-        <PrimaryModuleTable
-          data={dataList}
-          columns={columnDefs}
-          onColumnOrderChange={handleColumnsOrderChange}
-          initialColumnVisibility={
-            columnsData.data.status === 200
-              ? columnsData.data.body.reduce(
-                  (prev, current) => ({
-                    ...prev,
-                    [current.columnHeader]: current.isSelected,
-                  }),
-                  {}
-                )
-              : {}
-          }
-          onColumnVisibilityChange={handleColumnVisibilityChange}
-          totalPages={
-            parsedPagination?.totalRecords
-              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
-              : 0
-          }
-          pagination={pagination}
-          onPaginationChange={(newPaginationState) => {
-            startChangingPage();
-            navigate({
-              to: "/fleet",
-              params: {},
-              search: (current) => ({
-                ...current,
-                page: newPaginationState.pageIndex + 1,
-                size: newPaginationState.pageSize,
-                filters: searchFilters,
-              }),
-            }).then(stopChangingPage);
-          }}
-          filters={{
-            columnFilters,
-            setColumnFilters,
-            onClearFilters: () => {
-              startChangingPage();
-              navigate({
-                to: "/fleet",
-                params: {},
-                search: () => ({
-                  page: 1,
-                  size: pagination.pageSize,
-                }),
-              }).then(stopChangingPage);
-            },
-            onSearchWithFilters: () => {
-              const filters = columnFilters.reduce(
-                (prev, current) => ({
-                  ...prev,
-                  [current.id]: current.value,
-                }),
-                {}
-              );
-              startChangingPage();
-              navigate({
-                to: "/fleet",
-                params: {},
-                search: () => ({
-                  page: 1,
-                  size: pagination.pageSize,
-                  filters,
-                }),
-              }).then(stopChangingPage);
-            },
-            filterableColumns: tableFacetedFilters,
-          }}
-        />
-      </section> */}
     </Container>
   );
 }

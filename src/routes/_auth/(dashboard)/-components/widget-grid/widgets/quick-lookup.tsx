@@ -107,10 +107,10 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
 
         navigate({
-          to: "/customers",
+          to: "/customers/",
           search: () => ({
             page: variables.pagination.page,
-            pageSize: variables.pagination.pageSize,
+            size: variables.pagination.pageSize,
             filters: variables.filters,
           }),
         });
@@ -144,7 +144,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
 
         navigate({
-          to: "/agreements",
+          to: "/agreements/",
           search: () => ({
             page: variables.pagination.page,
             pageSize: variables.pagination.pageSize,
@@ -181,7 +181,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
 
         navigate({
-          to: "/reservations",
+          to: "/reservations/",
           search: () => ({
             page: variables.pagination.page,
             pageSize: variables.pagination.pageSize,
@@ -218,7 +218,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
         toast.message(t("messages.foundMultipleMatches", { ns: "dashboard" }));
 
         navigate({
-          to: "/fleet",
+          to: "/fleet/",
           search: () => ({
             page: variables.pagination.page,
             pageSize: variables.pagination.pageSize,

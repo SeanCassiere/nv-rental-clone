@@ -60,7 +60,7 @@ export const Route = createFileRoute("/_auth/(customers)/customers/")({
     (search) => ({
       page: search?.page || 1,
       size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
-      ...(search.filters ? { filters: search.filters } : {}),
+      filters: search?.filters ?? undefined,
     }),
   ],
   beforeLoad: ({ context, search }) => {
@@ -252,8 +252,6 @@ function CustomerSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/customers",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,
@@ -270,7 +268,7 @@ function CustomerSearchPage() {
       {}
     );
     navigate({
-      to: "/customers",
+      to: "/customers/",
       params: {},
       search: () => ({
         page: 1,
@@ -422,7 +420,7 @@ function CustomerSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/customers"
+                    to="/customers/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -436,7 +434,7 @@ function CustomerSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/customers"
+                    to="/customers/"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -457,7 +455,7 @@ function CustomerSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/customers"
+                    to="/customers/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,

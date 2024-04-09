@@ -65,12 +65,12 @@ import { titleMaker } from "@/lib/utils/title-maker";
 import { sortObjectKeys } from "@/lib/utils";
 
 export const Route = createFileRoute("/_auth/(agreements)/agreements/")({
-  validateSearch: AgreementSearchQuerySchema.parse,
+  validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   preSearchFilters: [
     (search) => ({
       page: search?.page || 1,
       size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
-      ...(search.filters ? { filters: search.filters } : {}),
+      filters: search?.filters ?? undefined,
     }),
   ],
   beforeLoad: ({ context, search }) => {
@@ -296,8 +296,6 @@ function AgreementsSearchPage() {
 
   const handleClearFilters = React.useCallback(() => {
     navigate({
-      to: "/agreements",
-      params: {},
       search: () => ({
         page: 1,
         size: pagination.pageSize,
@@ -314,7 +312,7 @@ function AgreementsSearchPage() {
       {}
     );
     navigate({
-      to: "/agreements",
+      to: "/agreements/",
       params: {},
       search: () => ({
         page: 1,
@@ -546,7 +544,7 @@ function AgreementsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/agreements"
+                    to="/agreements/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -560,7 +558,7 @@ function AgreementsSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/agreements"
+                    to="/agreements/"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -581,7 +579,7 @@ function AgreementsSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/agreements"
+                    to="/agreements/"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,

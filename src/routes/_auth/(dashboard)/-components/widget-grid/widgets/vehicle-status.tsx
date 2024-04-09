@@ -202,7 +202,7 @@ function VehicleStatusItem(props: VehicleStatusItemProps) {
       <div className="flex items-center justify-between">
         <div className="inline-flex grow gap-2">
           <Link
-            to="/fleet"
+            to="/fleet/"
             className={cn(
               buttonVariants({ variant: "link", size: "sm" }),
               "h-4 justify-start truncate p-0 underline-offset-1"

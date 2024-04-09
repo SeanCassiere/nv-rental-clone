@@ -18,7 +18,6 @@ import {
 
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
-import { removeTrailingSlash } from "@/lib/utils/random";
 
 import { useConfigureLocalFeatures } from "./-components/auth/useConfigureLocalFeatures";
 
@@ -43,10 +42,7 @@ export const Route = createFileRoute("/_auth")({
       const isAuthExpired = (user?.expires_at || 0) > Date.now();
 
       if (!user || isAuthExpired || !isAuthenticated) {
-        const path =
-          location.href && location.href === "/"
-            ? "/"
-            : removeTrailingSlash(location.href);
+        const path = location.href;
 
         window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, path);
         await context.auth.signinRedirect();
