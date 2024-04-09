@@ -8,13 +8,14 @@ import { I18nextProvider, useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
-import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
 import { icons } from "@/components/ui/icons";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { useEventListener } from "@/lib/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { GlobalDialogProvider } from "@/lib/context/modals";
+
+import { TailwindScreenDevTool } from "@/routes/-components/tailwind-screen-dev-tool";
 
 import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
 import { parseSearchFn, stringifySearchFn } from "@/lib/utils/router";
