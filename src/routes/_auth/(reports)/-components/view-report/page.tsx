@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 
-import { EmptyState } from "@/components/layouts/empty-state";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 
@@ -9,6 +8,7 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { ReportFilters } from "@/routes/_auth/(reports)/-components/view-report/page-filters";
 import { useReportContext } from "@/routes/_auth/(reports)/-components/view-report/view-report-context";
+import { EmptyState } from "@/routes/-components/empty-state";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 

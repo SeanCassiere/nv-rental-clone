@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { EmptyState } from "@/components/layouts/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +32,8 @@ import {
   useLocalStorage,
 } from "@/lib/hooks/useLocalStorage";
 import { useGlobalDialogContext } from "@/lib/context/modals";
+
+import { EmptyState } from "@/routes/-components/empty-state";
 
 import {
   featureFlags,

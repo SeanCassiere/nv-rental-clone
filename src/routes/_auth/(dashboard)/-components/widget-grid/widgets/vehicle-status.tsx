@@ -2,7 +2,6 @@ import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
-import { EmptyState } from "@/components/layouts/empty-state";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 import { Progress } from "@/components/ui/progress";
@@ -32,6 +31,7 @@ import {
 } from "@/lib/query/vehicle";
 
 import { useWidgetName } from "@/routes/_auth/(dashboard)/-components/useWidgetName";
+import { EmptyState } from "@/routes/-components/empty-state";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 import {

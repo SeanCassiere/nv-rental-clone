@@ -4,7 +4,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
-import { EmptyState } from "@/components/layouts/empty-state";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -36,6 +35,8 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { RoleListItem } from "@/lib/schemas/role";
 import { fetchRoleByIdOptions, fetchRolesListOptions } from "@/lib/query/role";
+
+import { EmptyState } from "@/routes/-components/empty-state";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 

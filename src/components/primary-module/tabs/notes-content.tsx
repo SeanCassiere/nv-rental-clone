@@ -4,7 +4,6 @@ import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import { CommonTable } from "@/components/common/common-table";
-import { EmptyState } from "@/components/layouts/empty-state";
 import { icons } from "@/components/ui/icons";
 
 import type { TNoteDataParsed } from "@/lib/schemas/note";
@@ -12,6 +11,8 @@ import { fetchAgreementNotesByIdOptions } from "@/lib/query/agreement";
 import { fetchCustomerNotesByIdOptions } from "@/lib/query/customer";
 import { fetchReservationNotesByIdOptions } from "@/lib/query/reservation";
 import { fetchVehiclesNotesByIdOptions } from "@/lib/query/vehicle";
+
+import { EmptyState } from "@/routes/-components/empty-state";
 
 import { parseISO } from "@/lib/config/date-fns";
 

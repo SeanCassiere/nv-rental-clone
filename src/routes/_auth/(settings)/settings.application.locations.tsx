@@ -3,7 +3,6 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { EmptyState } from "@/components/layouts/empty-state";
 import { badgeVariants } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -41,6 +40,8 @@ import {
   fetchLocationsListOptions,
   fetchLocationStatesByCountryIdListOptions,
 } from "@/lib/query/location";
+
+import { EmptyState } from "@/routes/-components/empty-state";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 

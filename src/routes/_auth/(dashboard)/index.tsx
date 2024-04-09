@@ -4,7 +4,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
 import DashboardStatsBlock from "@/components/dashboard/stats-block-display";
-import { EmptyState } from "@/components/layouts/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -43,6 +42,7 @@ import type { Auth } from "@/lib/query/helpers";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 
 import { Container } from "@/routes/-components/container";
+import { EmptyState } from "@/routes/-components/empty-state";
 
 import {
   getAuthFromAuthHook,
