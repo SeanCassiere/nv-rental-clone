@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
 
-import { LoadingPlaceholder } from "@/components/loading-placeholder";
+import { LoadingPlaceholder } from "@/routes/-components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 
