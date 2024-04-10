@@ -24,7 +24,9 @@ export const Route = createFileRoute("/_auth/(reservations)/reservations/new")({
 function AddReservationPage() {
   const navigate = Route.useNavigate();
 
-  const { stage = "rental-information" } = Route.useSearch();
+  const stage = Route.useSearch({
+    select: (s) => s?.stage ?? "rental-information",
+  });
 
   const handleStageTabClick = useCallback(
     (destination: string) => {

@@ -24,7 +24,9 @@ export const Route = createFileRoute("/_auth/(agreements)/agreements/new")({
 function AddAgreementPage() {
   const navigate = Route.useNavigate();
 
-  const { stage = "rental-information" } = Route.useSearch();
+  const stage = Route.useSearch({
+    select: (s) => s?.stage ?? "rental-information",
+  });
 
   const handleStageTabClick = useCallback(
     (destination: string) => {

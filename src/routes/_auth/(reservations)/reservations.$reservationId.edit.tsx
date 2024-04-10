@@ -29,7 +29,9 @@ function EditReservationPage() {
   const router = useRouter();
 
   const routeContext = Route.useRouteContext();
-  const { stage = "rental-information" } = Route.useSearch();
+  const stage = Route.useSearch({
+    select: (s) => s?.stage ?? "rental-information",
+  });
   const { reservationId } = Route.useParams();
 
   const reservationData = useQuery(routeContext.viewReservationOptions);

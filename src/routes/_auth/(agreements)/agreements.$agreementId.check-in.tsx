@@ -29,7 +29,9 @@ function CheckinAgreementPage() {
   const router = useRouter();
 
   const routeContext = Route.useRouteContext();
-  const { stage = "rental-information" } = Route.useSearch();
+  const stage = Route.useSearch({
+    select: (s) => s?.stage ?? "rental-information",
+  });
   const { agreementId } = Route.useParams();
 
   const agreementData = useQuery(routeContext.viewAgreementOptions);
