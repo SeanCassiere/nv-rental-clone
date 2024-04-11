@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
 
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_public/oidc-callback")({
     session_state: search?.session_state,
   }),
   beforeLoad: ({ search }) => ({ search }),
-  loader: async ({ context, preload, location, navigate }) => {
+  loader: async ({ context, preload, location }) => {
     const locationPathname = location.pathname;
     if (preload || !locationPathname.includes("oidc-callback")) return;
 
@@ -68,12 +68,10 @@ export const Route = createFileRoute("/_public/oidc-callback")({
     );
     const searchParamsObj = Object.fromEntries(searchParams.entries());
 
-    await navigate({
-      to: (pathname as any) ?? "/",
+    throw redirect({
+      to: pathname ?? "/",
       search: searchParamsObj,
     });
-
-    return;
   },
   component: LoadingPlaceholder,
 });
