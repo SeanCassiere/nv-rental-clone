@@ -1,15 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { LoadingPlaceholder } from "@/routes/-components/loading-placeholder";
 
 export const Route = createFileRoute("/_public/logout")({
-  loader: async ({ context, preload, navigate }) => {
+  loader: async ({ context, preload }) => {
     if (preload) return;
 
     const { auth } = context;
 
     if (!auth.isAuthenticated) {
-      await navigate({
+      throw redirect({
         to: "/logged-out",
       });
     }
