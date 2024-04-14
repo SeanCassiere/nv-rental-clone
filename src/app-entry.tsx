@@ -26,7 +26,7 @@ import { queryClient } from "@/lib/config/tanstack-query";
 
 import { routeTree } from "@/route-tree.gen";
 
-export const router = createRouter({
+const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
@@ -37,6 +37,7 @@ export const router = createRouter({
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
   },
+  trailingSlash: "never",
 });
 
 declare module "@tanstack/react-router" {
