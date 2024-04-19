@@ -30,9 +30,10 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
+  defaultViewTransition: true,
+  defaultPendingComponent: FullPageLoadingSpinner,
   parseSearch: parseSearchFn,
   stringifySearch: stringifySearchFn,
-  defaultPendingComponent: FullPageLoadingSpinner,
   context: {
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
