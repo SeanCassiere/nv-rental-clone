@@ -69,7 +69,7 @@ export const Route = createFileRoute("/_public/oidc-callback")({
     const searchParamsObj = Object.fromEntries(searchParams.entries());
 
     throw redirect({
-      to: pathname ?? "/",
+      to: pathname || "/",
       search: searchParamsObj,
     });
   },
