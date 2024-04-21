@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   Link,
   type AnyRoute,
-  type LinkProps,
+  type LinkOptions,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -85,13 +85,7 @@ interface SummaryLineItemProps<
   value: React.ReactNode;
   initialDropdownExpanded?: boolean;
   children?: React.ReactNode | undefined;
-  linkOptions?: Omit<
-    React.PropsWithoutRef<
-      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
-        Omit<React.ComponentPropsWithoutRef<"a">, "preload">
-    >,
-    "children" | "className" | "activeProps" | "inactiveProps"
-  >;
+  linkOptions?: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
 }
 
 export function SummaryLineItem<
@@ -147,7 +141,7 @@ export function SummaryLineItem<
                   valueColor,
                 })
               )}
-              {...linkOptions}
+              {...(linkOptions as any)}
             >
               {value}
             </Link>

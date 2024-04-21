@@ -2,7 +2,7 @@ import React from "react";
 import {
   Link,
   type AnyRoute,
-  type LinkProps,
+  type LinkOptions,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -32,13 +32,9 @@ export function SidebarNavigationItem<
   TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
   TMaskTo extends string = "",
 >(
-  props: Omit<
-    React.PropsWithoutRef<
-      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
-        Omit<React.ComponentPropsWithoutRef<"a">, "children" | "preload">
-    >,
-    "className" | "activeProps" | "inactiveProps" | "children"
-  > & { children: React.ReactNode }
+  props: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> & {
+    children: React.ReactNode;
+  }
 ) {
   const { children, ...rest } = props;
 
@@ -51,7 +47,7 @@ export function SidebarNavigationItem<
       inactiveProps={{
         className: cn("text-muted-foreground hover:text-foreground"),
       }}
-      {...rest}
+      {...(rest as any)}
     >
       {children}
     </Link>

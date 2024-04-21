@@ -2,7 +2,7 @@ import React from "react";
 import {
   Link,
   type AnyRoute,
-  type LinkProps,
+  type LinkOptions,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -111,7 +111,7 @@ const DashboardStatsBlock = ({
             icon={icons.Banknote}
             value={formatDisplayValue(statistics?.pendingPayment)}
             linkProps={{
-              to: "/agreements/",
+              to: "",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -145,13 +145,7 @@ const StatBlock = <
   title: string;
   value: string | null;
   icon: LucideIcon;
-  linkProps: Omit<
-    React.PropsWithoutRef<
-      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
-        Omit<React.ComponentPropsWithoutRef<"a">, "preload" | "className">
-    >,
-    "children"
-  >;
+  linkProps: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
 }) => {
   const { title, value, icon: Icon, linkProps } = props;
 
@@ -167,7 +161,7 @@ const StatBlock = <
       <CardContent>
         <Link
           className="block text-2xl font-bold tabular-nums underline-offset-4 focus-within:underline hover:underline"
-          {...linkProps}
+          {...(linkProps as any)}
         >
           {value ?? <Skeleton className="h-8 w-full" />}
         </Link>

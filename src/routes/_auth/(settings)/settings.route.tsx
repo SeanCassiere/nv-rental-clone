@@ -76,7 +76,7 @@ function SettingsLayout() {
     if (canSeeAdminTab) {
       // users, locations, taxes,
       items.push(() => (
-        <SidebarNavigationItem to="/settings/application" search={false}>
+        <SidebarNavigationItem to="/settings/application/" search={false}>
           {t("titles.application", { ns: "settings" })}
         </SidebarNavigationItem>
       ));
