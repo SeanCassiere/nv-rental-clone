@@ -2,7 +2,7 @@ import React from "react";
 import {
   Link,
   type AnyRoute,
-  type LinkProps,
+  type LinkOptions,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -13,7 +13,7 @@ import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 import { cn } from "@/lib/utils";
 
-const defaultActiveOptions: LinkProps["activeOptions"] = {
+const defaultActiveOptions: LinkOptions["activeOptions"] = {
   exact: false,
   includeHash: false,
   includeSearch: false,
@@ -125,13 +125,7 @@ const AppNavigationLink = <
   TMaskTo extends string = "",
 >(props: {
   name: string;
-  props: Omit<
-    React.PropsWithoutRef<
-      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
-        Omit<React.ComponentPropsWithoutRef<"a">, "preload">
-    >,
-    "children" | "className" | "activeProps" | "inactiveProps"
-  >;
+  props: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
 }) => {
   const { name, props: linkProps } = props;
   return (
@@ -146,7 +140,7 @@ const AppNavigationLink = <
         inactiveProps={{
           className: cn("border-transparent hover:border-foreground/20"),
         }}
-        {...linkProps}
+        {...(linkProps as any)}
       >
         {name}
       </Link>

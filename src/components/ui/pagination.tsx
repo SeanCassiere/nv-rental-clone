@@ -79,7 +79,7 @@ const PaginationLink = <
         }),
         className
       )}
-      {...rest}
+      {...(rest as any)}
     />
   );
 };
@@ -126,7 +126,7 @@ const PaginationLinkPrevious = <
       aria-label="Go to previous page"
       size="default"
       className={cn("cursor-pointer gap-1 pl-2.5", className)}
-      {...rest}
+      {...(rest as any)}
     >
       <ChevronLeft className="h-4 w-4" />
       <span>Previous</span>
@@ -166,7 +166,7 @@ const PaginationLinkNext = <
       aria-label="Go to next page"
       size="default"
       className={cn("gap-1 pr-2.5", className)}
-      {...rest}
+      {...(rest as any)}
     >
       <span>Next</span>
       <ChevronRight className="h-4 w-4" />

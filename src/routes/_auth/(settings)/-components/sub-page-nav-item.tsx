@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   Link,
   type AnyRoute,
-  type LinkProps,
+  type LinkOptions,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -22,13 +22,7 @@ export function SubPageNavItem<
 >(props: {
   title: string;
   description: string;
-  link: Omit<
-    React.PropsWithoutRef<
-      LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
-        Omit<React.ComponentPropsWithoutRef<"a">, "preload" | "children">
-    >,
-    "children"
-  >;
+  link: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
 }) {
   const { title, description, link } = props;
   const { t } = useTranslation();
@@ -46,7 +40,7 @@ export function SubPageNavItem<
       </div>
       <div className="flex items-center justify-center">
         <Link
-          {...link}
+          {...(link as any)}
           className={cn(
             buttonVariants({ variant: "outline", size: "sm" }),
             "bg-transparent"
