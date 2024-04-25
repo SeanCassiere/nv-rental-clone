@@ -1,8 +1,8 @@
 import * as React from "react";
 import {
   Link,
-  type AnyRoute,
-  type LinkOptions,
+  type AnyRouter,
+  type LinkProps,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -11,18 +11,21 @@ import { useTranslation } from "react-i18next";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
+import type { LinkComponentProps } from "@/lib/types/router";
+
 import { cn } from "@/lib/utils";
 
 export function SubPageNavItem<
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 >(props: {
   title: string;
   description: string;
-  link: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
+  link: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
+    LinkComponentProps<"a">;
 }) {
   const { title, description, link } = props;
   const { t } = useTranslation();
@@ -40,7 +43,7 @@ export function SubPageNavItem<
       </div>
       <div className="flex items-center justify-center">
         <Link
-          {...(link as any)}
+          {...link}
           className={cn(
             buttonVariants({ variant: "outline", size: "sm" }),
             "bg-transparent"

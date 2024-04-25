@@ -92,7 +92,7 @@ function ApplicationConfigurationUsersPage() {
       <div>
         <Link
           from="/settings/application/users"
-          to="../"
+          to=".."
           className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
         >
           <icons.ChevronLeft className="mr-2 h-3 w-3" />

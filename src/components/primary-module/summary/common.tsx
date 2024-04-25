@@ -1,8 +1,8 @@
 import * as React from "react";
 import {
   Link,
-  type AnyRoute,
-  type LinkOptions,
+  type AnyRouter,
+  type LinkProps,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -15,6 +15,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { CardHeader, CardTitle } from "@/components/ui/card";
+
+import type { LinkComponentProps } from "@/lib/types/router";
 
 import { cn } from "@/lib/utils";
 
@@ -74,10 +76,10 @@ const accordionValueVariants = cva("font-semibold", {
 });
 
 interface SummaryLineItemProps<
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 > extends VariantProps<typeof accordionVariants>,
     VariantProps<typeof accordionValueVariants> {
@@ -85,16 +87,17 @@ interface SummaryLineItemProps<
   value: React.ReactNode;
   initialDropdownExpanded?: boolean;
   children?: React.ReactNode | undefined;
-  linkOptions?: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
+  linkOptions?: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
+    LinkComponentProps<"a">;
 }
 
 export function SummaryLineItem<
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
->(props: SummaryLineItemProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>) {
+>(props: SummaryLineItemProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>) {
   const {
     // main
     label,
@@ -141,7 +144,7 @@ export function SummaryLineItem<
                   valueColor,
                 })
               )}
-              {...(linkOptions as any)}
+              {...linkOptions}
             >
               {value}
             </Link>

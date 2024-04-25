@@ -280,7 +280,7 @@ function VehicleSearchPage() {
       {}
     );
     navigate({
-      to: "/fleet/",
+      to: "/fleet",
       params: {},
       search: () => ({
         page: 1,
@@ -452,7 +452,7 @@ function VehicleSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/fleet/"
+                    to="/fleet"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -466,7 +466,7 @@ function VehicleSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/fleet/"
+                    to="/fleet"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -487,7 +487,7 @@ function VehicleSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/fleet/"
+                    to="/fleet"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
