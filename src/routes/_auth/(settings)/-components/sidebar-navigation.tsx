@@ -1,11 +1,14 @@
 import React from "react";
 import {
+  AnyRouter,
   Link,
   type AnyRoute,
   type LinkOptions,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
+
+import { LinkComponentProps } from "@/lib/types/router";
 
 import { cn } from "@/lib/utils";
 
@@ -26,15 +29,14 @@ export function SidebarNavigation({ items }: { items: (() => JSX.Element)[] }) {
 }
 
 export function SidebarNavigationItem<
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 >(
-  props: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> & {
-    children: React.ReactNode;
-  }
+  props: LinkOptions<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
+    Omit<LinkComponentProps<"a">, "children"> & { children: React.ReactNode }
 ) {
   const { children, ...rest } = props;
 

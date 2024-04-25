@@ -79,7 +79,7 @@ export default function QuickCheckinAgreementWidget(props: CommonWidgetProps) {
         queryClient.setQueryData(qk, () => data);
 
         navigate({
-          to: "/agreements/",
+          to: "/agreements",
           search: () => ({
             page: variables.pagination.page,
             size: variables.pagination.pageSize,

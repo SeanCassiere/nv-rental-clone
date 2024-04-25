@@ -268,8 +268,7 @@ function CustomerSearchPage() {
       {}
     );
     navigate({
-      to: "/customers/",
-      params: {},
+      to: "/customers",
       search: () => ({
         page: 1,
         size: pagination.pageSize,
@@ -420,7 +419,7 @@ function CustomerSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/customers/"
+                    to="/customers"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,
@@ -434,7 +433,7 @@ function CustomerSearchPage() {
               <TableListPaginationItems className="hidden sm:inline-block">
                 {({ pagination, isActive }) => (
                   <PaginationLink
-                    to="/customers/"
+                    to="/customers"
                     search={(prev) => ({
                       ...prev,
                       page: pagination.pageIndex + 1,
@@ -455,7 +454,7 @@ function CustomerSearchPage() {
                     className={cn(
                       state.disabled ? "cursor-not-allowed opacity-60" : ""
                     )}
-                    to="/customers/"
+                    to="/customers"
                     search={(prev) => ({
                       ...prev,
                       page: state.pagination.pageIndex + 1,

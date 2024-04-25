@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   Link,
-  type AnyRoute,
+  type AnyRouter,
   type LinkProps,
   type RegisteredRouter,
   type RoutePaths,
@@ -13,6 +13,8 @@ import {
   buttonVariants,
   type ButtonProps,
 } from "@/components/ui/button";
+
+import type { LinkComponentProps } from "@/lib/types/router";
 
 import { cn } from "@/lib/utils";
 
@@ -47,24 +49,28 @@ const PaginationItem = React.forwardRef<
 PaginationItem.displayName = "PaginationItem";
 
 type PaginationLinkProps<
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
-> = Pick<ButtonProps, "size"> & { isActive?: boolean } & React.PropsWithoutRef<
-    LinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> &
-      Omit<React.ComponentPropsWithoutRef<"a">, "children" | "preload">
-  >;
+> = Pick<ButtonProps, "size"> & { isActive?: boolean } & LinkProps<
+    TRouter,
+    TFrom,
+    TTo,
+    TMaskFrom,
+    TMaskTo
+  > &
+  LinkComponentProps<"a">;
 
 const PaginationLink = <
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 >(
-  props: PaginationLinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>
+  props: PaginationLinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>
 ) => {
   const { size, className, isActive = false, ...rest } = props;
 
@@ -112,13 +118,13 @@ const PaginationButton = ({
 PaginationButton.displayName = "PaginationButton";
 
 const PaginationLinkPrevious = <
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 >(
-  props: PaginationLinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>
+  props: PaginationLinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>
 ) => {
   const { className, ...rest } = props;
   return (
@@ -152,13 +158,13 @@ const PaginationButtonPrevious = ({
 PaginationButtonPrevious.displayName = "PaginationButtonPrevious";
 
 const PaginationLinkNext = <
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 >(
-  props: PaginationLinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>
+  props: PaginationLinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>
 ) => {
   const { className, ...rest } = props;
   return (

@@ -1,8 +1,8 @@
 import React from "react";
 import {
   Link,
-  type AnyRoute,
-  type LinkOptions,
+  type AnyRouter,
+  type LinkProps,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -11,9 +11,11 @@ import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
+import type { LinkComponentProps } from "@/lib/types/router";
+
 import { cn } from "@/lib/utils";
 
-const defaultActiveOptions: LinkOptions["activeOptions"] = {
+const defaultActiveOptions: LinkProps["activeOptions"] = {
   exact: false,
   includeHash: false,
   includeSearch: false,
@@ -49,7 +51,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Fleet"
           props={{
-            to: "/fleet/",
+            to: "/fleet",
             search: (current) => ({
               ...current,
               page: 1,
@@ -62,7 +64,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Customers"
           props={{
-            to: "/customers/",
+            to: "/customers",
             search: (current) => ({
               ...current,
               page: 1,
@@ -75,7 +77,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Reservations"
           props={{
-            to: "/reservations/",
+            to: "/reservations",
             search: (current) => ({
               ...current,
               page: 1,
@@ -88,7 +90,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Agreements"
           props={{
-            to: "/agreements/",
+            to: "/agreements",
             search: (current) => ({
               ...current,
               page: 1,
@@ -101,14 +103,14 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Reports"
           props={{
-            to: "/reports/",
+            to: "/reports",
             activeOptions: defaultActiveOptions,
           }}
         />
         <AppNavigationLink
           name="Settings"
           props={{
-            to: "/settings/",
+            to: "/settings",
             activeOptions: defaultActiveOptions,
           }}
         />
@@ -118,14 +120,15 @@ export const AppNavigation = (props: Props) => {
 };
 
 const AppNavigationLink = <
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 >(props: {
   name: string;
-  props: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
+  props: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
+    LinkComponentProps<"a">;
 }) => {
   const { name, props: linkProps } = props;
   return (
@@ -140,7 +143,7 @@ const AppNavigationLink = <
         inactiveProps={{
           className: cn("border-transparent hover:border-foreground/20"),
         }}
-        {...(linkProps as any)}
+        {...linkProps}
       >
         {name}
       </Link>

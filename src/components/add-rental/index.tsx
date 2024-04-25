@@ -905,7 +905,7 @@ const AddRentalParentForm = ({
             {!isEdit && module === "agreement" && (
               <>
                 <Link
-                  to="/agreements/"
+                  to="/agreements"
                   className="text-2xl font-semibold leading-6"
                 >
                   Agreements
@@ -971,7 +971,7 @@ const AddRentalParentForm = ({
             {!isEdit && module === "reservation" && (
               <>
                 <Link
-                  to="/reservations/"
+                  to="/reservations"
                   className="text-2xl font-semibold leading-6"
                 >
                   Reservations

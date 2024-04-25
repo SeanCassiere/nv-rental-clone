@@ -167,7 +167,7 @@ function Component() {
             <TabsTrigger value="reservations" asChild>
               <Link
                 from="/fleet/$vehicleId"
-                to="/fleet/$vehicleId/reservations/"
+                to="/fleet/$vehicleId/reservations"
               >
                 Reservations
               </Link>

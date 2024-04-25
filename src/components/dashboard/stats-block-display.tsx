@@ -1,8 +1,8 @@
 import React from "react";
 import {
   Link,
-  type AnyRoute,
-  type LinkOptions,
+  type AnyRouter,
+  type LinkProps,
   type RegisteredRouter,
   type RoutePaths,
 } from "@tanstack/react-router";
@@ -17,6 +17,8 @@ import type { TDashboardStats } from "@/lib/schemas/dashboard";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
+
+import type { LinkComponentProps } from "@/lib/types/router";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;
@@ -43,7 +45,7 @@ const DashboardStatsBlock = ({
             icon={icons.CreditCard}
             value={formatDisplayValue(statistics?.todaysReservationCount)}
             linkProps={{
-              to: "/reservations/",
+              to: "/reservations",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -62,7 +64,7 @@ const DashboardStatsBlock = ({
             icon={icons.ArrowDownLeft}
             value={formatDisplayValue(statistics?.todaysArrivalsCount)}
             linkProps={{
-              to: "/agreements/",
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -81,7 +83,7 @@ const DashboardStatsBlock = ({
             icon={icons.Car}
             value={formatDisplayValue(statistics?.openAgreement)}
             linkProps={{
-              to: "/agreements/",
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -96,7 +98,7 @@ const DashboardStatsBlock = ({
             icon={icons.CreditCard}
             value={formatDisplayValue(statistics?.overDues)}
             linkProps={{
-              to: "/agreements/",
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
@@ -136,16 +138,17 @@ const DashboardStatsBlock = ({
 };
 
 const StatBlock = <
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
+  TRouter extends AnyRouter = RegisteredRouter,
+  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
   TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
+  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
   TMaskTo extends string = "",
 >(props: {
   title: string;
   value: string | null;
   icon: LucideIcon;
-  linkProps: LinkOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>;
+  linkProps: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
+    LinkComponentProps<"a">;
 }) => {
   const { title, value, icon: Icon, linkProps } = props;
 
@@ -161,7 +164,7 @@ const StatBlock = <
       <CardContent>
         <Link
           className="block text-2xl font-bold tabular-nums underline-offset-4 focus-within:underline hover:underline"
-          {...(linkProps as any)}
+          {...linkProps}
         >
           {value ?? <Skeleton className="h-8 w-full" />}
         </Link>

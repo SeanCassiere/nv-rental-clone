@@ -39,7 +39,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.openedReservation) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/reservations/",
+              to: "/reservations",
               search: () => ({
                 filters: {
                   Statuses: ["2"],
@@ -60,7 +60,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.confirmedReservation) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/reservations/",
+              to: "/reservations",
               search: () => ({
                 filters: {
                   Statuses: ["3"],
@@ -81,7 +81,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.noShowReservation) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/reservations/",
+              to: "/reservations",
               search: () => ({
                 filters: {
                   Statuses: ["4"],
@@ -102,7 +102,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.cancelledReservation) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/reservations/",
+              to: "/reservations",
               search: () => ({
                 filters: {
                   Statuses: ["5"],
@@ -123,7 +123,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.openedAgreements) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/agreements/",
+              to: "/agreements",
               search: () => ({
                 filters: {
                   Statuses: ["2"],
@@ -145,7 +145,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.closedAgreements) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/agreements/",
+              to: "/agreements",
               search: () => ({
                 filters: {
                   Statuses: ["3"],
@@ -178,7 +178,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.pendingPayments) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/agreements/",
+              to: "/agreements",
               search: () => ({
                 filters: {
                   Statuses: ["5"],
@@ -200,7 +200,7 @@ export const CustomerSummary = ({
               isFalsy(summaryData?.pendingDeposit) ? "muted" : "default"
             }
             linkOptions={{
-              to: "/agreements/",
+              to: "/agreements",
               search: () => ({
                 filters: {
                   Statuses: ["7"],
