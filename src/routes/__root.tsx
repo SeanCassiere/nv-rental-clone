@@ -14,6 +14,8 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 import type { queryClient } from "@/lib/config/tanstack-query";
 
+import { cn } from "@/lib/utils";
+
 import { Container } from "./-components/container";
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
 import { PageNotFound } from "./-components/page-not-found";
@@ -43,7 +45,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <React.Fragment>
       {children}
       <ScrollRestoration />
-      <RouterDevTools position="bottom-left" />
+      <RouterDevTools position="bottom-right" />
     </React.Fragment>
   );
 }
