@@ -174,3 +174,9 @@
 
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .TanStackRouterDevtools > button {
+    @apply origin-top-right -translate-y-4 translate-x-2 rotate-90 rounded-t-none border-t-0 border-border/10 shadow-xl;
+  }
+}
