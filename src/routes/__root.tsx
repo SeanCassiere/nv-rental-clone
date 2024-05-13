@@ -14,8 +14,6 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 import type { queryClient } from "@/lib/config/tanstack-query";
 
-import { cn } from "@/lib/utils";
-
 import { Container } from "./-components/container";
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
 import { PageNotFound } from "./-components/page-not-found";
@@ -27,13 +25,32 @@ export interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: RootComponent,
-  notFoundComponent: RootNotFoundComponent,
+  component: function RootPageComponent() {
+    return (
+      <RootDocument>
+        <Outlet />
+        <FeatureTogglesDialog />
+      </RootDocument>
+    );
+  },
   errorComponent: function RootErrorComponent(props) {
     return (
       <RootDocument>
         <Container>
           <ErrorComponent {...props} />
+        </Container>
+      </RootDocument>
+    );
+  },
+  notFoundComponent: function RootNotFoundComponent() {
+    const { t } = useTranslation();
+
+    useDocumentTitle(titleMaker(t("notFound", { ns: "messages" })));
+
+    return (
+      <RootDocument>
+        <Container className="flex">
+          <PageNotFound className="px-2" />
         </Container>
       </RootDocument>
     );
@@ -47,28 +64,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <ScrollRestoration />
       <RouterDevTools position="bottom-right" />
     </React.Fragment>
-  );
-}
-
-function RootComponent() {
-  return (
-    <RootDocument>
-      <Outlet />
-      <FeatureTogglesDialog />
-    </RootDocument>
-  );
-}
-
-function RootNotFoundComponent() {
-  const { t } = useTranslation();
-
-  useDocumentTitle(titleMaker(t("notFound", { ns: "messages" })));
-
-  return (
-    <RootDocument>
-      <Container className="flex">
-        <PageNotFound className="px-2" />
-      </Container>
-    </RootDocument>
   );
 }

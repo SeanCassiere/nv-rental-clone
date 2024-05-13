@@ -31,8 +31,6 @@ import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchReservationsSearchColumnsOptions,
   fetchReservationsSearchListOptions,
-  fetchReservationStatusesOptions,
-  fetchReservationTypesOptions,
 } from "@/lib/query/reservation";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
 
@@ -126,6 +124,8 @@ function ReservationsSearchPage() {
     search,
     authParams,
     queryClient,
+    reservationStatusesOptions,
+    reservationTypesOptions,
   } = Route.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
@@ -147,13 +147,8 @@ function ReservationsSearchPage() {
 
   const reservationsData = useQuery(searchListOptions);
 
-  const reservationStatusList = useQuery(
-    fetchReservationStatusesOptions({ auth: authParams })
-  );
-  const reservationStatuses = React.useMemo(
-    () => reservationStatusList.data ?? [],
-    [reservationStatusList.data]
-  );
+  const reservationStatusQuery = useSuspenseQuery(reservationStatusesOptions);
+  const reservationStatuses = reservationStatusQuery.data;
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
@@ -174,13 +169,8 @@ function ReservationsSearchPage() {
     [locationsList.data?.body, locationsList.data?.status]
   );
 
-  const reservationTypesList = useQuery(
-    fetchReservationTypesOptions({ auth: authParams })
-  );
-  const reservationTypes = React.useMemo(
-    () => reservationTypesList.data ?? [],
-    [reservationTypesList.data]
-  );
+  const reservationTypesQuery = useSuspenseQuery(reservationTypesOptions);
+  const reservationTypes = reservationTypesQuery.data;
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
   const columnDefs = React.useMemo(

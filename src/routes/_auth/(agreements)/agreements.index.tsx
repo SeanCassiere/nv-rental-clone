@@ -30,8 +30,6 @@ import type { TAgreementListItemParsed } from "@/lib/schemas/agreement";
 import {
   fetchAgreementsSearchColumnsOptions,
   fetchAgreementsSearchListOptions,
-  fetchAgreementStatusesOptions,
-  fetchAgreementTypesOptions,
 } from "@/lib/query/agreement";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchVehiclesTypesOptions } from "@/lib/query/vehicle";
@@ -125,6 +123,8 @@ function AgreementsSearchPage() {
   const navigate = Route.useNavigate();
 
   const {
+    agreementStatusesOptions,
+    agreementTypesOptions,
     searchColumnsOptions,
     searchListOptions,
     search,
@@ -151,13 +151,8 @@ function AgreementsSearchPage() {
 
   const agreementsData = useQuery(searchListOptions);
 
-  const agreementStatusList = useQuery(
-    fetchAgreementStatusesOptions({ auth: authParams })
-  );
-  const agreementStatuses = React.useMemo(
-    () => agreementStatusList.data ?? [],
-    [agreementStatusList.data]
-  );
+  const agreementStatusesQuery = useSuspenseQuery(agreementStatusesOptions);
+  const agreementStatuses = agreementStatusesQuery.data;
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
@@ -178,13 +173,8 @@ function AgreementsSearchPage() {
     [locationsList.data?.body, locationsList.data?.status]
   );
 
-  const agreementTypesList = useQuery(
-    fetchAgreementTypesOptions({ auth: authParams })
-  );
-  const agreementTypes = React.useMemo(
-    () => agreementTypesList.data ?? [],
-    [agreementTypesList.data]
-  );
+  const agreementTypesQuery = useSuspenseQuery(agreementTypesOptions);
+  const agreementTypes = agreementTypesQuery.data;
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 

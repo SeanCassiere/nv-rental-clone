@@ -18,32 +18,30 @@ import { Route as PublicLogoutImport } from "./routes/_public/logout"
 import { Route as PublicLoggedOutImport } from "./routes/_public/logged-out"
 import { Route as PublicDevImport } from "./routes/_public/dev"
 import { Route as AuthdashboardIndexImport } from "./routes/_auth/(dashboard)/index"
-import { Route as AuthsettingsSettingsRouteImport } from "./routes/_auth/(settings)/settings.route"
-import { Route as AuthreservationsReservationsRouteImport } from "./routes/_auth/(reservations)/reservations.route"
-import { Route as AuthreportsReportsRouteImport } from "./routes/_auth/(reports)/reports.route"
-import { Route as AuthfleetFleetRouteImport } from "./routes/_auth/(fleet)/fleet.route"
-import { Route as AuthcustomersCustomersRouteImport } from "./routes/_auth/(customers)/customers.route"
-import { Route as AuthagreementsAgreementsRouteImport } from "./routes/_auth/(agreements)/agreements.route"
+import { Route as AuthsettingsSettingsImport } from "./routes/_auth/(settings)/settings"
+import { Route as AuthreservationsReservationsImport } from "./routes/_auth/(reservations)/reservations"
+import { Route as AuthfleetFleetImport } from "./routes/_auth/(fleet)/fleet"
+import { Route as AuthcustomersCustomersImport } from "./routes/_auth/(customers)/customers"
+import { Route as AuthagreementsAgreementsImport } from "./routes/_auth/(agreements)/agreements"
 import { Route as AuthsettingsSettingsIndexImport } from "./routes/_auth/(settings)/settings.index"
 import { Route as AuthreservationsReservationsIndexImport } from "./routes/_auth/(reservations)/reservations.index"
 import { Route as AuthreportsReportsIndexImport } from "./routes/_auth/(reports)/reports.index"
 import { Route as AuthfleetFleetIndexImport } from "./routes/_auth/(fleet)/fleet.index"
 import { Route as AuthcustomersCustomersIndexImport } from "./routes/_auth/(customers)/customers.index"
 import { Route as AuthagreementsAgreementsIndexImport } from "./routes/_auth/(agreements)/agreements.index"
+import { Route as AuthsettingsSettingsVehiclesAndCategoriesImport } from "./routes/_auth/(settings)/settings.vehicles-and-categories"
+import { Route as AuthsettingsSettingsRuntimeConfigurationImport } from "./routes/_auth/(settings)/settings.runtime-configuration"
+import { Route as AuthsettingsSettingsRatesAndChargesImport } from "./routes/_auth/(settings)/settings.rates-and-charges"
 import { Route as AuthsettingsSettingsProfileImport } from "./routes/_auth/(settings)/settings.profile"
+import { Route as AuthsettingsSettingsApplicationImport } from "./routes/_auth/(settings)/settings.application"
 import { Route as AuthreservationsReservationsNewImport } from "./routes/_auth/(reservations)/reservations.new"
+import { Route as AuthreservationsReservationsReservationIdImport } from "./routes/_auth/(reservations)/reservations.$reservationId"
 import { Route as AuthfleetFleetNewImport } from "./routes/_auth/(fleet)/fleet.new"
+import { Route as AuthfleetFleetVehicleIdImport } from "./routes/_auth/(fleet)/fleet.$vehicleId"
 import { Route as AuthcustomersCustomersNewImport } from "./routes/_auth/(customers)/customers.new"
+import { Route as AuthcustomersCustomersCustomerIdImport } from "./routes/_auth/(customers)/customers.$customerId"
 import { Route as AuthagreementsAgreementsNewImport } from "./routes/_auth/(agreements)/agreements.new"
-import { Route as AuthsettingsSettingsVehiclesAndCategoriesRouteImport } from "./routes/_auth/(settings)/settings.vehicles-and-categories.route"
-import { Route as AuthsettingsSettingsRuntimeConfigurationRouteImport } from "./routes/_auth/(settings)/settings.runtime-configuration.route"
-import { Route as AuthsettingsSettingsRatesAndChargesRouteImport } from "./routes/_auth/(settings)/settings.rates-and-charges.route"
-import { Route as AuthsettingsSettingsApplicationRouteImport } from "./routes/_auth/(settings)/settings.application.route"
-import { Route as AuthreservationsReservationsReservationIdRouteImport } from "./routes/_auth/(reservations)/reservations.$reservationId.route"
-import { Route as AuthreportsReportsReportIdRouteImport } from "./routes/_auth/(reports)/reports.$reportId.route"
-import { Route as AuthfleetFleetVehicleIdRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.route"
-import { Route as AuthcustomersCustomersCustomerIdRouteImport } from "./routes/_auth/(customers)/customers.$customerId.route"
-import { Route as AuthagreementsAgreementsAgreementIdRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId.route"
+import { Route as AuthagreementsAgreementsAgreementIdImport } from "./routes/_auth/(agreements)/agreements.$agreementId"
 import { Route as AuthsettingsSettingsApplicationIndexImport } from "./routes/_auth/(settings)/settings.application.index"
 import { Route as AuthreportsReportsReportIdIndexImport } from "./routes/_auth/(reports)/reports.$reportId.index"
 import { Route as AuthsettingsSettingsApplicationUsersImport } from "./routes/_auth/(settings)/settings.application.users"
@@ -112,242 +110,228 @@ const AuthdashboardIndexRoute = AuthdashboardIndexImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthsettingsSettingsRouteRoute = AuthsettingsSettingsRouteImport.update({
+const AuthsettingsSettingsRoute = AuthsettingsSettingsImport.update({
   path: "/settings",
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthreservationsReservationsRouteRoute =
-  AuthreservationsReservationsRouteImport.update({
+const AuthreservationsReservationsRoute =
+  AuthreservationsReservationsImport.update({
     path: "/reservations",
     getParentRoute: () => AuthRoute,
   } as any)
 
-const AuthreportsReportsRouteRoute = AuthreportsReportsRouteImport.update({
-  path: "/reports",
-  getParentRoute: () => AuthRoute,
-} as any)
-
-const AuthfleetFleetRouteRoute = AuthfleetFleetRouteImport.update({
+const AuthfleetFleetRoute = AuthfleetFleetImport.update({
   path: "/fleet",
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthcustomersCustomersRouteRoute =
-  AuthcustomersCustomersRouteImport.update({
-    path: "/customers",
-    getParentRoute: () => AuthRoute,
-  } as any)
+const AuthcustomersCustomersRoute = AuthcustomersCustomersImport.update({
+  path: "/customers",
+  getParentRoute: () => AuthRoute,
+} as any)
 
-const AuthagreementsAgreementsRouteRoute =
-  AuthagreementsAgreementsRouteImport.update({
-    path: "/agreements",
-    getParentRoute: () => AuthRoute,
-  } as any)
+const AuthagreementsAgreementsRoute = AuthagreementsAgreementsImport.update({
+  path: "/agreements",
+  getParentRoute: () => AuthRoute,
+} as any)
 
 const AuthsettingsSettingsIndexRoute = AuthsettingsSettingsIndexImport.update({
   path: "/",
-  getParentRoute: () => AuthsettingsSettingsRouteRoute,
+  getParentRoute: () => AuthsettingsSettingsRoute,
 } as any)
 
 const AuthreservationsReservationsIndexRoute =
   AuthreservationsReservationsIndexImport.update({
     path: "/",
-    getParentRoute: () => AuthreservationsReservationsRouteRoute,
+    getParentRoute: () => AuthreservationsReservationsRoute,
   } as any)
 
 const AuthreportsReportsIndexRoute = AuthreportsReportsIndexImport.update({
-  path: "/",
-  getParentRoute: () => AuthreportsReportsRouteRoute,
+  path: "/reports/",
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthfleetFleetIndexRoute = AuthfleetFleetIndexImport.update({
   path: "/",
-  getParentRoute: () => AuthfleetFleetRouteRoute,
+  getParentRoute: () => AuthfleetFleetRoute,
 } as any)
 
 const AuthcustomersCustomersIndexRoute =
   AuthcustomersCustomersIndexImport.update({
     path: "/",
-    getParentRoute: () => AuthcustomersCustomersRouteRoute,
+    getParentRoute: () => AuthcustomersCustomersRoute,
   } as any)
 
 const AuthagreementsAgreementsIndexRoute =
   AuthagreementsAgreementsIndexImport.update({
     path: "/",
-    getParentRoute: () => AuthagreementsAgreementsRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsRoute,
+  } as any)
+
+const AuthsettingsSettingsVehiclesAndCategoriesRoute =
+  AuthsettingsSettingsVehiclesAndCategoriesImport.update({
+    path: "/vehicles-and-categories",
+    getParentRoute: () => AuthsettingsSettingsRoute,
+  } as any)
+
+const AuthsettingsSettingsRuntimeConfigurationRoute =
+  AuthsettingsSettingsRuntimeConfigurationImport.update({
+    path: "/runtime-configuration",
+    getParentRoute: () => AuthsettingsSettingsRoute,
+  } as any)
+
+const AuthsettingsSettingsRatesAndChargesRoute =
+  AuthsettingsSettingsRatesAndChargesImport.update({
+    path: "/rates-and-charges",
+    getParentRoute: () => AuthsettingsSettingsRoute,
   } as any)
 
 const AuthsettingsSettingsProfileRoute =
   AuthsettingsSettingsProfileImport.update({
     path: "/profile",
-    getParentRoute: () => AuthsettingsSettingsRouteRoute,
+    getParentRoute: () => AuthsettingsSettingsRoute,
+  } as any)
+
+const AuthsettingsSettingsApplicationRoute =
+  AuthsettingsSettingsApplicationImport.update({
+    path: "/application",
+    getParentRoute: () => AuthsettingsSettingsRoute,
   } as any)
 
 const AuthreservationsReservationsNewRoute =
   AuthreservationsReservationsNewImport.update({
     path: "/new",
-    getParentRoute: () => AuthreservationsReservationsRouteRoute,
+    getParentRoute: () => AuthreservationsReservationsRoute,
+  } as any)
+
+const AuthreservationsReservationsReservationIdRoute =
+  AuthreservationsReservationsReservationIdImport.update({
+    path: "/$reservationId",
+    getParentRoute: () => AuthreservationsReservationsRoute,
   } as any)
 
 const AuthfleetFleetNewRoute = AuthfleetFleetNewImport.update({
   path: "/new",
-  getParentRoute: () => AuthfleetFleetRouteRoute,
+  getParentRoute: () => AuthfleetFleetRoute,
+} as any)
+
+const AuthfleetFleetVehicleIdRoute = AuthfleetFleetVehicleIdImport.update({
+  path: "/$vehicleId",
+  getParentRoute: () => AuthfleetFleetRoute,
 } as any)
 
 const AuthcustomersCustomersNewRoute = AuthcustomersCustomersNewImport.update({
   path: "/new",
-  getParentRoute: () => AuthcustomersCustomersRouteRoute,
+  getParentRoute: () => AuthcustomersCustomersRoute,
 } as any)
+
+const AuthcustomersCustomersCustomerIdRoute =
+  AuthcustomersCustomersCustomerIdImport.update({
+    path: "/$customerId",
+    getParentRoute: () => AuthcustomersCustomersRoute,
+  } as any)
 
 const AuthagreementsAgreementsNewRoute =
   AuthagreementsAgreementsNewImport.update({
     path: "/new",
-    getParentRoute: () => AuthagreementsAgreementsRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsRoute,
   } as any)
 
-const AuthsettingsSettingsVehiclesAndCategoriesRouteRoute =
-  AuthsettingsSettingsVehiclesAndCategoriesRouteImport.update({
-    path: "/vehicles-and-categories",
-    getParentRoute: () => AuthsettingsSettingsRouteRoute,
-  } as any)
-
-const AuthsettingsSettingsRuntimeConfigurationRouteRoute =
-  AuthsettingsSettingsRuntimeConfigurationRouteImport.update({
-    path: "/runtime-configuration",
-    getParentRoute: () => AuthsettingsSettingsRouteRoute,
-  } as any)
-
-const AuthsettingsSettingsRatesAndChargesRouteRoute =
-  AuthsettingsSettingsRatesAndChargesRouteImport.update({
-    path: "/rates-and-charges",
-    getParentRoute: () => AuthsettingsSettingsRouteRoute,
-  } as any)
-
-const AuthsettingsSettingsApplicationRouteRoute =
-  AuthsettingsSettingsApplicationRouteImport.update({
-    path: "/application",
-    getParentRoute: () => AuthsettingsSettingsRouteRoute,
-  } as any)
-
-const AuthreservationsReservationsReservationIdRouteRoute =
-  AuthreservationsReservationsReservationIdRouteImport.update({
-    path: "/$reservationId",
-    getParentRoute: () => AuthreservationsReservationsRouteRoute,
-  } as any)
-
-const AuthreportsReportsReportIdRouteRoute =
-  AuthreportsReportsReportIdRouteImport.update({
-    path: "/$reportId",
-    getParentRoute: () => AuthreportsReportsRouteRoute,
-  } as any)
-
-const AuthfleetFleetVehicleIdRouteRoute =
-  AuthfleetFleetVehicleIdRouteImport.update({
-    path: "/$vehicleId",
-    getParentRoute: () => AuthfleetFleetRouteRoute,
-  } as any)
-
-const AuthcustomersCustomersCustomerIdRouteRoute =
-  AuthcustomersCustomersCustomerIdRouteImport.update({
-    path: "/$customerId",
-    getParentRoute: () => AuthcustomersCustomersRouteRoute,
-  } as any)
-
-const AuthagreementsAgreementsAgreementIdRouteRoute =
-  AuthagreementsAgreementsAgreementIdRouteImport.update({
+const AuthagreementsAgreementsAgreementIdRoute =
+  AuthagreementsAgreementsAgreementIdImport.update({
     path: "/$agreementId",
-    getParentRoute: () => AuthagreementsAgreementsRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsRoute,
   } as any)
 
 const AuthsettingsSettingsApplicationIndexRoute =
   AuthsettingsSettingsApplicationIndexImport.update({
     path: "/",
-    getParentRoute: () => AuthsettingsSettingsApplicationRouteRoute,
+    getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
 
 const AuthreportsReportsReportIdIndexRoute =
   AuthreportsReportsReportIdIndexImport.update({
-    path: "/",
-    getParentRoute: () => AuthreportsReportsReportIdRouteRoute,
+    path: "/reports/$reportId/",
+    getParentRoute: () => AuthRoute,
   } as any)
 
 const AuthsettingsSettingsApplicationUsersRoute =
   AuthsettingsSettingsApplicationUsersImport.update({
     path: "/users",
-    getParentRoute: () => AuthsettingsSettingsApplicationRouteRoute,
+    getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
 
 const AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute =
   AuthsettingsSettingsApplicationStoreHoursAndHolidaysImport.update({
     path: "/store-hours-and-holidays",
-    getParentRoute: () => AuthsettingsSettingsApplicationRouteRoute,
+    getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
 
 const AuthsettingsSettingsApplicationPermissionsAndRolesRoute =
   AuthsettingsSettingsApplicationPermissionsAndRolesImport.update({
     path: "/permissions-and-roles",
-    getParentRoute: () => AuthsettingsSettingsApplicationRouteRoute,
+    getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
 
 const AuthsettingsSettingsApplicationLocationsRoute =
   AuthsettingsSettingsApplicationLocationsImport.update({
     path: "/locations",
-    getParentRoute: () => AuthsettingsSettingsApplicationRouteRoute,
+    getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
 
 const AuthreservationsReservationsReservationIdEditRoute =
   AuthreservationsReservationsReservationIdEditImport.update({
     path: "/edit",
-    getParentRoute: () => AuthreservationsReservationsReservationIdRouteRoute,
+    getParentRoute: () => AuthreservationsReservationsReservationIdRoute,
   } as any)
 
 const AuthreservationsReservationsReservationIdDetailsRoute =
   AuthreservationsReservationsReservationIdDetailsImport.update({
     id: "/_details",
-    getParentRoute: () => AuthreservationsReservationsReservationIdRouteRoute,
+    getParentRoute: () => AuthreservationsReservationsReservationIdRoute,
   } as any)
 
 const AuthfleetFleetVehicleIdEditRoute =
   AuthfleetFleetVehicleIdEditImport.update({
     path: "/edit",
-    getParentRoute: () => AuthfleetFleetVehicleIdRouteRoute,
+    getParentRoute: () => AuthfleetFleetVehicleIdRoute,
   } as any)
 
 const AuthfleetFleetVehicleIdDetailsRoute =
   AuthfleetFleetVehicleIdDetailsImport.update({
     id: "/_details",
-    getParentRoute: () => AuthfleetFleetVehicleIdRouteRoute,
+    getParentRoute: () => AuthfleetFleetVehicleIdRoute,
   } as any)
 
 const AuthcustomersCustomersCustomerIdEditRoute =
   AuthcustomersCustomersCustomerIdEditImport.update({
     path: "/edit",
-    getParentRoute: () => AuthcustomersCustomersCustomerIdRouteRoute,
+    getParentRoute: () => AuthcustomersCustomersCustomerIdRoute,
   } as any)
 
 const AuthcustomersCustomersCustomerIdDetailsRoute =
   AuthcustomersCustomersCustomerIdDetailsImport.update({
     id: "/_details",
-    getParentRoute: () => AuthcustomersCustomersCustomerIdRouteRoute,
+    getParentRoute: () => AuthcustomersCustomersCustomerIdRoute,
   } as any)
 
 const AuthagreementsAgreementsAgreementIdEditRoute =
   AuthagreementsAgreementsAgreementIdEditImport.update({
     path: "/edit",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
 
 const AuthagreementsAgreementsAgreementIdCheckInRoute =
   AuthagreementsAgreementsAgreementIdCheckInImport.update({
     path: "/check-in",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
 
 const AuthagreementsAgreementsAgreementIdDetailsRoute =
   AuthagreementsAgreementsAgreementIdDetailsImport.update({
     id: "/_details",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
 
 const AuthreservationsReservationsReservationIdDetailsIndexRoute =
@@ -469,27 +453,23 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof PublicImport
     }
     "/_auth/(agreements)/agreements": {
-      preLoaderRoute: typeof AuthagreementsAgreementsRouteImport
+      preLoaderRoute: typeof AuthagreementsAgreementsImport
       parentRoute: typeof AuthImport
     }
     "/_auth/(customers)/customers": {
-      preLoaderRoute: typeof AuthcustomersCustomersRouteImport
+      preLoaderRoute: typeof AuthcustomersCustomersImport
       parentRoute: typeof AuthImport
     }
     "/_auth/(fleet)/fleet": {
-      preLoaderRoute: typeof AuthfleetFleetRouteImport
-      parentRoute: typeof AuthImport
-    }
-    "/_auth/(reports)/reports": {
-      preLoaderRoute: typeof AuthreportsReportsRouteImport
+      preLoaderRoute: typeof AuthfleetFleetImport
       parentRoute: typeof AuthImport
     }
     "/_auth/(reservations)/reservations": {
-      preLoaderRoute: typeof AuthreservationsReservationsRouteImport
+      preLoaderRoute: typeof AuthreservationsReservationsImport
       parentRoute: typeof AuthImport
     }
     "/_auth/(settings)/settings": {
-      preLoaderRoute: typeof AuthsettingsSettingsRouteImport
+      preLoaderRoute: typeof AuthsettingsSettingsImport
       parentRoute: typeof AuthImport
     }
     "/_auth/(dashboard)/": {
@@ -497,144 +477,140 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof AuthImport
     }
     "/_auth/(agreements)/agreements/$agreementId": {
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
-      parentRoute: typeof AuthagreementsAgreementsRouteImport
-    }
-    "/_auth/(customers)/customers/$customerId": {
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
-      parentRoute: typeof AuthcustomersCustomersRouteImport
-    }
-    "/_auth/(fleet)/fleet/$vehicleId": {
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdRouteImport
-      parentRoute: typeof AuthfleetFleetRouteImport
-    }
-    "/_auth/(reports)/reports/$reportId": {
-      preLoaderRoute: typeof AuthreportsReportsReportIdRouteImport
-      parentRoute: typeof AuthreportsReportsRouteImport
-    }
-    "/_auth/(reservations)/reservations/$reservationId": {
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdRouteImport
-      parentRoute: typeof AuthreservationsReservationsRouteImport
-    }
-    "/_auth/(settings)/settings/application": {
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationRouteImport
-      parentRoute: typeof AuthsettingsSettingsRouteImport
-    }
-    "/_auth/(settings)/settings/rates-and-charges": {
-      preLoaderRoute: typeof AuthsettingsSettingsRatesAndChargesRouteImport
-      parentRoute: typeof AuthsettingsSettingsRouteImport
-    }
-    "/_auth/(settings)/settings/runtime-configuration": {
-      preLoaderRoute: typeof AuthsettingsSettingsRuntimeConfigurationRouteImport
-      parentRoute: typeof AuthsettingsSettingsRouteImport
-    }
-    "/_auth/(settings)/settings/vehicles-and-categories": {
-      preLoaderRoute: typeof AuthsettingsSettingsVehiclesAndCategoriesRouteImport
-      parentRoute: typeof AuthsettingsSettingsRouteImport
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdImport
+      parentRoute: typeof AuthagreementsAgreementsImport
     }
     "/_auth/(agreements)/agreements/new": {
       preLoaderRoute: typeof AuthagreementsAgreementsNewImport
-      parentRoute: typeof AuthagreementsAgreementsRouteImport
+      parentRoute: typeof AuthagreementsAgreementsImport
+    }
+    "/_auth/(customers)/customers/$customerId": {
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdImport
+      parentRoute: typeof AuthcustomersCustomersImport
     }
     "/_auth/(customers)/customers/new": {
       preLoaderRoute: typeof AuthcustomersCustomersNewImport
-      parentRoute: typeof AuthcustomersCustomersRouteImport
+      parentRoute: typeof AuthcustomersCustomersImport
+    }
+    "/_auth/(fleet)/fleet/$vehicleId": {
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdImport
+      parentRoute: typeof AuthfleetFleetImport
     }
     "/_auth/(fleet)/fleet/new": {
       preLoaderRoute: typeof AuthfleetFleetNewImport
-      parentRoute: typeof AuthfleetFleetRouteImport
+      parentRoute: typeof AuthfleetFleetImport
+    }
+    "/_auth/(reservations)/reservations/$reservationId": {
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdImport
+      parentRoute: typeof AuthreservationsReservationsImport
     }
     "/_auth/(reservations)/reservations/new": {
       preLoaderRoute: typeof AuthreservationsReservationsNewImport
-      parentRoute: typeof AuthreservationsReservationsRouteImport
+      parentRoute: typeof AuthreservationsReservationsImport
+    }
+    "/_auth/(settings)/settings/application": {
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationImport
+      parentRoute: typeof AuthsettingsSettingsImport
     }
     "/_auth/(settings)/settings/profile": {
       preLoaderRoute: typeof AuthsettingsSettingsProfileImport
-      parentRoute: typeof AuthsettingsSettingsRouteImport
+      parentRoute: typeof AuthsettingsSettingsImport
+    }
+    "/_auth/(settings)/settings/rates-and-charges": {
+      preLoaderRoute: typeof AuthsettingsSettingsRatesAndChargesImport
+      parentRoute: typeof AuthsettingsSettingsImport
+    }
+    "/_auth/(settings)/settings/runtime-configuration": {
+      preLoaderRoute: typeof AuthsettingsSettingsRuntimeConfigurationImport
+      parentRoute: typeof AuthsettingsSettingsImport
+    }
+    "/_auth/(settings)/settings/vehicles-and-categories": {
+      preLoaderRoute: typeof AuthsettingsSettingsVehiclesAndCategoriesImport
+      parentRoute: typeof AuthsettingsSettingsImport
     }
     "/_auth/(agreements)/agreements/": {
       preLoaderRoute: typeof AuthagreementsAgreementsIndexImport
-      parentRoute: typeof AuthagreementsAgreementsRouteImport
+      parentRoute: typeof AuthagreementsAgreementsImport
     }
     "/_auth/(customers)/customers/": {
       preLoaderRoute: typeof AuthcustomersCustomersIndexImport
-      parentRoute: typeof AuthcustomersCustomersRouteImport
+      parentRoute: typeof AuthcustomersCustomersImport
     }
     "/_auth/(fleet)/fleet/": {
       preLoaderRoute: typeof AuthfleetFleetIndexImport
-      parentRoute: typeof AuthfleetFleetRouteImport
+      parentRoute: typeof AuthfleetFleetImport
     }
     "/_auth/(reports)/reports/": {
       preLoaderRoute: typeof AuthreportsReportsIndexImport
-      parentRoute: typeof AuthreportsReportsRouteImport
+      parentRoute: typeof AuthImport
     }
     "/_auth/(reservations)/reservations/": {
       preLoaderRoute: typeof AuthreservationsReservationsIndexImport
-      parentRoute: typeof AuthreservationsReservationsRouteImport
+      parentRoute: typeof AuthreservationsReservationsImport
     }
     "/_auth/(settings)/settings/": {
       preLoaderRoute: typeof AuthsettingsSettingsIndexImport
-      parentRoute: typeof AuthsettingsSettingsRouteImport
+      parentRoute: typeof AuthsettingsSettingsImport
     }
     "/_auth/(agreements)/agreements/$agreementId/_details": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
     }
     "/_auth/(agreements)/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdCheckInImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
     }
     "/_auth/(agreements)/agreements/$agreementId/edit": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdEditImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
     }
     "/_auth/(customers)/customers/$customerId/_details": {
       preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdImport
     }
     "/_auth/(customers)/customers/$customerId/edit": {
       preLoaderRoute: typeof AuthcustomersCustomersCustomerIdEditImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdImport
     }
     "/_auth/(fleet)/fleet/$vehicleId/_details": {
       preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsImport
-      parentRoute: typeof AuthfleetFleetVehicleIdRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdImport
     }
     "/_auth/(fleet)/fleet/$vehicleId/edit": {
       preLoaderRoute: typeof AuthfleetFleetVehicleIdEditImport
-      parentRoute: typeof AuthfleetFleetVehicleIdRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdImport
     }
     "/_auth/(reservations)/reservations/$reservationId/_details": {
       preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdRouteImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdImport
     }
     "/_auth/(reservations)/reservations/$reservationId/edit": {
       preLoaderRoute: typeof AuthreservationsReservationsReservationIdEditImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdRouteImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdImport
     }
     "/_auth/(settings)/settings/application/locations": {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationLocationsImport
-      parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationImport
     }
     "/_auth/(settings)/settings/application/permissions-and-roles": {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationPermissionsAndRolesImport
-      parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationImport
     }
     "/_auth/(settings)/settings/application/store-hours-and-holidays": {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysImport
-      parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationImport
     }
     "/_auth/(settings)/settings/application/users": {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationUsersImport
-      parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationImport
     }
     "/_auth/(reports)/reports/$reportId/": {
       preLoaderRoute: typeof AuthreportsReportsReportIdIndexImport
-      parentRoute: typeof AuthreportsReportsReportIdRouteImport
+      parentRoute: typeof AuthImport
     }
     "/_auth/(settings)/settings/application/": {
       preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexImport
-      parentRoute: typeof AuthsettingsSettingsApplicationRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationImport
     }
     "/_auth/(agreements)/agreements/$agreementId/_details/exchanges": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsExchangesImport
@@ -703,8 +679,8 @@ declare module "@tanstack/react-router" {
 
 export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([
-    AuthagreementsAgreementsRouteRoute.addChildren([
-      AuthagreementsAgreementsAgreementIdRouteRoute.addChildren([
+    AuthagreementsAgreementsRoute.addChildren([
+      AuthagreementsAgreementsAgreementIdRoute.addChildren([
         AuthagreementsAgreementsAgreementIdDetailsRoute.addChildren([
           AuthagreementsAgreementsAgreementIdDetailsExchangesRoute,
           AuthagreementsAgreementsAgreementIdDetailsNotesRoute,
@@ -717,8 +693,8 @@ export const routeTree = rootRoute.addChildren([
       AuthagreementsAgreementsNewRoute,
       AuthagreementsAgreementsIndexRoute,
     ]),
-    AuthcustomersCustomersRouteRoute.addChildren([
-      AuthcustomersCustomersCustomerIdRouteRoute.addChildren([
+    AuthcustomersCustomersRoute.addChildren([
+      AuthcustomersCustomersCustomerIdRoute.addChildren([
         AuthcustomersCustomersCustomerIdDetailsRoute.addChildren([
           AuthcustomersCustomersCustomerIdDetailsNotesRoute,
           AuthcustomersCustomersCustomerIdDetailsSummaryRoute,
@@ -729,8 +705,8 @@ export const routeTree = rootRoute.addChildren([
       AuthcustomersCustomersNewRoute,
       AuthcustomersCustomersIndexRoute,
     ]),
-    AuthfleetFleetRouteRoute.addChildren([
-      AuthfleetFleetVehicleIdRouteRoute.addChildren([
+    AuthfleetFleetRoute.addChildren([
+      AuthfleetFleetVehicleIdRoute.addChildren([
         AuthfleetFleetVehicleIdDetailsRoute.addChildren([
           AuthfleetFleetVehicleIdDetailsAgreementsRoute,
           AuthfleetFleetVehicleIdDetailsNotesRoute,
@@ -743,14 +719,8 @@ export const routeTree = rootRoute.addChildren([
       AuthfleetFleetNewRoute,
       AuthfleetFleetIndexRoute,
     ]),
-    AuthreportsReportsRouteRoute.addChildren([
-      AuthreportsReportsReportIdRouteRoute.addChildren([
-        AuthreportsReportsReportIdIndexRoute,
-      ]),
-      AuthreportsReportsIndexRoute,
-    ]),
-    AuthreservationsReservationsRouteRoute.addChildren([
-      AuthreservationsReservationsReservationIdRouteRoute.addChildren([
+    AuthreservationsReservationsRoute.addChildren([
+      AuthreservationsReservationsReservationIdRoute.addChildren([
         AuthreservationsReservationsReservationIdDetailsRoute.addChildren([
           AuthreservationsReservationsReservationIdDetailsNotesRoute,
           AuthreservationsReservationsReservationIdDetailsSummaryRoute,
@@ -761,21 +731,23 @@ export const routeTree = rootRoute.addChildren([
       AuthreservationsReservationsNewRoute,
       AuthreservationsReservationsIndexRoute,
     ]),
-    AuthsettingsSettingsRouteRoute.addChildren([
-      AuthsettingsSettingsApplicationRouteRoute.addChildren([
+    AuthsettingsSettingsRoute.addChildren([
+      AuthsettingsSettingsApplicationRoute.addChildren([
         AuthsettingsSettingsApplicationLocationsRoute,
         AuthsettingsSettingsApplicationPermissionsAndRolesRoute,
         AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute,
         AuthsettingsSettingsApplicationUsersRoute,
         AuthsettingsSettingsApplicationIndexRoute,
       ]),
-      AuthsettingsSettingsRatesAndChargesRouteRoute,
-      AuthsettingsSettingsRuntimeConfigurationRouteRoute,
-      AuthsettingsSettingsVehiclesAndCategoriesRouteRoute,
       AuthsettingsSettingsProfileRoute,
+      AuthsettingsSettingsRatesAndChargesRoute,
+      AuthsettingsSettingsRuntimeConfigurationRoute,
+      AuthsettingsSettingsVehiclesAndCategoriesRoute,
       AuthsettingsSettingsIndexRoute,
     ]),
     AuthdashboardIndexRoute,
+    AuthreportsReportsIndexRoute,
+    AuthreportsReportsReportIdIndexRoute,
   ]),
   PublicRoute.addChildren([
     PublicDevRoute,
