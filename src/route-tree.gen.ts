@@ -18,12 +18,12 @@ import { Route as PublicLogoutImport } from "./routes/_public/logout"
 import { Route as PublicLoggedOutImport } from "./routes/_public/logged-out"
 import { Route as PublicDevImport } from "./routes/_public/dev"
 import { Route as AuthdashboardIndexImport } from "./routes/_auth/(dashboard)/index"
+import { Route as AuthagreementsAgreementsImport } from "./routes/_auth/(agreements)/agreements"
 import { Route as AuthsettingsSettingsRouteImport } from "./routes/_auth/(settings)/settings.route"
 import { Route as AuthreservationsReservationsRouteImport } from "./routes/_auth/(reservations)/reservations.route"
 import { Route as AuthreportsReportsRouteImport } from "./routes/_auth/(reports)/reports.route"
 import { Route as AuthfleetFleetRouteImport } from "./routes/_auth/(fleet)/fleet.route"
 import { Route as AuthcustomersCustomersRouteImport } from "./routes/_auth/(customers)/customers.route"
-import { Route as AuthagreementsAgreementsRouteImport } from "./routes/_auth/(agreements)/agreements.route"
 import { Route as AuthsettingsSettingsIndexImport } from "./routes/_auth/(settings)/settings.index"
 import { Route as AuthreservationsReservationsIndexImport } from "./routes/_auth/(reservations)/reservations.index"
 import { Route as AuthreportsReportsIndexImport } from "./routes/_auth/(reports)/reports.index"
@@ -35,6 +35,7 @@ import { Route as AuthreservationsReservationsNewImport } from "./routes/_auth/(
 import { Route as AuthfleetFleetNewImport } from "./routes/_auth/(fleet)/fleet.new"
 import { Route as AuthcustomersCustomersNewImport } from "./routes/_auth/(customers)/customers.new"
 import { Route as AuthagreementsAgreementsNewImport } from "./routes/_auth/(agreements)/agreements.new"
+import { Route as AuthagreementsAgreementsAgreementIdImport } from "./routes/_auth/(agreements)/agreements.$agreementId"
 import { Route as AuthsettingsSettingsVehiclesAndCategoriesRouteImport } from "./routes/_auth/(settings)/settings.vehicles-and-categories.route"
 import { Route as AuthsettingsSettingsRuntimeConfigurationRouteImport } from "./routes/_auth/(settings)/settings.runtime-configuration.route"
 import { Route as AuthsettingsSettingsRatesAndChargesRouteImport } from "./routes/_auth/(settings)/settings.rates-and-charges.route"
@@ -43,7 +44,6 @@ import { Route as AuthreservationsReservationsReservationIdRouteImport } from ".
 import { Route as AuthreportsReportsReportIdRouteImport } from "./routes/_auth/(reports)/reports.$reportId.route"
 import { Route as AuthfleetFleetVehicleIdRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.route"
 import { Route as AuthcustomersCustomersCustomerIdRouteImport } from "./routes/_auth/(customers)/customers.$customerId.route"
-import { Route as AuthagreementsAgreementsAgreementIdRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId.route"
 import { Route as AuthsettingsSettingsApplicationIndexImport } from "./routes/_auth/(settings)/settings.application.index"
 import { Route as AuthreportsReportsReportIdIndexImport } from "./routes/_auth/(reports)/reports.$reportId.index"
 import { Route as AuthsettingsSettingsApplicationUsersImport } from "./routes/_auth/(settings)/settings.application.users"
@@ -112,6 +112,11 @@ const AuthdashboardIndexRoute = AuthdashboardIndexImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const AuthagreementsAgreementsRoute = AuthagreementsAgreementsImport.update({
+  path: "/agreements",
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AuthsettingsSettingsRouteRoute = AuthsettingsSettingsRouteImport.update({
   path: "/settings",
   getParentRoute: () => AuthRoute,
@@ -136,12 +141,6 @@ const AuthfleetFleetRouteRoute = AuthfleetFleetRouteImport.update({
 const AuthcustomersCustomersRouteRoute =
   AuthcustomersCustomersRouteImport.update({
     path: "/customers",
-    getParentRoute: () => AuthRoute,
-  } as any)
-
-const AuthagreementsAgreementsRouteRoute =
-  AuthagreementsAgreementsRouteImport.update({
-    path: "/agreements",
     getParentRoute: () => AuthRoute,
   } as any)
 
@@ -175,7 +174,7 @@ const AuthcustomersCustomersIndexRoute =
 const AuthagreementsAgreementsIndexRoute =
   AuthagreementsAgreementsIndexImport.update({
     path: "/",
-    getParentRoute: () => AuthagreementsAgreementsRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsRoute,
   } as any)
 
 const AuthsettingsSettingsProfileRoute =
@@ -203,7 +202,13 @@ const AuthcustomersCustomersNewRoute = AuthcustomersCustomersNewImport.update({
 const AuthagreementsAgreementsNewRoute =
   AuthagreementsAgreementsNewImport.update({
     path: "/new",
-    getParentRoute: () => AuthagreementsAgreementsRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsRoute,
+  } as any)
+
+const AuthagreementsAgreementsAgreementIdRoute =
+  AuthagreementsAgreementsAgreementIdImport.update({
+    path: "/$agreementId",
+    getParentRoute: () => AuthagreementsAgreementsRoute,
   } as any)
 
 const AuthsettingsSettingsVehiclesAndCategoriesRouteRoute =
@@ -252,12 +257,6 @@ const AuthcustomersCustomersCustomerIdRouteRoute =
   AuthcustomersCustomersCustomerIdRouteImport.update({
     path: "/$customerId",
     getParentRoute: () => AuthcustomersCustomersRouteRoute,
-  } as any)
-
-const AuthagreementsAgreementsAgreementIdRouteRoute =
-  AuthagreementsAgreementsAgreementIdRouteImport.update({
-    path: "/$agreementId",
-    getParentRoute: () => AuthagreementsAgreementsRouteRoute,
   } as any)
 
 const AuthsettingsSettingsApplicationIndexRoute =
@@ -335,19 +334,19 @@ const AuthcustomersCustomersCustomerIdDetailsRoute =
 const AuthagreementsAgreementsAgreementIdEditRoute =
   AuthagreementsAgreementsAgreementIdEditImport.update({
     path: "/edit",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
 
 const AuthagreementsAgreementsAgreementIdCheckInRoute =
   AuthagreementsAgreementsAgreementIdCheckInImport.update({
     path: "/check-in",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
 
 const AuthagreementsAgreementsAgreementIdDetailsRoute =
   AuthagreementsAgreementsAgreementIdDetailsImport.update({
     id: "/_details",
-    getParentRoute: () => AuthagreementsAgreementsAgreementIdRouteRoute,
+    getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
 
 const AuthreservationsReservationsReservationIdDetailsIndexRoute =
@@ -468,10 +467,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PublicOidcCallbackImport
       parentRoute: typeof PublicImport
     }
-    "/_auth/(agreements)/agreements": {
-      preLoaderRoute: typeof AuthagreementsAgreementsRouteImport
-      parentRoute: typeof AuthImport
-    }
     "/_auth/(customers)/customers": {
       preLoaderRoute: typeof AuthcustomersCustomersRouteImport
       parentRoute: typeof AuthImport
@@ -492,13 +487,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthsettingsSettingsRouteImport
       parentRoute: typeof AuthImport
     }
+    "/_auth/(agreements)/agreements": {
+      preLoaderRoute: typeof AuthagreementsAgreementsImport
+      parentRoute: typeof AuthImport
+    }
     "/_auth/(dashboard)/": {
       preLoaderRoute: typeof AuthdashboardIndexImport
       parentRoute: typeof AuthImport
-    }
-    "/_auth/(agreements)/agreements/$agreementId": {
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
-      parentRoute: typeof AuthagreementsAgreementsRouteImport
     }
     "/_auth/(customers)/customers/$customerId": {
       preLoaderRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
@@ -532,9 +527,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthsettingsSettingsVehiclesAndCategoriesRouteImport
       parentRoute: typeof AuthsettingsSettingsRouteImport
     }
+    "/_auth/(agreements)/agreements/$agreementId": {
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdImport
+      parentRoute: typeof AuthagreementsAgreementsImport
+    }
     "/_auth/(agreements)/agreements/new": {
       preLoaderRoute: typeof AuthagreementsAgreementsNewImport
-      parentRoute: typeof AuthagreementsAgreementsRouteImport
+      parentRoute: typeof AuthagreementsAgreementsImport
     }
     "/_auth/(customers)/customers/new": {
       preLoaderRoute: typeof AuthcustomersCustomersNewImport
@@ -554,7 +553,7 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/(agreements)/agreements/": {
       preLoaderRoute: typeof AuthagreementsAgreementsIndexImport
-      parentRoute: typeof AuthagreementsAgreementsRouteImport
+      parentRoute: typeof AuthagreementsAgreementsImport
     }
     "/_auth/(customers)/customers/": {
       preLoaderRoute: typeof AuthcustomersCustomersIndexImport
@@ -578,15 +577,15 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/(agreements)/agreements/$agreementId/_details": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
     }
     "/_auth/(agreements)/agreements/$agreementId/check-in": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdCheckInImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
     }
     "/_auth/(agreements)/agreements/$agreementId/edit": {
       preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdEditImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
     }
     "/_auth/(customers)/customers/$customerId/_details": {
       preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
@@ -703,20 +702,6 @@ declare module "@tanstack/react-router" {
 
 export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([
-    AuthagreementsAgreementsRouteRoute.addChildren([
-      AuthagreementsAgreementsAgreementIdRouteRoute.addChildren([
-        AuthagreementsAgreementsAgreementIdDetailsRoute.addChildren([
-          AuthagreementsAgreementsAgreementIdDetailsExchangesRoute,
-          AuthagreementsAgreementsAgreementIdDetailsNotesRoute,
-          AuthagreementsAgreementsAgreementIdDetailsSummaryRoute,
-          AuthagreementsAgreementsAgreementIdDetailsIndexRoute,
-        ]),
-        AuthagreementsAgreementsAgreementIdCheckInRoute,
-        AuthagreementsAgreementsAgreementIdEditRoute,
-      ]),
-      AuthagreementsAgreementsNewRoute,
-      AuthagreementsAgreementsIndexRoute,
-    ]),
     AuthcustomersCustomersRouteRoute.addChildren([
       AuthcustomersCustomersCustomerIdRouteRoute.addChildren([
         AuthcustomersCustomersCustomerIdDetailsRoute.addChildren([
@@ -774,6 +759,20 @@ export const routeTree = rootRoute.addChildren([
       AuthsettingsSettingsVehiclesAndCategoriesRouteRoute,
       AuthsettingsSettingsProfileRoute,
       AuthsettingsSettingsIndexRoute,
+    ]),
+    AuthagreementsAgreementsRoute.addChildren([
+      AuthagreementsAgreementsAgreementIdRoute.addChildren([
+        AuthagreementsAgreementsAgreementIdDetailsRoute.addChildren([
+          AuthagreementsAgreementsAgreementIdDetailsExchangesRoute,
+          AuthagreementsAgreementsAgreementIdDetailsNotesRoute,
+          AuthagreementsAgreementsAgreementIdDetailsSummaryRoute,
+          AuthagreementsAgreementsAgreementIdDetailsIndexRoute,
+        ]),
+        AuthagreementsAgreementsAgreementIdCheckInRoute,
+        AuthagreementsAgreementsAgreementIdEditRoute,
+      ]),
+      AuthagreementsAgreementsNewRoute,
+      AuthagreementsAgreementsIndexRoute,
     ]),
     AuthdashboardIndexRoute,
   ]),

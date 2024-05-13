@@ -33,6 +33,6 @@ export const Route = createFileRoute(
       context.queryClient.ensureQueryData(context.viewAgreementSummaryOptions),
     ];
 
-    await Promise.all(promises);
+    await Promise.allSettled(promises);
   },
 });
