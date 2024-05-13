@@ -1,5 +1,5 @@
 import React from "react";
-import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   createColumnHelper,
@@ -119,6 +119,7 @@ function CustomerSearchPage() {
     searchListOptions,
     searchColumnsOptions,
     queryClient,
+    customerTypesOptions,
   } = Route.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
@@ -139,13 +140,8 @@ function CustomerSearchPage() {
   );
 
   const customersData = useSuspenseQuery(searchListOptions);
-  const customerTypesList = useQuery(
-    fetchCustomerTypesOptions({ auth: authParams })
-  );
-  const customerTypes = React.useMemo(
-    () => customerTypesList.data ?? [],
-    [customerTypesList.data]
-  );
+  const customerTypesList = useSuspenseQuery(customerTypesOptions);
+  const customerTypes = customerTypesList.data;
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 

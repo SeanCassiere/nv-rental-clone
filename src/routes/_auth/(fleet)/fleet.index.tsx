@@ -31,8 +31,6 @@ import { fetchLocationsListOptions } from "@/lib/query/location";
 import {
   fetchVehiclesSearchColumnsOptions,
   fetchVehiclesSearchListOptions,
-  fetchVehiclesStatusesOptions,
-  fetchVehiclesTypesOptions,
 } from "@/lib/query/vehicle";
 
 import {
@@ -120,6 +118,8 @@ function VehicleSearchPage() {
     searchListOptions,
     authParams,
     queryClient,
+    vehicleStatusesOptions,
+    vehicleTypesOptions,
   } = Route.useRouteContext();
   const { searchFilters, pageNumber, size } = search;
 
@@ -141,21 +141,11 @@ function VehicleSearchPage() {
 
   const vehiclesData = useQuery(searchListOptions);
 
-  const vehicleStatusList = useQuery(
-    fetchVehiclesStatusesOptions({ auth: authParams })
-  );
-  const vehicleStatuses = React.useMemo(
-    () => vehicleStatusList.data ?? [],
-    [vehicleStatusList.data]
-  );
+  const vehicleStatusQuery = useSuspenseQuery(vehicleStatusesOptions);
+  const vehicleStatuses = vehicleStatusQuery.data;
 
-  const vehicleTypesList = useQuery(
-    fetchVehiclesTypesOptions({ auth: authParams })
-  );
-  const vehicleTypes = React.useMemo(
-    () => vehicleTypesList.data ?? [],
-    [vehicleTypesList.data]
-  );
+  const vehicleTypesQuery = useSuspenseQuery(vehicleTypesOptions);
+  const vehicleTypes = vehicleTypesQuery.data;
 
   const locationsList = useQuery(
     fetchLocationsListOptions({

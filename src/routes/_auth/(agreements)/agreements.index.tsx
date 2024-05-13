@@ -151,11 +151,8 @@ function AgreementsSearchPage() {
 
   const agreementsData = useQuery(searchListOptions);
 
-  const agreementStatusList = useQuery(agreementStatusesOptions);
-  const agreementStatuses = React.useMemo(
-    () => agreementStatusList.data ?? [],
-    [agreementStatusList.data]
-  );
+  const agreementStatusesQuery = useSuspenseQuery(agreementStatusesOptions);
+  const agreementStatuses = agreementStatusesQuery.data;
 
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
@@ -176,11 +173,8 @@ function AgreementsSearchPage() {
     [locationsList.data?.body, locationsList.data?.status]
   );
 
-  const agreementTypesList = useQuery(agreementTypesOptions);
-  const agreementTypes = React.useMemo(
-    () => agreementTypesList.data ?? [],
-    [agreementTypesList.data]
-  );
+  const agreementTypesQuery = useSuspenseQuery(agreementTypesOptions);
+  const agreementTypes = agreementTypesQuery.data;
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 
