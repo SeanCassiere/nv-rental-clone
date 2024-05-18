@@ -445,7 +445,7 @@ export const CommandMenu = () => {
               onSelect={() => {
                 run(() =>
                   navigate({
-                    to: "/reports/",
+                    to: "/reports",
                   })
                 );
               }}

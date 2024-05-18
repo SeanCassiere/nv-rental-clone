@@ -79,7 +79,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
   const selectId = React.useId();
 
   const { t } = useTranslation();
-  const navigate = useNavigate({ from: "/reports/" });
+  const navigate = useNavigate({ from: "/reports" });
 
   const { searchListOptions } = useRouteContext({ from: "/_auth/reports/" });
   const query = useSuspenseQuery(searchListOptions);
@@ -180,7 +180,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
                 className="relative flex min-h-[5rem] flex-col items-start justify-between border-b border-r border-border bg-card p-4 sm:p-6"
               >
                 <Link
-                  to="/reports/$reportId/"
+                  to="/reports/$reportId"
                   params={{ reportId: report.id }}
                   className={cn(
                     buttonVariants({ variant: "link" }),
@@ -193,7 +193,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
                   {report.categories.map((category, idx) => (
                     <React.Fragment key={`${report.id}_${category}_${idx}`}>
                       <Link
-                        to="/reports/"
+                        to="/reports"
                         className="underline-offset-4 hover:text-muted-foreground hover:underline"
                         search={(s) => ({ ...s, category })}
                       >

@@ -626,8 +626,8 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/(reports)/reports/": {
       id: "/_auth/reports/"
-      path: "/reports/"
-      fullPath: "/reports/"
+      path: "/reports"
+      fullPath: "/reports"
       preLoaderRoute: typeof AuthreportsReportsIndexImport
       parentRoute: typeof AuthImport
     }
@@ -738,8 +738,8 @@ declare module "@tanstack/react-router" {
     }
     "/_auth/(reports)/reports/$reportId/": {
       id: "/_auth/reports/$reportId/"
-      path: "/reports/$reportId/"
-      fullPath: "/reports/$reportId/"
+      path: "/reports/$reportId"
+      fullPath: "/reports/$reportId"
       preLoaderRoute: typeof AuthreportsReportsReportIdIndexImport
       parentRoute: typeof AuthImport
     }
