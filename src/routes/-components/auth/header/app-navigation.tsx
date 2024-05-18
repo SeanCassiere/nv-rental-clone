@@ -103,7 +103,7 @@ export const AppNavigation = (props: Props) => {
         <AppNavigationLink
           name="Reports"
           props={{
-            to: "/reports/",
+            to: "/reports",
             activeOptions: defaultActiveOptions,
           }}
         />
