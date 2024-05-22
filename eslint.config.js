@@ -2,11 +2,15 @@
 import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import reactRecommended from "eslint-plugin-react/configs/recommended";
+import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime
 import tsEslint from "typescript-eslint";
 
 export default tsEslint.config(
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
+  reactRecommended,
+  reactJsxRuntime,
   {
     ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts"],
   },
@@ -16,6 +20,9 @@ export default tsEslint.config(
       parserOptions: {
         project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
     },
     rules: {
@@ -27,6 +34,11 @@ export default tsEslint.config(
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/ban-ts-comment": "off",
       "jsx-a11y/img-redundant-alt": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "react/display-name": "off",
+      "react/no-unescaped-entities": "off",
+      "react/no-unknown-property": "off",
     },
   },
   eslintPluginPrettierRecommended,
@@ -55,19 +67,13 @@ const config = [
     //   },
     // },
     languageOptions: {},
-    // plugins: ["@typescript-eslint", "react", "prettier"],
+    // plugins: ["react", "prettier"],
     // extends: [
     //   "plugin:react/recommended",
     //   "plugin:react/jsx-runtime",
     //   "plugin:react-hooks/recommended",
-    //   "prettier",
     // ],
     // rules: {
-    //   "react/react-in-jsx-scope": "off",
-    //   "react/prop-types": "off",
-    //   "react/display-name": "off",
-    //   "react/no-unescaped-entities": "off",
-    //   "react/no-unknown-property": "off",
     // },
   },
 ];
