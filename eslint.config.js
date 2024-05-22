@@ -2,8 +2,8 @@
 import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import reactRecommended from "eslint-plugin-react/configs/recommended";
-import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime
+import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
+import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import tsEslint from "typescript-eslint";
 
 export default tsEslint.config(

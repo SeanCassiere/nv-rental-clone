@@ -3,7 +3,6 @@ import path from "node:path";
 import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import eslintPlugin from "vite-plugin-eslint";
 
 import packageJson from "./package.json";
 
@@ -17,7 +16,6 @@ const APP_VERSION = `${packageJson.version}-${commitHash}`;
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    eslintPlugin(),
     TanStackRouterVite({
       experimental: {
         enableCodeSplitting: true,
