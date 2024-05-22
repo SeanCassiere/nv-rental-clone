@@ -3,6 +3,7 @@ import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
+import globals from "globals";
 import tsEslint from "typescript-eslint";
 
 /**
@@ -20,6 +21,10 @@ export default tsEslint.config(
   {
     files: ["src/**/*.{ts,tsx}", "index.html", "*.config.js", "*.config.cjs"],
     languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
       parserOptions: {
         project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
