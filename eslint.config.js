@@ -52,27 +52,25 @@ export default tsEslint.config(
   eslintConfigPrettier
 );
 
-const config = [
-  // {
-  //   ignores: ["./dist/**", "./node_modules/**", "./src/route-tree.gen.ts"],
-  // },
-  {
-    settings: {
-      react: {
-        createClass: "createReactClass", // Regex for Component Factory to use,
-        pragma: "React",
-        fragment: "Fragment",
-        version: "detect",
-      },
-    },
-    languageOptions: {},
-    // plugins: [],
-    // extends: [
-    //   "plugin:react/recommended",
-    //   "plugin:react/jsx-runtime",
-    //   "plugin:react-hooks/recommended",
-    // ],
-    // rules: {
-    // },
-  },
-];
+// const config = [
+// {
+//   ignores: ["./dist/**", "./node_modules/**", "./src/route-tree.gen.ts"],
+// },
+// {
+// settings: {
+//   react: {
+//     createClass: "createReactClass", // Regex for Component Factory to use,
+//     pragma: "React",
+//     fragment: "Fragment",
+//     version: "detect",
+//   },
+// },
+// languageOptions: {},
+// plugins: [],
+// extends: [
+//   "plugin:react-hooks/recommended",
+// ],
+// rules: {
+// },
+// },
+// ];
