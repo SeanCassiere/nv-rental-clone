@@ -5,6 +5,10 @@ import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import tsEslint from "typescript-eslint";
 
+/**
+ * @TODO Turn on React's Rules of Hooks when it available for use with flat configs
+ */
+
 export default tsEslint.config(
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
