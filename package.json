@@ -8,8 +8,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "node ./postbuild.cjs",
-    "lint": "eslint --max-warnings=0 src",
-    "lint:fix": "eslint --fix --max-warnings=0 src",
+    "lint": "eslint --max-warnings 0",
+    "lint:fix": "eslint --fix --max-warnings 0",
     "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./prettier.config.cjs",
     "preview": "vite preview --port 3000"
   },
