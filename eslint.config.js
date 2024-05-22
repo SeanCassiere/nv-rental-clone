@@ -1,7 +1,6 @@
 // @ts-check
 import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import tsEslint from "typescript-eslint";
@@ -41,7 +40,6 @@ export default tsEslint.config(
       "react/no-unknown-property": "off",
     },
   },
-  eslintPluginPrettierRecommended,
   eslintConfigPrettier
 );
 
@@ -58,16 +56,8 @@ const config = [
         version: "detect",
       },
     },
-    // files: ["src/**/*.{ts,tsx}"],
-    // parser: "@typescript-eslint/parser",
-    // parserOptions: {
-    //   project: "./tsconfig.json",
-    //   ecmaFeatures: {
-    //     jsx: true,
-    //   },
-    // },
     languageOptions: {},
-    // plugins: ["react", "prettier"],
+    // plugins: [],
     // extends: [
     //   "plugin:react/recommended",
     //   "plugin:react/jsx-runtime",
