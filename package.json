@@ -6,12 +6,12 @@
   "scripts": {
     "start": "vite preview --host localhost --port 3000",
     "dev": "vite",
-    "build:code": "tsc && vite build",
-    "build": "npm run lint && npm run build:code",
-    "postbuild": "node ./postbuild.cjs",
     "lint": "eslint --max-warnings 0",
     "lint:fix": "eslint --fix --max-warnings 0",
     "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./prettier.config.cjs",
+    "build:code": "tsc && vite build",
+    "build": "npm run lint && npm run build:code",
+    "postbuild": "node ./postbuild.cjs",
     "preview": "vite preview --port 3000"
   },
   "dependencies": {
