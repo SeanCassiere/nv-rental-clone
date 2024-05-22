@@ -6,7 +6,8 @@
   "scripts": {
     "start": "vite preview --host localhost --port 3000",
     "dev": "vite",
-    "build": "npm run lint && tsc && vite build",
+    "build:code": "tsc && vite build",
+    "build": "npm run lint && npm run build:code",
     "postbuild": "node ./postbuild.cjs",
     "lint": "eslint --max-warnings 0",
     "lint:fix": "eslint --fix --max-warnings 0",
