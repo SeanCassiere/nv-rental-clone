@@ -14,27 +14,29 @@ const commitHash = cp
 const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    TanStackRouterVite({
-      experimental: {
-        enableCodeSplitting: true,
+export default defineConfig(() => {
+  return {
+    plugins: [
+      TanStackRouterVite({
+        experimental: {
+          enableCodeSplitting: true,
+        },
+      }),
+      react(),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
       },
-    }),
-    react(),
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
     },
-  },
-  server: {
-    port: 3000,
-  },
-  build: {
-    sourcemap: true,
-  },
-  define: {
-    "import.meta.env.APP_VERSION": JSON.stringify(APP_VERSION),
-  },
+    server: {
+      port: 3000,
+    },
+    build: {
+      sourcemap: true,
+    },
+    define: {
+      "import.meta.env.APP_VERSION": JSON.stringify(APP_VERSION),
+    },
+  };
 });
