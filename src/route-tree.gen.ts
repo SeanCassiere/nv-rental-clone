@@ -952,3 +952,350 @@ export const routeTree = rootRoute.addChildren({
 })
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/_auth",
+        "/_public"
+      ]
+    },
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/agreements",
+        "/_auth/customers",
+        "/_auth/fleet",
+        "/_auth/reservations",
+        "/_auth/settings",
+        "/_auth/",
+        "/_auth/reports/",
+        "/_auth/reports/$reportId/"
+      ]
+    },
+    "/_public": {
+      "filePath": "_public.tsx",
+      "children": [
+        "/_public/dev",
+        "/_public/logged-out",
+        "/_public/logout",
+        "/_public/oidc-callback"
+      ]
+    },
+    "/_public/dev": {
+      "filePath": "_public/dev.tsx",
+      "parent": "/_public"
+    },
+    "/_public/logged-out": {
+      "filePath": "_public/logged-out.tsx",
+      "parent": "/_public"
+    },
+    "/_public/logout": {
+      "filePath": "_public/logout.tsx",
+      "parent": "/_public"
+    },
+    "/_public/oidc-callback": {
+      "filePath": "_public/oidc-callback.tsx",
+      "parent": "/_public"
+    },
+    "/_auth/agreements": {
+      "filePath": "_auth/(agreements)/agreements.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/agreements/$agreementId",
+        "/_auth/agreements/new",
+        "/_auth/agreements/"
+      ]
+    },
+    "/_auth/customers": {
+      "filePath": "_auth/(customers)/customers.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/customers/$customerId",
+        "/_auth/customers/new",
+        "/_auth/customers/"
+      ]
+    },
+    "/_auth/fleet": {
+      "filePath": "_auth/(fleet)/fleet.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/fleet/$vehicleId",
+        "/_auth/fleet/new",
+        "/_auth/fleet/"
+      ]
+    },
+    "/_auth/reservations": {
+      "filePath": "_auth/(reservations)/reservations.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/reservations/$reservationId",
+        "/_auth/reservations/new",
+        "/_auth/reservations/"
+      ]
+    },
+    "/_auth/settings": {
+      "filePath": "_auth/(settings)/settings.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/settings/application",
+        "/_auth/settings/profile",
+        "/_auth/settings/rates-and-charges",
+        "/_auth/settings/runtime-configuration",
+        "/_auth/settings/vehicles-and-categories",
+        "/_auth/settings/"
+      ]
+    },
+    "/_auth/": {
+      "filePath": "_auth/(dashboard)/index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/agreements/$agreementId": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId.tsx",
+      "parent": "/_auth/agreements",
+      "children": [
+        "/_auth/agreements/$agreementId/_details",
+        "/_auth/agreements/$agreementId/check-in",
+        "/_auth/agreements/$agreementId/edit"
+      ]
+    },
+    "/_auth/agreements/new": {
+      "filePath": "_auth/(agreements)/agreements.new.tsx",
+      "parent": "/_auth/agreements"
+    },
+    "/_auth/customers/$customerId": {
+      "filePath": "_auth/(customers)/customers.$customerId.tsx",
+      "parent": "/_auth/customers",
+      "children": [
+        "/_auth/customers/$customerId/_details",
+        "/_auth/customers/$customerId/edit"
+      ]
+    },
+    "/_auth/customers/new": {
+      "filePath": "_auth/(customers)/customers.new.tsx",
+      "parent": "/_auth/customers"
+    },
+    "/_auth/fleet/$vehicleId": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId.tsx",
+      "parent": "/_auth/fleet",
+      "children": [
+        "/_auth/fleet/$vehicleId/_details",
+        "/_auth/fleet/$vehicleId/edit"
+      ]
+    },
+    "/_auth/fleet/new": {
+      "filePath": "_auth/(fleet)/fleet.new.tsx",
+      "parent": "/_auth/fleet"
+    },
+    "/_auth/reservations/$reservationId": {
+      "filePath": "_auth/(reservations)/reservations.$reservationId.tsx",
+      "parent": "/_auth/reservations",
+      "children": [
+        "/_auth/reservations/$reservationId/_details",
+        "/_auth/reservations/$reservationId/edit"
+      ]
+    },
+    "/_auth/reservations/new": {
+      "filePath": "_auth/(reservations)/reservations.new.tsx",
+      "parent": "/_auth/reservations"
+    },
+    "/_auth/settings/application": {
+      "filePath": "_auth/(settings)/settings.application.tsx",
+      "parent": "/_auth/settings",
+      "children": [
+        "/_auth/settings/application/locations",
+        "/_auth/settings/application/permissions-and-roles",
+        "/_auth/settings/application/store-hours-and-holidays",
+        "/_auth/settings/application/users",
+        "/_auth/settings/application/"
+      ]
+    },
+    "/_auth/settings/profile": {
+      "filePath": "_auth/(settings)/settings.profile.tsx",
+      "parent": "/_auth/settings"
+    },
+    "/_auth/settings/rates-and-charges": {
+      "filePath": "_auth/(settings)/settings.rates-and-charges.tsx",
+      "parent": "/_auth/settings"
+    },
+    "/_auth/settings/runtime-configuration": {
+      "filePath": "_auth/(settings)/settings.runtime-configuration.tsx",
+      "parent": "/_auth/settings"
+    },
+    "/_auth/settings/vehicles-and-categories": {
+      "filePath": "_auth/(settings)/settings.vehicles-and-categories.tsx",
+      "parent": "/_auth/settings"
+    },
+    "/_auth/agreements/": {
+      "filePath": "_auth/(agreements)/agreements.index.tsx",
+      "parent": "/_auth/agreements"
+    },
+    "/_auth/customers/": {
+      "filePath": "_auth/(customers)/customers.index.tsx",
+      "parent": "/_auth/customers"
+    },
+    "/_auth/fleet/": {
+      "filePath": "_auth/(fleet)/fleet.index.tsx",
+      "parent": "/_auth/fleet"
+    },
+    "/_auth/reports/": {
+      "filePath": "_auth/(reports)/reports.index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/reservations/": {
+      "filePath": "_auth/(reservations)/reservations.index.tsx",
+      "parent": "/_auth/reservations"
+    },
+    "/_auth/settings/": {
+      "filePath": "_auth/(settings)/settings.index.tsx",
+      "parent": "/_auth/settings"
+    },
+    "/_auth/agreements/$agreementId/_details": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId._details.tsx",
+      "parent": "/_auth/agreements/$agreementId",
+      "children": [
+        "/_auth/agreements/$agreementId/_details/exchanges",
+        "/_auth/agreements/$agreementId/_details/notes",
+        "/_auth/agreements/$agreementId/_details/summary",
+        "/_auth/agreements/$agreementId/_details/"
+      ]
+    },
+    "/_auth/agreements/$agreementId/check-in": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId.check-in.tsx",
+      "parent": "/_auth/agreements/$agreementId"
+    },
+    "/_auth/agreements/$agreementId/edit": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId.edit.tsx",
+      "parent": "/_auth/agreements/$agreementId"
+    },
+    "/_auth/customers/$customerId/_details": {
+      "filePath": "_auth/(customers)/customers.$customerId._details.tsx",
+      "parent": "/_auth/customers/$customerId",
+      "children": [
+        "/_auth/customers/$customerId/_details/notes",
+        "/_auth/customers/$customerId/_details/summary",
+        "/_auth/customers/$customerId/_details/"
+      ]
+    },
+    "/_auth/customers/$customerId/edit": {
+      "filePath": "_auth/(customers)/customers.$customerId.edit.tsx",
+      "parent": "/_auth/customers/$customerId"
+    },
+    "/_auth/fleet/$vehicleId/_details": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId._details.tsx",
+      "parent": "/_auth/fleet/$vehicleId",
+      "children": [
+        "/_auth/fleet/$vehicleId/_details/agreements",
+        "/_auth/fleet/$vehicleId/_details/notes",
+        "/_auth/fleet/$vehicleId/_details/reservations",
+        "/_auth/fleet/$vehicleId/_details/summary",
+        "/_auth/fleet/$vehicleId/_details/"
+      ]
+    },
+    "/_auth/fleet/$vehicleId/edit": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId.edit.tsx",
+      "parent": "/_auth/fleet/$vehicleId"
+    },
+    "/_auth/reservations/$reservationId/_details": {
+      "filePath": "_auth/(reservations)/reservations.$reservationId._details.tsx",
+      "parent": "/_auth/reservations/$reservationId",
+      "children": [
+        "/_auth/reservations/$reservationId/_details/notes",
+        "/_auth/reservations/$reservationId/_details/summary",
+        "/_auth/reservations/$reservationId/_details/"
+      ]
+    },
+    "/_auth/reservations/$reservationId/edit": {
+      "filePath": "_auth/(reservations)/reservations.$reservationId.edit.tsx",
+      "parent": "/_auth/reservations/$reservationId"
+    },
+    "/_auth/settings/application/locations": {
+      "filePath": "_auth/(settings)/settings.application.locations.tsx",
+      "parent": "/_auth/settings/application"
+    },
+    "/_auth/settings/application/permissions-and-roles": {
+      "filePath": "_auth/(settings)/settings.application.permissions-and-roles.tsx",
+      "parent": "/_auth/settings/application"
+    },
+    "/_auth/settings/application/store-hours-and-holidays": {
+      "filePath": "_auth/(settings)/settings.application.store-hours-and-holidays.tsx",
+      "parent": "/_auth/settings/application"
+    },
+    "/_auth/settings/application/users": {
+      "filePath": "_auth/(settings)/settings.application.users.tsx",
+      "parent": "/_auth/settings/application"
+    },
+    "/_auth/reports/$reportId/": {
+      "filePath": "_auth/(reports)/reports.$reportId.index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/settings/application/": {
+      "filePath": "_auth/(settings)/settings.application.index.tsx",
+      "parent": "/_auth/settings/application"
+    },
+    "/_auth/agreements/$agreementId/_details/exchanges": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId._details.exchanges.tsx",
+      "parent": "/_auth/agreements/$agreementId/_details"
+    },
+    "/_auth/agreements/$agreementId/_details/notes": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId._details.notes.tsx",
+      "parent": "/_auth/agreements/$agreementId/_details"
+    },
+    "/_auth/agreements/$agreementId/_details/summary": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId._details.summary.tsx",
+      "parent": "/_auth/agreements/$agreementId/_details"
+    },
+    "/_auth/customers/$customerId/_details/notes": {
+      "filePath": "_auth/(customers)/customers.$customerId._details.notes.tsx",
+      "parent": "/_auth/customers/$customerId/_details"
+    },
+    "/_auth/customers/$customerId/_details/summary": {
+      "filePath": "_auth/(customers)/customers.$customerId._details.summary.tsx",
+      "parent": "/_auth/customers/$customerId/_details"
+    },
+    "/_auth/fleet/$vehicleId/_details/agreements": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId._details.agreements.tsx",
+      "parent": "/_auth/fleet/$vehicleId/_details"
+    },
+    "/_auth/fleet/$vehicleId/_details/notes": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId._details.notes.tsx",
+      "parent": "/_auth/fleet/$vehicleId/_details"
+    },
+    "/_auth/fleet/$vehicleId/_details/reservations": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId._details.reservations.tsx",
+      "parent": "/_auth/fleet/$vehicleId/_details"
+    },
+    "/_auth/fleet/$vehicleId/_details/summary": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId._details.summary.tsx",
+      "parent": "/_auth/fleet/$vehicleId/_details"
+    },
+    "/_auth/reservations/$reservationId/_details/notes": {
+      "filePath": "_auth/(reservations)/reservations.$reservationId._details.notes.tsx",
+      "parent": "/_auth/reservations/$reservationId/_details"
+    },
+    "/_auth/reservations/$reservationId/_details/summary": {
+      "filePath": "_auth/(reservations)/reservations.$reservationId._details.summary.tsx",
+      "parent": "/_auth/reservations/$reservationId/_details"
+    },
+    "/_auth/agreements/$agreementId/_details/": {
+      "filePath": "_auth/(agreements)/agreements.$agreementId._details.index.tsx",
+      "parent": "/_auth/agreements/$agreementId/_details"
+    },
+    "/_auth/customers/$customerId/_details/": {
+      "filePath": "_auth/(customers)/customers.$customerId._details.index.tsx",
+      "parent": "/_auth/customers/$customerId/_details"
+    },
+    "/_auth/fleet/$vehicleId/_details/": {
+      "filePath": "_auth/(fleet)/fleet.$vehicleId._details.index.tsx",
+      "parent": "/_auth/fleet/$vehicleId/_details"
+    },
+    "/_auth/reservations/$reservationId/_details/": {
+      "filePath": "_auth/(reservations)/reservations.$reservationId._details.index.tsx",
+      "parent": "/_auth/reservations/$reservationId/_details"
+    }
+  }
+}
+ROUTE_MANIFEST_END */
