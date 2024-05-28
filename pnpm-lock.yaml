@@ -205,6 +205,9 @@ devDependencies:
   eslint-plugin-react-hooks:
     specifier: ^4.6.2
     version: 4.6.2(eslint@8.57.0)
+  globals:
+    specifier: ^15.3.0
+    version: 15.3.0
   postcss:
     specifier: ^8.4.33
     version: 8.4.38
@@ -3522,6 +3525,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.20.2
+    dev: true
+
+  /globals@15.3.0:
+    resolution: {integrity: sha512-cCdyVjIUVTtX8ZsPkq1oCsOsLmGIswqnjZYMJJTGaNApj1yHtLSymKhwH51ttirREn75z3p4k051clwg7rvNKA==}
+    engines: {node: '>=18'}
     dev: true
 
   /globalthis@1.0.3:

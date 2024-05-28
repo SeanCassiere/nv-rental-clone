@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix --max-warnings 0",
     "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./prettier.config.cjs",
     "build:code": "tsc && vite build",
-    "build": "npm run lint && npm run build:code",
+    "build": "pnpm run lint && pnpm run build:code",
     "postbuild": "node ./postbuild.cjs",
     "preview": "vite preview --port 3000"
   },
@@ -83,6 +83,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "globals": "^15.3.0",
     "postcss": "^8.4.33",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
