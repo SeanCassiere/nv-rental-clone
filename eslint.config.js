@@ -10,6 +10,13 @@ import tsEslint from "typescript-eslint";
  * @TODO Turn on React's Rules of Hooks when it available for use with flat configs
  */
 
+/**
+ * @TODO Make sure the eslint disable directives are turned back on once the React Rules of Hooks are available
+ *
+ * Fine them by searching the project for `todo-eslint-disable-next-line`
+ * It should be replaced with `eslint-disable-next-line react-hooks/exhaustive-deps`
+ */
+
 export default tsEslint.config(
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
@@ -54,26 +61,3 @@ export default tsEslint.config(
   },
   eslintConfigPrettier
 );
-
-// const config = [
-// {
-//   ignores: ["./dist/**", "./node_modules/**", "./src/route-tree.gen.ts"],
-// },
-// {
-// settings: {
-//   react: {
-//     createClass: "createReactClass", // Regex for Component Factory to use,
-//     pragma: "React",
-//     fragment: "Fragment",
-//     version: "detect",
-//   },
-// },
-// languageOptions: {},
-// plugins: [],
-// extends: [
-//   "plugin:react-hooks/recommended",
-// ],
-// rules: {
-// },
-// },
-// ];
