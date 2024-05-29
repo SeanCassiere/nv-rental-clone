@@ -373,7 +373,7 @@ function LocationForm(props: LocationFormProps) {
       },
     ];
     const items = (
-      locationsQuery.data?.status === 200 ? locationsQuery.data?.body : []
+      locationsQuery.data?.status === 200 ? locationsQuery.data.body : []
     ).map((item) => ({
       id: `location_${item.locationId}`,
       value: item.locationId,

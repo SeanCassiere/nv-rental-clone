@@ -37,8 +37,10 @@ export function makeInitialSearchCriteria(
           break;
         case "CheckBox":
           acc[criteria.name] = stringBoolean(criteria?.defaultValue);
+          break;
         default:
           acc[criteria.name] = criteria.defaultValue ?? "";
+          break;
       }
 
       return acc;
