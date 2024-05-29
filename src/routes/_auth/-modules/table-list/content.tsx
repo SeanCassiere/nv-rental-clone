@@ -43,7 +43,7 @@ function TableListContent(props: TableListContentProps) {
 
   const columnOrder = React.useMemo(
     () => table.getState().columnOrder,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getState().columnOrder]
   );
 
@@ -53,7 +53,7 @@ function TableListContent(props: TableListContentProps) {
         .getAllColumns()
         .filter((column) => !column.getCanSort() && !column.getCanHide())
         .map((column) => column.id),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // todo-eslint react-hooks/exhaustive-deps
     [table.getAllColumns()]
   );
 

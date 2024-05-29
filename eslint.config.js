@@ -10,23 +10,31 @@ import tsEslint from "typescript-eslint";
  * @TODO Turn on React's Rules of Hooks when it available for use with flat configs
  */
 
+/**
+ * @TODO Make sure the eslint disable directives are turned back on once the React Rules of Hooks are available
+ *
+ * Fine them by searching the project for `todo-eslint-disable-next-line`
+ * It should be replaced with `eslint-disable-next-line react-hooks/exhaustive-deps`
+ */
+
 export default tsEslint.config(
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
-  reactRecommended,
   reactJsxRuntime,
   {
-    ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts"],
+    ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts", "*.html"],
   },
   {
-    files: ["src/**/*.{ts,tsx}", "index.html", "*.config.js", "*.config.cjs"],
+    files: ["src/**/*.{ts,tsx}", "*.config.js", "*.config.cjs"],
+    ...reactRecommended,
     languageOptions: {
+      ...reactRecommended.languageOptions,
       globals: {
         ...globals.node,
         ...globals.browser,
       },
       parserOptions: {
-        project: "./tsconfig.json",
+        // project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
@@ -34,6 +42,8 @@ export default tsEslint.config(
       },
     },
     rules: {
+      "no-extra-boolean-cast": "off",
+      "no-case-declarations": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/consistent-type-imports": "off",
@@ -51,26 +61,3 @@ export default tsEslint.config(
   },
   eslintConfigPrettier
 );
-
-// const config = [
-// {
-//   ignores: ["./dist/**", "./node_modules/**", "./src/route-tree.gen.ts"],
-// },
-// {
-// settings: {
-//   react: {
-//     createClass: "createReactClass", // Regex for Component Factory to use,
-//     pragma: "React",
-//     fragment: "Fragment",
-//     version: "detect",
-//   },
-// },
-// languageOptions: {},
-// plugins: [],
-// extends: [
-//   "plugin:react-hooks/recommended",
-// ],
-// rules: {
-// },
-// },
-// ];
