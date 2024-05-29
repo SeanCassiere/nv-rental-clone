@@ -13,14 +13,15 @@ import tsEslint from "typescript-eslint";
 export default tsEslint.config(
   eslint.configs.recommended,
   ...tsEslint.configs.recommended,
-  reactRecommended,
   reactJsxRuntime,
   {
     ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts", "*.html"],
   },
   {
     files: ["src/**/*.{ts,tsx}", "*.config.js", "*.config.cjs"],
+    ...reactRecommended,
     languageOptions: {
+      ...reactRecommended.languageOptions,
       globals: {
         ...globals.node,
         ...globals.browser,
