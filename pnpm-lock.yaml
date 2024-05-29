@@ -177,7 +177,7 @@ devDependencies:
     version: 0.5.13(tailwindcss@3.4.3)
   '@tanstack/router-vite-plugin':
     specifier: ^1.34.1
-    version: 1.34.1(vite@5.2.11)
+    version: 1.34.1(vite@5.2.12)
   '@types/node':
     specifier: ^20.12.12
     version: 20.12.12
@@ -189,7 +189,7 @@ devDependencies:
     version: 18.3.0
   '@vitejs/plugin-react':
     specifier: ^4.3.0
-    version: 4.3.0(vite@5.2.11)
+    version: 4.3.0(vite@5.2.12)
   autoprefixer:
     specifier: ^10.4.19
     version: 10.4.19(postcss@8.4.38)
@@ -230,8 +230,8 @@ devDependencies:
     specifier: ^7.11.0
     version: 7.11.0(eslint@8.57.0)(typescript@5.4.5)
   vite:
-    specifier: ^5.2.11
-    version: 5.2.11(@types/node@20.12.12)
+    specifier: ^5.2.12
+    version: 5.2.12(@types/node@20.12.12)
 
 packages:
 
@@ -2244,7 +2244,7 @@ packages:
       zod: 3.23.8
     dev: true
 
-  /@tanstack/router-vite-plugin@1.34.1(vite@5.2.11):
+  /@tanstack/router-vite-plugin@1.34.1(vite@5.2.12):
     resolution: {integrity: sha512-UtSDFKdDzhiFuUUHQp+/bUYkTLnJeYnVXEdXo+D7rUH12i9WFpbZY5dcG3Nj/c8y4WTljwtE6e8N/+yAyXYKeg==}
     engines: {node: '>=12'}
     dependencies:
@@ -2262,7 +2262,7 @@ packages:
       '@types/babel__generator': 7.6.8
       '@types/babel__template': 7.4.4
       '@types/babel__traverse': 7.20.6
-      '@vitejs/plugin-react': 4.3.0(vite@5.2.11)
+      '@vitejs/plugin-react': 4.3.0(vite@5.2.12)
       zod: 3.23.8
     transitivePeerDependencies:
       - supports-color
@@ -2519,7 +2519,7 @@ packages:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
     dev: true
 
-  /@vitejs/plugin-react@4.3.0(vite@5.2.11):
+  /@vitejs/plugin-react@4.3.0(vite@5.2.12):
     resolution: {integrity: sha512-KcEbMsn4Dpk+LIbHMj7gDPRKaTMStxxWRkRmxsg/jVdFdJCZWt1SchZcf0M4t8lIKdwwMsEyzhrcOXRrDPtOBw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -2530,7 +2530,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.6(@babel/core@7.24.6)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.2.11(@types/node@20.12.12)
+      vite: 5.2.12(@types/node@20.12.12)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5373,8 +5373,8 @@ packages:
       d3-timer: 3.0.1
     dev: false
 
-  /vite@5.2.11(@types/node@20.12.12):
-    resolution: {integrity: sha512-HndV31LWW05i1BLPMUCE1B9E9GFbOu1MbenhS58FuK6owSO5qHm7GiCotrNY1YE5rMeQSFBGmT5ZaLEjFizgiQ==}
+  /vite@5.2.12(@types/node@20.12.12):
+    resolution: {integrity: sha512-/gC8GxzxMK5ntBwb48pR32GGhENnjtY30G4A0jemunsBkiEZFw60s8InGpN8gkhHEkjnRK1aSAxeQgwvFhUHAA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
