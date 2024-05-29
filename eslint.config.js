@@ -34,6 +34,7 @@ export default tsEslint.config(
       },
     },
     rules: {
+      "no-extra-boolean-cast": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/consistent-type-imports": "off",
