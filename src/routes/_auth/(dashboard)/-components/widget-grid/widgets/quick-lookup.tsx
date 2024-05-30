@@ -266,12 +266,58 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
             if (isSearching) return;
 
             const { accessor, ...rest } = values;
-            const searchKey = Object.keys(rest).find(
-              (key) => (rest as Record<string, string>)[key]
-            );
-            if (!searchKey) return;
-            const searchValue = (rest as Record<string, string>)[searchKey];
-            if (!searchValue) return;
+
+            let searchValue = (rest as Record<string, string>)[accessor];
+
+            if (typeof searchValue === "string") {
+              searchValue = searchValue.trim();
+            } else {
+              searchValue = "";
+            }
+
+            if (searchValue.length === 0) {
+              switch (accessor) {
+                case "customerPhoneNo":
+                  toast.error(
+                    t("messages.enterLabelForQuickLookup", {
+                      ns: "dashboard",
+                      label: t("display.phoneNo", { ns: "labels" }),
+                    })
+                  );
+                  break;
+                case "agreementNo":
+                  toast.error(
+                    t("messages.enterLabelForQuickLookup", {
+                      ns: "dashboard",
+                      label: t("display.agreementNo", { ns: "labels" }),
+                    })
+                  );
+                  break;
+                case "reservationNo":
+                  toast.error(
+                    t("messages.enterLabelForQuickLookup", {
+                      ns: "dashboard",
+                      label: t("display.reservationNo", { ns: "labels" }),
+                    })
+                  );
+                  break;
+                case "vehicleLicenseNo":
+                  toast.error(
+                    t("messages.enterLabelForQuickLookup", {
+                      ns: "dashboard",
+                      label: t("display.licenseNo", { ns: "labels" }),
+                    })
+                  );
+                  break;
+                default:
+                  console.warn(
+                    "unknown accessor provided to the QuickLookupForm for the length checker:",
+                    accessor
+                  );
+                  break;
+              }
+              return;
+            }
 
             switch (accessor) {
               case "customerPhoneNo":
@@ -326,7 +372,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
                 break;
               default:
                 console.warn(
-                  "unknown accessor provided to the QuickLookupForm:",
+                  "unknown accessor provided to the QuickLookupForm at the searcher:",
                   accessor
                 );
                 break;

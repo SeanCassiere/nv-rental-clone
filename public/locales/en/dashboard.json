@@ -2,7 +2,8 @@
   "messages": {
     "rentalAgreementNotFound": "Rental agreement not found",
     "foundMultipleMatches": "Found multiple matches",
-    "enterVehicleOrAgreementNo": "Please enter a vehicle or agreement number"
+    "enterVehicleOrAgreementNo": "You need to enter a vehicle or agreement number",
+    "enterLabelForQuickLookup": "You need to enter the {{label}}"
   },
   "widgets": {
     "salesStatus": "Sales status",
