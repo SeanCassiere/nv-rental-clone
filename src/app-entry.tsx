@@ -106,6 +106,7 @@ function RouterWithInjectedAuth() {
       <Toaster
         theme={theme.ternaryDarkMode}
         dir={dir}
+        position="bottom-center"
         className="toaster group"
         toastOptions={{
           classNames: {
