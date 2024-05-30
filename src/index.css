@@ -75,9 +75,12 @@
     --border: var(--light-border);
     --input: var(--light-input);
     --ring: var(--light-ring);
+
     --banner-promo: var(--light-banner-promo);
     --banner-promo-foreground: var(--light-banner-promo-foreground);
+
     --logo-url: var(--light-logo-url);
+    --toast-background: hsl(var(--card));
   }
 
   /* Dark mode */
@@ -102,9 +105,12 @@
     --border: var(--dark-border);
     --input: var(--dark-input);
     --ring: var(--dark-ring);
+
     --banner-promo: var(--dark-banner-promo);
     --banner-promo-foreground: var(--dark-banner-promo-foreground);
+
     --logo-url: var(--dark-logo-url);
+    --toast-background: hsl(var(--background));
   }
 
   /* Match system, light mode */
@@ -130,9 +136,12 @@
       --border: var(--light-border);
       --input: var(--light-input);
       --ring: var(--light-ring);
+
       --banner-promo: var(--light-banner-promo);
       --banner-promo-foreground: var(--light-banner-promo-foreground);
+
       --logo-url: var(--light-logo-url);
+      --toast-background: hsl(var(--card));
     }
   }
 
@@ -159,9 +168,12 @@
       --border: var(--dark-border);
       --input: var(--dark-input);
       --ring: var(--dark-ring);
+
       --banner-promo: var(--dark-banner-promo);
       --banner-promo-foreground: var(--dark-banner-promo-foreground);
+
       --logo-url: var(--dark-logo-url);
+      --toast-background: hsl(var(--background));
     }
   }
 }
