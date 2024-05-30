@@ -81,8 +81,8 @@ dependencies:
     specifier: ^5.39.0
     version: 5.40.0(@tanstack/react-query@5.40.0)(react@18.3.1)
   '@tanstack/react-router':
-    specifier: ^1.34.5
-    version: 1.34.5(react-dom@18.3.1)(react@18.3.1)
+    specifier: ^1.34.7
+    version: 1.34.7(react-dom@18.3.1)(react@18.3.1)
   '@tanstack/react-table':
     specifier: ^8.17.3
     version: 8.17.3(react-dom@18.3.1)(react@18.3.1)
@@ -90,8 +90,8 @@ dependencies:
     specifier: ^3.5.0
     version: 3.5.0(react-dom@18.3.1)(react@18.3.1)
   '@tanstack/router-devtools':
-    specifier: ^1.34.5
-    version: 1.34.5(@tanstack/react-router@1.34.5)(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1)
+    specifier: ^1.34.7
+    version: 1.34.7(@tanstack/react-router@1.34.7)(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1)
   '@ts-rest/core':
     specifier: ^3.45.2
     version: 3.45.2(zod@3.23.8)
@@ -179,8 +179,8 @@ devDependencies:
     specifier: ^1.34.1
     version: 1.34.1(vite@5.2.12)
   '@types/node':
-    specifier: ^20.12.12
-    version: 20.12.12
+    specifier: ^20.12.13
+    version: 20.12.13
   '@types/react':
     specifier: ^18.3.3
     version: 18.3.3
@@ -217,6 +217,9 @@ devDependencies:
   prettier-plugin-tailwindcss:
     specifier: ^0.5.14
     version: 0.5.14(@ianvs/prettier-plugin-sort-imports@4.2.1)(prettier@3.2.5)
+  rimraf:
+    specifier: ^5.0.7
+    version: 5.0.7
   tailwindcss:
     specifier: ^3.4.3
     version: 3.4.3
@@ -231,7 +234,7 @@ devDependencies:
     version: 7.11.0(eslint@9.3.0)(typescript@5.4.5)
   vite:
     specifier: ^5.2.12
-    version: 5.2.12(@types/node@20.12.12)
+    version: 5.2.12(@types/node@20.12.13)
 
 packages:
 
@@ -2168,8 +2171,8 @@ packages:
       react: 18.3.1
     dev: false
 
-  /@tanstack/react-router@1.34.5(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-mOMbNHSJ1cAgRuJj9W35wteQL7zFiCNJYgg3QHkxj+obO9zQWiAwycFs0hQTRxqzGfC+jhVLJe1+cW93BhqKyA==}
+  /@tanstack/react-router@1.34.7(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-iS3cFdoKCobYIO4I2I6gw52tylY0kep+MXra3sblFNgKL11kKsfiaO4cYNRqiNg98DEJjboGq+KTXopDMhr07A==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16.8'
@@ -2218,15 +2221,15 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@tanstack/router-devtools@1.34.5(@tanstack/react-router@1.34.5)(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-ps0SC14ijFkYkmvqRDlIo7M182Kinvs9syNbQJ5NZT3HjC4yNSZpKWIFkEEDL9IhQvIXQbk0FROz/c7Us7VpsA==}
+  /@tanstack/router-devtools@1.34.7(@tanstack/react-router@1.34.7)(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-+RBefI2TtCOkt/YEAQwXEliVi+ICn5GlhKhRarpbKrFaOnRXlk1mVHkFbEtpcoXFyYl/ep6jnTsudikV1I+ZpQ==}
     engines: {node: '>=12'}
     peerDependencies:
-      '@tanstack/react-router': ^1.34.5
+      '@tanstack/react-router': ^1.34.7
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
-      '@tanstack/react-router': 1.34.5(react-dom@18.3.1)(react@18.3.1)
+      '@tanstack/react-router': 1.34.7(react-dom@18.3.1)(react@18.3.1)
       clsx: 2.1.1
       date-fns: 2.30.0
       goober: 2.1.14(csstype@3.1.3)
@@ -2368,8 +2371,8 @@ packages:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
 
-  /@types/node@20.12.12:
-    resolution: {integrity: sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==}
+  /@types/node@20.12.13:
+    resolution: {integrity: sha512-gBGeanV41c1L171rR7wjbMiEpEI/l5XFQdLLfhr/REwpgDy/4U8y89+i8kRiLzDyZdOkXh+cRaTetUnCYutoXA==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -2526,7 +2529,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.6(@babel/core@7.24.6)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.2.12(@types/node@20.12.12)
+      vite: 5.2.12(@types/node@20.12.13)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4781,6 +4784,14 @@ packages:
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
 
+  /rimraf@5.0.7:
+    resolution: {integrity: sha512-nV6YcJo5wbLW77m+8KjH8aB/7/rxQy9SZ0HY5shnwULfS+9nmTtVXAJET5NdZmCzA4fPI/Hm1wo/Po/4mopOdg==}
+    engines: {node: '>=14.18'}
+    hasBin: true
+    dependencies:
+      glob: 10.4.1
+    dev: true
+
   /rollup@4.18.0:
     resolution: {integrity: sha512-QmJz14PX3rzbJCN1SG4Xe/bAAX2a6NpCP8ab2vfu2GiUr8AQcr2nCV/oEO3yneFarB67zk8ShlIyWb2LGTb3Sg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -5308,7 +5319,7 @@ packages:
       d3-timer: 3.0.1
     dev: false
 
-  /vite@5.2.12(@types/node@20.12.12):
+  /vite@5.2.12(@types/node@20.12.13):
     resolution: {integrity: sha512-/gC8GxzxMK5ntBwb48pR32GGhENnjtY30G4A0jemunsBkiEZFw60s8InGpN8gkhHEkjnRK1aSAxeQgwvFhUHAA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -5336,7 +5347,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 20.12.13
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.18.0
