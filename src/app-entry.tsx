@@ -1,10 +1,15 @@
 import * as React from "react";
 import { broadcastQueryClient } from "@tanstack/query-broadcast-client-experimental";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import {
+  createRouter,
+  parseSearchWith,
+  RouterProvider,
+  stringifySearchWith,
+} from "@tanstack/react-router";
+import * as JSURL2 from "jsurl2";
 import CacheBuster, { useCacheBuster } from "react-cache-buster";
-import { I18nextProvider, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
@@ -15,16 +20,44 @@ import { useEventListener } from "@/lib/hooks/useEventListener";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { GlobalDialogProvider } from "@/lib/context/modals";
 
-import { TailwindScreenDevTool } from "@/routes/-components/tailwind-screen-dev-tool";
-
 import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
-import { parseSearchFn, stringifySearchFn } from "@/lib/utils/router";
 
-import i18nextConfig from "@/lib/config/i18next";
+import "@/lib/config/i18next";
+
 import { reactOidcContextConfig } from "@/lib/config/react-oidc-context";
 import { queryClient } from "@/lib/config/tanstack-query";
 
 import { routeTree } from "@/route-tree.gen";
+
+function CacheDocumentFocusChecker() {
+  const documentRef = React.useRef<Document>(document);
+
+  const { checkCacheStatus } = useCacheBuster();
+
+  const onVisibilityChange = () => {
+    if (
+      document.visibilityState === "visible" &&
+      typeof checkCacheStatus === "function"
+    ) {
+      checkCacheStatus();
+    }
+  };
+
+  useEventListener("visibilitychange", onVisibilityChange, documentRef);
+
+  return null;
+}
+
+function FullPageLoadingSpinner() {
+  return (
+    <div className="grid min-h-dvh place-items-center bg-background">
+      <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
+    </div>
+  );
+}
+
+const parseSearch = parseSearchWith((value) => JSURL2.parse(value));
+const stringifySearch = stringifySearchWith((value) => JSURL2.stringify(value));
 
 const router = createRouter({
   routeTree,
@@ -32,8 +65,8 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
   defaultViewTransition: true,
   defaultPendingComponent: FullPageLoadingSpinner,
-  parseSearch: parseSearchFn,
-  stringifySearch: stringifySearchFn,
+  parseSearch,
+  stringifySearch,
   context: {
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
@@ -51,39 +84,6 @@ broadcastQueryClient({
   queryClient,
   broadcastChannel: APP_VERSION,
 });
-
-export default function App() {
-  return (
-    <CacheBuster
-      loadingComponent={<FullPageLoadingSpinner />}
-      currentVersion={APP_VERSION}
-      isVerboseMode={IS_DEV}
-      isEnabled={IS_DEV === false}
-      reloadOnDowngrade
-    >
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider {...reactOidcContextConfig}>
-          <React.Suspense fallback={<FullPageLoadingSpinner />}>
-            <I18nextProvider i18n={i18nextConfig}>
-              <GlobalDialogProvider>
-                <TooltipProvider>
-                  <CacheDocumentFocusChecker />
-                  <RouterWithInjectedAuth />
-                </TooltipProvider>
-              </GlobalDialogProvider>
-            </I18nextProvider>
-          </React.Suspense>
-          <ReactQueryDevtools
-            initialIsOpen={false}
-            position="bottom"
-            buttonPosition="top-left"
-          />
-          <TailwindScreenDevTool />
-        </AuthProvider>
-      </QueryClientProvider>
-    </CacheBuster>
-  );
-}
 
 function RouterWithInjectedAuth() {
   const { i18n } = useTranslation();
@@ -125,29 +125,27 @@ function RouterWithInjectedAuth() {
   );
 }
 
-function CacheDocumentFocusChecker() {
-  const documentRef = React.useRef<Document>(document);
-
-  const { checkCacheStatus } = useCacheBuster();
-
-  const onVisibilityChange = () => {
-    if (
-      document.visibilityState === "visible" &&
-      typeof checkCacheStatus === "function"
-    ) {
-      checkCacheStatus();
-    }
-  };
-
-  useEventListener("visibilitychange", onVisibilityChange, documentRef);
-
-  return null;
-}
-
-function FullPageLoadingSpinner() {
+export default function App() {
   return (
-    <div className="grid min-h-dvh place-items-center bg-background">
-      <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
-    </div>
+    <React.Suspense fallback={<FullPageLoadingSpinner />}>
+      <CacheBuster
+        loadingComponent={<FullPageLoadingSpinner />}
+        currentVersion={APP_VERSION}
+        isVerboseMode={IS_DEV}
+        isEnabled={IS_DEV === false}
+        reloadOnDowngrade
+      >
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider {...reactOidcContextConfig}>
+            <GlobalDialogProvider>
+              <TooltipProvider>
+                <CacheDocumentFocusChecker />
+                <RouterWithInjectedAuth />
+              </TooltipProvider>
+            </GlobalDialogProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </CacheBuster>
+    </React.Suspense>
   );
 }

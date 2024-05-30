@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
   ErrorComponent,
@@ -18,6 +19,7 @@ import { Container } from "./-components/container";
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
 import { PageNotFound } from "./-components/page-not-found";
 import { RouterDevTools } from "./-components/router-devtools";
+import { TailwindScreenDevTool } from "./-components/tailwind-screen-dev-tool";
 
 export interface MyRouterContext {
   queryClient: typeof queryClient;
@@ -25,7 +27,7 @@ export interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: function RootPageComponent() {
+  component: function RootComponent() {
     return (
       <RootDocument>
         <Outlet />
@@ -62,6 +64,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <React.Fragment>
       {children}
       <ScrollRestoration />
+      <TailwindScreenDevTool />
+      <ReactQueryDevtools
+        initialIsOpen={false}
+        position="bottom"
+        buttonPosition="top-left"
+      />
       <RouterDevTools position="bottom-right" />
     </React.Fragment>
   );
