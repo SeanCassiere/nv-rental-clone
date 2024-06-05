@@ -16,6 +16,7 @@ import { parse } from "date-fns/parse";
 import { parseISO } from "date-fns/parseISO";
 import { setHours } from "date-fns/setHours";
 import { setMinutes } from "date-fns/setMinutes";
+import { setMonth } from "date-fns/setMonth";
 import { startOfDay } from "date-fns/startOfDay";
 import { startOfMonth } from "date-fns/startOfMonth";
 import { startOfYear } from "date-fns/startOfYear";
@@ -43,6 +44,7 @@ export {
   parseISO,
   setHours,
   setMinutes,
+  setMonth,
   startOfDay,
   startOfMonth,
   startOfYear,
