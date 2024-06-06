@@ -716,9 +716,14 @@ function ResetPasswordBlock({ clientId, userId, user }: BlockProps) {
       />
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Reset password</CardTitle>
+          <CardTitle className="text-lg">
+            {t("titles.profileResetPassword", { ns: "settings" })}
+          </CardTitle>
           <CardDescription>
-            An email will be sent to you with a link to reset your password.
+            {t("descriptions.profileResetPassword", {
+              ns: "settings",
+              appName: UI_APPLICATION_NAME,
+            })}
           </CardDescription>
         </CardHeader>
         <CardFooter className="justify-end border-t py-2.5">
