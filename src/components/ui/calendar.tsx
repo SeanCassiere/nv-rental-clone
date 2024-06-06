@@ -23,6 +23,8 @@ import { cn } from "@/lib/utils";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
+const DEFAULT_FROM_YEAR = 1900;
+
 function Calendar({
   className,
   classNames,
@@ -36,8 +38,8 @@ function Calendar({
 
   const currentYear = new Date().getFullYear();
 
-  const oldestYear = fromYear || currentYear - 15;
-  const newestYear = toYear || currentYear + 7;
+  const oldestYear = fromYear ?? DEFAULT_FROM_YEAR;
+  const newestYear = toYear ?? currentYear + 15;
 
   return (
     <DayPicker
