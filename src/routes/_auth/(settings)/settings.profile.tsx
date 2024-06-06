@@ -96,8 +96,6 @@ export const Route = createFileRoute("/_auth/(settings)/settings/profile")({
   component: SettingsProfilePage,
 });
 
-const mutationKey = ["settings", "profile", "updating"];
-
 function SettingsProfilePage() {
   const context = Route.useRouteContext();
   const { authParams } = context;
@@ -151,7 +149,7 @@ function SettingsProfilePage() {
                   className="bg-transparent"
                   disabled
                 >
-                  Save
+                  {t("buttons.save", { ns: "labels" })}
                 </Button>
               </CardFooter>
             </Card>
@@ -206,7 +204,6 @@ function ProfileForm(props: ProfileFormProps) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey,
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
@@ -462,10 +459,8 @@ function EmailBlock({ form, onFormSubmit, isLocked, isMutating }: BlockProps) {
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
@@ -549,10 +544,8 @@ function DisplayNameBlock({
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
@@ -626,10 +619,8 @@ function LanguageBlock({
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
@@ -691,10 +682,8 @@ function PhoneNumberBlock({
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>

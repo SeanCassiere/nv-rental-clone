@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { icons } from "@/components/ui/icons";
 
-import type { TUserConfigurations } from "@/lib/schemas/user";
-
 import { localDateTimeToQueryYearMonthDay } from "@/lib/utils/date";
 
 import { apiClient } from "@/lib/api";
@@ -25,7 +23,11 @@ interface UserResetPasswordDialogProps {
   setOpen: (open: boolean) => void;
   clientId: string;
   userId: string;
-  user: TUserConfigurations[number];
+  user: {
+    userID: string | number;
+    email: string | null;
+    userName: string;
+  };
 }
 
 export function UserResetPasswordDialog({
