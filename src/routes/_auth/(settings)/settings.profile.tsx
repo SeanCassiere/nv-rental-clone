@@ -69,6 +69,8 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 import { apiClient } from "@/lib/api";
 
+import { UserResetPasswordDialog } from "./-components/application/user-reset-password-dialog";
+
 export const Route = createFileRoute("/_auth/(settings)/settings/profile")({
   beforeLoad: ({ context }) => ({
     currentUserProfileOptions: fetchUserByIdOptions({
@@ -95,8 +97,6 @@ export const Route = createFileRoute("/_auth/(settings)/settings/profile")({
   },
   component: SettingsProfilePage,
 });
-
-const mutationKey = ["settings", "profile", "updating"];
 
 function SettingsProfilePage() {
   const context = Route.useRouteContext();
@@ -131,7 +131,7 @@ function SettingsProfilePage() {
         />
       ) : (
         <React.Fragment>
-          {[...Array(4)].map((_, idx) => (
+          {[...Array(5)].map((_, idx) => (
             <Card key={`skeleton_${idx}`}>
               <CardHeader>
                 <CardTitle>
@@ -151,7 +151,7 @@ function SettingsProfilePage() {
                   className="bg-transparent"
                   disabled
                 >
-                  Save
+                  {t("buttons.save", { ns: "labels" })}
                 </Button>
               </CardFooter>
             </Card>
@@ -206,7 +206,6 @@ function ProfileForm(props: ProfileFormProps) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey,
     mutationFn: apiClient.user.updateProfileByUserId,
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
@@ -305,6 +304,13 @@ function ProfileForm(props: ProfileFormProps) {
         isMutating={isPending}
       />
       <PhoneNumberBlock
+        {...props}
+        form={form}
+        onFormSubmit={handleFormSubmit}
+        isLocked={isLocked}
+        isMutating={isPending}
+      />
+      <ResetPasswordBlock
         {...props}
         form={form}
         onFormSubmit={handleFormSubmit}
@@ -462,10 +468,8 @@ function EmailBlock({ form, onFormSubmit, isLocked, isMutating }: BlockProps) {
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
@@ -549,10 +553,8 @@ function DisplayNameBlock({
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
@@ -626,10 +628,8 @@ function LanguageBlock({
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
@@ -691,15 +691,53 @@ function PhoneNumberBlock({
               size="sm"
               variant="outline"
               className="bg-transparent"
+              disabled={isLocked || isMutating}
             >
-              {isMutating ? (
-                <icons.Loading className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
               <span>{t("buttons.save", { ns: "labels" })}</span>
             </Button>
           </CardFooter>
         </Card>
       </form>
     </Form>
+  );
+}
+
+function ResetPasswordBlock({ clientId, userId, user }: BlockProps) {
+  const { t } = useTranslation();
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <UserResetPasswordDialog
+        open={open}
+        setOpen={setOpen}
+        user={user}
+        clientId={clientId}
+        userId={userId}
+      />
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">
+            {t("titles.profileResetPassword", { ns: "settings" })}
+          </CardTitle>
+          <CardDescription>
+            {t("descriptions.profileResetPassword", {
+              ns: "settings",
+              appName: UI_APPLICATION_NAME,
+            })}
+          </CardDescription>
+        </CardHeader>
+        <CardFooter className="justify-end border-t py-2.5">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className="bg-transparent text-destructive/90 hover:text-destructive"
+            onClick={() => setOpen(true)}
+          >
+            <span>{t("labels.resetPassword", { ns: "settings" })}</span>
+          </Button>
+        </CardFooter>
+      </Card>
+    </>
   );
 }
