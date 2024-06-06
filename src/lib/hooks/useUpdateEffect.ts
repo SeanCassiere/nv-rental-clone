@@ -21,6 +21,6 @@ export function useUpdateEffect(effect: EffectCallback, deps?: DependencyList) {
     if (!isFirst) {
       return effect();
     }
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }

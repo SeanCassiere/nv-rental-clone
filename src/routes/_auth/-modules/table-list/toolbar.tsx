@@ -128,7 +128,7 @@ function TableListToolbarActions({
 
   const tableFilters = React.useMemo(
     () => table.getState().columnFilters,
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getState().columnFilters]
   );
 
