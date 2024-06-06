@@ -112,7 +112,8 @@ function ReportTableContent<TData, TValue>(
         header.column.getSize();
     }
     return colSizes;
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table.getState().columnSizingInfo, table.getFlatHeaders()]);
 
   const visibleColumns = table.getVisibleLeafColumns();

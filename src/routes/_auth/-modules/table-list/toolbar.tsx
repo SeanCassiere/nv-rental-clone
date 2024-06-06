@@ -126,11 +126,7 @@ function TableListToolbarActions({
   const { handleSearch, handleReset, filterItems } = useTableListToolbar();
   const { table } = useTableList();
 
-  const tableFilters = React.useMemo(
-    () => table.getState().columnFilters,
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getState().columnFilters]
-  );
+  const tableFilters = table.getState().columnFilters;
 
   const isFiltered = React.useMemo(() => {
     let isDirty = false;

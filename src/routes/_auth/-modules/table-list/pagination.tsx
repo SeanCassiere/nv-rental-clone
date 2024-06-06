@@ -23,16 +23,8 @@ function TableListPaginationItems({
 }) {
   const { table } = useTableList();
 
-  const pagination = React.useMemo(
-    () => table.getState().pagination,
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getState().pagination]
-  );
-  const totalPages = React.useMemo(
-    () => table.getPageCount(),
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getPageCount()]
-  );
+  const pagination = table.getState().pagination;
+  const totalPages = table.getPageCount();
 
   const pages = React.useMemo(
     () =>
@@ -91,12 +83,12 @@ function TableListPaginationPrevious({
 
   const pagination = React.useMemo(
     () => table.getState().pagination,
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getState().pagination]
   );
   const canPrevious = React.useMemo(
     () => table.getCanPreviousPage(),
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getCanPreviousPage()]
   );
 
@@ -129,12 +121,12 @@ function TableListPaginationNext({
 
   const pagination = React.useMemo(
     () => table.getState().pagination,
-    // todo-eslint react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getState().pagination]
   );
   const canNext = React.useMemo(
     () => table.getCanNextPage(),
-    // todo-eslint react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getCanNextPage()]
   );
 

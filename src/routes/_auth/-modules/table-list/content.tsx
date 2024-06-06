@@ -41,21 +41,12 @@ function TableListContent(props: TableListContentProps) {
   const { className, ...divProps } = props;
   const { table, isLoading = false } = useTableList();
 
-  const columnOrder = React.useMemo(
-    () => table.getState().columnOrder,
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getState().columnOrder]
-  );
+  const columnOrder = table.getState().columnOrder;
 
-  const safeColumnOrderIds = React.useMemo(
-    () =>
-      table
-        .getAllColumns()
-        .filter((column) => !column.getCanSort() && !column.getCanHide())
-        .map((column) => column.id),
-    // todo-eslint react-hooks/exhaustive-deps
-    [table.getAllColumns()]
-  );
+  const safeColumnOrderIds = table
+    .getAllColumns()
+    .filter((column) => !column.getCanSort() && !column.getCanHide())
+    .map((column) => column.id);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;

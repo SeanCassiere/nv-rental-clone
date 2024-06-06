@@ -164,8 +164,7 @@ export function useLocalStorage<T>(
 
   useEffect(() => {
     setStoredValue(readValue());
-    // todo-eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  }, [key, readValue]);
 
   const handleStorageChange = useCallback(
     (event: StorageEvent | CustomEvent) => {

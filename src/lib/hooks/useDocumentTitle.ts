@@ -20,18 +20,21 @@ type Options = {
 export function useDocumentTitle(title: string, options: Options = {}): void {
   const { preserveTitleOnUnmount = true } = options;
   const defaultTitle = useRef<string | null>(null);
+  const windowRef = useRef(window);
 
   useIsomorphicLayoutEffect(() => {
     defaultTitle.current = window.document.title;
   }, []);
 
   useIsomorphicLayoutEffect(() => {
-    window.document.title = title;
+    windowRef.current.document.title = title;
+    // window.document.title = title;
   }, [title]);
 
   useUnmount(() => {
     if (!preserveTitleOnUnmount && defaultTitle.current) {
-      window.document.title = defaultTitle.current;
+      windowRef.current.document.title = defaultTitle.current;
+      // window.document.title = defaultTitle.current;
     }
   });
 }
