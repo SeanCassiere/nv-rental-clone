@@ -28,7 +28,7 @@
     "tailwind.config.cjs",
     "prettier.config.cjs",
     "postcss.config.cjs",
-    "eslint.config.js",
+    "eslint.config.mjs",
     "postbuild.cjs"
   ],
   "exclude": ["node_modules", "temp", "dist"],

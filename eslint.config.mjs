@@ -1,5 +1,7 @@
 // @ts-check
-import eslint from "@eslint/js";
+import { fixupConfigRules } from "@eslint/compat";
+import { FlatCompat } from "@eslint/eslintrc";
+import eslintJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
@@ -17,13 +19,20 @@ import tsEslint from "typescript-eslint";
  * It should be replaced with `eslint-disable-next-line react-hooks/exhaustive-deps`
  */
 
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
+  recommendedConfig: eslintJs.configs.recommended,
+  allConfig: eslintJs.configs.all,
+});
+
 export default tsEslint.config(
-  eslint.configs.recommended,
+  eslintJs.configs.recommended,
   ...tsEslint.configs.recommended,
   reactJsxRuntime,
   {
     ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts", "*.html"],
   },
+  ...fixupConfigRules(compat.extends("plugin:react-hooks/recommended")),
   {
     files: ["src/**/*.{ts,tsx}", "*.config.js", "*.config.cjs"],
     ...reactRecommended,
@@ -39,6 +48,14 @@ export default tsEslint.config(
         ecmaFeatures: {
           jsx: true,
         },
+      },
+    },
+    settings: {
+      react: {
+        createClass: "createReactClass",
+        pragma: "React",
+        fragment: "Fragment",
+        version: "detect",
       },
     },
     rules: {

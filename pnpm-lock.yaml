@@ -160,6 +160,12 @@ dependencies:
     version: 3.23.8
 
 devDependencies:
+  '@eslint/compat':
+    specifier: ^1.0.3
+    version: 1.0.3
+  '@eslint/eslintrc':
+    specifier: ^3.1.0
+    version: 3.1.0
   '@eslint/js':
     specifier: ^9.4.0
     version: 9.4.0
@@ -859,6 +865,11 @@ packages:
   /@eslint-community/regexpp@4.10.0:
     resolution: {integrity: sha512-Cu96Sd2By9mCNTx2iyKOmq10v22jUVQv0lQnlGNy16oE9589yE+QADPbrMGCkA51cKZSg3Pu/aTJVTGfL/qjUA==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
+    dev: true
+
+  /@eslint/compat@1.0.3:
+    resolution: {integrity: sha512-9RaroPQaU2+SDcWav1YfuipwqnHccoiXZdUsicRQsQ/vH2wkEmRVcj344GapG/FnCeZRtqj0n6PshI+s9xkkAQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     dev: true
 
   /@eslint/config-array@0.15.1:
