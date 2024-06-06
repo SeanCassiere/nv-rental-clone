@@ -120,8 +120,8 @@ dependencies:
     specifier: ^2.2.0
     version: 2.2.0
   lucide-react:
-    specifier: ^0.383.0
-    version: 0.383.0(react@18.3.1)
+    specifier: ^0.387.0
+    version: 0.387.0(react@18.3.1)
   oidc-client-ts:
     specifier: ^3.0.1
     version: 3.0.1
@@ -4088,8 +4088,8 @@ packages:
       yallist: 3.1.1
     dev: true
 
-  /lucide-react@0.383.0(react@18.3.1):
-    resolution: {integrity: sha512-13xlG0CQCJtzjSQYwwJ3WRqMHtRj3EXmLlorrARt7y+IHnxUCp3XyFNL1DfaGySWxHObDvnu1u1dV+0VMKHUSg==}
+  /lucide-react@0.387.0(react@18.3.1):
+    resolution: {integrity: sha512-NyB4oJZ0pzLHT/QgMpgCPbez6yqvz8QPBocMJBXQCInPpXcQVCUpcU1CDlRG8mT2j0KqodLQYp+F5zn8U86sXg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
