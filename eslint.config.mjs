@@ -3,6 +3,7 @@ import { fixupConfigRules } from "@eslint/compat";
 import { FlatCompat } from "@eslint/eslintrc";
 import eslintJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
+import reactCompiler from "eslint-plugin-react-compiler";
 import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import globals from "globals";
@@ -58,6 +59,9 @@ export default tsEslint.config(
         version: "detect",
       },
     },
+    plugins: {
+      "react-compiler": reactCompiler,
+    },
     rules: {
       "no-extra-boolean-cast": "off",
       "no-case-declarations": "off",
@@ -74,6 +78,7 @@ export default tsEslint.config(
       "react/display-name": "off",
       "react/no-unescaped-entities": "off",
       "react/no-unknown-property": "off",
+      "react-compiler/react-compiler": "error",
     },
   },
   eslintConfigPrettier

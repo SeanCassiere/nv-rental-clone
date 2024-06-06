@@ -23,16 +23,8 @@ function TableListPaginationItems({
 }) {
   const { table } = useTableList();
 
-  const pagination = React.useMemo(
-    () => table.getState().pagination,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getState().pagination]
-  );
-  const totalPages = React.useMemo(
-    () => table.getPageCount(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getPageCount()]
-  );
+  const pagination = table.getState().pagination;
+  const totalPages = table.getPageCount();
 
   const pages = React.useMemo(
     () =>
