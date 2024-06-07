@@ -66,23 +66,18 @@ export function getAuthFromRouterContext(context: MyRouterContext) {
 
 /**
  * Checks if the user is valid and authenticated.
- * @param user - The user object.
- * @param isAuthenticated - A boolean indicating if the user is authenticated.
+ * @param user - The user object from the `UserManager`.
  * @returns A boolean indicating if the user is valid and authenticated.
  * @example
  * ```ts
  * const user = context.auth.user;
- * const isAuthenticated = context.auth.isAuthenticated;
- * const isValid = isUserValid(user, isAuthenticated);
+ * const isValid = isUserValid(user);
  * if (!isValid) {
  *  throw redirect({ to: "/login" });
  * }
  * ```
  */
-export function isUserValid(
-  user: User | null | undefined,
-  isAuthenticated: boolean
-) {
+export function isValidUser(user: User | null | undefined) {
   const isAuthExpired = (user?.expires_at || 0) > Date.now();
-  return !!user && isAuthenticated && !isAuthExpired;
+  return !!user && !isAuthExpired;
 }

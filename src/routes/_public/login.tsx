@@ -19,7 +19,7 @@ import { icons } from "@/components/ui/icons";
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 
-import { isUserValid } from "@/lib/utils/auth";
+import { isValidUser } from "@/lib/utils/auth";
 import {
   LS_OIDC_REDIRECT_URI_KEY,
   UI_APPLICATION_NAME,
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/_public/login")({
       };
     }
 
-    if (isUserValid(context.auth.user, context.auth.isAuthenticated)) {
+    if (context.auth.isAuthenticated && isValidUser(context.auth.user)) {
       throw redirect({
         to: redirect_url,
       });

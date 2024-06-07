@@ -17,7 +17,7 @@ import {
   fetchUserByIdOptions,
 } from "@/lib/query/user";
 
-import { getAuthFromRouterContext, isUserValid } from "@/lib/utils/auth";
+import { getAuthFromRouterContext, isValidUser } from "@/lib/utils/auth";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 
 import { useConfigureLocalFeatures } from "./-components/auth/useConfigureLocalFeatures";
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/_auth")({
     if (
       navigator !== "signinSilent" &&
       navigator !== "signinRedirect" &&
-      !isUserValid(context.auth.user, context.auth.isAuthenticated)
+      !isValidUser(context.auth.user)
     ) {
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, location.href);
 
