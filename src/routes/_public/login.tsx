@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -56,11 +57,12 @@ export const Route = createFileRoute("/_public/login")({
 });
 
 function LoginPage() {
+  const auth = useAuth();
+  const { t } = useTranslation();
+
   const redirect_url = Route.useLoaderData({
     select: (s) => s.redirect_url,
   });
-
-  const auth = useAuth();
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -80,7 +82,7 @@ function LoginPage() {
     }
   };
 
-  useDocumentTitle(titleMaker("Login to your account"));
+  useDocumentTitle(titleMaker(t("pageTitle", { ns: "login" })));
 
   return (
     <main className="grid h-dvh w-dvw bg-background lg:grid-cols-2 xl:grid-cols-3">
@@ -97,10 +99,11 @@ function LoginPage() {
         </div>
         <Card className="mx-auto w-full max-w-md shadow-inner">
           <CardHeader className="mb-2">
-            <CardTitle className="mb-2">Login to your account</CardTitle>
+            <CardTitle className="mb-2">
+              {t("title", { ns: "login" })}
+            </CardTitle>
             <CardDescription className="max-w-sm">
-              You must be signed in to access the {UI_APPLICATION_NAME}{" "}
-              application.
+              {t("description", { ns: "login", appName: UI_APPLICATION_NAME })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -111,7 +114,9 @@ function LoginPage() {
               onClick={handleLogin}
               disabled={isSubmitting}
             >
-              <span>Sign in</span>
+              <span>
+                {t("submitBtn", { ns: "login", appName: UI_APPLICATION_NAME })}
+              </span>
             </Button>
           </CardContent>
         </Card>

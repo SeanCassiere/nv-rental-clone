@@ -1,0 +1,6 @@
+{
+  "pageTitle": "Login to your account",
+  "title": "Login to your account",
+  "description": "You must be signed in to access the {{appName}} application.",
+  "submitBtn": "Sign in to {{appName}}"
+}
