@@ -214,5 +214,6 @@ function CalendarDropdown(props: DropdownProps) {
 
   return null;
 }
+CalendarDropdown.displayName = "CalendarDropdown";
 
 export { Calendar };
