@@ -1,3 +1,4 @@
+import type { User } from "oidc-client-ts";
 import { z } from "zod";
 
 import type { MyRouterContext } from "@/routes/__root";
@@ -61,4 +62,27 @@ export function getAuthFromAuthHook(auth: MyRouterContext["auth"]) {
 
 export function getAuthFromRouterContext(context: MyRouterContext) {
   return getAuthFromAuthHook(context.auth);
+}
+
+/**
+ * Checks if the user is valid and authenticated.
+ * @param user - The user object.
+ * @param isAuthenticated - A boolean indicating if the user is authenticated.
+ * @returns A boolean indicating if the user is valid and authenticated.
+ * @example
+ * ```ts
+ * const user = context.auth.user;
+ * const isAuthenticated = context.auth.isAuthenticated;
+ * const isValid = isUserValid(user, isAuthenticated);
+ * if (!isValid) {
+ *  throw redirect({ to: "/login" });
+ * }
+ * ```
+ */
+export function isUserValid(
+  user: User | null | undefined,
+  isAuthenticated: boolean
+) {
+  const isAuthExpired = (user?.expires_at || 0) > Date.now();
+  return !!user && isAuthenticated && !isAuthExpired;
 }
