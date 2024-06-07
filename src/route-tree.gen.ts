@@ -15,6 +15,7 @@ import { Route as PublicImport } from "./routes/_public"
 import { Route as AuthImport } from "./routes/_auth"
 import { Route as PublicOidcCallbackImport } from "./routes/_public/oidc-callback"
 import { Route as PublicLogoutImport } from "./routes/_public/logout"
+import { Route as PublicLoginImport } from "./routes/_public/login"
 import { Route as PublicLoggedOutImport } from "./routes/_public/logged-out"
 import { Route as PublicDevImport } from "./routes/_public/dev"
 import { Route as AuthdashboardIndexImport } from "./routes/_auth/(dashboard)/index"
@@ -92,6 +93,11 @@ const PublicOidcCallbackRoute = PublicOidcCallbackImport.update({
 
 const PublicLogoutRoute = PublicLogoutImport.update({
   path: "/logout",
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicLoginRoute = PublicLoginImport.update({
+  path: "/login",
   getParentRoute: () => PublicRoute,
 } as any)
 
@@ -454,6 +460,13 @@ declare module "@tanstack/react-router" {
       path: "/logged-out"
       fullPath: "/logged-out"
       preLoaderRoute: typeof PublicLoggedOutImport
+      parentRoute: typeof PublicImport
+    }
+    "/_public/login": {
+      id: "/_public/login"
+      path: "/login"
+      fullPath: "/login"
+      preLoaderRoute: typeof PublicLoginImport
       parentRoute: typeof PublicImport
     }
     "/_public/logout": {
@@ -946,6 +959,7 @@ export const routeTree = rootRoute.addChildren({
   PublicRoute: PublicRoute.addChildren({
     PublicDevRoute,
     PublicLoggedOutRoute,
+    PublicLoginRoute,
     PublicLogoutRoute,
     PublicOidcCallbackRoute,
   }),
@@ -981,6 +995,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_public/dev",
         "/_public/logged-out",
+        "/_public/login",
         "/_public/logout",
         "/_public/oidc-callback"
       ]
@@ -991,6 +1006,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_public/logged-out": {
       "filePath": "_public/logged-out.tsx",
+      "parent": "/_public"
+    },
+    "/_public/login": {
+      "filePath": "_public/login.tsx",
       "parent": "/_public"
     },
     "/_public/logout": {

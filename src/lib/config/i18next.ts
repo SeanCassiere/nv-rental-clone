@@ -33,6 +33,7 @@ export function getDateFnsLocale(lng?: string) {
 // END: locales for date-fns
 
 export const i18nextNsTranslation = "translation";
+export const i18nextNsLogin = "login";
 export const i18nextNsSettings = "settings";
 export const i18nextNsDashboard = "dashboard";
 export const i18nextNsMessages = "messages";
@@ -178,6 +179,7 @@ i18next
     defaultNS: i18nextNsDefault,
     ns: [
       i18nextNsTranslation,
+      i18nextNsLogin,
       i18nextNsDashboard,
       i18nextNsSettings,
       i18nextNsMessages,

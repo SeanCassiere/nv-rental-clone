@@ -1,5 +1,4 @@
-import { WebStorageStateStore } from "oidc-client-ts";
-import type { AuthProviderNoUserManagerProps } from "react-oidc-context";
+import { UserManager, WebStorageStateStore } from "oidc-client-ts";
 
 import {
   OIDC_AUTHORITY,
@@ -9,9 +8,9 @@ import {
   OIDC_SILENT_REDIRECT_URI,
 } from "@/lib/utils/constants";
 
-import { queryClient } from "@/lib/config/tanstack-query";
+const userStore = new WebStorageStateStore({ store: window.localStorage });
 
-export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
+export const userManager = new UserManager({
   authority: OIDC_AUTHORITY,
   metadataUrl: `${OIDC_AUTHORITY}/.well-known/openid-configuration`,
   client_id: OIDC_CLIENT_ID,
@@ -24,8 +23,5 @@ export const reactOidcContextConfig: AuthProviderNoUserManagerProps = {
   automaticSilentRenew: true,
   loadUserInfo: true,
   monitorSession: true,
-  userStore: new WebStorageStateStore({ store: window.localStorage }),
-  onSigninCallback: async (user) => {
-    await queryClient.invalidateQueries();
-  },
-};
+  userStore,
+});

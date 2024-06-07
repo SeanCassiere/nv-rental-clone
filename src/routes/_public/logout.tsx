@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
+import { Container } from "@/routes/-components/container";
 import { LoadingPlaceholder } from "@/routes/-components/loading-placeholder";
 
 export const Route = createFileRoute("/_public/logout")({
@@ -26,5 +27,11 @@ export const Route = createFileRoute("/_public/logout")({
 
     return;
   },
-  component: LoadingPlaceholder,
+  component: function PageComponent() {
+    return (
+      <Container>
+        <LoadingPlaceholder />
+      </Container>
+    );
+  },
 });

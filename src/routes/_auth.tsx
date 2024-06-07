@@ -2,6 +2,7 @@ import React from "react";
 import {
   createFileRoute,
   Outlet,
+  redirect,
   useRouterState,
 } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
@@ -16,7 +17,7 @@ import {
   fetchUserByIdOptions,
 } from "@/lib/query/user";
 
-import { getAuthFromRouterContext } from "@/lib/utils/auth";
+import { getAuthFromRouterContext, isUserValid } from "@/lib/utils/auth";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 
 import { useConfigureLocalFeatures } from "./-components/auth/useConfigureLocalFeatures";
@@ -30,23 +31,28 @@ export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context, location, preload }) => {
     const navigator = context.auth.activeNavigator;
 
-    // if there isn't an authentication flow currently in-flight
+    if (preload) {
+      return;
+    }
+
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect_url: location.href,
+        },
+      });
+    }
+
     if (
-      !preload &&
-      !context.auth.isLoading &&
       navigator !== "signinSilent" &&
-      navigator !== "signinRedirect"
+      navigator !== "signinRedirect" &&
+      !isUserValid(context.auth.user, context.auth.isAuthenticated)
     ) {
-      const user = context.auth.user;
-      const isAuthenticated = context.auth.isAuthenticated;
-      const isAuthExpired = (user?.expires_at || 0) > Date.now();
+      window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, location.href);
 
-      if (!user || isAuthExpired || !isAuthenticated) {
-        const path = location.href;
-
-        window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, path);
-        await context.auth.signinRedirect();
-      }
+      await context.auth.signinRedirect();
+      return;
     }
 
     return;

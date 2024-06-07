@@ -24,7 +24,7 @@ import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
 
 import "@/lib/config/i18next";
 
-import { reactOidcContextConfig } from "@/lib/config/react-oidc-context";
+import { userManager } from "@/lib/config/oidc-client-ts";
 import { queryClient } from "@/lib/config/tanstack-query";
 
 import { routeTree } from "@/route-tree.gen";
@@ -97,11 +97,7 @@ function RouterWithInjectedAuth() {
       {auth.isLoading ? (
         <FullPageLoadingSpinner />
       ) : (
-        <RouterProvider
-          router={router}
-          defaultPreload="intent"
-          context={{ auth }}
-        />
+        <RouterProvider router={router} context={{ auth }} />
       )}
       <Toaster
         theme={theme.ternaryDarkMode}
@@ -136,7 +132,12 @@ export default function App() {
         reloadOnDowngrade
       >
         <QueryClientProvider client={queryClient}>
-          <AuthProvider {...reactOidcContextConfig}>
+          <AuthProvider
+            userManager={userManager}
+            onSigninCallback={() => {
+              queryClient.invalidateQueries();
+            }}
+          >
             <GlobalDialogProvider>
               <TooltipProvider>
                 <CacheDocumentFocusChecker />
