@@ -5,10 +5,22 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { isUserValid } from "@/lib/utils/auth";
-import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
+import {
+  LS_OIDC_REDIRECT_URI_KEY,
+  UI_APPLICATION_NAME,
+} from "@/lib/utils/constants";
+import { titleMaker } from "@/lib/utils/title-maker";
 
 const DEFAULT_REDIRECT_URL = "/";
 
@@ -68,18 +80,50 @@ function LoginPage() {
     }
   };
 
+  useDocumentTitle(titleMaker("Login to your account"));
+
   return (
-    <main className="grid h-dvh w-dvw grid-cols-2">
-      <section className="flex items-center justify-center">
-        <Card>
+    <main className="grid h-dvh w-dvw bg-background lg:grid-cols-2 xl:grid-cols-3">
+      <section className="flex flex-col justify-between p-4 md:col-span-1">
+        <div className="mx-auto flex w-full max-w-[800px] items-center justify-start gap-2">
+          <img
+            className="h-10 w-10 rounded-full p-1 [content:var(--logo-url)]"
+            alt={UI_APPLICATION_NAME}
+            style={{ imageRendering: "crisp-edges" }}
+          />
+          <p className="select-none text-lg font-medium leading-3">
+            {UI_APPLICATION_NAME}
+          </p>
+        </div>
+        <Card className="mx-auto w-full max-w-md shadow-inner">
+          <CardHeader className="mb-2">
+            <CardTitle className="mb-2">Login to your account</CardTitle>
+            <CardDescription className="max-w-sm">
+              You must be signed in to access the {UI_APPLICATION_NAME}{" "}
+              application.
+            </CardDescription>
+          </CardHeader>
           <CardContent>
-            <Button type="button" onClick={handleLogin} disabled={isSubmitting}>
-              <span>Login</span>
+            <Button
+              type="button"
+              className="w-full text-base"
+              size="lg"
+              onClick={handleLogin}
+              disabled={isSubmitting}
+            >
+              <span>Sign in</span>
             </Button>
           </CardContent>
         </Card>
+        <div className="mx-auto w-full max-w-[800px]">
+          <p className="text-sm font-medium tracking-tight text-muted-foreground">
+            © {UI_APPLICATION_NAME} ({new Date().getFullYear()})
+          </p>
+        </div>
       </section>
-      <section>Marketing content</section>
+      <section className="hidden py-4 lg:col-span-1 lg:grid lg:place-items-center xl:col-span-2">
+        <div className="size-full rounded-l-2xl bg-secondary p-4" />
+      </section>
     </main>
   );
 }
