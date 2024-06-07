@@ -52,6 +52,7 @@ export const Route = createFileRoute("/_auth")({
       window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, location.href);
 
       await context.auth.signinRedirect();
+      return;
     }
 
     return;
