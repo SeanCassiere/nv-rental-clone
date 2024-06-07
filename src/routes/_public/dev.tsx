@@ -10,6 +10,8 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
+import { Container } from "../-components/container";
+
 export const Route = createFileRoute("/_public/dev")({
   component: DevPage,
 });
@@ -18,12 +20,14 @@ function DevPage() {
   useDocumentTitle(titleMaker("Styling Area"));
 
   return (
-    <div className="overflow-y-auto bg-background px-2 text-foreground">
-      <section className="py-10 md:mx-28">
-        <h2 className="text-2xl">JSURL Utils</h2>
-        <JsURLDecoder />
-      </section>
-    </div>
+    <Container>
+      <div className="overflow-y-auto bg-background px-2 text-foreground">
+        <section className="py-10 md:mx-28">
+          <h2 className="text-2xl">JSURL Utils</h2>
+          <JsURLDecoder />
+        </section>
+      </div>
+    </Container>
   );
 }
 

@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
 
+import { Container } from "@/routes/-components/container";
 import { LoadingPlaceholder } from "@/routes/-components/loading-placeholder";
 
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
@@ -73,5 +74,11 @@ export const Route = createFileRoute("/_public/oidc-callback")({
       search: searchParamsObj,
     });
   },
-  component: LoadingPlaceholder,
+  component: function PageComponent() {
+    return (
+      <Container>
+        <LoadingPlaceholder />
+      </Container>
+    );
+  },
 });
