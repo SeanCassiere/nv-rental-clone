@@ -92,9 +92,15 @@ function RouterWithInjectedAuth() {
 
   const dir = i18n.dir();
 
+  React.useEffect(() => {
+    if (typeof auth.user === "undefined") return;
+
+    router.invalidate();
+  }, [auth.user]);
+
   return (
     <React.Fragment>
-      {auth.isLoading ? (
+      {typeof auth.user === "undefined" ? (
         <FullPageLoadingSpinner />
       ) : (
         <RouterProvider router={router} context={{ auth }} />

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { CircleCheckBigIcon } from "lucide-react";
+import * as ReactDOM from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
@@ -68,12 +69,8 @@ function LoginPage() {
     select: (s) => s.redirect_url,
   });
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
   const handleLogin = async () => {
     window.localStorage.setItem(LS_OIDC_REDIRECT_URI_KEY, redirect_url);
-
-    setIsSubmitting(true);
 
     try {
       await auth.signinRedirect();
@@ -81,10 +78,10 @@ function LoginPage() {
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
       toast.error(errorMessage);
-    } finally {
-      setIsSubmitting(false);
     }
   };
+
+  const isSubmitting = auth.isLoading;
 
   useDocumentTitle(titleMaker(t("pageTitle", { ns: "login" })));
 
@@ -118,6 +115,9 @@ function LoginPage() {
               onClick={handleLogin}
               disabled={isSubmitting}
             >
+              {isSubmitting ? (
+                <icons.Loading className="mr-2 animate-spin" />
+              ) : null}
               <span>
                 {t("submitBtn", { ns: "login", appName: UI_APPLICATION_NAME })}
               </span>
