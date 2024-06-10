@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // lib/react-compiler-runtime/index.js
 
 import * as React from "react";
