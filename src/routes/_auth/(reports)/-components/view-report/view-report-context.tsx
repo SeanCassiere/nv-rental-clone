@@ -59,9 +59,8 @@ export function ReportContextProvider(
       (s.name ?? "").toLowerCase() !== "customerid"
   );
 
-  const initialSearchCriteria = React.useMemo(
-    () => makeInitialSearchCriteria(props.report.searchCriteria),
-    [props.report.searchCriteria]
+  const initialSearchCriteria = makeInitialSearchCriteria(
+    props.report.searchCriteria
   );
 
   const [searchCriteria, setSearchCriteria] = React.useState(

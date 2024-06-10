@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
@@ -132,26 +126,26 @@ const AddRentalParentForm = ({
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
 
-  const [hasEdited, setHasEdited] = useState(false);
+  const [hasEdited, setHasEdited] = React.useState(false);
 
-  const [creationStagesComplete, setCreationStageComplete] = useState(() =>
-    isCheckin ? defaultCheckinCompletionStages : defaultCompletionStages
+  const [creationStagesComplete, setCreationStageComplete] = React.useState(
+    () => (isCheckin ? defaultCheckinCompletionStages : defaultCompletionStages)
   );
 
   const [agreementRentalInformation, setAgreementRentalInformation] =
-    useState<AgreementRentalInformationSchemaParsed | null>(null);
+    React.useState<AgreementRentalInformationSchemaParsed | null>(null);
   const [agreementVehicleInformation, setAgreementVehicleInformation] =
-    useState<AgreementVehicleInformationSchemaParsed | null>(null);
+    React.useState<AgreementVehicleInformationSchemaParsed | null>(null);
 
   const [commonCustomerInformation, setCommonCustomerInformation] =
-    useState<CommonCustomerInformationSchemaParsed | null>(null);
+    React.useState<CommonCustomerInformationSchemaParsed | null>(null);
 
-  const [selectedTaxIds, setSelectedTaxIds] = useState<number[]>([]);
-  const [selectedMiscCharges, setSelectedMiscCharges] = useState<
+  const [selectedTaxIds, setSelectedTaxIds] = React.useState<number[]>([]);
+  const [selectedMiscCharges, setSelectedMiscCharges] = React.useState<
     CalculateRentalSummaryInput["miscCharges"]
   >([]);
 
-  const [[selectedRateName, selectedRate], setRateDetails] = useState<
+  const [[selectedRateName, selectedRate], setRateDetails] = React.useState<
     [string, RentalRateParsed | null]
   >(["", null]);
   const setSelectedRate = (
@@ -171,11 +165,11 @@ const AddRentalParentForm = ({
     setRateDetails((prev) => [prev[0], cb]);
   };
 
-  const handleSetSelectedRateName = useCallback((rateName: string) => {
+  const handleSetSelectedRateName = React.useCallback((rateName: string) => {
     setRateDetails([rateName, null]);
   }, []);
 
-  const handleSetSelectedRate = useCallback((rate: RentalRateParsed) => {
+  const handleSetSelectedRate = React.useCallback((rate: RentalRateParsed) => {
     setSelectedRate(rate);
     setCreationStageComplete((prev) => ({
       ...prev,
@@ -183,7 +177,7 @@ const AddRentalParentForm = ({
     }));
   }, []);
 
-  const handleSetSelectedMiscCharges = useCallback(
+  const handleSetSelectedMiscCharges = React.useCallback(
     (charges: CalculateRentalSummaryInput["miscCharges"]) => {
       setSelectedMiscCharges(charges);
       setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
@@ -191,8 +185,9 @@ const AddRentalParentForm = ({
     []
   );
 
-  const tabsConfig = useMemo(() => {
-    const tabs: { id: string; label: string; component: ReactNode }[] = [];
+  const tabsConfig = React.useMemo(() => {
+    const tabs: { id: string; label: string; component: React.ReactNode }[] =
+      [];
     if (module === "agreement") {
       const others = {
         // 5
@@ -427,7 +422,7 @@ const AddRentalParentForm = ({
     })
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (getAgreementQuery.status !== "success" || !getAgreementQuery.data)
       return;
     if (getAgreementQuery.data && getAgreementQuery.data?.status !== 200)
@@ -582,7 +577,7 @@ const AddRentalParentForm = ({
     })
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (getOptimalRateQuery.status !== "success") return;
 
     const data =
@@ -644,7 +639,7 @@ const AddRentalParentForm = ({
     })
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (getRentalRatesQuery.status !== "success") return;
 
     const data =
@@ -740,7 +735,7 @@ const AddRentalParentForm = ({
     })
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (getMiscChargesQuery.status !== "success") return;
     if (!getMiscChargesQuery.data || getMiscChargesQuery.data.status !== 200)
       return;
@@ -824,7 +819,7 @@ const AddRentalParentForm = ({
     })
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (getTaxesQuery.status !== "success") return;
     if (!getTaxesQuery.data || getTaxesQuery.data.status !== 200) return;
 

@@ -380,12 +380,7 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
   const widgetList = useQuery(
     fetchDashboardWidgetsOptions({ auth: authParams })
   );
-  const widgets = React.useMemo(() => {
-    if (widgetList.data?.status === 200) {
-      return widgetList.data?.body;
-    }
-    return [];
-  }, [widgetList.data]);
+  const widgets = widgetList.data?.status === 200 ? widgetList.data?.body : [];
 
   const saveDashboardWidgetsMutation = useMutation({
     ...saveDashboardWidgetsMutationOptions(),

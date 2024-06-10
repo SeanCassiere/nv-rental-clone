@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useAuth } from "react-oidc-context";
@@ -32,10 +32,10 @@ export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
 
   const authParams = getAuthFromAuthHook(auth);
 
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(20);
 
-  const acceptedColumns = useMemo(
+  const acceptedColumns = React.useMemo(
     () =>
       [
         { accessor: "CustomerId", label: "#" },
@@ -62,7 +62,7 @@ export const SelectCustomerDialog = (props: SelectVehicleModalProps) => {
     })
   );
 
-  const columnDefs = useMemo(() => {
+  const columnDefs = React.useMemo(() => {
     const columns: any[] = [];
 
     acceptedColumns.forEach((column) => {

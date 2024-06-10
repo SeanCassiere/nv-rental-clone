@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useAuth } from "react-oidc-context";
@@ -39,12 +39,10 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
 
   const authParams = getAuthFromAuthHook(auth);
 
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(20);
 
-  const checkoutLocation = props.filters?.CurrentLocationId ?? 0;
-
-  const acceptedColumns = useMemo(
+  const acceptedColumns = React.useMemo(
     () =>
       [
         { accessor: "VehicleId", label: "#" },
@@ -81,7 +79,7 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
   const vehiclesList =
     vehicleListData.data?.status === 200 ? vehicleListData.data?.body : [];
 
-  const columnDefs = useMemo(() => {
+  const columnDefs = React.useMemo(() => {
     const columns: any[] = [];
 
     acceptedColumns.forEach((column) => {

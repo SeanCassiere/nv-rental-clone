@@ -60,10 +60,7 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
     })
   );
 
-  const data = React.useMemo(
-    () => (statusCounts.data?.status === 200 ? statusCounts.data?.body : []),
-    [statusCounts.data?.status, statusCounts.data?.body]
-  );
+  const data = statusCounts.data?.status === 200 ? statusCounts.data?.body : [];
 
   const vehicleStatuses = useQuery(
     fetchVehiclesStatusesOptions({ auth: props.auth })
@@ -77,27 +74,17 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
     [vehicleStatuses.data]
   );
 
-  const sortedData = React.useMemo(
-    () =>
-      data.sort((a, b) => {
-        if (a.total < b.total) return 1;
-        if (a.total > b.total) return -1;
-        return 0;
-      }),
-    [data]
-  );
+  const sortedData = data.sort((a, b) => {
+    if (a.total < b.total) return 1;
+    if (a.total > b.total) return -1;
+    return 0;
+  });
 
-  const totalVehicles = React.useMemo(
-    () => sortedData.reduce((acc, item) => acc + item.total, 0),
-    [sortedData]
-  );
+  const totalVehicles = sortedData.reduce((acc, item) => acc + item.total, 0);
 
   const vehicleTypesList = useQuery(fetchVehiclesTypesOptions({ auth }));
 
-  const vehicleTypes = React.useMemo(
-    () => vehicleTypesList.data ?? [],
-    [vehicleTypesList.data]
-  );
+  const vehicleTypes = vehicleTypesList.data ?? [];
 
   const [rowCountStr] = useLocalStorage(
     STORAGE_KEYS.tableRowCount,

@@ -141,13 +141,10 @@ function AgreementsSearchPage() {
       )
     );
 
-  const pagination: PaginationState = React.useMemo(
-    () => ({
-      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
-      pageSize: size,
-    }),
-    [pageNumber, size]
-  );
+  const pagination: PaginationState = {
+    pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+    pageSize: size,
+  };
 
   const agreementsData = useQuery(searchListOptions);
 
@@ -157,10 +154,7 @@ function AgreementsSearchPage() {
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
   );
-  const vehicleTypes = React.useMemo(
-    () => vehicleTypesList.data ?? [],
-    [vehicleTypesList.data]
-  );
+  const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useQuery(
     fetchLocationsListOptions({
@@ -168,10 +162,8 @@ function AgreementsSearchPage() {
       filters: { withActive: true },
     })
   );
-  const locations = React.useMemo(
-    () => (locationsList.data?.status === 200 ? locationsList.data.body : []),
-    [locationsList.data?.body, locationsList.data?.status]
-  );
+  const locations =
+    locationsList.data?.status === 200 ? locationsList.data.body : [];
 
   const agreementTypesQuery = useSuspenseQuery(agreementTypesOptions);
   const agreementTypes = agreementTypesQuery.data;
@@ -311,146 +303,138 @@ function AgreementsSearchPage() {
     });
   }, [columnFilters, navigate, pagination.pageSize]);
 
-  const columnVisibility: VisibilityState = React.useMemo(
-    () =>
-      columnsData.data.status === 200
-        ? columnsData.data.body.reduce(
-            (prev, current) => ({
-              ...prev,
-              [current.columnHeader]: current.isSelected,
-            }),
-            {}
-          )
-        : {},
-    [columnsData.data?.body, columnsData.data?.status]
-  );
+  const columnVisibility: VisibilityState =
+    columnsData.data.status === 200
+      ? columnsData.data.body.reduce(
+          (prev, current) => ({
+            ...prev,
+            [current.columnHeader]: current.isSelected,
+          }),
+          {}
+        )
+      : {};
 
   const parsedPagination =
     agreementsData.status === "success"
       ? agreementsData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
-    () => [
-      {
-        id: "CustomerId",
-        title: "CustomerId",
-        type: "hidden",
-      },
-      {
-        id: "VehicleId",
-        title: "VehicleId",
-        type: "hidden",
-      },
-      {
-        id: "AgreementNumber",
-        title: "AgreementNumber",
-        type: "hidden",
-      },
-      {
-        id: "Keyword",
-        title: "Search",
-        type: "text",
-        size: "large",
-      },
-      {
-        id: "Statuses",
-        title: "Status",
-        type: "multi-select",
-        options: agreementStatuses.map((item) => ({
-          value: `${item.id}`,
-          label: insertSpacesBeforeCaps(item.name),
-        })),
-        defaultValue: [],
-      },
-      {
-        id: "AgreementTypes",
-        title: "Type",
-        type: "multi-select",
-        options: agreementTypes.map((item) => ({
-          value: `${item.typeName}`,
-          label: item.typeName,
-        })),
-        defaultValue: [],
-      },
-      {
-        id: "StartDate",
-        title: "Start date",
-        type: "date",
-      },
-      {
-        id: "EndDate",
-        title: "End date",
-        type: "date",
-      },
-      {
-        id: "PickupLocationId",
-        title: "Checkout location",
-        type: "select",
-        options: locations.map((item) => ({
-          value: `${item.locationId}`,
-          label: `${item.locationName}`,
-        })),
-      },
-      {
-        id: "ReturnLocationId",
-        title: "Checkin location",
-        type: "select",
-        options: locations.map((item) => ({
-          value: `${item.locationId}`,
-          label: `${item.locationName}`,
-        })),
-      },
-      {
-        id: "VehicleTypeId",
-        title: "Vehicle type",
-        type: "select",
-        options: vehicleTypes.map((item) => ({
-          value: `${item.id}`,
-          label: item.value,
-        })),
-      },
-      {
-        id: "VehicleNo",
-        title: "Vehicle no.",
-        type: "text",
-        size: "normal",
-      },
-      {
-        id: "IsSearchOverdues",
-        title: "Only overdues?",
-        type: "select",
-        options: [
-          { value: "true", label: "Yes" },
-          { value: "false", label: "No" },
-        ],
-        defaultValue: "false",
-      },
-      {
-        id: "SortBy",
-        title: "Sort by",
-        type: "select",
-        options: [{ value: "CreatedDate", label: "Created date" }],
-        defaultValue: "CreatedDate",
-      },
-      {
-        id: "SortDirection",
-        title: "Sort direction",
-        type: "select",
-        options: [
-          { value: "ASC", label: "Asc" },
-          { value: "DESC", label: "Desc" },
-        ],
-        defaultValue: "DESC",
-      },
-    ],
-    [agreementStatuses, agreementTypes, locations, vehicleTypes]
-  );
+  const tableFacetedFilters: TableListToolbarFilterItem[] = [
+    {
+      id: "CustomerId",
+      title: "CustomerId",
+      type: "hidden",
+    },
+    {
+      id: "VehicleId",
+      title: "VehicleId",
+      type: "hidden",
+    },
+    {
+      id: "AgreementNumber",
+      title: "AgreementNumber",
+      type: "hidden",
+    },
+    {
+      id: "Keyword",
+      title: "Search",
+      type: "text",
+      size: "large",
+    },
+    {
+      id: "Statuses",
+      title: "Status",
+      type: "multi-select",
+      options: agreementStatuses.map((item) => ({
+        value: `${item.id}`,
+        label: insertSpacesBeforeCaps(item.name),
+      })),
+      defaultValue: [],
+    },
+    {
+      id: "AgreementTypes",
+      title: "Type",
+      type: "multi-select",
+      options: agreementTypes.map((item) => ({
+        value: `${item.typeName}`,
+        label: item.typeName,
+      })),
+      defaultValue: [],
+    },
+    {
+      id: "StartDate",
+      title: "Start date",
+      type: "date",
+    },
+    {
+      id: "EndDate",
+      title: "End date",
+      type: "date",
+    },
+    {
+      id: "PickupLocationId",
+      title: "Checkout location",
+      type: "select",
+      options: locations.map((item) => ({
+        value: `${item.locationId}`,
+        label: `${item.locationName}`,
+      })),
+    },
+    {
+      id: "ReturnLocationId",
+      title: "Checkin location",
+      type: "select",
+      options: locations.map((item) => ({
+        value: `${item.locationId}`,
+        label: `${item.locationName}`,
+      })),
+    },
+    {
+      id: "VehicleTypeId",
+      title: "Vehicle type",
+      type: "select",
+      options: vehicleTypes.map((item) => ({
+        value: `${item.id}`,
+        label: item.value,
+      })),
+    },
+    {
+      id: "VehicleNo",
+      title: "Vehicle no.",
+      type: "text",
+      size: "normal",
+    },
+    {
+      id: "IsSearchOverdues",
+      title: "Only overdues?",
+      type: "select",
+      options: [
+        { value: "true", label: "Yes" },
+        { value: "false", label: "No" },
+      ],
+      defaultValue: "false",
+    },
+    {
+      id: "SortBy",
+      title: "Sort by",
+      type: "select",
+      options: [{ value: "CreatedDate", label: "Created date" }],
+      defaultValue: "CreatedDate",
+    },
+    {
+      id: "SortDirection",
+      title: "Sort direction",
+      type: "select",
+      options: [
+        { value: "ASC", label: "Asc" },
+        { value: "DESC", label: "Desc" },
+      ],
+      defaultValue: "DESC",
+    },
+  ];
 
-  const dataList = React.useMemo(
-    () => (agreementsData.data?.status === 200 ? agreementsData.data.body : []),
-    [agreementsData.data?.body, agreementsData.data?.status]
-  );
+  const dataList =
+    agreementsData.data?.status === 200 ? agreementsData.data.body : [];
 
   useDocumentTitle(titleMaker("Agreements"));
 

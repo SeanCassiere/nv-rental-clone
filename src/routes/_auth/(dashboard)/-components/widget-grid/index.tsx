@@ -36,15 +36,9 @@ export default function WidgetGrid(props: WidgetGridProps) {
     props.widgets.sort(widgetSortByUserPosition)
   );
 
-  const availableWidgets = React.useMemo(
-    () => widgets.filter((w) => !w.isDeleted),
-    [widgets]
-  );
+  const availableWidgets = widgets.filter((w) => !w.isDeleted);
 
-  const widgetIds = React.useMemo(
-    () => availableWidgets.map((w) => w.widgetID),
-    [availableWidgets]
-  );
+  const widgetIds = availableWidgets.map((w) => w.widgetID);
 
   const onDragEnd = React.useCallback(
     (evt: DragEndEvent) => {

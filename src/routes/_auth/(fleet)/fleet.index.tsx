@@ -131,13 +131,10 @@ function VehicleSearchPage() {
       )
     );
 
-  const pagination: PaginationState = React.useMemo(
-    () => ({
-      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
-      pageSize: size,
-    }),
-    [pageNumber, size]
-  );
+  const pagination: PaginationState = {
+    pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+    pageSize: size,
+  };
 
   const vehiclesData = useQuery(searchListOptions);
 
@@ -153,10 +150,8 @@ function VehicleSearchPage() {
       filters: { withActive: true },
     })
   );
-  const locations = React.useMemo(
-    () => (locationsList.data?.status === 200 ? locationsList.data.body : []),
-    [locationsList.data?.body, locationsList.data?.status]
-  );
+  const locations =
+    locationsList.data?.status === 200 ? locationsList.data.body : [];
 
   const columnsData = useSuspenseQuery(searchColumnsOptions);
 
@@ -280,102 +275,94 @@ function VehicleSearchPage() {
     });
   }, [columnFilters, navigate, pagination.pageSize]);
 
-  const columnVisibility: VisibilityState = React.useMemo(
-    () =>
-      columnsData.data.status === 200
-        ? columnsData.data.body.reduce(
-            (prev, current) => ({
-              ...prev,
-              [current.columnHeader]: current.isSelected,
-            }),
-            {}
-          )
-        : {},
-    [columnsData.data?.body, columnsData.data?.status]
-  );
+  const columnVisibility: VisibilityState =
+    columnsData.data.status === 200
+      ? columnsData.data.body.reduce(
+          (prev, current) => ({
+            ...prev,
+            [current.columnHeader]: current.isSelected,
+          }),
+          {}
+        )
+      : {};
 
   const parsedPagination =
     vehiclesData.status === "success"
       ? vehiclesData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
-    () => [
-      {
-        id: "VehicleId",
-        title: "Vehicle ID",
-        type: "hidden",
-      },
-      {
-        id: "VehicleStatus",
-        title: "Status",
-        type: "select",
-        options: vehicleStatuses.map((item) => ({
-          value: `${item.id}`,
-          label: insertSpacesBeforeCaps(item.name),
-        })),
-      },
-      {
-        id: "VehicleTypeId",
-        title: "Type",
-        type: "select",
-        options: vehicleTypes.map((item) => ({
-          value: `${item.id}`,
-          label: item.value,
-        })),
-      },
-      {
-        id: "VehicleNo",
-        title: "Vehicle no.",
-        type: "text",
-        size: "normal",
-      },
-      {
-        id: "OwningLocationId",
-        title: "Owning location",
-        type: "select",
-        options: locations.map((item) => ({
-          value: `${item.locationId}`,
-          label: `${item.locationName}`,
-        })),
-      },
-      {
-        id: "CurrentLocationId",
-        title: "Current location",
-        type: "select",
-        options: locations.map((item) => ({
-          value: `${item.locationId}`,
-          label: `${item.locationName}`,
-        })),
-      },
-      {
-        id: "Active",
-        title: "Is active?",
-        type: "select",
-        options: [
-          { value: "true", label: "Yes" },
-          { value: "false", label: "No" },
-        ],
-        defaultValue: "true",
-      },
-      {
-        id: "SortDirection",
-        title: "Sort direction",
-        type: "select",
-        options: [
-          { value: "ASC", label: "Asc" },
-          { value: "DESC", label: "Desc" },
-        ],
-        defaultValue: "DESC",
-      },
-    ],
-    [locations, vehicleStatuses, vehicleTypes]
-  );
+  const tableFacetedFilters: TableListToolbarFilterItem[] = [
+    {
+      id: "VehicleId",
+      title: "Vehicle ID",
+      type: "hidden",
+    },
+    {
+      id: "VehicleStatus",
+      title: "Status",
+      type: "select",
+      options: vehicleStatuses.map((item) => ({
+        value: `${item.id}`,
+        label: insertSpacesBeforeCaps(item.name),
+      })),
+    },
+    {
+      id: "VehicleTypeId",
+      title: "Type",
+      type: "select",
+      options: vehicleTypes.map((item) => ({
+        value: `${item.id}`,
+        label: item.value,
+      })),
+    },
+    {
+      id: "VehicleNo",
+      title: "Vehicle no.",
+      type: "text",
+      size: "normal",
+    },
+    {
+      id: "OwningLocationId",
+      title: "Owning location",
+      type: "select",
+      options: locations.map((item) => ({
+        value: `${item.locationId}`,
+        label: `${item.locationName}`,
+      })),
+    },
+    {
+      id: "CurrentLocationId",
+      title: "Current location",
+      type: "select",
+      options: locations.map((item) => ({
+        value: `${item.locationId}`,
+        label: `${item.locationName}`,
+      })),
+    },
+    {
+      id: "Active",
+      title: "Is active?",
+      type: "select",
+      options: [
+        { value: "true", label: "Yes" },
+        { value: "false", label: "No" },
+      ],
+      defaultValue: "true",
+    },
+    {
+      id: "SortDirection",
+      title: "Sort direction",
+      type: "select",
+      options: [
+        { value: "ASC", label: "Asc" },
+        { value: "DESC", label: "Desc" },
+      ],
+      defaultValue: "DESC",
+    },
+  ];
 
-  const dataList = React.useMemo(
-    () => (vehiclesData.data?.status === 200 ? vehiclesData.data?.body : []),
-    [vehiclesData.data?.body, vehiclesData.data?.status]
-  );
+  const dataList =
+    vehiclesData.data?.status === 200 ? vehiclesData.data?.body : [];
 
   useDocumentTitle(titleMaker("Fleet"));
 

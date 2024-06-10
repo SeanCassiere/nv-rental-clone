@@ -1,5 +1,5 @@
 import React from "react";
-import { PaginationState } from "@tanstack/react-table";
+import type { PaginationState } from "@tanstack/react-table";
 
 import { PaginationEllipsis, PaginationItem } from "@/components/ui/pagination";
 
@@ -81,22 +81,12 @@ function TableListPaginationPrevious({
 }) {
   const { table } = useTableList();
 
-  const pagination = React.useMemo(
-    () => table.getState().pagination,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getState().pagination]
-  );
-  const canPrevious = React.useMemo(
-    () => table.getCanPreviousPage(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getCanPreviousPage()]
-  );
+  const pagination = table.getState().pagination;
+  const canPrevious = table.getCanPreviousPage();
 
-  const previousPagePagination: PaginationState = React.useMemo(() => {
-    return canPrevious
-      ? { pageIndex: pagination.pageIndex - 1, pageSize: pagination.pageSize }
-      : { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize };
-  }, [canPrevious, pagination.pageIndex, pagination.pageSize]);
+  const previousPagePagination: PaginationState = canPrevious
+    ? { pageIndex: pagination.pageIndex - 1, pageSize: pagination.pageSize }
+    : { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize };
 
   return (
     <PaginationItem {...(!canPrevious ? { "aria-disabled": true } : {})}>
@@ -119,22 +109,12 @@ function TableListPaginationNext({
 }) {
   const { table } = useTableList();
 
-  const pagination = React.useMemo(
-    () => table.getState().pagination,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getState().pagination]
-  );
-  const canNext = React.useMemo(
-    () => table.getCanNextPage(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [table.getCanNextPage()]
-  );
+  const pagination = table.getState().pagination;
+  const canNext = table.getCanNextPage();
 
-  const nextPagePagination: PaginationState = React.useMemo(() => {
-    return canNext
-      ? { pageIndex: pagination.pageIndex + 1, pageSize: pagination.pageSize }
-      : { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize };
-  }, [canNext, pagination.pageIndex, pagination.pageSize]);
+  const nextPagePagination: PaginationState = canNext
+    ? { pageIndex: pagination.pageIndex + 1, pageSize: pagination.pageSize }
+    : { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize };
 
   return (
     <PaginationItem {...(!canNext ? { "aria-disabled": true } : {})}>

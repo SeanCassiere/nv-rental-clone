@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import * as React from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
@@ -40,7 +40,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
   const { data, isLoading, mode } = props;
   const { t } = useTranslation();
 
-  const title = useMemo(() => {
+  const title = React.useMemo(() => {
     let currentTitle = "Customer information";
     if (mode === "vehicle") {
       currentTitle = "Current customer";
@@ -49,7 +49,7 @@ const CustomerInformation = (props: TCustomerInformationProps) => {
     return currentTitle;
   }, [mode]);
 
-  const infoBlocks = useMemo(() => {
+  const infoBlocks = React.useMemo(() => {
     const fullName = data?.firstName
       ? String(data?.firstName) +
         (data?.middleName ? data.middleName + " " : " ") +

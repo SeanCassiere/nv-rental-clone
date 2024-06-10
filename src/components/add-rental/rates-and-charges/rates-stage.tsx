@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
@@ -79,12 +79,12 @@ export const RatesStage = (props: RatesStageProps) => {
 
   const form = useForm<RentalRateParsed>({
     resolver: zodResolver(RentalRateSchema),
-    defaultValues: useMemo(() => {
+    defaultValues: React.useMemo(() => {
       return rate !== null ? rate : undefined;
     }, [rate]),
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (rate) {
       form.reset(rate);
     }

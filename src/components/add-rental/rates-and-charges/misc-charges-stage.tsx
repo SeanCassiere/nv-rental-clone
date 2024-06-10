@@ -1,11 +1,4 @@
-import {
-  Fragment,
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useState,
-} from "react";
+import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -61,7 +54,7 @@ export const MiscChargesStage = (props: MiscChargesStageProps) => {
     Boolean(durationStageData) && Boolean(vehicleStageData);
 
   const [charges, setCharges] =
-    useState<RatesAndChargesTabProps["miscCharges"]>(selectedMiscCharges);
+    React.useState<RatesAndChargesTabProps["miscCharges"]>(selectedMiscCharges);
 
   const selectedChargeIds = charges.map((charge) => `${charge.id}`);
 
@@ -157,12 +150,12 @@ function MiscChargeItem(props: {
   onRemove: (chargeId: number) => void;
   dates: { startDate: Date; endDate: Date };
 }) {
-  const id = useId();
+  const id = React.useId();
   const { t } = useTranslation();
 
   const { charge, isSelected, selectedCharge, onSave, dates, onRemove } = props;
 
-  const startDate = useMemo(
+  const startDate = React.useMemo(
     () =>
       selectedCharge?.startDate
         ? new Date(selectedCharge?.startDate)
@@ -170,7 +163,7 @@ function MiscChargeItem(props: {
     [dates.startDate, selectedCharge?.startDate]
   );
 
-  const endDate = useMemo(
+  const endDate = React.useMemo(
     () =>
       selectedCharge?.endDate
         ? new Date(selectedCharge?.endDate)
@@ -178,21 +171,21 @@ function MiscChargeItem(props: {
     [dates.endDate, selectedCharge?.endDate]
   );
 
-  const [accordionValue, setAccordionValue] = useState(
+  const [accordionValue, setAccordionValue] = React.useState(
     isSelected ? "show" : "no-show"
   );
 
-  const [qty, setQty] = useState(
+  const [qty, setQty] = React.useState(
     isSelected && selectedCharge ? selectedCharge.quantity : 1
   );
-  const [price, setPrice] = useState(
+  const [price, setPrice] = React.useState(
     isSelected && selectedCharge ? selectedCharge.value : charge.Total ?? 0
   );
-  const [optionId, setOptionId] = useState(
+  const [optionId, setOptionId] = React.useState(
     isSelected && selectedCharge ? selectedCharge.optionId : 0
   );
 
-  const [localViewState, setLocalViewState] = useState({
+  const [localViewState, setLocalViewState] = React.useState({
     hourlyQuantity:
       isSelected && selectedCharge
         ? selectedCharge.hourlyQuantity
@@ -227,7 +220,7 @@ function MiscChargeItem(props: {
         : charge.MonthlyValue,
   });
 
-  const save = useCallback(
+  const save = React.useCallback(
     ({
       optionIdToSave,
       priceToSave,
@@ -302,7 +295,7 @@ function MiscChargeItem(props: {
     setQty(1);
   };
 
-  const properties = useMemo(() => {
+  const properties = React.useMemo(() => {
     const items: string[] = [];
     if (charge.CalculationType?.toLowerCase() === "fixed") {
       items.push("Fixed");
@@ -322,7 +315,7 @@ function MiscChargeItem(props: {
     charge.CalculationType?.toLowerCase() === "perday" ||
     Boolean(charge.IsDeductible);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isSelected && charge.IsOptional === false) {
       save({ optionIdToSave: 0, priceToSave: charge.Total ?? 0, qtyToSave: 1 });
     }
@@ -440,7 +433,9 @@ function MiscChargeItem(props: {
                     </legend>
                     {charge.Options.map((option, idx) => {
                       return (
-                        <Fragment key={`${idx}-${option.miscChargeOptionId}`}>
+                        <React.Fragment
+                          key={`${idx}-${option.miscChargeOptionId}`}
+                        >
                           <label
                             htmlFor={`${idx}-${charge.Id}-${option.miscChargeOptionId}`}
                             className={cn(
@@ -542,7 +537,7 @@ function MiscChargeItem(props: {
                               aria-hidden="true"
                             ></div>
                           </label>
-                        </Fragment>
+                        </React.Fragment>
                       );
                     })}
                   </fieldset>

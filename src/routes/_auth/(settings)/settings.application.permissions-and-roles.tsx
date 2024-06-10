@@ -151,15 +151,15 @@ function PermissionsAndRolesPage() {
   );
 }
 
-function filterRoles(role: RoleListItem[], type: string) {
+function filterRoles(roles: RoleListItem[], type: string) {
   switch (type.toLowerCase()) {
     case "system":
-      return role.filter((r) => r.type <= 0);
+      return roles.filter((r) => r.type <= 0);
     case "user":
-      return role.filter((r) => r.type > 0);
+      return roles.filter((r) => r.type > 0);
     case "all":
     default:
-      return role;
+      return roles;
   }
 }
 
@@ -168,16 +168,11 @@ function SystemRolesList({ filterMode }: { filterMode: string }) {
   const auth = context.authParams;
 
   const rolesQuery = useSuspenseQuery(context.systemRolesListOptions);
-  const roles = React.useMemo(
-    () =>
-      filterRoles(
-        (rolesQuery.data?.status === 200
-          ? rolesQuery.data?.body ?? []
-          : []
-        ).sort((a, b) => a.roleName.localeCompare(b.roleName)),
-        filterMode
-      ),
-    [filterMode, rolesQuery.data?.body, rolesQuery.data?.status]
+  const roles = filterRoles(
+    (rolesQuery.data?.status === 200 ? rolesQuery.data?.body ?? [] : []).sort(
+      (a, b) => a.roleName.localeCompare(b.roleName)
+    ),
+    filterMode
   );
 
   return (

@@ -84,21 +84,11 @@ export default function ReportsListV2(props: ReportsListV2Props) {
   const { searchListOptions } = useRouteContext({ from: "/_auth/reports/" });
   const query = useSuspenseQuery(searchListOptions);
 
-  const reportsList = React.useMemo(
-    () => (query.data?.status === 200 ? query.data.body : []),
-    [query.data?.status, query.data?.body]
-  );
-  const tenantFiltered = React.useMemo(
-    () => reportsList.filter(tenantReportFilterFn),
-    [reportsList]
-  );
+  const reportsList = query.data?.status === 200 ? query.data.body : [];
+  const tenantFiltered = reportsList.filter(tenantReportFilterFn);
 
-  const isFiltered = React.useMemo(
-    () =>
-      currentCategory.length > 0 &&
-      currentCategory !== internationalization.all,
-    [currentCategory, internationalization.all]
-  );
+  const isFiltered =
+    currentCategory.length > 0 && currentCategory !== internationalization.all;
 
   const reports = React.useMemo(() => {
     const transformed = transformReportsList(tenantFiltered);
