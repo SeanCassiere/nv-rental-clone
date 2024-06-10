@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import * as React from "react";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
@@ -11,7 +11,7 @@ function setDomThemeDataAttribute(theme: string) {
 type TernaryDarkMode = "system" | "dark" | "light";
 interface UseTernaryDarkModeOutput {
   ternaryDarkMode: TernaryDarkMode;
-  setTernaryDarkMode: Dispatch<SetStateAction<TernaryDarkMode>>;
+  setTernaryDarkMode: React.Dispatch<React.SetStateAction<TernaryDarkMode>>;
   toggleTernaryDarkMode: () => void;
 }
 
@@ -22,7 +22,7 @@ export function useTernaryDarkMode(): UseTernaryDarkModeOutput {
       STORAGE_DEFAULTS.theme
     );
 
-  useEffect(() => {
+  React.useEffect(() => {
     setDomThemeDataAttribute(ternaryDarkMode);
   }, [ternaryDarkMode]);
 

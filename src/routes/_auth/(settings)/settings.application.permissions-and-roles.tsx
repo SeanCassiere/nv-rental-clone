@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import * as React from "react";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { t } from "i18next";
@@ -142,24 +142,24 @@ function PermissionsAndRolesPage() {
               </SelectContent>
             </Select>
           </div>
-          <Suspense fallback={<Skeleton className="h-72" />}>
+          <React.Suspense fallback={<Skeleton className="h-72" />}>
             <SystemRolesList filterMode={filterMode} />
-          </Suspense>
+          </React.Suspense>
         </CardContent>
       </Card>
     </article>
   );
 }
 
-function filterRoles(role: RoleListItem[], type: string) {
+function filterRoles(roles: RoleListItem[], type: string) {
   switch (type.toLowerCase()) {
     case "system":
-      return role.filter((r) => r.type <= 0);
+      return roles.filter((r) => r.type <= 0);
     case "user":
-      return role.filter((r) => r.type > 0);
+      return roles.filter((r) => r.type > 0);
     case "all":
     default:
-      return role;
+      return roles;
   }
 }
 
@@ -168,16 +168,11 @@ function SystemRolesList({ filterMode }: { filterMode: string }) {
   const auth = context.authParams;
 
   const rolesQuery = useSuspenseQuery(context.systemRolesListOptions);
-  const roles = React.useMemo(
-    () =>
-      filterRoles(
-        (rolesQuery.data?.status === 200
-          ? rolesQuery.data?.body ?? []
-          : []
-        ).sort((a, b) => a.roleName.localeCompare(b.roleName)),
-        filterMode
-      ),
-    [filterMode, rolesQuery.data?.body, rolesQuery.data?.status]
+  const roles = filterRoles(
+    (rolesQuery.data?.status === 200 ? rolesQuery.data?.body ?? [] : []).sort(
+      (a, b) => a.roleName.localeCompare(b.roleName)
+    ),
+    filterMode
   );
 
   return (

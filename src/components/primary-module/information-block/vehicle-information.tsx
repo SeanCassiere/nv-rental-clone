@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import * as React from "react";
 import { Link } from "@tanstack/react-router";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -49,7 +49,7 @@ interface TVehicleInformationProps {
 const VehicleInformation = (props: TVehicleInformationProps) => {
   const { data, isLoading = false, mode } = props;
 
-  const title = useMemo(() => {
+  const title = React.useMemo(() => {
     let currentTitle = "Vehicle information";
     if (mode === "vehicle") {
       currentTitle = "Specifications";
@@ -58,7 +58,7 @@ const VehicleInformation = (props: TVehicleInformationProps) => {
     return currentTitle;
   }, [mode]);
 
-  const infoBlocks = useMemo(() => {
+  const infoBlocks = React.useMemo(() => {
     const blocks: TInformationBlockCardProps["blocks"] = [];
 
     const pushVehicleNo = () => {

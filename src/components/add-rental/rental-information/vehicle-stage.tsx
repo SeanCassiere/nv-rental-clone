@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -75,12 +75,9 @@ export const VehicleStage = ({
 
   const authParams = getAuthFromAuthHook(auth);
 
-  const checkoutLocation = useMemo(
-    () => rentalInformation?.checkoutLocation || 0,
-    [rentalInformation?.checkoutLocation]
-  );
+  const checkoutLocation = rentalInformation?.checkoutLocation || 0;
 
-  const [showVehiclePicker, setShowVehiclePicker] = useState(false);
+  const [showVehiclePicker, setShowVehiclePicker] = React.useState(false);
 
   const values: AgreementVehicleInformationSchemaParsed = {
     vehicleTypeId: vehicleInformation?.vehicleTypeId || 0,

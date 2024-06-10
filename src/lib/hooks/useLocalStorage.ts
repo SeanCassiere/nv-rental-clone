@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import * as React from "react";
 
 import { useEventCallback } from "@/lib/hooks/useEventCallback";
 import { useEventListener } from "@/lib/hooks/useEventListener";
@@ -36,14 +30,14 @@ export function useLocalStorage<T>(
   key: string,
   initialValue: T | (() => T),
   options: UseLocalStorageOptions<T, false>
-): [T | undefined, Dispatch<SetStateAction<T>>];
+): [T | undefined, React.Dispatch<React.SetStateAction<T>>];
 
 // CSR version of useLocalStorage.
 export function useLocalStorage<T>(
   key: string,
   initialValue: T | (() => T),
   options?: Partial<UseLocalStorageOptions<T, boolean>>
-): [T, Dispatch<SetStateAction<T>>];
+): [T, React.Dispatch<React.SetStateAction<T>>];
 /**
  * Custom hook for using local storage to persist state across page reloads.
  * @template T - The type of the state to be stored in local storage.
@@ -53,7 +47,7 @@ export function useLocalStorage<T>(
  * @param {?boolean} [options.initializeWithValue] - If `true` (default), the hook will initialize reading the local storage. In SSR, you should set it to `false`, returning `undefined` initially.
  * @param {?((value: T) => string)} [options.serializer] - A function to serialize the value before storing it.
  * @param {?((value: string) => T)} [options.deserializer] - A function to deserialize the stored value.
- * @returns {[T, Dispatch<SetStateAction<T>>]} A tuple containing the stored value and a function to set the value.
+ * @returns {[T, React.Dispatch<React.SetStateAction<T>>]} A tuple containing the stored value and a function to set the value.
  * @see [Documentation](https://usehooks-ts.com/react-hook/use-local-storage)
  * @see [MDN Local Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
  * @example
@@ -64,13 +58,13 @@ export function useLocalStorage<T>(
   key: string,
   initialValue: T | (() => T),
   options: Partial<UseLocalStorageOptions<T, boolean>> = {}
-): [T | undefined, Dispatch<SetStateAction<T>>] {
+): [T | undefined, React.Dispatch<React.SetStateAction<T>>] {
   let { initializeWithValue = true } = options;
   if (IS_SERVER) {
     initializeWithValue = false;
   }
 
-  const serializer = useCallback<(value: T) => string>(
+  const serializer = React.useCallback<(value: T) => string>(
     (value) => {
       if (options.serializer) {
         return options.serializer(value);
@@ -81,7 +75,7 @@ export function useLocalStorage<T>(
     [options]
   );
 
-  const deserializer = useCallback<(value: string) => T>(
+  const deserializer = React.useCallback<(value: string) => T>(
     (value) => {
       if (options.deserializer) {
         return options.deserializer(value);
@@ -109,7 +103,7 @@ export function useLocalStorage<T>(
 
   // Get from local storage then
   // parse stored json or return initialValue
-  const readValue = useCallback((): T => {
+  const readValue = React.useCallback((): T => {
     const initialValueToUse =
       initialValue instanceof Function ? initialValue() : initialValue;
 
@@ -127,7 +121,7 @@ export function useLocalStorage<T>(
     }
   }, [initialValue, key, deserializer]);
 
-  const [storedValue, setStoredValue] = useState(() => {
+  const [storedValue, setStoredValue] = React.useState(() => {
     if (initializeWithValue) {
       return readValue();
     }
@@ -136,37 +130,39 @@ export function useLocalStorage<T>(
 
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
-  const setValue: Dispatch<SetStateAction<T>> = useEventCallback((value) => {
-    // Prevent build error "window is undefined" but keeps working
-    if (IS_SERVER) {
-      console.warn(
-        `Tried setting localStorage key “${key}” even though environment is not a client`
-      );
+  const setValue: React.Dispatch<React.SetStateAction<T>> = useEventCallback(
+    (value) => {
+      // Prevent build error "window is undefined" but keeps working
+      if (IS_SERVER) {
+        console.warn(
+          `Tried setting localStorage key “${key}” even though environment is not a client`
+        );
+      }
+
+      try {
+        // Allow value to be a function so we have the same API as useState
+        const newValue = value instanceof Function ? value(readValue()) : value;
+
+        // Save to local storage
+        window.localStorage.setItem(key, serializer(newValue));
+
+        // Save state
+        setStoredValue(newValue);
+
+        // We dispatch a custom event so every similar useLocalStorage hook is notified
+
+        notifyLocalStorageChange({ key });
+      } catch (error) {
+        console.warn(`Error setting localStorage key “${key}”:`, error);
+      }
     }
+  );
 
-    try {
-      // Allow value to be a function so we have the same API as useState
-      const newValue = value instanceof Function ? value(readValue()) : value;
-
-      // Save to local storage
-      window.localStorage.setItem(key, serializer(newValue));
-
-      // Save state
-      setStoredValue(newValue);
-
-      // We dispatch a custom event so every similar useLocalStorage hook is notified
-
-      notifyLocalStorageChange({ key });
-    } catch (error) {
-      console.warn(`Error setting localStorage key “${key}”:`, error);
-    }
-  });
-
-  useEffect(() => {
+  React.useEffect(() => {
     setStoredValue(readValue());
   }, [key, readValue]);
 
-  const handleStorageChange = useCallback(
+  const handleStorageChange = React.useCallback(
     (event: StorageEvent | CustomEvent) => {
       if ((event as StorageEvent)?.key && (event as StorageEvent).key !== key) {
         return;

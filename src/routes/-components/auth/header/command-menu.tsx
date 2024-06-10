@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
@@ -200,7 +200,7 @@ export const CommandMenu = () => {
   }, [setShowCommandMenu]);
 
   return (
-    <Fragment>
+    <React.Fragment>
       <Button
         variant="outline"
         className={cn(
@@ -516,6 +516,6 @@ export const CommandMenu = () => {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
-    </Fragment>
+    </React.Fragment>
   );
 };

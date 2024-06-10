@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import * as React from "react";
 
 /**
  * Hook that runs a cleanup function when the component is unmounted.
@@ -11,11 +11,11 @@ import { useEffect, useRef } from "react";
  * });
  */
 export function useUnmount(func: () => void) {
-  const funcRef = useRef(func);
+  const funcRef = React.useRef(func);
 
   funcRef.current = func;
 
-  useEffect(
+  React.useEffect(
     () => () => {
       funcRef.current();
     },

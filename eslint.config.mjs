@@ -9,17 +9,6 @@ import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import globals from "globals";
 import tsEslint from "typescript-eslint";
 
-/**
- * @TODO Turn on React's Rules of Hooks when it available for use with flat configs
- */
-
-/**
- * @TODO Make sure the eslint disable directives are turned back on once the React Rules of Hooks are available
- *
- * Fine them by searching the project for `todo-eslint-disable-next-line`
- * It should be replaced with `eslint-disable-next-line react-hooks/exhaustive-deps`
- */
-
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
   recommendedConfig: eslintJs.configs.recommended,

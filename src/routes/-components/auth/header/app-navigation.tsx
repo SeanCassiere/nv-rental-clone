@@ -30,10 +30,7 @@ export const AppNavigation = (props: Props) => {
     STORAGE_KEYS.tableRowCount,
     STORAGE_DEFAULTS.tableRowCount
   );
-  const tableRowCount = React.useMemo(
-    () => parseInt(tableRowCountStr, 10),
-    [tableRowCountStr]
-  );
+  const tableRowCount = parseInt(tableRowCountStr, 10);
 
   return (
     <nav className={cn(className)} {...navProps}>

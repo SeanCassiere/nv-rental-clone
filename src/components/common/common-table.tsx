@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import * as React from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -35,9 +35,8 @@ interface TCommonTableProps<T> {
 
 export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
   const hasPagination = props.hasPagination ?? false;
-  const [internalPagination, setInternalPagination] = useState<PaginationState>(
-    { pageIndex: 0, pageSize: 10 }
-  );
+  const [internalPagination, setInternalPagination] =
+    React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
   const totalPages =
     props.paginationMode === "server" && props.totalPages
@@ -69,16 +68,13 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
     },
   });
 
-  const pageNumbers = useMemo(() => {
-    if (hasPagination) {
-      return getPaginationWithDoubleEllipsis(
+  const pageNumbers = hasPagination
+    ? getPaginationWithDoubleEllipsis(
         paginationState.pageIndex + 1,
         totalPages ?? 0,
         7
-      );
-    }
-    return [];
-  }, [hasPagination, totalPages, paginationState.pageIndex]);
+      )
+    : [];
 
   return (
     <div

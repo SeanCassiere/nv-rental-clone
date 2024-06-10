@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
-import { PopoverContentProps } from "@radix-ui/react-popover";
+import * as React from "react";
+import type { PopoverContentProps } from "@radix-ui/react-popover";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -22,14 +22,14 @@ const DEFAULT_DATE_FORMAT = dfnsDateFormat;
 const DEFAULT_TIME_FORMAT = dfnsTimeFormat;
 const DEFAULT_DATE_TIME_FORMAT = `${DEFAULT_DATE_FORMAT} ${DEFAULT_TIME_FORMAT}`;
 
-const InputDatePickerContext = createContext<ReturnType<
+const InputDatePickerContext = React.createContext<ReturnType<
   typeof useDateInput
 > | null>(null);
 
 interface InputDatePickerProps {
   value?: Date;
   mode: "date" | "time" | "datetime";
-  children: ReactNode;
+  children: React.ReactNode;
   disabled?: boolean;
   readOnly?: boolean;
   onChange?: (date: Date) => void;
@@ -51,7 +51,9 @@ function InputDatePicker({
   required,
   onChange,
 }: InputDatePickerProps) {
-  const [tabStage, setTabStage] = useState(mode === "time" ? "time" : "date");
+  const [tabStage, setTabStage] = React.useState(
+    mode === "time" ? "time" : "date"
+  );
 
   const useDateInputHook = useDateInput({
     defaultSelected: value,
@@ -124,7 +126,7 @@ interface InputDatePickerSlotProps {
 function InputDatePickerSlot({
   placeholder = "Select a date",
 }: InputDatePickerSlotProps) {
-  const ctx = useContext(InputDatePickerContext);
+  const ctx = React.useContext(InputDatePickerContext);
   if (!ctx) {
     throw new Error(
       "InputDatePickerSlotTrigger must be used within a InputDatePicker"

@@ -131,13 +131,10 @@ function CustomerSearchPage() {
       )
     );
 
-  const pagination: PaginationState = React.useMemo(
-    () => ({
-      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
-      pageSize: size,
-    }),
-    [pageNumber, size]
-  );
+  const pagination: PaginationState = {
+    pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+    pageSize: size,
+  };
 
   const customersData = useSuspenseQuery(searchListOptions);
   const customerTypesList = useSuspenseQuery(customerTypesOptions);
@@ -273,82 +270,74 @@ function CustomerSearchPage() {
     });
   }, [columnFilters, navigate, pagination.pageSize]);
 
-  const columnVisibility: VisibilityState = React.useMemo(
-    () =>
-      columnsData.data.status === 200
-        ? columnsData.data.body.reduce(
-            (prev, current) => ({
-              ...prev,
-              [current.columnHeader]: current.isSelected,
-            }),
-            {}
-          )
-        : {},
-    [columnsData.data?.body, columnsData.data?.status]
-  );
+  const columnVisibility: VisibilityState =
+    columnsData.data.status === 200
+      ? columnsData.data.body.reduce(
+          (prev, current) => ({
+            ...prev,
+            [current.columnHeader]: current.isSelected,
+          }),
+          {}
+        )
+      : {};
 
   const parsedPagination =
     customersData.status === "success"
       ? customersData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
-    () => [
-      {
-        id: "Keyword",
-        title: "Search",
-        type: "text",
-        size: "large",
-      },
-      {
-        id: "CustomerTypes",
-        title: "Type",
-        type: "multi-select",
-        options: customerTypes.map((item) => ({
-          value: `${item.typeName}`,
-          label: insertSpacesBeforeCaps(item.typeName),
-        })),
-        defaultValue: [],
-      },
-      {
-        id: "DateOfbirth",
-        title: "DOB",
-        type: "date",
-      },
-      {
-        id: "Phone",
-        title: "Phone",
-        type: "text",
-        size: "normal",
-      },
-      {
-        id: "Active",
-        title: "Is active?",
-        type: "select",
-        options: [
-          { value: "true", label: "Yes" },
-          { value: "false", label: "No" },
-        ],
-        defaultValue: "true",
-      },
-      {
-        id: "SortDirection",
-        title: "Sort direction",
-        type: "select",
-        options: [
-          { value: "ASC", label: "Asc" },
-          { value: "DESC", label: "Desc" },
-        ],
-        defaultValue: "ASC",
-      },
-    ],
-    [customerTypes]
-  );
+  const tableFacetedFilters: TableListToolbarFilterItem[] = [
+    {
+      id: "Keyword",
+      title: "Search",
+      type: "text",
+      size: "large",
+    },
+    {
+      id: "CustomerTypes",
+      title: "Type",
+      type: "multi-select",
+      options: customerTypes.map((item) => ({
+        value: `${item.typeName}`,
+        label: insertSpacesBeforeCaps(item.typeName),
+      })),
+      defaultValue: [],
+    },
+    {
+      id: "DateOfbirth",
+      title: "DOB",
+      type: "date",
+    },
+    {
+      id: "Phone",
+      title: "Phone",
+      type: "text",
+      size: "normal",
+    },
+    {
+      id: "Active",
+      title: "Is active?",
+      type: "select",
+      options: [
+        { value: "true", label: "Yes" },
+        { value: "false", label: "No" },
+      ],
+      defaultValue: "true",
+    },
+    {
+      id: "SortDirection",
+      title: "Sort direction",
+      type: "select",
+      options: [
+        { value: "ASC", label: "Asc" },
+        { value: "DESC", label: "Desc" },
+      ],
+      defaultValue: "ASC",
+    },
+  ];
 
-  const dataList = React.useMemo(
-    () => (customersData.data?.status === 200 ? customersData.data?.body : []),
-    [customersData.data?.body, customersData.data?.status]
-  );
+  const dataList =
+    customersData.data?.status === 200 ? customersData.data?.body : [];
 
   useDocumentTitle(titleMaker("Customers"));
 

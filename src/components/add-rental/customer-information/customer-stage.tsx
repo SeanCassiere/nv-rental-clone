@@ -1,4 +1,4 @@
-import { useState } from "react";
+import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -80,7 +80,7 @@ export const CustomerStage = ({
   const { t: tl } = useTranslation("labels");
   const { dateFormat } = useDatePreference();
 
-  const [showCustomerPicker, setShowCustomerPicker] = useState(false);
+  const [showCustomerPicker, setShowCustomerPicker] = React.useState(false);
 
   const values: CommonCustomerInformationSchemaParsed = {
     address: customerInformation?.address || "",

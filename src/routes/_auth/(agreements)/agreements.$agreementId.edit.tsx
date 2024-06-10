@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { z } from "zod";
@@ -42,7 +42,7 @@ function EditAgreementPage() {
       ? rentalRatesSummary.data?.body
       : undefined;
 
-  const handleStageTabClick = useCallback(
+  const handleStageTabClick = React.useCallback(
     (destination: string) => {
       navigate({
         search: () => ({ stage: destination }),
@@ -52,7 +52,7 @@ function EditAgreementPage() {
     [agreementId, navigate]
   );
 
-  const handleAgreementSaveComplete = useCallback(() => {
+  const handleAgreementSaveComplete = React.useCallback(() => {
     navigate({
       to: "/agreements/$agreementId/summary",
       params: { agreementId },
@@ -60,7 +60,7 @@ function EditAgreementPage() {
     });
   }, [agreementId, navigate]);
 
-  const handleCancelEditAgreement = useCallback(() => {
+  const handleCancelEditAgreement = React.useCallback(() => {
     navigate({
       to: "..",
     });
@@ -73,7 +73,7 @@ function EditAgreementPage() {
     titleMaker(`Edit - ${agreement?.agreementNumber || "Loading"} - Agreement`)
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (agreementData.status !== "error") return;
 
     router.history.go(-1);

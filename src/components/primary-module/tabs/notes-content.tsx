@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
@@ -87,7 +87,7 @@ const ModuleNotesTabContent = ({
   const { t } = useTranslation();
   const auth = { clientId, userId };
 
-  const colDefs = useMemo(() => {
+  const colDefs = React.useMemo(() => {
     const columns: ColumnDef<TNoteDataParsed>[] = [];
 
     const pushToColumns = (localColumns: TNoteKeyHelp[]) => {

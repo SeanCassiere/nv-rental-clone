@@ -10,10 +10,7 @@ export function useDatePreference() {
   const [dateFormat] = useLocalStorage(STORAGE_KEYS.dateFormat, dfnsDateFormat);
   const [timeFormat] = useLocalStorage(STORAGE_KEYS.timeFormat, dfnsTimeFormat);
 
-  const dateTimeFormat = React.useMemo(
-    () => `${dateFormat} ${timeFormat}`,
-    [dateFormat, timeFormat]
-  );
+  const dateTimeFormat = `${dateFormat} ${timeFormat}`;
 
   return {
     dateFormat,

@@ -137,13 +137,10 @@ function ReservationsSearchPage() {
       )
     );
 
-  const pagination: PaginationState = React.useMemo(
-    () => ({
-      pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
-      pageSize: size,
-    }),
-    [pageNumber, size]
-  );
+  const pagination: PaginationState = {
+    pageIndex: pageNumber === 0 ? 0 : pageNumber - 1,
+    pageSize: size,
+  };
 
   const reservationsData = useQuery(searchListOptions);
 
@@ -153,10 +150,7 @@ function ReservationsSearchPage() {
   const vehicleTypesList = useQuery(
     fetchVehiclesTypesOptions({ auth: authParams })
   );
-  const vehicleTypes = React.useMemo(
-    () => vehicleTypesList.data ?? [],
-    [vehicleTypesList.data]
-  );
+  const vehicleTypes = vehicleTypesList.data ?? [];
 
   const locationsList = useQuery(
     fetchLocationsListOptions({
@@ -164,10 +158,8 @@ function ReservationsSearchPage() {
       filters: { withActive: true },
     })
   );
-  const locations = React.useMemo(
-    () => (locationsList.data?.status === 200 ? locationsList.data.body : []),
-    [locationsList.data?.body, locationsList.data?.status]
-  );
+  const locations =
+    locationsList.data?.status === 200 ? locationsList.data.body : [];
 
   const reservationTypesQuery = useSuspenseQuery(reservationTypesOptions);
   const reservationTypes = reservationTypesQuery.data;
@@ -303,125 +295,116 @@ function ReservationsSearchPage() {
     });
   }, [columnFilters, navigate, pagination.pageSize]);
 
-  const columnVisibility: VisibilityState = React.useMemo(
-    () =>
-      columnsData.data.status === 200
-        ? columnsData.data.body.reduce(
-            (prev, current) => ({
-              ...prev,
-              [current.columnHeader]: current.isSelected,
-            }),
-            {}
-          )
-        : {},
-    [columnsData.data?.body, columnsData.data?.status]
-  );
+  const columnVisibility: VisibilityState =
+    columnsData.data.status === 200
+      ? columnsData.data.body.reduce(
+          (prev, current) => ({
+            ...prev,
+            [current.columnHeader]: current.isSelected,
+          }),
+          {}
+        )
+      : {};
 
   const parsedPagination =
     reservationsData.status === "success"
       ? reservationsData.data.pagination
       : getXPaginationFromHeaders(null);
 
-  const tableFacetedFilters: TableListToolbarFilterItem[] = React.useMemo(
-    () => [
-      {
-        id: "CustomerId",
-        title: "CustomerId",
-        type: "hidden",
-      },
-      {
-        id: "VehicleId",
-        title: "VehicleId",
-        type: "hidden",
-      },
-      {
-        id: "Keyword",
-        title: "Search",
-        type: "text",
-        size: "large",
-      },
-      {
-        id: "Statuses",
-        title: "Status",
-        type: "multi-select",
-        options: reservationStatuses.map((item) => ({
-          value: `${item.id}`,
-          label: insertSpacesBeforeCaps(item.name),
-        })),
-        defaultValue: [],
-      },
-      {
-        id: "ReservationTypes",
-        title: "Type",
-        type: "multi-select",
-        options: reservationTypes.map((item) => ({
-          value: `${item.typeName}`,
-          label: item.typeName,
-        })),
-        defaultValue: [],
-      },
-      {
-        id: "VehicleTypeId",
-        title: "Vehicle type",
-        type: "select",
-        options: vehicleTypes.map((item) => ({
-          value: `${item.id}`,
-          label: item.value,
-        })),
-      },
-      {
-        id: "VehicleNo",
-        title: "Vehicle no.",
-        type: "text",
-        size: "normal",
-      },
-      {
-        id: "CreatedDateFrom",
-        title: "Start date",
-        type: "date",
-      },
-      {
-        id: "CreatedDateTo",
-        title: "End date",
-        type: "date",
-      },
-      {
-        id: "CheckoutLocationId",
-        title: "Checkout location",
-        type: "select",
-        options: locations.map((item) => ({
-          value: `${item.locationId}`,
-          label: `${item.locationName}`,
-        })),
-      },
-      {
-        id: "CheckinLocationId",
-        title: "Checkin location",
-        type: "select",
-        options: locations.map((item) => ({
-          value: `${item.locationId}`,
-          label: `${item.locationName}`,
-        })),
-      },
-      {
-        id: "SortDirection",
-        title: "Sort direction",
-        type: "select",
-        options: [
-          { value: "ASC", label: "Asc" },
-          { value: "DESC", label: "Desc" },
-        ],
-        defaultValue: "ASC",
-      },
-    ],
-    [locations, reservationStatuses, reservationTypes, vehicleTypes]
-  );
+  const tableFacetedFilters: TableListToolbarFilterItem[] = [
+    {
+      id: "CustomerId",
+      title: "CustomerId",
+      type: "hidden",
+    },
+    {
+      id: "VehicleId",
+      title: "VehicleId",
+      type: "hidden",
+    },
+    {
+      id: "Keyword",
+      title: "Search",
+      type: "text",
+      size: "large",
+    },
+    {
+      id: "Statuses",
+      title: "Status",
+      type: "multi-select",
+      options: reservationStatuses.map((item) => ({
+        value: `${item.id}`,
+        label: insertSpacesBeforeCaps(item.name),
+      })),
+      defaultValue: [],
+    },
+    {
+      id: "ReservationTypes",
+      title: "Type",
+      type: "multi-select",
+      options: reservationTypes.map((item) => ({
+        value: `${item.typeName}`,
+        label: item.typeName,
+      })),
+      defaultValue: [],
+    },
+    {
+      id: "VehicleTypeId",
+      title: "Vehicle type",
+      type: "select",
+      options: vehicleTypes.map((item) => ({
+        value: `${item.id}`,
+        label: item.value,
+      })),
+    },
+    {
+      id: "VehicleNo",
+      title: "Vehicle no.",
+      type: "text",
+      size: "normal",
+    },
+    {
+      id: "CreatedDateFrom",
+      title: "Start date",
+      type: "date",
+    },
+    {
+      id: "CreatedDateTo",
+      title: "End date",
+      type: "date",
+    },
+    {
+      id: "CheckoutLocationId",
+      title: "Checkout location",
+      type: "select",
+      options: locations.map((item) => ({
+        value: `${item.locationId}`,
+        label: `${item.locationName}`,
+      })),
+    },
+    {
+      id: "CheckinLocationId",
+      title: "Checkin location",
+      type: "select",
+      options: locations.map((item) => ({
+        value: `${item.locationId}`,
+        label: `${item.locationName}`,
+      })),
+    },
+    {
+      id: "SortDirection",
+      title: "Sort direction",
+      type: "select",
+      options: [
+        { value: "ASC", label: "Asc" },
+        { value: "DESC", label: "Desc" },
+      ],
+      defaultValue: "ASC",
+    },
+  ];
 
-  const dataList = React.useMemo(
-    () =>
-      reservationsData.data?.status === 200 ? reservationsData.data?.body : [],
-    [reservationsData.data?.body, reservationsData.data?.status]
-  );
+  const dataList =
+    reservationsData.data?.status === 200 ? reservationsData.data?.body : [];
 
   useDocumentTitle(titleMaker("Reservations"));
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -170,7 +170,7 @@ export const DurationStage = ({
     form.setValue("checkinDate", date, { shouldValidate: true });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (agreementNumberQuery.status !== "success") return;
 
     form.setValue("agreementNumber", agreementNumberQuery.data?.agreementNo);

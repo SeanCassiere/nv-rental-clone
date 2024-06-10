@@ -1,5 +1,5 @@
 // https://usehooks-ts.com/react-hook/use-document-title
-import { useRef } from "react";
+import * as React from "react";
 
 import { useIsomorphicLayoutEffect } from "@/lib/hooks/useIsomorphicLayoutEffect";
 import { useUnmount } from "@/lib/hooks/useUnmount";
@@ -19,8 +19,8 @@ type Options = {
  */
 export function useDocumentTitle(title: string, options: Options = {}): void {
   const { preserveTitleOnUnmount = true } = options;
-  const defaultTitle = useRef<string | null>(null);
-  const windowRef = useRef(window);
+  const defaultTitle = React.useRef<string | null>(null);
+  const windowRef = React.useRef(window);
 
   useIsomorphicLayoutEffect(() => {
     defaultTitle.current = window.document.title;

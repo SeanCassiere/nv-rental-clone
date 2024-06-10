@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import * as React from "react";
 import { useTranslation } from "react-i18next";
 
 import { icons } from "@/components/ui/icons";
@@ -36,7 +36,7 @@ const RentalInformation = (props: TRentalInformationProps) => {
   const { data, mode, isLoading = false } = props;
   const { t } = useTranslation();
 
-  const infoBlocks = useMemo(() => {
+  const infoBlocks = React.useMemo(() => {
     const blocks: TInformationBlockCardProps["blocks"] = [];
     const pushTotalDays = () => {
       blocks.push({

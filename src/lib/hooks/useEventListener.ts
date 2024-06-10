@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef } from "react";
+import * as React from "react";
 
 import { useIsomorphicLayoutEffect } from "@/lib/hooks/useIsomorphicLayoutEffect";
 
@@ -6,7 +6,7 @@ import { useIsomorphicLayoutEffect } from "@/lib/hooks/useIsomorphicLayoutEffect
 function useEventListener<K extends keyof MediaQueryListEventMap>(
   eventName: K,
   handler: (event: MediaQueryListEventMap[K]) => void,
-  element: RefObject<MediaQueryList>,
+  element: React.RefObject<MediaQueryList>,
   options?: boolean | AddEventListenerOptions
 ): void;
 
@@ -25,7 +25,7 @@ function useEventListener<
 >(
   eventName: K,
   handler: (event: HTMLElementEventMap[K]) => void,
-  element: RefObject<T>,
+  element: React.RefObject<T>,
   options?: boolean | AddEventListenerOptions
 ): void;
 
@@ -33,7 +33,7 @@ function useEventListener<
 function useEventListener<K extends keyof DocumentEventMap>(
   eventName: K,
   handler: (event: DocumentEventMap[K]) => void,
-  element: RefObject<Document>,
+  element: React.RefObject<Document>,
   options?: boolean | AddEventListenerOptions
 ): void;
 
@@ -45,7 +45,7 @@ function useEventListener<K extends keyof DocumentEventMap>(
  * @template T - The type of the DOM element (default is `HTMLElement`).
  * @param {KW | KH | KM} eventName - The name of the event to listen for.
  * @param {(event: WindowEventMap[KW] | HTMLElementEventMap[KH] | MediaQueryListEventMap[KM] | Event) => void} handler - The event handler function.
- * @param {RefObject<T>} [element] - The DOM element or media query list to attach the event listener to (optional).
+ * @param {React.RefObject<T>} [element] - The DOM element or media query list to attach the event listener to (optional).
  * @param {boolean | AddEventListenerOptions} [options] - An options object that specifies characteristics about the event listener (optional).
  * @see [Documentation](https://usehooks-ts.com/react-hook/use-event-listener)
  * @example
@@ -74,17 +74,17 @@ function useEventListener<
       | MediaQueryListEventMap[KM]
       | Event
   ) => void,
-  element?: RefObject<T>,
+  element?: React.RefObject<T>,
   options?: boolean | AddEventListenerOptions
 ) {
   // Create a ref that stores handler
-  const savedHandler = useRef(handler);
+  const savedHandler = React.useRef(handler);
 
   useIsomorphicLayoutEffect(() => {
     savedHandler.current = handler;
   }, [handler]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Define the listening target
     const targetElement: T | Window = element?.current ?? window;
 

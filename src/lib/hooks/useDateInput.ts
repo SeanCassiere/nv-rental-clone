@@ -1,5 +1,5 @@
 // customized based on source: https://github.com/gpbl/react-day-picker/blob/HEAD/src/hooks/useInput/useInput.ts
-import React, { useEffect, useState } from "react";
+import * as React from "react";
 import { enUS } from "date-fns/locale";
 import type {
   DayClickEventHandler,
@@ -149,12 +149,12 @@ export function useDateInput(
   const parseValue = (value: string) => parse(value, format, today, { locale });
 
   // Initialize states
-  const [month, setMonth] = useState(defaultSelected ?? today);
-  const [selectedDay, setSelectedDay] = useState(defaultSelected);
+  const [month, setMonth] = React.useState(defaultSelected ?? today);
+  const [selectedDay, setSelectedDay] = React.useState(defaultSelected);
   const defaultInputValue = defaultSelected
     ? _format(defaultSelected, format, { locale })
     : "";
-  const [inputValue, setInputValue] = useState(defaultInputValue);
+  const [inputValue, setInputValue] = React.useState(defaultInputValue);
 
   const reset = () => {
     setSelectedDay(defaultSelected);
@@ -256,7 +256,7 @@ export function useDateInput(
     readOnly,
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (
       selectedDay &&
       defaultSelected &&

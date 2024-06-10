@@ -76,13 +76,10 @@ export default function WidgetPicker(props: WidgetPickerProps) {
   );
 
   const widgetsQuery = useQuery(widgetsQueryOptions);
-  const widgets = React.useMemo(
-    () =>
-      widgetsQuery.data?.status === 200
-        ? widgetsQuery.data?.body.sort(widgetSortByUserPosition)
-        : [],
-    [widgetsQuery.data?.body, widgetsQuery.data?.status]
-  );
+  const widgets =
+    widgetsQuery.data?.status === 200
+      ? widgetsQuery.data?.body.sort(widgetSortByUserPosition)
+      : [];
 
   return (
     <Dialog open={show_widget_picker} onOpenChange={onShowWidgetPicker}>
@@ -133,10 +130,7 @@ function SortableWidgetList(props: SortableWidgetListProps) {
 
   const activeWidget = widgets.find((widget) => widget.widgetID === activeId);
 
-  const widgetIds = React.useMemo(
-    () => widgets.map((widget) => widget.widgetID),
-    [widgets]
-  );
+  const widgetIds = widgets.map((widget) => widget.widgetID);
 
   const onDragStart = React.useCallback((evt: DragStartEvent) => {
     setActiveId(evt.active.id);

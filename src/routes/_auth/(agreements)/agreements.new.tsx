@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
@@ -28,7 +28,7 @@ function AddAgreementPage() {
     select: (s) => s?.stage ?? "rental-information",
   });
 
-  const handleStageTabClick = useCallback(
+  const handleStageTabClick = React.useCallback(
     (destination: string) => {
       navigate({
         search: () => ({ stage: destination }),
@@ -37,7 +37,7 @@ function AddAgreementPage() {
     [navigate]
   );
 
-  const handleAgreementSaveComplete = useCallback(
+  const handleAgreementSaveComplete = React.useCallback(
     (agreementId: number) => {
       navigate({
         to: "/agreements/$agreementId/summary",
@@ -48,7 +48,7 @@ function AddAgreementPage() {
     [navigate]
   );
 
-  const handleCancelAddAgreement = useCallback(() => {
+  const handleCancelAddAgreement = React.useCallback(() => {
     navigate({
       to: "..",
     });

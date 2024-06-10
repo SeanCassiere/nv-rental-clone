@@ -1,5 +1,5 @@
 // https://usehooks-ts.com/react-hook/use-copy-to-clipboard
-import { useCallback, useState } from "react";
+import * as React from "react";
 
 /**
  * The copied text as `string` or `null` if nothing has been copied yet.
@@ -36,9 +36,9 @@ type CopyFn = (text: string) => Promise<boolean>;
  * ```
  */
 export function useCopyToClipboard(): [CopiedValue, CopyFn] {
-  const [copiedText, setCopiedText] = useState<CopiedValue>(null);
+  const [copiedText, setCopiedText] = React.useState<CopiedValue>(null);
 
-  const copy: CopyFn = useCallback(async (text) => {
+  const copy: CopyFn = React.useCallback(async (text) => {
     if (!navigator?.clipboard) {
       console.warn("Clipboard not supported");
       return false;
