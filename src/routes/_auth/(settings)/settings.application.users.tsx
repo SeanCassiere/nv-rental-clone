@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import * as React from "react";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -115,9 +115,9 @@ function ApplicationConfigurationUsersPage() {
               <span>{t("labels.addUser", { ns: "settings" })}</span>
             </Button>
           </div>
-          <Suspense fallback={<Skeleton className="h-72" />}>
+          <React.Suspense fallback={<Skeleton className="h-72" />}>
             <ListUsers />
-          </Suspense>
+          </React.Suspense>
         </CardContent>
       </Card>
     </article>

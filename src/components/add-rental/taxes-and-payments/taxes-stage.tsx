@@ -1,4 +1,4 @@
-import { useState } from "react";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
@@ -31,7 +31,7 @@ export const TaxesStage = (props: TaxesStageProps) => {
   const isSupportingInfoAvailable = Boolean(durationStageData);
 
   const [selectedTaxes, setSelectedTaxes] =
-    useState<TaxesStageProps["taxes"]>(taxes);
+    React.useState<TaxesStageProps["taxes"]>(taxes);
 
   const taxesData = useQuery(
     fetchTaxesListOptions({

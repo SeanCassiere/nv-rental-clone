@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { z } from "zod";
@@ -46,7 +46,7 @@ function EditReservationPage() {
       ? rentalRatesSummary.data?.body
       : undefined;
 
-  const handleStageTabClick = useCallback(
+  const handleStageTabClick = React.useCallback(
     (destination: string) => {
       navigate({
         search: () => ({ stage: destination }),
@@ -56,14 +56,14 @@ function EditReservationPage() {
     [reservationId, navigate]
   );
 
-  const handleReservationSaveComplete = useCallback(() => {
+  const handleReservationSaveComplete = React.useCallback(() => {
     navigate({
       to: "/reservations/$reservationId/summary",
       params: { reservationId },
     });
   }, [reservationId, navigate]);
 
-  const handleCancelEditReservation = useCallback(() => {
+  const handleCancelEditReservation = React.useCallback(() => {
     navigate({
       to: "..",
     });
@@ -77,7 +77,7 @@ function EditReservationPage() {
     )
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (rentalRatesSummary.status !== "error") return;
 
     router.history.go(-1);

@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import * as React from "react";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { t } from "i18next";
@@ -142,9 +142,9 @@ function PermissionsAndRolesPage() {
               </SelectContent>
             </Select>
           </div>
-          <Suspense fallback={<Skeleton className="h-72" />}>
+          <React.Suspense fallback={<Skeleton className="h-72" />}>
             <SystemRolesList filterMode={filterMode} />
-          </Suspense>
+          </React.Suspense>
         </CardContent>
       </Card>
     </article>

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react";
+import * as React from "react";
 
 /**
  * Custom hook for using either `useLayoutEffect` or `useEffect` based on the environment (client-side or server-side).
@@ -11,4 +11,4 @@ import { useEffect, useLayoutEffect } from "react";
  * }, [dependency1, dependency2]);
  */
 export const useIsomorphicLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
