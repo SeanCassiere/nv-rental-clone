@@ -13,10 +13,6 @@ const commitHash = cp
 
 const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
-const ReactCompilerConfig = {
-  runtimeModule: "react-compiler-runtime",
-};
-
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
@@ -28,7 +24,12 @@ export default defineConfig(() => {
       }),
       react({
         babel: {
-          plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
+          plugins: [
+            [
+              "babel-plugin-react-compiler",
+              { runtimeModule: "react-compiler-runtime" },
+            ],
+          ],
         },
       }),
     ],
