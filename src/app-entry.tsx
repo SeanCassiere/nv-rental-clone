@@ -8,11 +8,11 @@ import {
   stringifySearchWith,
 } from "@tanstack/react-router";
 import * as JSURL2 from "jsurl2";
-import CacheBuster, { useCacheBuster } from "react-cache-buster";
 import { useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
+import { CacheBuster, useCacheBuster } from "@/components/cache-buster";
 import { icons } from "@/components/ui/icons";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -35,10 +35,7 @@ function CacheDocumentFocusChecker() {
   const { checkCacheStatus } = useCacheBuster();
 
   const onVisibilityChange = () => {
-    if (
-      document.visibilityState === "visible" &&
-      typeof checkCacheStatus === "function"
-    ) {
+    if (document.visibilityState === "visible") {
       checkCacheStatus();
     }
   };

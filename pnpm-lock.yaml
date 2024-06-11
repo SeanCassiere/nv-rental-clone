@@ -104,6 +104,9 @@ dependencies:
   cmdk:
     specifier: ^1.0.0
     version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
+  compare-versions:
+    specifier: ^6.1.0
+    version: 6.1.0
   date-fns:
     specifier: ^3.6.0
     version: 3.6.0
@@ -128,9 +131,6 @@ dependencies:
   react:
     specifier: ^18.3.1
     version: 18.3.1
-  react-cache-buster:
-    specifier: ^0.1.8
-    version: 0.1.8(prop-types@15.8.1)(react@18.3.1)
   react-compiler-runtime:
     specifier: file:./libs/react-compiler-runtime
     version: file:libs/react-compiler-runtime
@@ -2985,8 +2985,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /compare-versions@4.1.4:
-    resolution: {integrity: sha512-FemMreK9xNyL8gQevsdRMrvO4lFCkQP7qbuktn1q8ndcNk1+0mz7lgE7b/sNvbhVgY4w6tMN1FDp6aADjqw2rw==}
+  /compare-versions@6.1.0:
+    resolution: {integrity: sha512-LNZQXhqUvqUTotpZ00qLSaify3b4VFD588aRr8MKFw4CMUr98ytzCW5wDH5qx/DEY5kCDXcbcRuCqL0szEf2tg==}
     dev: false
 
   /concat-map@0.0.1:
@@ -4651,18 +4651,6 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
-
-  /react-cache-buster@0.1.8(prop-types@15.8.1)(react@18.3.1):
-    resolution: {integrity: sha512-N7BMnz2MUC++oXUzcYXsGn0WsIBDe5rRyT8W6O7L32CjcbgnuxhxNjc9T+Y56zdlSdY5nde3PTmZSktFv3V9IQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      prop-types: '>=15.7.2'
-      react: '>=17.0.2'
-    dependencies:
-      compare-versions: 4.1.4
-      prop-types: 15.8.1
-      react: 18.3.1
-    dev: false
 
   /react-day-picker@8.10.1(date-fns@3.6.0)(react@18.3.1):
     resolution: {integrity: sha512-TMx7fNbhLk15eqcMt+7Z7S2KF7mfTId/XJDjKE8f+IUcFn0l08/kI4FiYTL/0yuOLmEcbR4Fwe3GJf/NiiMnPA==}
