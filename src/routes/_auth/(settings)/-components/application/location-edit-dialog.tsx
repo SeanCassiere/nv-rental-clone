@@ -346,7 +346,12 @@ function LocationForm(props: LocationFormProps) {
     },
   });
 
-  const countryId = form.watch("countryId");
+  const countryId = React.useMemo(
+    () => form.watch("countryId"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("countryId")]
+  );
 
   const locationsQuery = useQuery(
     fetchLocationsListOptions({

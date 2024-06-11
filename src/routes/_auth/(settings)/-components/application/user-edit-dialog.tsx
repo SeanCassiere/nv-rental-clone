@@ -933,7 +933,7 @@ function CreateUserForm(props: {
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t("display.password", { ns: "labels" })}</FormLabel>
-              <div className="flex justify-between gap-x-1.5">
+              <div className="relative flex justify-between gap-x-1.5">
                 <FormControl>
                   <Input
                     {...field}
@@ -945,7 +945,8 @@ function CreateUserForm(props: {
                 </FormControl>
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="ghost"
+                  className="absolute right-0.5 top-0.5 h-9"
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (

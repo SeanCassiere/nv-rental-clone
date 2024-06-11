@@ -90,10 +90,25 @@ export const RatesStage = (props: RatesStageProps) => {
     }
   }, [form, rate, rate?.rateName, rateName]);
 
-  const isDayRate = form.watch("isDayRate");
-  const isWeekDayRate = form.watch("isDayWeek");
+  const isDayRate = React.useMemo(
+    () => form.watch("isDayRate"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("isDayRate")]
+  );
+  const isWeekDayRate = React.useMemo(
+    () => form.watch("isDayWeek"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("isDayWeek")]
+  );
 
-  const totalDays = form.watch("totalDays");
+  const totalDays = React.useMemo(
+    () => form.watch("totalDays"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("totalDays")]
+  );
   const rentalDays = totalDays ?? 0;
 
   const commonFormProps: CommonRatesFormProps = {

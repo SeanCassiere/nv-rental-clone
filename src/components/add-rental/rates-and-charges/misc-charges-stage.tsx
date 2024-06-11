@@ -405,7 +405,7 @@ function MiscChargeItem(props: {
               {showAccordionTrigger && (
                 <AccordionPrimitive.Trigger
                   className={cn(
-                    buttonVariants({ size: "sm", variant: "secondary" }),
+                    buttonVariants({ size: "sm", variant: "ghost" }),
                     "flex h-6 w-6 items-center justify-center p-0 [&[data-state=open]>svg]:rotate-180"
                   )}
                 >

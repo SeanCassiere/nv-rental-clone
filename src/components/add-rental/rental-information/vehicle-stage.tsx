@@ -92,8 +92,18 @@ export const VehicleStage = ({
     values: vehicleInformation ? values : undefined,
   });
 
-  const formVehicleTypeId = form.watch("vehicleTypeId");
-  const formVehicleId = form.watch("vehicleId");
+  const formVehicleTypeId = React.useMemo(
+    () => form.watch("vehicleTypeId"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("vehicleTypeId")]
+  );
+  const formVehicleId = React.useMemo(
+    () => form.watch("vehicleId"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("vehicleId")]
+  );
 
   //
   const vehicleTypesData = useQuery(
