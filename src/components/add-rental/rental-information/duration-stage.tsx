@@ -148,8 +148,18 @@ export const DurationStage = ({
     })
   );
 
-  const form_checkoutDate = form.watch("checkoutDate");
-  const form_checkinDate = form.watch("checkinDate");
+  const form_checkoutDate = React.useMemo(
+    () => form.watch("checkoutDate"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("checkoutDate")]
+  );
+  const form_checkinDate = React.useMemo(
+    () => form.watch("checkinDate"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("checkinDate")]
+  );
 
   const handleCheckoutDateChange = (date: Date) => {
     const previousCheckoutDate = form_checkoutDate;
@@ -159,13 +169,12 @@ export const DurationStage = ({
       previousCheckinDate,
       previousCheckoutDate
     );
-    const checkin = add(new Date(date), {
+    const checkin = add(date, {
       minutes: diffMinsBetweenDates,
     });
     form.setValue("checkoutDate", date, { shouldValidate: true });
     form.setValue("checkinDate", checkin, { shouldValidate: true });
   };
-
   const handleCheckinDateChange = (date: Date) => {
     form.setValue("checkinDate", date, { shouldValidate: true });
   };

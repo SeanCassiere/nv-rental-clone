@@ -136,11 +136,12 @@ function InputDatePickerSlot({
   const { formItemId } = useFormField();
 
   return (
-    <div className="flex gap-1">
+    <div className="relative">
       <Input id={formItemId} {...ctx.inputProps} placeholder={placeholder} />
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
+          className="absolute right-0.5 top-0.5 h-9"
           disabled={ctx.inputProps.disabled || ctx.inputProps.readOnly}
         >
           <icons.Calendar className="h-3.5 w-3.5" />

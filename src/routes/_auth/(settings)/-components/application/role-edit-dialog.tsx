@@ -375,7 +375,12 @@ function RoleForm(props: {
     },
   });
 
-  const templateId = form.watch("templateId");
+  const templateId = React.useMemo(
+    () => form.watch("templateId"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("templateId")]
+  );
 
   const roleQuery = useQuery(
     fetchRoleByIdOptions({

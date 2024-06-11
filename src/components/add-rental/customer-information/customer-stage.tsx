@@ -108,7 +108,12 @@ export const CustomerStage = ({
     values: customerInformation ? values : undefined,
   });
 
-  const form_dob = form.watch("dateOfBirth");
+  const form_dob = React.useMemo(
+    () => form.watch("dateOfBirth"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("dateOfBirth")]
+  );
 
   return (
     <Form {...form}>

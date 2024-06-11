@@ -334,7 +334,12 @@ const COPY_TIMEOUT = 1500;
 
 function UsernameBlock({ form }: BlockProps) {
   const { t } = useTranslation();
-  const username = form.watch("userName");
+  const username = React.useMemo(
+    () => form.watch("userName"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("userName")]
+  );
 
   const [hidden, setHidden] = React.useState(false);
   const [_, copy] = useCopyToClipboard();

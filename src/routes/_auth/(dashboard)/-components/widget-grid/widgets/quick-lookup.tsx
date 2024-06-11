@@ -90,7 +90,12 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
     shouldUnregister: true,
   });
 
-  const accessor = form.watch("accessor");
+  const accessor = React.useMemo(
+    () => form.watch("accessor"),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form.watch("accessor")]
+  );
 
   const customers = useMutation({
     mutationFn: fetchCustomersSearchListFn,

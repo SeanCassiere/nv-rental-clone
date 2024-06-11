@@ -111,7 +111,7 @@ function DummyComponent(data: any) {
   );
 }
 
-const AddRentalParentForm = ({
+function AddRentalParentForm({
   referenceId,
   currentStage: stage,
   module,
@@ -121,7 +121,7 @@ const AddRentalParentForm = ({
   summaryData,
   reservationData,
   isCheckin = false,
-}: TAddRentalParentFormProps) => {
+}: TAddRentalParentFormProps) {
   const isEdit = Boolean(referenceId);
   const auth = useAuth();
   const authParams = getAuthFromAuthHook(auth);
@@ -423,7 +423,7 @@ const AddRentalParentForm = ({
   );
 
   React.useEffect(() => {
-    if (getAgreementQuery.status !== "success" || !getAgreementQuery.data)
+    if (getAgreementQuery?.status !== "success" || !getAgreementQuery.data)
       return;
     if (getAgreementQuery.data && getAgreementQuery.data?.status !== 200)
       return;
@@ -540,7 +540,7 @@ const AddRentalParentForm = ({
     });
 
     setCreationStageComplete(startingCompletionStages);
-  }, [getAgreementQuery.data, getAgreementQuery.status]);
+  }, [getAgreementQuery?.data, getAgreementQuery?.status]);
 
   // fetching the optimal rate name for new rentals
   const agreementConditionsForOptimalRateFetch =
@@ -578,10 +578,10 @@ const AddRentalParentForm = ({
   );
 
   React.useEffect(() => {
-    if (getOptimalRateQuery.status !== "success") return;
+    if (getOptimalRateQuery?.status !== "success") return;
 
     const data =
-      getOptimalRateQuery.data.status === 200
+      getOptimalRateQuery.data?.status === 200
         ? getOptimalRateQuery.data.body
         : null;
 
@@ -594,7 +594,7 @@ const AddRentalParentForm = ({
         return values;
       });
     }
-  }, [getOptimalRateQuery.data, getOptimalRateQuery.status]);
+  }, [getOptimalRateQuery?.data, getOptimalRateQuery?.status]);
 
   // fetching the rate for the rental
   const agreementConditionsForFetchingRates =
@@ -640,10 +640,10 @@ const AddRentalParentForm = ({
   );
 
   React.useEffect(() => {
-    if (getRentalRatesQuery.status !== "success") return;
+    if (getRentalRatesQuery?.status !== "success") return;
 
     const data =
-      getRentalRatesQuery.data.status === 200
+      getRentalRatesQuery.data?.status === 200
         ? getRentalRatesQuery.data.body
         : [];
 
@@ -656,7 +656,7 @@ const AddRentalParentForm = ({
         rates: true,
       }));
     }
-  }, [getRentalRatesQuery.data, getRentalRatesQuery.status]);
+  }, [getRentalRatesQuery?.data, getRentalRatesQuery?.status]);
 
   // fetching the data before page navigation
   useQuery(
@@ -736,8 +736,8 @@ const AddRentalParentForm = ({
   );
 
   React.useEffect(() => {
-    if (getMiscChargesQuery.status !== "success") return;
-    if (!getMiscChargesQuery.data || getMiscChargesQuery.data.status !== 200)
+    if (getMiscChargesQuery?.status !== "success") return;
+    if (!getMiscChargesQuery.data || getMiscChargesQuery.data?.status !== 200)
       return;
     const data = getMiscChargesQuery.data.body;
 
@@ -794,8 +794,8 @@ const AddRentalParentForm = ({
     setCreationStageComplete((prev) => ({ ...prev, miscCharges: true }));
   }, [
     agreementRentalInformation,
-    getMiscChargesQuery.data,
-    getMiscChargesQuery.status,
+    getMiscChargesQuery?.data,
+    getMiscChargesQuery?.status,
   ]);
 
   // fetch taxes for the rental
@@ -820,8 +820,8 @@ const AddRentalParentForm = ({
   );
 
   React.useEffect(() => {
-    if (getTaxesQuery.status !== "success") return;
-    if (!getTaxesQuery.data || getTaxesQuery.data.status !== 200) return;
+    if (getTaxesQuery?.status !== "success") return;
+    if (!getTaxesQuery.data || getTaxesQuery.data?.status !== 200) return;
 
     const data = getTaxesQuery.data.body;
     const selectedTaxesNow = (data || []).filter((tax) => !tax.isOptional);
@@ -831,7 +831,7 @@ const AddRentalParentForm = ({
       return selectedTaxesNow.map((tax) => tax.id);
     });
     setCreationStageComplete((prev) => ({ ...prev, taxes: true }));
-  }, [getTaxesQuery.data, getTaxesQuery.status]);
+  }, [getTaxesQuery?.data, getTaxesQuery?.status]);
 
   // fetch a calculated rental summary
   const agreementConditionsForSummaryCalculation =
@@ -1121,6 +1121,7 @@ const AddRentalParentForm = ({
       </section>
     </>
   );
-};
+}
+AddRentalParentForm.displayName = "AddRentalParentForm";
 
 export default AddRentalParentForm;
