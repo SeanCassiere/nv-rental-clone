@@ -116,7 +116,12 @@ function ReportTableContent<TData, TValue>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table.getState().columnSizingInfo, table.getFlatHeaders()]);
 
-  const visibleColumns = table.getVisibleLeafColumns();
+  const visibleColumns = React.useMemo(
+    () => table.getVisibleLeafColumns(),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getVisibleLeafColumns()]
+  );
 
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
 

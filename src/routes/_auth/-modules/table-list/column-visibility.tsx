@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +16,13 @@ import { useTableList } from "./context";
 
 function TableListColumnVisibilityDropdown() {
   const { table } = useTableList();
+
+  const columns = React.useMemo(
+    () => table.getAllColumns(),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getAllColumns()]
+  );
 
   return (
     <DropdownMenu>
@@ -40,8 +49,7 @@ function TableListColumnVisibilityDropdown() {
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
         <ScrollArea className="h-80">
-          {table
-            .getAllColumns()
+          {columns
             .filter(
               (column) =>
                 typeof column.accessorFn !== "undefined" && column.getCanHide()

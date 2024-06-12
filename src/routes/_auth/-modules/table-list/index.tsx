@@ -116,10 +116,8 @@ function TableList<TData, TValue>(rootProps: TableListProps<TData, TValue>) {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const memoizedTable = React.useMemo(() => table, [table]);
-
   return (
-    <tableListContext.Provider value={{ table: memoizedTable, isLoading }}>
+    <tableListContext.Provider value={{ table, isLoading }}>
       {children}
     </tableListContext.Provider>
   );

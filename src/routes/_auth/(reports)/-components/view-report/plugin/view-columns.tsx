@@ -17,6 +17,13 @@ import type { ReportTablePlugin } from "@/lib/types/report";
 export const ViewColumns: ReportTablePlugin = (props) => {
   const { table, align } = props;
 
+  const allLeafColumns = React.useMemo(
+    () => table.getAllLeafColumns(),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getAllLeafColumns()]
+  );
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -45,7 +52,7 @@ export const ViewColumns: ReportTablePlugin = (props) => {
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
         <ScrollArea className="h-80">
-          {table.getAllLeafColumns().map((column) => {
+          {allLeafColumns.map((column) => {
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}

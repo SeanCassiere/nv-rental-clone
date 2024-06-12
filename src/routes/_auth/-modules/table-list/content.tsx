@@ -48,6 +48,13 @@ function TableListContent(props: TableListContentProps) {
     .filter((column) => !column.getCanSort() && !column.getCanHide())
     .map((column) => column.id);
 
+  const rowModel = React.useMemo(
+    () => table.getRowModel(),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getRowModel()]
+  );
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -102,8 +109,8 @@ function TableListContent(props: TableListContentProps) {
               isLoading ? "pointer-events-none [&>*]:opacity-50" : ""
             )}
           >
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {rowModel.rows?.length ? (
+              rowModel.rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

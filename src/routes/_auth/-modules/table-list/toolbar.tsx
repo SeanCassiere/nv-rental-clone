@@ -126,7 +126,12 @@ function TableListToolbarActions({
   const { handleSearch, handleReset, filterItems } = useTableListToolbar();
   const { table } = useTableList();
 
-  const tableFilters = table.getState().columnFilters;
+  const tableFilters = React.useMemo(
+    () => table.getState().columnFilters,
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [table.getState().columnFilters]
+  );
 
   const isFiltered = React.useMemo(() => {
     let isDirty = false;
@@ -272,40 +277,46 @@ function ToolbarFilter({
 
   const clearText = t("buttons.clear", { ns: "labels" });
 
-  const baseState = table
-    .getState()
-    .columnFilters.find((item) => item.id === id);
+  const baseState = React.useMemo(
+    () => table.getState().columnFilters.find((item) => item.id === id),
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [id, table.getState().columnFilters]
+  );
 
   const arrayState =
     baseState && Array.isArray(baseState?.value)
       ? baseState.value.map((e) => String(e))
       : [];
 
-  const handleSaveValue = (
-    updateValue: string | string[] | Date | undefined,
-    handleType: "date" | "date-time" | "array" | "text" = "text"
-  ) => {
-    table.setColumnFilters((prev) => {
-      const newFiltersList = prev.filter((item) => item.id !== id);
+  const handleSaveValue = React.useCallback(
+    (
+      updateValue: string | string[] | Date | undefined,
+      handleType: "date" | "date-time" | "array" | "text" = "text"
+    ) => {
+      table.setColumnFilters((prev) => {
+        const newFiltersList = prev.filter((item) => item.id !== id);
 
-      switch (handleType) {
-        case "date":
-          newFiltersList.push({
-            id,
-            value:
-              updateValue instanceof Date
-                ? localDateToQueryYearMonthDay(updateValue)
-                : undefined,
-          });
-          break;
-        default:
-          newFiltersList.push({ id, value: updateValue });
-          break;
-      }
+        switch (handleType) {
+          case "date":
+            newFiltersList.push({
+              id,
+              value:
+                updateValue instanceof Date
+                  ? localDateToQueryYearMonthDay(updateValue)
+                  : undefined,
+            });
+            break;
+          default:
+            newFiltersList.push({ id, value: updateValue });
+            break;
+        }
 
-      return newFiltersList;
-    });
-  };
+        return newFiltersList;
+      });
+    },
+    [id, table]
+  );
 
   if (type === "text" && size === "large") {
     return (
