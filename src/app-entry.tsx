@@ -53,17 +53,17 @@ function FullPageLoadingSpinner() {
   );
 }
 
-const parseSearch = parseSearchWith((value) => JSURL2.parse(value));
-const stringifySearch = stringifySearchWith((value) => JSURL2.stringify(value));
-
 const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   defaultViewTransition: true,
   defaultPendingComponent: FullPageLoadingSpinner,
-  parseSearch,
-  stringifySearch,
+  parseSearch: parseSearchWith((value) => JSURL2.parse(value)),
+  stringifySearch: stringifySearchWith(
+    (value) => JSURL2.stringify(value),
+    (value) => JSURL2.parse(value)
+  ),
   context: {
     queryClient,
     auth: undefined!, // will be set by an AuthWrapper
