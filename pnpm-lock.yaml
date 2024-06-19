@@ -187,8 +187,8 @@ importers:
         specifier: ^0.5.13
         version: 0.5.13(tailwindcss@3.4.4)
       '@tanstack/router-plugin':
-        specifier: ^1.39.2
-        version: 1.39.2(vite@5.3.1(@types/node@20.14.2))
+        specifier: ^1.39.5
+        version: 1.39.5(vite@5.3.1(@types/node@20.14.2))
       '@types/node':
         specifier: ^20.14.2
         version: 20.14.2
@@ -1438,8 +1438,8 @@ packages:
     resolution: {integrity: sha512-sI1B1Zd1SjeY1Uc6Tehi4BfBEl+e5mR7c4COWYRkZRIC3P4870Q54t+7aMGDY/lw4Yd9J2vUcxZ7F4qiTgo62w==}
     engines: {node: '>=12'}
 
-  '@tanstack/router-plugin@1.39.2':
-    resolution: {integrity: sha512-wbwcjtLJVSOop02tBPsMKJO6ikNpwl3ULmHNTfjdDeofM91ulvIe8KcDYGKzLIl9WcSWKyzsByD3Ypf01npJGA==}
+  '@tanstack/router-plugin@1.39.5':
+    resolution: {integrity: sha512-PGe7cdPRCnsv526wdu24DJdHMlDDCPuT+SZ4/v94UjpW3iN7/x+WcflJAaMJYWbNC4J2i+COwJrqoYheRrvbMw==}
     engines: {node: '>=12'}
     peerDependencies:
       vite: '>=5'
@@ -4504,17 +4504,17 @@ snapshots:
       prettier: 3.3.2
       zod: 3.23.8
 
-  '@tanstack/router-plugin@1.39.2(vite@5.3.1(@types/node@20.14.2))':
+  '@tanstack/router-plugin@1.39.5(vite@5.3.1(@types/node@20.14.2))':
     dependencies:
       '@babel/core': 7.24.6
-      '@babel/generator': 7.24.6
+      '@babel/generator': 7.24.7
       '@babel/plugin-syntax-jsx': 7.24.7(@babel/core@7.24.6)
       '@babel/plugin-syntax-typescript': 7.24.7(@babel/core@7.24.6)
       '@babel/plugin-transform-react-jsx': 7.24.7(@babel/core@7.24.6)
       '@babel/plugin-transform-typescript': 7.24.7(@babel/core@7.24.6)
-      '@babel/template': 7.24.6
-      '@babel/traverse': 7.24.6
-      '@babel/types': 7.24.6
+      '@babel/template': 7.24.7
+      '@babel/traverse': 7.24.7
+      '@babel/types': 7.24.7
       '@tanstack/router-generator': 1.37.0
       '@types/babel__core': 7.20.5
       '@types/babel__generator': 7.6.8
