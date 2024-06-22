@@ -8,12 +8,15 @@
     "dev": "vite",
     "lint": "eslint --max-warnings 0 .",
     "lint:fix": "eslint --fix --max-warnings 0 .",
-    "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./prettier.config.cjs",
+    "format": "prettier --check './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config './prettier.config.cjs'",
+    "format:fix": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config './prettier.config.cjs'",
     "clean": "rimraf ./dist && rimraf ./coverage",
     "build:code": "tsc && vite build",
     "build": "pnpm run clean && pnpm run lint && pnpm run build:code",
     "postbuild": "node ./postbuild.cjs",
-    "preview": "vite preview --port 3000"
+    "preview": "vite preview --port 3000",
+    "ci:lint": "pnpm run lint",
+    "ci:format": "pnpm run format"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

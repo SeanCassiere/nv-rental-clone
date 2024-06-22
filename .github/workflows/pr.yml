@@ -1,0 +1,41 @@
+name: pr
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint-and-format:
+    name: lint-and-format
+    runs-on: ubuntu-latest
+    steps:
+      # This step uses the actions/checkout action to download a copy of your repository on the runner.
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # This step uses the pnpm/action-setup action to set up pnpm on the runner.
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      # This step uses the actions/setup-node action to set up a Node.js environment on the runner.
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # This step runs the install script for the selected node package manager.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # This step runs the ci script for linting to check for linting errors.
+      - name: Run the linter to check for linting errors
+        run: pnpm ci:lint
+
+      # This step runs the ci script for formatting to check for formatting errors.
+      - name: Run the formatter to check for formatting errors
+        run: pnpm ci:format
