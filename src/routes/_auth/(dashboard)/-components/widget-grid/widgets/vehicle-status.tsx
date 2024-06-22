@@ -97,32 +97,25 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
       <div className="flex max-h-8 shrink-0 items-center justify-between gap-2">
         <div className="flex grow items-center justify-between">
           <span className="font-medium">{widgetName}</span>
-          <Tooltip delayDuration={250}>
-            <Select value={vehicleTypeId} onValueChange={setVehicleTypeId}>
-              <TooltipTrigger asChild>
-                <SelectTrigger className="h-8 w-auto gap-2">
-                  <SelectValue placeholder="Select a vehicle type" />
-                </SelectTrigger>
-              </TooltipTrigger>
-              <SelectContent align="end">
-                <SelectGroup>
-                  <SelectLabel>Vehicle types</SelectLabel>
-                  <SelectItem value="0">All</SelectItem>
-                  {vehicleTypes.map((type, idx) => (
-                    <SelectItem
-                      key={`vehicle_status_v_type_${idx}`}
-                      value={String(type.id)}
-                    >
-                      {type.value}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            <TooltipContent align="start">
-              <p>Filter the fleet by vehicle type.</p>
-            </TooltipContent>
-          </Tooltip>
+          <Select value={vehicleTypeId} onValueChange={setVehicleTypeId}>
+            <SelectTrigger className="h-8 w-auto gap-2">
+              <SelectValue placeholder="Select a vehicle type" />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectGroup>
+                <SelectLabel>Vehicle types</SelectLabel>
+                <SelectItem value="0">All</SelectItem>
+                {vehicleTypes.map((type, idx) => (
+                  <SelectItem
+                    key={`vehicle_status_v_type_${idx}`}
+                    value={String(type.id)}
+                  >
+                    {type.value}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <Button
           type="button"
