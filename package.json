@@ -61,7 +61,7 @@
     "react-compiler-runtime": "file:./libs/react-compiler-runtime",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.51.5",
+    "react-hook-form": "^7.52.0",
     "react-i18next": "^14.1.2",
     "react-oidc-context": "^3.1.0",
     "recharts": "2.13.0-alpha.4",
