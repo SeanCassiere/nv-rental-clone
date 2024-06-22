@@ -92,7 +92,7 @@
     "globals": "^15.6.0",
     "postcss": "^8.4.33",
     "prettier": "^3.3.2",
-    "prettier-plugin-tailwindcss": "^0.6.4",
+    "prettier-plugin-tailwindcss": "^0.6.5",
     "rimraf": "^5.0.7",
     "tailwindcss": "^3.4.4",
     "tailwindcss-animate": "^1.0.7",
