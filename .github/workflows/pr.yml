@@ -33,7 +33,7 @@ jobs:
         run: pnpm install
 
       # This step runs the test script if there is one specified under the scripts key in your package.json file.
-      - name: Test
+      - name: Run the linter to check for linting errors
         run: pnpm ci:lint
 
   format:
@@ -62,5 +62,5 @@ jobs:
         run: pnpm install
 
       # This step runs the test script if there is one specified under the scripts key in your package.json file.
-      - name: Test
+      - name: Run the formatter to check for formatting errors
         run: pnpm ci:format
