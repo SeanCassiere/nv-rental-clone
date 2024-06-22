@@ -2,7 +2,7 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -90,12 +90,7 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
     shouldUnregister: true,
   });
 
-  const accessor = React.useMemo(
-    () => form.watch("accessor"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("accessor")]
-  );
+  const accessor = useWatch({ control: form.control, name: "accessor" });
 
   const customers = useMutation({
     mutationFn: fetchCustomersSearchListFn,

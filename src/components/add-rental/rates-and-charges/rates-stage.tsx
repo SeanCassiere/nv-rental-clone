@@ -1,7 +1,12 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useForm, type FormState, type UseFormRegister } from "react-hook-form";
+import {
+  useForm,
+  useWatch,
+  type FormState,
+  type UseFormRegister,
+} from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 
@@ -84,37 +89,22 @@ export const RatesStage = (props: RatesStageProps) => {
     }, [rate]),
   });
 
-  React.useEffect(() => {
-    if (rate) {
-      form.reset(rate);
-    }
-  }, [form, rate, rate?.rateName, rateName]);
+  const isDayRate = useWatch({ control: form.control, name: "isDayRate" });
+  const isWeekDayRate = useWatch({ control: form.control, name: "isDayWeek" });
+  const totalDays = useWatch({ control: form.control, name: "totalDays" });
 
-  const isDayRate = React.useMemo(
-    () => form.watch("isDayRate"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("isDayRate")]
-  );
-  const isWeekDayRate = React.useMemo(
-    () => form.watch("isDayWeek"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("isDayWeek")]
-  );
-
-  const totalDays = React.useMemo(
-    () => form.watch("totalDays"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("totalDays")]
-  );
   const rentalDays = totalDays ?? 0;
 
   const commonFormProps: CommonRatesFormProps = {
     registerFn: form.register,
     formState: form.formState,
   };
+
+  React.useEffect(() => {
+    if (rate) {
+      form.reset(rate);
+    }
+  }, [form, rate, rate?.rateName, rateName]);
 
   return (
     <Form {...form}>

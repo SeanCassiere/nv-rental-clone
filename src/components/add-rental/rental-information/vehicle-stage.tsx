@@ -1,7 +1,7 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 import { z } from "zod";
@@ -92,18 +92,11 @@ export const VehicleStage = ({
     values: vehicleInformation ? values : undefined,
   });
 
-  const formVehicleTypeId = React.useMemo(
-    () => form.watch("vehicleTypeId"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("vehicleTypeId")]
-  );
-  const formVehicleId = React.useMemo(
-    () => form.watch("vehicleId"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("vehicleId")]
-  );
+  const formVehicleTypeId = useWatch({
+    control: form.control,
+    name: "vehicleTypeId",
+  });
+  const formVehicleId = useWatch({ control: form.control, name: "vehicleId" });
 
   //
   const vehicleTypesData = useQuery(

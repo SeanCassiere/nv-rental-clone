@@ -2,7 +2,7 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AccordionItem } from "@radix-ui/react-accordion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -375,12 +375,7 @@ function RoleForm(props: {
     },
   });
 
-  const templateId = React.useMemo(
-    () => form.watch("templateId"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("templateId")]
-  );
+  const templateId = useWatch({ control: form.control, name: "templateId" });
 
   const roleQuery = useQuery(
     fetchRoleByIdOptions({

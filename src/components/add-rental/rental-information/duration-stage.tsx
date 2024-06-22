@@ -1,7 +1,7 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "react-oidc-context";
 import { z } from "zod";
@@ -139,7 +139,10 @@ export const DurationStage = ({
   );
   const agreementTypesList = agreementTypeData.data ?? [];
 
-  const currentAgreementType = form.watch("agreementType");
+  const currentAgreementType = useWatch({
+    control: form.control,
+    name: "agreementType",
+  });
   const agreementNumberQuery = useQuery(
     fetchAgreementGeneratedNumberOptions({
       auth: authParams,
@@ -148,18 +151,14 @@ export const DurationStage = ({
     })
   );
 
-  const form_checkoutDate = React.useMemo(
-    () => form.watch("checkoutDate"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("checkoutDate")]
-  );
-  const form_checkinDate = React.useMemo(
-    () => form.watch("checkinDate"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("checkinDate")]
-  );
+  const form_checkoutDate = useWatch({
+    control: form.control,
+    name: "checkoutDate",
+  });
+  const form_checkinDate = useWatch({
+    control: form.control,
+    name: "checkinDate",
+  });
 
   const handleCheckoutDateChange = (date: Date) => {
     const previousCheckoutDate = form_checkoutDate;
