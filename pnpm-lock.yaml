@@ -187,8 +187,8 @@ importers:
         specifier: ^0.5.13
         version: 0.5.13(tailwindcss@3.4.4)
       '@tanstack/router-plugin':
-        specifier: ^1.39.12
-        version: 1.39.12(vite@5.3.1(@types/node@20.14.2))
+        specifier: ^1.39.13
+        version: 1.39.13(vite@5.3.1(@types/node@20.14.2))
       '@types/node':
         specifier: ^20.14.2
         version: 20.14.2
@@ -1438,8 +1438,8 @@ packages:
     resolution: {integrity: sha512-sI1B1Zd1SjeY1Uc6Tehi4BfBEl+e5mR7c4COWYRkZRIC3P4870Q54t+7aMGDY/lw4Yd9J2vUcxZ7F4qiTgo62w==}
     engines: {node: '>=12'}
 
-  '@tanstack/router-plugin@1.39.12':
-    resolution: {integrity: sha512-cw6AUyUekRHosHjCh/PqFGwkQYZfJjai3oUIruGHMkMjF0/feRjLtDw5vryM00ieR3pzq/dpN4CdoFnaMjSNqA==}
+  '@tanstack/router-plugin@1.39.13':
+    resolution: {integrity: sha512-tcrBnoTdiYJQ0QT+5nGhwHxPkmW38a8ARRResuc6NgbIQ613rpQMBmADnFR994NX5uG0VuGWKPigTX8sdlHk8A==}
     engines: {node: '>=12'}
     peerDependencies:
       '@rsbuild/core': '>=0.7.9'
@@ -4507,7 +4507,7 @@ snapshots:
       prettier: 3.3.2
       zod: 3.23.8
 
-  '@tanstack/router-plugin@1.39.12(vite@5.3.1(@types/node@20.14.2))':
+  '@tanstack/router-plugin@1.39.13(vite@5.3.1(@types/node@20.14.2))':
     dependencies:
       '@babel/core': 7.24.6
       '@babel/generator': 7.24.7
