@@ -1,6 +1,6 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -108,12 +108,7 @@ export const CustomerStage = ({
     values: customerInformation ? values : undefined,
   });
 
-  const form_dob = React.useMemo(
-    () => form.watch("dateOfBirth"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("dateOfBirth")]
-  );
+  const form_dob = useWatch({ control: form.control, name: "dateOfBirth" });
 
   return (
     <Form {...form}>

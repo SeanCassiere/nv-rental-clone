@@ -1,7 +1,7 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -346,12 +346,7 @@ function LocationForm(props: LocationFormProps) {
     },
   });
 
-  const countryId = React.useMemo(
-    () => form.watch("countryId"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("countryId")]
-  );
+  const countryId = useWatch({ control: form.control, name: "countryId" });
 
   const locationsQuery = useQuery(
     fetchLocationsListOptions({

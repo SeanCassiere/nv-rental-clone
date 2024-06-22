@@ -6,7 +6,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm, useWatch, type UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -334,12 +334,7 @@ const COPY_TIMEOUT = 1500;
 
 function UsernameBlock({ form }: BlockProps) {
   const { t } = useTranslation();
-  const username = React.useMemo(
-    () => form.watch("userName"),
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form.watch("userName")]
-  );
+  const username = useWatch({ control: form.control, name: "userName" });
 
   const [hidden, setHidden] = React.useState(false);
   const [_, copy] = useCopyToClipboard();
