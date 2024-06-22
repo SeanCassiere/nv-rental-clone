@@ -126,8 +126,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       lucide-react:
-        specifier: ^0.387.0
-        version: 0.387.0(react@18.3.1)
+        specifier: ^0.396.0
+        version: 0.396.0(react@18.3.1)
       oidc-client-ts:
         specifier: ^3.0.1
         version: 3.0.1
@@ -2445,8 +2445,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@0.387.0:
-    resolution: {integrity: sha512-NyB4oJZ0pzLHT/QgMpgCPbez6yqvz8QPBocMJBXQCInPpXcQVCUpcU1CDlRG8mT2j0KqodLQYp+F5zn8U86sXg==}
+  lucide-react@0.396.0:
+    resolution: {integrity: sha512-N/zP+9vEfEYHiMWMpjwH/M5diaV0e4UFe07BpgdzaRYce5QvXi87hixf7F0Xqdr3zuX/9u7H/2D4MVXIK22O0A==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
 
@@ -5687,7 +5687,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.387.0(react@18.3.1):
+  lucide-react@0.396.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 
