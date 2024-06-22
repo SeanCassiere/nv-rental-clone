@@ -10,5 +10,5 @@
     },
     "resolveJsonModule": true
   },
-  "include": ["vite.config.ts", "package.json"]
+  "include": ["package.json"]
 }

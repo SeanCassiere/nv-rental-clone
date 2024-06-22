@@ -177,22 +177,22 @@ function settingStartingColumn(
     return columnData;
   }
 
-  const findReservationNumber = columnData
+  const startingHeaderIdx = columnData
     .map((d) => d.columnHeader)
     .indexOf(startingColumnHeader);
 
   if (numberActive === 0) {
     // if 0 columns are active
-    if (columnData[findReservationNumber]) {
-      (columnData[findReservationNumber] as any).isSelected = true;
+    if (columnData[startingHeaderIdx]) {
+      (columnData[startingHeaderIdx] as any).isSelected = true;
     }
   }
 
   // setting the starting column
   if (
-    columnData[findReservationNumber] &&
-    (columnData[findReservationNumber]?.orderIndex !== 0 ||
-      columnData[findReservationNumber]?.orderIndex !== 1)
+    columnData[startingHeaderIdx] &&
+    columnData[startingHeaderIdx]?.orderIndex !== 0 &&
+    columnData[startingHeaderIdx]?.orderIndex !== 1
   ) {
     columnData = columnData.map((col, idx) => ({
       ...col,
