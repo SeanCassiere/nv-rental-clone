@@ -5,6 +5,14 @@ import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 
 function setDomThemeDataAttribute(theme: string) {
+  if (typeof document === "undefined") return;
+  if ("startViewTransition" in document) {
+    // @ts-expect-error
+    document.startViewTransition(() => {
+      document.documentElement.setAttribute("data-theme", theme);
+    });
+    return;
+  }
   document.documentElement.setAttribute("data-theme", theme);
 }
 
