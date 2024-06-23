@@ -191,4 +191,35 @@
   .TanStackRouterDevtools > button {
     @apply origin-top-right -translate-y-4 translate-x-2 rotate-90 rounded-t-none border-t-0 border-border/10 shadow-xl;
   }
+
+  html {
+    view-transition-name: theme-update;
+  }
+
+  ::view-transition-group(theme-update) {
+    animation-timing-function: var(--expo-out);
+  }
+
+  ::view-transition-new(theme-update) {
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="0" cy="0" r="18" fill="white" filter="url(%23blur)"/></svg>')
+      top left / 0 no-repeat;
+    mask-origin: content-box;
+    animation: scale 750ms;
+    transform-origin: top left;
+  }
+
+  ::view-transition-old(theme-update),
+  [data-theme="light"]::view-transition-old(theme-update),
+  [data-theme="dark"]::view-transition-old(theme-update),
+  [data-theme="system"]::view-transition-old(theme-update) {
+    animation: scale 750ms;
+    transform-origin: top left;
+    z-index: -1;
+  }
+
+  @keyframes scale {
+    to {
+      mask-size: 350vmax;
+    }
+  }
 }
