@@ -1,10 +1,6 @@
 {
-  "cSpell.ignoreWords": [],
-  "cSpell.words": [],
-  "conventionalCommits.scopes": [],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "prettier.configPath": "./prettier.config.cjs",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "eslint.experimental.useFlatConfig": true
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
