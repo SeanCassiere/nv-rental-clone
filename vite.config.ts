@@ -18,6 +18,10 @@ export default defineConfig(() => {
   return {
     plugins: [
       TanStackRouterVite({
+        routesDirectory: "./src/routes",
+        generatedRouteTree: "./src/route-tree.gen.ts",
+        routeFileIgnorePrefix: "-",
+        quoteStyle: "double",
         experimental: {
           enableCodeSplitting: true,
         },
