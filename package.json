@@ -27,7 +27,7 @@
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.1.0",
-    "@radix-ui/react-checkbox": "^1.1.0",
+    "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-label": "^2.1.0",
@@ -58,7 +58,7 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^2.5.2",
     "jsurl2": "^2.2.0",
-    "lucide-react": "^0.396.0",
+    "lucide-react": "^0.400.0",
     "oidc-client-ts": "^3.0.1",
     "react": "^18.3.1",
     "react-compiler-runtime": "file:./libs/react-compiler-runtime",
@@ -80,7 +80,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
-    "@tanstack/router-plugin": "^1.43.1",
+    "@tanstack/router-plugin": "^1.43.9",
     "@types/node": "^20.14.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -93,7 +93,7 @@
     "eslint-plugin-react-compiler": "0.0.0-experimental-51a85ea-20240601",
     "eslint-plugin-react-hooks": "^4.6.2",
     "globals": "^15.6.0",
-    "postcss": "^8.4.33",
+    "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "rimraf": "^5.0.7",
@@ -101,6 +101,6 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.2",
     "typescript-eslint": "^7.13.1",
-    "vite": "^5.3.1"
+    "vite": "^5.3.3"
   }
 }
