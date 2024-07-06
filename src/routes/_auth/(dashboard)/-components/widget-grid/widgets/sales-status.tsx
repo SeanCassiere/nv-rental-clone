@@ -1,9 +1,15 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import { Button } from "@/components/ui/button";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { icons } from "@/components/ui/icons";
 
 import { fetchDashboardSalesStatisticsOptions } from "@/lib/query/dashboard";
@@ -14,6 +20,17 @@ import { WidgetSkeleton, type CommonWidgetProps } from "./_common";
 
 export default function SalesStatusWidget(props: CommonWidgetProps) {
   const { auth, selectedLocationIds, widgetId } = props;
+
+  const chartConfig = {
+    previousTotal: {
+      label: "Last year",
+      color: "hsl(var(--chart-1))",
+    },
+    total: {
+      label: "This year",
+      color: "hsl(var(--chart-2))",
+    },
+  } satisfies ChartConfig;
 
   const widgetName = useWidgetName(widgetId);
 
@@ -47,97 +64,58 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
       {salesQuery.status === "pending" ? (
         <WidgetSkeleton />
       ) : (
-        <ResponsiveContainer
-          width="100%"
-          height="100%"
-          className="min-h-[250px]"
-        >
+        <ChartContainer config={chartConfig} className="min-h-[250px] w-full">
           <LineChart
+            accessibilityLayer
             data={sales}
             margin={{
-              top: 5,
-              right: 15,
-              left: 15,
-              bottom: 5,
+              left: 12,
+              right: 12,
             }}
           >
+            <CartesianGrid vertical={false} />
             <XAxis
-              axisLine={false}
               dataKey="monthName"
-              stroke="hsl(var(--muted-foreground)/0.7)"
-              fontSize={13}
-              dy={10}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
             />
-            <Tooltip
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  return (
-                    <div className="rounded-lg border bg-background p-2 shadow-sm">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="flex flex-col">
-                          <span className="text-[0.70rem] uppercase text-muted-foreground">
-                            Previous year
-                          </span>
-                          <span className="font-bold text-muted-foreground">
-                            {t("intlCurrency", {
-                              value: Number(payload[0]?.value ?? 0),
-                              ns: "format",
-                            })}
-                          </span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-[0.70rem] uppercase text-muted-foreground">
-                            This year
-                          </span>
-                          <span className="font-bold">
-                            {t("intlCurrency", {
-                              value: Number(payload[1]?.value ?? 0),
-                              ns: "format",
-                            })}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-                return null;
-              }}
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dot" />}
+              formatter={(value) =>
+                t("intlCurrency", {
+                  value: Number(value ?? 0),
+                  ns: "format",
+                })
+              }
             />
             <Line
+              dataKey="total"
               type="monotone"
+              stroke="var(--color-total)"
               strokeWidth={2}
-              dataKey="previousTotal"
+              dot={{
+                fill: "var(--color-total)",
+              }}
               activeDot={{
                 r: 6,
-                style: { fill: "var(--theme-primary)", opacity: 0.25 },
               }}
-              style={
-                {
-                  stroke: "var(--theme-primary)",
-                  opacity: 0.25,
-                  "--theme-primary": "hsl(var(--primary))",
-                } as React.CSSProperties
-              }
-              isAnimationActive={false}
             />
             <Line
+              dataKey="previousTotal"
               type="monotone"
-              dataKey="total"
+              stroke="var(--color-previousTotal)"
               strokeWidth={2}
-              activeDot={{
-                r: 8,
-                style: { fill: "var(--theme-primary)" },
+              dot={{
+                fill: "var(--color-previousTotal)",
               }}
-              style={
-                {
-                  stroke: "var(--theme-primary)",
-                  "--theme-primary": `hsl(var(--primary))`,
-                } as React.CSSProperties
-              }
-              isAnimationActive={false}
+              activeDot={{
+                r: 6,
+              }}
             />
           </LineChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       )}
     </React.Fragment>
   );

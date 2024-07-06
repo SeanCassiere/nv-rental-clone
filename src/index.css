@@ -24,6 +24,11 @@
     --light-border: 20 5.9% 90%;
     --light-input: 240 5.9% 90%;
     --light-ring: 240 5.9% 45%;
+    --light-chart-1: 173 58% 39%;
+    --light-chart-2: 12 76% 61%;
+    --light-chart-3: 197 37% 24%;
+    --light-chart-4: 43 74% 66%;
+    --light-chart-5: 27 87% 67%;
     --light-banner-promo: 224 87% 65%;
     --light-banner-promo-foreground: 166 76% 97%;
     --light-logo-url: url(/android-chrome-192x192-light.png);
@@ -48,6 +53,11 @@
     --dark-border: 12 6.5% 15.1%;
     --dark-input: 240 3.7% 15.9%;
     --dark-ring: 240 4.9% 40%;
+    --dark-chart-1: 220 70% 50%;
+    --dark-chart-2: 340 75% 55%;
+    --dark-chart-3: 30 80% 55%;
+    --dark-chart-4: 280 65% 60%;
+    --dark-chart-5: 160 60% 45%;
     --dark-banner-promo: 217 71% 19%;
     --dark-banner-promo-foreground: 166 76% 97%;
     --dark-logo-url: url(/android-chrome-192x192-dark.png);
@@ -75,6 +85,11 @@
     --border: var(--light-border);
     --input: var(--light-input);
     --ring: var(--light-ring);
+    --chart-1: var(--light-chart-1);
+    --chart-2: var(--light-chart-2);
+    --chart-3: var(--light-chart-3);
+    --chart-4: var(--light-chart-4);
+    --chart-5: var(--light-chart-5);
 
     --banner-promo: var(--light-banner-promo);
     --banner-promo-foreground: var(--light-banner-promo-foreground);
@@ -105,6 +120,11 @@
     --border: var(--dark-border);
     --input: var(--dark-input);
     --ring: var(--dark-ring);
+    --chart-1: var(--dark-chart-1);
+    --chart-2: var(--dark-chart-2);
+    --chart-3: var(--dark-chart-3);
+    --chart-4: var(--dark-chart-4);
+    --chart-5: var(--dark-chart-5);
 
     --banner-promo: var(--dark-banner-promo);
     --banner-promo-foreground: var(--dark-banner-promo-foreground);
@@ -136,6 +156,11 @@
       --border: var(--light-border);
       --input: var(--light-input);
       --ring: var(--light-ring);
+      --chart-1: var(--light-chart-1);
+      --chart-2: var(--light-chart-2);
+      --chart-3: var(--light-chart-3);
+      --chart-4: var(--light-chart-4);
+      --chart-5: var(--light-chart-5);
 
       --banner-promo: var(--light-banner-promo);
       --banner-promo-foreground: var(--light-banner-promo-foreground);
@@ -168,6 +193,11 @@
       --border: var(--dark-border);
       --input: var(--dark-input);
       --ring: var(--dark-ring);
+      --chart-1: var(--dark-chart-1);
+      --chart-2: var(--dark-chart-2);
+      --chart-3: var(--dark-chart-3);
+      --chart-4: var(--dark-chart-4);
+      --chart-5: var(--dark-chart-5);
 
       --banner-promo: var(--dark-banner-promo);
       --banner-promo-foreground: var(--dark-banner-promo-foreground);
