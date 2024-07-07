@@ -81,7 +81,6 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
               tickMargin={8}
             />
             <ChartTooltip
-              cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
               formatter={(value) =>
                 t("intlCurrency", {
