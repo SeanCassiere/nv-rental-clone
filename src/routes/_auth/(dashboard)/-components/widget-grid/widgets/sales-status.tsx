@@ -18,19 +18,19 @@ import { useWidgetName } from "@/routes/_auth/(dashboard)/-components/useWidgetN
 
 import { WidgetSkeleton, type CommonWidgetProps } from "./_common";
 
+const chartConfig = {
+  previousTotal: {
+    label: "Last year",
+    color: "hsl(var(--chart-1))",
+  },
+  total: {
+    label: "This year",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig;
+
 export default function SalesStatusWidget(props: CommonWidgetProps) {
   const { auth, selectedLocationIds, widgetId } = props;
-
-  const chartConfig = {
-    previousTotal: {
-      label: "Last year",
-      color: "hsl(var(--chart-1))",
-    },
-    total: {
-      label: "This year",
-      color: "hsl(var(--chart-2))",
-    },
-  } satisfies ChartConfig;
 
   const widgetName = useWidgetName(widgetId);
 
@@ -81,7 +81,6 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
               tickMargin={8}
             />
             <ChartTooltip
-              cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
               formatter={(value) =>
                 t("intlCurrency", {
