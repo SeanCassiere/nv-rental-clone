@@ -126,8 +126,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       lucide-react:
-        specifier: ^0.400.0
-        version: 0.400.0(react@18.3.1)
+        specifier: ^0.407.0
+        version: 0.407.0(react@18.3.1)
       oidc-client-ts:
         specifier: ^3.0.1
         version: 3.0.1
@@ -159,8 +159,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwind-merge:
-        specifier: ^2.3.0
-        version: 2.3.0
+        specifier: ^2.4.0
+        version: 2.4.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -187,8 +187,8 @@ importers:
         specifier: ^0.5.13
         version: 0.5.13(tailwindcss@3.4.4)
       '@tanstack/router-plugin':
-        specifier: ^1.43.13
-        version: 1.43.13(vite@5.3.3(@types/node@20.14.10))
+        specifier: ^1.44.2
+        version: 1.44.2(vite@5.3.3(@types/node@20.14.10))
       '@types/node':
         specifier: ^20.14.10
         version: 20.14.10
@@ -235,8 +235,8 @@ importers:
         specifier: ^0.6.5
         version: 0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.0(prettier@3.3.2))(prettier@3.3.2)
       rimraf:
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^6.0.1
+        version: 6.0.1
       tailwindcss:
         specifier: ^3.4.4
         version: 3.4.4
@@ -1495,12 +1495,12 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/router-generator@1.43.13':
-    resolution: {integrity: sha512-uWs32cgtREaqqjD6sBCZnuX3HmTMSyU+xhHAsT8Fa3mLCyXj4ABJ8uzItPQYLyoZtJ8M1eV7XDe48vDbjus+AA==}
+  '@tanstack/router-generator@1.44.2':
+    resolution: {integrity: sha512-0/wVn3b2M6I6zAPsWLjEbewUZxnvRXG3ZncSAKqJ9g0OTuqUrOfz/cmcgaEtVuXHdWnclaWKh6y5OUcrHOklsw==}
     engines: {node: '>=12'}
 
-  '@tanstack/router-plugin@1.43.13':
-    resolution: {integrity: sha512-v8QD5Ns14bS2Lw6hf6bxRnPqAYHxaQ+3LMKxZqhWfA3S+enQGkyi6lt9Aicr6DX2i0g7yyjUeXA5ro7ekIOdpw==}
+  '@tanstack/router-plugin@1.44.2':
+    resolution: {integrity: sha512-g1t/3L4Q4hxsgBHBzKaRVP0yCmWdXPdcDlXZ5HTV3mAhxLM9sLoq68EFI51JivqG6Yo3uPGHc06l6V++ZLcvvw==}
     engines: {node: '>=12'}
     peerDependencies:
       '@rsbuild/core': '>=0.7.9'
@@ -2526,8 +2526,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@0.400.0:
-    resolution: {integrity: sha512-rpp7pFHh3Xd93KHixNgB0SqThMHpYNzsGUu69UaQbSZ75Q/J3m5t6EhKyMT3m4w2WOxmJ2mY0tD3vebnXqQryQ==}
+  lucide-react@0.407.0:
+    resolution: {integrity: sha512-+dRIu9Sry+E8wPF9+sY5eKld2omrU4X5IKXxrgqBt+o11IIHVU0QOfNoVWFuj0ZRDrxr4Wci26o2mKZqLGE0lA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -2981,8 +2981,8 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
-  rimraf@6.0.0:
-    resolution: {integrity: sha512-u+yqhM92LW+89cxUQK0SRyvXYQmyuKHx0jkx4W7KfwLGLqJnQM5031Uv1trE4gB9XEXBM/s6MxKlfW95IidqaA==}
+  rimraf@6.0.1:
+    resolution: {integrity: sha512-9dkvaxAsk/xNXSJzMgFqqMCuFgt2+KsOFek3TMLfo8NCPfWpBmqwyNn5Y+NX56QUYfCtsyhF3ayiboEoUmJk/A==}
     engines: {node: 20 || >=22}
     hasBin: true
 
@@ -3108,8 +3108,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  tailwind-merge@2.3.0:
-    resolution: {integrity: sha512-vkYrLpIP+lgR0tQCG6AP7zZXCTLc1Lnv/CCRT3BqJ9CZ3ui2++GPaGb1x/ILsINIMSYqqvrpqjUFsMNLlW99EA==}
+  tailwind-merge@2.4.0:
+    resolution: {integrity: sha512-49AwoOQNKdqKPd9CViyH5wJoSKsCDjUlzL8DxuGp3P1FsGY36NJDAa18jLZcaHAUUuTj+JB8IAo8zWgBNvBF7A==}
 
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
@@ -4573,12 +4573,12 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/router-generator@1.43.13':
+  '@tanstack/router-generator@1.44.2':
     dependencies:
       prettier: 3.3.2
       zod: 3.23.8
 
-  '@tanstack/router-plugin@1.43.13(vite@5.3.3(@types/node@20.14.10))':
+  '@tanstack/router-plugin@1.44.2(vite@5.3.3(@types/node@20.14.10))':
     dependencies:
       '@babel/core': 7.24.7
       '@babel/generator': 7.24.7
@@ -4588,7 +4588,7 @@ snapshots:
       '@babel/template': 7.24.7
       '@babel/traverse': 7.24.7
       '@babel/types': 7.24.7
-      '@tanstack/router-generator': 1.43.13
+      '@tanstack/router-generator': 1.44.2
       '@types/babel__core': 7.20.5
       '@types/babel__generator': 7.6.8
       '@types/babel__template': 7.4.4
@@ -5785,7 +5785,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.400.0(react@18.3.1):
+  lucide-react@0.407.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 
@@ -6172,9 +6172,10 @@ snapshots:
 
   reusify@1.0.4: {}
 
-  rimraf@6.0.0:
+  rimraf@6.0.1:
     dependencies:
       glob: 11.0.0
+      package-json-from-dist: 1.0.0
 
   rollup@4.18.0:
     dependencies:
@@ -6341,9 +6342,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tailwind-merge@2.3.0:
-    dependencies:
-      '@babel/runtime': 7.24.6
+  tailwind-merge@2.4.0: {}
 
   tailwindcss-animate@1.0.7(tailwindcss@3.4.4):
     dependencies:
