@@ -187,8 +187,8 @@ importers:
         specifier: ^0.5.13
         version: 0.5.13(tailwindcss@3.4.4)
       '@tanstack/router-plugin':
-        specifier: ^1.43.13
-        version: 1.43.13(vite@5.3.3(@types/node@20.14.10))
+        specifier: ^1.44.2
+        version: 1.44.2(vite@5.3.3(@types/node@20.14.10))
       '@types/node':
         specifier: ^20.14.10
         version: 20.14.10
@@ -1495,12 +1495,12 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/router-generator@1.43.13':
-    resolution: {integrity: sha512-uWs32cgtREaqqjD6sBCZnuX3HmTMSyU+xhHAsT8Fa3mLCyXj4ABJ8uzItPQYLyoZtJ8M1eV7XDe48vDbjus+AA==}
+  '@tanstack/router-generator@1.44.2':
+    resolution: {integrity: sha512-0/wVn3b2M6I6zAPsWLjEbewUZxnvRXG3ZncSAKqJ9g0OTuqUrOfz/cmcgaEtVuXHdWnclaWKh6y5OUcrHOklsw==}
     engines: {node: '>=12'}
 
-  '@tanstack/router-plugin@1.43.13':
-    resolution: {integrity: sha512-v8QD5Ns14bS2Lw6hf6bxRnPqAYHxaQ+3LMKxZqhWfA3S+enQGkyi6lt9Aicr6DX2i0g7yyjUeXA5ro7ekIOdpw==}
+  '@tanstack/router-plugin@1.44.2':
+    resolution: {integrity: sha512-g1t/3L4Q4hxsgBHBzKaRVP0yCmWdXPdcDlXZ5HTV3mAhxLM9sLoq68EFI51JivqG6Yo3uPGHc06l6V++ZLcvvw==}
     engines: {node: '>=12'}
     peerDependencies:
       '@rsbuild/core': '>=0.7.9'
@@ -4573,12 +4573,12 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/router-generator@1.43.13':
+  '@tanstack/router-generator@1.44.2':
     dependencies:
       prettier: 3.3.2
       zod: 3.23.8
 
-  '@tanstack/router-plugin@1.43.13(vite@5.3.3(@types/node@20.14.10))':
+  '@tanstack/router-plugin@1.44.2(vite@5.3.3(@types/node@20.14.10))':
     dependencies:
       '@babel/core': 7.24.7
       '@babel/generator': 7.24.7
@@ -4588,7 +4588,7 @@ snapshots:
       '@babel/template': 7.24.7
       '@babel/traverse': 7.24.7
       '@babel/types': 7.24.7
-      '@tanstack/router-generator': 1.43.13
+      '@tanstack/router-generator': 1.44.2
       '@types/babel__core': 7.20.5
       '@types/babel__generator': 7.6.8
       '@types/babel__template': 7.4.4
