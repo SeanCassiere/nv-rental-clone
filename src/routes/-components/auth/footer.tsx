@@ -124,7 +124,24 @@ export default function AuthFooter() {
             </div>
           </div>
         </div>
-        <div>github twitter</div>
+        <div>
+          <div className="flex items-center gap-2">
+            <a
+              className="p-2"
+              href="https://github.com/seancassiere/nv-rental-clone"
+              target="_blank"
+            >
+              <icons.GitHub className="h-4 w-4" />
+            </a>
+            <a
+              className="p-2"
+              href="https://x.com/seancassiere"
+              target="_blank"
+            >
+              <icons.Twitter className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
         <div>
           <p className="text-xs">
             {APP_VERSION} {IS_DEV ? "(Development)" : null}
