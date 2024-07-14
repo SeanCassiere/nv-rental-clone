@@ -8,11 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { useGlobalDialogContext } from "@/lib/context/modals";
 
-import {
-  APP_VERSION,
-  IS_DEV,
-  UI_APPLICATION_NAME,
-} from "@/lib/utils/constants";
+import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
 
 import { IsMacLike } from "@/lib/utils";
 
@@ -25,10 +21,13 @@ export default function AuthFooter() {
       <div className="mx-auto grid max-w-[1700px] gap-4 px-4 pb-6 pt-5 md:px-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link to="/">
+            <Link
+              to="/"
+              className="rounded ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
               <img
                 // logo url is set in the global css under the name --logo-url
-                className="h-8 w-8 rounded-full p-1 opacity-65 [content:var(--logo-url)]"
+                className="h-8 w-8 rounded-full p-1 opacity-65 [content:var(--logo-url)] focus-within:opacity-100 hover:opacity-100"
                 alt={UI_APPLICATION_NAME}
                 style={{ imageRendering: "crisp-edges" }}
               />
@@ -127,25 +126,20 @@ export default function AuthFooter() {
         <div>
           <div className="flex items-center gap-2">
             <a
-              className="p-2"
+              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               href="https://github.com/seancassiere/nv-rental-clone"
               target="_blank"
             >
               <icons.GitHub className="h-4 w-4" />
             </a>
             <a
-              className="p-2"
+              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               href="https://x.com/seancassiere"
               target="_blank"
             >
               <icons.Twitter className="h-3 w-3" />
             </a>
           </div>
-        </div>
-        <div>
-          <p className="text-xs">
-            {APP_VERSION} {IS_DEV ? "(Development)" : null}
-          </p>
         </div>
       </div>
     </footer>
