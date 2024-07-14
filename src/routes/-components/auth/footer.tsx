@@ -2,14 +2,22 @@ import * as React from "react";
 import { Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
+import { icons } from "@/components/ui/icons";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
+import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 import { useGlobalDialogContext } from "@/lib/context/modals";
 
-import { UI_APPLICATION_NAME } from "@/lib/utils/constants";
+import {
+  APP_VERSION,
+  IS_DEV,
+  UI_APPLICATION_NAME,
+} from "@/lib/utils/constants";
 
 import { IsMacLike } from "@/lib/utils";
 
 export default function AuthFooter() {
+  const { ternaryDarkMode, setTernaryDarkMode } = useTernaryDarkMode();
   const { setShowCommandMenu } = useGlobalDialogContext();
 
   return (
@@ -45,12 +53,83 @@ export default function AuthFooter() {
                 }}
               >
                 <span>Command menu</span>
-                <span>{IsMacLike ? "⌘" : "Ctrl"} + K</span>
+                <div className="inline-flex items-center gap-1">
+                  <span
+                    className="rounded border bg-background px-1 py-0.5"
+                    aria-hidden
+                  >
+                    {IsMacLike ? "⌘" : "Ctrl"}
+                  </span>
+                  <span aria-hidden>+</span>
+                  <span
+                    className="rounded border bg-background px-1.5 py-0.5"
+                    aria-hidden
+                  >
+                    K
+                  </span>
+                  <span className="sr-only">
+                    {IsMacLike ? "⌘" : "Ctrl"} + K
+                  </span>
+                </div>
               </Button>
+            </div>
+            <div>
+              <ToggleGroup
+                type="single"
+                size="sm"
+                className="gap-0.5 rounded-2xl border p-0.5"
+                value={ternaryDarkMode}
+                onValueChange={(value) => {
+                  switch (value) {
+                    case "system":
+                      setTernaryDarkMode("system");
+                      break;
+                    case "light":
+                      setTernaryDarkMode("light");
+                      break;
+                    case "dark":
+                      setTernaryDarkMode("dark");
+                      break;
+                    default:
+                      console.warn(
+                        "Unhandled theme value in the footer switcher:",
+                        value
+                      );
+                      break;
+                  }
+                }}
+              >
+                <ToggleGroupItem
+                  className="h-8 rounded-2xl"
+                  aria-label="Set theme to system"
+                  value="system"
+                >
+                  <icons.System className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  className="h-8 rounded-2xl"
+                  aria-label="Set theme to light"
+                  value="light"
+                >
+                  <icons.Sun className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  className="h-8 rounded-2xl"
+                  aria-label="Set theme to dark"
+                  value="dark"
+                >
+                  <icons.Moon className="h-4 w-4" />
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
           </div>
         </div>
         <div>github twitter</div>
+        <div>
+          <p className="text-xs">
+            {APP_VERSION} {IS_DEV ? "(Development)" : null}
+          </p>
+        </div>
       </div>
     </footer>
   );
