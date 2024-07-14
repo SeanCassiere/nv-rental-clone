@@ -23,6 +23,7 @@ import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 import { useConfigureLocalFeatures } from "./-components/auth/useConfigureLocalFeatures";
 
 const AuthHeader = React.lazy(() => import("@/routes/-components/auth/header"));
+const AuthFooter = React.lazy(() => import("@/routes/-components/auth/footer"));
 const LogoutDialog = React.lazy(
   () => import("@/routes/-components/auth/logout-dialog")
 );
@@ -129,8 +130,13 @@ function AuthLayout() {
   return (
     <React.Fragment>
       <LogoutDialog />
-      <AuthHeader />
-      <Outlet />
+      <div className="flex min-h-dvh flex-col justify-between">
+        <div>
+          <AuthHeader />
+          <Outlet />
+        </div>
+        <AuthFooter />
+      </div>
     </React.Fragment>
   );
 }
