@@ -54,7 +54,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
-    "compare-versions": "^6.1.0",
+    "compare-versions": "^6.1.1",
     "date-fns": "^3.6.0",
     "i18next": "^23.12.1",
     "i18next-browser-languagedetector": "^8.0.0",
