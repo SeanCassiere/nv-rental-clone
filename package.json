@@ -50,7 +50,7 @@
     "@tanstack/react-table": "^8.19.3",
     "@tanstack/react-virtual": "^3.8.3",
     "@tanstack/router-devtools": "^1.45.4",
-    "@ts-rest/core": "^3.45.2",
+    "@ts-rest/core": "^3.46.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
