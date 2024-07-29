@@ -32,6 +32,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # This step runs the ci script for type-level errors.
+      - name: Run the tsc compiler to check for type-level errors
+        run: pnpm ci:typecheck
+
       # This step runs the ci script for linting to check for linting errors.
       - name: Run the linter to check for linting errors
         run: pnpm ci:lint
