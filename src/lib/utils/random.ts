@@ -90,3 +90,17 @@ export function compareStringArrays<TData = string | number>(
 export function insertSpacesBeforeCaps(str: string): string {
   return str.replace(/([A-Z])/g, " $1").trim();
 }
+
+/**
+ * Generates a random short ID.
+ * @returns {string} A random short ID.
+ * @example
+ * ```
+ * generateShortId(); // "lz6ydb42wb1gl"
+ * ```
+ */
+export function generateShortId(): string {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substr(2, 5);
+  return timestamp + random;
+}
