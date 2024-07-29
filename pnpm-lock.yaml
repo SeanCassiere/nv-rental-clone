@@ -81,14 +81,14 @@ importers:
         specifier: ^8.15.1
         version: 8.15.1
       '@tanstack/query-broadcast-client-experimental':
-        specifier: ^5.51.1
-        version: 5.51.1
+        specifier: ^5.51.15
+        version: 5.51.15
       '@tanstack/react-query':
-        specifier: ^5.51.1
-        version: 5.51.1(react@18.3.1)
+        specifier: ^5.51.15
+        version: 5.51.15(react@18.3.1)
       '@tanstack/react-query-devtools':
-        specifier: ^5.51.1
-        version: 5.51.1(@tanstack/react-query@5.51.1(react@18.3.1))(react@18.3.1)
+        specifier: ^5.51.15
+        version: 5.51.15(@tanstack/react-query@5.51.15(react@18.3.1))(react@18.3.1)
       '@tanstack/react-router':
         specifier: ^1.45.11
         version: 1.45.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -102,8 +102,8 @@ importers:
         specifier: ^1.45.11
         version: 1.45.11(@tanstack/react-router@1.45.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(csstype@3.1.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ts-rest/core':
-        specifier: ^3.46.0
-        version: 3.46.0(zod@3.23.8)
+        specifier: ^3.48.1
+        version: 3.48.1(zod@3.23.8)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -132,8 +132,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       lucide-react:
-        specifier: ^0.408.0
-        version: 0.408.0(react@18.3.1)
+        specifier: ^0.417.0
+        version: 0.417.0(react@18.3.1)
       oidc-client-ts:
         specifier: ^3.0.1
         version: 3.0.1
@@ -1524,23 +1524,23 @@ packages:
     resolution: {integrity: sha512-PnVV3d2poenUM31ZbZi/yXkBu3J7kd5k2u51CGwwNojag451AjTH9N6n41yjXz2fpLeewleyLBmNS6+HcGDlXw==}
     engines: {node: '>=12'}
 
-  '@tanstack/query-broadcast-client-experimental@5.51.1':
-    resolution: {integrity: sha512-i3REaSZHX3t3JbEWQTZaaf7RjEpCJ4uPGlCjdvp3ibvaY4rLFZQlwT+fbqpbqZrr/b9qrzLhQv/xjbhVVF0kLA==}
+  '@tanstack/query-broadcast-client-experimental@5.51.15':
+    resolution: {integrity: sha512-jyl+Erp080G5TlD5oXrI9JuicahLZwmc/APUrQuM7MoWm5/55oUKmMMuY3K83gOQf6WWCcOUaXraH3IsattH3A==}
 
-  '@tanstack/query-core@5.51.1':
-    resolution: {integrity: sha512-fJBMQMpo8/KSsWW5ratJR5+IFr7YNJ3K2kfP9l5XObYHsgfVy1w3FJUWU4FT2fj7+JMaEg33zOcNDBo0LMwHnw==}
+  '@tanstack/query-core@5.51.15':
+    resolution: {integrity: sha512-xyobHDJ0yhPE3+UkSQ2/4X1fLSg7ICJI5J1JyU9yf7F3deQfEwSImCDrB1WSRrauJkMtXW7YIEcC0oA6ZZWt5A==}
 
-  '@tanstack/query-devtools@5.51.1':
-    resolution: {integrity: sha512-rehG0WmL3EXER6MAI2uHQia/n0b5c3ZROohpYm7u3G7yg4q+HsfQy6nuAo6uy40NzHUe3FmnfWCZQ0Vb/3lE6g==}
+  '@tanstack/query-devtools@5.51.15':
+    resolution: {integrity: sha512-1oSCl+PsCa/aBCGVM2ZdcQLuQ0QYmKXJJB264twEMVM1M0n5CI40trtywORPF+wLGuZNIZzkKL7j/98mOLAIag==}
 
-  '@tanstack/react-query-devtools@5.51.1':
-    resolution: {integrity: sha512-bRShIVKGpUOHpwziGKT8Aq1Ty0lIlGmNI7E0KbGYtmyOaImErpdElTdxfES1bRaI7i/j+mf2hLy+E6q7SrCwPg==}
+  '@tanstack/react-query-devtools@5.51.15':
+    resolution: {integrity: sha512-bvGvJoncjZ3irEofoFevptj5BPkDpQrp2+dZhtFqPUZXRT6MAKPmOqtSmZPfacLR5jQLpqw/7d3Zxr173z7WDA==}
     peerDependencies:
-      '@tanstack/react-query': ^5.51.1
+      '@tanstack/react-query': ^5.51.15
       react: ^18 || ^19
 
-  '@tanstack/react-query@5.51.1':
-    resolution: {integrity: sha512-s47HKFnQ4HOJAHoIiXcpna/roMMPZJPy6fJ6p4ZNVn8+/onlLBEDd1+xc8OnDuwgvecqkZD7Z2mnSRbcWefrKw==}
+  '@tanstack/react-query@5.51.15':
+    resolution: {integrity: sha512-UgFg23SrdIYrmfTSxAUn9g+J64VQy11pb9/EefoY/u2+zWuNMeqEOnvpJhf52XQy0yztQoyM9p6x8PFyTNaxXg==}
     peerDependencies:
       react: ^18.0.0
 
@@ -1607,8 +1607,8 @@ packages:
   '@tanstack/virtual-core@3.8.3':
     resolution: {integrity: sha512-vd2A2TnM5lbnWZnHi9B+L2gPtkSeOtJOAw358JqokIH1+v2J7vUAzFVPwB/wrye12RFOurffXu33plm4uQ+JBQ==}
 
-  '@ts-rest/core@3.46.0':
-    resolution: {integrity: sha512-GG3xG9GSzJqAdSkap7FnfiapVdgS+venTQzqN/b7xqe3hZFehK8pXqgXflXNgTGbzJc2h2hutQSqOcRf5yDBqw==}
+  '@ts-rest/core@3.48.1':
+    resolution: {integrity: sha512-pfIaLRW/cHAdUHqj1DcS/IXJcLfwc9APYTH4GFEx2A6Faf2DZbUt6fwk4R9wbUnEFiCKLOBK5dSmHY2Q+mSeDg==}
     peerDependencies:
       zod: ^3.22.3
     peerDependenciesMeta:
@@ -2616,8 +2616,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@0.408.0:
-    resolution: {integrity: sha512-8kETAAeWmOvtGIr7HPHm51DXoxlfkNncQ5FZWXR+abX8saQwMYXANWIkUstaYtcKSo/imOe/q+tVFA8ANzdSVA==}
+  lucide-react@0.417.0:
+    resolution: {integrity: sha512-F/MDUHDter8YMZ7JKQpW/5/+v38tdaoShKX3e+opYsqfCnaHwn+5zz3+lBrMDFMNtSsvxtNpchLIaMpEfsi/4w==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -4727,24 +4727,24 @@ snapshots:
     dependencies:
       remove-accents: 0.5.0
 
-  '@tanstack/query-broadcast-client-experimental@5.51.1':
+  '@tanstack/query-broadcast-client-experimental@5.51.15':
     dependencies:
-      '@tanstack/query-core': 5.51.1
+      '@tanstack/query-core': 5.51.15
       broadcast-channel: 7.0.0
 
-  '@tanstack/query-core@5.51.1': {}
+  '@tanstack/query-core@5.51.15': {}
 
-  '@tanstack/query-devtools@5.51.1': {}
+  '@tanstack/query-devtools@5.51.15': {}
 
-  '@tanstack/react-query-devtools@5.51.1(@tanstack/react-query@5.51.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query-devtools@5.51.15(@tanstack/react-query@5.51.15(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/query-devtools': 5.51.1
-      '@tanstack/react-query': 5.51.1(react@18.3.1)
+      '@tanstack/query-devtools': 5.51.15
+      '@tanstack/react-query': 5.51.15(react@18.3.1)
       react: 18.3.1
 
-  '@tanstack/react-query@5.51.1(react@18.3.1)':
+  '@tanstack/react-query@5.51.15(react@18.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.51.1
+      '@tanstack/query-core': 5.51.15
       react: 18.3.1
 
   '@tanstack/react-router@1.45.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
@@ -4820,7 +4820,7 @@ snapshots:
 
   '@tanstack/virtual-core@3.8.3': {}
 
-  '@ts-rest/core@3.46.0(zod@3.23.8)':
+  '@ts-rest/core@3.48.1(zod@3.23.8)':
     optionalDependencies:
       zod: 3.23.8
 
@@ -6004,7 +6004,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.408.0(react@18.3.1):
+  lucide-react@0.417.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 
