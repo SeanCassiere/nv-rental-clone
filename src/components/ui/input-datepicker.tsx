@@ -11,7 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { dfnsDateFormat, dfnsTimeFormat } from "@/lib/config/i18next";
 
@@ -53,10 +52,6 @@ function InputDatePicker({
   readOnly,
   onChange,
 }: InputDatePickerProps) {
-  const [tabStage, setTabStage] = React.useState(
-    mode === "time" ? "time" : "date"
-  );
-
   const dateTimeFormat = format ?? DEFAULT_DATE_TIME_FORMAT;
 
   const { trigger } = useFormField();
@@ -79,61 +74,47 @@ function InputDatePicker({
     <InputDatePickerContext.Provider value={values}>
       <Popover>
         {children}
-        <PopoverContent align={align} className="max-w-[300px] p-0">
-          <Tabs value={tabStage} onValueChange={setTabStage}>
-            {(mode === "time" || mode === "datetime") && (
-              <>
-                <TabsList className="h-12 w-full rounded-b-none px-2.5">
-                  <TabsTrigger className="w-full" value="date">
-                    Date
-                  </TabsTrigger>
-                  <TabsTrigger className="w-full" value="time">
-                    Time
-                  </TabsTrigger>
-                </TabsList>
-              </>
-            )}
-            <TabsContent
-              value="date"
-              className="flex w-full justify-center pt-0"
-            >
-              <Calendar
-                mode="single"
-                initialFocus
-                className="pb-4 pt-1"
-                selected={value}
-                onSelect={(date) => {
-                  if (!onChange) return;
+        <PopoverContent
+          align={align}
+          className="max-w-[300px] px-0 pb-1.5 pt-1"
+        >
+          {mode === "date" || mode === "datetime" ? (
+            <Calendar
+              mode="single"
+              initialFocus
+              className="pb-1"
+              selected={value}
+              onSelect={(date) => {
+                if (!onChange) return;
 
-                  if (!date) {
-                    return onChange(date);
-                  }
+                if (!date) {
+                  return onChange(date);
+                }
 
-                  const year = date.getFullYear();
-                  const month = date.getMonth();
-                  const day = date.getDate();
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const day = date.getDate();
 
-                  const newDate = value ? new Date(value) : new Date();
-                  newDate.setFullYear(year);
-                  newDate.setMonth(month);
-                  newDate.setDate(day);
+                const newDate = value ? new Date(value) : new Date();
+                newDate.setFullYear(year);
+                newDate.setMonth(month);
+                newDate.setDate(day);
 
-                  return onChange(newDate);
-                }}
+                return onChange(newDate);
+              }}
+            />
+          ) : null}
+          {mode === "time" || mode === "datetime" ? (
+            <div className="px-4 py-1.5">
+              <InputDatetime
+                date={value}
+                onDateChange={onChange}
+                dateFormat={timeFormat}
+                disabled={disabled}
+                readOnly={readOnly}
               />
-            </TabsContent>
-            <TabsContent value="time">
-              <div className="h-[300px] w-full px-3.5">
-                <InputDatetime
-                  date={value}
-                  onDateChange={onChange}
-                  dateFormat={timeFormat}
-                  disabled={disabled}
-                  readOnly={readOnly}
-                />
-              </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          ) : null}
         </PopoverContent>
       </Popover>
     </InputDatePickerContext.Provider>
