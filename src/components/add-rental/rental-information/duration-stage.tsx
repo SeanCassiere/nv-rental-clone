@@ -208,7 +208,7 @@ export const DurationStage = ({
         className="flex flex-col gap-4 px-1 pt-4"
         autoComplete="off"
       >
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <FormField
               control={form.control}
