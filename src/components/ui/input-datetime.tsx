@@ -23,16 +23,16 @@ function InputDatetime(props: InputDatetimeProps) {
 
   const handleDateChange = React.useCallback(
     (nextDate: Date | undefined) => {
-      if (!props.disabled && !props.readOnly) {
-        props.onDateChange?.(nextDate);
-        setDate(nextDate);
-      }
+      if (props.disabled || props.readOnly) return;
+
+      props.onDateChange?.(nextDate);
+      setDate(nextDate);
     },
     [props]
   );
 
   const { segments, hours12 } = React.useMemo(
-    () => getTimescapePreferences(props.dateFormat ?? "dd-MMM-yyyy HH:mm"),
+    () => getTimescapePreferences(props.dateFormat ?? "dd/MMM/yyyy HH:mm"),
     [props.dateFormat]
   );
 
@@ -48,6 +48,9 @@ function InputDatetime(props: InputDatetimeProps) {
   });
 
   React.useEffect(() => {
+    if (!props.date) {
+      return;
+    }
     if (options.date !== props.date) {
       update((prev) => ({ ...prev, date: props.date }));
     }
@@ -56,7 +59,7 @@ function InputDatetime(props: InputDatetimeProps) {
   return (
     <div
       id={`${id}-root`}
-      className="flex h-10 items-center justify-start gap-1 rounded-md border border-input bg-background px-3 py-2 text-sm duration-100"
+      className="flex h-10 items-center justify-start gap-0.5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background duration-100 focus-within:border-input focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
       {...getRootProps()}
     >
       {segments.map((segment, idx) => {
@@ -64,7 +67,7 @@ function InputDatetime(props: InputDatetimeProps) {
           return (
             <span
               key={`${id}-separator-${idx}`}
-              className="separator m-0 text-[80%] text-muted-foreground"
+              className="separator m-0 font-mono text-[60%] text-muted-foreground"
             >
               {segment.value}
             </span>
@@ -84,7 +87,13 @@ function InputDatetime(props: InputDatetimeProps) {
             readOnly={props.readOnly}
             onFocus={props.onDateFocus}
             onBlur={props.onDateBlur}
-            className="inline-block h-full rounded-md border-none bg-transparent p-0 text-sm tabular-nums text-foreground caret-transparent outline-none ring-offset-background placeholder:text-muted-foreground focus:border-input focus:outline-none focus:ring-ring read-only:focus:ring-ring/80 focus-visible:border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-block h-full flex-grow-0 rounded-sm border-none bg-transparent px-0.5 font-sans text-sm tabular-nums text-foreground caret-transparent outline-none ring-0 selection:bg-foreground selection:text-background placeholder:font-mono focus:bg-foreground focus:text-background focus:ring-0"
+            style={
+              {
+                "--char-length": `${segment.type === "years" ? 4 : segment.type === "am/pm" ? 2.5 : 2}ch`,
+                minWidth: "calc(var(--char-length) + 0.25rem)",
+              } as React.CSSProperties
+            }
             {...getInputProps(segment.type)}
           />
         );
@@ -194,7 +203,13 @@ function getTimescapePreferences(dateformat: string) {
         }
         break;
       default:
-        segments.push({ type: "separator", value: piece });
+        if (piece.trim()) {
+          segments.push({
+            type: "separator",
+            value: piece,
+          });
+        }
+        break;
     }
   });
 
