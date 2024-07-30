@@ -56,7 +56,7 @@ function InputDatetime(props: InputDatetimeProps) {
   return (
     <div
       id={`${id}-root`}
-      className="flex h-10 items-center justify-start gap-1 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium duration-100"
+      className="flex h-10 items-center justify-start gap-1 rounded-md border border-input bg-background px-3 py-2 text-sm duration-100"
       {...getRootProps()}
     >
       {segments.map((segment, idx) => {
@@ -84,7 +84,7 @@ function InputDatetime(props: InputDatetimeProps) {
             readOnly={props.readOnly}
             onFocus={props.onDateFocus}
             onBlur={props.onDateBlur}
-            className="inline-block h-full rounded-md border-none bg-transparent p-0 text-sm tabular-nums text-foreground caret-transparent opacity-100 outline-none ring-offset-background placeholder:text-muted-foreground read-only:opacity-70 focus:border-input focus:outline-none focus:ring-ring read-only:focus:ring-ring/80 focus-visible:border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-block h-full rounded-md border-none bg-transparent p-0 text-sm tabular-nums text-foreground caret-transparent outline-none ring-offset-background placeholder:text-muted-foreground focus:border-input focus:outline-none focus:ring-ring read-only:focus:ring-ring/80 focus-visible:border-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-70"
             {...getInputProps(segment.type)}
           />
         );

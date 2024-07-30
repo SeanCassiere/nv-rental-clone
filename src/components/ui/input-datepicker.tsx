@@ -69,8 +69,8 @@ function InputDatePicker({
         onChange?.(inputDate);
         void trigger();
       },
-      disabled,
-      readonly: readOnly,
+      disabled: !!disabled,
+      readonly: !!readOnly,
     }),
     [dateTimeFormat, disabled, onChange, readOnly, trigger, value]
   );
@@ -148,7 +148,7 @@ function InputDatePickerSlot() {
     );
   }
 
-  const { formItemId, onBlur, onFocus, trigger } = useFormField();
+  const { formItemId, onBlur, onFocus } = useFormField();
 
   return (
     <div className="relative">
