@@ -3,28 +3,31 @@ import type { PopoverContentProps } from "@radix-ui/react-popover";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { useFormField } from "@/components/ui/form";
 import { icons } from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
+import { InputDatetime } from "@/components/ui/input-datetime";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { useDateInput } from "@/lib/hooks/useDateInput";
 
 import { dfnsDateFormat, dfnsTimeFormat } from "@/lib/config/i18next";
-
-import { useFormField } from "./form";
 
 const DEFAULT_DATE_FORMAT = dfnsDateFormat;
 const DEFAULT_TIME_FORMAT = dfnsTimeFormat;
 const DEFAULT_DATE_TIME_FORMAT = `${DEFAULT_DATE_FORMAT} ${DEFAULT_TIME_FORMAT}`;
 
-const InputDatePickerContext = React.createContext<ReturnType<
-  typeof useDateInput
-> | null>(null);
+type InputDatePickerContextValue = {
+  inputFormat: string;
+  value?: InputDatePickerProps["value"];
+  onValueChange?: InputDatePickerProps["onChange"];
+  disabled?: boolean;
+  readOnly?: boolean;
+};
+
+const InputDatePickerContext =
+  React.createContext<InputDatePickerContextValue | null>(null);
 
 interface InputDatePickerProps {
   value?: Date;
@@ -32,11 +35,10 @@ interface InputDatePickerProps {
   children: React.ReactNode;
   disabled?: boolean;
   readOnly?: boolean;
-  onChange?: (date: Date) => void;
+  onChange?: (date: Date | undefined) => void;
   align?: PopoverContentProps["align"];
   format?: string;
   timeFormat?: string;
-  required?: boolean;
 }
 
 function InputDatePicker({
@@ -48,84 +50,78 @@ function InputDatePicker({
   timeFormat = DEFAULT_TIME_FORMAT,
   disabled,
   readOnly,
-  required,
   onChange,
 }: InputDatePickerProps) {
-  const [tabStage, setTabStage] = React.useState(
-    mode === "time" ? "time" : "date"
+  const dateTimeFormat = format ?? DEFAULT_DATE_TIME_FORMAT;
+
+  const { trigger } = useFormField();
+
+  const values: InputDatePickerContextValue = React.useMemo(
+    () => ({
+      inputFormat: dateTimeFormat,
+      value,
+      onValueChange: (inputDate) => {
+        onChange?.(inputDate);
+        void trigger();
+      },
+      disabled: !!disabled,
+      readOnly: !!readOnly,
+    }),
+    [dateTimeFormat, disabled, onChange, readOnly, trigger, value]
   );
 
-  const useDateInputHook = useDateInput({
-    defaultSelected: value,
-    onValidChange: onChange,
-    format: format
-      ? format
-      : mode === "date"
-        ? DEFAULT_DATE_FORMAT
-        : mode === "datetime"
-          ? DEFAULT_DATE_TIME_FORMAT
-          : timeFormat,
-    disabled,
-    readOnly,
-    required,
-  });
-
-  const useTimeInputHook = useDateInput({
-    defaultSelected: value,
-    onValidChange: onChange,
-    format: timeFormat,
-    disabled,
-    readOnly,
-  });
-
   return (
-    <InputDatePickerContext.Provider value={useDateInputHook}>
+    <InputDatePickerContext.Provider value={values}>
       <Popover>
         {children}
-        <PopoverContent align={align} className="max-w-[300px] p-0">
-          <Tabs value={tabStage} onValueChange={setTabStage}>
-            {(mode === "time" || mode === "datetime") && (
-              <>
-                <TabsList className="h-12 w-full rounded-b-none px-2.5">
-                  <TabsTrigger className="w-full" value="date">
-                    Date
-                  </TabsTrigger>
-                  <TabsTrigger className="w-full" value="time">
-                    Time
-                  </TabsTrigger>
-                </TabsList>
-              </>
-            )}
-            <TabsContent
-              value="date"
-              className="flex w-full justify-center pt-0"
-            >
-              <Calendar
-                mode="single"
-                initialFocus
-                className="pb-4 pt-1"
-                {...useDateInputHook.dayPickerProps}
+        <PopoverContent
+          align={align}
+          className="max-w-[300px] px-0 pb-1.5 pt-1"
+        >
+          {mode === "date" || mode === "datetime" ? (
+            <Calendar
+              mode="single"
+              initialFocus
+              className="pb-1"
+              selected={value}
+              onSelect={(date) => {
+                if (!onChange) return;
+
+                if (!date) {
+                  return onChange(date);
+                }
+
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const day = date.getDate();
+
+                const newDate = value ? new Date(value) : new Date();
+                newDate.setFullYear(year);
+                newDate.setMonth(month);
+                newDate.setDate(day);
+
+                return onChange(newDate);
+              }}
+            />
+          ) : null}
+          {mode === "time" || mode === "datetime" ? (
+            <div className="px-4 py-1.5">
+              <InputDatetime
+                date={value}
+                onDateChange={onChange}
+                dateFormat={timeFormat}
+                disabled={disabled}
+                readOnly={readOnly}
               />
-            </TabsContent>
-            <TabsContent value="time">
-              <div className="h-[300px] w-full px-3.5">
-                <Input {...useTimeInputHook.inputProps} />
-              </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          ) : null}
         </PopoverContent>
       </Popover>
     </InputDatePickerContext.Provider>
   );
 }
 
-interface InputDatePickerSlotProps {
-  placeholder?: string;
-}
-
-function InputDatePickerSlot({
-  placeholder = "Select a date",
-}: InputDatePickerSlotProps) {
+function InputDatePickerSlot() {
   const ctx = React.useContext(InputDatePickerContext);
   if (!ctx) {
     throw new Error(
@@ -133,16 +129,25 @@ function InputDatePickerSlot({
     );
   }
 
-  const { formItemId } = useFormField();
+  const { formItemId, onBlur, onFocus } = useFormField();
 
   return (
     <div className="relative">
-      <Input id={formItemId} {...ctx.inputProps} placeholder={placeholder} />
+      <InputDatetime
+        id={formItemId}
+        date={ctx.value}
+        onDateChange={ctx.onValueChange}
+        onDateFocus={onFocus}
+        onDateBlur={onBlur}
+        dateFormat={ctx.inputFormat}
+        disabled={ctx.disabled}
+        readOnly={ctx.readOnly}
+      />
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
           className="absolute right-0.5 top-0.5 h-9"
-          disabled={ctx.inputProps.disabled || ctx.inputProps.readOnly}
+          disabled={ctx.disabled || ctx.readOnly}
         >
           <icons.Calendar className="h-3.5 w-3.5" />
         </Button>
