@@ -921,7 +921,11 @@ function AddRentalParentForm({
             {isEdit && module === "agreement" && (
               <>
                 <Link
-                  from="/agreements/$agreementId/edit"
+                  from={
+                    isCheckin
+                      ? "/agreements/$agreementId/check-in"
+                      : "/agreements/$agreementId/edit"
+                  }
                   to=".."
                   className="text-2xl font-semibold leading-6"
                 >
