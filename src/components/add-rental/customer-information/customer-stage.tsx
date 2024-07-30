@@ -227,9 +227,7 @@ export const CustomerStage = ({
                     readOnly
                   >
                     <FormControl>
-                      <InputDatePickerSlot
-                        placeholder={tl("display.dateOfBirth")}
-                      />
+                      <InputDatePickerSlot />
                     </FormControl>
                   </InputDatePicker>
                   <FormMessage />

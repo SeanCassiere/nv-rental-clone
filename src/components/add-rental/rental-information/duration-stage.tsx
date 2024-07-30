@@ -160,23 +160,33 @@ export const DurationStage = ({
     name: "checkinDate",
   });
 
-  const handleCheckoutDateChange = (date: Date) => {
-    const previousCheckoutDate = form_checkoutDate;
-    const previousCheckinDate = form_checkinDate;
+  const handleCheckoutDateChange = React.useCallback(
+    (date: Date | undefined) => {
+      if (date === undefined) return;
 
-    const diffMinsBetweenDates = differenceInMinutes(
-      previousCheckinDate,
-      previousCheckoutDate
-    );
-    const checkin = add(date, {
-      minutes: diffMinsBetweenDates,
-    });
-    form.setValue("checkoutDate", date, { shouldValidate: true });
-    form.setValue("checkinDate", checkin, { shouldValidate: true });
-  };
-  const handleCheckinDateChange = (date: Date) => {
-    form.setValue("checkinDate", date, { shouldValidate: true });
-  };
+      const previousCheckoutDate = form_checkoutDate;
+      const previousCheckinDate = form_checkinDate;
+
+      const diffMinsBetweenDates = differenceInMinutes(
+        previousCheckinDate,
+        previousCheckoutDate
+      );
+      const checkin = add(date, {
+        minutes: diffMinsBetweenDates,
+      });
+      form.setValue("checkoutDate", date, { shouldValidate: true });
+      form.setValue("checkinDate", checkin, { shouldValidate: true });
+    },
+    [form, form_checkinDate, form_checkoutDate]
+  );
+  const handleCheckinDateChange = React.useCallback(
+    (date: Date | undefined) => {
+      if (date === undefined) return;
+
+      form.setValue("checkinDate", date, { shouldValidate: true });
+    },
+    [form]
+  );
 
   React.useEffect(() => {
     if (agreementNumberQuery.status !== "success") return;
@@ -270,10 +280,9 @@ export const DurationStage = ({
                     mode="datetime"
                     format={dateTimeFormat}
                     timeFormat={timeFormat}
-                    required
                   >
                     <FormControl>
-                      <InputDatePickerSlot placeholder="Checkout date" />
+                      <InputDatePickerSlot />
                     </FormControl>
                   </InputDatePicker>
                   <FormMessage />
@@ -322,10 +331,9 @@ export const DurationStage = ({
                     mode="datetime"
                     format={dateTimeFormat}
                     timeFormat={timeFormat}
-                    required
                   >
                     <FormControl>
-                      <InputDatePickerSlot placeholder="Checkin date" />
+                      <InputDatePickerSlot />
                     </FormControl>
                   </InputDatePicker>
                   <FormMessage />
