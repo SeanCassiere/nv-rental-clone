@@ -24,7 +24,7 @@ type InputDatePickerContextValue = {
   value?: InputDatePickerProps["value"];
   onValueChange?: InputDatePickerProps["onChange"];
   disabled?: boolean;
-  readonly?: boolean;
+  readOnly?: boolean;
 };
 
 const InputDatePickerContext =
@@ -70,7 +70,7 @@ function InputDatePicker({
         void trigger();
       },
       disabled: !!disabled,
-      readonly: !!readOnly,
+      readOnly: !!readOnly,
     }),
     [dateTimeFormat, disabled, onChange, readOnly, trigger, value]
   );
@@ -160,13 +160,13 @@ function InputDatePickerSlot() {
         onDateBlur={onBlur}
         dateFormat={ctx.inputFormat}
         disabled={ctx.disabled}
-        readOnly={ctx.readonly}
+        readOnly={ctx.readOnly}
       />
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
           className="absolute right-0.5 top-0.5 h-9"
-          disabled={ctx.disabled || ctx.readonly}
+          disabled={ctx.disabled || ctx.readOnly}
         >
           <icons.Calendar className="h-3.5 w-3.5" />
         </Button>
