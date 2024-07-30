@@ -7,8 +7,8 @@ on:
     branches: [master]
 
 jobs:
-  lint-and-format:
-    name: lint-and-format
+  check:
+    name: check
     runs-on: ubuntu-latest
     steps:
       # This step uses the actions/checkout action to download a copy of your repository on the runner.
