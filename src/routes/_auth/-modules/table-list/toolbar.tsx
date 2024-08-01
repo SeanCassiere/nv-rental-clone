@@ -535,6 +535,8 @@ function ToolbarFilter({
           {type === "date" && (
             <Calendar
               mode="single"
+              className="p-2 pt-3"
+              autoFocus
               selected={
                 baseState?.value && typeof baseState.value === "string"
                   ? new Date(baseState.value)
@@ -543,7 +545,6 @@ function ToolbarFilter({
               onSelect={(day) => {
                 handleSaveValue(day, "date");
               }}
-              initialFocus
             />
           )}
           {type === "text" && (

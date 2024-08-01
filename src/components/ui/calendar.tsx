@@ -2,9 +2,8 @@ import * as React from "react";
 import {
   DayPicker,
   useDayPicker,
-  useNavigation,
-  type CaptionLayout,
   type DropdownProps,
+  type Matcher,
 } from "react-day-picker";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -17,111 +16,118 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 
-import { setMonth } from "@/lib/config/date-fns";
+import { addMonths } from "@/lib/config/date-fns";
 
 import { cn } from "@/lib/utils";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const DEFAULT_FROM_YEAR = 1900;
-
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
-  fromYear,
-  toYear,
+  startMonth,
+  endMonth,
+  hidden,
   captionLayout,
   ...props
 }: CalendarProps) {
-  const layout: CaptionLayout = captionLayout || "dropdown-buttons";
+  const layout: CalendarProps["captionLayout"] = captionLayout || "dropdown";
 
-  const currentYear = new Date().getFullYear();
+  const calendarStartMonth = startMonth ?? new Date(1900, 0, 0);
+  const calendarEndMonth =
+    endMonth ?? new Date(new Date().getFullYear() + 15, 11);
 
-  const oldestYear = fromYear ?? DEFAULT_FROM_YEAR;
-  const newestYear = toYear ?? currentYear + 15;
+  const hiddenIsArray = Array.isArray(hidden);
+
+  const calendarHiddenOptions: Matcher[] = [
+    ...(startMonth ? [{ before: startMonth }] : []),
+    ...(endMonth ? [{ after: endMonth }] : []),
+    ...(hiddenIsArray ? hidden : []),
+    hidden && !hiddenIsArray ? hidden : [],
+  ];
 
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
+      className={cn("inline-flex justify-start", className)}
       captionLayout={layout}
-      fromYear={oldestYear}
-      toYear={newestYear}
+      startMonth={calendarStartMonth}
+      endMonth={calendarEndMonth}
+      hidden={calendarHiddenOptions}
       classNames={{
-        months: cn(
-          "flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0"
-        ),
-        month: "space-y-4",
-        caption: cn(
-          "relative",
-          layout === "buttons" && "flex items-center justify-between"
+        months: "relative",
+        month: cn(layout === "label" ? "space-y-4" : "space-y-2"),
+        month_caption: cn(
+          layout === "label" ? "translate-y-1" : "",
+          layout === "dropdown" && "flex w-full justify-center"
         ),
         caption_label: cn(
-          "font-medium",
-          layout === "dropdown" && "hidden",
-          layout === "dropdown-buttons" && "hidden"
+          "pl-2 font-medium",
+          layout === "dropdown" && "hidden"
         ),
-        caption_dropdowns: cn(
-          "flex items-center justify-center",
-          layout === "dropdown" && "-translate-x-1 gap-1.5",
-          layout === "dropdown-buttons" && "-translate-x-0.5 gap-1"
+        dropdowns: cn(
+          layout === "dropdown"
+            ? "flex items-center justify-center gap-1.5"
+            : "",
+          layout === "dropdown-years" || layout === "dropdown-months"
+            ? "flex w-8/12 items-center justify-between [&>button]:translate-x-3 [&>span]:pl-2 [&>span]:font-medium"
+            : "",
+          layout === "dropdown-months" ? "flex-row-reverse" : ""
         ),
         nav: cn(
-          layout === "buttons" && "flex items-center justify-between gap-1"
+          layout === "label" ||
+            layout === "dropdown-years" ||
+            layout === "dropdown-months"
+            ? "absolute right-1 top-0 flex gap-1.5"
+            : ""
         ),
-        nav_button: cn(
+        button_previous: cn(
           buttonVariants({ variant: "outline" }),
-          "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100"
+          "size-8 bg-transparent p-0 opacity-50 hover:opacity-100",
+          layout === "dropdown" && "absolute left-1 top-0"
         ),
-        nav_button_previous: cn(
-          layout === "dropdown-buttons" && "absolute left-1 top-0"
+        button_next: cn(
+          buttonVariants({ variant: "outline" }),
+          "size-8 bg-transparent p-0 opacity-50 hover:opacity-100",
+          layout === "dropdown" && "absolute right-1 top-0"
         ),
-        nav_button_next: cn(
-          layout === "dropdown-buttons" && "absolute right-1 top-0"
-        ),
-        dropdown_month: cn("h-8", layout === "dropdown-buttons" && "w-20"),
-        dropdown_year: cn("h-8", layout === "dropdown-buttons" && "w-20"),
-        table: cn("w-full border-collapse space-y-1"),
-        head_row: "flex",
-        head_cell: cn(
-          "w-9 select-none rounded-md text-[0.8rem] font-normal text-muted-foreground"
-        ),
-        row: cn("mt-2 flex w-full"),
-        cell: cn(
-          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md"
-        ),
+        table: "w-full border-collapse",
+        weekdays: "flex",
+        weekday:
+          "m-0.5 h-7 w-9 select-none rounded-md text-[0.8rem] font-normal text-muted-foreground",
+        row: "mt-2 flex w-full",
+        cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          "m-0.5 size-9 p-0 font-normal aria-selected:opacity-100 [&>button]:h-full [&>button]:w-full"
         ),
-        day_selected: cn(
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground"
-        ),
-        day_today: cn("bg-accent text-accent-foreground"),
-        day_outside: cn(
-          "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30"
-        ),
-        day_disabled: cn("text-muted-foreground opacity-50"),
-        day_range_middle: cn(
-          "aria-selected:bg-accent aria-selected:text-accent-foreground"
-        ),
-        day_hidden: "invisible",
+        selected:
+          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+        today: "bg-accent text-accent-foreground",
+        outside:
+          "text-muted-foreground opacity-50 transition-all aria-selected:bg-primary aria-selected:text-primary-foreground aria-selected:opacity-90 aria-selected:hover:opacity-100",
+        disabled: "text-muted-foreground opacity-50",
+        range_middle:
+          "aria-selected:bg-accent aria-selected:text-accent-foreground",
+        hidden: "invisible",
         ...classNames,
       }}
       components={{
-        IconLeft: (props) => (
-          <icons.ChevronLeft
-            style={props.style}
-            className={cn("h-5 w-5", props.className)}
-          />
-        ),
-        IconRight: (props) => (
-          <icons.ChevronRight
-            style={props.style}
-            className={cn("h-5 w-5", props.className)}
-          />
-        ),
+        Chevron(props) {
+          switch (props.orientation) {
+            case "left":
+              return (
+                <icons.ChevronLeft className={cn("size-5", props.className)} />
+              );
+            case "right":
+              return (
+                <icons.ChevronRight className={cn("size-5", props.className)} />
+              );
+            default:
+              return <span>·</span>;
+          }
+        },
         Dropdown: CalendarDropdown,
       }}
       {...props}
@@ -130,37 +136,26 @@ function Calendar({
 }
 Calendar.displayName = "Calendar";
 
+const numberRegex = /^\d+$/;
+
 function CalendarDropdown(props: DropdownProps) {
-  const { id, fromYear, fromMonth, fromDate, toYear, toMonth, toDate } =
-    useDayPicker();
-  const { currentMonth, goToMonth } = useNavigation();
+  const dropdownType: "unknown" | "months" | "years" = React.useMemo(() => {
+    const option = props.options?.[0];
+    if (!option) {
+      return "unknown";
+    }
+    const label = option.label;
 
-  const months = Array.from({ length: 12 }, (_, i) => {
-    const value = i.toString();
-    const label = setMonth(new Date(), i).toLocaleString("default", {
-      month: "long",
-    });
-    return { value, label };
-  });
-
-  const years = React.useMemo(() => {
-    const items: { value: string; label: string }[] = [];
-
-    const oldestYear =
-      fromYear || fromMonth?.getFullYear() || fromDate?.getFullYear();
-    const newestYear =
-      toYear || toMonth?.getFullYear() || toDate?.getFullYear();
-
-    if (oldestYear && newestYear) {
-      const range = newestYear - oldestYear + 1;
-      for (let i = 0; i < range; i++) {
-        const value = (oldestYear + i).toString();
-        items.push({ value, label: value });
-      }
+    if (!numberRegex.test(label)) {
+      return "months";
     }
 
-    return items;
-  }, [fromYear, fromMonth, fromDate, toYear, toMonth, toDate]);
+    return "years";
+  }, [props.options]);
+  const { goToMonth, previousMonth } = useDayPicker();
+
+  const currentMonth = addMonths(previousMonth ?? new Date(), 1);
+  const options = props.options ?? [];
 
   const handleMonthChange = (value: string) => {
     const date = new Date(currentMonth);
@@ -174,16 +169,23 @@ function CalendarDropdown(props: DropdownProps) {
     goToMonth(date);
   };
 
-  if (props.name === "months") {
+  if (dropdownType === "months") {
     return (
       <Select onValueChange={handleMonthChange} value={props.value?.toString()}>
-        <SelectTrigger className={props.className} style={props.style}>
+        <SelectTrigger
+          className={cn("m-0 h-8 w-24", props.className)}
+          style={props.style}
+        >
           {currentMonth.toLocaleString("default", { month: "long" })}
         </SelectTrigger>
         <SelectContent>
           <ScrollArea className="overflow-auto" style={{ maxHeight: "400px" }}>
-            {months.map(({ value, label }) => (
-              <SelectItem key={`${id}_month_${value}`} value={value}>
+            {options.map(({ value, label, disabled }) => (
+              <SelectItem
+                key={`${"id"}_month_${value}`}
+                value={value.toString()}
+                disabled={disabled}
+              >
                 {label}
               </SelectItem>
             ))}
@@ -193,16 +195,23 @@ function CalendarDropdown(props: DropdownProps) {
     );
   }
 
-  if (props.name === "years") {
+  if (dropdownType === "years") {
     return (
       <Select onValueChange={handleYearChange} value={props.value?.toString()}>
-        <SelectTrigger className={props.className} style={props.style}>
+        <SelectTrigger
+          className={cn("m-0 h-8 w-24", props.className)}
+          style={props.style}
+        >
           {currentMonth.getFullYear()}
         </SelectTrigger>
         <SelectContent>
           <ScrollArea className="overflow-auto" style={{ maxHeight: "400px" }}>
-            {years.map(({ value, label }) => (
-              <SelectItem key={`${id}_year_${value}`} value={value}>
+            {options.map(({ value, label, disabled }) => (
+              <SelectItem
+                key={`${"id"}_year_${value}`}
+                value={value.toString()}
+                disabled={disabled}
+              >
                 {label}
               </SelectItem>
             ))}
@@ -212,8 +221,9 @@ function CalendarDropdown(props: DropdownProps) {
     );
   }
 
-  return null;
+  return <div>dropdown</div>;
 }
+
 CalendarDropdown.displayName = "CalendarDropdown";
 
 export { Calendar };
