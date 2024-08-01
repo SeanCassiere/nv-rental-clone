@@ -76,13 +76,13 @@ function InputDatePicker({
         {children}
         <PopoverContent
           align={align}
-          className="max-w-[300px] px-0 pb-1.5 pt-1"
+          className="w-full max-w-[400px] px-0 pb-1.5 pt-1"
         >
           {mode === "date" || mode === "datetime" ? (
             <Calendar
               mode="single"
-              initialFocus
-              className="pb-1"
+              autoFocus
+              className="p-3"
               selected={value}
               onSelect={(date) => {
                 if (!onChange) return;

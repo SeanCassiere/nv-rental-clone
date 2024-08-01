@@ -81,6 +81,8 @@ export function DateReportFilter(props: ReportFilterProps) {
         <PopoverContent className={cn("p-0", "w-auto")} align="start">
           <Calendar
             mode="single"
+            autoFocus
+            className="px-2 py-3"
             selected={baseState ? new Date(baseState) : undefined}
             today={baseState ? new Date(baseState) : new Date()}
             onSelect={(day) => {
@@ -93,7 +95,6 @@ export function DateReportFilter(props: ReportFilterProps) {
 
               setCriteriaValue(props.accessor, dateFormat(day));
             }}
-            initialFocus
           />
         </PopoverContent>
       </Popover>
