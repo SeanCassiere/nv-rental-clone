@@ -12,7 +12,7 @@ import { useWidgetName } from "@/routes/_auth/(dashboard)/-components/useWidgetN
 
 import { cn } from "@/lib/utils";
 
-import { CommonWidgetProps } from "./widgets/_common";
+import type { CommonWidgetProps } from "./widgets/_common";
 
 const SalesStatusWidget = React.lazy(() => import("./widgets/sales-status"));
 const VehicleStatusWidget = React.lazy(
@@ -98,7 +98,7 @@ function NoWidgetAvailable(props: CommonWidgetProps) {
           <icons.GripVertical className="h-3 w-3" />
         </Button>
       </div>
-      <div>No widget available for "{widgetName}".</div>
+      <div>No widget available for &quot;{widgetName}&quot;.</div>
     </React.Fragment>
   );
 }

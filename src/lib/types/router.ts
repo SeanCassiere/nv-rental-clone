@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 
 export type LinkComponentProps<TComp> = React.PropsWithoutRef<
   TComp extends React.FC<infer TProps> | React.Component<infer TProps>

@@ -175,7 +175,7 @@ function DashboardPage() {
           </div>
         </div>
         <p className={cn("text-base text-foreground/80")}>
-          Jump into what's going on with your fleet.
+          Jump into what&apos;s going on with your fleet.
         </p>
         <Separator className="mt-3.5" />
       </section>

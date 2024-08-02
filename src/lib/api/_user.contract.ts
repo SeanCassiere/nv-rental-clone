@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import { c } from "@/lib/api/c";
+import type { UpdateUserInput } from "@/lib/schemas/user";
 import {
-  UpdateUserInput,
   UserConfigurationsListSchema,
   UserLanguageListSchema,
   UserProfileSchema,

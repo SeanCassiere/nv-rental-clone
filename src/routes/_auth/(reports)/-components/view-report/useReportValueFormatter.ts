@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-import { TReportDetail, TReportResult } from "@/lib/schemas/report";
+import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
 
 type OutputField = TReportDetail["outputFields"][number];
 type Candidate = TReportResult[number];

@@ -1,6 +1,6 @@
 import "@tanstack/react-table";
 
-import { RankingInfo } from "@tanstack/match-sorter-utils";
+import type { RankingInfo } from "@tanstack/match-sorter-utils";
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData extends RowData, TValue> {

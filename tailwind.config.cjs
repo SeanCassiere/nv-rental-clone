@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class", // doesn't really do anything, its handled by the index.css file using the data-theme attribute

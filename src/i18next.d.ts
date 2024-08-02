@@ -1,7 +1,7 @@
+import type { i18nextNsDefault } from "@/lib/config/i18next";
 import {
   formatNsResources,
   i18nextNsDashboard,
-  i18nextNsDefault,
   i18nextNsFormat,
   i18nextNsLabels,
   i18nextNsLogin,

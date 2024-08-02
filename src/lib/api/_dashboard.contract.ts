@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 import { c } from "@/lib/api/c";
+import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import {
   DashboardStatsSchema,
   DashboardWidgetItemListSchema,
-  DashboardWidgetItemParsed,
   SalesStatusParse,
   ServerMessageListSchema,
   VehicleStatusCountListSchema,
