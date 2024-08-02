@@ -87,6 +87,7 @@ function Component() {
               <Link
                 to="/agreements/$agreementId/summary"
                 search={(current) => ({
+                  ...current,
                   tab:
                     "tab" in current && typeof current.tab === "string"
                       ? current.tab
@@ -188,6 +189,7 @@ function Component() {
               <Link
                 from="/agreements/$agreementId"
                 to="/agreements/$agreementId/summary"
+                resetScroll={false}
               >
                 Summary
               </Link>
@@ -196,6 +198,7 @@ function Component() {
               <Link
                 from="/agreements/$agreementId"
                 to="/agreements/$agreementId/notes"
+                resetScroll={false}
               >
                 Notes
               </Link>
@@ -204,6 +207,7 @@ function Component() {
               <Link
                 from="/agreements/$agreementId"
                 to="/agreements/$agreementId/exchanges"
+                resetScroll={false}
               >
                 Exchanges
               </Link>

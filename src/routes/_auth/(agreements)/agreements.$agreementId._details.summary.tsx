@@ -1,8 +1,12 @@
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { useFeature } from "@/lib/hooks/useFeature";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import CustomerInformation from "@/routes/_auth/-modules/information-block/customer-information";
 import RentalInformation from "@/routes/_auth/-modules/information-block/rental-information";
@@ -10,11 +14,16 @@ import VehicleInformation from "@/routes/_auth/-modules/information-block/vehicl
 import { RentalSummary } from "@/routes/_auth/-modules/summary/rental-summary";
 import { Container } from "@/routes/-components/container";
 
+import { incompleteAgreementCustomerSignatureFeatureFlag } from "@/lib/config/features";
+
 export const Route = createFileRoute(
   "/_auth/(agreements)/agreements/$agreementId/_details/summary"
 )({
   component: Component,
 });
+const SummarySignatureCard = React.lazy(
+  () => import("@/routes/_auth/(agreements)/-components/summary-signature-card")
+);
 
 function Component() {
   const { viewAgreementOptions, viewAgreementSummaryOptions } =
@@ -22,6 +31,15 @@ function Component() {
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
+
+  const [_, canViewDigitalSignaturePad] = useFeature(
+    "DIGITAL_SIGNATURE_PAD",
+    null
+  );
+  const [showIncompleteAgreementSignature] = useLocalStorage(
+    incompleteAgreementCustomerSignatureFeatureFlag.id,
+    incompleteAgreementCustomerSignatureFeatureFlag.default_value
+  );
 
   const agreementQuery = useSuspenseQuery(viewAgreementOptions);
   const agreement =
@@ -139,28 +157,40 @@ function Component() {
             />
           )}
 
-          <Tabs value={currentTab} onValueChange={setCurrentTab}>
-            <TabsList className="w-full sm:max-w-max">
+          {tabsConfig.length >= 1 ? (
+            <Tabs value={currentTab} onValueChange={setCurrentTab}>
+              <TabsList className="w-full sm:max-w-max">
+                {tabsConfig.map((tab, idx) => (
+                  <TabsTrigger
+                    key={`tab-summary-trigger-${idx}`}
+                    value={tab.id}
+                  >
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
               {tabsConfig.map((tab, idx) => (
-                <TabsTrigger key={`tab-summary-trigger-${idx}`} value={tab.id}>
-                  {tab.label}
-                </TabsTrigger>
+                <TabsContent
+                  key={`tab-summary-content-${idx}`}
+                  value={tab.id}
+                  className="min-h-[180px]"
+                >
+                  {tab.component}
+                </TabsContent>
               ))}
-            </TabsList>
-            {tabsConfig.map((tab, idx) => (
-              <TabsContent
-                key={`tab-summary-content-${idx}`}
-                value={tab.id}
-                className="min-h-[180px]"
-              >
-                {tab.component}
-              </TabsContent>
-            ))}
-          </Tabs>
+            </Tabs>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-4 lg:col-span-4">
           <RentalSummary module="agreements" summaryData={summaryData} />
+          <React.Suspense fallback={null}>
+            {showIncompleteAgreementSignature &&
+            canViewDigitalSignaturePad &&
+            agreement ? (
+              <SummarySignatureCard agreement={agreement} />
+            ) : null}
+          </React.Suspense>
         </div>
       </div>
     </Container>
