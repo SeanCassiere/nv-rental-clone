@@ -11,6 +11,7 @@ export default function SummarySignatureCard(props: {
 }) {
   const agreementId = props.agreement.agreementId.toString();
   const drivers = props.agreement.driverList;
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between border-b px-5 py-4">
@@ -42,8 +43,8 @@ function Driver(props: {
   agreementId: string;
   isPrimary: boolean;
 }) {
-  // const isSigned = !!props.driver.signatureDate;
   const isSigned = !!props.driver.signatureDate;
+
   return (
     <li className="flex flex-row items-center justify-between gap-4 p-5 xl:gap-2">
       <div className="grid min-w-0 justify-start text-sm">
