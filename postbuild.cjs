@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const fs = require("node:fs");
 const cp = require("node:child_process");
 

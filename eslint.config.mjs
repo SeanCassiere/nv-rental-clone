@@ -4,10 +4,9 @@ import { FlatCompat } from "@eslint/eslintrc";
 import eslintJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import reactCompiler from "eslint-plugin-react-compiler";
-import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import globals from "globals";
-import tsEslint from "typescript-eslint";
+import tseslint from "typescript-eslint";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -15,13 +14,14 @@ const compat = new FlatCompat({
   allConfig: eslintJs.configs.all,
 });
 
-export default tsEslint.config(
+export default tseslint.config(
   eslintJs.configs.recommended,
-  ...tsEslint.configs.recommended,
-  reactJsxRuntime,
+  ...tseslint.configs.recommended,
   {
     ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts", "*.html"],
   },
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   ...fixupConfigRules(compat.extends("plugin:react-hooks/recommended")),
   {
     files: ["src/**/*.{ts,tsx}", "*.config.js", "*.config.cjs"],
@@ -35,9 +35,7 @@ export default tsEslint.config(
       parserOptions: {
         // project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
       },
     },
     settings: {
@@ -61,6 +59,8 @@ export default tsEslint.config(
       "@typescript-eslint/no-unnecessary-type-constraint": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
       "jsx-a11y/img-redundant-alt": "off",
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
