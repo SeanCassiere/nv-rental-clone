@@ -6,8 +6,6 @@ import type { AgreementDataParsed } from "@/lib/schemas/agreement";
 
 import { cn } from "@/lib/utils";
 
-// https://testapi.appnavotar.com/api/v3/DigitalSignature/AdditionalDriverList?agreementID=167886
-
 export default function SummarySignatureCard(props: {
   agreement: AgreementDataParsed;
 }) {
@@ -50,7 +48,11 @@ function Driver(props: {
     <li className="flex flex-row items-center justify-between gap-4 p-5 xl:gap-2">
       <div className="grid min-w-0 justify-start text-sm">
         <p className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground">
-          {props.isPrimary ? <icons.User className="size-3" /> : null}
+          {props.isPrimary ? (
+            <icons.User className="size-3" />
+          ) : (
+            <icons.Users className="size-3" />
+          )}
           <span>{props.driver.driverName}</span>
         </p>
         <p className="mt-1 leading-5 text-muted-foreground">
@@ -78,8 +80,8 @@ function Driver(props: {
           </span>
         </Button>
         {isSigned ? (
-          <Button variant="ghost" size="icon">
-            :
+          <Button variant="ghost" size="icon" className="h-9">
+            <icons.More className="size-3" />
           </Button>
         ) : null}
       </div>
