@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
-import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
 import { Button } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
@@ -25,6 +24,8 @@ import {
 import { fetchTaxesListOptions } from "@/lib/query/tax";
 import { fetchVehiclesSearchListOptions } from "@/lib/query/vehicle";
 import { fetchVehicleTypesListOptions } from "@/lib/query/vehicle-type";
+
+import { RentalSummary } from "@/routes/_auth/-modules/summary/rental-summary";
 
 import { getAuthFromAuthHook } from "@/lib/utils/auth";
 import { localDateTimeWithoutSecondsToQueryYearMonthDay } from "@/lib/utils/date";

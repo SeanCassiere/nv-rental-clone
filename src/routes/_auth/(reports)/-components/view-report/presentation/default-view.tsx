@@ -2,6 +2,7 @@ import React from "react";
 import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
+import { EmptyState } from "@/components/empty-state";
 import { icons } from "@/components/ui/icons";
 
 import type { TReportDetail, TReportResult } from "@/lib/schemas/report";
@@ -12,7 +13,6 @@ import { ReportTable } from "@/routes/_auth/(reports)/-components/view-report/pl
 import { ViewColumns } from "@/routes/_auth/(reports)/-components/view-report/plugin/view-columns";
 import { useReportValueFormatter } from "@/routes/_auth/(reports)/-components/view-report/useReportValueFormatter";
 import { useReportContext } from "@/routes/_auth/(reports)/-components/view-report/view-report-context";
-import { EmptyState } from "@/routes/-components/empty-state";
 
 import type { ReportTablePlugin } from "@/lib/types/report";
 

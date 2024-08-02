@@ -4,7 +4,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { CommonTable } from "@/components/common/common-table";
+import { CommonTable } from "@/components/common-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 
