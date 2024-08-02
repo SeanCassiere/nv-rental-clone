@@ -20,12 +20,25 @@ export const Route = createFileRoute(
   "/_auth/(agreements)/agreements/$agreementId/_details/summary"
 )({
   component: Component,
+  validateSearch: z.object({
+    summary_tab: z.string().optional(),
+  }),
 });
 const SummarySignatureCard = React.lazy(
   () => import("@/routes/_auth/(agreements)/-components/summary-signature-card")
 );
 
 function Component() {
+  const navigate = Route.useNavigate();
+
+  const currentTab = Route.useSearch({
+    select: (s) => {
+      if (s.summary_tab && ["vehicle", "rental"].includes(s.summary_tab)) {
+        return s.summary_tab;
+      }
+      return "vehicle";
+    },
+  });
   const { viewAgreementOptions, viewAgreementSummaryOptions } =
     Route.useRouteContext();
 
@@ -49,8 +62,6 @@ function Component() {
   const summaryQuery = useSuspenseQuery(viewAgreementSummaryOptions);
   const summaryData =
     summaryQuery.data?.status === 200 ? summaryQuery.data?.body : undefined;
-
-  const [currentTab, setCurrentTab] = React.useState("vehicle");
 
   const tabsConfig = React.useMemo(() => {
     const tabs: { id: string; label: string; component: React.ReactNode }[] =
@@ -126,6 +137,13 @@ function Component() {
     canViewRentalInformation,
     isCheckedIn,
   ]);
+
+  const setCurrentTab = (name: string) => {
+    navigate({
+      search: (s) => ({ ...s, summary_tab: name }),
+      resetScroll: false,
+    });
+  };
 
   return (
     <Container as="div">
