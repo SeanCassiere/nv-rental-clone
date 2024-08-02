@@ -129,6 +129,7 @@ export default function AuthFooter() {
               className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               href="https://github.com/seancassiere/nv-rental-clone"
               target="_blank"
+              rel="noreferrer"
             >
               <icons.GitHub className="h-4 w-4" />
             </a>
@@ -136,6 +137,7 @@ export default function AuthFooter() {
               className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               href="https://x.com/seancassiere"
               target="_blank"
+              rel="noreferrer"
             >
               <icons.Twitter className="h-3 w-3" />
             </a>

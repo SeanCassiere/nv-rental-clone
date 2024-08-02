@@ -1,17 +1,19 @@
 import * as React from "react";
+import type {
+  DragEndEvent,
+  DraggableAttributes,
+  DraggableSyntheticListeners,
+  DragStartEvent,
+  UniqueIdentifier,
+} from "@dnd-kit/core";
 import {
   DndContext,
   DragOverlay,
-  DragStartEvent,
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
-  type DragEndEvent,
-  type DraggableAttributes,
-  type DraggableSyntheticListeners,
-  type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {

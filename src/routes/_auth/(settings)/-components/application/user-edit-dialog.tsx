@@ -41,12 +41,12 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 
 import type { RoleListItem } from "@/lib/schemas/role";
-import {
-  buildUpdateUserSchema,
+import type {
+  TUserProfile,
+  UpdateUserInput,
   UserLanguageItem,
-  type TUserProfile,
-  type UpdateUserInput,
 } from "@/lib/schemas/user";
+import { buildUpdateUserSchema } from "@/lib/schemas/user";
 import { fetchLocationsListOptions } from "@/lib/query/location";
 import { fetchRolesListOptions } from "@/lib/query/role";
 import {

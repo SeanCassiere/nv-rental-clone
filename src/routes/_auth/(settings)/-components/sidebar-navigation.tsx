@@ -1,14 +1,12 @@
-import React from "react";
-import {
+import type {
   AnyRouter,
-  Link,
-  type AnyRoute,
-  type LinkOptions,
-  type RegisteredRouter,
-  type RoutePaths,
+  LinkOptions,
+  RegisteredRouter,
+  RoutePaths,
 } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
-import { LinkComponentProps } from "@/lib/types/router";
+import type { LinkComponentProps } from "@/lib/types/router";
 
 import { cn } from "@/lib/utils";
 

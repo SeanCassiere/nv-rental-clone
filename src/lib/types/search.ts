@@ -1,4 +1,4 @@
-import { AppModule } from "./app-module";
+import type { AppModule } from "./app-module";
 
 export type GlobalSearchReturnType = {
   module: AppModule;

@@ -1,43 +1,46 @@
 // @ts-check
-import { fixupConfigRules } from "@eslint/compat";
-import { FlatCompat } from "@eslint/eslintrc";
 import eslintJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-import reactCompiler from "eslint-plugin-react-compiler";
-import reactJsxRuntime from "eslint-plugin-react/configs/jsx-runtime.js";
-import reactRecommended from "eslint-plugin-react/configs/recommended.js";
+import eslintReact from "eslint-plugin-react";
+import eslintReactCompiler from "eslint-plugin-react-compiler";
+import eslintReactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
-import tsEslint from "typescript-eslint";
+import tseslint from "typescript-eslint";
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-  recommendedConfig: eslintJs.configs.recommended,
-  allConfig: eslintJs.configs.all,
-});
-
-export default tsEslint.config(
+export default tseslint.config(
   eslintJs.configs.recommended,
-  ...tsEslint.configs.recommended,
-  reactJsxRuntime,
+  ...tseslint.configs.recommended,
+  eslintConfigPrettier,
   {
-    ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts", "*.html"],
-  },
-  ...fixupConfigRules(compat.extends("plugin:react-hooks/recommended")),
-  {
-    files: ["src/**/*.{ts,tsx}", "*.config.js", "*.config.cjs"],
-    ...reactRecommended,
+    files: ["**.config.{cjs,mjs,ts,js}", "postbuild.cjs"],
     languageOptions: {
-      ...reactRecommended.languageOptions,
-      globals: {
-        ...globals.node,
-        ...globals.browser,
-      },
+      globals: { ...globals.node },
+      parserOptions: { tsconfigRootDir: import.meta.dirname },
+    },
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+  {
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "**.config.{cjs,mjs,ts,js}",
+      "src/**/*.gen.ts",
+      "*.html",
+    ],
+  },
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ...eslintReact.configs.flat.recommended,
+  },
+  {
+    languageOptions: {
+      ...eslintReact.configs.flat.recommended.languageOptions,
+      globals: { ...globals.browser },
       parserOptions: {
-        // project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
       },
     },
     settings: {
@@ -48,27 +51,34 @@ export default tsEslint.config(
         version: "detect",
       },
     },
+  },
+  // {},
+  {
     plugins: {
-      "react-compiler": reactCompiler,
-    },
-    rules: {
-      "no-extra-boolean-cast": "off",
-      "no-case-declarations": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/consistent-type-imports": "off",
-      "@typescript-eslint/no-empty-interface": "off",
-      "@typescript-eslint/no-unnecessary-type-constraint": "off",
-      "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
-      "jsx-a11y/img-redundant-alt": "off",
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
-      "react/display-name": "off",
-      "react/no-unescaped-entities": "off",
-      "react/no-unknown-property": "off",
-      "react-compiler/react-compiler": "error",
+      "react-compiler": eslintReactCompiler,
+      // @ts-expect-error
+      "react-hooks": eslintReactHooks,
     },
   },
-  eslintConfigPrettier
+  {
+    rules: {
+      ...eslintReactHooks.configs.recommended.rules,
+      "react-compiler/react-compiler": "error",
+
+      "no-extra-boolean-cast": "off",
+      "no-case-declarations": "off",
+
+      "react/display-name": "off",
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/no-empty-object-type": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unnecessary-type-constraint": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  }
 );

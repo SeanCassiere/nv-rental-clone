@@ -33,7 +33,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
-import { RoleListItem } from "@/lib/schemas/role";
+import type { RoleListItem } from "@/lib/schemas/role";
 import { fetchRoleByIdOptions, fetchRolesListOptions } from "@/lib/query/role";
 
 import { EmptyState } from "@/routes/-components/empty-state";

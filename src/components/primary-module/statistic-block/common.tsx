@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import * as React from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -8,7 +8,7 @@ export const ModuleStatBlockContainer = ({
   children,
   className,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   className?: string;
 }) => {
   return (
@@ -28,7 +28,7 @@ export const ModuleStatBlock = ({
   stat,
 }: {
   header: string;
-  stat?: ReactNode;
+  stat?: React.ReactNode;
 }) => {
   return (
     <Card>

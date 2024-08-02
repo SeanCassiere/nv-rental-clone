@@ -209,8 +209,8 @@ function VehicleStatusItem(props: VehicleStatusItemProps) {
             </TooltipTrigger>
             <TooltipContent align="start">
               <p>
-                {percentage} of your fleet is in the status of "
-                {readableVehicleStatus}"
+                {percentage} of your fleet is in the status of &quot;
+                {readableVehicleStatus}&quot;
               </p>
             </TooltipContent>
           </Tooltip>

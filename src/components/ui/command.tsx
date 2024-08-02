@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unknown-property */
 import * as React from "react";
-import { DialogProps } from "@radix-ui/react-dialog";
+import type { DialogProps } from "@radix-ui/react-dialog";
 import { Command as CommandPrimitive } from "cmdk";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
