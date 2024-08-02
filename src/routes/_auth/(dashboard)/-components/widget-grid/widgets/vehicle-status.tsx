@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -43,54 +43,17 @@ import { cn } from "@/lib/utils/styles";
 import { WidgetSkeleton, type CommonWidgetProps } from "./_common";
 
 export default function VehicleStatusWidget(props: CommonWidgetProps) {
-  const { auth, selectedLocationIds, widgetId } = props;
-
-  const widgetName = useWidgetName(widgetId);
+  const widgetName = useWidgetName(props.widgetId);
 
   const [vehicleTypeId, setVehicleTypeId] = React.useState("0");
 
-  const statusCounts = useQuery(
-    fetchDashboardVehicleStatusCountsOptions({
-      auth: auth,
-      filters: {
-        vehicleTypeId,
-        locationIds: selectedLocationIds,
-        clientDate: new Date(),
-      },
-    })
+  const vehicleTypesList = useQuery(
+    fetchVehiclesTypesOptions({ auth: props.auth })
   );
-
-  const data = statusCounts.data?.status === 200 ? statusCounts.data?.body : [];
-
-  const vehicleStatuses = useQuery(
-    fetchVehiclesStatusesOptions({ auth: props.auth })
+  const vehicleTypes = React.useMemo(
+    () => vehicleTypesList.data ?? [],
+    [vehicleTypesList.data]
   );
-
-  const getStatusIdByName = React.useCallback(
-    (name: string) => {
-      const status = vehicleStatuses.data?.find((s) => s.name === name);
-      return status?.id || 0;
-    },
-    [vehicleStatuses.data]
-  );
-
-  const sortedData = data.sort((a, b) => {
-    if (a.total < b.total) return 1;
-    if (a.total > b.total) return -1;
-    return 0;
-  });
-
-  const totalVehicles = sortedData.reduce((acc, item) => acc + item.total, 0);
-
-  const vehicleTypesList = useQuery(fetchVehiclesTypesOptions({ auth }));
-
-  const vehicleTypes = vehicleTypesList.data ?? [];
-
-  const [rowCountStr] = useLocalStorage(
-    STORAGE_KEYS.tableRowCount,
-    STORAGE_DEFAULTS.tableRowCount
-  );
-  const defaultRowCount = parseInt(rowCountStr, 10);
 
   return (
     <React.Fragment>
@@ -127,33 +90,87 @@ export default function VehicleStatusWidget(props: CommonWidgetProps) {
           <icons.GripVertical className="h-3 w-3" />
         </Button>
       </div>
-      {statusCounts.status === "pending" ? (
-        <WidgetSkeleton className="h-[260px]" />
-      ) : totalVehicles <= 0 ? (
-        <EmptyState
-          title="No vehicles"
-          subtitle="You've got no vehicles in your fleet"
-          styles={{
-            containerClassName: cn("h-auto pt-4 sm:pt-0"),
-          }}
-        />
-      ) : (
-        <ScrollArea className="h-[260px]">
-          <div className="grid gap-5 pt-4 md:gap-4">
-            {sortedData.map((item, idx) => (
-              <VehicleStatusItem
-                key={`status_widget_${item.name}_${idx}`}
-                item={item}
-                totalItems={totalVehicles}
-                getVehicleStatusIdByName={getStatusIdByName}
-                vehiclePageRowCount={defaultRowCount}
-                selectedVehicleTypeId={vehicleTypeId}
-              />
-            ))}
-          </div>
-        </ScrollArea>
-      )}
+      <React.Suspense fallback={<WidgetSkeleton className="mt-1 h-[250px]" />}>
+        <VehicleStatusChart {...props} vehicleTypeId={vehicleTypeId} />
+      </React.Suspense>
     </React.Fragment>
+  );
+}
+
+function VehicleStatusChart(
+  props: CommonWidgetProps & { vehicleTypeId: string }
+) {
+  const statusCountQuery = useSuspenseQuery(
+    fetchDashboardVehicleStatusCountsOptions({
+      auth: props.auth,
+      filters: {
+        vehicleTypeId: props.vehicleTypeId,
+        locationIds: props.selectedLocationIds,
+        clientDate: new Date(),
+      },
+    })
+  );
+
+  const data = React.useMemo(
+    () =>
+      statusCountQuery.data.status === 200 ? statusCountQuery.data.body : [],
+    [statusCountQuery.data.body, statusCountQuery.data.status]
+  );
+
+  const vehicleStatusesQuery = useSuspenseQuery(
+    fetchVehiclesStatusesOptions({ auth: props.auth })
+  );
+
+  const vehicleStatuses = React.useMemo(
+    () => vehicleStatusesQuery.data ?? [],
+    [vehicleStatusesQuery.data]
+  );
+
+  const getStatusIdByName = React.useCallback(
+    (name: string) => {
+      const status = vehicleStatuses.find((s) => s.name === name);
+      return status?.id || 0;
+    },
+    [vehicleStatuses]
+  );
+
+  const sortedData = data.sort((a, b) => {
+    if (a.total < b.total) return 1;
+    if (a.total > b.total) return -1;
+    return 0;
+  });
+
+  const totalVehicles = sortedData.reduce((acc, item) => acc + item.total, 0);
+
+  const [rowCountStr] = useLocalStorage(
+    STORAGE_KEYS.tableRowCount,
+    STORAGE_DEFAULTS.tableRowCount
+  );
+  const defaultRowCount = parseInt(rowCountStr, 10);
+
+  return totalVehicles <= 0 ? (
+    <EmptyState
+      title="No vehicles"
+      subtitle="You've got no vehicles in your fleet"
+      styles={{
+        containerClassName: cn("h-auto pt-4 sm:pt-0"),
+      }}
+    />
+  ) : (
+    <ScrollArea className="h-[260px]">
+      <div className="grid gap-5 pt-4 md:gap-4">
+        {sortedData.map((item, idx) => (
+          <VehicleStatusItem
+            key={`status_widget_${item.name}_${idx}`}
+            item={item}
+            totalItems={totalVehicles}
+            getVehicleStatusIdByName={getStatusIdByName}
+            vehiclePageRowCount={defaultRowCount}
+            selectedVehicleTypeId={props.vehicleTypeId}
+          />
+        ))}
+      </div>
+    </ScrollArea>
   );
 }
 
