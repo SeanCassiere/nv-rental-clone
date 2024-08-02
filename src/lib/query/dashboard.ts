@@ -1,4 +1,4 @@
-import { keepPreviousData, queryOptions } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query";
 
 import { getDashboardMessagesAndFilter } from "@/lib/api/get-dashboard-messages";
 import { saveDashboardWidgets } from "@/lib/api/save-dashboard-widgets";
@@ -77,7 +77,6 @@ export function fetchDashboardSalesStatisticsOptions(
         .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 1, // 1 minute
-    placeholderData: keepPreviousData,
   });
 }
 
@@ -117,7 +116,6 @@ export function fetchDashboardRentalStatisticsOptions(
         .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 1, // 1 minute
-    placeholderData: keepPreviousData,
   });
 }
 
@@ -160,7 +158,6 @@ export function fetchDashboardVehicleStatusCountsOptions(
         .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options),
     staleTime: 1000 * 60 * 1, // 1 minute
-    placeholderData: keepPreviousData,
   });
 }
 
