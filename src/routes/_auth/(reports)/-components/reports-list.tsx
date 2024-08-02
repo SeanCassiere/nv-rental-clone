@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { EmptyState } from "@/components/empty-state";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
@@ -17,8 +18,6 @@ import {
 } from "@/components/ui/select";
 
 import type { TReportsListItem } from "@/lib/schemas/report";
-
-import { EmptyState } from "@/routes/-components/empty-state";
 
 import { cn } from "@/lib/utils";
 

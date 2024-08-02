@@ -7,7 +7,6 @@ import {
   useChildMatches,
 } from "@tanstack/react-router";
 
-import ReservationStatBlock from "@/components/primary-module/statistic-block/reservation-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,6 +23,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
+import ReservationStatBlock from "@/routes/_auth/-modules/statistic-block/reservation-stat-block";
 import { Container } from "@/routes/-components/container";
 
 import { titleMaker } from "@/lib/utils/title-maker";

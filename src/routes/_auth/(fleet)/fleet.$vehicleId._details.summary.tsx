@@ -2,13 +2,13 @@ import * as React from "react";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import CustomerInformation from "@/components/primary-module/information-block/customer-information";
-import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
-import { VehicleSummary } from "@/components/primary-module/summary/vehicle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { fetchAgreementByIdOptions } from "@/lib/query/agreement";
 
+import CustomerInformation from "@/routes/_auth/-modules/information-block/customer-information";
+import VehicleInformation from "@/routes/_auth/-modules/information-block/vehicle-information";
+import { VehicleSummary } from "@/routes/_auth/-modules/summary/vehicle";
 import { Container } from "@/routes/-components/container";
 
 export const Route = createFileRoute(

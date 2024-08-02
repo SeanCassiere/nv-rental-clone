@@ -4,7 +4,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
-import { CommonTable } from "@/components/common/common-table";
+import { CommonTable } from "@/components/common-table";
+import { EmptyState } from "@/components/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
@@ -13,7 +14,6 @@ import type { TVehicleExchangeListItemParsed } from "@/lib/schemas/vehicle-excha
 import { fetchAgreementExchangesByIdOptions } from "@/lib/query/agreement";
 
 import { Container } from "@/routes/-components/container";
-import { EmptyState } from "@/routes/-components/empty-state";
 
 import { parseISO } from "@/lib/config/date-fns";
 

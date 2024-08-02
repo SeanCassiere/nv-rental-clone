@@ -1,8 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CustomerSummary } from "@/components/primary-module/summary/customer";
-
+import { CustomerSummary } from "@/routes/_auth/-modules/summary/customer";
 import { Container } from "@/routes/-components/container";
 
 import { sortObjectKeys } from "@/lib/utils";

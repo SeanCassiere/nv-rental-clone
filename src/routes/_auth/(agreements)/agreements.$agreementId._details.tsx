@@ -7,7 +7,6 @@ import {
   useChildMatches,
 } from "@tanstack/react-router";
 
-import AgreementStatBlock from "@/components/primary-module/statistic-block/agreement-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,6 +23,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
+import AgreementStatBlock from "@/routes/_auth/-modules/statistic-block/agreement-stat-block";
 import { Container } from "@/routes/-components/container";
 
 import { titleMaker } from "@/lib/utils/title-maker";

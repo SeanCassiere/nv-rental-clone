@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useAuth } from "react-oidc-context";
 
-import { CommonTable } from "@/components/common/common-table";
+import { CommonTable } from "@/components/common-table";
 import {
   Dialog,
   DialogContent,

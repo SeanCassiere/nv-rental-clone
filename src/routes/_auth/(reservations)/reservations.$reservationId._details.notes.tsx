@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import ModuleNotesTabContent from "@/components/primary-module/tabs/notes-content";
-
 import { fetchReservationNotesByIdOptions } from "@/lib/query/reservation";
 
+import ModuleNotesTabContent from "@/routes/_auth/-modules/tabs/notes-content";
 import { Container } from "@/routes/-components/container";
 
 export const Route = createFileRoute(

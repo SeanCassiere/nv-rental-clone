@@ -1,11 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import CustomerInformation from "@/components/primary-module/information-block/customer-information";
-import RentalInformation from "@/components/primary-module/information-block/rental-information";
-import VehicleInformation from "@/components/primary-module/information-block/vehicle-information";
-import { RentalSummary } from "@/components/primary-module/summary/rental-summary";
-
+import CustomerInformation from "@/routes/_auth/-modules/information-block/customer-information";
+import RentalInformation from "@/routes/_auth/-modules/information-block/rental-information";
+import VehicleInformation from "@/routes/_auth/-modules/information-block/vehicle-information";
+import { RentalSummary } from "@/routes/_auth/-modules/summary/rental-summary";
 import { Container } from "@/routes/-components/container";
 
 export const Route = createFileRoute(

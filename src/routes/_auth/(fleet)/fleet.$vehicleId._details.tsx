@@ -7,7 +7,6 @@ import {
   useChildMatches,
 } from "@tanstack/react-router";
 
-import VehicleStatBlock from "@/components/primary-module/statistic-block/vehicle-stat-block";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +21,7 @@ import { icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import VehicleStatBlock from "@/routes/_auth/-modules/statistic-block/vehicle-stat-block";
 import { Container } from "@/routes/-components/container";
 
 import { cn } from "@/lib/utils";

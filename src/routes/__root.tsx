@@ -9,6 +9,9 @@ import {
 import { useTranslation } from "react-i18next";
 import type { AuthContextProps } from "react-oidc-context";
 
+import { RouterDevTools } from "@/components/router-devtools";
+import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
+
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
@@ -18,8 +21,6 @@ import type { queryClient } from "@/lib/config/tanstack-query";
 import { Container } from "./-components/container";
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
 import { PageNotFound } from "./-components/page-not-found";
-import { RouterDevTools } from "./-components/router-devtools";
-import { TailwindScreenDevTool } from "./-components/tailwind-screen-dev-tool";
 
 export interface MyRouterContext {
   queryClient: typeof queryClient;

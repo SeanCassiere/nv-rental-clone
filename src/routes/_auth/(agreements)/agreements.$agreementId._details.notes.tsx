@@ -1,10 +1,9 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import ModuleNotesTabContent from "@/components/primary-module/tabs/notes-content";
-
 import { fetchAgreementNotesByIdOptions } from "@/lib/query/agreement";
 
+import ModuleNotesTabContent from "@/routes/_auth/-modules/tabs/notes-content";
 import { Container } from "@/routes/-components/container";
 
 export const Route = createFileRoute(
