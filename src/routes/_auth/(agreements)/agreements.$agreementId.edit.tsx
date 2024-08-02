@@ -56,7 +56,6 @@ function EditAgreementPage() {
     navigate({
       to: "/agreements/$agreementId/summary",
       params: { agreementId },
-      search: () => ({ tab: "summary" }),
     });
   }, [agreementId, navigate]);
 

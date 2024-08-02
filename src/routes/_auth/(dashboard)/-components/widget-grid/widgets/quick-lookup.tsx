@@ -158,7 +158,6 @@ export default function SalesStatusWidget(props: CommonWidgetProps) {
       navigate({
         to: "/agreements/$agreementId/summary",
         params: { agreementId: String(agreement.id) },
-        search: () => ({ tab: "summary" }),
       });
     },
     onError: (err) => {

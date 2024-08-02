@@ -365,7 +365,7 @@ export const CommandMenu = () => {
                       navigate({
                         to: "/agreements/$agreementId/summary",
                         params: { agreementId: item.referenceId },
-                        search: () => ({ tab: "summary" }),
+                        search: (s) => ({ ...s, tab: "summary" }),
                       })
                     );
                   }}
