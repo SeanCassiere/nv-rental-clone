@@ -68,8 +68,9 @@ export default tseslint.config(
       "no-extra-boolean-cast": "off",
       "no-case-declarations": "off",
 
-      "react/prop-types": "off",
       "react/display-name": "off",
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
 
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/consistent-type-imports": "error",

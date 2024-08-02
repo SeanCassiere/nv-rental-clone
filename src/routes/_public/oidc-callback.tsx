@@ -1,4 +1,3 @@
-import * as React from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { hasAuthParams } from "react-oidc-context";
 import { z } from "zod";
