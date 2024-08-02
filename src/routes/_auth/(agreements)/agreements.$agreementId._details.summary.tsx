@@ -1,8 +1,12 @@
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { useFeature } from "@/lib/hooks/useFeature";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import CustomerInformation from "@/routes/_auth/-modules/information-block/customer-information";
 import RentalInformation from "@/routes/_auth/-modules/information-block/rental-information";
@@ -10,18 +14,45 @@ import VehicleInformation from "@/routes/_auth/-modules/information-block/vehicl
 import { RentalSummary } from "@/routes/_auth/-modules/summary/rental-summary";
 import { Container } from "@/routes/-components/container";
 
+import { incompleteAgreementCustomerSignatureFeatureFlag } from "@/lib/config/features";
+
 export const Route = createFileRoute(
   "/_auth/(agreements)/agreements/$agreementId/_details/summary"
 )({
   component: Component,
+  validateSearch: z.object({
+    summary_tab: z.string().optional(),
+  }),
 });
+const SummarySignatureCard = React.lazy(
+  () => import("@/routes/_auth/(agreements)/-components/summary-signature-card")
+);
 
 function Component() {
+  const navigate = Route.useNavigate();
+
+  const currentTab = Route.useSearch({
+    select: (s) => {
+      if (s.summary_tab && ["vehicle", "rental"].includes(s.summary_tab)) {
+        return s.summary_tab;
+      }
+      return "vehicle";
+    },
+  });
   const { viewAgreementOptions, viewAgreementSummaryOptions } =
     Route.useRouteContext();
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
+
+  const [_, canViewDigitalSignaturePad] = useFeature(
+    "DIGITAL_SIGNATURE_PAD",
+    null
+  );
+  const [showIncompleteAgreementSignature] = useLocalStorage(
+    incompleteAgreementCustomerSignatureFeatureFlag.id,
+    incompleteAgreementCustomerSignatureFeatureFlag.default_value
+  );
 
   const agreementQuery = useSuspenseQuery(viewAgreementOptions);
   const agreement =
@@ -31,8 +62,6 @@ function Component() {
   const summaryQuery = useSuspenseQuery(viewAgreementSummaryOptions);
   const summaryData =
     summaryQuery.data?.status === 200 ? summaryQuery.data?.body : undefined;
-
-  const [currentTab, setCurrentTab] = React.useState("vehicle");
 
   const tabsConfig = React.useMemo(() => {
     const tabs: { id: string; label: string; component: React.ReactNode }[] =
@@ -109,6 +138,13 @@ function Component() {
     isCheckedIn,
   ]);
 
+  const setCurrentTab = (name: string) => {
+    navigate({
+      search: (s) => ({ ...s, summary_tab: name }),
+      resetScroll: false,
+    });
+  };
+
   return (
     <Container as="div">
       <div className="mb-6 grid max-w-full grid-cols-1 gap-4 px-2 sm:px-4 lg:grid-cols-12">
@@ -139,28 +175,40 @@ function Component() {
             />
           )}
 
-          <Tabs value={currentTab} onValueChange={setCurrentTab}>
-            <TabsList className="w-full sm:max-w-max">
+          {tabsConfig.length >= 1 ? (
+            <Tabs value={currentTab} onValueChange={setCurrentTab}>
+              <TabsList className="w-full sm:max-w-max">
+                {tabsConfig.map((tab, idx) => (
+                  <TabsTrigger
+                    key={`tab-summary-trigger-${idx}`}
+                    value={tab.id}
+                  >
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
               {tabsConfig.map((tab, idx) => (
-                <TabsTrigger key={`tab-summary-trigger-${idx}`} value={tab.id}>
-                  {tab.label}
-                </TabsTrigger>
+                <TabsContent
+                  key={`tab-summary-content-${idx}`}
+                  value={tab.id}
+                  className="min-h-[180px]"
+                >
+                  {tab.component}
+                </TabsContent>
               ))}
-            </TabsList>
-            {tabsConfig.map((tab, idx) => (
-              <TabsContent
-                key={`tab-summary-content-${idx}`}
-                value={tab.id}
-                className="min-h-[180px]"
-              >
-                {tab.component}
-              </TabsContent>
-            ))}
-          </Tabs>
+            </Tabs>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-4 lg:col-span-4">
           <RentalSummary module="agreements" summaryData={summaryData} />
+          <React.Suspense fallback={null}>
+            {showIncompleteAgreementSignature &&
+            canViewDigitalSignaturePad &&
+            agreement ? (
+              <SummarySignatureCard agreement={agreement} />
+            ) : null}
+          </React.Suspense>
         </div>
       </div>
     </Container>

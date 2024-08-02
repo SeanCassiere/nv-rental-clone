@@ -42,7 +42,6 @@ function AddAgreementPage() {
       navigate({
         to: "/agreements/$agreementId/summary",
         params: { agreementId: String(agreementId) },
-        search: () => ({ tab: "summary" }),
       });
     },
     [navigate]
