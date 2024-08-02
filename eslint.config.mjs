@@ -1,18 +1,11 @@
 // @ts-check
-import { fixupConfigRules } from "@eslint/compat";
-import { FlatCompat } from "@eslint/eslintrc";
 import eslintJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import reactCompiler from "eslint-plugin-react-compiler";
+import reactHooks from "eslint-plugin-react-hooks";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-  recommendedConfig: eslintJs.configs.recommended,
-  allConfig: eslintJs.configs.all,
-});
 
 export default tseslint.config(
   eslintJs.configs.recommended,
@@ -20,9 +13,6 @@ export default tseslint.config(
   {
     ignores: ["dist/**", "node_modules/**", "src/route-tree.gen.ts", "*.html"],
   },
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  ...fixupConfigRules(compat.extends("plugin:react-hooks/recommended")),
   {
     files: ["src/**/*.{ts,tsx}", "*.config.js", "*.config.cjs"],
     ...reactRecommended,
@@ -33,7 +23,6 @@ export default tseslint.config(
         ...globals.browser,
       },
       parserOptions: {
-        // project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: { jsx: true },
       },
@@ -48,8 +37,12 @@ export default tseslint.config(
     },
     plugins: {
       "react-compiler": reactCompiler,
+      // @ts-expect-error
+      "react-hooks": reactHooks,
     },
+    // @ts-expect-error
     rules: {
+      ...reactHooks.configs.recommended.rules,
       "no-extra-boolean-cast": "off",
       "no-case-declarations": "off",
       "@typescript-eslint/no-unused-vars": "off",
