@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFeature } from "@/lib/hooks/useFeature";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
+import { fetchDigitalSignatureDriversList } from "@/lib/query/digitalSignature";
+
 import CustomerInformation from "@/routes/_auth/-modules/information-block/customer-information";
 import RentalInformation from "@/routes/_auth/-modules/information-block/rental-information";
 import VehicleInformation from "@/routes/_auth/-modules/information-block/vehicle-information";
@@ -23,6 +25,19 @@ export const Route = createFileRoute(
   validateSearch: z.object({
     summary_tab: z.string().optional(),
   }),
+  beforeLoad: ({ context, params }) => {
+    const { authParams } = context;
+    return {
+      digitalSignatureDriversOptions: fetchDigitalSignatureDriversList({
+        auth: authParams,
+        agreementId: params.agreementId,
+      }),
+    };
+  },
+  loader: async ({ context }) => {
+    const { queryClient, digitalSignatureDriversOptions } = context;
+    await queryClient.prefetchQuery(digitalSignatureDriversOptions);
+  },
 });
 const SummarySignatureCard = React.lazy(
   () => import("@/routes/_auth/(agreements)/-components/summary-signature-card")
@@ -39,8 +54,12 @@ function Component() {
       return "vehicle";
     },
   });
-  const { viewAgreementOptions, viewAgreementSummaryOptions } =
-    Route.useRouteContext();
+  const {
+    viewAgreementOptions,
+    viewAgreementSummaryOptions,
+    digitalSignatureDriversOptions,
+    authParams: auth,
+  } = Route.useRouteContext();
 
   const canViewCustomerInformation = true;
   const canViewRentalInformation = true;
@@ -62,6 +81,14 @@ function Component() {
   const summaryQuery = useSuspenseQuery(viewAgreementSummaryOptions);
   const summaryData =
     summaryQuery.data?.status === 200 ? summaryQuery.data?.body : undefined;
+
+  const signatureDriverListQuery = useSuspenseQuery(
+    digitalSignatureDriversOptions
+  );
+  const signatureDriverList =
+    signatureDriverListQuery.data?.status === 200
+      ? signatureDriverListQuery.data.body
+      : [];
 
   const tabsConfig = React.useMemo(() => {
     const tabs: { id: string; label: string; component: React.ReactNode }[] =
@@ -206,7 +233,12 @@ function Component() {
             {showIncompleteAgreementSignature &&
             canViewDigitalSignaturePad &&
             agreement ? (
-              <SummarySignatureCard agreement={agreement} />
+              <SummarySignatureCard
+                auth={auth}
+                isCheckin={isCheckedIn}
+                agreement={agreement}
+                drivers={signatureDriverList}
+              />
             ) : null}
           </React.Suspense>
         </div>

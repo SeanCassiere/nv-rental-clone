@@ -2,6 +2,7 @@ import { rootAgreementContract } from "./_agreement.contract";
 import { rootClientContract } from "./_client.contract";
 import { rootCustomerContract } from "./_customer.contract";
 import { rootDashboardContract } from "./_dashboard.contract";
+import { rootDigitalSignatureContract } from "./_digitalSignature.contract";
 import { rootLocationContract } from "./_location.contract";
 import { rootMiscChargeContract } from "./_misc-charge.contract";
 import { rootNoteContract } from "./_note.contract";
@@ -24,6 +25,7 @@ const contract = c.router(
     client: rootClientContract,
     customer: rootCustomerContract,
     dashboard: rootDashboardContract,
+    digitalSignature: rootDigitalSignatureContract,
     location: rootLocationContract,
     miscCharge: rootMiscChargeContract,
     note: rootNoteContract,
