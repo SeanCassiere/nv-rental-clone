@@ -206,7 +206,10 @@ function Component() {
             {showIncompleteAgreementSignature &&
             canViewDigitalSignaturePad &&
             agreement ? (
-              <SummarySignatureCard agreement={agreement} />
+              <SummarySignatureCard
+                agreement={agreement}
+                isCheckin={isCheckedIn}
+              />
             ) : null}
           </React.Suspense>
         </div>

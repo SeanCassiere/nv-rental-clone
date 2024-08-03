@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 export default function SummarySignatureCard(props: {
   agreement: AgreementDataParsed;
+  isCheckin: boolean;
 }) {
   const agreementId = props.agreement.agreementId.toString();
   const drivers = props.agreement.driverList;
@@ -30,6 +31,7 @@ export default function SummarySignatureCard(props: {
               driver={d}
               agreementId={agreementId}
               isPrimary={d.customerId === props.agreement.customerId}
+              stage={props.isCheckin ? "checkin" : "checkout"}
             />
           ))}
         </ul>
@@ -42,36 +44,63 @@ function Driver(props: {
   driver: AgreementDataParsed["driverList"][number];
   agreementId: string;
   isPrimary: boolean;
+  stage: "checkout" | "checkin";
 }) {
   const isSigned = !!props.driver.signatureDate;
 
   return (
-    <li className="flex flex-row items-center justify-between gap-4 p-5 xl:gap-2">
+    <li className="flex flex-row items-start justify-between gap-4 p-5 xl:gap-2">
       <div className="grid min-w-0 justify-start text-sm">
         <p className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground">
           {props.isPrimary ? (
-            <icons.User className="size-3" />
+            <icons.User className="size-3.5" />
           ) : (
-            <icons.Users className="size-3" />
+            <icons.Users className="size-3.5" />
           )}
           <span>{props.driver.driverName}</span>
         </p>
-        <p className="mt-1 leading-5 text-muted-foreground">
-          <icons.Signature
-            className={cn(
-              "mr-1 inline size-3",
-              isSigned ? "text-green-500" : "text-destructive"
+        <div className="mt-2 grid gap-1 leading-5 text-muted-foreground">
+          <p>
+            <icons.Signature
+              className={cn(
+                "mr-2 inline size-3",
+                isSigned ? "text-green-500" : "text-destructive"
+              )}
+            />
+            <span>Checkout </span>
+            {isSigned ? (
+              <>
+                <span className="hidden 2xl:inline">signed:</span>
+                <span>
+                  &nbsp;{props.driver.signatureDate?.slice(0, 16) ?? "..."}
+                </span>
+              </>
+            ) : (
+              <span>not signed.</span>
             )}
-          />
-          {isSigned ? (
-            <>
-              <span className="hidden 2xl:inline">Signed on:</span>
-              <span>&nbsp;{props.driver.signatureDate ?? "..."}</span>
-            </>
-          ) : (
-            <span>Not signed</span>
-          )}
-        </p>
+          </p>
+          {props.stage === "checkin" ? (
+            <p>
+              <icons.Signature
+                className={cn(
+                  "mr-2 inline size-3",
+                  isSigned ? "text-green-500" : "text-destructive"
+                )}
+              />
+              <span>Checkin </span>
+              {isSigned ? (
+                <>
+                  <span className="hidden 2xl:inline">signed:</span>
+                  <span>
+                    &nbsp;{props.driver.signatureDate?.slice(0, 16) ?? "..."}
+                  </span>
+                </>
+              ) : (
+                <span>not signed.</span>
+              )}
+            </p>
+          ) : null}
+        </div>
       </div>
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm" className="gap-1 bg-transparent">
@@ -80,11 +109,6 @@ function Driver(props: {
             {isSigned ? "Redo" : "Sign"}
           </span>
         </Button>
-        {isSigned ? (
-          <Button variant="ghost" size="icon" className="h-9">
-            <icons.More className="size-3" />
-          </Button>
-        ) : null}
       </div>
     </li>
   );
