@@ -122,7 +122,7 @@ function SignatureImage(props: BaseDriverProps) {
       <motion.img
         src={dataUrl}
         alt="Signature Image"
-        className={cn("w-full object-cover")}
+        className="w-full object-cover"
         initial={{ height: "0rem" }}
         whileInView={{ height: "14rem" }}
         viewport={{ once: true }}
