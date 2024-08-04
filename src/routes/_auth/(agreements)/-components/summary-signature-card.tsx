@@ -431,6 +431,8 @@ function SignatureDialog(
       qc.invalidateQueries({ queryKey: listKey });
       qc.invalidateQueries({ queryKey: imageKey });
 
+      toast.success("Signature saved successfully.");
+
       signaturePadRef.current?.clear();
       props.onOpenChange(false);
     },
@@ -557,7 +559,10 @@ function SignatureDialog(
             Cancel
           </Button>
           <Button onClick={handleAcceptSignature(props.mode)}>
-            {props.mode === "resigning" ? "Resign" : "Sign"}
+            {uploadSignature.isPending ? (
+              <icons.Loading className="mr-2 h-3 w-3 animate-spin" />
+            ) : null}
+            <span>{props.mode === "resigning" ? "Resign" : "Sign"}</span>
           </Button>
         </DialogFooter>
       </DialogContent>
