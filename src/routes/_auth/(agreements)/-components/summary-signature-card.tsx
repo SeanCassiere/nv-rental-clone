@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
@@ -183,14 +184,19 @@ function Driver(
   return (
     <li className="flex flex-row items-start justify-between gap-4 p-5 xl:gap-2">
       <div className="grid min-w-0 justify-start text-sm">
-        <p className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground">
+        <Link
+          to="/customers/$customerId/summary"
+          params={{ customerId: `${props.driver.customerId}` }}
+          className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground underline-offset-2 hover:underline"
+          disabled={!props.driver.customerId}
+        >
           {props.isPrimary ? (
             <icons.User className="size-3.5" aria-hidden />
           ) : (
             <icons.Users className="size-3.5" aria-hidden />
           )}
           <span>{props.driver.driverName}</span>
-        </p>
+        </Link>
         <p className="mt-2 leading-5 text-muted-foreground">
           <icons.Signature
             className={cn(
