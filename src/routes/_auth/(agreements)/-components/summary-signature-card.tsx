@@ -143,7 +143,7 @@ function PrimaryDriverSignatureImage(props: BaseDriverProps) {
       <li
         className="group relative overflow-hidden px-1.5 py-2"
         style={{
-          backgroundColor: "hsl(var(--light-card))",
+          backgroundColor: "hsl(var(--canvas-light-background))",
         }}
       >
         <motion.img
@@ -349,7 +349,7 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
             <div
               className="px-1.5 py-2"
               style={{
-                backgroundColor: "hsl(var(--light-card))",
+                backgroundColor: "hsl(var(--canvas-light-background))",
               }}
             >
               <img
@@ -403,7 +403,7 @@ function SignatureDialog(
         <div
           className="aspect-video w-full overflow-hidden rounded-md border border-border"
           style={{
-            backgroundColor: "hsl(var(--light-card))",
+            backgroundColor: "hsl(var(--canvas-light-background))",
           }}
         ></div>
         <DialogFooter>

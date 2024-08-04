@@ -3,6 +3,7 @@
 @layer base {
   :root {
     --radius: 0.5rem;
+    --canvas-light-background: 0 0% 100%;
 
     /* Light mode colors */
     --light-background: 220 33% 98%;
