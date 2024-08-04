@@ -34,7 +34,7 @@ export default function SummarySignatureCard(
   } & Auth
 ) {
   const agreementId = props.agreement.agreementId.toString();
-  const drivers = props.drivers;
+  const drivers = props.drivers.sort((a, b) => a.driverType - b.driverType);
 
   return (
     <Card>
