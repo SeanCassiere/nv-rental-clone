@@ -2,6 +2,8 @@ import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import ReactSignatureCanvas from "react-signature-canvas";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -393,6 +395,35 @@ function SignatureDialog(
     onOpenChange: (bool: boolean) => void;
   } & BaseDriverProps
 ) {
+  const signaturePadRef = React.useRef<ReactSignatureCanvas | null>(null);
+
+  const handleAcceptSignature = (mode: "signing" | "resigning") => {
+    return () => {
+      const isEmpty = signaturePadRef.current?.isEmpty();
+
+      if (isEmpty) {
+        toast.info("Please sign before submitting.");
+        return;
+      }
+
+      switch (mode) {
+        case "signing":
+          console.log(mode, signaturePadRef.current?.toDataURL());
+          break;
+        case "resigning":
+          console.log(mode, signaturePadRef.current?.toDataURL());
+          break;
+        default:
+          break;
+      }
+    };
+  };
+
+  const handleClose = () => {
+    signaturePadRef.current?.clear();
+    props.onOpenChange(false);
+  };
+
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent className="md:max-w-xl">
@@ -401,24 +432,32 @@ function SignatureDialog(
           <DialogDescription>Dialog description</DialogDescription>
         </DialogHeader>
         <div
-          className="aspect-video w-full overflow-hidden rounded-md border border-border"
+          className="relative aspect-video w-full overflow-hidden rounded-md border border-border"
           style={{
             backgroundColor: "hsl(var(--canvas-light-background))",
           }}
-        ></div>
-        <DialogFooter>
+        >
+          <ReactSignatureCanvas
+            ref={signaturePadRef}
+            canvasProps={{ className: "w-full h-full" }}
+          />
           <Button
-            variant="ghost"
-            // className="h-10"
-            onClick={() => props.onOpenChange(false)}
+            size="sm"
+            variant="outline"
+            className="absolute right-1 top-1 h-8 gap-1 shadow"
+            onClick={() => signaturePadRef.current?.clear()}
           >
+            <icons.RotateBackwards className="size-3" aria-hidden />
+            <span className="sr-only">Clear</span>
+          </Button>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={handleClose}>
             Cancel
           </Button>
-          {props.mode === "resigning" ? (
-            <Button onClick={() => props.onOpenChange(false)}>Resign</Button>
-          ) : (
-            <Button onClick={() => props.onOpenChange(false)}>Sign</Button>
-          )}
+          <Button onClick={handleAcceptSignature(props.mode)}>
+            {props.mode === "resigning" ? "Resign" : "Sign"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
