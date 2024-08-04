@@ -165,10 +165,10 @@ function DriverController(props: BaseDriverProps) {
     })
   );
 
-  const data =
+  const signatureImageContent =
     signatureQuery.data.status === 200 ? signatureQuery.data.body : null;
 
-  const isSigned = !!data;
+  const isSigned = !!signatureImageContent;
 
   return <Driver {...props} isSigned={isSigned} isPrimary />;
 }
