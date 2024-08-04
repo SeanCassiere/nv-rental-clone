@@ -406,6 +406,8 @@ function SignatureDialog(
   const uploadSignature = useMutation({
     mutationFn: apiClient.digitalSignature.uploadDigitalSignature,
     onSuccess: () => {
+      signaturePadRef.current?.on();
+
       const imageKey =
         props.submitMode === "primary"
           ? getAgreementCustomerDigSigUrlOptions({
@@ -445,6 +447,11 @@ function SignatureDialog(
 
   const handleAcceptSignature = (mode: "signing" | "resigning") => {
     return () => {
+      if (uploadSignature.isPending) {
+        toast.info("Please wait for the previous signature to be saved.");
+        return;
+      }
+
       const isEmpty = signaturePadRef.current?.isEmpty();
 
       if (isEmpty) {
@@ -458,6 +465,8 @@ function SignatureDialog(
         toast.error("An error occurred while processing the signature.");
         return;
       }
+
+      signaturePadRef.current?.off();
 
       switch (mode) {
         case "signing":
@@ -555,7 +564,11 @@ function SignatureDialog(
           </Button>
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={handleClose}>
+          <Button
+            variant="ghost"
+            onClick={handleClose}
+            disabled={uploadSignature.isPending}
+          >
             Cancel
           </Button>
           <Button onClick={handleAcceptSignature(props.mode)}>
