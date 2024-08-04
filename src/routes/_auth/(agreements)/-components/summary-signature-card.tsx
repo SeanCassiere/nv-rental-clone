@@ -187,7 +187,7 @@ function Driver(
         <Link
           to="/customers/$customerId/summary"
           params={{ customerId: `${props.driver.customerId}` }}
-          className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground underline-offset-2 hover:underline"
+          className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground underline-offset-2 ring-0 hover:underline focus:underline focus:outline-none focus:ring-0"
           disabled={!props.driver.customerId}
         >
           {props.isPrimary ? (
