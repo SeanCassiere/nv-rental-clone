@@ -316,6 +316,8 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
     })
   );
 
+  console.log(props.driver.driverName, signatureQuery.data);
+
   const data =
     signatureQuery.data.status === 200 ? signatureQuery.data.body : null;
 
@@ -474,14 +476,22 @@ function SignatureDialog(
             body: {
               agreementId: props.agreementId,
               base64String: dataUrl,
-              imageName: props.agreementId,
+              imageName: props.driver.driverId.toString(),
               imageType: ".jpg",
-              isCheckIn: props.stage === "checkin",
               isDamageView: false,
               reservationId: 0,
               signatureDate: new Date().toISOString(),
               signatureImage: null,
               signatureName: props.driver.driverName || "Driver",
+
+              ...(props.submitMode === "primary"
+                ? {
+                    isCheckIn: props.stage === "checkin",
+                  }
+                : {
+                    // checkin needs to always be false for additional drivers
+                    isCheckIn: false,
+                  }),
 
               ...(props.submitMode === "primary"
                 ? {
