@@ -262,7 +262,11 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" side="top" className="overflow-hidden p-0">
+      <PopoverContent
+        align="end"
+        side="top"
+        className="w-full max-w-80 overflow-hidden p-0 lg:max-w-96"
+      >
         <div className="flex flex-col items-center divide-y">
           <div
             className="px-1.5 py-2"
@@ -273,7 +277,7 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
             <img
               src={dataUrl}
               alt="Signature Image"
-              className="h-56 w-full object-cover"
+              className="aspect-video w-full object-cover"
             />
           </div>
           <p className="flex w-full items-center gap-2 p-2 text-sm font-semibold text-foreground">
