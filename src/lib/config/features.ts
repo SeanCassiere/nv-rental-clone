@@ -44,25 +44,15 @@ const incompleteApplicationSettingsTabsFeatureFlag: SwitchFeatureFlag = {
   input_type: "switch",
   default_value: false,
 } as const;
-const incompleteAgreementCustomerSignatureFeatureFlag: SwitchFeatureFlag = {
-  id: "incomplete_agreement.customer.signature",
-  name: "Accept digital signatures from the drivers",
-  description:
-    "Toggle this feature to enable the digital signature acceptance from the drivers.",
-  input_type: "switch",
-  default_value: false,
-} as const;
 // Features END
 
 const featureFlags: FeatureFlags = [
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
-  incompleteAgreementCustomerSignatureFeatureFlag,
 ] as const;
 
 export {
   featureFlags, // the array of all the feature flags
   incompleteSettingsNavigationFeatureFlag,
   incompleteApplicationSettingsTabsFeatureFlag,
-  incompleteAgreementCustomerSignatureFeatureFlag,
 };

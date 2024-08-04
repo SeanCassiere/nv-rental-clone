@@ -22,8 +22,9 @@ export function getDigSigDriversListOptions(
       options.agreementId
         ? `agreement_${options.agreementId}`
         : `reservation_${options.reservationId}`,
+      "drivers-list",
     ]),
-    queryFn: () =>
+    queryFn: async () =>
       apiClient.digitalSignature
         .getDriversList({
           query: {
@@ -52,10 +53,11 @@ export function getAgreementCustomerDigSigUrlOptions(
     queryKey: makeQueryKey(options, [
       SEGMENT,
       `agreement_${options.agreementId}`,
-      options.driverId || "no-driver-id",
+      `driver_${options.driverId || "no-driver-id"}`,
       `checkin_${options.isCheckin}`,
+      "url",
     ]),
-    queryFn: () =>
+    queryFn: async () =>
       apiClient.digitalSignature
         .getDigitalSignatureImageUrl({
           body: {
@@ -84,8 +86,9 @@ export function getAgreementAdditionalDriverDigSigUrlOptions(
     queryKey: makeQueryKey(options, [
       SEGMENT,
       `agreement_${options.agreementId}`,
-      options.additionalDriverId || "no-driver-id",
+      `driver_${options.additionalDriverId || "no-driver-id"}`,
       `checkin_${options.isCheckin}`,
+      "url",
     ]),
     queryFn: () =>
       apiClient.digitalSignature
