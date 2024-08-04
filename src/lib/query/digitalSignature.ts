@@ -36,7 +36,7 @@ export function fetchDigitalSignatureDriversList(
   });
 }
 
-export function fetchAgreementDigitalSignatureUrl(
+export function fetchAgreementCustomerDigitalSignatureUrl(
   options: {
     agreementId: string;
     driverId: string | null;
@@ -61,6 +61,39 @@ export function fetchAgreementDigitalSignatureUrl(
             agreementId: options.agreementId,
             isCheckin: options.isCheckin,
             signatureImageUrl: options.signatureImageUrl,
+          },
+        })
+        .then((res) => ({ ...res, headers: null })),
+    enabled: isEnabled(options) && enabled,
+  });
+}
+
+export function fetchAgreementAdditionalDriverDigitalSignatureUrl(
+  options: {
+    agreementId: string;
+    additionalDriverId: string | null;
+    isCheckin: boolean;
+    signatureImageUrl: string;
+  } & Auth &
+    Enabled
+) {
+  const { enabled = true } = options;
+
+  return queryOptions({
+    queryKey: makeQueryKey(options, [
+      SEGMENT,
+      `agreement_${options.agreementId}`,
+      options.additionalDriverId || "no-driver-id",
+      `checkin_${options.isCheckin}`,
+    ]),
+    queryFn: () =>
+      apiClient.digitalSignature
+        .getDigitalSignatureImageUrl({
+          body: {
+            agreementId: options.agreementId,
+            signatureImageUrl: options.signatureImageUrl,
+            additionalDriverId: options.additionalDriverId ?? undefined,
+            isAdditional: true,
           },
         })
         .then((res) => ({ ...res, headers: null })),

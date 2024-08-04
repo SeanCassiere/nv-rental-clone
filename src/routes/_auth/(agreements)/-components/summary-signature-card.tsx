@@ -1,17 +1,26 @@
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { icons } from "@/components/ui/icons";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useDatePreference } from "@/lib/hooks/useDatePreferences";
 
 import type { AgreementDataParsed } from "@/lib/schemas/agreement";
 import type { DigitalSignatureDriver } from "@/lib/schemas/digital-signature/driverList";
-import { fetchAgreementDigitalSignatureUrl } from "@/lib/query/digitalSignature";
+import {
+  fetchAgreementAdditionalDriverDigitalSignatureUrl,
+  fetchAgreementCustomerDigitalSignatureUrl,
+} from "@/lib/query/digitalSignature";
 import type { Auth } from "@/lib/query/helpers";
 
 import { format } from "@/lib/config/date-fns";
@@ -26,7 +35,7 @@ export default function SummarySignatureCard(
   } & Auth
 ) {
   const agreementId = props.agreement.agreementId.toString();
-  const drivers = props.drivers;
+  const drivers = props.drivers.sort((a, b) => a.driverType - b.driverType);
 
   return (
     <Card>
@@ -93,7 +102,7 @@ export default function SummarySignatureCard(
 
 function SignatureImage(props: BaseDriverProps) {
   const signatureQuery = useSuspenseQuery(
-    fetchAgreementDigitalSignatureUrl({
+    fetchAgreementCustomerDigitalSignatureUrl({
       agreementId: props.agreementId,
       driverId: props.driver.driverId.toString(),
       isCheckin: props.stage === "checkin",
@@ -122,9 +131,9 @@ function SignatureImage(props: BaseDriverProps) {
       <motion.img
         src={dataUrl}
         alt="Signature Image"
-        className="w-full object-cover"
+        className="aspect-video w-full object-cover"
         initial={{ height: "0rem" }}
-        whileInView={{ height: "14rem" }}
+        whileInView={{ height: "16rem" }}
         viewport={{ once: true }}
       />
     </li>
@@ -175,14 +184,19 @@ function Driver(
   return (
     <li className="flex flex-row items-start justify-between gap-4 p-5 xl:gap-2">
       <div className="grid min-w-0 justify-start text-sm">
-        <p className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground">
+        <Link
+          to="/customers/$customerId/summary"
+          params={{ customerId: `${props.driver.customerId}` }}
+          className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground underline-offset-2 ring-0 hover:underline focus:underline focus:outline-none focus:ring-0"
+          disabled={!props.driver.customerId}
+        >
           {props.isPrimary ? (
             <icons.User className="size-3.5" aria-hidden />
           ) : (
             <icons.Users className="size-3.5" aria-hidden />
           )}
           <span>{props.driver.driverName}</span>
-        </p>
+        </Link>
         <p className="mt-2 leading-5 text-muted-foreground">
           <icons.Signature
             className={cn(
@@ -205,7 +219,14 @@ function Driver(
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="gap-1 bg-transparent">
+        {!props.isPrimary ? (
+          <AdditionalDriverSignaturePopover {...props} />
+        ) : null}
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 gap-1 bg-transparent"
+        >
           <icons.Signature className="size-3" aria-hidden />
           <span className="hidden text-xs xl:inline">
             {props.isSigned ? "Redo" : "Sign"}
@@ -213,5 +234,64 @@ function Driver(
         </Button>
       </div>
     </li>
+  );
+}
+
+function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
+  const signatureQuery = useSuspenseQuery(
+    fetchAgreementAdditionalDriverDigitalSignatureUrl({
+      agreementId: props.agreementId,
+      additionalDriverId: props.driver.driverId.toString(),
+      isCheckin: props.stage === "checkin",
+      signatureImageUrl: "",
+      auth: props.auth,
+    })
+  );
+
+  const data =
+    signatureQuery.data.status === 200 ? signatureQuery.data.body : null;
+
+  const dataUrl = React.useMemo(
+    () => (data ? `data:image/png;base64,${data}` : null),
+    [data]
+  );
+
+  if (!data || !dataUrl) return null;
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button size="icon" variant="outline" className="size-8 bg-transparent">
+          <icons.EyeOn className="size-3" aria-hidden />
+          <span className="sr-only">
+            View {props.driver.driverName} signature
+          </span>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="end"
+        side="top"
+        className="w-full max-w-80 overflow-hidden p-0 lg:max-w-96"
+      >
+        <div className="flex flex-col items-center divide-y">
+          <div
+            className="px-1.5 py-2"
+            style={{
+              backgroundColor: "hsl(var(--light-card))",
+            }}
+          >
+            <img
+              src={dataUrl}
+              alt="Signature Image"
+              className="aspect-video w-full object-cover"
+            />
+          </div>
+          <p className="flex w-full items-center gap-2 p-2 text-sm font-semibold text-foreground">
+            <icons.Users className="size-3.5" aria-hidden />
+            {props.driver.driverName}
+          </p>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

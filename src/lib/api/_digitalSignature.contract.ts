@@ -27,9 +27,11 @@ const rootDigitalSignatureContract = c.router({
       404: StructuredErrorSchema,
     },
     body: z.object({
-      isCheckin: z.boolean(),
-      agreementId: z.string(),
+      isCheckin: z.boolean().optional(),
+      agreementId: z.string().optional(),
       signatureImageUrl: z.string(),
+      additionalDriverId: z.string().optional(),
+      isAdditional: z.boolean().optional(),
     }),
   },
 });
