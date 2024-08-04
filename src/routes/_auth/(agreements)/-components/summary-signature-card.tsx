@@ -61,7 +61,7 @@ export default function SummarySignatureCard(
                     </li>
                   }
                 >
-                  <SignatureImage
+                  <PrimaryDriverSignatureImage
                     driver={driver}
                     auth={props.auth}
                     agreementId={agreementId}
@@ -100,7 +100,7 @@ export default function SummarySignatureCard(
   );
 }
 
-function SignatureImage(props: BaseDriverProps) {
+function PrimaryDriverSignatureImage(props: BaseDriverProps) {
   const signatureQuery = useSuspenseQuery(
     getAgreementCustomerDigSigUrlOptions({
       agreementId: props.agreementId,
@@ -123,7 +123,7 @@ function SignatureImage(props: BaseDriverProps) {
 
   return (
     <li
-      className="overflow-hidden px-1.5 py-2"
+      className="group relative overflow-hidden px-1.5 py-2"
       style={{
         backgroundColor: "hsl(var(--light-card))",
       }}
@@ -136,6 +136,14 @@ function SignatureImage(props: BaseDriverProps) {
         whileInView={{ height: "16rem" }}
         viewport={{ once: true }}
       />
+      <Button
+        size="sm"
+        variant="secondary"
+        className="absolute right-1 top-1 h-8 gap-1 text-xs shadow"
+      >
+        <icons.RotateBackwards className="size-2.5" aria-hidden />
+        <span>Redo</span>
+      </Button>
     </li>
   );
 }
@@ -147,15 +155,22 @@ interface BaseDriverProps extends Auth {
 }
 
 function DriverController(props: BaseDriverProps) {
-  return (
-    <Driver
-      {...props}
-      isSigned={
-        !!props.driver.signatureImageUrlString || !!props.driver.signatureDate
-      }
-      isPrimary
-    />
+  const signatureQuery = useSuspenseQuery(
+    getAgreementCustomerDigSigUrlOptions({
+      agreementId: props.agreementId,
+      driverId: props.driver.driverId.toString(),
+      isCheckin: props.stage === "checkin",
+      signatureImageUrl: "",
+      auth: props.auth,
+    })
   );
+
+  const data =
+    signatureQuery.data.status === 200 ? signatureQuery.data.body : null;
+
+  const isSigned = !!data;
+
+  return <Driver {...props} isSigned={isSigned} isPrimary />;
 }
 
 function AdditionalDriverController(props: BaseDriverProps) {
@@ -179,7 +194,7 @@ function Driver(
 
   const signedDate = props.driver.signatureDate
     ? ` ${format(props.driver.signatureDate, dateTimeFormat)}.`
-    : " ...";
+    : "";
 
   return (
     <li className="flex flex-row items-start justify-between gap-4 p-5 xl:gap-2">
@@ -206,8 +221,14 @@ function Driver(
           />
           {props.isSigned ? (
             <React.Fragment>
-              <span className="hidden 2xl:inline">Signed at</span>
-              <span>{signedDate}</span>
+              {signedDate ? (
+                <React.Fragment>
+                  <span className="hidden 2xl:inline">Signed at</span>
+                  <span>{signedDate}</span>
+                </React.Fragment>
+              ) : (
+                <span>Driver has signed.</span>
+              )}
             </React.Fragment>
           ) : (
             <span>
@@ -222,22 +243,29 @@ function Driver(
         {!props.isPrimary ? (
           <AdditionalDriverSignaturePopover {...props} />
         ) : null}
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1 bg-transparent"
-        >
-          <icons.Signature className="size-3" aria-hidden />
-          <span className="hidden text-xs xl:inline">
-            {props.isSigned ? "Redo" : "Sign"}
-          </span>
-        </Button>
+        {
+          // if not a primary driver and they haven't yet signed the agreement
+          (!props.isPrimary && !props.isSigned) ||
+          // if primary driver and they haven't yet signed the agreement
+          (props.isPrimary && !props.isSigned) ? (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1 bg-transparent"
+            >
+              <icons.Signature className="size-3" aria-hidden />
+              <span className="hidden text-xs xl:inline">Sign</span>
+            </Button>
+          ) : null
+        }
       </div>
     </li>
   );
 }
 
 function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
+  const [open, onOpenChange] = React.useState(false);
+
   const signatureQuery = useSuspenseQuery(
     getAgreementAdditionalDriverDigSigUrlOptions({
       agreementId: props.agreementId,
@@ -259,7 +287,7 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
   if (!data || !dataUrl) return null;
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button size="icon" variant="outline" className="size-8 bg-transparent">
           <icons.EyeOn className="size-3" aria-hidden />
@@ -286,10 +314,23 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
               className="aspect-video w-full object-cover"
             />
           </div>
-          <p className="flex w-full items-center gap-2 p-2 text-sm font-semibold text-foreground">
-            <icons.Users className="size-3.5" aria-hidden />
-            {props.driver.driverName}
-          </p>
+          <div className="flex w-full items-center justify-between gap-2 p-2 text-sm font-semibold text-foreground">
+            <div className="flex items-center justify-start gap-2">
+              <icons.Users className="size-3.5" aria-hidden />
+              {props.driver.driverName}
+            </div>
+            <div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 gap-1 bg-transparent"
+                onClick={() => onOpenChange(false)}
+              >
+                <icons.RotateBackwards className="size-3" aria-hidden />
+                <span>Redo</span>
+              </Button>
+            </div>
+          </div>
         </div>
       </PopoverContent>
     </Popover>
