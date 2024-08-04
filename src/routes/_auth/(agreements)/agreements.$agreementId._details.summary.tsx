@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFeature } from "@/lib/hooks/useFeature";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
-import { fetchDigitalSignatureDriversList } from "@/lib/query/digitalSignature";
+import { getDigSigDriversListOptions } from "@/lib/query/digitalSignature";
 
 import CustomerInformation from "@/routes/_auth/-modules/information-block/customer-information";
 import RentalInformation from "@/routes/_auth/-modules/information-block/rental-information";
@@ -28,7 +28,7 @@ export const Route = createFileRoute(
   beforeLoad: ({ context, params }) => {
     const { authParams } = context;
     return {
-      digitalSignatureDriversOptions: fetchDigitalSignatureDriversList({
+      digitalSignatureDriversOptions: getDigSigDriversListOptions({
         auth: authParams,
         agreementId: params.agreementId,
       }),
