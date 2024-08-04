@@ -1,5 +1,9 @@
 import * as React from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import ReactSignatureCanvas from "react-signature-canvas";
@@ -30,11 +34,13 @@ import type { DigitalSignatureDriver } from "@/lib/schemas/digital-signature/dri
 import {
   getAgreementAdditionalDriverDigSigUrlOptions,
   getAgreementCustomerDigSigUrlOptions,
+  getDigSigDriversListOptions,
 } from "@/lib/query/digitalSignature";
 import type { Auth } from "@/lib/query/helpers";
 
 import { format } from "@/lib/config/date-fns";
 
+import { apiClient } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 export default function SummarySignatureCard(
@@ -395,6 +401,44 @@ function SignatureDialog(
     onOpenChange: (bool: boolean) => void;
   } & BaseDriverProps
 ) {
+  const qc = useQueryClient();
+
+  const uploadSignature = useMutation({
+    mutationFn: apiClient.digitalSignature.uploadDigitalSignature,
+    onSuccess: () => {
+      const imageKey =
+        props.submitMode === "primary"
+          ? getAgreementCustomerDigSigUrlOptions({
+              agreementId: props.agreementId,
+              driverId: props.driver.driverId.toString(),
+              isCheckin: props.stage === "checkin",
+              signatureImageUrl: "",
+              auth: props.auth,
+            }).queryKey
+          : getAgreementAdditionalDriverDigSigUrlOptions({
+              agreementId: props.agreementId,
+              additionalDriverId: props.driver.driverId.toString(),
+              isCheckin: props.stage === "checkin",
+              signatureImageUrl: "",
+              auth: props.auth,
+            }).queryKey;
+
+      const listKey = getDigSigDriversListOptions({
+        agreementId: props.agreementId,
+        auth: props.auth,
+      }).queryKey;
+
+      qc.invalidateQueries({ queryKey: listKey });
+      qc.invalidateQueries({ queryKey: imageKey });
+
+      signaturePadRef.current?.clear();
+      props.onOpenChange(false);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const signaturePadRef = React.useRef<ReactSignatureCanvas | null>(null);
 
   const handleAcceptSignature = (mode: "signing" | "resigning") => {
@@ -406,12 +450,69 @@ function SignatureDialog(
         return;
       }
 
+      const dataUrl = signaturePadRef.current?.toDataURL();
+
+      if (!dataUrl) {
+        toast.error("An error occurred while processing the signature.");
+        return;
+      }
+
       switch (mode) {
         case "signing":
-          console.log(mode, signaturePadRef.current?.toDataURL());
+          uploadSignature.mutate({
+            body: {
+              agreementId: props.agreementId,
+              base64String: dataUrl,
+              imageName: props.agreementId,
+              imageType: ".jpg",
+              isCheckIn: props.stage === "checkin",
+              isDamageView: false,
+              reservationId: 0,
+              signatureDate: new Date().toISOString(),
+              signatureImage: null,
+              signatureName: props.driver.driverName || "Driver",
+
+              ...(props.submitMode === "primary"
+                ? {
+                    driverId: props.driver.driverId.toString(),
+                  }
+                : {
+                    additionalDriverId: props.driver.driverId.toString(),
+                  }),
+            },
+          });
           break;
         case "resigning":
-          console.log(mode, signaturePadRef.current?.toDataURL());
+          uploadSignature.mutate({
+            body: {
+              agreementId: props.agreementId,
+              base64String: dataUrl,
+              imageName: props.driver.driverId.toString(),
+              imageType: ".jpg",
+              isDamageView: false,
+              reservationId: 0,
+              signatureDate: new Date().toISOString(),
+              signatureImage: null,
+              signatureName: props.driver.driverName || "Additional driver",
+
+              ...(props.submitMode === "primary"
+                ? {
+                    isCheckIn: props.stage === "checkin",
+                  }
+                : {
+                    // checkin needs to always be false for additional drivers
+                    isCheckIn: false,
+                  }),
+
+              ...(props.submitMode === "primary"
+                ? {
+                    driverId: props.driver.driverId.toString(),
+                  }
+                : {
+                    additionalDriverId: props.driver.driverId.toString(),
+                  }),
+            },
+          });
           break;
         default:
           break;

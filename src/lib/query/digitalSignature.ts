@@ -24,7 +24,7 @@ export function getDigSigDriversListOptions(
         : `reservation_${options.reservationId}`,
       "drivers-list",
     ]),
-    queryFn: () =>
+    queryFn: async () =>
       apiClient.digitalSignature
         .getDriversList({
           query: {
@@ -57,7 +57,7 @@ export function getAgreementCustomerDigSigUrlOptions(
       `checkin_${options.isCheckin}`,
       "url",
     ]),
-    queryFn: () =>
+    queryFn: async () =>
       apiClient.digitalSignature
         .getDigitalSignatureImageUrl({
           body: {
