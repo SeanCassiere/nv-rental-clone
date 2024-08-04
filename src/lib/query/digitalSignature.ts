@@ -7,7 +7,7 @@ import type { Auth, Enabled } from "./helpers";
 
 const SEGMENT = "digital_signature";
 
-export function fetchDigitalSignatureDriversList(
+export function getDigSigDriversListOptions(
   options: {
     agreementId?: string;
     reservationId?: string;
@@ -33,10 +33,11 @@ export function fetchDigitalSignatureDriversList(
         })
         .then((res) => ({ ...res, headers: null })),
     enabled: isEnabled(options) && enabled,
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
 }
 
-export function fetchAgreementCustomerDigitalSignatureUrl(
+export function getAgreementCustomerDigSigUrlOptions(
   options: {
     agreementId: string;
     driverId: string | null;
@@ -68,7 +69,7 @@ export function fetchAgreementCustomerDigitalSignatureUrl(
   });
 }
 
-export function fetchAgreementAdditionalDriverDigitalSignatureUrl(
+export function getAgreementAdditionalDriverDigSigUrlOptions(
   options: {
     agreementId: string;
     additionalDriverId: string | null;

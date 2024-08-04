@@ -18,8 +18,8 @@ import { useDatePreference } from "@/lib/hooks/useDatePreferences";
 import type { AgreementDataParsed } from "@/lib/schemas/agreement";
 import type { DigitalSignatureDriver } from "@/lib/schemas/digital-signature/driverList";
 import {
-  fetchAgreementAdditionalDriverDigitalSignatureUrl,
-  fetchAgreementCustomerDigitalSignatureUrl,
+  getAgreementAdditionalDriverDigSigUrlOptions,
+  getAgreementCustomerDigSigUrlOptions,
 } from "@/lib/query/digitalSignature";
 import type { Auth } from "@/lib/query/helpers";
 
@@ -102,7 +102,7 @@ export default function SummarySignatureCard(
 
 function SignatureImage(props: BaseDriverProps) {
   const signatureQuery = useSuspenseQuery(
-    fetchAgreementCustomerDigitalSignatureUrl({
+    getAgreementCustomerDigSigUrlOptions({
       agreementId: props.agreementId,
       driverId: props.driver.driverId.toString(),
       isCheckin: props.stage === "checkin",
@@ -239,7 +239,7 @@ function Driver(
 
 function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
   const signatureQuery = useSuspenseQuery(
-    fetchAgreementAdditionalDriverDigitalSignatureUrl({
+    getAgreementAdditionalDriverDigSigUrlOptions({
       agreementId: props.agreementId,
       additionalDriverId: props.driver.driverId.toString(),
       isCheckin: props.stage === "checkin",
