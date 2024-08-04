@@ -16,8 +16,6 @@ import VehicleInformation from "@/routes/_auth/-modules/information-block/vehicl
 import { RentalSummary } from "@/routes/_auth/-modules/summary/rental-summary";
 import { Container } from "@/routes/-components/container";
 
-import { incompleteAgreementCustomerSignatureFeatureFlag } from "@/lib/config/features";
-
 export const Route = createFileRoute(
   "/_auth/(agreements)/agreements/$agreementId/_details/summary"
 )({
@@ -67,10 +65,6 @@ function Component() {
   const [_, canViewDigitalSignaturePad] = useFeature(
     "DIGITAL_SIGNATURE_PAD",
     null
-  );
-  const [showIncompleteAgreementSignature] = useLocalStorage(
-    incompleteAgreementCustomerSignatureFeatureFlag.id,
-    incompleteAgreementCustomerSignatureFeatureFlag.default_value
   );
 
   const agreementQuery = useSuspenseQuery(viewAgreementOptions);
@@ -230,9 +224,7 @@ function Component() {
         <div className="flex flex-col gap-4 lg:col-span-4">
           <RentalSummary module="agreements" summaryData={summaryData} />
           <React.Suspense fallback={null}>
-            {showIncompleteAgreementSignature &&
-            canViewDigitalSignaturePad &&
-            agreement ? (
+            {canViewDigitalSignaturePad && agreement ? (
               <SummarySignatureCard
                 auth={auth}
                 isCheckin={isCheckedIn}
