@@ -447,98 +447,61 @@ function SignatureDialog(
 
   const signaturePadRef = React.useRef<ReactSignatureCanvas | null>(null);
 
-  const handleAcceptSignature = (mode: "signing" | "resigning") => {
-    return () => {
-      if (uploadSignature.isPending) {
-        toast.info("Please wait for the previous signature to be saved.");
-        return;
-      }
+  const handleAcceptSignature = () => {
+    if (uploadSignature.isPending) {
+      toast.info("Please wait for the previous signature to be saved.");
+      return;
+    }
 
-      const isEmpty = signaturePadRef.current?.isEmpty();
+    const isEmpty = signaturePadRef.current?.isEmpty();
 
-      if (isEmpty) {
-        toast.info("Please sign before submitting.");
-        return;
-      }
+    if (isEmpty) {
+      toast.info("Please sign before submitting.");
+      return;
+    }
 
-      const dataUrl = signaturePadRef.current?.toDataURL();
+    const dataUrl = signaturePadRef.current?.toDataURL();
 
-      if (!dataUrl) {
-        toast.error("An error occurred while processing the signature.");
-        return;
-      }
+    if (!dataUrl) {
+      toast.error("An error occurred while processing the signature.");
+      return;
+    }
 
-      signaturePadRef.current?.off();
+    signaturePadRef.current?.off();
 
-      switch (mode) {
-        case "signing":
-          uploadSignature.mutate({
-            body: {
-              agreementId: props.agreementId,
-              base64String: dataUrl,
-              imageName: props.driver.driverId.toString(),
-              imageType: ".jpg",
-              isDamageView: false,
-              reservationId: 0,
-              signatureDate: new Date().toISOString(),
-              signatureImage: null,
-              signatureName: props.driver.driverName || "Driver",
+    const fallbackName =
+      props.submitMode === "primary" ? "Driver" : "Additional driver";
 
-              ...(props.submitMode === "primary"
-                ? {
-                    isCheckIn: props.stage === "checkin",
-                  }
-                : {
-                    // checkin needs to always be false for additional drivers
-                    isCheckIn: false,
-                  }),
+    uploadSignature.mutate({
+      body: {
+        agreementId: props.agreementId,
+        base64String: dataUrl,
+        imageName: props.driver.driverId.toString(),
+        imageType: ".jpg",
+        isDamageView: false,
+        reservationId: 0,
+        signatureDate: new Date().toISOString(),
+        signatureImage: null,
+        signatureName: props.driver.driverName || fallbackName,
 
-              ...(props.submitMode === "primary"
-                ? {
-                    driverId: props.driver.driverId.toString(),
-                  }
-                : {
-                    additionalDriverId: props.driver.driverId.toString(),
-                  }),
-            },
-          });
-          break;
-        case "resigning":
-          uploadSignature.mutate({
-            body: {
-              agreementId: props.agreementId,
-              base64String: dataUrl,
-              imageName: props.driver.driverId.toString(),
-              imageType: ".jpg",
-              isDamageView: false,
-              reservationId: 0,
-              signatureDate: new Date().toISOString(),
-              signatureImage: null,
-              signatureName: props.driver.driverName || "Additional driver",
+        ...(props.submitMode === "primary"
+          ? {
+              isCheckIn: props.stage === "checkin",
+            }
+          : {
+              // checkin needs to always be false for additional drivers
+              isCheckIn: false,
+            }),
 
-              ...(props.submitMode === "primary"
-                ? {
-                    isCheckIn: props.stage === "checkin",
-                  }
-                : {
-                    // checkin needs to always be false for additional drivers
-                    isCheckIn: false,
-                  }),
-
-              ...(props.submitMode === "primary"
-                ? {
-                    driverId: props.driver.driverId.toString(),
-                  }
-                : {
-                    additionalDriverId: props.driver.driverId.toString(),
-                  }),
-            },
-          });
-          break;
-        default:
-          break;
-      }
-    };
+        ...(props.submitMode === "primary"
+          ? {
+              driverId: props.driver.driverId.toString(),
+            }
+          : {
+              additionalDriverId: props.driver.driverId.toString(),
+            }),
+      },
+    });
   };
 
   const handleClose = () => {
@@ -581,7 +544,7 @@ function SignatureDialog(
           >
             Cancel
           </Button>
-          <Button onClick={handleAcceptSignature(props.mode)}>
+          <Button onClick={handleAcceptSignature}>
             {uploadSignature.isPending ? (
               <icons.Loading className="mr-2 h-3 w-3 animate-spin" />
             ) : null}
