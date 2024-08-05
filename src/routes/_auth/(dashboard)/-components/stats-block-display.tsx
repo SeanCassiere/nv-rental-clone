@@ -113,7 +113,7 @@ const DashboardStatsBlock = ({
             icon={icons.Banknote}
             value={formatDisplayValue(statistics?.pendingPayment)}
             linkProps={{
-              to: "",
+              to: "/agreements",
               search: () => ({
                 page: 1,
                 size: defaultRowCount,
