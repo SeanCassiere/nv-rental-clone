@@ -154,7 +154,11 @@ function Component() {
       </Container>
       <Separator />
       <Container as="div" className="overflow-hidden">
-        <Tabs defaultValue={currentTab} className="overflow-x-auto">
+        <Tabs
+          key={`details_tab_${currentTab}`}
+          defaultValue={currentTab}
+          className="overflow-x-auto"
+        >
           <TabsList className="mx-2 sm:mx-4">
             <TabsTrigger value="summary" asChild>
               <Link

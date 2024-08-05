@@ -163,6 +163,7 @@ function Component() {
     navigate({
       search: (s) => ({ ...s, summary_tab: name }),
       resetScroll: false,
+      replace: true,
     });
   };
 
