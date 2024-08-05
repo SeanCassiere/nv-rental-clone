@@ -316,8 +316,6 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
     })
   );
 
-  console.log(props.driver.driverName, signatureQuery.data);
-
   const data =
     signatureQuery.data.status === 200 ? signatureQuery.data.body : null;
 
@@ -469,8 +467,29 @@ function SignatureDialog(
 
     signaturePadRef.current?.off();
 
-    const fallbackName =
-      props.submitMode === "primary" ? "Driver" : "Additional driver";
+    let fallbackName = "Driver";
+
+    if (props.submitMode === "primary") {
+      uploadSignature.mutate({
+        body: {
+          agreementId: props.agreementId,
+          base64String: dataUrl,
+          imageName: props.driver.driverId.toString(),
+          imageType: ".jpg",
+          isDamageView: false,
+          reservationId: 0,
+          signatureDate: new Date().toISOString(),
+          signatureImage: null,
+          signatureName: props.driver.driverName || fallbackName,
+
+          isCheckIn: props.stage === "checkin",
+          driverId: props.driver.driverId.toString(),
+        },
+      });
+      return;
+    }
+
+    fallbackName = "Additional driver";
 
     uploadSignature.mutate({
       body: {
@@ -484,22 +503,9 @@ function SignatureDialog(
         signatureImage: null,
         signatureName: props.driver.driverName || fallbackName,
 
-        ...(props.submitMode === "primary"
-          ? {
-              isCheckIn: props.stage === "checkin",
-            }
-          : {
-              // checkin needs to always be false for additional drivers
-              isCheckIn: false,
-            }),
-
-        ...(props.submitMode === "primary"
-          ? {
-              driverId: props.driver.driverId.toString(),
-            }
-          : {
-              additionalDriverId: props.driver.driverId.toString(),
-            }),
+        // checkin needs to always be false for additional drivers
+        isCheckIn: false,
+        additionalDriverId: props.driver.driverId.toString(),
       },
     });
   };
