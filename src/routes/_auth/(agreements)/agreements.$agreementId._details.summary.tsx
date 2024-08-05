@@ -6,7 +6,6 @@ import { z } from "zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useFeature } from "@/lib/hooks/useFeature";
-import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { getDigSigDriversListOptions } from "@/lib/query/digitalSignature";
 
