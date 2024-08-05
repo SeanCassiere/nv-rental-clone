@@ -538,7 +538,7 @@ function SignatureDialog(
             className="absolute right-1 top-1 h-8 gap-1 shadow"
             onClick={() => signaturePadRef.current?.clear()}
           >
-            <icons.RotateBackwards className="size-3" aria-hidden />
+            <icons.Clear className="size-3" aria-hidden />
             <span className="sr-only">Clear</span>
           </Button>
         </div>
