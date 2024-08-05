@@ -316,8 +316,6 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
     })
   );
 
-  console.log(props.driver.driverName, signatureQuery.data);
-
   const data =
     signatureQuery.data.status === 200 ? signatureQuery.data.body : null;
 
