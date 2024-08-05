@@ -58,7 +58,11 @@ const router = createRouter({
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   defaultViewTransition: true,
-  defaultPendingComponent: FullPageLoadingSpinner,
+  defaultPendingComponent: function RouterPendingComponent() {
+    <div className="grid min-h-full w-full place-items-center">
+      <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
+    </div>;
+  },
   parseSearch: parseSearchWith((value) => JSURL2.parse(value)),
   stringifySearch: stringifySearchWith(
     (value) => JSURL2.stringify(value),

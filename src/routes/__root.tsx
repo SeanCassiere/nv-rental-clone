@@ -3,20 +3,34 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
   ErrorComponent,
+  Link,
   Outlet,
+  rootRouteId,
   ScrollRestoration,
+  useMatch,
+  useRouter,
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { AuthContextProps } from "react-oidc-context";
 
 import { RouterDevTools } from "@/components/router-devtools";
 import { TailwindScreenDevTool } from "@/components/tailwind-screen-dev-tool";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
 import type { queryClient } from "@/lib/config/tanstack-query";
+
+import { cn } from "@/lib/utils";
 
 import { Container } from "./-components/container";
 import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
@@ -37,10 +51,60 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     );
   },
   errorComponent: function RootErrorComponent(props) {
+    const { t } = useTranslation();
+
+    const router = useRouter();
+    const isRoot = useMatch({
+      strict: false,
+      select: (state) => state.id === rootRouteId,
+    });
+
+    useDocumentTitle(titleMaker(t("error", { ns: "messages" })));
+
     return (
       <RootDocument>
-        <Container>
-          <ErrorComponent {...props} />
+        <Container className="grid place-items-center px-2">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Error</CardTitle>
+              <CardDescription>Something went wrong.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-2 flex flex-wrap items-center gap-2">
+                <Button
+                  onClick={() => {
+                    router.invalidate();
+                  }}
+                  className=""
+                >
+                  Try Again
+                </Button>
+                {isRoot ? (
+                  <Link
+                    to="/"
+                    className={cn(
+                      buttonVariants({ variant: "outline" }),
+                      "bg-transparent"
+                    )}
+                  >
+                    Go Home
+                  </Link>
+                ) : (
+                  <Link
+                    to="/"
+                    className=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.back();
+                    }}
+                  >
+                    Go Back
+                  </Link>
+                )}
+              </div>
+              <ErrorComponent {...props} />
+            </CardContent>
+          </Card>
         </Container>
       </RootDocument>
     );

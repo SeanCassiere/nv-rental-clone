@@ -11,6 +11,7 @@
   "labelFeatureUpdated": "{{label}} feature updated",
   "labelFeatureReset": "{{label}} feature reset",
   "notFound": "Not found",
+  "error": "Error",
   "pleaseTryAgain": "Please try again later.",
   "somethingWentWrong": "Something went wrong.",
   "inputValidationFailed": "Input validation failed.",
