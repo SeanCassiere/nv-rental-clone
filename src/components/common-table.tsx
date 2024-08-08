@@ -41,7 +41,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
   const totalPages =
     props.paginationMode === "server" && props.totalPages
       ? props.totalPages
-      : Math.ceil(props.data.length / internalPagination.pageSize) ?? -1;
+      : (Math.ceil(props.data.length / internalPagination.pageSize) ?? -1);
 
   const paginationState =
     props?.paginationMode === "server" && props.paginationState

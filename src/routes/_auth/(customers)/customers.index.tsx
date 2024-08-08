@@ -375,7 +375,7 @@ function CustomerSearchPage() {
           pagination={{
             pagination,
             totalPages: parsedPagination.totalRecords
-              ? Math.ceil(parsedPagination?.totalRecords / size) ?? -1
+              ? (Math.ceil(parsedPagination?.totalRecords / size) ?? -1)
               : 0,
           }}
         >

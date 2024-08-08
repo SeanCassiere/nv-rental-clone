@@ -133,7 +133,7 @@ export const SelectVehicleDialog = (props: SelectVehicleModalProps) => {
           }}
           totalPages={
             parsedPagination?.totalRecords
-              ? Math.ceil(parsedPagination?.totalRecords / pageSize) ?? -1
+              ? (Math.ceil(parsedPagination?.totalRecords / pageSize) ?? -1)
               : 0
           }
           stickyHeader

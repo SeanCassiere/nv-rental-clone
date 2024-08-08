@@ -179,7 +179,7 @@ function MiscChargeItem(props: {
     isSelected && selectedCharge ? selectedCharge.quantity : 1
   );
   const [price, setPrice] = React.useState(
-    isSelected && selectedCharge ? selectedCharge.value : charge.Total ?? 0
+    isSelected && selectedCharge ? selectedCharge.value : (charge.Total ?? 0)
   );
   const [optionId, setOptionId] = React.useState(
     isSelected && selectedCharge ? selectedCharge.optionId : 0

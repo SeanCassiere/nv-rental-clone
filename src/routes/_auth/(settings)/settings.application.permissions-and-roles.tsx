@@ -168,7 +168,7 @@ function SystemRolesList({ filterMode }: { filterMode: string }) {
 
   const rolesQuery = useSuspenseQuery(context.systemRolesListOptions);
   const roles = filterRoles(
-    (rolesQuery.data?.status === 200 ? rolesQuery.data?.body ?? [] : []).sort(
+    (rolesQuery.data?.status === 200 ? (rolesQuery.data?.body ?? []) : []).sort(
       (a, b) => a.roleName.localeCompare(b.roleName)
     ),
     filterMode
