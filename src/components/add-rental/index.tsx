@@ -1118,7 +1118,7 @@ function AddRentalParentForm({
                   ? networkSummaryData
                   : networkSummaryData
                     ? networkSummaryData
-                    : summaryData ?? undefined
+                    : (summaryData ?? undefined)
               }
             />
           </div>
