@@ -26,7 +26,6 @@ export function createRouter() {
       to: "/",
       params: true,
       search: (s) => ({ ...s, show_widget_picker: undefined }),
-      unmaskOnReload: true,
     }),
 
     // hide the selected summary tab's state of the agreement summary page
@@ -36,7 +35,6 @@ export function createRouter() {
       to: "/agreements/$agreementId/summary",
       params: true,
       search: (s) => ({ ...s, summary_tab: undefined }),
-      unmaskOnReload: true,
     }),
 
     // hide the selected category state of the reports page
@@ -46,7 +44,6 @@ export function createRouter() {
       to: "/reports",
       params: true,
       search: (s) => ({ ...s, category: undefined }),
-      unmaskOnReload: true,
     }),
   ];
 
@@ -56,17 +53,17 @@ export function createRouter() {
     defaultPreload: "intent",
     defaultPreloadStaleTime: 0,
     defaultViewTransition: true,
+    trailingSlash: "never",
+    context: {
+      queryClient,
+      auth: undefined!, // will be set when passing it into the RouterProvider
+    },
     parseSearch: parseSearchWith((value) => JSURL2.parse(value)),
     stringifySearch: stringifySearchWith(
       (value) => JSURL2.stringify(value),
       (value) => JSURL2.parse(value)
     ),
-    context: {
-      queryClient,
-      auth: undefined!, // will be set by an AuthWrapper
-    },
-    trailingSlash: "never",
-    Wrap: function ({ children }) {
+    Wrap: function WrapComponent({ children }) {
       return (
         <QueryClientProvider client={queryClient}>
           <GlobalDialogProvider>
@@ -75,7 +72,7 @@ export function createRouter() {
         </QueryClientProvider>
       );
     },
-    InnerWrap: function ({ children }) {
+    InnerWrap: function InnerWrapComponent({ children }) {
       return (
         <React.Fragment>
           <CacheDocumentFocusChecker />
