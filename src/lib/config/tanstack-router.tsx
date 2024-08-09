@@ -1,6 +1,7 @@
 import React from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import {
+  createRouteMask,
   createRouter as createTanStackRouter,
   parseSearchWith,
   stringifySearchWith,
@@ -17,8 +18,21 @@ import { queryClient } from "@/lib/config/tanstack-query";
 import { routeTree } from "@/route-tree.gen";
 
 export function createRouter() {
+  const routeMasks = [
+    // hide the widget picker modal's state from the URL
+    createRouteMask({
+      routeTree,
+      from: "/",
+      to: "/",
+      params: true,
+      search: (s) => ({ ...s, show_widget_picker: undefined }),
+      unmaskOnReload: true,
+    }),
+  ];
+
   const router = createTanStackRouter({
     routeTree,
+    routeMasks,
     defaultPreload: "intent",
     defaultPreloadStaleTime: 0,
     defaultViewTransition: true,
