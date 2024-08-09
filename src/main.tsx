@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 
 import UserApp from "./app-entry";
 
-import "./index.css";
+import "./main.css";
 
 const documentElement = document.getElementById("root");
 
