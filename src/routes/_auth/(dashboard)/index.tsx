@@ -2,6 +2,7 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
+import { z } from "zod";
 
 import { EmptyState } from "@/components/empty-state";
 import { Badge } from "@/components/ui/badge";
@@ -28,10 +29,7 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 import { usePermission } from "@/lib/hooks/usePermission";
 import { useScreenSetting } from "@/lib/hooks/useScreenSetting";
 
-import {
-  DashboardSearchQuerySchema,
-  type DashboardWidgetItemParsed,
-} from "@/lib/schemas/dashboard";
+import type { DashboardWidgetItemParsed } from "@/lib/schemas/dashboard";
 import {
   fetchDashboardMessagesOptions,
   fetchDashboardRentalStatisticsOptions,
@@ -59,7 +57,9 @@ import WidgetGrid from "./-components/widget-grid";
 import WidgetPicker from "./-components/widget-picker";
 
 export const Route = createFileRoute("/_auth/(dashboard)/")({
-  validateSearch: (search) => DashboardSearchQuerySchema.parse(search),
+  validateSearch: z.object({
+    show_widget_picker: z.boolean().default(false).optional(),
+  }),
   beforeLoad: ({ context }) => {
     const auth = getAuthFromRouterContext(context);
     return {
