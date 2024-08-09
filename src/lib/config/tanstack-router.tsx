@@ -24,7 +24,6 @@ export function createRouter() {
       routeTree,
       from: "/",
       to: "/",
-      params: true,
       search: { show_widget_picker: undefined },
     }),
 
@@ -42,7 +41,6 @@ export function createRouter() {
       routeTree,
       from: "/reports",
       to: "/reports",
-      params: true,
       search: { category: undefined },
     }),
   ];
