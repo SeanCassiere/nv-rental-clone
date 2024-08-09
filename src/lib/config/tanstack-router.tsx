@@ -19,7 +19,7 @@ import { routeTree } from "@/route-tree.gen";
 
 export function createRouter() {
   const routeMasks = [
-    // hide the widget picker modal's state from the URL
+    // hide the widget picker modal's state
     createRouteMask({
       routeTree,
       from: "/",
@@ -29,7 +29,7 @@ export function createRouter() {
       unmaskOnReload: true,
     }),
 
-    // hide the summary tab of the agreement summary page
+    // hide the selected summary tab's state of the agreement summary page
     createRouteMask({
       routeTree,
       from: "/agreements/$agreementId/summary",
@@ -39,7 +39,7 @@ export function createRouter() {
       unmaskOnReload: true,
     }),
 
-    // hide the selected category of the reports page
+    // hide the selected category state of the reports page
     createRouteMask({
       routeTree,
       from: "/reports",
