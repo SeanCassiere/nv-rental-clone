@@ -58,11 +58,8 @@ export function createRouter() {
       queryClient,
       auth: undefined!, // will be set when passing it into the RouterProvider
     },
-    parseSearch: parseSearchWith((value) => JSURL2.parse(value)),
-    stringifySearch: stringifySearchWith(
-      (value) => JSURL2.stringify(value),
-      (value) => JSURL2.parse(value)
-    ),
+    parseSearch: parseSearchWith(JSURL2.parse),
+    stringifySearch: stringifySearchWith(JSURL2.stringify, JSURL2.parse),
     Wrap: function WrapComponent({ children }) {
       return (
         <QueryClientProvider client={queryClient}>
