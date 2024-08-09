@@ -7,6 +7,8 @@ import {
 } from "@tanstack/react-router";
 import { useAuth } from "react-oidc-context";
 
+import { icons } from "@/components/ui/icons";
+
 import {
   fetchClientProfileOptions,
   fetchFeaturesForClientOptions,
@@ -21,6 +23,7 @@ import { getAuthFromRouterContext, isValidUser } from "@/lib/utils/auth";
 import { LS_OIDC_REDIRECT_URI_KEY } from "@/lib/utils/constants";
 
 import { useConfigureLocalFeatures } from "./-components/auth/useConfigureLocalFeatures";
+import { FullPageLoadingSpinner } from "./-components/full-screen-loading-spinner";
 
 const AuthHeader = React.lazy(() => import("@/routes/-components/auth/header"));
 const AuthFooter = React.lazy(() => import("@/routes/-components/auth/footer"));
@@ -98,6 +101,7 @@ export const Route = createFileRoute("/_auth")({
     await Promise.all(promises);
   },
   component: AuthLayout,
+  pendingComponent: FullPageLoadingSpinner,
 });
 
 function AuthLayout() {

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "class", // doesn't really do anything, its handled by the index.css file using the data-theme attribute
+  darkMode: "class", // doesn't really do anything, its handled by the main.css file using the data-theme attribute
   content: ["./src/**/*.{css,ts,tsx}", "./index.html"],
   theme: {
     container: {
