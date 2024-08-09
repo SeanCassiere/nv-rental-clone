@@ -1,3 +1,4 @@
+import React from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import {
   createRouter as createTanStackRouter,
@@ -48,10 +49,10 @@ export function createRouter() {
     },
     InnerWrap: function ({ children }) {
       return (
-        <>
+        <React.Fragment>
           <CacheDocumentFocusChecker />
           {children}
-        </>
+        </React.Fragment>
       );
     },
   });
