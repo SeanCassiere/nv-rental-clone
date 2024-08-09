@@ -4,6 +4,8 @@
 import * as React from "react";
 import { compare } from "compare-versions";
 
+import { useEventListener } from "@/lib/hooks/useEventListener";
+
 type OnCacheClearFn = (callback?: () => void) => Promise<void>;
 
 const CacheBusterContext = React.createContext<{
@@ -165,4 +167,20 @@ function useCacheBuster() {
   return context;
 }
 
-export { CacheBuster, useCacheBuster };
+function CacheDocumentFocusChecker() {
+  const documentRef = React.useRef<Document>(document);
+
+  const { checkCacheStatus } = useCacheBuster();
+
+  const onVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      checkCacheStatus();
+    }
+  };
+
+  useEventListener("visibilitychange", onVisibilityChange, documentRef);
+
+  return null;
+}
+
+export { CacheBuster, CacheDocumentFocusChecker, useCacheBuster };
