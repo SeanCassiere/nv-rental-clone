@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import App from "./app-entry";
+import UserApp from "./app-entry";
 
 import "./index.css";
 
@@ -13,6 +13,6 @@ if (!documentElement) {
 
 ReactDOM.createRoot(documentElement).render(
   <React.StrictMode>
-    <App />
+    <UserApp />
   </React.StrictMode>
 );

@@ -5,7 +5,6 @@ import { AuthProvider, useAuth } from "react-oidc-context";
 import { Toaster } from "sonner";
 
 import { CacheBuster } from "@/components/cache-buster";
-import { icons } from "@/components/ui/icons";
 
 import { useTernaryDarkMode } from "@/lib/hooks/useTernaryDarkMode";
 
@@ -13,20 +12,14 @@ import { APP_VERSION, IS_DEV } from "@/lib/utils/constants";
 
 import "@/lib/config/i18next";
 
+import { FullPageLoadingSpinner } from "@/routes/-components/full-screen-loading-spinner";
+
 import { userManager } from "@/lib/config/oidc-client-ts";
 import { createRouter } from "@/lib/config/tanstack-router";
 
-function FullPageLoadingSpinner() {
-  return (
-    <div className="grid min-h-dvh place-items-center bg-background">
-      <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
-    </div>
-  );
-}
-
 const router = createRouter();
 
-function InnerApp() {
+function App() {
   const auth = useAuth();
 
   React.useEffect(() => {
@@ -42,7 +35,7 @@ function InnerApp() {
   );
 }
 
-export default function App() {
+export default function UserApp() {
   const { i18n } = useTranslation();
   const theme = useTernaryDarkMode();
 
@@ -58,7 +51,7 @@ export default function App() {
         reloadOnDowngrade
       >
         <AuthProvider userManager={userManager}>
-          <InnerApp />
+          <App />
         </AuthProvider>
         <Toaster
           theme={theme.ternaryDarkMode}
