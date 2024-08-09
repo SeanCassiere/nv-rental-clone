@@ -38,6 +38,16 @@ export function createRouter() {
       search: (s) => ({ ...s, summary_tab: undefined }),
       unmaskOnReload: true,
     }),
+
+    // hide the selected category of the reports page
+    createRouteMask({
+      routeTree,
+      from: "/reports",
+      to: "/reports",
+      params: true,
+      search: (s) => ({ ...s, category: undefined }),
+      unmaskOnReload: true,
+    }),
   ];
 
   const router = createTanStackRouter({
