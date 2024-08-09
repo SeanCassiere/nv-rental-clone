@@ -25,7 +25,7 @@ export function createRouter() {
       from: "/",
       to: "/",
       params: true,
-      search: (s) => ({ ...s, show_widget_picker: undefined }),
+      search: { show_widget_picker: undefined },
     }),
 
     // hide the selected summary tab's state of the agreement summary page
@@ -34,7 +34,7 @@ export function createRouter() {
       from: "/agreements/$agreementId/summary",
       to: "/agreements/$agreementId/summary",
       params: true,
-      search: (s) => ({ ...s, summary_tab: undefined }),
+      search: { summary_tab: undefined },
     }),
 
     // hide the selected category state of the reports page
@@ -43,7 +43,7 @@ export function createRouter() {
       from: "/reports",
       to: "/reports",
       params: true,
-      search: (s) => ({ ...s, category: undefined }),
+      search: { category: undefined },
     }),
   ];
 
