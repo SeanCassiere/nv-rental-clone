@@ -28,6 +28,16 @@ export function createRouter() {
       search: (s) => ({ ...s, show_widget_picker: undefined }),
       unmaskOnReload: true,
     }),
+
+    // hide the summary tab of the agreement summary page
+    createRouteMask({
+      routeTree,
+      from: "/agreements/$agreementId/summary",
+      to: "/agreements/$agreementId/summary",
+      params: true,
+      search: (s) => ({ ...s, summary_tab: undefined }),
+      unmaskOnReload: true,
+    }),
   ];
 
   const router = createTanStackRouter({
