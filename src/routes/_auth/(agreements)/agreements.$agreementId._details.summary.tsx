@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -41,8 +41,6 @@ const SummarySignatureCard = React.lazy(
 );
 
 function Component() {
-  const navigate = Route.useNavigate();
-
   const currentTab = Route.useSearch({
     select: (s) => {
       if (s.summary_tab && ["vehicle", "rental"].includes(s.summary_tab)) {
@@ -158,14 +156,6 @@ function Component() {
     isCheckedIn,
   ]);
 
-  const setCurrentTab = (name: string) => {
-    navigate({
-      search: (s) => ({ ...s, summary_tab: name }),
-      resetScroll: false,
-      replace: true,
-    });
-  };
-
   return (
     <Container as="div">
       <div className="mb-6 grid max-w-full grid-cols-1 gap-4 px-2 sm:px-4 lg:grid-cols-12">
@@ -197,14 +187,20 @@ function Component() {
           )}
 
           {tabsConfig.length >= 1 ? (
-            <Tabs value={currentTab} onValueChange={setCurrentTab}>
+            <Tabs defaultValue={currentTab} key={`tab-${currentTab}`}>
               <TabsList className="w-full sm:max-w-max">
                 {tabsConfig.map((tab, idx) => (
                   <TabsTrigger
                     key={`tab-summary-trigger-${idx}`}
                     value={tab.id}
+                    asChild
                   >
-                    {tab.label}
+                    <Link
+                      search={(s) => ({ ...s, summary_tab: tab.id })}
+                      resetScroll={false}
+                    >
+                      {tab.label}
+                    </Link>
                   </TabsTrigger>
                 ))}
               </TabsList>

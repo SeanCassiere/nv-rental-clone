@@ -1,6 +1,7 @@
 import React from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import {
+  createRouteMask,
   createRouter as createTanStackRouter,
   parseSearchWith,
   stringifySearchWith,
@@ -8,7 +9,6 @@ import {
 import * as JSURL2 from "jsurl2";
 
 import { CacheDocumentFocusChecker } from "@/components/cache-buster";
-import { icons } from "@/components/ui/icons";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { GlobalDialogProvider } from "@/lib/context/modals";
@@ -18,27 +18,47 @@ import { queryClient } from "@/lib/config/tanstack-query";
 import { routeTree } from "@/route-tree.gen";
 
 export function createRouter() {
+  const routeMasks = [
+    // hide the widget picker modal's state
+    createRouteMask({
+      routeTree,
+      from: "/",
+      to: "/",
+      search: { show_widget_picker: undefined },
+    }),
+
+    // hide the selected summary tab's state of the agreement summary page
+    createRouteMask({
+      routeTree,
+      from: "/agreements/$agreementId/summary",
+      to: "/agreements/$agreementId/summary",
+      params: true,
+      search: { summary_tab: undefined },
+    }),
+
+    // hide the selected category state of the reports page
+    createRouteMask({
+      routeTree,
+      from: "/reports",
+      to: "/reports",
+      search: { category: undefined },
+    }),
+  ];
+
   const router = createTanStackRouter({
     routeTree,
+    routeMasks,
     defaultPreload: "intent",
     defaultPreloadStaleTime: 0,
     defaultViewTransition: true,
-    defaultPendingComponent: function RouterPendingComponent() {
-      <div className="grid min-h-full w-full place-items-center">
-        <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
-      </div>;
-    },
-    parseSearch: parseSearchWith((value) => JSURL2.parse(value)),
-    stringifySearch: stringifySearchWith(
-      (value) => JSURL2.stringify(value),
-      (value) => JSURL2.parse(value)
-    ),
+    trailingSlash: "never",
     context: {
       queryClient,
-      auth: undefined!, // will be set by an AuthWrapper
+      auth: undefined!, // will be set when passing it into the RouterProvider
     },
-    trailingSlash: "never",
-    Wrap: function ({ children }) {
+    parseSearch: parseSearchWith(JSURL2.parse),
+    stringifySearch: stringifySearchWith(JSURL2.stringify, JSURL2.parse),
+    Wrap: function WrapComponent({ children }) {
       return (
         <QueryClientProvider client={queryClient}>
           <GlobalDialogProvider>
@@ -47,7 +67,7 @@ export function createRouter() {
         </QueryClientProvider>
       );
     },
-    InnerWrap: function ({ children }) {
+    InnerWrap: function InnerWrapComponent({ children }) {
       return (
         <React.Fragment>
           <CacheDocumentFocusChecker />

@@ -1,4 +1,5 @@
 import React from "react";
+import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
@@ -28,8 +29,6 @@ import { useDocumentTitle } from "@/lib/hooks/useDocumentTitle";
 
 import { titleMaker } from "@/lib/utils/title-maker";
 
-import type { queryClient } from "@/lib/config/tanstack-query";
-
 import { cn } from "@/lib/utils";
 
 import { Container } from "./-components/container";
@@ -37,7 +36,7 @@ import { FeatureTogglesDialog } from "./-components/feature-toggles-dialog";
 import { PageNotFound } from "./-components/page-not-found";
 
 export interface MyRouterContext {
-  queryClient: typeof queryClient;
+  queryClient: QueryClient;
   auth: AuthContextProps;
 }
 
