@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import UserApp from "./app-entry";
+import UserApp from "./entry-app";
 
 import "./main.css";
 
