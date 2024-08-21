@@ -17,7 +17,6 @@ export const Route = createFileRoute("/_auth/(reservations)/reservations/new")({
         stage: z.string().optional(),
       })
       .parse(search),
-  preSearchFilters: [() => ({ stage: "rental-information" })],
   component: AddReservationPage,
 });
 

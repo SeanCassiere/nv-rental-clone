@@ -20,7 +20,6 @@ export const Route = createFileRoute(
         stage: z.string().optional(),
       })
       .parse(search),
-  preSearchFilters: [() => ({ stage: "rental-information" })],
   component: CheckinAgreementPage,
 });
 

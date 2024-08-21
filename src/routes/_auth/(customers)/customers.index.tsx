@@ -47,7 +47,6 @@ import { Container } from "@/routes/-components/container";
 
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 import { sortColOrderByOrderIndex } from "@/lib/utils/columns";
-import { STORAGE_DEFAULTS } from "@/lib/utils/constants";
 import { getXPaginationFromHeaders } from "@/lib/utils/headers";
 import { normalizeCustomerListSearchParams } from "@/lib/utils/normalize-search-params";
 import { insertSpacesBeforeCaps } from "@/lib/utils/random";
@@ -56,13 +55,6 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createFileRoute("/_auth/(customers)/customers/")({
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
-  preSearchFilters: [
-    (search) => ({
-      page: search?.page || 1,
-      size: search?.size || parseInt(STORAGE_DEFAULTS.tableRowCount),
-      filters: search?.filters ?? undefined,
-    }),
-  ],
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
     const parsedSearch = normalizeCustomerListSearchParams(search);
