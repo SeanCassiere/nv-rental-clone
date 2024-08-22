@@ -20,6 +20,7 @@ export function useEventCallback<Args extends unknown[], R>(
     throw new Error("Cannot call an event handler while rendering.");
   });
 
+  // eslint-disable-next-line react-compiler/react-compiler
   useIsomorphicLayoutEffect(() => {
     ref.current = fn;
   }, [fn]);

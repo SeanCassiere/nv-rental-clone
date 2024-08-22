@@ -22,9 +22,7 @@ export default defineConfig(() => {
         generatedRouteTree: "./src/route-tree.gen.ts",
         routeFileIgnorePrefix: "-",
         quoteStyle: "double",
-        experimental: {
-          enableCodeSplitting: true,
-        },
+        autoCodeSplitting: true,
       }),
       react({
         babel: {
