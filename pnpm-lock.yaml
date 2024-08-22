@@ -174,8 +174,8 @@ importers:
         specifier: ^2.5.2
         version: 2.5.2
       timescape:
-        specifier: ^0.5.0
-        version: 0.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.5.1
+        version: 0.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -3271,8 +3271,8 @@ packages:
   thenify@3.3.1:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
 
-  timescape@0.5.0:
-    resolution: {integrity: sha512-RyA/NYSLPZrHEo4xqXZituUVVWBFegogC3fup/pazisLSGagq00yP/Fds5M/qJWsvjBKuvyCyZKIzTqHoc5Inw==}
+  timescape@0.5.1:
+    resolution: {integrity: sha512-6li6gS8jzEnFKT55BF3XeC+LKmIfLlDtyN3QTCDq7VEnEQKhejRjaqKwTVWBxmDPOJMCmdnvc/Wfx7Qb14v23g==}
     peerDependencies:
       '@preact/signals': 1.x
       preact: 10.x
@@ -6717,7 +6717,7 @@ snapshots:
     dependencies:
       any-promise: 1.3.0
 
-  timescape@0.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  timescape@0.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     optionalDependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
