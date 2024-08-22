@@ -217,8 +217,8 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.41)
       babel-plugin-react-compiler:
-        specifier: 0.0.0-experimental-5f79ba2-20240815
-        version: 0.0.0-experimental-5f79ba2-20240815
+        specifier: 0.0.0-experimental-7d62301-20240821
+        version: 0.0.0-experimental-7d62301-20240821
       eslint:
         specifier: ^9.9.0
         version: 9.9.0(jiti@1.21.0)
@@ -1871,8 +1871,8 @@ packages:
   babel-dead-code-elimination@1.0.6:
     resolution: {integrity: sha512-JxFi9qyRJpN0LjEbbjbN8g0ux71Qppn9R8Qe3k6QzHg2CaKsbUQtbn307LQGiDLGjV6JCtEFqfxzVig9MyDCHQ==}
 
-  babel-plugin-react-compiler@0.0.0-experimental-5f79ba2-20240815:
-    resolution: {integrity: sha512-9/pMj32tpmzWyjnPmRqQ25L9MJkffqVPEsoboHaSKypnaB/Xo8haWk54T5WhRf/WfE0kB36w2Nm/STkAHGXJWw==}
+  babel-plugin-react-compiler@0.0.0-experimental-7d62301-20240821:
+    resolution: {integrity: sha512-jkkE/OzJpu5tOa3GwGM3vgaBAjkOGYmKEYyo6NXNaCtt/ITYjs2Tq2+MmrDLx1nsxBDi91rB+MLV8kes/KQ0lQ==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -5224,7 +5224,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-react-compiler@0.0.0-experimental-5f79ba2-20240815:
+  babel-plugin-react-compiler@0.0.0-experimental-7d62301-20240821:
     dependencies:
       '@babel/generator': 7.2.0
       '@babel/types': 7.25.2
