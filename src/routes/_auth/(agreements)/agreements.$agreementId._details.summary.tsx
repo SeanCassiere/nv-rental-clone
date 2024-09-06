@@ -196,6 +196,7 @@ function Component() {
                     asChild
                   >
                     <Link
+                      from="/agreements/$agreementId/summary"
                       search={(s) => ({ ...s, summary_tab: tab.id })}
                       resetScroll={false}
                     >

@@ -1,31 +1,16 @@
 import * as React from "react";
-import {
-  Link,
-  type AnyRouter,
-  type LinkProps,
-  type RegisteredRouter,
-  type RoutePaths,
-} from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { buttonVariants } from "@/components/ui/button";
 import { icons } from "@/components/ui/icons";
 
-import type { LinkComponentProps } from "@/lib/types/router";
-
 import { cn } from "@/lib/utils";
 
-export function SubPageNavItem<
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
->(props: {
+export function SubPageNavItem(props: {
   title: string;
   description: string;
-  link: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
-    LinkComponentProps<"a">;
+  link: LinkProps;
 }) {
   const { title, description, link } = props;
   const { t } = useTranslation();

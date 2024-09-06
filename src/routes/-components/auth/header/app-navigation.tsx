@@ -1,17 +1,9 @@
 import React from "react";
-import {
-  Link,
-  type AnyRouter,
-  type LinkProps,
-  type RegisteredRouter,
-  type RoutePaths,
-} from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
-
-import type { LinkComponentProps } from "@/lib/types/router";
 
 import { cn } from "@/lib/utils";
 
@@ -116,17 +108,7 @@ export const AppNavigation = (props: Props) => {
   );
 };
 
-const AppNavigationLink = <
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
->(props: {
-  name: string;
-  props: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
-    LinkComponentProps<"a">;
-}) => {
+const AppNavigationLink = (props: { name: string; props: LinkProps }) => {
   const { name, props: linkProps } = props;
   return (
     <li>

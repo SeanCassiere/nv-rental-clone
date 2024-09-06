@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Link,
-  type AnyRouter,
-  type LinkProps,
-  type RegisteredRouter,
-  type RoutePaths,
-} from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import {
@@ -15,8 +9,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { CardHeader, CardTitle } from "@/components/ui/card";
-
-import type { LinkComponentProps } from "@/lib/types/router";
 
 import { cn } from "@/lib/utils";
 
@@ -75,29 +67,17 @@ const accordionValueVariants = cva("font-semibold", {
   },
 });
 
-interface SummaryLineItemProps<
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
-> extends VariantProps<typeof accordionVariants>,
+interface SummaryLineItemProps
+  extends VariantProps<typeof accordionVariants>,
     VariantProps<typeof accordionValueVariants> {
   label: string;
   value: React.ReactNode;
   initialDropdownExpanded?: boolean;
   children?: React.ReactNode | undefined;
-  linkOptions?: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
-    LinkComponentProps<"a">;
+  linkOptions?: LinkProps;
 }
 
-export function SummaryLineItem<
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
->(props: SummaryLineItemProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>) {
+export function SummaryLineItem(props: SummaryLineItemProps) {
   const {
     // main
     label,

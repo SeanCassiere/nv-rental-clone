@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Link,
-  type AnyRouter,
-  type LinkProps,
-  type RegisteredRouter,
-  type RoutePaths,
-} from "@tanstack/react-router";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { icons, type LucideIcon } from "@/components/ui/icons";
@@ -17,8 +11,6 @@ import type { TDashboardStats } from "@/lib/schemas/dashboard";
 
 import { STORAGE_DEFAULTS, STORAGE_KEYS } from "@/lib/utils/constants";
 import { localDateToQueryYearMonthDay } from "@/lib/utils/date";
-
-import type { LinkComponentProps } from "@/lib/types/router";
 
 function formatDisplayValue(value: number | null | undefined): string | null {
   if (typeof value === "undefined") return null;
@@ -137,18 +129,11 @@ const DashboardStatsBlock = ({
   );
 };
 
-const StatBlock = <
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
->(props: {
+const StatBlock = (props: {
   title: string;
   value: string | null;
   icon: LucideIcon;
-  linkProps: LinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo> &
-    LinkComponentProps<"a">;
+  linkProps: LinkProps;
 }) => {
   const { title, value, icon: Icon, linkProps } = props;
 
