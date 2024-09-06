@@ -873,97 +873,706 @@ declare module "@tanstack/react-router" {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  AuthRoute: AuthRoute.addChildren({
-    AuthagreementsAgreementsRoute: AuthagreementsAgreementsRoute.addChildren({
-      AuthagreementsAgreementsAgreementIdRoute:
-        AuthagreementsAgreementsAgreementIdRoute.addChildren({
-          AuthagreementsAgreementsAgreementIdDetailsRoute:
-            AuthagreementsAgreementsAgreementIdDetailsRoute.addChildren({
-              AuthagreementsAgreementsAgreementIdDetailsExchangesRoute,
-              AuthagreementsAgreementsAgreementIdDetailsNotesRoute,
-              AuthagreementsAgreementsAgreementIdDetailsSummaryRoute,
-              AuthagreementsAgreementsAgreementIdDetailsIndexRoute,
-            }),
-          AuthagreementsAgreementsAgreementIdCheckInRoute,
-          AuthagreementsAgreementsAgreementIdEditRoute,
-        }),
-      AuthagreementsAgreementsNewRoute,
-      AuthagreementsAgreementsIndexRoute,
-    }),
-    AuthcustomersCustomersRoute: AuthcustomersCustomersRoute.addChildren({
-      AuthcustomersCustomersCustomerIdRoute:
-        AuthcustomersCustomersCustomerIdRoute.addChildren({
-          AuthcustomersCustomersCustomerIdDetailsRoute:
-            AuthcustomersCustomersCustomerIdDetailsRoute.addChildren({
-              AuthcustomersCustomersCustomerIdDetailsNotesRoute,
-              AuthcustomersCustomersCustomerIdDetailsSummaryRoute,
-              AuthcustomersCustomersCustomerIdDetailsIndexRoute,
-            }),
-          AuthcustomersCustomersCustomerIdEditRoute,
-        }),
-      AuthcustomersCustomersNewRoute,
-      AuthcustomersCustomersIndexRoute,
-    }),
-    AuthfleetFleetRoute: AuthfleetFleetRoute.addChildren({
-      AuthfleetFleetVehicleIdRoute: AuthfleetFleetVehicleIdRoute.addChildren({
-        AuthfleetFleetVehicleIdDetailsRoute:
-          AuthfleetFleetVehicleIdDetailsRoute.addChildren({
-            AuthfleetFleetVehicleIdDetailsAgreementsRoute,
-            AuthfleetFleetVehicleIdDetailsNotesRoute,
-            AuthfleetFleetVehicleIdDetailsReservationsRoute,
-            AuthfleetFleetVehicleIdDetailsSummaryRoute,
-            AuthfleetFleetVehicleIdDetailsIndexRoute,
-          }),
-        AuthfleetFleetVehicleIdEditRoute,
-      }),
-      AuthfleetFleetNewRoute,
-      AuthfleetFleetIndexRoute,
-    }),
-    AuthreservationsReservationsRoute:
-      AuthreservationsReservationsRoute.addChildren({
-        AuthreservationsReservationsReservationIdRoute:
-          AuthreservationsReservationsReservationIdRoute.addChildren({
-            AuthreservationsReservationsReservationIdDetailsRoute:
-              AuthreservationsReservationsReservationIdDetailsRoute.addChildren(
-                {
-                  AuthreservationsReservationsReservationIdDetailsNotesRoute,
-                  AuthreservationsReservationsReservationIdDetailsSummaryRoute,
-                  AuthreservationsReservationsReservationIdDetailsIndexRoute,
-                },
-              ),
-            AuthreservationsReservationsReservationIdEditRoute,
-          }),
-        AuthreservationsReservationsNewRoute,
-        AuthreservationsReservationsIndexRoute,
-      }),
-    AuthsettingsSettingsRoute: AuthsettingsSettingsRoute.addChildren({
-      AuthsettingsSettingsApplicationRoute:
-        AuthsettingsSettingsApplicationRoute.addChildren({
-          AuthsettingsSettingsApplicationLocationsRoute,
-          AuthsettingsSettingsApplicationPermissionsAndRolesRoute,
-          AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute,
-          AuthsettingsSettingsApplicationUsersRoute,
-          AuthsettingsSettingsApplicationIndexRoute,
-        }),
-      AuthsettingsSettingsProfileRoute,
-      AuthsettingsSettingsRatesAndChargesRoute,
-      AuthsettingsSettingsRuntimeConfigurationRoute,
-      AuthsettingsSettingsVehiclesAndCategoriesRoute,
-      AuthsettingsSettingsIndexRoute,
-    }),
-    AuthdashboardIndexRoute,
-    AuthreportsReportsIndexRoute,
-    AuthreportsReportsReportIdIndexRoute,
-  }),
-  PublicRoute: PublicRoute.addChildren({
-    PublicDevRoute,
-    PublicLoggedOutRoute,
-    PublicLoginRoute,
-    PublicLogoutRoute,
-    PublicOidcCallbackRoute,
-  }),
-})
+interface AuthagreementsAgreementsAgreementIdDetailsRouteChildren {
+  AuthagreementsAgreementsAgreementIdDetailsExchangesRoute: typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
+  AuthagreementsAgreementsAgreementIdDetailsNotesRoute: typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
+  AuthagreementsAgreementsAgreementIdDetailsSummaryRoute: typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
+  AuthagreementsAgreementsAgreementIdDetailsIndexRoute: typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
+}
+
+const AuthagreementsAgreementsAgreementIdDetailsRouteChildren: AuthagreementsAgreementsAgreementIdDetailsRouteChildren =
+  {
+    AuthagreementsAgreementsAgreementIdDetailsExchangesRoute:
+      AuthagreementsAgreementsAgreementIdDetailsExchangesRoute,
+    AuthagreementsAgreementsAgreementIdDetailsNotesRoute:
+      AuthagreementsAgreementsAgreementIdDetailsNotesRoute,
+    AuthagreementsAgreementsAgreementIdDetailsSummaryRoute:
+      AuthagreementsAgreementsAgreementIdDetailsSummaryRoute,
+    AuthagreementsAgreementsAgreementIdDetailsIndexRoute:
+      AuthagreementsAgreementsAgreementIdDetailsIndexRoute,
+  }
+
+const AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren =
+  AuthagreementsAgreementsAgreementIdDetailsRoute._addFileChildren(
+    AuthagreementsAgreementsAgreementIdDetailsRouteChildren,
+  )
+
+interface AuthagreementsAgreementsAgreementIdRouteChildren {
+  AuthagreementsAgreementsAgreementIdDetailsRoute: typeof AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren
+  AuthagreementsAgreementsAgreementIdCheckInRoute: typeof AuthagreementsAgreementsAgreementIdCheckInRoute
+  AuthagreementsAgreementsAgreementIdEditRoute: typeof AuthagreementsAgreementsAgreementIdEditRoute
+}
+
+const AuthagreementsAgreementsAgreementIdRouteChildren: AuthagreementsAgreementsAgreementIdRouteChildren =
+  {
+    AuthagreementsAgreementsAgreementIdDetailsRoute:
+      AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren,
+    AuthagreementsAgreementsAgreementIdCheckInRoute:
+      AuthagreementsAgreementsAgreementIdCheckInRoute,
+    AuthagreementsAgreementsAgreementIdEditRoute:
+      AuthagreementsAgreementsAgreementIdEditRoute,
+  }
+
+const AuthagreementsAgreementsAgreementIdRouteWithChildren =
+  AuthagreementsAgreementsAgreementIdRoute._addFileChildren(
+    AuthagreementsAgreementsAgreementIdRouteChildren,
+  )
+
+interface AuthagreementsAgreementsRouteChildren {
+  AuthagreementsAgreementsAgreementIdRoute: typeof AuthagreementsAgreementsAgreementIdRouteWithChildren
+  AuthagreementsAgreementsNewRoute: typeof AuthagreementsAgreementsNewRoute
+  AuthagreementsAgreementsIndexRoute: typeof AuthagreementsAgreementsIndexRoute
+}
+
+const AuthagreementsAgreementsRouteChildren: AuthagreementsAgreementsRouteChildren =
+  {
+    AuthagreementsAgreementsAgreementIdRoute:
+      AuthagreementsAgreementsAgreementIdRouteWithChildren,
+    AuthagreementsAgreementsNewRoute: AuthagreementsAgreementsNewRoute,
+    AuthagreementsAgreementsIndexRoute: AuthagreementsAgreementsIndexRoute,
+  }
+
+const AuthagreementsAgreementsRouteWithChildren =
+  AuthagreementsAgreementsRoute._addFileChildren(
+    AuthagreementsAgreementsRouteChildren,
+  )
+
+interface AuthcustomersCustomersCustomerIdDetailsRouteChildren {
+  AuthcustomersCustomersCustomerIdDetailsNotesRoute: typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
+  AuthcustomersCustomersCustomerIdDetailsSummaryRoute: typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
+  AuthcustomersCustomersCustomerIdDetailsIndexRoute: typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
+}
+
+const AuthcustomersCustomersCustomerIdDetailsRouteChildren: AuthcustomersCustomersCustomerIdDetailsRouteChildren =
+  {
+    AuthcustomersCustomersCustomerIdDetailsNotesRoute:
+      AuthcustomersCustomersCustomerIdDetailsNotesRoute,
+    AuthcustomersCustomersCustomerIdDetailsSummaryRoute:
+      AuthcustomersCustomersCustomerIdDetailsSummaryRoute,
+    AuthcustomersCustomersCustomerIdDetailsIndexRoute:
+      AuthcustomersCustomersCustomerIdDetailsIndexRoute,
+  }
+
+const AuthcustomersCustomersCustomerIdDetailsRouteWithChildren =
+  AuthcustomersCustomersCustomerIdDetailsRoute._addFileChildren(
+    AuthcustomersCustomersCustomerIdDetailsRouteChildren,
+  )
+
+interface AuthcustomersCustomersCustomerIdRouteChildren {
+  AuthcustomersCustomersCustomerIdDetailsRoute: typeof AuthcustomersCustomersCustomerIdDetailsRouteWithChildren
+  AuthcustomersCustomersCustomerIdEditRoute: typeof AuthcustomersCustomersCustomerIdEditRoute
+}
+
+const AuthcustomersCustomersCustomerIdRouteChildren: AuthcustomersCustomersCustomerIdRouteChildren =
+  {
+    AuthcustomersCustomersCustomerIdDetailsRoute:
+      AuthcustomersCustomersCustomerIdDetailsRouteWithChildren,
+    AuthcustomersCustomersCustomerIdEditRoute:
+      AuthcustomersCustomersCustomerIdEditRoute,
+  }
+
+const AuthcustomersCustomersCustomerIdRouteWithChildren =
+  AuthcustomersCustomersCustomerIdRoute._addFileChildren(
+    AuthcustomersCustomersCustomerIdRouteChildren,
+  )
+
+interface AuthcustomersCustomersRouteChildren {
+  AuthcustomersCustomersCustomerIdRoute: typeof AuthcustomersCustomersCustomerIdRouteWithChildren
+  AuthcustomersCustomersNewRoute: typeof AuthcustomersCustomersNewRoute
+  AuthcustomersCustomersIndexRoute: typeof AuthcustomersCustomersIndexRoute
+}
+
+const AuthcustomersCustomersRouteChildren: AuthcustomersCustomersRouteChildren =
+  {
+    AuthcustomersCustomersCustomerIdRoute:
+      AuthcustomersCustomersCustomerIdRouteWithChildren,
+    AuthcustomersCustomersNewRoute: AuthcustomersCustomersNewRoute,
+    AuthcustomersCustomersIndexRoute: AuthcustomersCustomersIndexRoute,
+  }
+
+const AuthcustomersCustomersRouteWithChildren =
+  AuthcustomersCustomersRoute._addFileChildren(
+    AuthcustomersCustomersRouteChildren,
+  )
+
+interface AuthfleetFleetVehicleIdDetailsRouteChildren {
+  AuthfleetFleetVehicleIdDetailsAgreementsRoute: typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
+  AuthfleetFleetVehicleIdDetailsNotesRoute: typeof AuthfleetFleetVehicleIdDetailsNotesRoute
+  AuthfleetFleetVehicleIdDetailsReservationsRoute: typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
+  AuthfleetFleetVehicleIdDetailsSummaryRoute: typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
+  AuthfleetFleetVehicleIdDetailsIndexRoute: typeof AuthfleetFleetVehicleIdDetailsIndexRoute
+}
+
+const AuthfleetFleetVehicleIdDetailsRouteChildren: AuthfleetFleetVehicleIdDetailsRouteChildren =
+  {
+    AuthfleetFleetVehicleIdDetailsAgreementsRoute:
+      AuthfleetFleetVehicleIdDetailsAgreementsRoute,
+    AuthfleetFleetVehicleIdDetailsNotesRoute:
+      AuthfleetFleetVehicleIdDetailsNotesRoute,
+    AuthfleetFleetVehicleIdDetailsReservationsRoute:
+      AuthfleetFleetVehicleIdDetailsReservationsRoute,
+    AuthfleetFleetVehicleIdDetailsSummaryRoute:
+      AuthfleetFleetVehicleIdDetailsSummaryRoute,
+    AuthfleetFleetVehicleIdDetailsIndexRoute:
+      AuthfleetFleetVehicleIdDetailsIndexRoute,
+  }
+
+const AuthfleetFleetVehicleIdDetailsRouteWithChildren =
+  AuthfleetFleetVehicleIdDetailsRoute._addFileChildren(
+    AuthfleetFleetVehicleIdDetailsRouteChildren,
+  )
+
+interface AuthfleetFleetVehicleIdRouteChildren {
+  AuthfleetFleetVehicleIdDetailsRoute: typeof AuthfleetFleetVehicleIdDetailsRouteWithChildren
+  AuthfleetFleetVehicleIdEditRoute: typeof AuthfleetFleetVehicleIdEditRoute
+}
+
+const AuthfleetFleetVehicleIdRouteChildren: AuthfleetFleetVehicleIdRouteChildren =
+  {
+    AuthfleetFleetVehicleIdDetailsRoute:
+      AuthfleetFleetVehicleIdDetailsRouteWithChildren,
+    AuthfleetFleetVehicleIdEditRoute: AuthfleetFleetVehicleIdEditRoute,
+  }
+
+const AuthfleetFleetVehicleIdRouteWithChildren =
+  AuthfleetFleetVehicleIdRoute._addFileChildren(
+    AuthfleetFleetVehicleIdRouteChildren,
+  )
+
+interface AuthfleetFleetRouteChildren {
+  AuthfleetFleetVehicleIdRoute: typeof AuthfleetFleetVehicleIdRouteWithChildren
+  AuthfleetFleetNewRoute: typeof AuthfleetFleetNewRoute
+  AuthfleetFleetIndexRoute: typeof AuthfleetFleetIndexRoute
+}
+
+const AuthfleetFleetRouteChildren: AuthfleetFleetRouteChildren = {
+  AuthfleetFleetVehicleIdRoute: AuthfleetFleetVehicleIdRouteWithChildren,
+  AuthfleetFleetNewRoute: AuthfleetFleetNewRoute,
+  AuthfleetFleetIndexRoute: AuthfleetFleetIndexRoute,
+}
+
+const AuthfleetFleetRouteWithChildren = AuthfleetFleetRoute._addFileChildren(
+  AuthfleetFleetRouteChildren,
+)
+
+interface AuthreservationsReservationsReservationIdDetailsRouteChildren {
+  AuthreservationsReservationsReservationIdDetailsNotesRoute: typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
+  AuthreservationsReservationsReservationIdDetailsSummaryRoute: typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
+  AuthreservationsReservationsReservationIdDetailsIndexRoute: typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
+}
+
+const AuthreservationsReservationsReservationIdDetailsRouteChildren: AuthreservationsReservationsReservationIdDetailsRouteChildren =
+  {
+    AuthreservationsReservationsReservationIdDetailsNotesRoute:
+      AuthreservationsReservationsReservationIdDetailsNotesRoute,
+    AuthreservationsReservationsReservationIdDetailsSummaryRoute:
+      AuthreservationsReservationsReservationIdDetailsSummaryRoute,
+    AuthreservationsReservationsReservationIdDetailsIndexRoute:
+      AuthreservationsReservationsReservationIdDetailsIndexRoute,
+  }
+
+const AuthreservationsReservationsReservationIdDetailsRouteWithChildren =
+  AuthreservationsReservationsReservationIdDetailsRoute._addFileChildren(
+    AuthreservationsReservationsReservationIdDetailsRouteChildren,
+  )
+
+interface AuthreservationsReservationsReservationIdRouteChildren {
+  AuthreservationsReservationsReservationIdDetailsRoute: typeof AuthreservationsReservationsReservationIdDetailsRouteWithChildren
+  AuthreservationsReservationsReservationIdEditRoute: typeof AuthreservationsReservationsReservationIdEditRoute
+}
+
+const AuthreservationsReservationsReservationIdRouteChildren: AuthreservationsReservationsReservationIdRouteChildren =
+  {
+    AuthreservationsReservationsReservationIdDetailsRoute:
+      AuthreservationsReservationsReservationIdDetailsRouteWithChildren,
+    AuthreservationsReservationsReservationIdEditRoute:
+      AuthreservationsReservationsReservationIdEditRoute,
+  }
+
+const AuthreservationsReservationsReservationIdRouteWithChildren =
+  AuthreservationsReservationsReservationIdRoute._addFileChildren(
+    AuthreservationsReservationsReservationIdRouteChildren,
+  )
+
+interface AuthreservationsReservationsRouteChildren {
+  AuthreservationsReservationsReservationIdRoute: typeof AuthreservationsReservationsReservationIdRouteWithChildren
+  AuthreservationsReservationsNewRoute: typeof AuthreservationsReservationsNewRoute
+  AuthreservationsReservationsIndexRoute: typeof AuthreservationsReservationsIndexRoute
+}
+
+const AuthreservationsReservationsRouteChildren: AuthreservationsReservationsRouteChildren =
+  {
+    AuthreservationsReservationsReservationIdRoute:
+      AuthreservationsReservationsReservationIdRouteWithChildren,
+    AuthreservationsReservationsNewRoute: AuthreservationsReservationsNewRoute,
+    AuthreservationsReservationsIndexRoute:
+      AuthreservationsReservationsIndexRoute,
+  }
+
+const AuthreservationsReservationsRouteWithChildren =
+  AuthreservationsReservationsRoute._addFileChildren(
+    AuthreservationsReservationsRouteChildren,
+  )
+
+interface AuthsettingsSettingsApplicationRouteChildren {
+  AuthsettingsSettingsApplicationLocationsRoute: typeof AuthsettingsSettingsApplicationLocationsRoute
+  AuthsettingsSettingsApplicationPermissionsAndRolesRoute: typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
+  AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute: typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
+  AuthsettingsSettingsApplicationUsersRoute: typeof AuthsettingsSettingsApplicationUsersRoute
+  AuthsettingsSettingsApplicationIndexRoute: typeof AuthsettingsSettingsApplicationIndexRoute
+}
+
+const AuthsettingsSettingsApplicationRouteChildren: AuthsettingsSettingsApplicationRouteChildren =
+  {
+    AuthsettingsSettingsApplicationLocationsRoute:
+      AuthsettingsSettingsApplicationLocationsRoute,
+    AuthsettingsSettingsApplicationPermissionsAndRolesRoute:
+      AuthsettingsSettingsApplicationPermissionsAndRolesRoute,
+    AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute:
+      AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute,
+    AuthsettingsSettingsApplicationUsersRoute:
+      AuthsettingsSettingsApplicationUsersRoute,
+    AuthsettingsSettingsApplicationIndexRoute:
+      AuthsettingsSettingsApplicationIndexRoute,
+  }
+
+const AuthsettingsSettingsApplicationRouteWithChildren =
+  AuthsettingsSettingsApplicationRoute._addFileChildren(
+    AuthsettingsSettingsApplicationRouteChildren,
+  )
+
+interface AuthsettingsSettingsRouteChildren {
+  AuthsettingsSettingsApplicationRoute: typeof AuthsettingsSettingsApplicationRouteWithChildren
+  AuthsettingsSettingsProfileRoute: typeof AuthsettingsSettingsProfileRoute
+  AuthsettingsSettingsRatesAndChargesRoute: typeof AuthsettingsSettingsRatesAndChargesRoute
+  AuthsettingsSettingsRuntimeConfigurationRoute: typeof AuthsettingsSettingsRuntimeConfigurationRoute
+  AuthsettingsSettingsVehiclesAndCategoriesRoute: typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
+  AuthsettingsSettingsIndexRoute: typeof AuthsettingsSettingsIndexRoute
+}
+
+const AuthsettingsSettingsRouteChildren: AuthsettingsSettingsRouteChildren = {
+  AuthsettingsSettingsApplicationRoute:
+    AuthsettingsSettingsApplicationRouteWithChildren,
+  AuthsettingsSettingsProfileRoute: AuthsettingsSettingsProfileRoute,
+  AuthsettingsSettingsRatesAndChargesRoute:
+    AuthsettingsSettingsRatesAndChargesRoute,
+  AuthsettingsSettingsRuntimeConfigurationRoute:
+    AuthsettingsSettingsRuntimeConfigurationRoute,
+  AuthsettingsSettingsVehiclesAndCategoriesRoute:
+    AuthsettingsSettingsVehiclesAndCategoriesRoute,
+  AuthsettingsSettingsIndexRoute: AuthsettingsSettingsIndexRoute,
+}
+
+const AuthsettingsSettingsRouteWithChildren =
+  AuthsettingsSettingsRoute._addFileChildren(AuthsettingsSettingsRouteChildren)
+
+interface AuthRouteChildren {
+  AuthagreementsAgreementsRoute: typeof AuthagreementsAgreementsRouteWithChildren
+  AuthcustomersCustomersRoute: typeof AuthcustomersCustomersRouteWithChildren
+  AuthfleetFleetRoute: typeof AuthfleetFleetRouteWithChildren
+  AuthreservationsReservationsRoute: typeof AuthreservationsReservationsRouteWithChildren
+  AuthsettingsSettingsRoute: typeof AuthsettingsSettingsRouteWithChildren
+  AuthdashboardIndexRoute: typeof AuthdashboardIndexRoute
+  AuthreportsReportsIndexRoute: typeof AuthreportsReportsIndexRoute
+  AuthreportsReportsReportIdIndexRoute: typeof AuthreportsReportsReportIdIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthagreementsAgreementsRoute: AuthagreementsAgreementsRouteWithChildren,
+  AuthcustomersCustomersRoute: AuthcustomersCustomersRouteWithChildren,
+  AuthfleetFleetRoute: AuthfleetFleetRouteWithChildren,
+  AuthreservationsReservationsRoute:
+    AuthreservationsReservationsRouteWithChildren,
+  AuthsettingsSettingsRoute: AuthsettingsSettingsRouteWithChildren,
+  AuthdashboardIndexRoute: AuthdashboardIndexRoute,
+  AuthreportsReportsIndexRoute: AuthreportsReportsIndexRoute,
+  AuthreportsReportsReportIdIndexRoute: AuthreportsReportsReportIdIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface PublicRouteChildren {
+  PublicDevRoute: typeof PublicDevRoute
+  PublicLoggedOutRoute: typeof PublicLoggedOutRoute
+  PublicLoginRoute: typeof PublicLoginRoute
+  PublicLogoutRoute: typeof PublicLogoutRoute
+  PublicOidcCallbackRoute: typeof PublicOidcCallbackRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicDevRoute: PublicDevRoute,
+  PublicLoggedOutRoute: PublicLoggedOutRoute,
+  PublicLoginRoute: PublicLoginRoute,
+  PublicLogoutRoute: PublicLogoutRoute,
+  PublicOidcCallbackRoute: PublicOidcCallbackRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
+interface FileRoutesByFullPath {
+  "": typeof PublicRouteWithChildren
+  "/dev": typeof PublicDevRoute
+  "/logged-out": typeof PublicLoggedOutRoute
+  "/login": typeof PublicLoginRoute
+  "/logout": typeof PublicLogoutRoute
+  "/oidc-callback": typeof PublicOidcCallbackRoute
+  "/agreements": typeof AuthagreementsAgreementsRouteWithChildren
+  "/customers": typeof AuthcustomersCustomersRouteWithChildren
+  "/fleet": typeof AuthfleetFleetRouteWithChildren
+  "/reservations": typeof AuthreservationsReservationsRouteWithChildren
+  "/settings": typeof AuthsettingsSettingsRouteWithChildren
+  "/": typeof AuthdashboardIndexRoute
+  "/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren
+  "/agreements/new": typeof AuthagreementsAgreementsNewRoute
+  "/customers/$customerId": typeof AuthcustomersCustomersCustomerIdDetailsRouteWithChildren
+  "/customers/new": typeof AuthcustomersCustomersNewRoute
+  "/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdDetailsRouteWithChildren
+  "/fleet/new": typeof AuthfleetFleetNewRoute
+  "/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdDetailsRouteWithChildren
+  "/reservations/new": typeof AuthreservationsReservationsNewRoute
+  "/settings/application": typeof AuthsettingsSettingsApplicationRouteWithChildren
+  "/settings/profile": typeof AuthsettingsSettingsProfileRoute
+  "/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
+  "/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
+  "/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
+  "/agreements/": typeof AuthagreementsAgreementsIndexRoute
+  "/customers/": typeof AuthcustomersCustomersIndexRoute
+  "/fleet/": typeof AuthfleetFleetIndexRoute
+  "/reports": typeof AuthreportsReportsIndexRoute
+  "/reservations/": typeof AuthreservationsReservationsIndexRoute
+  "/settings/": typeof AuthsettingsSettingsIndexRoute
+  "/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
+  "/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
+  "/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
+  "/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
+  "/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
+  "/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
+  "/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
+  "/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
+  "/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
+  "/reports/$reportId": typeof AuthreportsReportsReportIdIndexRoute
+  "/settings/application/": typeof AuthsettingsSettingsApplicationIndexRoute
+  "/agreements/$agreementId/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
+  "/agreements/$agreementId/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
+  "/agreements/$agreementId/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
+  "/customers/$customerId/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
+  "/customers/$customerId/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
+  "/fleet/$vehicleId/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
+  "/fleet/$vehicleId/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
+  "/fleet/$vehicleId/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
+  "/fleet/$vehicleId/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
+  "/reservations/$reservationId/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
+  "/reservations/$reservationId/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
+  "/agreements/$agreementId/": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
+  "/customers/$customerId/": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
+  "/fleet/$vehicleId/": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
+  "/reservations/$reservationId/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
+}
+
+interface FileRoutesByTo {
+  "": typeof PublicRouteWithChildren
+  "/dev": typeof PublicDevRoute
+  "/logged-out": typeof PublicLoggedOutRoute
+  "/login": typeof PublicLoginRoute
+  "/logout": typeof PublicLogoutRoute
+  "/oidc-callback": typeof PublicOidcCallbackRoute
+  "/": typeof AuthdashboardIndexRoute
+  "/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
+  "/agreements/new": typeof AuthagreementsAgreementsNewRoute
+  "/customers/$customerId": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
+  "/customers/new": typeof AuthcustomersCustomersNewRoute
+  "/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
+  "/fleet/new": typeof AuthfleetFleetNewRoute
+  "/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
+  "/reservations/new": typeof AuthreservationsReservationsNewRoute
+  "/settings/profile": typeof AuthsettingsSettingsProfileRoute
+  "/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
+  "/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
+  "/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
+  "/agreements": typeof AuthagreementsAgreementsIndexRoute
+  "/customers": typeof AuthcustomersCustomersIndexRoute
+  "/fleet": typeof AuthfleetFleetIndexRoute
+  "/reports": typeof AuthreportsReportsIndexRoute
+  "/reservations": typeof AuthreservationsReservationsIndexRoute
+  "/settings": typeof AuthsettingsSettingsIndexRoute
+  "/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
+  "/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
+  "/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
+  "/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
+  "/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
+  "/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
+  "/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
+  "/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
+  "/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
+  "/reports/$reportId": typeof AuthreportsReportsReportIdIndexRoute
+  "/settings/application": typeof AuthsettingsSettingsApplicationIndexRoute
+  "/agreements/$agreementId/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
+  "/agreements/$agreementId/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
+  "/agreements/$agreementId/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
+  "/customers/$customerId/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
+  "/customers/$customerId/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
+  "/fleet/$vehicleId/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
+  "/fleet/$vehicleId/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
+  "/fleet/$vehicleId/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
+  "/fleet/$vehicleId/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
+  "/reservations/$reservationId/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
+  "/reservations/$reservationId/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
+}
+
+interface FileRoutesById {
+  "/_auth": typeof AuthRouteWithChildren
+  "/_public": typeof PublicRouteWithChildren
+  "/_public/dev": typeof PublicDevRoute
+  "/_public/logged-out": typeof PublicLoggedOutRoute
+  "/_public/login": typeof PublicLoginRoute
+  "/_public/logout": typeof PublicLogoutRoute
+  "/_public/oidc-callback": typeof PublicOidcCallbackRoute
+  "/_auth/agreements": typeof AuthagreementsAgreementsRouteWithChildren
+  "/_auth/customers": typeof AuthcustomersCustomersRouteWithChildren
+  "/_auth/fleet": typeof AuthfleetFleetRouteWithChildren
+  "/_auth/reservations": typeof AuthreservationsReservationsRouteWithChildren
+  "/_auth/settings": typeof AuthsettingsSettingsRouteWithChildren
+  "/_auth/": typeof AuthdashboardIndexRoute
+  "/_auth/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdRouteWithChildren
+  "/_auth/agreements/new": typeof AuthagreementsAgreementsNewRoute
+  "/_auth/customers/$customerId": typeof AuthcustomersCustomersCustomerIdRouteWithChildren
+  "/_auth/customers/new": typeof AuthcustomersCustomersNewRoute
+  "/_auth/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdRouteWithChildren
+  "/_auth/fleet/new": typeof AuthfleetFleetNewRoute
+  "/_auth/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdRouteWithChildren
+  "/_auth/reservations/new": typeof AuthreservationsReservationsNewRoute
+  "/_auth/settings/application": typeof AuthsettingsSettingsApplicationRouteWithChildren
+  "/_auth/settings/profile": typeof AuthsettingsSettingsProfileRoute
+  "/_auth/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
+  "/_auth/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
+  "/_auth/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
+  "/_auth/agreements/": typeof AuthagreementsAgreementsIndexRoute
+  "/_auth/customers/": typeof AuthcustomersCustomersIndexRoute
+  "/_auth/fleet/": typeof AuthfleetFleetIndexRoute
+  "/_auth/reports/": typeof AuthreportsReportsIndexRoute
+  "/_auth/reservations/": typeof AuthreservationsReservationsIndexRoute
+  "/_auth/settings/": typeof AuthsettingsSettingsIndexRoute
+  "/_auth/agreements/$agreementId/_details": typeof AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren
+  "/_auth/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
+  "/_auth/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
+  "/_auth/customers/$customerId/_details": typeof AuthcustomersCustomersCustomerIdDetailsRouteWithChildren
+  "/_auth/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
+  "/_auth/fleet/$vehicleId/_details": typeof AuthfleetFleetVehicleIdDetailsRouteWithChildren
+  "/_auth/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
+  "/_auth/reservations/$reservationId/_details": typeof AuthreservationsReservationsReservationIdDetailsRouteWithChildren
+  "/_auth/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
+  "/_auth/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
+  "/_auth/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
+  "/_auth/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
+  "/_auth/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
+  "/_auth/reports/$reportId/": typeof AuthreportsReportsReportIdIndexRoute
+  "/_auth/settings/application/": typeof AuthsettingsSettingsApplicationIndexRoute
+  "/_auth/agreements/$agreementId/_details/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
+  "/_auth/agreements/$agreementId/_details/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
+  "/_auth/agreements/$agreementId/_details/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
+  "/_auth/customers/$customerId/_details/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
+  "/_auth/customers/$customerId/_details/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
+  "/_auth/fleet/$vehicleId/_details/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
+  "/_auth/fleet/$vehicleId/_details/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
+  "/_auth/fleet/$vehicleId/_details/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
+  "/_auth/fleet/$vehicleId/_details/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
+  "/_auth/reservations/$reservationId/_details/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
+  "/_auth/reservations/$reservationId/_details/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
+  "/_auth/agreements/$agreementId/_details/": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
+  "/_auth/customers/$customerId/_details/": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
+  "/_auth/fleet/$vehicleId/_details/": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
+  "/_auth/reservations/$reservationId/_details/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
+}
+
+interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | ""
+    | "/dev"
+    | "/logged-out"
+    | "/login"
+    | "/logout"
+    | "/oidc-callback"
+    | "/agreements"
+    | "/customers"
+    | "/fleet"
+    | "/reservations"
+    | "/settings"
+    | "/"
+    | "/agreements/$agreementId"
+    | "/agreements/new"
+    | "/customers/$customerId"
+    | "/customers/new"
+    | "/fleet/$vehicleId"
+    | "/fleet/new"
+    | "/reservations/$reservationId"
+    | "/reservations/new"
+    | "/settings/application"
+    | "/settings/profile"
+    | "/settings/rates-and-charges"
+    | "/settings/runtime-configuration"
+    | "/settings/vehicles-and-categories"
+    | "/agreements/"
+    | "/customers/"
+    | "/fleet/"
+    | "/reports"
+    | "/reservations/"
+    | "/settings/"
+    | "/agreements/$agreementId/check-in"
+    | "/agreements/$agreementId/edit"
+    | "/customers/$customerId/edit"
+    | "/fleet/$vehicleId/edit"
+    | "/reservations/$reservationId/edit"
+    | "/settings/application/locations"
+    | "/settings/application/permissions-and-roles"
+    | "/settings/application/store-hours-and-holidays"
+    | "/settings/application/users"
+    | "/reports/$reportId"
+    | "/settings/application/"
+    | "/agreements/$agreementId/exchanges"
+    | "/agreements/$agreementId/notes"
+    | "/agreements/$agreementId/summary"
+    | "/customers/$customerId/notes"
+    | "/customers/$customerId/summary"
+    | "/fleet/$vehicleId/agreements"
+    | "/fleet/$vehicleId/notes"
+    | "/fleet/$vehicleId/reservations"
+    | "/fleet/$vehicleId/summary"
+    | "/reservations/$reservationId/notes"
+    | "/reservations/$reservationId/summary"
+    | "/agreements/$agreementId/"
+    | "/customers/$customerId/"
+    | "/fleet/$vehicleId/"
+    | "/reservations/$reservationId/"
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | ""
+    | "/dev"
+    | "/logged-out"
+    | "/login"
+    | "/logout"
+    | "/oidc-callback"
+    | "/"
+    | "/agreements/$agreementId"
+    | "/agreements/new"
+    | "/customers/$customerId"
+    | "/customers/new"
+    | "/fleet/$vehicleId"
+    | "/fleet/new"
+    | "/reservations/$reservationId"
+    | "/reservations/new"
+    | "/settings/profile"
+    | "/settings/rates-and-charges"
+    | "/settings/runtime-configuration"
+    | "/settings/vehicles-and-categories"
+    | "/agreements"
+    | "/customers"
+    | "/fleet"
+    | "/reports"
+    | "/reservations"
+    | "/settings"
+    | "/agreements/$agreementId/check-in"
+    | "/agreements/$agreementId/edit"
+    | "/customers/$customerId/edit"
+    | "/fleet/$vehicleId/edit"
+    | "/reservations/$reservationId/edit"
+    | "/settings/application/locations"
+    | "/settings/application/permissions-and-roles"
+    | "/settings/application/store-hours-and-holidays"
+    | "/settings/application/users"
+    | "/reports/$reportId"
+    | "/settings/application"
+    | "/agreements/$agreementId/exchanges"
+    | "/agreements/$agreementId/notes"
+    | "/agreements/$agreementId/summary"
+    | "/customers/$customerId/notes"
+    | "/customers/$customerId/summary"
+    | "/fleet/$vehicleId/agreements"
+    | "/fleet/$vehicleId/notes"
+    | "/fleet/$vehicleId/reservations"
+    | "/fleet/$vehicleId/summary"
+    | "/reservations/$reservationId/notes"
+    | "/reservations/$reservationId/summary"
+  id:
+    | "/_auth"
+    | "/_public"
+    | "/_public/dev"
+    | "/_public/logged-out"
+    | "/_public/login"
+    | "/_public/logout"
+    | "/_public/oidc-callback"
+    | "/_auth/agreements"
+    | "/_auth/customers"
+    | "/_auth/fleet"
+    | "/_auth/reservations"
+    | "/_auth/settings"
+    | "/_auth/"
+    | "/_auth/agreements/$agreementId"
+    | "/_auth/agreements/new"
+    | "/_auth/customers/$customerId"
+    | "/_auth/customers/new"
+    | "/_auth/fleet/$vehicleId"
+    | "/_auth/fleet/new"
+    | "/_auth/reservations/$reservationId"
+    | "/_auth/reservations/new"
+    | "/_auth/settings/application"
+    | "/_auth/settings/profile"
+    | "/_auth/settings/rates-and-charges"
+    | "/_auth/settings/runtime-configuration"
+    | "/_auth/settings/vehicles-and-categories"
+    | "/_auth/agreements/"
+    | "/_auth/customers/"
+    | "/_auth/fleet/"
+    | "/_auth/reports/"
+    | "/_auth/reservations/"
+    | "/_auth/settings/"
+    | "/_auth/agreements/$agreementId/_details"
+    | "/_auth/agreements/$agreementId/check-in"
+    | "/_auth/agreements/$agreementId/edit"
+    | "/_auth/customers/$customerId/_details"
+    | "/_auth/customers/$customerId/edit"
+    | "/_auth/fleet/$vehicleId/_details"
+    | "/_auth/fleet/$vehicleId/edit"
+    | "/_auth/reservations/$reservationId/_details"
+    | "/_auth/reservations/$reservationId/edit"
+    | "/_auth/settings/application/locations"
+    | "/_auth/settings/application/permissions-and-roles"
+    | "/_auth/settings/application/store-hours-and-holidays"
+    | "/_auth/settings/application/users"
+    | "/_auth/reports/$reportId/"
+    | "/_auth/settings/application/"
+    | "/_auth/agreements/$agreementId/_details/exchanges"
+    | "/_auth/agreements/$agreementId/_details/notes"
+    | "/_auth/agreements/$agreementId/_details/summary"
+    | "/_auth/customers/$customerId/_details/notes"
+    | "/_auth/customers/$customerId/_details/summary"
+    | "/_auth/fleet/$vehicleId/_details/agreements"
+    | "/_auth/fleet/$vehicleId/_details/notes"
+    | "/_auth/fleet/$vehicleId/_details/reservations"
+    | "/_auth/fleet/$vehicleId/_details/summary"
+    | "/_auth/reservations/$reservationId/_details/notes"
+    | "/_auth/reservations/$reservationId/_details/summary"
+    | "/_auth/agreements/$agreementId/_details/"
+    | "/_auth/customers/$customerId/_details/"
+    | "/_auth/fleet/$vehicleId/_details/"
+    | "/_auth/reservations/$reservationId/_details/"
+  fileRoutesById: FileRoutesById
+}
+
+interface RootRouteChildren {
+  AuthRoute: typeof AuthRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthRoute: AuthRouteWithChildren,
+  PublicRoute: PublicRouteWithChildren,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
