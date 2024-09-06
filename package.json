@@ -99,7 +99,7 @@
     "eslint-plugin-react-compiler": "0.0.0-experimental-8e3b87c-20240821",
     "eslint-plugin-react-hooks": "5.1.0-beta-26f2496093-20240514",
     "globals": "^15.9.0",
-    "postcss": "^8.4.41",
+    "postcss": "^8.4.45",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "rimraf": "^6.0.1",
