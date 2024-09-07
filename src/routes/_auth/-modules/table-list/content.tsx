@@ -51,7 +51,7 @@ function TableListContent(props: TableListContentProps) {
   const rowModel = React.useMemo(
     () => table.getRowModel(),
     // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps, react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getRowModel()]
   );
 

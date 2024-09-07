@@ -20,7 +20,7 @@ function TableListColumnVisibilityDropdown() {
   const columns = React.useMemo(
     () => table.getAllColumns(),
     // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps, react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [table.getAllColumns()]
   );
 

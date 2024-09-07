@@ -15,6 +15,7 @@ interface InputDatetimeProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function InputDatetime(props: InputDatetimeProps) {
   const elementId = React.useRef(generateShortId());
+  // eslint-disable-next-line react-compiler/react-compiler
   const id = props.id ?? elementId.current;
 
   const [date, setDate] = React.useState<Date | undefined>(
@@ -62,42 +63,45 @@ function InputDatetime(props: InputDatetimeProps) {
       className="flex h-10 items-center justify-start gap-0.5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background duration-100 focus-within:border-input focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
       {...getRootProps()}
     >
-      {segments.map((segment, idx) => {
-        if (segment.type === "separator") {
+      {
+        // eslint-disable-next-line react-compiler/react-compiler
+        segments.map((segment, idx) => {
+          if (segment.type === "separator") {
+            return (
+              <span
+                key={`${id}-separator-${idx}`}
+                className="separator m-0 font-mono text-[60%] text-muted-foreground"
+              >
+                {segment.value}
+              </span>
+            );
+          }
+
+          const inputId = idx === 0 ? id : `${id}-${segment.type}`;
+          const placeholder =
+            segment.type !== "am/pm" ? segment.value : undefined;
+
           return (
-            <span
-              key={`${id}-separator-${idx}`}
-              className="separator m-0 font-mono text-[60%] text-muted-foreground"
-            >
-              {segment.value}
-            </span>
+            <input
+              key={`${id}-${segment.type}-${idx}`}
+              id={inputId}
+              placeholder={placeholder}
+              disabled={props.disabled}
+              readOnly={props.readOnly}
+              onFocus={props.onDateFocus}
+              onBlur={props.onDateBlur}
+              className="inline-block h-full flex-grow-0 rounded-sm border-none bg-transparent px-0.5 font-sans text-sm tabular-nums text-foreground caret-transparent outline-none ring-0 selection:bg-foreground selection:text-background placeholder:font-mono focus:bg-foreground focus:text-background focus:ring-0"
+              style={
+                {
+                  "--char-length": `${segment.type === "years" ? 4 : segment.type === "am/pm" ? 2.5 : 2}ch`,
+                  minWidth: "calc(var(--char-length) + 0.25rem)",
+                } as React.CSSProperties
+              }
+              {...getInputProps(segment.type)}
+            />
           );
-        }
-
-        const inputId = idx === 0 ? id : `${id}-${segment.type}`;
-        const placeholder =
-          segment.type !== "am/pm" ? segment.value : undefined;
-
-        return (
-          <input
-            key={`${id}-${segment.type}-${idx}`}
-            id={inputId}
-            placeholder={placeholder}
-            disabled={props.disabled}
-            readOnly={props.readOnly}
-            onFocus={props.onDateFocus}
-            onBlur={props.onDateBlur}
-            className="inline-block h-full flex-grow-0 rounded-sm border-none bg-transparent px-0.5 font-sans text-sm tabular-nums text-foreground caret-transparent outline-none ring-0 selection:bg-foreground selection:text-background placeholder:font-mono focus:bg-foreground focus:text-background focus:ring-0"
-            style={
-              {
-                "--char-length": `${segment.type === "years" ? 4 : segment.type === "am/pm" ? 2.5 : 2}ch`,
-                minWidth: "calc(var(--char-length) + 0.25rem)",
-              } as React.CSSProperties
-            }
-            {...getInputProps(segment.type)}
-          />
-        );
-      })}
+        })
+      }
     </div>
   );
 }
