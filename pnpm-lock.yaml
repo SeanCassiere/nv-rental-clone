@@ -217,8 +217,8 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.45)
       babel-plugin-react-compiler:
-        specifier: 0.0.0-experimental-7d62301-20240821
-        version: 0.0.0-experimental-7d62301-20240821
+        specifier: 0.0.0-experimental-7449567-20240905
+        version: 0.0.0-experimental-7449567-20240905
       eslint:
         specifier: ^9.9.1
         version: 9.9.1(jiti@1.21.0)
@@ -229,8 +229,8 @@ importers:
         specifier: ^7.35.2
         version: 7.35.2(eslint@9.9.1(jiti@1.21.0))
       eslint-plugin-react-compiler:
-        specifier: 0.0.0-experimental-8e3b87c-20240821
-        version: 0.0.0-experimental-8e3b87c-20240821(eslint@9.9.1(jiti@1.21.0))
+        specifier: 0.0.0-experimental-8d8bd53-20240905
+        version: 0.0.0-experimental-8d8bd53-20240905(eslint@9.9.1(jiti@1.21.0))
       eslint-plugin-react-hooks:
         specifier: 5.1.0-beta-26f2496093-20240514
         version: 5.1.0-beta-26f2496093-20240514(eslint@9.9.1(jiti@1.21.0))
@@ -2015,8 +2015,8 @@ packages:
   babel-dead-code-elimination@1.0.6:
     resolution: {integrity: sha512-JxFi9qyRJpN0LjEbbjbN8g0ux71Qppn9R8Qe3k6QzHg2CaKsbUQtbn307LQGiDLGjV6JCtEFqfxzVig9MyDCHQ==}
 
-  babel-plugin-react-compiler@0.0.0-experimental-7d62301-20240821:
-    resolution: {integrity: sha512-jkkE/OzJpu5tOa3GwGM3vgaBAjkOGYmKEYyo6NXNaCtt/ITYjs2Tq2+MmrDLx1nsxBDi91rB+MLV8kes/KQ0lQ==}
+  babel-plugin-react-compiler@0.0.0-experimental-7449567-20240905:
+    resolution: {integrity: sha512-ltBywPFOEf1rRnkRQ1TiiPJeqJ1Cte86bo4tpSPsfqGTTsiyUo8OLyOR13EG08QIFTQd6HfGGgjpE9Kv/t5Vcg==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -2308,8 +2308,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-react-compiler@0.0.0-experimental-8e3b87c-20240821:
-    resolution: {integrity: sha512-VSJDGcBGwI3UeMwAa+BLdVyTwyKfPtGvhSlcfrzjnQe0v+dx4Yo+hmVvPSZ42RsJpq58HIjkjSTY6TwLjpI0QQ==}
+  eslint-plugin-react-compiler@0.0.0-experimental-8d8bd53-20240905:
+    resolution: {integrity: sha512-iWgFnhAJcckBOF3FcQ5RdR9Q2NN6gmYpu+ALljft5pMmIJasZR3asshIUYadHG+46ZaZWoa+Rhk9ouIj/O8qIQ==}
     engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
     peerDependencies:
       eslint: '>=7'
@@ -5443,7 +5443,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-react-compiler@0.0.0-experimental-7d62301-20240821:
+  babel-plugin-react-compiler@0.0.0-experimental-7449567-20240905:
     dependencies:
       '@babel/generator': 7.2.0
       '@babel/types': 7.25.2
@@ -5842,7 +5842,7 @@ snapshots:
     dependencies:
       eslint: 9.9.1(jiti@1.21.0)
 
-  eslint-plugin-react-compiler@0.0.0-experimental-8e3b87c-20240821(eslint@9.9.1(jiti@1.21.0)):
+  eslint-plugin-react-compiler@0.0.0-experimental-8d8bd53-20240905(eslint@9.9.1(jiti@1.21.0)):
     dependencies:
       '@babel/core': 7.25.2
       '@babel/parser': 7.25.3
