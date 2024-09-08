@@ -1210,7 +1210,7 @@ const PublicRouteChildren: PublicRouteChildren = {
 const PublicRouteWithChildren =
   PublicRoute._addFileChildren(PublicRouteChildren)
 
-interface FileRoutesByFullPath {
+export interface FileRoutesByFullPath {
   "": typeof PublicRouteWithChildren
   "/dev": typeof PublicDevRoute
   "/logged-out": typeof PublicLoggedOutRoute
@@ -1270,7 +1270,7 @@ interface FileRoutesByFullPath {
   "/reservations/$reservationId/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
 }
 
-interface FileRoutesByTo {
+export interface FileRoutesByTo {
   "": typeof PublicRouteWithChildren
   "/dev": typeof PublicDevRoute
   "/logged-out": typeof PublicLoggedOutRoute
@@ -1320,7 +1320,8 @@ interface FileRoutesByTo {
   "/reservations/$reservationId/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
 }
 
-interface FileRoutesById {
+export interface FileRoutesById {
+  __root__: typeof rootRoute
   "/_auth": typeof AuthRouteWithChildren
   "/_public": typeof PublicRouteWithChildren
   "/_public/dev": typeof PublicDevRoute
@@ -1385,7 +1386,7 @@ interface FileRoutesById {
   "/_auth/reservations/$reservationId/_details/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
 }
 
-interface FileRouteTypes {
+export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ""
@@ -1495,6 +1496,7 @@ interface FileRouteTypes {
     | "/reservations/$reservationId/notes"
     | "/reservations/$reservationId/summary"
   id:
+    | "__root__"
     | "/_auth"
     | "/_public"
     | "/_public/dev"
@@ -1560,7 +1562,7 @@ interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 
-interface RootRouteChildren {
+export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
 }
