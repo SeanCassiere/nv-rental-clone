@@ -13,7 +13,7 @@ import { Container } from "@/routes/-components/container";
 
 import { getAuthFromRouterContext } from "@/lib/utils/auth";
 
-export const Route = createFileRoute("/_auth/(reports)/reports/$reportId/index")({
+export const Route = createFileRoute("/_auth/(reports)/reports/$reportId/")({
   beforeLoad: ({ context, params: { reportId } }) => {
     const auth = getAuthFromRouterContext(context);
     return {

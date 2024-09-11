@@ -56,7 +56,7 @@ import { cn } from "@/lib/utils";
 import WidgetGrid from "./-components/widget-grid";
 import WidgetPicker from "./-components/widget-picker";
 
-export const Route = createFileRoute("/_auth/(dashboard)/index")({
+export const Route = createFileRoute("/_auth/(dashboard)/")({
   validateSearch: z.object({
     show_widget_picker: z.boolean().default(false).optional(),
   }),

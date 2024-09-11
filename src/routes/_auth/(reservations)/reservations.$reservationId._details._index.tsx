@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_auth/(reservations)/reservations/$reservationId/_details/index"
+  "/_auth/(reservations)/reservations/$reservationId/_details/"
 )({
   loader: ({ params }) => {
     throw redirect({

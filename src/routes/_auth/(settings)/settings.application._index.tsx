@@ -19,7 +19,7 @@ import { incompleteApplicationSettingsTabsFeatureFlag } from "@/lib/config/featu
 
 import { SubPageNavItem } from "./-components/sub-page-nav-item";
 
-export const Route = createFileRoute("/_auth/(settings)/settings/application/index")(
+export const Route = createFileRoute("/_auth/(settings)/settings/application/")(
   {
     component: SettingsApplicationIndex,
   }

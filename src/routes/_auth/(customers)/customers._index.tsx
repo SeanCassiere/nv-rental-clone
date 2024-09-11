@@ -53,7 +53,7 @@ import { insertSpacesBeforeCaps } from "@/lib/utils/random";
 import { cn } from "@/lib/utils/styles";
 import { titleMaker } from "@/lib/utils/title-maker";
 
-export const Route = createFileRoute("/_auth/(customers)/customers/index")({
+export const Route = createFileRoute("/_auth/(customers)/customers/")({
   validateSearch: (search) => CustomerSearchQuerySchema.parse(search),
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);

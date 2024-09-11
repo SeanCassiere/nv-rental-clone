@@ -61,7 +61,7 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 import { sortObjectKeys } from "@/lib/utils";
 
-export const Route = createFileRoute("/_auth/(agreements)/agreements/index")({
+export const Route = createFileRoute("/_auth/(agreements)/agreements/")({
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
