@@ -25,6 +25,7 @@ export default defineConfig(() => {
         autoCodeSplitting: true,
         indexToken: "_index",
         routeToken: "_route",
+        disableManifestGeneration: true,
       }),
       react({
         babel: {
