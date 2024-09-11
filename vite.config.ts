@@ -14,7 +14,7 @@ const commitHash = cp
 const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
 // https://vitejs.dev/config/
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
   return {
     plugins: [
       TanStackRouterVite({
@@ -47,7 +47,7 @@ export default defineConfig(() => {
       port: 3000,
     },
     build: {
-      sourcemap: true,
+      sourcemap: command === "serve",
     },
     define: {
       "import.meta.env.APP_VERSION": JSON.stringify(APP_VERSION),
