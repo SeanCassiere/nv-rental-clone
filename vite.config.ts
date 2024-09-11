@@ -1,7 +1,7 @@
 import cp from "node:child_process";
 import path from "node:path";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-import react from "@vitejs/plugin-react";
+import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 import packageJson from "./package.json";
@@ -14,7 +14,7 @@ const commitHash = cp
 const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
 // https://vitejs.dev/config/
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
   return {
     plugins: [
       TanStackRouterVite({
@@ -23,8 +23,11 @@ export default defineConfig(() => {
         routeFileIgnorePrefix: "-",
         quoteStyle: "double",
         autoCodeSplitting: true,
+        indexToken: "_index",
+        routeToken: "_route",
+        disableManifestGeneration: true,
       }),
-      react({
+      viteReact({
         babel: {
           plugins: [
             [
@@ -44,7 +47,7 @@ export default defineConfig(() => {
       port: 3000,
     },
     build: {
-      sourcemap: true,
+      sourcemap: command === "serve",
     },
     define: {
       "import.meta.env.APP_VERSION": JSON.stringify(APP_VERSION),
