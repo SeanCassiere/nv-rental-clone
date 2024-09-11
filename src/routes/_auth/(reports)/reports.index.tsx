@@ -14,7 +14,7 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_auth/(reports)/reports/")({
+export const Route = createFileRoute("/_auth/(reports)/reports/index")({
   validateSearch: (search) =>
     z
       .object({

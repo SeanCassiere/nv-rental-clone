@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_auth/(customers)/customers/$customerId/_details/"
+  "/_auth/(customers)/customers/$customerId/_details/index"
 )({
   loader: ({ params }) => {
     throw redirect({

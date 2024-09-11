@@ -23,6 +23,8 @@ export default defineConfig(() => {
         routeFileIgnorePrefix: "-",
         quoteStyle: "double",
         autoCodeSplitting: true,
+        indexToken: "_index",
+        routeToken: "_route",
       }),
       react({
         babel: {
