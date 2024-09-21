@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_public/oidc-callback")({
     state: z.string().optional(),
     session_state: z.string().optional(),
   }),
+  beforeLoad: ({ search }) => ({ search }),
   loaderDeps: ({ search }) => ({
     redirect: search?.redirect,
     code: search?.code,
@@ -22,7 +23,6 @@ export const Route = createFileRoute("/_public/oidc-callback")({
     state: search?.state,
     session_state: search?.session_state,
   }),
-  beforeLoad: ({ search }) => ({ search }),
   loader: async ({ context, preload, location }) => {
     const locationPathname = location.pathname;
     if (preload || !locationPathname.includes("oidc-callback")) return;

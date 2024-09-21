@@ -29,6 +29,7 @@ export const Route = createFileRoute("/_auth/(reports)/reports/")({
       searchListOptions: fetchReportsListOptions({ auth }),
     };
   },
+  loaderDeps: ({ search: { category } }) => ({ category }),
   loader: async ({ context }) => {
     const { queryClient, searchListOptions } = context;
 
@@ -38,7 +39,6 @@ export const Route = createFileRoute("/_auth/(reports)/reports/")({
 
     return;
   },
-  loaderDeps: ({ search: { category } }) => ({ category }),
   component: ReportSearchPage,
 });
 
