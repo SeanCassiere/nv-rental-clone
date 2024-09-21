@@ -1,5 +1,6 @@
 // @ts-check
 import eslintJs from "@eslint/js";
+import tanstackRouterPlugin from "@tanstack/eslint-plugin-router";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintReact from "eslint-plugin-react";
 import eslintReactCompiler from "eslint-plugin-react-compiler";
@@ -10,6 +11,7 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   eslintJs.configs.recommended,
   ...tseslint.configs.recommended,
+  ...tanstackRouterPlugin.configs["flat/recommended"],
   eslintConfigPrettier,
   {
     files: ["**.config.{cjs,mjs,ts,js}", "postbuild.cjs"],
