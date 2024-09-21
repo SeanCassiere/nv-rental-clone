@@ -195,6 +195,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.15
         version: 0.5.15(tailwindcss@3.4.10)
+      '@tanstack/eslint-plugin-router':
+        specifier: ^1.58.6
+        version: 1.58.6(eslint@9.9.1(jiti@1.21.0))(typescript@5.5.4)
       '@tanstack/router-plugin':
         specifier: ^1.58.4
         version: 1.58.4(vite@5.4.7(@types/node@22.5.4))
@@ -1699,6 +1702,11 @@ packages:
     resolution: {integrity: sha512-AqhlCXl+8grUz8uqExv5OTtgpjuVIwFTSXTrh8y9/pw6q2ek7fJ+Y8ZEVw7EB2DCcuCOtEjf9w3+J3rzts01uA==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20'
+
+  '@tanstack/eslint-plugin-router@1.58.6':
+    resolution: {integrity: sha512-8nqu8vYqV4hA7Bq6fBi+YqwH7n6C9U/uMQCwyIEej1Qvzsblb/QHfSMYk8T6fWcnAgmgvPETWgar9/K+wd17ng==}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
 
   '@tanstack/history@1.57.6':
     resolution: {integrity: sha512-ppAJbnUaHdHmccVmplcd1ivX4GMPHxhStSquuuz0TSAEPEpz0iOVBur4iKfvIuMKm24c40nhvaEwZbKGVfbrGg==}
@@ -5096,6 +5104,14 @@ snapshots:
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
       tailwindcss: 3.4.10
+
+  '@tanstack/eslint-plugin-router@1.58.6(eslint@9.9.1(jiti@1.21.0))(typescript@5.5.4)':
+    dependencies:
+      '@typescript-eslint/utils': 8.4.0(eslint@9.9.1(jiti@1.21.0))(typescript@5.5.4)
+      eslint: 9.9.1(jiti@1.21.0)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   '@tanstack/history@1.57.6': {}
 
