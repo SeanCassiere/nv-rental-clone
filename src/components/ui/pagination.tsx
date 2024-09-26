@@ -48,30 +48,12 @@ const PaginationItem = React.forwardRef<
 ));
 PaginationItem.displayName = "PaginationItem";
 
-type PaginationLinkProps<
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
-> = Pick<ButtonProps, "size"> & { isActive?: boolean } & LinkProps<
-    TRouter,
-    TFrom,
-    TTo,
-    TMaskFrom,
-    TMaskTo
-  > &
+type PaginationLinkProps = Pick<ButtonProps, "size"> & {
+  isActive?: boolean;
+} & LinkProps &
   LinkComponentProps<"a">;
 
-const PaginationLink = <
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
->(
-  props: PaginationLinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>
-) => {
+const PaginationLink = (props: PaginationLinkProps) => {
   const { size, className, isActive = false, ...rest } = props;
 
   return (
@@ -117,15 +99,7 @@ const PaginationButton = ({
 );
 PaginationButton.displayName = "PaginationButton";
 
-const PaginationLinkPrevious = <
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
->(
-  props: PaginationLinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>
-) => {
+const PaginationLinkPrevious = (props: PaginationLinkProps) => {
   const { className, ...rest } = props;
   return (
     <PaginationLink
@@ -157,15 +131,7 @@ const PaginationButtonPrevious = ({
 );
 PaginationButtonPrevious.displayName = "PaginationButtonPrevious";
 
-const PaginationLinkNext = <
-  TRouter extends AnyRouter = RegisteredRouter,
-  TFrom extends RoutePaths<TRouter["routeTree"]> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouter["routeTree"]> | string = TFrom,
-  TMaskTo extends string = "",
->(
-  props: PaginationLinkProps<TRouter, TFrom, TTo, TMaskFrom, TMaskTo>
-) => {
+const PaginationLinkNext = (props: PaginationLinkProps) => {
   const { className, ...rest } = props;
   return (
     <PaginationLink
