@@ -32,7 +32,10 @@ export default defineConfig(({ command }) => {
           plugins: [
             [
               "babel-plugin-react-compiler",
-              { runtimeModule: "react-compiler-runtime" },
+              {
+                target: "18",
+                // runtimeModule: "react-compiler-runtime"
+              },
             ],
           ],
         },
