@@ -34,7 +34,6 @@ export default defineConfig(({ command }) => {
               "babel-plugin-react-compiler",
               {
                 target: "18",
-                // runtimeModule: "react-compiler-runtime"
               },
             ],
           ],
