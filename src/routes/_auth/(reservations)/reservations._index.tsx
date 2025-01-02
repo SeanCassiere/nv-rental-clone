@@ -62,6 +62,11 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createFileRoute("/_auth/(reservations)/reservations/")({
   validateSearch: (search) => ReservationSearchQuerySchema.parse(search),
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    size: search.size,
+    filters: search.filters,
+  }),
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
     const parsedSearch = normalizeReservationListSearchParams(search);
@@ -79,11 +84,6 @@ export const Route = createFileRoute("/_auth/(reservations)/reservations/")({
       search: parsedSearch,
     };
   },
-  loaderDeps: ({ search }) => ({
-    page: search.page,
-    size: search.size,
-    filters: search.filters,
-  }),
   loader: async ({ context }) => {
     const { queryClient, searchListOptions, searchColumnsOptions } = context;
 

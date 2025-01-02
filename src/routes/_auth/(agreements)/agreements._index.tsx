@@ -63,6 +63,11 @@ import { sortObjectKeys } from "@/lib/utils";
 
 export const Route = createFileRoute("/_auth/(agreements)/agreements/")({
   validateSearch: (search) => AgreementSearchQuerySchema.parse(search),
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    size: search.size,
+    filters: sortObjectKeys(search.filters),
+  }),
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
     const parsedSearch = normalizeAgreementListSearchParams(search);
@@ -86,11 +91,6 @@ export const Route = createFileRoute("/_auth/(agreements)/agreements/")({
       search: parsedSearch,
     };
   },
-  loaderDeps: ({ search }) => ({
-    page: search.page,
-    size: search.size,
-    filters: sortObjectKeys(search.filters),
-  }),
   loader: async ({ context }) => {
     const { queryClient, searchColumnsOptions, searchListOptions } = context;
 
