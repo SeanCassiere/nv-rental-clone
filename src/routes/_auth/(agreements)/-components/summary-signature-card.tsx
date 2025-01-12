@@ -528,6 +528,7 @@ function SignatureDialog(
             backgroundColor: "hsl(var(--canvas-light-background))",
           }}
         >
+          {/* @ts-expect-error */}
           <ReactSignatureCanvas
             ref={signaturePadRef}
             canvasProps={{ className: "w-full h-full" }}

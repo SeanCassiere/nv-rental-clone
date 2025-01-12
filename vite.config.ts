@@ -29,7 +29,7 @@ export default defineConfig(({ command }) => {
       }),
       viteReact({
         babel: {
-          plugins: [["babel-plugin-react-compiler", { target: "18" }]],
+          plugins: [["babel-plugin-react-compiler", {}]],
         },
       }),
     ],
