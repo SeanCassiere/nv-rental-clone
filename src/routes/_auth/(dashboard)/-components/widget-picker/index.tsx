@@ -61,7 +61,7 @@ export default function WidgetPicker(props: WidgetPickerProps) {
   const { auth } = props;
 
   const navigate = useNavigate({ from: "/" });
-  const { show_widget_picker } = useSearch({ from: "/_auth/" });
+  const { show_widget_picker } = useSearch({ from: "/_auth/(dashboard)/" });
 
   const onShowWidgetPicker = React.useCallback(
     (open: boolean) => {
