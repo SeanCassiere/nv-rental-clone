@@ -162,8 +162,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(oidc-client-ts@3.1.0)(react@19.0.0)
       react-signature-canvas:
-        specifier: ^1.0.6
-        version: 1.0.6(prop-types@15.8.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^1.0.7
+        version: 1.0.7(prop-types@15.8.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       recharts:
         specifier: 2.15.0
         version: 2.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -3010,12 +3010,12 @@ packages:
       '@types/react':
         optional: true
 
-  react-signature-canvas@1.0.6:
-    resolution: {integrity: sha512-NoMHomYu9HxFeLjUGbIeV9abPdWSROfFxFNDekGdwmmaIx+w5ziOEiU2C34X0Ao4GxFnwqyUy/BpYlA4lCD1CA==}
+  react-signature-canvas@1.0.7:
+    resolution: {integrity: sha512-yo0x0uTMVmcClaqryuQu6F8xEVapk5zdM9/nuQ7GalDJWccoVNZPMmCFGK7U5r3I0mrEHPB9E5/rFSYUgZcfmA==}
     peerDependencies:
       prop-types: ^15.5.8
-      react: 0.14 - 18
-      react-dom: 0.14 - 18
+      react: 0.14 - 19
+      react-dom: 0.14 - 19
 
   react-smooth@4.0.1:
     resolution: {integrity: sha512-OE4hm7XqR0jNOq3Qmk9mFLyd6p2+j6bvbPJ7qlB7+oo0eNcL2l7WQzG6MBnT3EXY6xzkLMUBec3AfewJdA0J8w==}
@@ -6244,7 +6244,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.5
 
-  react-signature-canvas@1.0.6(prop-types@15.8.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-signature-canvas@1.0.7(prop-types@15.8.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       prop-types: 15.8.1
       react: 19.0.0
