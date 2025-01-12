@@ -36,7 +36,7 @@ function TableListPaginationItems({
     [pagination.pageIndex, totalPages, count]
   );
 
-  const items: JSX.ElementType[] = React.useMemo(
+  const items: React.JSX.ElementType[] = React.useMemo(
     () =>
       pages.map(
         (page) => () =>

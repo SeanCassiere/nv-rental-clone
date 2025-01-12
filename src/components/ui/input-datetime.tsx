@@ -58,6 +58,7 @@ function InputDatetime(props: InputDatetimeProps) {
   }, [options.date, props.date, update]);
 
   return (
+    // @ts-expect-error
     <div
       id={`${id}-root`}
       className="flex h-10 items-center justify-start gap-0.5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background duration-100 focus-within:border-input focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
