@@ -178,7 +178,6 @@ function CacheDocumentFocusChecker() {
     }
   };
 
-  // eslint-disable-next-line react-compiler/react-compiler
   useEventListener("visibilitychange", onVisibilityChange, documentRef);
 
   return null;

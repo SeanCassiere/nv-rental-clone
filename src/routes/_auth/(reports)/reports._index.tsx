@@ -22,6 +22,7 @@ export const Route = createFileRoute("/_auth/(reports)/reports/")({
       })
       .parse(search),
   preSearchFilters: [(curr) => ({ category: curr?.category })],
+  loaderDeps: ({ search: { category } }) => ({ category }),
   beforeLoad: ({ context }) => {
     const auth = getAuthFromRouterContext(context);
     return {
@@ -29,7 +30,6 @@ export const Route = createFileRoute("/_auth/(reports)/reports/")({
       searchListOptions: fetchReportsListOptions({ auth }),
     };
   },
-  loaderDeps: ({ search: { category } }) => ({ category }),
   loader: async ({ context }) => {
     const { queryClient, searchListOptions } = context;
 

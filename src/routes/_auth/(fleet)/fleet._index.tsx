@@ -57,6 +57,11 @@ import { titleMaker } from "@/lib/utils/title-maker";
 
 export const Route = createFileRoute("/_auth/(fleet)/fleet/")({
   validateSearch: (search) => VehicleSearchQuerySchema.parse(search),
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    size: search.size,
+    filters: search.filters,
+  }),
   beforeLoad: ({ context, search }) => {
     const auth = getAuthFromRouterContext(context);
     const parsedSearch = normalizeVehicleListSearchParams(search);
@@ -74,11 +79,6 @@ export const Route = createFileRoute("/_auth/(fleet)/fleet/")({
       search: parsedSearch,
     };
   },
-  loaderDeps: ({ search }) => ({
-    page: search.page,
-    size: search.size,
-    filters: search.filters,
-  }),
   loader: async ({ context }) => {
     const { queryClient, searchColumnsOptions, searchListOptions } = context;
 

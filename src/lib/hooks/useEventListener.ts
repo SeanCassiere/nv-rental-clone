@@ -80,7 +80,6 @@ function useEventListener<
   // Create a ref that stores handler
   const savedHandler = React.useRef(handler);
 
-  // eslint-disable-next-line react-compiler/react-compiler
   useIsomorphicLayoutEffect(() => {
     savedHandler.current = handler;
   }, [handler]);

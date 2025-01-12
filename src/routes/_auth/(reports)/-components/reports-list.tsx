@@ -80,7 +80,9 @@ export default function ReportsListV2(props: ReportsListV2Props) {
   const { t } = useTranslation();
   const navigate = useNavigate({ from: "/reports" });
 
-  const { searchListOptions } = useRouteContext({ from: "/_auth/reports/" });
+  const { searchListOptions } = useRouteContext({
+    from: "/_auth/(reports)/reports/",
+  });
   const query = useSuspenseQuery(searchListOptions);
 
   const reportsList = query.data?.status === 200 ? query.data.body : [];

@@ -22,17 +22,14 @@ export function useDocumentTitle(title: string, options: Options = {}): void {
   const defaultTitle = React.useRef<string | null>(null);
   const windowRef = React.useRef(window);
 
-  // eslint-disable-next-line react-compiler/react-compiler
   useIsomorphicLayoutEffect(() => {
     defaultTitle.current = window.document.title;
   }, []);
 
-  // eslint-disable-next-line react-compiler/react-compiler
   useIsomorphicLayoutEffect(() => {
     windowRef.current.document.title = title;
   }, [title]);
 
-  // eslint-disable-next-line react-compiler/react-compiler
   useUnmount(() => {
     if (!preserveTitleOnUnmount && defaultTitle.current) {
       windowRef.current.document.title = defaultTitle.current;
