@@ -143,9 +143,6 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.0.0
-      react-compiler-runtime:
-        specifier: 19.0.0-beta-63e3235-20250105
-        version: 19.0.0-beta-63e3235-20250105(react@19.0.0)
       react-day-picker:
         specifier: ^9.5.0
         version: 9.5.0(react@19.0.0)
@@ -2942,11 +2939,6 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
-
-  react-compiler-runtime@19.0.0-beta-63e3235-20250105:
-    resolution: {integrity: sha512-ojqSg+8uNvomQKpZT+iPgUPWc/ZqFLt9wnoVSNiwVtX51pZgbcgRJnekSYGv0XuyCXQuy4zCz1IaEW+UXjf/ZQ==}
-    peerDependencies:
-      react: ^17.0.0 || ^18.0.0 || ^19.0.0 || ^0.0.0-experimental
 
   react-day-picker@9.5.0:
     resolution: {integrity: sha512-WmJnPFVLnKh5Qscm7wavMNg86rqPverSWjx+zgK8/ZmGRSQ8c8OoqW10RI+AzAfT2atIxImpCUU2R9Z7Xb2SUA==}
@@ -6193,10 +6185,6 @@ snapshots:
   punycode@2.3.1: {}
 
   queue-microtask@1.2.3: {}
-
-  react-compiler-runtime@19.0.0-beta-63e3235-20250105(react@19.0.0):
-    dependencies:
-      react: 19.0.0
 
   react-day-picker@9.5.0(react@19.0.0):
     dependencies:
