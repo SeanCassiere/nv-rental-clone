@@ -161,7 +161,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
             "-mx-px grid grid-cols-1 overflow-hidden rounded-md border-l border-border sm:mx-0 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
             reports.length > 2
               ? "border-t"
-              : "[&>li:nth-child(1)]:border-t [&>li]:sm:border-t"
+              : "[&>li:nth-child(1)]:border-t sm:[&>li]:border-t"
           )}
         >
           {reports.length > 0 ? (

@@ -81,7 +81,7 @@ function Component() {
                 Agreements
               </Link>
               <icons.ChevronRight
-                className="h-4 w-4 flex-shrink-0"
+                className="h-4 w-4 shrink-0"
                 aria-hidden="true"
               />
               <Link

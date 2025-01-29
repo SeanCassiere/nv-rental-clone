@@ -175,31 +175,31 @@ function LoginPage() {
               on delivering exceptional service to your customers.
             </p>
             <ul className="z-10 mt-4 grid gap-4">
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow-sm">
                 <span>
                   <CircleCheckBigIcon className="size-5 text-foreground" />
                 </span>
                 <h4 className="text-foreground/90">Booking Management</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow-sm">
                 <span>
                   <CircleCheckBigIcon className="size-5 text-foreground" />
                 </span>
                 <h4 className="text-foreground/90">Fleet Management</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow-sm">
                 <span>
                   <CircleCheckBigIcon className="size-5 text-foreground" />
                 </span>
                 <h4 className="text-foreground/90">Customer Database</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow-sm">
                 <span>
                   <CircleCheckBigIcon className="size-5 text-foreground" />
                 </span>
                 <h4 className="text-foreground/90">Reporting and Analytics</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow-sm">
                 <span>
                   <CircleCheckBigIcon className="size-5 text-foreground" />
                 </span>

@@ -439,7 +439,7 @@ function MiscChargeItem(props: {
                           <label
                             htmlFor={`${idx}-${charge.Id}-${option.miscChargeOptionId}`}
                             className={cn(
-                              "relative block w-full rounded-lg border bg-background px-4 py-3.5 focus:outline-none sm:flex sm:justify-between",
+                              "relative block w-full rounded-lg border bg-background px-4 py-3.5 focus:outline-hidden sm:flex sm:justify-between",
                               String(optionId) ===
                                 String(option.miscChargeOptionId)
                                 ? "border-transparent"

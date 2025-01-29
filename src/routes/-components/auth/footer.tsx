@@ -23,7 +23,7 @@ export default function AuthFooter() {
           <div className="flex items-center gap-2">
             <Link
               to="/"
-              className="rounded ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="rounded ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <img
                 // logo url is set in the global css under the name --logo-url
@@ -126,7 +126,7 @@ export default function AuthFooter() {
         <div>
           <div className="flex items-center gap-2">
             <a
-              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               href="https://github.com/seancassiere/nv-rental-clone"
               target="_blank"
               rel="noreferrer"
@@ -134,7 +134,7 @@ export default function AuthFooter() {
               <icons.GitHub className="h-4 w-4" />
             </a>
             <a
-              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               href="https://x.com/seancassiere"
               target="_blank"
               rel="noreferrer"

@@ -1,5 +1,6 @@
 // https://vitejs.dev/config/
 import cp from "node:child_process";
+import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -28,6 +29,7 @@ export default defineConfig(({ command }) => {
     },
     plugins: [
       viteTsConfigPaths(),
+      tailwindcss(),
       TanStackRouterVite({
         routesDirectory: "./src/routes",
         generatedRouteTree: "./src/route-tree.gen.ts",

@@ -61,7 +61,7 @@ function InputDatetime(props: InputDatetimeProps) {
     // @ts-expect-error
     <div
       id={`${id}-root`}
-      className="flex h-10 items-center justify-start gap-0.5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background duration-100 focus-within:border-input focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex h-10 items-center justify-start gap-0.5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background duration-100 focus-within:border-input focus-within:outline-hidden focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
       {...getRootProps()}
     >
       {
@@ -91,7 +91,7 @@ function InputDatetime(props: InputDatetimeProps) {
               readOnly={props.readOnly}
               onFocus={props.onDateFocus}
               onBlur={props.onDateBlur}
-              className="inline-block h-full flex-grow-0 rounded-sm border-none bg-transparent px-0.5 font-sans text-sm tabular-nums text-foreground caret-transparent outline-none ring-0 selection:bg-foreground selection:text-background placeholder:font-mono focus:bg-foreground focus:text-background focus:ring-0"
+              className="inline-block h-full grow-0 rounded-sm border-none bg-transparent px-0.5 font-sans text-sm tabular-nums text-foreground caret-transparent outline-hidden ring-0 selection:bg-foreground selection:text-background placeholder:font-mono focus:bg-foreground focus:text-background focus:ring-0"
               style={
                 {
                   "--char-length": `${segment.type === "years" ? 4 : segment.type === "am/pm" ? 2.5 : 2}ch`,

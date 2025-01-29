@@ -116,7 +116,7 @@ function SettingsLayout() {
 
   return (
     <main>
-      <Container className="max-w-screen-xl pb-4" as="div">
+      <Container className="max-w-(--breakpoint-xl) pb-4" as="div">
         <section
           className={cn(
             "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:px-1"
@@ -138,7 +138,7 @@ function SettingsLayout() {
         </section>
       </Container>
       <Separator />
-      <Container className="max-w-screen-xl" as="div">
+      <Container className="max-w-(--breakpoint-xl)" as="div">
         <section
           className={cn(
             "relative mx-auto mb-5 flex max-w-full flex-col space-y-5 px-2 pt-6 sm:px-4 lg:flex-row lg:space-x-12 lg:space-y-0"

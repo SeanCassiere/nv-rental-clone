@@ -48,7 +48,7 @@ export const ViewReport = () => {
               Reports
             </Link>
             <icons.ChevronRight
-              className="hidden h-4 w-4 flex-shrink-0 sm:inline-block"
+              className="hidden h-4 w-4 shrink-0 sm:inline-block"
               aria-hidden="true"
             />
             <h1 className="inline-block text-2xl font-semibold leading-6">

@@ -48,7 +48,7 @@ export default function AuthHeader() {
                 />
               </Link>
             </div>
-            <div className="flex flex-grow items-center">
+            <div className="flex grow items-center">
               <Link
                 to="/"
                 className="hidden items-center rounded p-1 text-lg font-medium leading-3 transition sm:flex"
@@ -64,7 +64,7 @@ export default function AuthHeader() {
         </div>
       </header>
       <AppNavigation
-        className={cn("sticky top-0 z-20 w-full border-b bg-card md:shadow-sm")}
+        className={cn("sticky top-0 z-20 w-full border-b bg-card md:shadow-xs")}
       />
     </>
   );
