@@ -366,9 +366,9 @@ function VehicleSearchPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="text-2xl font-semibold leading-6">Fleet</h1>
+          <h1 className="text-2xl leading-6 font-semibold">Fleet</h1>
         </div>
-        <p className={cn("text-base text-foreground/80")}>
+        <p className={cn("text-foreground/80 text-base")}>
           Search through your fleet and view details.
         </p>
       </section>
@@ -409,11 +409,11 @@ function VehicleSearchPage() {
           <div className="flex items-center justify-end">
             <TableListColumnVisibilityDropdown />
           </div>
-          <div className="mt-2.5 overflow-hidden rounded-md border bg-card">
+          <div className="bg-card mt-2.5 overflow-hidden rounded-md border">
             <TableListContent />
           </div>
           <Pagination className="mt-2.5">
-            <PaginationContent className="rounded-md border bg-card px-1 py-0.5 md:px-2 md:py-1">
+            <PaginationContent className="bg-card rounded-md border px-1 py-0.5 md:px-2 md:py-1">
               <TableListPaginationPrevious>
                 {(state) => (
                   <PaginationLinkPrevious

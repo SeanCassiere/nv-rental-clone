@@ -176,7 +176,7 @@ const DefaultView = () => {
   }, [format, report.name, sanitizedRows.outputFields]);
 
   return (
-    <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
+    <section className="mx-2 mt-4 mb-6 sm:mx-4 sm:px-1">
       {state.status === "success" && sanitizedRows.rows.length === 0 ? (
         <EmptyState
           title={t("display.noResultsFound", { ns: "labels" })}

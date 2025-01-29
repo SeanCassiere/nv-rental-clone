@@ -33,15 +33,15 @@ export const EmptyState = ({
   return (
     <div
       className={cn(
-        "flex h-[450px] shrink-0 items-center justify-center rounded-md border bg-card",
+        "bg-card flex h-[450px] shrink-0 items-center justify-center rounded-md border",
         containerClassName
       )}
     >
       <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-        <RenderedIcon className="h-10 w-10 text-muted-foreground" />
+        <RenderedIcon className="text-muted-foreground h-10 w-10" />
 
         <h3 className="mt-4 text-lg font-semibold">{title}</h3>
-        <p className="mb-4 mt-2 text-sm text-muted-foreground">{subtitle}</p>
+        <p className="text-muted-foreground mt-2 mb-4 text-sm">{subtitle}</p>
 
         {buttonOptions ? (
           <Button

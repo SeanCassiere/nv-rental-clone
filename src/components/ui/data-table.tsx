@@ -54,7 +54,7 @@ export function DataTableColumnHeader<TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort() && !column.getCanHide()) {
     return (
-      <div className={cn("whitespace-nowrap text-left", className)}>
+      <div className={cn("text-left whitespace-nowrap", className)}>
         {title}
       </div>
     );
@@ -67,7 +67,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 whitespace-nowrap text-left data-[state=open]:bg-accent"
+            className="data-[state=open]:bg-accent -ml-3 h-8 text-left whitespace-nowrap"
           >
             <span>{title}</span>
             {column.getCanSort() ? (
@@ -91,18 +91,18 @@ export function DataTableColumnHeader<TData, TValue>({
           {column.getCanSort() && (
             <>
               <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-                <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                <SortAsc className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
                 Asc
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-                <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                <SortDesc className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
                 Desc
               </DropdownMenuItem>
               <DropdownMenuSeparator />
             </>
           )}
           <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            <EyeOff className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
             Hide
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -195,7 +195,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                   >
                     <div
                       className={cn(
-                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                        "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                         isSelected
                           ? "bg-primary text-primary-foreground"
                           : "opacity-50 [&_svg]:invisible"
@@ -204,7 +204,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       <CheckIcon className={cn("h-4 w-4")} />
                     </div>
                     {option.icon && (
-                      <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <option.icon className="text-muted-foreground mr-2 h-4 w-4" />
                     )}
                     <span>{option.label}</span>
                     {facets?.get(option.value) && (
@@ -303,7 +303,7 @@ export function DataTableToolbar<TData>({
         <>{customSearchFilters}</>
       ) : (
         <div className="flex flex-1 items-center space-x-2">
-          <div className="text-sm text-foreground/80">
+          <div className="text-foreground/80 text-sm">
             TODO: implement a more modern search filter toolbar
           </div>
           {/* <Input

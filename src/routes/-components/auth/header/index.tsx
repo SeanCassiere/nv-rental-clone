@@ -27,7 +27,7 @@ export default function AuthHeader() {
     <>
       <header className="bg-card">
         {messages.length > 0 && (
-          <section className="grid w-full divide-y divide-bannerPromo-foreground/80 bg-bannerPromo">
+          <section className="divide-bannerPromo-foreground/80 bg-bannerPromo grid w-full divide-y">
             {messages.map((notice) => (
               <BannerNotice
                 message={notice}
@@ -37,7 +37,7 @@ export default function AuthHeader() {
           </section>
         )}
         <div className={cn("mx-auto max-w-[1700px] px-1 md:px-5")}>
-          <div className="flex items-center px-4 pb-4 pt-6 md:px-10 md:pt-8">
+          <div className="flex items-center px-4 pt-6 pb-4 md:px-10 md:pt-8">
             <div className="mr-2 md:ml-2">
               <Link to="/">
                 <img
@@ -48,10 +48,10 @@ export default function AuthHeader() {
                 />
               </Link>
             </div>
-            <div className="flex flex-grow items-center">
+            <div className="flex grow items-center">
               <Link
                 to="/"
-                className="hidden items-center rounded p-1 text-lg font-medium leading-3 transition sm:flex"
+                className="hidden items-center rounded p-1 text-lg leading-3 font-medium transition sm:flex"
               >
                 {UI_APPLICATION_NAME}
               </Link>
@@ -64,7 +64,7 @@ export default function AuthHeader() {
         </div>
       </header>
       <AppNavigation
-        className={cn("sticky top-0 z-20 w-full border-b bg-card md:shadow-sm")}
+        className={cn("bg-card sticky top-0 z-20 w-full border-b md:shadow-xs")}
       />
     </>
   );

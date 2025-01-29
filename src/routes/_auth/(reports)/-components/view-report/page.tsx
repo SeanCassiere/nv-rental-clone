@@ -43,22 +43,22 @@ export const ViewReport = () => {
           <div className="flex h-full w-full flex-col gap-2 sm:flex-row sm:items-center">
             <Link
               to="/reports"
-              className="inline-block text-xl font-semibold leading-6 text-foreground/75 sm:text-2xl sm:text-foreground"
+              className="text-foreground/75 sm:text-foreground inline-block text-xl leading-6 font-semibold sm:text-2xl"
             >
               Reports
             </Link>
             <icons.ChevronRight
-              className="hidden h-4 w-4 flex-shrink-0 sm:inline-block"
+              className="hidden h-4 w-4 shrink-0 sm:inline-block"
               aria-hidden="true"
             />
-            <h1 className="inline-block text-2xl font-semibold leading-6">
+            <h1 className="inline-block text-2xl leading-6 font-semibold">
               {report?.title ? report.title : report.name}
             </h1>
           </div>
           {/* put action details here like save and schedule */}
         </div>
 
-        <p className={cn("mt-2 w-full text-base text-foreground/80 sm:mt-0")}>
+        <p className={cn("text-foreground/80 mt-2 w-full text-base sm:mt-0")}>
           {isFiltersAvailable
             ? "Confirm the search criteria and click the Run button to generate the report."
             : "Click the Run button to generate the report."}
@@ -68,7 +68,7 @@ export const ViewReport = () => {
       </section>
 
       {resultState.status === "idle" && (
-        <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
+        <section className="mx-2 mt-4 mb-6 sm:mx-4 sm:px-1">
           <EmptyState
             title="Report is ready to run."
             subtitle="Click the Run button to generate the report."
@@ -91,7 +91,7 @@ export const ViewReport = () => {
         </section>
       )}
       {resultState.status === "error" && (
-        <section className="mx-2 mb-6 mt-4 sm:mx-4 sm:px-1">
+        <section className="mx-2 mt-4 mb-6 sm:mx-4 sm:px-1">
           <EmptyState
             title="Something went wrong"
             subtitle={

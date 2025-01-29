@@ -204,13 +204,13 @@ export const CommandMenu = () => {
       <Button
         variant="outline"
         className={cn(
-          "relative w-52 items-center justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64"
+          "text-muted-foreground relative w-52 items-center justify-start text-sm sm:pr-12 md:w-40 lg:w-64"
         )}
         onClick={() => setShowCommandMenu(true)}
       >
         <span className="hidden lg:inline-flex">Search application...</span>
         <span className="inline-flex lg:hidden">Search...</span>
-        <kbd className="pointer-events-none absolute right-1.5 top-[0.55rem] hidden h-5 select-none items-center gap-1 rounded-md border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+        <kbd className="bg-muted pointer-events-none absolute top-[0.55rem] right-1.5 hidden h-5 items-center gap-1 rounded-md border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex">
           <span className="text-xs">{IsMacLike ? "⌘" : "Ctrl"}</span>+ K
         </kbd>
       </Button>
@@ -258,7 +258,7 @@ export const CommandMenu = () => {
                     );
                   }}
                 >
-                  <icons.Car className="mr-2 h-4 w-4 text-primary/70" />
+                  <icons.Car className="text-primary/70 mr-2 h-4 w-4" />
                   {item.displayText}
                 </CommandItem>
               ))}
@@ -295,7 +295,7 @@ export const CommandMenu = () => {
                     );
                   }}
                 >
-                  <icons.Users className="mr-2 h-4 w-4 text-primary/70" />
+                  <icons.Users className="text-primary/70 mr-2 h-4 w-4" />
                   {item.displayText}
                 </CommandItem>
               ))}
@@ -332,7 +332,7 @@ export const CommandMenu = () => {
                     );
                   }}
                 >
-                  <icons.Calendar className="mr-2 h-4 w-4 text-primary/70" />
+                  <icons.Calendar className="text-primary/70 mr-2 h-4 w-4" />
                   {item.displayText}
                 </CommandItem>
               ))}
@@ -369,7 +369,7 @@ export const CommandMenu = () => {
                     );
                   }}
                 >
-                  <icons.FileSignature className="mr-4 h-4 w-4 text-primary/70" />
+                  <icons.FileSignature className="text-primary/70 mr-4 h-4 w-4" />
                   {item.displayText}
                 </CommandItem>
               ))}
@@ -386,7 +386,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.Car className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.Car className="text-primary/70 mr-4 h-4 w-4" />
               Fleet
             </CommandItem>
             <CommandItem
@@ -399,7 +399,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.Users className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.Users className="text-primary/70 mr-4 h-4 w-4" />
               Customers
             </CommandItem>
             <CommandItem
@@ -412,7 +412,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.Calendar className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.Calendar className="text-primary/70 mr-4 h-4 w-4" />
               Reservations
             </CommandItem>
             <CommandItem
@@ -425,7 +425,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.FileSignature className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.FileSignature className="text-primary/70 mr-4 h-4 w-4" />
               Agreements
             </CommandItem>
             <CommandItem
@@ -437,7 +437,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.DashboardLayout className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.DashboardLayout className="text-primary/70 mr-4 h-4 w-4" />
               Dashboard
             </CommandItem>
             <CommandItem
@@ -449,7 +449,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.BarChart className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.BarChart className="text-primary/70 mr-4 h-4 w-4" />
               Reports
             </CommandItem>
           </CommandGroup>
@@ -460,7 +460,7 @@ export const CommandMenu = () => {
                 run(() => setTernaryDarkMode("dark"));
               }}
             >
-              <icons.Moon className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.Moon className="text-primary/70 mr-4 h-4 w-4" />
               Set theme to dark
             </CommandItem>
             <CommandItem
@@ -468,7 +468,7 @@ export const CommandMenu = () => {
                 run(() => setTernaryDarkMode("light"));
               }}
             >
-              <icons.Sun className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.Sun className="text-primary/70 mr-4 h-4 w-4" />
               Set theme to light
             </CommandItem>
             <CommandItem
@@ -476,7 +476,7 @@ export const CommandMenu = () => {
                 run(() => setTernaryDarkMode("system"));
               }}
             >
-              <icons.System className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.System className="text-primary/70 mr-4 h-4 w-4" />
               Set theme to system
             </CommandItem>
             <CommandItem
@@ -489,7 +489,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.User className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.User className="text-primary/70 mr-4 h-4 w-4" />
               Profile
             </CommandItem>
             <CommandItem
@@ -501,7 +501,7 @@ export const CommandMenu = () => {
                 );
               }}
             >
-              <icons.Settings className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.Settings className="text-primary/70 mr-4 h-4 w-4" />
               Settings
             </CommandItem>
             <CommandItem
@@ -509,7 +509,7 @@ export const CommandMenu = () => {
                 run(() => setShowLogout(true), false);
               }}
             >
-              <icons.Logout className="mr-4 h-4 w-4 text-primary/70" />
+              <icons.Logout className="text-primary/70 mr-4 h-4 w-4" />
               Logout
             </CommandItem>
           </CommandGroup>

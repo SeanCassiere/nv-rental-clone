@@ -367,8 +367,8 @@ function UsernameBlock({ form }: BlockProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex h-10 items-center justify-between rounded-md border border-border pl-3 opacity-90 lg:w-72">
-          <span className="grow cursor-not-allowed truncate text-muted-foreground">
+        <div className="border-border flex h-10 items-center justify-between rounded-md border pl-3 opacity-90 lg:w-72">
+          <span className="text-muted-foreground grow cursor-not-allowed truncate">
             {username}
           </span>
           <Tooltip delayDuration={0}>
@@ -508,7 +508,7 @@ function DisplayNameBlock({
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="mb-2 text-muted-foreground">
+                    <FormLabel className="text-muted-foreground mb-2">
                       {t("display.firstName", { ns: "labels" })}
                     </FormLabel>
                     <FormControl className="mb-0">
@@ -529,7 +529,7 @@ function DisplayNameBlock({
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="mb-2 text-muted-foreground">
+                    <FormLabel className="text-muted-foreground mb-2">
                       {t("display.lastName", { ns: "labels" })}
                     </FormLabel>
                     <FormControl className="mb-0">
@@ -731,7 +731,7 @@ function ResetPasswordBlock({ clientId, userId, user }: BlockProps) {
             type="button"
             size="sm"
             variant="outline"
-            className="bg-transparent text-destructive/90 hover:text-destructive"
+            className="text-destructive/90 hover:text-destructive bg-transparent"
             onClick={() => setOpen(true)}
           >
             <span>{t("labels.resetPassword", { ns: "settings" })}</span>

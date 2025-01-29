@@ -21,7 +21,7 @@ function DevPage() {
 
   return (
     <Container>
-      <div className="overflow-y-auto bg-background px-2 text-foreground">
+      <div className="bg-background text-foreground overflow-y-auto px-2">
         <section className="py-10 md:mx-28">
           <h2 className="text-2xl">JSURL Utils</h2>
           <JsURLDecoder />
@@ -62,7 +62,7 @@ function JsURLDecoder() {
       <div>
         <p className="text-sm">Encoded</p>
         <div className="flex flex-col md:flex-row">
-          <p className="w-full break-all bg-accent p-4 text-accent-foreground">
+          <p className="bg-accent text-accent-foreground w-full p-4 break-all">
             {encoded}
           </p>
           <p className="w-min">
@@ -96,7 +96,7 @@ function JsURLDecoder() {
       <div>
         <p className="text-sm">Decoded</p>
         <div className="flex flex-col md:flex-row">
-          <p className="w-full break-all bg-accent p-4 text-accent-foreground">
+          <p className="bg-accent text-accent-foreground w-full p-4 break-all">
             {JSON.stringify(decoded)}
           </p>
           <p className="w-min">

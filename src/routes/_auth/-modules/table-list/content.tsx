@@ -105,9 +105,7 @@ function TableListContent(props: TableListContentProps) {
             ))}
           </TableHeader>
           <TableBody
-            className={cn(
-              isLoading ? "pointer-events-none [&>*]:opacity-50" : ""
-            )}
+            className={cn(isLoading ? "pointer-events-none *:opacity-50" : "")}
           >
             {rowModel.rows?.length ? (
               rowModel.rows.map((row) => (

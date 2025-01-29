@@ -133,7 +133,7 @@ function ListUsers() {
   );
 
   return (
-    <ul role="list" className="divide-y divide-muted">
+    <ul role="list" className="divide-muted divide-y">
       {users.map((user) => (
         <ListItemUser
           key={`user_config_${user.userID}`}
@@ -193,19 +193,19 @@ function ListItemUser({
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-auto text-sm">
-            <p className="font-semibold leading-6 text-foreground">
+            <p className="text-foreground leading-6 font-semibold">
               {user.fullName} ({user.userName})
             </p>
-            <p className="mt-1 truncate leading-5 text-muted-foreground">
+            <p className="text-muted-foreground mt-1 truncate leading-5">
               {user.email}
             </p>
           </div>
         </div>
         <div className="flex gap-x-4 text-sm">
           <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-            <p className="leading-6 text-foreground">{user.roleName}</p>
+            <p className="text-foreground leading-6">{user.roleName}</p>
             <div className="mt-1 flex items-center gap-x-1.5">
-              <div className="flex-none rounded-full bg-background/20 p-1">
+              <div className="bg-background/20 flex-none rounded-full p-1">
                 <div
                   className={cn(
                     "h-2 w-2 rounded-full",
@@ -213,7 +213,7 @@ function ListItemUser({
                   )}
                 />
               </div>
-              <p className="select-none leading-5 text-muted-foreground">
+              <p className="text-muted-foreground leading-5 select-none">
                 {user.isActive
                   ? t("display.active", { ns: "labels" })
                   : t("display.inactive", { ns: "labels" })}

@@ -50,7 +50,7 @@ export function WidgetFacade(props: WidgetFacadeProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "col-span-1 flex flex-col rounded-md border bg-card p-4 shadow-sm",
+        "bg-card col-span-1 flex flex-col rounded-md border p-4 shadow-xs",
         props.widget.widgetScale > 6 ? "md:col-span-12" : "md:col-span-6"
       )}
     >

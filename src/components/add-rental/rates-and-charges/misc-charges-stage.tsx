@@ -415,7 +415,7 @@ function MiscChargeItem(props: {
             </div>
           </CardHeader>
           {hasContent && (
-            <CardContent className="flex flex-col gap-3 pb-0 pt-0 sm:ml-12">
+            <CardContent className="flex flex-col gap-3 pt-0 pb-0 sm:ml-12">
               {charge.CalculationType?.toLowerCase() === "range" && (
                 <div className="pb-6">
                   {dates.startDate.toISOString().substring(0, 10)}&nbsp;-&nbsp;
@@ -423,7 +423,7 @@ function MiscChargeItem(props: {
                 </div>
               )}
               {charge.IsDeductible && charge.Options?.length && (
-                <AccordionPrimitive.Content className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                <AccordionPrimitive.Content className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden transition-all">
                   <fieldset
                     className="flex flex-col gap-3 pb-6"
                     disabled={!isSelected}
@@ -439,7 +439,7 @@ function MiscChargeItem(props: {
                           <label
                             htmlFor={`${idx}-${charge.Id}-${option.miscChargeOptionId}`}
                             className={cn(
-                              "relative block w-full rounded-lg border bg-background px-4 py-3.5 focus:outline-none sm:flex sm:justify-between",
+                              "bg-background relative block w-full rounded-lg border px-4 py-3.5 focus:outline-hidden sm:flex sm:justify-between",
                               String(optionId) ===
                                 String(option.miscChargeOptionId)
                                 ? "border-transparent"
@@ -531,7 +531,7 @@ function MiscChargeItem(props: {
                                 "pointer-events-none absolute -inset-px rounded-lg",
                                 String(optionId) ===
                                   String(option.miscChargeOptionId)
-                                  ? "border-2 border-primary"
+                                  ? "border-primary border-2"
                                   : "border border-transparent"
                               )}
                               aria-hidden="true"
@@ -544,7 +544,7 @@ function MiscChargeItem(props: {
                 </AccordionPrimitive.Content>
               )}
               {charge.CalculationType?.toLowerCase() === "perday" && (
-                <AccordionPrimitive.Content className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                <AccordionPrimitive.Content className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden transition-all">
                   <div className="grid grid-cols-2 items-center gap-3 pb-6 sm:max-w-[500px] sm:grid-cols-3">
                     <div className="hidden font-semibold sm:block">
                       Description

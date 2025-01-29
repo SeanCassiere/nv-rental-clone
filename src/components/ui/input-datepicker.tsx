@@ -76,7 +76,7 @@ function InputDatePicker({
         {children}
         <PopoverContent
           align={align}
-          className="w-full max-w-[400px] px-0 pb-1.5 pt-1"
+          className="w-full max-w-[400px] px-0 pt-1 pb-1.5"
         >
           {mode === "date" || mode === "datetime" ? (
             <Calendar
@@ -146,7 +146,7 @@ function InputDatePickerSlot() {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="absolute right-0.5 top-0.5 h-9"
+          className="absolute top-0.5 right-0.5 h-9"
           disabled={ctx.disabled || ctx.readOnly}
         >
           <icons.Calendar className="h-3.5 w-3.5" />

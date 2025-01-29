@@ -86,7 +86,7 @@ function LoginPage() {
   useDocumentTitle(titleMaker(t("pageTitle", { ns: "login" })));
 
   return (
-    <main className="grid h-dvh w-dvw bg-background lg:grid-cols-2 xl:grid-cols-3">
+    <main className="bg-background grid h-dvh w-dvw lg:grid-cols-2 xl:grid-cols-3">
       <section className="flex flex-col justify-between p-4 md:col-span-1">
         <div className="mx-auto flex w-full max-w-[800px] items-center justify-start gap-2">
           <img
@@ -94,7 +94,7 @@ function LoginPage() {
             alt={UI_APPLICATION_NAME}
             style={{ imageRendering: "crisp-edges" }}
           />
-          <p className="select-none text-lg font-medium leading-3">
+          <p className="text-lg leading-3 font-medium select-none">
             {UI_APPLICATION_NAME}
           </p>
         </div>
@@ -125,7 +125,7 @@ function LoginPage() {
           </CardContent>
         </Card>
         <div className="mx-auto flex w-full max-w-[800px] items-center justify-between">
-          <p className="block text-sm font-medium tracking-tight text-muted-foreground">
+          <p className="text-muted-foreground block text-sm font-medium tracking-tight">
             © {UI_APPLICATION_NAME} ({new Date().getFullYear()})
           </p>
           <Button
@@ -153,55 +153,55 @@ function LoginPage() {
         </div>
       </section>
       <section className="relative hidden py-4 lg:col-span-1 lg:grid lg:place-items-center xl:col-span-2">
-        <div className="size-full rounded-l-2xl bg-secondary p-10">
+        <div className="bg-secondary size-full rounded-l-2xl p-10">
           <div
             className="absolute inset-0 size-full bg-[radial-gradient(hsla(var(--secondary-foreground)/0.25)_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"
             aria-hidden
           />
           <div className="grid max-w-2xl gap-4 xl:gap-5">
             <span
-              className="mb-4 grid size-14 place-items-center rounded-full border bg-background xl:mb-6 xl:size-16"
+              className="bg-background mb-4 grid size-14 place-items-center rounded-full border xl:mb-6 xl:size-16"
               aria-hidden
             >
-              <icons.GripVertical className="size-5 text-foreground/75 xl:size-6" />
+              <icons.GripVertical className="text-foreground/75 size-5 xl:size-6" />
             </span>
-            <h3 className="z-20 text-5xl font-medium tracking-tighter text-secondary-foreground xl:text-6xl">
+            <h3 className="text-secondary-foreground z-20 text-5xl font-medium tracking-tighter xl:text-6xl">
               Streamline your workflow
             </h3>
-            <p className="z-10 pl-0.5 tracking-wide text-secondary-foreground/90">
+            <p className="text-secondary-foreground/90 z-10 pl-0.5 tracking-wide">
               Discover the ease of managing your car rental business with our
               intuitive software. From reservations to reporting, our{" "}
               {UI_APPLICATION_NAME} simplifies every step, allowing you to focus
               on delivering exceptional service to your customers.
             </p>
             <ul className="z-10 mt-4 grid gap-4">
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="bg-background/80 flex items-center gap-6 rounded-xl border px-6 py-4 shadow-sm">
                 <span>
-                  <CircleCheckBigIcon className="size-5 text-foreground" />
+                  <CircleCheckBigIcon className="text-foreground size-5" />
                 </span>
                 <h4 className="text-foreground/90">Booking Management</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="bg-background/80 flex items-center gap-6 rounded-xl border px-6 py-4 shadow-sm">
                 <span>
-                  <CircleCheckBigIcon className="size-5 text-foreground" />
+                  <CircleCheckBigIcon className="text-foreground size-5" />
                 </span>
                 <h4 className="text-foreground/90">Fleet Management</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="bg-background/80 flex items-center gap-6 rounded-xl border px-6 py-4 shadow-sm">
                 <span>
-                  <CircleCheckBigIcon className="size-5 text-foreground" />
+                  <CircleCheckBigIcon className="text-foreground size-5" />
                 </span>
                 <h4 className="text-foreground/90">Customer Database</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="bg-background/80 flex items-center gap-6 rounded-xl border px-6 py-4 shadow-sm">
                 <span>
-                  <CircleCheckBigIcon className="size-5 text-foreground" />
+                  <CircleCheckBigIcon className="text-foreground size-5" />
                 </span>
                 <h4 className="text-foreground/90">Reporting and Analytics</h4>
               </li>
-              <li className="flex items-center gap-6 rounded-xl border bg-background/80 px-6 py-4 shadow">
+              <li className="bg-background/80 flex items-center gap-6 rounded-xl border px-6 py-4 shadow-sm">
                 <span>
-                  <CircleCheckBigIcon className="size-5 text-foreground" />
+                  <CircleCheckBigIcon className="text-foreground size-5" />
                 </span>
                 <h4 className="text-foreground/90">24/7 Customer Support</h4>
               </li>

@@ -122,8 +122,8 @@ export default function ReportsListV2(props: ReportsListV2Props) {
   );
 
   return (
-    <section className="mx-auto mb-4 mt-2 grid max-w-full gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1 md:mb-8">
-      <div className="grid grid-cols-1 space-y-2 sm:grid-cols-2 sm:space-x-2 sm:space-y-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <section className="mx-auto mt-2 mb-4 grid max-w-full gap-2 px-2 pt-1.5 sm:mx-4 sm:px-1 md:mb-8">
+      <div className="grid grid-cols-1 space-y-2 sm:grid-cols-2 sm:space-y-0 sm:space-x-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <div>
           <Label htmlFor={selectId} className="sr-only">
             Filter down the reports by their category
@@ -134,7 +134,7 @@ export default function ReportsListV2(props: ReportsListV2Props) {
           >
             <SelectTrigger
               id={selectId}
-              className="w-full truncate whitespace-nowrap bg-card"
+              className="bg-card w-full truncate whitespace-nowrap"
             >
               <SelectValue
                 placeholder="Select a category"
@@ -158,34 +158,34 @@ export default function ReportsListV2(props: ReportsListV2Props) {
       <nav>
         <ul
           className={cn(
-            "-mx-px grid grid-cols-1 overflow-hidden rounded-md border-l border-border sm:mx-0 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+            "border-border -mx-px grid grid-cols-1 overflow-hidden rounded-md border-l sm:mx-0 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
             reports.length > 2
               ? "border-t"
-              : "[&>li:nth-child(1)]:border-t [&>li]:sm:border-t"
+              : "sm:[&>li]:border-t [&>li:nth-child(1)]:border-t"
           )}
         >
           {reports.length > 0 ? (
             reports.map((report, idx) => (
               <li
                 key={`report_item_${report.id}_${idx}`}
-                className="relative flex min-h-[5rem] flex-col items-start justify-between border-b border-r border-border bg-card p-4 sm:p-6"
+                className="border-border bg-card relative flex min-h-[5rem] flex-col items-start justify-between border-r border-b p-4 sm:p-6"
               >
                 <Link
                   to="/reports/$reportId"
                   params={{ reportId: report.id }}
                   className={cn(
                     buttonVariants({ variant: "link" }),
-                    "flex w-full grow justify-start text-balance px-0 py-2"
+                    "flex w-full grow justify-start px-0 py-2 text-balance"
                   )}
                 >
                   {report.title}
                 </Link>
-                <p className="text-sm text-foreground/60">
+                <p className="text-foreground/60 text-sm">
                   {report.categories.map((category, idx) => (
                     <React.Fragment key={`${report.id}_${category}_${idx}`}>
                       <Link
                         to="/reports"
-                        className="underline-offset-4 hover:text-muted-foreground hover:underline"
+                        className="hover:text-muted-foreground underline-offset-4 hover:underline"
                         search={(s) => ({ ...s, category })}
                       >
                         {category}

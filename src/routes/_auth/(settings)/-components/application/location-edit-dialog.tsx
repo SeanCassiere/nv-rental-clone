@@ -608,7 +608,7 @@ function LocationForm(props: LocationFormProps) {
           control={form.control}
           name="active"
           render={({ field }) => (
-            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
+            <FormItem className="bg-background mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("labels.availableForUse", { ns: "settings" })}
@@ -632,7 +632,7 @@ function LocationForm(props: LocationFormProps) {
           control={form.control}
           name="isReservation"
           render={({ field }) => (
-            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
+            <FormItem className="bg-background mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("labels.availableForOnlineReservations", {

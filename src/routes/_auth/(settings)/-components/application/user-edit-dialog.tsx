@@ -542,7 +542,7 @@ function EditUserForm(props: {
               <FormItem className="w-full">
                 <FormLabel>
                   {t("display.phoneNo", { ns: "labels" })}&nbsp;
-                  <span className="text-xs text-foreground/70">
+                  <span className="text-foreground/70 text-xs">
                     {t("display.bracketOptional", { ns: "labels" })}
                   </span>
                 </FormLabel>
@@ -624,7 +624,7 @@ function EditUserForm(props: {
           control={form.control}
           name="isReservationEmail"
           render={({ field }) => (
-            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
+            <FormItem className="bg-background mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}
@@ -647,7 +647,7 @@ function EditUserForm(props: {
           control={form.control}
           name="isActive"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
+            <FormItem className="bg-background flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("titles.accountActive", { ns: "settings" })}
@@ -672,7 +672,7 @@ function EditUserForm(props: {
           control={form.control}
           name="lockOut"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
+            <FormItem className="bg-background flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("titles.accountLock", { ns: "settings" })}
@@ -946,7 +946,7 @@ function CreateUserForm(props: {
                 <Button
                   type="button"
                   variant="ghost"
-                  className="absolute right-0.5 top-0.5 h-9"
+                  className="absolute top-0.5 right-0.5 h-9"
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (
@@ -1045,7 +1045,7 @@ function CreateUserForm(props: {
               <FormItem className="w-full">
                 <FormLabel>
                   {t("display.phoneNo", { ns: "labels" })}&nbsp;
-                  <span className="text-xs text-foreground/70">
+                  <span className="text-foreground/70 text-xs">
                     {t("display.bracketOptional", { ns: "labels" })}
                   </span>
                 </FormLabel>
@@ -1127,7 +1127,7 @@ function CreateUserForm(props: {
           control={form.control}
           name="isReservationEmail"
           render={({ field }) => (
-            <FormItem className="mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border bg-background p-4">
+            <FormItem className="bg-background mt-2 flex flex-row items-center justify-between gap-1 rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel>
                   {t("labels.userToReceiveEmailsQuestion", { ns: "settings" })}

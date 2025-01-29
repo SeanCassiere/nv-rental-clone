@@ -17,13 +17,13 @@ export default function AuthFooter() {
   const { setShowCommandMenu } = useGlobalDialogContext();
 
   return (
-    <footer className="border-t bg-card px-1 text-foreground/65 md:px-5">
-      <div className="mx-auto grid max-w-[1700px] gap-4 px-4 pb-6 pt-5 md:px-10">
+    <footer className="bg-card text-foreground/65 border-t px-1 md:px-5">
+      <div className="mx-auto grid max-w-[1700px] gap-4 px-4 pt-5 pb-6 md:px-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link
               to="/"
-              className="rounded ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="ring-offset-background focus-within:text-foreground hover:text-foreground focus-visible:ring-ring rounded transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
             >
               <img
                 // logo url is set in the global css under the name --logo-url
@@ -54,14 +54,14 @@ export default function AuthFooter() {
                 <span>Command menu</span>
                 <div className="inline-flex items-center gap-1">
                   <span
-                    className="rounded border bg-background px-1 py-0.5"
+                    className="bg-background rounded border px-1 py-0.5"
                     aria-hidden
                   >
                     {IsMacLike ? "⌘" : "Ctrl"}
                   </span>
                   <span aria-hidden>+</span>
                   <span
-                    className="rounded border bg-background px-1.5 py-0.5"
+                    className="bg-background rounded border px-1.5 py-0.5"
                     aria-hidden
                   >
                     K
@@ -126,7 +126,7 @@ export default function AuthFooter() {
         <div>
           <div className="flex items-center gap-2">
             <a
-              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="ring-offset-background focus-within:text-foreground hover:text-foreground focus-visible:ring-ring inline-flex h-8 items-center rounded p-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
               href="https://github.com/seancassiere/nv-rental-clone"
               target="_blank"
               rel="noreferrer"
@@ -134,7 +134,7 @@ export default function AuthFooter() {
               <icons.GitHub className="h-4 w-4" />
             </a>
             <a
-              className="inline-flex h-8 items-center rounded p-2 ring-offset-background transition-colors focus-within:text-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="ring-offset-background focus-within:text-foreground hover:text-foreground focus-visible:ring-ring inline-flex h-8 items-center rounded p-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
               href="https://x.com/seancassiere"
               target="_blank"
               rel="noreferrer"

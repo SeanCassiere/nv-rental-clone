@@ -61,7 +61,7 @@ function InputDatetime(props: InputDatetimeProps) {
     // @ts-expect-error
     <div
       id={`${id}-root`}
-      className="flex h-10 items-center justify-start gap-0.5 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background duration-100 focus-within:border-input focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
+      className="border-input bg-background ring-offset-background focus-within:border-input focus-within:ring-ring focus-within:ring-offset-background flex h-10 items-center justify-start gap-0.5 rounded-md border px-3 py-2 text-sm duration-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
       {...getRootProps()}
     >
       {
@@ -71,7 +71,7 @@ function InputDatetime(props: InputDatetimeProps) {
             return (
               <span
                 key={`${id}-separator-${idx}`}
-                className="separator m-0 font-mono text-[60%] text-muted-foreground"
+                className="separator text-muted-foreground m-0 font-mono text-[60%]"
               >
                 {segment.value}
               </span>
@@ -91,7 +91,7 @@ function InputDatetime(props: InputDatetimeProps) {
               readOnly={props.readOnly}
               onFocus={props.onDateFocus}
               onBlur={props.onDateBlur}
-              className="inline-block h-full flex-grow-0 rounded-sm border-none bg-transparent px-0.5 font-sans text-sm tabular-nums text-foreground caret-transparent outline-none ring-0 selection:bg-foreground selection:text-background placeholder:font-mono focus:bg-foreground focus:text-background focus:ring-0"
+              className="text-foreground selection:bg-foreground selection:text-background focus:bg-foreground focus:text-background inline-block h-full grow-0 rounded-sm border-none bg-transparent px-0.5 font-sans text-sm tabular-nums caret-transparent ring-0 outline-hidden placeholder:font-mono focus:ring-0"
               style={
                 {
                   "--char-length": `${segment.type === "years" ? 4 : segment.type === "am/pm" ? 2.5 : 2}ch`,

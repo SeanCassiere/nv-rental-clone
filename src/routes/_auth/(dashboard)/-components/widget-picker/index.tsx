@@ -321,7 +321,7 @@ const WidgetItem = React.forwardRef<HTMLLIElement, WidgetItemProps>(
       <li
         ref={ref}
         className={cn(
-          "grid w-full grid-cols-8 items-center bg-card p-1",
+          "bg-card grid w-full grid-cols-8 items-center p-1",
           "[&.indicator]:opacity-10",
           className
         )}

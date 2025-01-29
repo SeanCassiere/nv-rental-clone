@@ -79,12 +79,12 @@ function Component() {
               <Link
                 from="/customers/$customerId"
                 to=".."
-                className="text-2xl font-semibold leading-6"
+                className="text-2xl leading-6 font-semibold"
               >
                 Customers
               </Link>
               <icons.ChevronRight
-                className="h-4 w-4 flex-shrink-0"
+                className="h-4 w-4 shrink-0"
                 aria-hidden="true"
               />
               <Link
@@ -96,7 +96,7 @@ function Component() {
                       : "summary",
                 })}
                 params={{ customerId }}
-                className="max-w-[230px] truncate text-2xl font-semibold leading-6 text-foreground/80 md:max-w-full"
+                className="text-foreground/80 max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
               >
                 {customer?.firstName}&nbsp;
                 {customer?.lastName}
@@ -147,7 +147,7 @@ function Component() {
               </DropdownMenu>
             </div>
           </div>
-          <p className={cn("text-base text-foreground/80")}>
+          <p className={cn("text-foreground/80 text-base")}>
             View the details related to this customer.
           </p>
         </div>

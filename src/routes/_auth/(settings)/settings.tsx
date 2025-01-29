@@ -116,7 +116,7 @@ function SettingsLayout() {
 
   return (
     <main>
-      <Container className="max-w-screen-xl pb-4" as="div">
+      <Container className="max-w-(--breakpoint-xl) pb-4" as="div">
         <section
           className={cn(
             "mx-auto mt-6 flex max-w-full flex-col gap-2 px-2 sm:mx-4 sm:px-1"
@@ -125,11 +125,11 @@ function SettingsLayout() {
           <div
             className={cn("flex min-h-[2.5rem] items-center justify-between")}
           >
-            <h1 className="text-2xl font-semibold leading-6">
+            <h1 className="text-2xl leading-6 font-semibold">
               {t("titles.settings", { ns: "settings" })}
             </h1>
           </div>
-          <p className={cn("text-balance text-base text-foreground/80")}>
+          <p className={cn("text-foreground/80 text-base text-balance")}>
             {t("descriptions.settings", {
               ns: "settings",
               appName: UI_APPLICATION_NAME,
@@ -138,10 +138,10 @@ function SettingsLayout() {
         </section>
       </Container>
       <Separator />
-      <Container className="max-w-screen-xl" as="div">
+      <Container className="max-w-(--breakpoint-xl)" as="div">
         <section
           className={cn(
-            "relative mx-auto mb-5 flex max-w-full flex-col space-y-5 px-2 pt-6 sm:px-4 lg:flex-row lg:space-x-12 lg:space-y-0"
+            "relative mx-auto mb-5 flex max-w-full flex-col space-y-5 px-2 pt-6 sm:px-4 lg:flex-row lg:space-y-0 lg:space-x-12"
           )}
         >
           <aside className="block h-full shrink-0 pb-4 sm:px-1 lg:sticky lg:top-16 lg:w-1/5">

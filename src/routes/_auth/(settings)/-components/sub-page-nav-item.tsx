@@ -17,11 +17,11 @@ export function SubPageNavItem(props: {
   return (
     <li className="flex justify-between gap-x-6 py-4 lg:py-5">
       <div className="flex min-w-0 gap-x-4">
-        <div className="grid min-w-0 max-w-xl items-center text-base lg:text-sm">
-          <p className="items-baseline truncate font-semibold leading-6">
+        <div className="grid max-w-xl min-w-0 items-center text-base lg:text-sm">
+          <p className="items-baseline truncate leading-6 font-semibold">
             {title}
           </p>
-          <p className="mt-1 truncate text-sm leading-5 text-muted-foreground">
+          <p className="text-muted-foreground mt-1 truncate text-sm leading-5">
             {description}
           </p>
         </div>

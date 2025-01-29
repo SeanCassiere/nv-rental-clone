@@ -58,7 +58,7 @@ export function DateReportFilter(props: ReportFilterProps) {
             variant="outline"
             size="sm"
             className={cn(
-              "flex w-full justify-start whitespace-nowrap border-dashed",
+              "flex w-full justify-start border-dashed whitespace-nowrap",
               baseState && clearable ? "border-r-0" : ""
             )}
           >
@@ -134,7 +134,7 @@ export function TextBoxReportFilter(props: ReportFilterProps) {
             variant="outline"
             size="sm"
             className={cn(
-              "flex w-full justify-start whitespace-nowrap border-dashed"
+              "flex w-full justify-start border-dashed whitespace-nowrap"
             )}
           >
             <icons.PlusCircle className="mr-2 h-3 w-3" />
@@ -212,7 +212,7 @@ export function SelectDropdownReportFilter(
             variant="outline"
             size="sm"
             className={cn(
-              "flex w-full justify-start whitespace-nowrap border-dashed"
+              "flex w-full justify-start border-dashed whitespace-nowrap"
             )}
           >
             <icons.PlusCircle className="mr-2 h-3 w-3" />
@@ -249,7 +249,7 @@ export function SelectDropdownReportFilter(
                     >
                       <div
                         className={cn(
-                          "mr-3 flex h-3 w-3 items-center justify-center rounded-full border border-primary/70",
+                          "border-primary/70 mr-3 flex h-3 w-3 items-center justify-center rounded-full border",
                           isSelected
                             ? "bg-primary text-primary-foreground"
                             : "opacity-50 [&_svg]:invisible"
@@ -308,7 +308,7 @@ export function MultiSelectDropdownReportFilter(
             variant="outline"
             size="sm"
             className={cn(
-              "flex w-full justify-start whitespace-nowrap border-dashed"
+              "flex w-full justify-start border-dashed whitespace-nowrap"
             )}
           >
             <icons.PlusCircle className="mr-2 h-3 w-3" />
@@ -381,7 +381,7 @@ export function MultiSelectDropdownReportFilter(
                     >
                       <div
                         className={cn(
-                          "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                          "border-primary/70 mr-3 flex h-3 w-3 items-center justify-center rounded-sm border",
                           isSelected
                             ? "bg-primary text-primary-foreground"
                             : "opacity-50 [&_svg]:invisible"

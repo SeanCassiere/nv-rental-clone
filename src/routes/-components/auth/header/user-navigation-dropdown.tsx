@@ -75,7 +75,7 @@ export const UserNavigationDropdown = () => {
             <AvatarImage src={user ? imgUrl : undefined} alt={fullName} />
             <AvatarFallback>{getAvatarFallbackText(fullName)}</AvatarFallback>
           </Avatar>
-          <span className="absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-background bg-muted transition-colors">
+          <span className="border-background bg-muted absolute -right-0.5 -bottom-0.5 rounded-full border-2 transition-colors">
             <icons.ChevronDown className="h-2.5 w-2.5 md:h-3 md:w-3" />
           </span>
         </Button>
@@ -83,10 +83,10 @@ export const UserNavigationDropdown = () => {
       <DropdownMenuContent className="w-64" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="truncate font-medium leading-none">
+            <p className="truncate leading-none font-medium">
               {user?.userName}
             </p>
-            <p className="truncate text-sm leading-none text-muted-foreground">
+            <p className="text-muted-foreground truncate text-sm leading-none">
               {user?.email}
             </p>
           </div>
@@ -188,7 +188,7 @@ export const UserNavigationDropdown = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="-mx-1 -my-1 bg-muted px-3 py-2.5 text-xs font-normal leading-none text-muted-foreground">
+        <DropdownMenuLabel className="bg-muted text-muted-foreground -mx-1 -my-1 px-3 py-2.5 text-xs leading-none font-normal">
           {APP_VERSION} {IS_DEV ? "(Development)" : "(Production)"}
         </DropdownMenuLabel>
       </DropdownMenuContent>

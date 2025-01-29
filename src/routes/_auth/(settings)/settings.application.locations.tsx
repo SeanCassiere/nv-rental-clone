@@ -268,7 +268,7 @@ function ListActiveLocations() {
   );
 
   return (
-    <ul role="list" className="divide-y divide-muted">
+    <ul role="list" className="divide-muted divide-y">
       {locationsSorted.length === 0 ? (
         <EmptyState title="No results" subtitle="No inactive locations found" />
       ) : (
@@ -294,7 +294,7 @@ function ListInactiveLocations() {
   );
 
   return (
-    <ul role="list" className="divide-y divide-muted">
+    <ul role="list" className="divide-muted divide-y">
       {locationsSorted.length === 0 ? (
         <EmptyState title="No results" subtitle="No inactive locations found" />
       ) : (
@@ -373,11 +373,11 @@ function LocationItem(props: { location: TLocationParsed }) {
 
       <li className="flex justify-between gap-x-6 py-5">
         <div className="flex min-w-0 gap-x-4">
-          <div className="min-w-0 max-w-xl flex-auto text-sm">
-            <p className="flex items-baseline truncate font-semibold leading-6">
+          <div className="max-w-xl min-w-0 flex-auto text-sm">
+            <p className="flex items-baseline truncate leading-6 font-semibold">
               {location.locationName}
             </p>
-            <p className="mt-1 truncate leading-5 text-muted-foreground">
+            <p className="text-muted-foreground mt-1 truncate leading-5">
               {makeLocationAddress(location) || "No address"}
             </p>
           </div>
@@ -388,7 +388,7 @@ function LocationItem(props: { location: TLocationParsed }) {
               {location.active ? "Active" : "Inactive"}
             </p>
             <div className="mt-1 flex items-center gap-x-1.5">
-              <div className="flex-none rounded-full bg-background/20 p-1">
+              <div className="bg-background/20 flex-none rounded-full p-1">
                 <div
                   className={cn(
                     "h-2 w-2 rounded-full",
@@ -396,7 +396,7 @@ function LocationItem(props: { location: TLocationParsed }) {
                   )}
                 />
               </div>
-              <p className="select-none leading-5 text-muted-foreground">
+              <p className="text-muted-foreground leading-5 select-none">
                 {location.isReservation
                   ? t("labels.availableOnline", { ns: "settings" })
                   : t("labels.notAvailableOnline", { ns: "settings" })}

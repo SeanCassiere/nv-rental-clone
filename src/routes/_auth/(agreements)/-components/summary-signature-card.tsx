@@ -165,7 +165,7 @@ function PrimaryDriverSignatureImage(props: BaseDriverProps) {
         <Button
           size="sm"
           variant="secondary"
-          className="absolute right-1 top-1 h-8 gap-1 text-xs shadow"
+          className="absolute top-1 right-1 h-8 gap-1 text-xs shadow-sm"
           onClick={() => setSignatureDialogOpen(true)}
         >
           <icons.RotateBackwards className="size-2.5" aria-hidden />
@@ -239,7 +239,7 @@ function Driver(
           <Link
             to="/customers/$customerId/summary"
             params={{ customerId: `${props.driver.customerId}` }}
-            className="inline-flex items-center gap-1 truncate font-semibold leading-6 text-foreground underline-offset-2 ring-0 hover:underline focus:underline focus:outline-none focus:ring-0"
+            className="text-foreground inline-flex items-center gap-1 truncate leading-6 font-semibold underline-offset-2 ring-0 hover:underline focus:underline focus:ring-0 focus:outline-hidden"
             disabled={!props.driver.customerId}
           >
             {props.isPrimary ? (
@@ -249,7 +249,7 @@ function Driver(
             )}
             <span>{props.driver.driverName}</span>
           </Link>
-          <p className="mt-2 leading-5 text-muted-foreground">
+          <p className="text-muted-foreground mt-2 leading-5">
             <icons.Signature
               className={cn(
                 "mr-2 inline size-3",
@@ -366,7 +366,7 @@ function AdditionalDriverSignaturePopover(props: BaseDriverProps) {
                 className="aspect-video w-full object-cover"
               />
             </div>
-            <div className="flex w-full items-center justify-between gap-2 p-2 text-sm font-semibold text-foreground">
+            <div className="text-foreground flex w-full items-center justify-between gap-2 p-2 text-sm font-semibold">
               <div className="flex items-center justify-start gap-2">
                 <icons.Users className="size-3.5" aria-hidden />
                 {props.driver.driverName}
@@ -523,7 +523,7 @@ function SignatureDialog(
           <DialogDescription>Dialog description</DialogDescription>
         </DialogHeader>
         <div
-          className="relative aspect-video w-full overflow-hidden rounded-md border border-border"
+          className="border-border relative aspect-video w-full overflow-hidden rounded-md border"
           style={{
             backgroundColor: "hsl(var(--canvas-light-background))",
           }}
@@ -535,7 +535,7 @@ function SignatureDialog(
           <Button
             size="sm"
             variant="outline"
-            className="absolute right-1 top-1 h-8 gap-1 shadow"
+            className="absolute top-1 right-1 h-8 gap-1 shadow-sm"
             onClick={() => signaturePadRef.current?.clear()}
           >
             <icons.Clear className="size-3" aria-hidden />

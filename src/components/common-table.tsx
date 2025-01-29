@@ -83,7 +83,7 @@ export const CommonTable = <T extends unknown>(props: TCommonTableProps<T>) => {
         props.stickyHeader ? "mr-2 max-h-[650px]" : ""
       )}
     >
-      <Table className="table-auto overflow-x-auto bg-card">
+      <Table className="bg-card table-auto overflow-x-auto">
         <TableHeader
           className={cn(props.stickyHeader ? "sticky top-0 z-10" : "")}
         >

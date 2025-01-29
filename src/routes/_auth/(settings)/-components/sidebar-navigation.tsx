@@ -46,7 +46,7 @@ export function SidebarNavigationItem<
     <Link
       className="py-2"
       activeProps={{
-        className: cn("font-semibold text-foreground"),
+        className: cn("text-foreground font-semibold"),
       }}
       inactiveProps={{
         className: cn("text-muted-foreground hover:text-foreground"),

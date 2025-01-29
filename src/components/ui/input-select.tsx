@@ -89,7 +89,7 @@ const InputSelectTrigger = React.forwardRef<
   return (
     <PopoverTrigger
       className={cn(
-        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        "border-input bg-background ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex h-10 w-full items-center justify-between rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       disabled={disabled ?? _disabled}
@@ -139,7 +139,7 @@ function InputSelectContent({
                 >
                   <div
                     className={cn(
-                      "mr-2 flex h-3 w-3 items-center justify-center rounded-full border border-primary/70",
+                      "border-primary/70 mr-2 flex h-3 w-3 items-center justify-center rounded-full border",
                       isSelected
                         ? "bg-primary text-primary-foreground"
                         : "opacity-50 [&_svg]:invisible"
