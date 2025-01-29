@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import DefaultView from "./presentation/default-view";
 import JsonView from "./presentation/json-view";
 
-const customReports: Record<string, () => JSX.Element> = {
+const customReports: Record<string, () => React.JSX.Element> = {
   financialsummary: JsonView,
 };
 

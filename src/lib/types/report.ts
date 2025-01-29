@@ -1,3 +1,4 @@
+import type React from "react";
 import type { Table } from "@tanstack/react-table";
 
 export type ReportFilterOption = {
@@ -8,4 +9,4 @@ export type ReportFilterOption = {
 export type ReportTablePlugin = <TData>(props: {
   table: Table<TData>;
   align: "start" | "center" | "end";
-}) => JSX.Element | null;
+}) => React.JSX.Element | null;

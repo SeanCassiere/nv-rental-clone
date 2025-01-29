@@ -1,16 +1,20 @@
+import * as React from "react";
 import type {
   AnyRouter,
+  LinkComponentProps,
   LinkOptions,
   RegisteredRouter,
   RoutePaths,
 } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 
-import type { LinkComponentProps } from "@/lib/types/router";
-
 import { cn } from "@/lib/utils";
 
-export function SidebarNavigation({ items }: { items: (() => JSX.Element)[] }) {
+export function SidebarNavigation({
+  items,
+}: {
+  items: Array<() => React.JSX.Element>;
+}) {
   return (
     <nav className="w-full">
       <ul className="grid gap-4 md:text-sm">

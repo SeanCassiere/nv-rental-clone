@@ -1,8 +1,9 @@
+// https://vitejs.dev/config/
 import cp from "node:child_process";
-import path from "node:path";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import viteTsConfigPaths from "vite-tsconfig-paths";
 
 import packageJson from "./package.json";
 
@@ -13,10 +14,20 @@ const commitHash = cp
 
 const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
-// https://vitejs.dev/config/
+// Add the ts-expect-error comment since the types for vite-tsconfig-paths are not up to date
 export default defineConfig(({ command }) => {
   return {
+    server: {
+      port: 3000,
+    },
+    build: {
+      sourcemap: command === "serve",
+    },
+    define: {
+      "import.meta.env.APP_VERSION": JSON.stringify(APP_VERSION),
+    },
     plugins: [
+      viteTsConfigPaths(),
       TanStackRouterVite({
         routesDirectory: "./src/routes",
         generatedRouteTree: "./src/route-tree.gen.ts",
@@ -33,19 +44,5 @@ export default defineConfig(({ command }) => {
         },
       }),
     ],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
-      },
-    },
-    server: {
-      port: 3000,
-    },
-    build: {
-      sourcemap: command === "serve",
-    },
-    define: {
-      "import.meta.env.APP_VERSION": JSON.stringify(APP_VERSION),
-    },
   };
 });

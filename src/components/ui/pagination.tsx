@@ -1,10 +1,8 @@
 import * as React from "react";
 import {
   Link,
-  type AnyRouter,
+  type LinkComponentProps,
   type LinkProps,
-  type RegisteredRouter,
-  type RoutePaths,
 } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
@@ -13,8 +11,6 @@ import {
   buttonVariants,
   type ButtonProps,
 } from "@/components/ui/button";
-
-import type { LinkComponentProps } from "@/lib/types/router";
 
 import { cn } from "@/lib/utils";
 
