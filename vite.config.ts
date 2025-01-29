@@ -1,10 +1,10 @@
 // https://vitejs.dev/config/
 import cp from "node:child_process";
 import tailwindcss from "@tailwindcss/vite";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-import viteReact from "@vitejs/plugin-react";
+import { TanStackRouterVite as tanstackRouter } from "@tanstack/router-plugin/vite";
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import viteTsConfigPaths from "vite-tsconfig-paths";
+import tsConfigPaths from "vite-tsconfig-paths";
 
 import packageJson from "./package.json";
 
@@ -24,9 +24,9 @@ export default defineConfig({
     "import.meta.env.APP_VERSION": JSON.stringify(APP_VERSION),
   },
   plugins: [
-    viteTsConfigPaths(),
+    tsConfigPaths(),
     tailwindcss(),
-    TanStackRouterVite({
+    tanstackRouter({
       routesDirectory: "./src/routes",
       generatedRouteTree: "./src/route-tree.gen.ts",
       routeFileIgnorePrefix: "-",
@@ -36,7 +36,7 @@ export default defineConfig({
       routeToken: "_route",
       disableManifestGeneration: true,
     }),
-    viteReact({
+    react({
       babel: {
         plugins: [["babel-plugin-react-compiler", { target: "19" }]],
       },
