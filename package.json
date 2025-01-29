@@ -63,7 +63,7 @@
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-http-backend": "^3.0.1",
     "jsurl2": "^2.2.0",
-    "lucide-react": "^0.469.0",
+    "lucide-react": "^0.474.0",
     "oidc-client-ts": "^3.1.0",
     "react": "^19.0.0",
     "react-day-picker": "^9.5.0",
