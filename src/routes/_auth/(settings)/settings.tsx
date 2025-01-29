@@ -64,7 +64,7 @@ function SettingsLayout() {
   );
 
   const destinations = React.useMemo(() => {
-    const items: (() => JSX.Element)[] = [];
+    const items: (() => React.JSX.Element)[] = [];
 
     // user profile
     items.push(() => (
