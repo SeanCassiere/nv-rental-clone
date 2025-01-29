@@ -15,7 +15,6 @@ const commitHash = cp
 const APP_VERSION = `${packageJson.version}-${commitHash}`;
 
 // Add the ts-expect-error comment since the types for vite-tsconfig-paths are not up to date
-// @ts-expect-error
 export default defineConfig(({ command }) => {
   return {
     server: {
