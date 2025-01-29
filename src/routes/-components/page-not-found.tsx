@@ -24,13 +24,13 @@ function PageNotFound({
           className
         )}
       >
-        <p className="text-sm font-semibold uppercase tracking-wide text-primary">
+        <p className="text-primary text-sm font-semibold tracking-wide uppercase">
           {t("labelError", { ns: "messages", label: 404 })}
         </p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="text-foreground mt-2 text-2xl font-semibold tracking-tight sm:text-4xl">
           {t("pageNotFound", { ns: "messages" })}
         </h1>
-        <p className="mt-2 text-center text-base text-foreground/80">
+        <p className="text-foreground/80 mt-2 text-center text-base">
           {t("sorryCouldNotFindThatPage", { ns: "messages" })}
         </p>
         {children || (

@@ -4,8 +4,8 @@ import { icons } from "@/components/ui/icons";
 
 const LoadingPlaceholder = () => {
   return (
-    <div className="grid min-h-dvh place-items-center bg-background">
-      <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
+    <div className="bg-background grid min-h-dvh place-items-center">
+      <icons.Loading className="text-foreground h-24 w-24 animate-spin" />
     </div>
   );
 };

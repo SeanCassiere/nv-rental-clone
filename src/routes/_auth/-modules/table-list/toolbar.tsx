@@ -89,7 +89,7 @@ function TableListToolbar({
       }}
     >
       <div
-        className={cn("rounded-md border bg-card p-2", className)}
+        className={cn("bg-card rounded-md border p-2", className)}
         {...props}
       >
         {children}
@@ -342,7 +342,7 @@ function ToolbarFilter({
             variant="outline"
             size="sm"
             className={cn(
-              "h-8 whitespace-nowrap border-dashed",
+              "h-8 border-dashed whitespace-nowrap",
               type === "date" && baseState?.value ? "border-r-0" : ""
             )}
           >
@@ -454,7 +454,7 @@ function ToolbarFilter({
                       >
                         <div
                           className={cn(
-                            "mr-3 flex h-3 w-3 items-center justify-center rounded-full border border-primary/70",
+                            "border-primary/70 mr-3 flex h-3 w-3 items-center justify-center rounded-full border",
                             isSelected
                               ? "bg-primary text-primary-foreground"
                               : "opacity-50 [&_svg]:invisible"
@@ -505,7 +505,7 @@ function ToolbarFilter({
                       >
                         <div
                           className={cn(
-                            "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                            "border-primary/70 mr-3 flex h-3 w-3 items-center justify-center rounded-sm border",
                             isSelected
                               ? "bg-primary text-primary-foreground"
                               : "opacity-50 [&_svg]:invisible"

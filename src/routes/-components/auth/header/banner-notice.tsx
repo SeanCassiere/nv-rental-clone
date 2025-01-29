@@ -13,7 +13,7 @@ const MessageText = ({ message }: { message: ServerMessage }) => (
     <span className="flex items-center font-semibold">
       {message.title}
       {message.description && (
-        <icons.Dot className="mx-0.5 mb-1 mt-1 hidden h-3 w-3 sm:inline sm:h-5 sm:w-5" />
+        <icons.Dot className="mx-0.5 mt-1 mb-1 hidden h-3 w-3 sm:inline sm:h-5 sm:w-5" />
       )}
     </span>
     {message.description && (
@@ -40,11 +40,11 @@ export const BannerNotice = React.memo(
     if (hidden) return null;
 
     return (
-      <article className="mx-auto flex w-full max-w-[1700px] flex-1 items-center gap-6 pb-2 pl-3.5 pr-1 pt-2.5 text-bannerPromo-foreground md:px-16 md:pb-1 md:pt-1.5">
+      <article className="text-bannerPromo-foreground mx-auto flex w-full max-w-[1700px] flex-1 items-center gap-6 pt-2.5 pr-1 pb-2 pl-3.5 md:px-16 md:pt-1.5 md:pb-1">
         {message.link ? (
           <a
             href={message.link}
-            className="group flex flex-1 flex-col flex-wrap items-start gap-1 text-balance text-sm leading-tight sm:flex-row sm:items-center md:items-center md:gap-0"
+            className="group flex flex-1 flex-col flex-wrap items-start gap-1 text-sm leading-tight text-balance sm:flex-row sm:items-center md:items-center md:gap-0"
             target={message.link.startsWith("http") ? "_blank" : "_self"}
             rel="noopener noreferrer"
           >
@@ -57,7 +57,7 @@ export const BannerNotice = React.memo(
         )}
         <div className="flex justify-end">
           <button
-            className="p-3 text-bannerPromo-foreground hover:text-bannerPromo-foreground/70"
+            className="text-bannerPromo-foreground hover:text-bannerPromo-foreground/70 p-3"
             onClick={onDismiss}
           >
             <icons.X className="h-4 w-4" />

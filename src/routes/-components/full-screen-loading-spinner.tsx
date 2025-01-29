@@ -16,7 +16,7 @@ export function FullPageLoadingSpinner({
       )}
       {...props}
     >
-      <icons.Loading className="h-24 w-24 animate-spin text-foreground" />
+      <icons.Loading className="text-foreground h-24 w-24 animate-spin" />
     </div>
   );
 }

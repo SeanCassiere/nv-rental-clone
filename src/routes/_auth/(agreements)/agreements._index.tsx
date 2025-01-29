@@ -443,7 +443,7 @@ function AgreementsSearchPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <h1 className="text-2xl font-semibold leading-6">Agreements</h1>
+            <h1 className="text-2xl leading-6 font-semibold">Agreements</h1>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <Link
@@ -456,7 +456,7 @@ function AgreementsSearchPage() {
             </Link>
           </div>
         </div>
-        <p className={cn("text-base text-foreground/80")}>
+        <p className={cn("text-foreground/80 text-base")}>
           Search through your rentals and view details.
         </p>
       </section>
@@ -497,11 +497,11 @@ function AgreementsSearchPage() {
           <div className="flex items-center justify-end">
             <TableListColumnVisibilityDropdown />
           </div>
-          <div className="mt-2.5 overflow-hidden rounded-md border bg-card">
+          <div className="bg-card mt-2.5 overflow-hidden rounded-md border">
             <TableListContent />
           </div>
           <Pagination className="mt-2.5">
-            <PaginationContent className="rounded-md border bg-card px-1 py-0.5 md:px-2 md:py-1">
+            <PaginationContent className="bg-card rounded-md border px-1 py-0.5 md:px-2 md:py-1">
               <TableListPaginationPrevious>
                 {(state) => (
                   <PaginationLinkPrevious

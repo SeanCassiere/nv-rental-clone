@@ -60,7 +60,7 @@ function SettingsApplicationIndex() {
           </CardDescription>
         </CardHeader>
         <CardContent className="pb-4">
-          <ul role="list" className="divide-y divide-muted">
+          <ul role="list" className="divide-muted divide-y">
             {canSeeUsers ? (
               <SubPageNavItem
                 title={t("titles.systemUsers", { ns: "settings" })}

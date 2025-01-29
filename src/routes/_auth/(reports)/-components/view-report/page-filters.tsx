@@ -21,7 +21,7 @@ export const ReportFilters = () => {
   const lookup = useReportLookupLists(report);
 
   return (
-    <div className="mt-4 rounded-md border bg-card px-2 py-2">
+    <div className="bg-card mt-4 rounded-md border px-2 py-2">
       <ul
         className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center"
         aria-label="Report filters"

@@ -138,7 +138,7 @@ export const RentalSummary = ({
                 {taxableMischarges.map((charge) => (
                   <span
                     key={`taxable-charge-${charge.id}`}
-                    className="block break-all text-sm text-foreground/70"
+                    className="text-foreground/70 block text-sm break-all"
                   >
                     {makeChargeItemText(charge, t)}
                   </span>
@@ -171,7 +171,7 @@ export const RentalSummary = ({
                 {nonTaxableMischarges.map((charge) => (
                   <span
                     key={`non-taxable-charge-${charge.id}`}
-                    className="block break-all text-sm text-foreground/70"
+                    className="text-foreground/70 block text-sm break-all"
                   >
                     {makeChargeItemText(charge, t)}
                   </span>
@@ -298,7 +298,7 @@ export const RentalSummary = ({
                 {taxes.map((tax) => (
                   <span
                     key={`tax-charge-${tax.taxId}`}
-                    className="block break-all text-sm text-foreground/70"
+                    className="text-foreground/70 block text-sm break-all"
                   >
                     {makeTaxItemText(tax)}
                   </span>

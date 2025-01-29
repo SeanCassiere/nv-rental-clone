@@ -143,7 +143,7 @@ const StatBlock = (props: {
         <CardTitle className="text-sm font-medium sm:text-base">
           {title}
         </CardTitle>
-        <Icon className="h-3.5 w-3.5 text-muted-foreground sm:h-4 sm:w-4" />
+        <Icon className="text-muted-foreground h-3.5 w-3.5 sm:h-4 sm:w-4" />
         <span className="sr-only">{title} icon</span>
       </CardHeader>
       <CardContent>

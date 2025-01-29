@@ -79,18 +79,18 @@ function Calendar({
           layout === "label" ||
             layout === "dropdown-years" ||
             layout === "dropdown-months"
-            ? "absolute right-1 top-0 flex gap-1.5"
+            ? "absolute top-0 right-1 flex gap-1.5"
             : ""
         ),
         button_previous: cn(
           buttonVariants({ variant: "outline" }),
           "size-8 bg-transparent p-0 opacity-50 hover:opacity-100",
-          layout === "dropdown" && "absolute left-1 top-0"
+          layout === "dropdown" && "absolute top-0 left-1"
         ),
         button_next: cn(
           buttonVariants({ variant: "outline" }),
           "size-8 bg-transparent p-0 opacity-50 hover:opacity-100",
-          layout === "dropdown" && "absolute right-1 top-0"
+          layout === "dropdown" && "absolute top-0 right-1"
         ),
         table: "w-full border-collapse",
         weekdays: "flex",

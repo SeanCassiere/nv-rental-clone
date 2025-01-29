@@ -902,7 +902,7 @@ function AddRentalParentForm({
               <>
                 <Link
                   to="/agreements"
-                  className="text-2xl font-semibold leading-6"
+                  className="text-2xl leading-6 font-semibold"
                 >
                   Agreements
                 </Link>
@@ -913,7 +913,7 @@ function AddRentalParentForm({
                 <Link
                   to="/agreements/new"
                   search={() => ({ stage })}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
                 >
                   Add Agreement
                 </Link>
@@ -928,7 +928,7 @@ function AddRentalParentForm({
                       : "/agreements/$agreementId/edit"
                   }
                   to=".."
-                  className="text-2xl font-semibold leading-6"
+                  className="text-2xl leading-6 font-semibold"
                 >
                   Agreements
                 </Link>
@@ -939,7 +939,7 @@ function AddRentalParentForm({
                 <Link
                   to="/agreements/$agreementId/summary"
                   params={{ agreementId: String(referenceId) }}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
                 >
                   {referenceNumber ?? "-"}
                 </Link>
@@ -952,7 +952,7 @@ function AddRentalParentForm({
                     to="/agreements/$agreementId/check-in"
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
-                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
+                    className="max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
                   >
                     Check-in
                   </Link>
@@ -961,7 +961,7 @@ function AddRentalParentForm({
                     to="/agreements/$agreementId/edit"
                     search={() => ({ stage })}
                     params={{ agreementId: String(referenceId) }}
-                    className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
+                    className="max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
                   >
                     Edit
                   </Link>
@@ -972,7 +972,7 @@ function AddRentalParentForm({
               <>
                 <Link
                   to="/reservations"
-                  className="text-2xl font-semibold leading-6"
+                  className="text-2xl leading-6 font-semibold"
                 >
                   Reservations
                 </Link>
@@ -983,7 +983,7 @@ function AddRentalParentForm({
                 <Link
                   to="/reservations/new"
                   search={() => ({ stage })}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
                 >
                   Add Reservation
                 </Link>
@@ -994,7 +994,7 @@ function AddRentalParentForm({
                 <Link
                   from="/reservations/$reservationId/edit"
                   to=".."
-                  className="text-2xl font-semibold leading-6"
+                  className="text-2xl leading-6 font-semibold"
                 >
                   Reservations
                 </Link>
@@ -1005,7 +1005,7 @@ function AddRentalParentForm({
                 <Link
                   to="/reservations/$reservationId/summary"
                   params={{ reservationId: String(referenceId) }}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
                 >
                   {referenceNumber ?? "-"}
                 </Link>
@@ -1017,7 +1017,7 @@ function AddRentalParentForm({
                   to="/reservations/$reservationId/edit"
                   search={() => ({ stage })}
                   params={{ reservationId: String(referenceId) }}
-                  className="max-w-[230px] truncate text-2xl font-semibold leading-6 md:max-w-full"
+                  className="max-w-[230px] truncate text-2xl leading-6 font-semibold md:max-w-full"
                 >
                   Edit
                 </Link>
@@ -1077,7 +1077,7 @@ function AddRentalParentForm({
           {module === "agreement" ? "rental" : "booking"} and proceed to&nbsp;
           {isEdit ? "save" : "create"}.
         </p>
-        <Separator className="mb-3.5 mt-3.5" />
+        <Separator className="mt-3.5 mb-3.5" />
       </section>
 
       <section

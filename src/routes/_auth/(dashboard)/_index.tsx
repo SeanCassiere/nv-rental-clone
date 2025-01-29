@@ -154,7 +154,7 @@ function DashboardPage() {
           )}
         >
           <div className="flex w-full items-center justify-start gap-2">
-            <h1 className="text-2xl font-semibold leading-6">Dashboard</h1>
+            <h1 className="text-2xl leading-6 font-semibold">Dashboard</h1>
           </div>
           <div className="flex w-full gap-2 sm:w-max">
             <LocationPicker
@@ -174,7 +174,7 @@ function DashboardPage() {
             </Link>
           </div>
         </div>
-        <p className={cn("text-base text-foreground/80")}>
+        <p className={cn("text-foreground/80 text-base")}>
           Jump into what&apos;s going on with your fleet.
         </p>
         <Separator className="mt-3.5" />
@@ -212,7 +212,7 @@ function LocationPicker({
         <Button
           size="sm"
           variant="outline"
-          className="h-8 whitespace-nowrap border"
+          className="h-8 border whitespace-nowrap"
         >
           <icons.PlusCircle className="mr-2 h-3 w-3" />
           Locations
@@ -273,7 +273,7 @@ function LocationPicker({
               >
                 <div
                   className={cn(
-                    "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                    "border-primary/70 mr-3 flex h-3 w-3 items-center justify-center rounded-sm border",
                     isAllSelectedEmpty
                       ? "bg-primary text-primary-foreground"
                       : "opacity-50 [&_svg]:invisible"
@@ -303,7 +303,7 @@ function LocationPicker({
                   >
                     <div
                       className={cn(
-                        "mr-3 flex h-3 w-3 items-center justify-center rounded-sm border border-primary/70",
+                        "border-primary/70 mr-3 flex h-3 w-3 items-center justify-center rounded-sm border",
                         isSelected
                           ? "bg-primary text-primary-foreground"
                           : "opacity-50 [&_svg]:invisible"
@@ -410,7 +410,7 @@ const DefaultDashboardContent = (props: DefaultDashboardContentProps) => {
   return (
     <section
       className={cn(
-        "mx-auto mb-4 mt-2.5 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mb-2 sm:px-4 sm:pb-4"
+        "mx-auto mt-2.5 mb-4 flex max-w-full flex-col gap-2 px-2 pt-1.5 sm:mb-2 sm:px-4 sm:pb-4"
       )}
     >
       {canViewRentalSummary && (

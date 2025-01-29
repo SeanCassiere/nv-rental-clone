@@ -62,9 +62,9 @@ function ReportSearchPage() {
         )}
       >
         <div className={cn("flex min-h-[2.5rem] items-center justify-between")}>
-          <h1 className="h-full text-2xl font-semibold leading-6">Reports</h1>
+          <h1 className="h-full text-2xl leading-6 font-semibold">Reports</h1>
         </div>
-        <p className={cn("text-base text-foreground/80")}>
+        <p className={cn("text-foreground/80 text-base")}>
           Select and run a report from the list available to you.
         </p>
       </section>

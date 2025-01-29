@@ -111,7 +111,7 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
         <Button
           variant="outline"
           size="sm"
-          className="flex h-8 w-full bg-card sm:w-fit"
+          className="bg-card flex h-8 w-full sm:w-fit"
         >
           <icons.Sheet className="mr-2 h-4 w-4" />
           Export to CSV
@@ -126,8 +126,8 @@ export const ExportToCsv: ReportTablePlugin = (props) => {
             })}
           >
             <div className="space-y-2">
-              <h4 className="font-medium leading-none">Export to CSV</h4>
-              <p className="text-sm text-muted-foreground">
+              <h4 className="leading-none font-medium">Export to CSV</h4>
+              <p className="text-muted-foreground text-sm">
                 Confirm the filename and click the download button.
               </p>
             </div>

@@ -114,13 +114,13 @@ const AppNavigationLink = (props: { name: string; props: LinkProps }) => {
     <li>
       <Link
         className={cn(
-          "inline-block whitespace-nowrap border-b py-4 leading-none transition-all sm:px-4"
+          "inline-block border-b py-4 leading-none whitespace-nowrap transition-all sm:px-4"
         )}
         activeProps={{
           className: cn("border-foreground font-semibold"),
         }}
         inactiveProps={{
-          className: cn("border-transparent hover:border-foreground/20"),
+          className: cn("hover:border-foreground/20 border-transparent"),
         }}
         {...linkProps}
       >

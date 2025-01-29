@@ -27,10 +27,10 @@ const InformationBlock = (props: TInformationBlockProps) => {
         "gap-0.5 border-b pb-2 sm:grid"
       )}
     >
-      <span className="select-none truncate px-1 text-base font-semibold">
+      <span className="truncate px-1 text-base font-semibold select-none">
         {props.heading}
       </span>
-      <span className="truncate px-1 pb-2 pt-1.5 text-base leading-3">
+      <span className="truncate px-1 pt-1.5 pb-2 text-base leading-3">
         {props.isLoading ? EMPTY_KEY : props.value}
       </span>
     </div>

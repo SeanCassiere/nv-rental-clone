@@ -535,7 +535,7 @@ function PermissionSelector({
   const gps = filterPermissions(permissionsList, 7);
 
   return (
-    <Accordion type="multiple" className="divide-y divide-muted">
+    <Accordion type="multiple" className="divide-muted divide-y">
       <AccordionItem value="dashboard">
         <AccordionTrigger>Dashboard</AccordionTrigger>
         <AccordionContent>

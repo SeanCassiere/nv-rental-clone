@@ -173,7 +173,7 @@ function ReportTableContent<TData, TValue>(
       )}
       {isPending ? (
         <Skeleton
-          className={cn("w-full rounded-b-none bg-foreground/10")}
+          className={cn("bg-foreground/10 w-full rounded-b-none")}
           aria-label="Report loading"
           style={{ height: "3px" }}
         />
@@ -186,7 +186,7 @@ function ReportTableContent<TData, TValue>(
       )}
       <div
         ref={tableContainerRef}
-        className="relative h-[600px] overflow-auto rounded-md border bg-card"
+        className="bg-card relative h-[600px] overflow-auto rounded-md border"
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
         <table
@@ -196,7 +196,7 @@ function ReportTableContent<TData, TValue>(
           }}
         >
           <TableHeader
-            className="sticky top-0 grid bg-card"
+            className="bg-card sticky top-0 grid"
             style={{ zIndex: 1 }}
           >
             {table.getHeaderGroups().map((headerGroup) => (
@@ -218,7 +218,7 @@ function ReportTableContent<TData, TValue>(
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "relative flex h-auto justify-between whitespace-nowrap border-x-2 py-2",
+                        "relative flex h-auto justify-between border-x-2 py-2 whitespace-nowrap",
                         header.column.getIsResizing()
                           ? "border-border"
                           : "border-transparent"
@@ -228,7 +228,7 @@ function ReportTableContent<TData, TValue>(
                       }}
                     >
                       <div className="inline-flex w-full grow flex-col whitespace-nowrap">
-                        <div className="inline w-full select-none truncate">
+                        <div className="inline w-full truncate select-none">
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
@@ -250,13 +250,13 @@ function ReportTableContent<TData, TValue>(
                                 >
                                   {{
                                     asc: (
-                                      <icons.SortAsc className="h-3.5 w-3.5 text-foreground" />
+                                      <icons.SortAsc className="text-foreground h-3.5 w-3.5" />
                                     ),
                                     desc: (
-                                      <icons.SortDesc className="h-3.5 w-3.5 text-foreground" />
+                                      <icons.SortDesc className="text-foreground h-3.5 w-3.5" />
                                     ),
                                   }[header.column.getIsSorted() as string] ?? (
-                                    <icons.SortUnsorted className="h-3.5 w-3.5 text-foreground/30" />
+                                    <icons.SortUnsorted className="text-foreground/30 h-3.5 w-3.5" />
                                   )}
                                 </button>
                               </TooltipTrigger>
@@ -287,7 +287,7 @@ function ReportTableContent<TData, TValue>(
                           onMouseDown={header.getResizeHandler()}
                           onTouchStart={header.getResizeHandler()}
                           className={cn(
-                            "-mr-2.5 mt-2.5 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
+                            "mt-2.5 -mr-2.5 inline-block h-3/5 w-1 shrink-0 cursor-col-resize rounded",
                             header.column.getIsResizing()
                               ? "bg-foreground/75"
                               : "bg-foreground/15 hover:bg-foreground/45"
@@ -328,7 +328,7 @@ function ReportTableContent<TData, TValue>(
       </div>
       {isPending ? (
         <Skeleton
-          className={cn("w-full rounded-t-none bg-foreground/10")}
+          className={cn("bg-foreground/10 w-full rounded-t-none")}
           aria-label="Report loading"
           style={{ height: "3px" }}
         />
@@ -410,7 +410,7 @@ function ReportTableBody<TData, TValue>({
                 <TableCell
                   key={cell.id}
                   className={cn(
-                    "flex w-full whitespace-nowrap border-x-2",
+                    "flex w-full border-x-2 whitespace-nowrap",
                     cell.column.getIsResizing()
                       ? "border-border"
                       : "border-transparent"

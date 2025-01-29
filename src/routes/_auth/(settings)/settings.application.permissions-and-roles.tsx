@@ -175,7 +175,7 @@ function SystemRolesList({ filterMode }: { filterMode: string }) {
   );
 
   return (
-    <ul role="list" className="divide-y divide-muted">
+    <ul role="list" className="divide-muted divide-y">
       {roles.length === 0 ? (
         <li>
           <EmptyState
@@ -243,10 +243,10 @@ function SystemRole({
       />
       <li className="flex justify-between gap-x-6 py-5">
         <div className="flex min-w-0 gap-x-4">
-          <div className="min-w-0 max-w-xl flex-auto text-sm">
+          <div className="max-w-xl min-w-0 flex-auto text-sm">
             <p
               className={cn(
-                "flex items-baseline font-semibold leading-6",
+                "flex items-baseline leading-6 font-semibold",
                 isSystemRole ? "text-muted-foreground" : "text-foreground"
               )}
             >
@@ -254,7 +254,7 @@ function SystemRole({
               {isSystemRole && <icons.System className="mr-2 h-3 w-3" />}
               {role.roleName}
             </p>
-            <p className="mt-1 truncate leading-5 text-muted-foreground">
+            <p className="text-muted-foreground mt-1 truncate leading-5">
               {role.description}
             </p>
           </div>

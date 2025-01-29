@@ -178,7 +178,7 @@ export const VehicleStage = ({
         }}
       />
       {!checkoutLocation && (
-        <span className="block text-base text-destructive">
+        <span className="text-destructive block text-base">
           Checkout location not selected.
         </span>
       )}
