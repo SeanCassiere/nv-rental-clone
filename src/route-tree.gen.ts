@@ -8,926 +8,1209 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from "./routes/__root"
+import { Route as PublicRouteImport } from "./routes/_public"
+import { Route as AuthRouteImport } from "./routes/_auth"
+import { Route as PublicOidcCallbackRouteImport } from "./routes/_public/oidc-callback"
+import { Route as PublicLogoutRouteImport } from "./routes/_public/logout"
+import { Route as PublicLoginRouteImport } from "./routes/_public/login"
+import { Route as PublicLoggedOutRouteImport } from "./routes/_public/logged-out"
+import { Route as PublicDevRouteImport } from "./routes/_public/dev"
+import { Route as AuthdashboardIndexRouteImport } from "./routes/_auth/(dashboard)/_index"
+import { Route as AuthsettingsSettingsRouteImport } from "./routes/_auth/(settings)/settings"
+import { Route as AuthreservationsReservationsRouteImport } from "./routes/_auth/(reservations)/reservations"
+import { Route as AuthfleetFleetRouteImport } from "./routes/_auth/(fleet)/fleet"
+import { Route as AuthcustomersCustomersRouteImport } from "./routes/_auth/(customers)/customers"
+import { Route as AuthagreementsAgreementsRouteImport } from "./routes/_auth/(agreements)/agreements"
+import { Route as AuthsettingsSettingsIndexRouteImport } from "./routes/_auth/(settings)/settings._index"
+import { Route as AuthreservationsReservationsIndexRouteImport } from "./routes/_auth/(reservations)/reservations._index"
+import { Route as AuthreportsReportsIndexRouteImport } from "./routes/_auth/(reports)/reports._index"
+import { Route as AuthfleetFleetIndexRouteImport } from "./routes/_auth/(fleet)/fleet._index"
+import { Route as AuthcustomersCustomersIndexRouteImport } from "./routes/_auth/(customers)/customers._index"
+import { Route as AuthagreementsAgreementsIndexRouteImport } from "./routes/_auth/(agreements)/agreements._index"
+import { Route as AuthsettingsSettingsVehiclesAndCategoriesRouteImport } from "./routes/_auth/(settings)/settings.vehicles-and-categories"
+import { Route as AuthsettingsSettingsRuntimeConfigurationRouteImport } from "./routes/_auth/(settings)/settings.runtime-configuration"
+import { Route as AuthsettingsSettingsRatesAndChargesRouteImport } from "./routes/_auth/(settings)/settings.rates-and-charges"
+import { Route as AuthsettingsSettingsProfileRouteImport } from "./routes/_auth/(settings)/settings.profile"
+import { Route as AuthsettingsSettingsApplicationRouteImport } from "./routes/_auth/(settings)/settings.application"
+import { Route as AuthreservationsReservationsNewRouteImport } from "./routes/_auth/(reservations)/reservations.new"
+import { Route as AuthreservationsReservationsReservationIdRouteImport } from "./routes/_auth/(reservations)/reservations.$reservationId"
+import { Route as AuthfleetFleetNewRouteImport } from "./routes/_auth/(fleet)/fleet.new"
+import { Route as AuthfleetFleetVehicleIdRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId"
+import { Route as AuthcustomersCustomersNewRouteImport } from "./routes/_auth/(customers)/customers.new"
+import { Route as AuthcustomersCustomersCustomerIdRouteImport } from "./routes/_auth/(customers)/customers.$customerId"
+import { Route as AuthagreementsAgreementsNewRouteImport } from "./routes/_auth/(agreements)/agreements.new"
+import { Route as AuthagreementsAgreementsAgreementIdRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId"
+import { Route as AuthsettingsSettingsApplicationIndexRouteImport } from "./routes/_auth/(settings)/settings.application._index"
+import { Route as AuthreportsReportsReportIdIndexRouteImport } from "./routes/_auth/(reports)/reports.$reportId._index"
+import { Route as AuthsettingsSettingsApplicationUsersRouteImport } from "./routes/_auth/(settings)/settings.application.users"
+import { Route as AuthsettingsSettingsApplicationStoreHoursAndHolidaysRouteImport } from "./routes/_auth/(settings)/settings.application.store-hours-and-holidays"
+import { Route as AuthsettingsSettingsApplicationPermissionsAndRolesRouteImport } from "./routes/_auth/(settings)/settings.application.permissions-and-roles"
+import { Route as AuthsettingsSettingsApplicationLocationsRouteImport } from "./routes/_auth/(settings)/settings.application.locations"
+import { Route as AuthreservationsReservationsReservationIdEditRouteImport } from "./routes/_auth/(reservations)/reservations.$reservationId.edit"
+import { Route as AuthreservationsReservationsReservationIdDetailsRouteImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details"
+import { Route as AuthfleetFleetVehicleIdEditRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.edit"
+import { Route as AuthfleetFleetVehicleIdDetailsRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details"
+import { Route as AuthcustomersCustomersCustomerIdEditRouteImport } from "./routes/_auth/(customers)/customers.$customerId.edit"
+import { Route as AuthcustomersCustomersCustomerIdDetailsRouteImport } from "./routes/_auth/(customers)/customers.$customerId._details"
+import { Route as AuthagreementsAgreementsAgreementIdEditRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId.edit"
+import { Route as AuthagreementsAgreementsAgreementIdCheckInRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId.check-in"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details"
+import { Route as AuthreservationsReservationsReservationIdDetailsIndexRouteImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details._index"
+import { Route as AuthfleetFleetVehicleIdDetailsIndexRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details._index"
+import { Route as AuthcustomersCustomersCustomerIdDetailsIndexRouteImport } from "./routes/_auth/(customers)/customers.$customerId._details._index"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsIndexRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details._index"
+import { Route as AuthreservationsReservationsReservationIdDetailsSummaryRouteImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details.summary"
+import { Route as AuthreservationsReservationsReservationIdDetailsNotesRouteImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details.notes"
+import { Route as AuthfleetFleetVehicleIdDetailsSummaryRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.summary"
+import { Route as AuthfleetFleetVehicleIdDetailsReservationsRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.reservations"
+import { Route as AuthfleetFleetVehicleIdDetailsNotesRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.notes"
+import { Route as AuthfleetFleetVehicleIdDetailsAgreementsRouteImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.agreements"
+import { Route as AuthcustomersCustomersCustomerIdDetailsSummaryRouteImport } from "./routes/_auth/(customers)/customers.$customerId._details.summary"
+import { Route as AuthcustomersCustomersCustomerIdDetailsNotesRouteImport } from "./routes/_auth/(customers)/customers.$customerId._details.notes"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsSummaryRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.summary"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsNotesRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.notes"
+import { Route as AuthagreementsAgreementsAgreementIdDetailsExchangesRouteImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.exchanges"
 
-import { Route as rootRoute } from "./routes/__root"
-import { Route as PublicImport } from "./routes/_public"
-import { Route as AuthImport } from "./routes/_auth"
-import { Route as PublicOidcCallbackImport } from "./routes/_public/oidc-callback"
-import { Route as PublicLogoutImport } from "./routes/_public/logout"
-import { Route as PublicLoginImport } from "./routes/_public/login"
-import { Route as PublicLoggedOutImport } from "./routes/_public/logged-out"
-import { Route as PublicDevImport } from "./routes/_public/dev"
-import { Route as AuthdashboardIndexImport } from "./routes/_auth/(dashboard)/_index"
-import { Route as AuthsettingsSettingsImport } from "./routes/_auth/(settings)/settings"
-import { Route as AuthreservationsReservationsImport } from "./routes/_auth/(reservations)/reservations"
-import { Route as AuthfleetFleetImport } from "./routes/_auth/(fleet)/fleet"
-import { Route as AuthcustomersCustomersImport } from "./routes/_auth/(customers)/customers"
-import { Route as AuthagreementsAgreementsImport } from "./routes/_auth/(agreements)/agreements"
-import { Route as AuthsettingsSettingsIndexImport } from "./routes/_auth/(settings)/settings._index"
-import { Route as AuthreservationsReservationsIndexImport } from "./routes/_auth/(reservations)/reservations._index"
-import { Route as AuthreportsReportsIndexImport } from "./routes/_auth/(reports)/reports._index"
-import { Route as AuthfleetFleetIndexImport } from "./routes/_auth/(fleet)/fleet._index"
-import { Route as AuthcustomersCustomersIndexImport } from "./routes/_auth/(customers)/customers._index"
-import { Route as AuthagreementsAgreementsIndexImport } from "./routes/_auth/(agreements)/agreements._index"
-import { Route as AuthsettingsSettingsVehiclesAndCategoriesImport } from "./routes/_auth/(settings)/settings.vehicles-and-categories"
-import { Route as AuthsettingsSettingsRuntimeConfigurationImport } from "./routes/_auth/(settings)/settings.runtime-configuration"
-import { Route as AuthsettingsSettingsRatesAndChargesImport } from "./routes/_auth/(settings)/settings.rates-and-charges"
-import { Route as AuthsettingsSettingsProfileImport } from "./routes/_auth/(settings)/settings.profile"
-import { Route as AuthsettingsSettingsApplicationImport } from "./routes/_auth/(settings)/settings.application"
-import { Route as AuthreservationsReservationsNewImport } from "./routes/_auth/(reservations)/reservations.new"
-import { Route as AuthreservationsReservationsReservationIdImport } from "./routes/_auth/(reservations)/reservations.$reservationId"
-import { Route as AuthfleetFleetNewImport } from "./routes/_auth/(fleet)/fleet.new"
-import { Route as AuthfleetFleetVehicleIdImport } from "./routes/_auth/(fleet)/fleet.$vehicleId"
-import { Route as AuthcustomersCustomersNewImport } from "./routes/_auth/(customers)/customers.new"
-import { Route as AuthcustomersCustomersCustomerIdImport } from "./routes/_auth/(customers)/customers.$customerId"
-import { Route as AuthagreementsAgreementsNewImport } from "./routes/_auth/(agreements)/agreements.new"
-import { Route as AuthagreementsAgreementsAgreementIdImport } from "./routes/_auth/(agreements)/agreements.$agreementId"
-import { Route as AuthsettingsSettingsApplicationIndexImport } from "./routes/_auth/(settings)/settings.application._index"
-import { Route as AuthreportsReportsReportIdIndexImport } from "./routes/_auth/(reports)/reports.$reportId._index"
-import { Route as AuthsettingsSettingsApplicationUsersImport } from "./routes/_auth/(settings)/settings.application.users"
-import { Route as AuthsettingsSettingsApplicationStoreHoursAndHolidaysImport } from "./routes/_auth/(settings)/settings.application.store-hours-and-holidays"
-import { Route as AuthsettingsSettingsApplicationPermissionsAndRolesImport } from "./routes/_auth/(settings)/settings.application.permissions-and-roles"
-import { Route as AuthsettingsSettingsApplicationLocationsImport } from "./routes/_auth/(settings)/settings.application.locations"
-import { Route as AuthreservationsReservationsReservationIdEditImport } from "./routes/_auth/(reservations)/reservations.$reservationId.edit"
-import { Route as AuthreservationsReservationsReservationIdDetailsImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details"
-import { Route as AuthfleetFleetVehicleIdEditImport } from "./routes/_auth/(fleet)/fleet.$vehicleId.edit"
-import { Route as AuthfleetFleetVehicleIdDetailsImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details"
-import { Route as AuthcustomersCustomersCustomerIdEditImport } from "./routes/_auth/(customers)/customers.$customerId.edit"
-import { Route as AuthcustomersCustomersCustomerIdDetailsImport } from "./routes/_auth/(customers)/customers.$customerId._details"
-import { Route as AuthagreementsAgreementsAgreementIdEditImport } from "./routes/_auth/(agreements)/agreements.$agreementId.edit"
-import { Route as AuthagreementsAgreementsAgreementIdCheckInImport } from "./routes/_auth/(agreements)/agreements.$agreementId.check-in"
-import { Route as AuthagreementsAgreementsAgreementIdDetailsImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details"
-import { Route as AuthreservationsReservationsReservationIdDetailsIndexImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details._index"
-import { Route as AuthfleetFleetVehicleIdDetailsIndexImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details._index"
-import { Route as AuthcustomersCustomersCustomerIdDetailsIndexImport } from "./routes/_auth/(customers)/customers.$customerId._details._index"
-import { Route as AuthagreementsAgreementsAgreementIdDetailsIndexImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details._index"
-import { Route as AuthreservationsReservationsReservationIdDetailsSummaryImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details.summary"
-import { Route as AuthreservationsReservationsReservationIdDetailsNotesImport } from "./routes/_auth/(reservations)/reservations.$reservationId._details.notes"
-import { Route as AuthfleetFleetVehicleIdDetailsSummaryImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.summary"
-import { Route as AuthfleetFleetVehicleIdDetailsReservationsImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.reservations"
-import { Route as AuthfleetFleetVehicleIdDetailsNotesImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.notes"
-import { Route as AuthfleetFleetVehicleIdDetailsAgreementsImport } from "./routes/_auth/(fleet)/fleet.$vehicleId._details.agreements"
-import { Route as AuthcustomersCustomersCustomerIdDetailsSummaryImport } from "./routes/_auth/(customers)/customers.$customerId._details.summary"
-import { Route as AuthcustomersCustomersCustomerIdDetailsNotesImport } from "./routes/_auth/(customers)/customers.$customerId._details.notes"
-import { Route as AuthagreementsAgreementsAgreementIdDetailsSummaryImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.summary"
-import { Route as AuthagreementsAgreementsAgreementIdDetailsNotesImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.notes"
-import { Route as AuthagreementsAgreementsAgreementIdDetailsExchangesImport } from "./routes/_auth/(agreements)/agreements.$agreementId._details.exchanges"
-
-// Create/Update Routes
-
-const PublicRoute = PublicImport.update({
+const PublicRoute = PublicRouteImport.update({
   id: "/_public",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthRoute = AuthImport.update({
+const AuthRoute = AuthRouteImport.update({
   id: "/_auth",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const PublicOidcCallbackRoute = PublicOidcCallbackImport.update({
+const PublicOidcCallbackRoute = PublicOidcCallbackRouteImport.update({
   id: "/oidc-callback",
   path: "/oidc-callback",
   getParentRoute: () => PublicRoute,
 } as any)
-
-const PublicLogoutRoute = PublicLogoutImport.update({
+const PublicLogoutRoute = PublicLogoutRouteImport.update({
   id: "/logout",
   path: "/logout",
   getParentRoute: () => PublicRoute,
 } as any)
-
-const PublicLoginRoute = PublicLoginImport.update({
+const PublicLoginRoute = PublicLoginRouteImport.update({
   id: "/login",
   path: "/login",
   getParentRoute: () => PublicRoute,
 } as any)
-
-const PublicLoggedOutRoute = PublicLoggedOutImport.update({
+const PublicLoggedOutRoute = PublicLoggedOutRouteImport.update({
   id: "/logged-out",
   path: "/logged-out",
   getParentRoute: () => PublicRoute,
 } as any)
-
-const PublicDevRoute = PublicDevImport.update({
+const PublicDevRoute = PublicDevRouteImport.update({
   id: "/dev",
   path: "/dev",
   getParentRoute: () => PublicRoute,
 } as any)
-
-const AuthdashboardIndexRoute = AuthdashboardIndexImport.update({
+const AuthdashboardIndexRoute = AuthdashboardIndexRouteImport.update({
   id: "/(dashboard)/",
   path: "/",
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthsettingsSettingsRoute = AuthsettingsSettingsImport.update({
+const AuthsettingsSettingsRoute = AuthsettingsSettingsRouteImport.update({
   id: "/(settings)/settings",
   path: "/settings",
   getParentRoute: () => AuthRoute,
 } as any)
-
 const AuthreservationsReservationsRoute =
-  AuthreservationsReservationsImport.update({
+  AuthreservationsReservationsRouteImport.update({
     id: "/(reservations)/reservations",
     path: "/reservations",
     getParentRoute: () => AuthRoute,
   } as any)
-
-const AuthfleetFleetRoute = AuthfleetFleetImport.update({
+const AuthfleetFleetRoute = AuthfleetFleetRouteImport.update({
   id: "/(fleet)/fleet",
   path: "/fleet",
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthcustomersCustomersRoute = AuthcustomersCustomersImport.update({
+const AuthcustomersCustomersRoute = AuthcustomersCustomersRouteImport.update({
   id: "/(customers)/customers",
   path: "/customers",
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthagreementsAgreementsRoute = AuthagreementsAgreementsImport.update({
-  id: "/(agreements)/agreements",
-  path: "/agreements",
-  getParentRoute: () => AuthRoute,
-} as any)
-
-const AuthsettingsSettingsIndexRoute = AuthsettingsSettingsIndexImport.update({
-  id: "/",
-  path: "/",
-  getParentRoute: () => AuthsettingsSettingsRoute,
-} as any)
-
+const AuthagreementsAgreementsRoute =
+  AuthagreementsAgreementsRouteImport.update({
+    id: "/(agreements)/agreements",
+    path: "/agreements",
+    getParentRoute: () => AuthRoute,
+  } as any)
+const AuthsettingsSettingsIndexRoute =
+  AuthsettingsSettingsIndexRouteImport.update({
+    id: "/",
+    path: "/",
+    getParentRoute: () => AuthsettingsSettingsRoute,
+  } as any)
 const AuthreservationsReservationsIndexRoute =
-  AuthreservationsReservationsIndexImport.update({
+  AuthreservationsReservationsIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthreservationsReservationsRoute,
   } as any)
-
-const AuthreportsReportsIndexRoute = AuthreportsReportsIndexImport.update({
+const AuthreportsReportsIndexRoute = AuthreportsReportsIndexRouteImport.update({
   id: "/(reports)/reports/",
   path: "/reports/",
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthfleetFleetIndexRoute = AuthfleetFleetIndexImport.update({
+const AuthfleetFleetIndexRoute = AuthfleetFleetIndexRouteImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => AuthfleetFleetRoute,
 } as any)
-
 const AuthcustomersCustomersIndexRoute =
-  AuthcustomersCustomersIndexImport.update({
+  AuthcustomersCustomersIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthcustomersCustomersRoute,
   } as any)
-
 const AuthagreementsAgreementsIndexRoute =
-  AuthagreementsAgreementsIndexImport.update({
+  AuthagreementsAgreementsIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthagreementsAgreementsRoute,
   } as any)
-
 const AuthsettingsSettingsVehiclesAndCategoriesRoute =
-  AuthsettingsSettingsVehiclesAndCategoriesImport.update({
+  AuthsettingsSettingsVehiclesAndCategoriesRouteImport.update({
     id: "/vehicles-and-categories",
     path: "/vehicles-and-categories",
     getParentRoute: () => AuthsettingsSettingsRoute,
   } as any)
-
 const AuthsettingsSettingsRuntimeConfigurationRoute =
-  AuthsettingsSettingsRuntimeConfigurationImport.update({
+  AuthsettingsSettingsRuntimeConfigurationRouteImport.update({
     id: "/runtime-configuration",
     path: "/runtime-configuration",
     getParentRoute: () => AuthsettingsSettingsRoute,
   } as any)
-
 const AuthsettingsSettingsRatesAndChargesRoute =
-  AuthsettingsSettingsRatesAndChargesImport.update({
+  AuthsettingsSettingsRatesAndChargesRouteImport.update({
     id: "/rates-and-charges",
     path: "/rates-and-charges",
     getParentRoute: () => AuthsettingsSettingsRoute,
   } as any)
-
 const AuthsettingsSettingsProfileRoute =
-  AuthsettingsSettingsProfileImport.update({
+  AuthsettingsSettingsProfileRouteImport.update({
     id: "/profile",
     path: "/profile",
     getParentRoute: () => AuthsettingsSettingsRoute,
   } as any)
-
 const AuthsettingsSettingsApplicationRoute =
-  AuthsettingsSettingsApplicationImport.update({
+  AuthsettingsSettingsApplicationRouteImport.update({
     id: "/application",
     path: "/application",
     getParentRoute: () => AuthsettingsSettingsRoute,
   } as any)
-
 const AuthreservationsReservationsNewRoute =
-  AuthreservationsReservationsNewImport.update({
+  AuthreservationsReservationsNewRouteImport.update({
     id: "/new",
     path: "/new",
     getParentRoute: () => AuthreservationsReservationsRoute,
   } as any)
-
 const AuthreservationsReservationsReservationIdRoute =
-  AuthreservationsReservationsReservationIdImport.update({
+  AuthreservationsReservationsReservationIdRouteImport.update({
     id: "/$reservationId",
     path: "/$reservationId",
     getParentRoute: () => AuthreservationsReservationsRoute,
   } as any)
-
-const AuthfleetFleetNewRoute = AuthfleetFleetNewImport.update({
+const AuthfleetFleetNewRoute = AuthfleetFleetNewRouteImport.update({
   id: "/new",
   path: "/new",
   getParentRoute: () => AuthfleetFleetRoute,
 } as any)
-
-const AuthfleetFleetVehicleIdRoute = AuthfleetFleetVehicleIdImport.update({
+const AuthfleetFleetVehicleIdRoute = AuthfleetFleetVehicleIdRouteImport.update({
   id: "/$vehicleId",
   path: "/$vehicleId",
   getParentRoute: () => AuthfleetFleetRoute,
 } as any)
-
-const AuthcustomersCustomersNewRoute = AuthcustomersCustomersNewImport.update({
-  id: "/new",
-  path: "/new",
-  getParentRoute: () => AuthcustomersCustomersRoute,
-} as any)
-
+const AuthcustomersCustomersNewRoute =
+  AuthcustomersCustomersNewRouteImport.update({
+    id: "/new",
+    path: "/new",
+    getParentRoute: () => AuthcustomersCustomersRoute,
+  } as any)
 const AuthcustomersCustomersCustomerIdRoute =
-  AuthcustomersCustomersCustomerIdImport.update({
+  AuthcustomersCustomersCustomerIdRouteImport.update({
     id: "/$customerId",
     path: "/$customerId",
     getParentRoute: () => AuthcustomersCustomersRoute,
   } as any)
-
 const AuthagreementsAgreementsNewRoute =
-  AuthagreementsAgreementsNewImport.update({
+  AuthagreementsAgreementsNewRouteImport.update({
     id: "/new",
     path: "/new",
     getParentRoute: () => AuthagreementsAgreementsRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdRoute =
-  AuthagreementsAgreementsAgreementIdImport.update({
+  AuthagreementsAgreementsAgreementIdRouteImport.update({
     id: "/$agreementId",
     path: "/$agreementId",
     getParentRoute: () => AuthagreementsAgreementsRoute,
   } as any)
-
 const AuthsettingsSettingsApplicationIndexRoute =
-  AuthsettingsSettingsApplicationIndexImport.update({
+  AuthsettingsSettingsApplicationIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
-
 const AuthreportsReportsReportIdIndexRoute =
-  AuthreportsReportsReportIdIndexImport.update({
+  AuthreportsReportsReportIdIndexRouteImport.update({
     id: "/(reports)/reports/$reportId/",
     path: "/reports/$reportId/",
     getParentRoute: () => AuthRoute,
   } as any)
-
 const AuthsettingsSettingsApplicationUsersRoute =
-  AuthsettingsSettingsApplicationUsersImport.update({
+  AuthsettingsSettingsApplicationUsersRouteImport.update({
     id: "/users",
     path: "/users",
     getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
-
 const AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute =
-  AuthsettingsSettingsApplicationStoreHoursAndHolidaysImport.update({
+  AuthsettingsSettingsApplicationStoreHoursAndHolidaysRouteImport.update({
     id: "/store-hours-and-holidays",
     path: "/store-hours-and-holidays",
     getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
-
 const AuthsettingsSettingsApplicationPermissionsAndRolesRoute =
-  AuthsettingsSettingsApplicationPermissionsAndRolesImport.update({
+  AuthsettingsSettingsApplicationPermissionsAndRolesRouteImport.update({
     id: "/permissions-and-roles",
     path: "/permissions-and-roles",
     getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
-
 const AuthsettingsSettingsApplicationLocationsRoute =
-  AuthsettingsSettingsApplicationLocationsImport.update({
+  AuthsettingsSettingsApplicationLocationsRouteImport.update({
     id: "/locations",
     path: "/locations",
     getParentRoute: () => AuthsettingsSettingsApplicationRoute,
   } as any)
-
 const AuthreservationsReservationsReservationIdEditRoute =
-  AuthreservationsReservationsReservationIdEditImport.update({
+  AuthreservationsReservationsReservationIdEditRouteImport.update({
     id: "/edit",
     path: "/edit",
     getParentRoute: () => AuthreservationsReservationsReservationIdRoute,
   } as any)
-
 const AuthreservationsReservationsReservationIdDetailsRoute =
-  AuthreservationsReservationsReservationIdDetailsImport.update({
+  AuthreservationsReservationsReservationIdDetailsRouteImport.update({
     id: "/_details",
     getParentRoute: () => AuthreservationsReservationsReservationIdRoute,
   } as any)
-
 const AuthfleetFleetVehicleIdEditRoute =
-  AuthfleetFleetVehicleIdEditImport.update({
+  AuthfleetFleetVehicleIdEditRouteImport.update({
     id: "/edit",
     path: "/edit",
     getParentRoute: () => AuthfleetFleetVehicleIdRoute,
   } as any)
-
 const AuthfleetFleetVehicleIdDetailsRoute =
-  AuthfleetFleetVehicleIdDetailsImport.update({
+  AuthfleetFleetVehicleIdDetailsRouteImport.update({
     id: "/_details",
     getParentRoute: () => AuthfleetFleetVehicleIdRoute,
   } as any)
-
 const AuthcustomersCustomersCustomerIdEditRoute =
-  AuthcustomersCustomersCustomerIdEditImport.update({
+  AuthcustomersCustomersCustomerIdEditRouteImport.update({
     id: "/edit",
     path: "/edit",
     getParentRoute: () => AuthcustomersCustomersCustomerIdRoute,
   } as any)
-
 const AuthcustomersCustomersCustomerIdDetailsRoute =
-  AuthcustomersCustomersCustomerIdDetailsImport.update({
+  AuthcustomersCustomersCustomerIdDetailsRouteImport.update({
     id: "/_details",
     getParentRoute: () => AuthcustomersCustomersCustomerIdRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdEditRoute =
-  AuthagreementsAgreementsAgreementIdEditImport.update({
+  AuthagreementsAgreementsAgreementIdEditRouteImport.update({
     id: "/edit",
     path: "/edit",
     getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdCheckInRoute =
-  AuthagreementsAgreementsAgreementIdCheckInImport.update({
+  AuthagreementsAgreementsAgreementIdCheckInRouteImport.update({
     id: "/check-in",
     path: "/check-in",
     getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdDetailsRoute =
-  AuthagreementsAgreementsAgreementIdDetailsImport.update({
+  AuthagreementsAgreementsAgreementIdDetailsRouteImport.update({
     id: "/_details",
     getParentRoute: () => AuthagreementsAgreementsAgreementIdRoute,
   } as any)
-
 const AuthreservationsReservationsReservationIdDetailsIndexRoute =
-  AuthreservationsReservationsReservationIdDetailsIndexImport.update({
+  AuthreservationsReservationsReservationIdDetailsIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthreservationsReservationsReservationIdDetailsRoute,
   } as any)
-
 const AuthfleetFleetVehicleIdDetailsIndexRoute =
-  AuthfleetFleetVehicleIdDetailsIndexImport.update({
+  AuthfleetFleetVehicleIdDetailsIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
   } as any)
-
 const AuthcustomersCustomersCustomerIdDetailsIndexRoute =
-  AuthcustomersCustomersCustomerIdDetailsIndexImport.update({
+  AuthcustomersCustomersCustomerIdDetailsIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthcustomersCustomersCustomerIdDetailsRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdDetailsIndexRoute =
-  AuthagreementsAgreementsAgreementIdDetailsIndexImport.update({
+  AuthagreementsAgreementsAgreementIdDetailsIndexRouteImport.update({
     id: "/",
     path: "/",
     getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
   } as any)
-
 const AuthreservationsReservationsReservationIdDetailsSummaryRoute =
-  AuthreservationsReservationsReservationIdDetailsSummaryImport.update({
+  AuthreservationsReservationsReservationIdDetailsSummaryRouteImport.update({
     id: "/summary",
     path: "/summary",
     getParentRoute: () => AuthreservationsReservationsReservationIdDetailsRoute,
   } as any)
-
 const AuthreservationsReservationsReservationIdDetailsNotesRoute =
-  AuthreservationsReservationsReservationIdDetailsNotesImport.update({
+  AuthreservationsReservationsReservationIdDetailsNotesRouteImport.update({
     id: "/notes",
     path: "/notes",
     getParentRoute: () => AuthreservationsReservationsReservationIdDetailsRoute,
   } as any)
-
 const AuthfleetFleetVehicleIdDetailsSummaryRoute =
-  AuthfleetFleetVehicleIdDetailsSummaryImport.update({
+  AuthfleetFleetVehicleIdDetailsSummaryRouteImport.update({
     id: "/summary",
     path: "/summary",
     getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
   } as any)
-
 const AuthfleetFleetVehicleIdDetailsReservationsRoute =
-  AuthfleetFleetVehicleIdDetailsReservationsImport.update({
+  AuthfleetFleetVehicleIdDetailsReservationsRouteImport.update({
     id: "/reservations",
     path: "/reservations",
     getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
   } as any)
-
 const AuthfleetFleetVehicleIdDetailsNotesRoute =
-  AuthfleetFleetVehicleIdDetailsNotesImport.update({
+  AuthfleetFleetVehicleIdDetailsNotesRouteImport.update({
     id: "/notes",
     path: "/notes",
     getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
   } as any)
-
 const AuthfleetFleetVehicleIdDetailsAgreementsRoute =
-  AuthfleetFleetVehicleIdDetailsAgreementsImport.update({
+  AuthfleetFleetVehicleIdDetailsAgreementsRouteImport.update({
     id: "/agreements",
     path: "/agreements",
     getParentRoute: () => AuthfleetFleetVehicleIdDetailsRoute,
   } as any)
-
 const AuthcustomersCustomersCustomerIdDetailsSummaryRoute =
-  AuthcustomersCustomersCustomerIdDetailsSummaryImport.update({
+  AuthcustomersCustomersCustomerIdDetailsSummaryRouteImport.update({
     id: "/summary",
     path: "/summary",
     getParentRoute: () => AuthcustomersCustomersCustomerIdDetailsRoute,
   } as any)
-
 const AuthcustomersCustomersCustomerIdDetailsNotesRoute =
-  AuthcustomersCustomersCustomerIdDetailsNotesImport.update({
+  AuthcustomersCustomersCustomerIdDetailsNotesRouteImport.update({
     id: "/notes",
     path: "/notes",
     getParentRoute: () => AuthcustomersCustomersCustomerIdDetailsRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdDetailsSummaryRoute =
-  AuthagreementsAgreementsAgreementIdDetailsSummaryImport.update({
+  AuthagreementsAgreementsAgreementIdDetailsSummaryRouteImport.update({
     id: "/summary",
     path: "/summary",
     getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdDetailsNotesRoute =
-  AuthagreementsAgreementsAgreementIdDetailsNotesImport.update({
+  AuthagreementsAgreementsAgreementIdDetailsNotesRouteImport.update({
     id: "/notes",
     path: "/notes",
     getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
   } as any)
-
 const AuthagreementsAgreementsAgreementIdDetailsExchangesRoute =
-  AuthagreementsAgreementsAgreementIdDetailsExchangesImport.update({
+  AuthagreementsAgreementsAgreementIdDetailsExchangesRouteImport.update({
     id: "/exchanges",
     path: "/exchanges",
     getParentRoute: () => AuthagreementsAgreementsAgreementIdDetailsRoute,
   } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  "/dev": typeof PublicDevRoute
+  "/logged-out": typeof PublicLoggedOutRoute
+  "/login": typeof PublicLoginRoute
+  "/logout": typeof PublicLogoutRoute
+  "/oidc-callback": typeof PublicOidcCallbackRoute
+  "/agreements": typeof AuthagreementsAgreementsRouteWithChildren
+  "/customers": typeof AuthcustomersCustomersRouteWithChildren
+  "/fleet": typeof AuthfleetFleetRouteWithChildren
+  "/reservations": typeof AuthreservationsReservationsRouteWithChildren
+  "/settings": typeof AuthsettingsSettingsRouteWithChildren
+  "/": typeof AuthdashboardIndexRoute
+  "/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren
+  "/agreements/new": typeof AuthagreementsAgreementsNewRoute
+  "/customers/$customerId": typeof AuthcustomersCustomersCustomerIdDetailsRouteWithChildren
+  "/customers/new": typeof AuthcustomersCustomersNewRoute
+  "/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdDetailsRouteWithChildren
+  "/fleet/new": typeof AuthfleetFleetNewRoute
+  "/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdDetailsRouteWithChildren
+  "/reservations/new": typeof AuthreservationsReservationsNewRoute
+  "/settings/application": typeof AuthsettingsSettingsApplicationRouteWithChildren
+  "/settings/profile": typeof AuthsettingsSettingsProfileRoute
+  "/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
+  "/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
+  "/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
+  "/agreements/": typeof AuthagreementsAgreementsIndexRoute
+  "/customers/": typeof AuthcustomersCustomersIndexRoute
+  "/fleet/": typeof AuthfleetFleetIndexRoute
+  "/reports": typeof AuthreportsReportsIndexRoute
+  "/reservations/": typeof AuthreservationsReservationsIndexRoute
+  "/settings/": typeof AuthsettingsSettingsIndexRoute
+  "/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
+  "/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
+  "/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
+  "/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
+  "/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
+  "/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
+  "/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
+  "/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
+  "/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
+  "/reports/$reportId": typeof AuthreportsReportsReportIdIndexRoute
+  "/settings/application/": typeof AuthsettingsSettingsApplicationIndexRoute
+  "/agreements/$agreementId/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
+  "/agreements/$agreementId/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
+  "/agreements/$agreementId/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
+  "/customers/$customerId/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
+  "/customers/$customerId/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
+  "/fleet/$vehicleId/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
+  "/fleet/$vehicleId/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
+  "/fleet/$vehicleId/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
+  "/fleet/$vehicleId/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
+  "/reservations/$reservationId/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
+  "/reservations/$reservationId/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
+  "/agreements/$agreementId/": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
+  "/customers/$customerId/": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
+  "/fleet/$vehicleId/": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
+  "/reservations/$reservationId/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
+}
+export interface FileRoutesByTo {
+  "/dev": typeof PublicDevRoute
+  "/logged-out": typeof PublicLoggedOutRoute
+  "/login": typeof PublicLoginRoute
+  "/logout": typeof PublicLogoutRoute
+  "/oidc-callback": typeof PublicOidcCallbackRoute
+  "/": typeof AuthdashboardIndexRoute
+  "/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
+  "/agreements/new": typeof AuthagreementsAgreementsNewRoute
+  "/customers/$customerId": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
+  "/customers/new": typeof AuthcustomersCustomersNewRoute
+  "/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
+  "/fleet/new": typeof AuthfleetFleetNewRoute
+  "/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
+  "/reservations/new": typeof AuthreservationsReservationsNewRoute
+  "/settings/profile": typeof AuthsettingsSettingsProfileRoute
+  "/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
+  "/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
+  "/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
+  "/agreements": typeof AuthagreementsAgreementsIndexRoute
+  "/customers": typeof AuthcustomersCustomersIndexRoute
+  "/fleet": typeof AuthfleetFleetIndexRoute
+  "/reports": typeof AuthreportsReportsIndexRoute
+  "/reservations": typeof AuthreservationsReservationsIndexRoute
+  "/settings": typeof AuthsettingsSettingsIndexRoute
+  "/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
+  "/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
+  "/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
+  "/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
+  "/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
+  "/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
+  "/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
+  "/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
+  "/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
+  "/reports/$reportId": typeof AuthreportsReportsReportIdIndexRoute
+  "/settings/application": typeof AuthsettingsSettingsApplicationIndexRoute
+  "/agreements/$agreementId/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
+  "/agreements/$agreementId/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
+  "/agreements/$agreementId/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
+  "/customers/$customerId/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
+  "/customers/$customerId/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
+  "/fleet/$vehicleId/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
+  "/fleet/$vehicleId/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
+  "/fleet/$vehicleId/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
+  "/fleet/$vehicleId/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
+  "/reservations/$reservationId/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
+  "/reservations/$reservationId/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  "/_auth": typeof AuthRouteWithChildren
+  "/_public": typeof PublicRouteWithChildren
+  "/_public/dev": typeof PublicDevRoute
+  "/_public/logged-out": typeof PublicLoggedOutRoute
+  "/_public/login": typeof PublicLoginRoute
+  "/_public/logout": typeof PublicLogoutRoute
+  "/_public/oidc-callback": typeof PublicOidcCallbackRoute
+  "/_auth/(agreements)/agreements": typeof AuthagreementsAgreementsRouteWithChildren
+  "/_auth/(customers)/customers": typeof AuthcustomersCustomersRouteWithChildren
+  "/_auth/(fleet)/fleet": typeof AuthfleetFleetRouteWithChildren
+  "/_auth/(reservations)/reservations": typeof AuthreservationsReservationsRouteWithChildren
+  "/_auth/(settings)/settings": typeof AuthsettingsSettingsRouteWithChildren
+  "/_auth/(dashboard)/": typeof AuthdashboardIndexRoute
+  "/_auth/(agreements)/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdRouteWithChildren
+  "/_auth/(agreements)/agreements/new": typeof AuthagreementsAgreementsNewRoute
+  "/_auth/(customers)/customers/$customerId": typeof AuthcustomersCustomersCustomerIdRouteWithChildren
+  "/_auth/(customers)/customers/new": typeof AuthcustomersCustomersNewRoute
+  "/_auth/(fleet)/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdRouteWithChildren
+  "/_auth/(fleet)/fleet/new": typeof AuthfleetFleetNewRoute
+  "/_auth/(reservations)/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdRouteWithChildren
+  "/_auth/(reservations)/reservations/new": typeof AuthreservationsReservationsNewRoute
+  "/_auth/(settings)/settings/application": typeof AuthsettingsSettingsApplicationRouteWithChildren
+  "/_auth/(settings)/settings/profile": typeof AuthsettingsSettingsProfileRoute
+  "/_auth/(settings)/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
+  "/_auth/(settings)/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
+  "/_auth/(settings)/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
+  "/_auth/(agreements)/agreements/": typeof AuthagreementsAgreementsIndexRoute
+  "/_auth/(customers)/customers/": typeof AuthcustomersCustomersIndexRoute
+  "/_auth/(fleet)/fleet/": typeof AuthfleetFleetIndexRoute
+  "/_auth/(reports)/reports/": typeof AuthreportsReportsIndexRoute
+  "/_auth/(reservations)/reservations/": typeof AuthreservationsReservationsIndexRoute
+  "/_auth/(settings)/settings/": typeof AuthsettingsSettingsIndexRoute
+  "/_auth/(agreements)/agreements/$agreementId/_details": typeof AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren
+  "/_auth/(agreements)/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
+  "/_auth/(agreements)/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
+  "/_auth/(customers)/customers/$customerId/_details": typeof AuthcustomersCustomersCustomerIdDetailsRouteWithChildren
+  "/_auth/(customers)/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
+  "/_auth/(fleet)/fleet/$vehicleId/_details": typeof AuthfleetFleetVehicleIdDetailsRouteWithChildren
+  "/_auth/(fleet)/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
+  "/_auth/(reservations)/reservations/$reservationId/_details": typeof AuthreservationsReservationsReservationIdDetailsRouteWithChildren
+  "/_auth/(reservations)/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
+  "/_auth/(settings)/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
+  "/_auth/(settings)/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
+  "/_auth/(settings)/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
+  "/_auth/(settings)/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
+  "/_auth/(reports)/reports/$reportId/": typeof AuthreportsReportsReportIdIndexRoute
+  "/_auth/(settings)/settings/application/": typeof AuthsettingsSettingsApplicationIndexRoute
+  "/_auth/(agreements)/agreements/$agreementId/_details/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
+  "/_auth/(agreements)/agreements/$agreementId/_details/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
+  "/_auth/(agreements)/agreements/$agreementId/_details/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
+  "/_auth/(customers)/customers/$customerId/_details/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
+  "/_auth/(customers)/customers/$customerId/_details/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
+  "/_auth/(fleet)/fleet/$vehicleId/_details/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
+  "/_auth/(fleet)/fleet/$vehicleId/_details/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
+  "/_auth/(fleet)/fleet/$vehicleId/_details/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
+  "/_auth/(fleet)/fleet/$vehicleId/_details/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
+  "/_auth/(reservations)/reservations/$reservationId/_details/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
+  "/_auth/(reservations)/reservations/$reservationId/_details/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
+  "/_auth/(agreements)/agreements/$agreementId/_details/": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
+  "/_auth/(customers)/customers/$customerId/_details/": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
+  "/_auth/(fleet)/fleet/$vehicleId/_details/": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
+  "/_auth/(reservations)/reservations/$reservationId/_details/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | "/dev"
+    | "/logged-out"
+    | "/login"
+    | "/logout"
+    | "/oidc-callback"
+    | "/agreements"
+    | "/customers"
+    | "/fleet"
+    | "/reservations"
+    | "/settings"
+    | "/"
+    | "/agreements/$agreementId"
+    | "/agreements/new"
+    | "/customers/$customerId"
+    | "/customers/new"
+    | "/fleet/$vehicleId"
+    | "/fleet/new"
+    | "/reservations/$reservationId"
+    | "/reservations/new"
+    | "/settings/application"
+    | "/settings/profile"
+    | "/settings/rates-and-charges"
+    | "/settings/runtime-configuration"
+    | "/settings/vehicles-and-categories"
+    | "/agreements/"
+    | "/customers/"
+    | "/fleet/"
+    | "/reports"
+    | "/reservations/"
+    | "/settings/"
+    | "/agreements/$agreementId/check-in"
+    | "/agreements/$agreementId/edit"
+    | "/customers/$customerId/edit"
+    | "/fleet/$vehicleId/edit"
+    | "/reservations/$reservationId/edit"
+    | "/settings/application/locations"
+    | "/settings/application/permissions-and-roles"
+    | "/settings/application/store-hours-and-holidays"
+    | "/settings/application/users"
+    | "/reports/$reportId"
+    | "/settings/application/"
+    | "/agreements/$agreementId/exchanges"
+    | "/agreements/$agreementId/notes"
+    | "/agreements/$agreementId/summary"
+    | "/customers/$customerId/notes"
+    | "/customers/$customerId/summary"
+    | "/fleet/$vehicleId/agreements"
+    | "/fleet/$vehicleId/notes"
+    | "/fleet/$vehicleId/reservations"
+    | "/fleet/$vehicleId/summary"
+    | "/reservations/$reservationId/notes"
+    | "/reservations/$reservationId/summary"
+    | "/agreements/$agreementId/"
+    | "/customers/$customerId/"
+    | "/fleet/$vehicleId/"
+    | "/reservations/$reservationId/"
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | "/dev"
+    | "/logged-out"
+    | "/login"
+    | "/logout"
+    | "/oidc-callback"
+    | "/"
+    | "/agreements/$agreementId"
+    | "/agreements/new"
+    | "/customers/$customerId"
+    | "/customers/new"
+    | "/fleet/$vehicleId"
+    | "/fleet/new"
+    | "/reservations/$reservationId"
+    | "/reservations/new"
+    | "/settings/profile"
+    | "/settings/rates-and-charges"
+    | "/settings/runtime-configuration"
+    | "/settings/vehicles-and-categories"
+    | "/agreements"
+    | "/customers"
+    | "/fleet"
+    | "/reports"
+    | "/reservations"
+    | "/settings"
+    | "/agreements/$agreementId/check-in"
+    | "/agreements/$agreementId/edit"
+    | "/customers/$customerId/edit"
+    | "/fleet/$vehicleId/edit"
+    | "/reservations/$reservationId/edit"
+    | "/settings/application/locations"
+    | "/settings/application/permissions-and-roles"
+    | "/settings/application/store-hours-and-holidays"
+    | "/settings/application/users"
+    | "/reports/$reportId"
+    | "/settings/application"
+    | "/agreements/$agreementId/exchanges"
+    | "/agreements/$agreementId/notes"
+    | "/agreements/$agreementId/summary"
+    | "/customers/$customerId/notes"
+    | "/customers/$customerId/summary"
+    | "/fleet/$vehicleId/agreements"
+    | "/fleet/$vehicleId/notes"
+    | "/fleet/$vehicleId/reservations"
+    | "/fleet/$vehicleId/summary"
+    | "/reservations/$reservationId/notes"
+    | "/reservations/$reservationId/summary"
+  id:
+    | "__root__"
+    | "/_auth"
+    | "/_public"
+    | "/_public/dev"
+    | "/_public/logged-out"
+    | "/_public/login"
+    | "/_public/logout"
+    | "/_public/oidc-callback"
+    | "/_auth/(agreements)/agreements"
+    | "/_auth/(customers)/customers"
+    | "/_auth/(fleet)/fleet"
+    | "/_auth/(reservations)/reservations"
+    | "/_auth/(settings)/settings"
+    | "/_auth/(dashboard)/"
+    | "/_auth/(agreements)/agreements/$agreementId"
+    | "/_auth/(agreements)/agreements/new"
+    | "/_auth/(customers)/customers/$customerId"
+    | "/_auth/(customers)/customers/new"
+    | "/_auth/(fleet)/fleet/$vehicleId"
+    | "/_auth/(fleet)/fleet/new"
+    | "/_auth/(reservations)/reservations/$reservationId"
+    | "/_auth/(reservations)/reservations/new"
+    | "/_auth/(settings)/settings/application"
+    | "/_auth/(settings)/settings/profile"
+    | "/_auth/(settings)/settings/rates-and-charges"
+    | "/_auth/(settings)/settings/runtime-configuration"
+    | "/_auth/(settings)/settings/vehicles-and-categories"
+    | "/_auth/(agreements)/agreements/"
+    | "/_auth/(customers)/customers/"
+    | "/_auth/(fleet)/fleet/"
+    | "/_auth/(reports)/reports/"
+    | "/_auth/(reservations)/reservations/"
+    | "/_auth/(settings)/settings/"
+    | "/_auth/(agreements)/agreements/$agreementId/_details"
+    | "/_auth/(agreements)/agreements/$agreementId/check-in"
+    | "/_auth/(agreements)/agreements/$agreementId/edit"
+    | "/_auth/(customers)/customers/$customerId/_details"
+    | "/_auth/(customers)/customers/$customerId/edit"
+    | "/_auth/(fleet)/fleet/$vehicleId/_details"
+    | "/_auth/(fleet)/fleet/$vehicleId/edit"
+    | "/_auth/(reservations)/reservations/$reservationId/_details"
+    | "/_auth/(reservations)/reservations/$reservationId/edit"
+    | "/_auth/(settings)/settings/application/locations"
+    | "/_auth/(settings)/settings/application/permissions-and-roles"
+    | "/_auth/(settings)/settings/application/store-hours-and-holidays"
+    | "/_auth/(settings)/settings/application/users"
+    | "/_auth/(reports)/reports/$reportId/"
+    | "/_auth/(settings)/settings/application/"
+    | "/_auth/(agreements)/agreements/$agreementId/_details/exchanges"
+    | "/_auth/(agreements)/agreements/$agreementId/_details/notes"
+    | "/_auth/(agreements)/agreements/$agreementId/_details/summary"
+    | "/_auth/(customers)/customers/$customerId/_details/notes"
+    | "/_auth/(customers)/customers/$customerId/_details/summary"
+    | "/_auth/(fleet)/fleet/$vehicleId/_details/agreements"
+    | "/_auth/(fleet)/fleet/$vehicleId/_details/notes"
+    | "/_auth/(fleet)/fleet/$vehicleId/_details/reservations"
+    | "/_auth/(fleet)/fleet/$vehicleId/_details/summary"
+    | "/_auth/(reservations)/reservations/$reservationId/_details/notes"
+    | "/_auth/(reservations)/reservations/$reservationId/_details/summary"
+    | "/_auth/(agreements)/agreements/$agreementId/_details/"
+    | "/_auth/(customers)/customers/$customerId/_details/"
+    | "/_auth/(fleet)/fleet/$vehicleId/_details/"
+    | "/_auth/(reservations)/reservations/$reservationId/_details/"
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  AuthRoute: typeof AuthRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
+}
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/_auth": {
-      id: "/_auth"
-      path: ""
-      fullPath: ""
-      preLoaderRoute: typeof AuthImport
-      parentRoute: typeof rootRoute
-    }
     "/_public": {
       id: "/_public"
       path: ""
       fullPath: ""
-      preLoaderRoute: typeof PublicImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    "/_public/dev": {
-      id: "/_public/dev"
-      path: "/dev"
-      fullPath: "/dev"
-      preLoaderRoute: typeof PublicDevImport
-      parentRoute: typeof PublicImport
-    }
-    "/_public/logged-out": {
-      id: "/_public/logged-out"
-      path: "/logged-out"
-      fullPath: "/logged-out"
-      preLoaderRoute: typeof PublicLoggedOutImport
-      parentRoute: typeof PublicImport
-    }
-    "/_public/login": {
-      id: "/_public/login"
-      path: "/login"
-      fullPath: "/login"
-      preLoaderRoute: typeof PublicLoginImport
-      parentRoute: typeof PublicImport
-    }
-    "/_public/logout": {
-      id: "/_public/logout"
-      path: "/logout"
-      fullPath: "/logout"
-      preLoaderRoute: typeof PublicLogoutImport
-      parentRoute: typeof PublicImport
+    "/_auth": {
+      id: "/_auth"
+      path: ""
+      fullPath: ""
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     "/_public/oidc-callback": {
       id: "/_public/oidc-callback"
       path: "/oidc-callback"
       fullPath: "/oidc-callback"
-      preLoaderRoute: typeof PublicOidcCallbackImport
-      parentRoute: typeof PublicImport
+      preLoaderRoute: typeof PublicOidcCallbackRouteImport
+      parentRoute: typeof PublicRoute
     }
-    "/_auth/(agreements)/agreements": {
-      id: "/_auth/(agreements)/agreements"
-      path: "/agreements"
-      fullPath: "/agreements"
-      preLoaderRoute: typeof AuthagreementsAgreementsImport
-      parentRoute: typeof AuthImport
+    "/_public/logout": {
+      id: "/_public/logout"
+      path: "/logout"
+      fullPath: "/logout"
+      preLoaderRoute: typeof PublicLogoutRouteImport
+      parentRoute: typeof PublicRoute
     }
-    "/_auth/(customers)/customers": {
-      id: "/_auth/(customers)/customers"
-      path: "/customers"
-      fullPath: "/customers"
-      preLoaderRoute: typeof AuthcustomersCustomersImport
-      parentRoute: typeof AuthImport
+    "/_public/login": {
+      id: "/_public/login"
+      path: "/login"
+      fullPath: "/login"
+      preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRoute
     }
-    "/_auth/(fleet)/fleet": {
-      id: "/_auth/(fleet)/fleet"
-      path: "/fleet"
-      fullPath: "/fleet"
-      preLoaderRoute: typeof AuthfleetFleetImport
-      parentRoute: typeof AuthImport
+    "/_public/logged-out": {
+      id: "/_public/logged-out"
+      path: "/logged-out"
+      fullPath: "/logged-out"
+      preLoaderRoute: typeof PublicLoggedOutRouteImport
+      parentRoute: typeof PublicRoute
     }
-    "/_auth/(reservations)/reservations": {
-      id: "/_auth/(reservations)/reservations"
-      path: "/reservations"
-      fullPath: "/reservations"
-      preLoaderRoute: typeof AuthreservationsReservationsImport
-      parentRoute: typeof AuthImport
-    }
-    "/_auth/(settings)/settings": {
-      id: "/_auth/(settings)/settings"
-      path: "/settings"
-      fullPath: "/settings"
-      preLoaderRoute: typeof AuthsettingsSettingsImport
-      parentRoute: typeof AuthImport
+    "/_public/dev": {
+      id: "/_public/dev"
+      path: "/dev"
+      fullPath: "/dev"
+      preLoaderRoute: typeof PublicDevRouteImport
+      parentRoute: typeof PublicRoute
     }
     "/_auth/(dashboard)/": {
       id: "/_auth/(dashboard)/"
       path: "/"
       fullPath: "/"
-      preLoaderRoute: typeof AuthdashboardIndexImport
-      parentRoute: typeof AuthImport
+      preLoaderRoute: typeof AuthdashboardIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId": {
-      id: "/_auth/(agreements)/agreements/$agreementId"
-      path: "/$agreementId"
-      fullPath: "/agreements/$agreementId"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdImport
-      parentRoute: typeof AuthagreementsAgreementsImport
+    "/_auth/(settings)/settings": {
+      id: "/_auth/(settings)/settings"
+      path: "/settings"
+      fullPath: "/settings"
+      preLoaderRoute: typeof AuthsettingsSettingsRouteImport
+      parentRoute: typeof AuthRoute
     }
-    "/_auth/(agreements)/agreements/new": {
-      id: "/_auth/(agreements)/agreements/new"
-      path: "/new"
-      fullPath: "/agreements/new"
-      preLoaderRoute: typeof AuthagreementsAgreementsNewImport
-      parentRoute: typeof AuthagreementsAgreementsImport
+    "/_auth/(reservations)/reservations": {
+      id: "/_auth/(reservations)/reservations"
+      path: "/reservations"
+      fullPath: "/reservations"
+      preLoaderRoute: typeof AuthreservationsReservationsRouteImport
+      parentRoute: typeof AuthRoute
     }
-    "/_auth/(customers)/customers/$customerId": {
-      id: "/_auth/(customers)/customers/$customerId"
-      path: "/$customerId"
-      fullPath: "/customers/$customerId"
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdImport
-      parentRoute: typeof AuthcustomersCustomersImport
+    "/_auth/(fleet)/fleet": {
+      id: "/_auth/(fleet)/fleet"
+      path: "/fleet"
+      fullPath: "/fleet"
+      preLoaderRoute: typeof AuthfleetFleetRouteImport
+      parentRoute: typeof AuthRoute
     }
-    "/_auth/(customers)/customers/new": {
-      id: "/_auth/(customers)/customers/new"
-      path: "/new"
-      fullPath: "/customers/new"
-      preLoaderRoute: typeof AuthcustomersCustomersNewImport
-      parentRoute: typeof AuthcustomersCustomersImport
+    "/_auth/(customers)/customers": {
+      id: "/_auth/(customers)/customers"
+      path: "/customers"
+      fullPath: "/customers"
+      preLoaderRoute: typeof AuthcustomersCustomersRouteImport
+      parentRoute: typeof AuthRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId": {
-      id: "/_auth/(fleet)/fleet/$vehicleId"
-      path: "/$vehicleId"
-      fullPath: "/fleet/$vehicleId"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdImport
-      parentRoute: typeof AuthfleetFleetImport
-    }
-    "/_auth/(fleet)/fleet/new": {
-      id: "/_auth/(fleet)/fleet/new"
-      path: "/new"
-      fullPath: "/fleet/new"
-      preLoaderRoute: typeof AuthfleetFleetNewImport
-      parentRoute: typeof AuthfleetFleetImport
-    }
-    "/_auth/(reservations)/reservations/$reservationId": {
-      id: "/_auth/(reservations)/reservations/$reservationId"
-      path: "/$reservationId"
-      fullPath: "/reservations/$reservationId"
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdImport
-      parentRoute: typeof AuthreservationsReservationsImport
-    }
-    "/_auth/(reservations)/reservations/new": {
-      id: "/_auth/(reservations)/reservations/new"
-      path: "/new"
-      fullPath: "/reservations/new"
-      preLoaderRoute: typeof AuthreservationsReservationsNewImport
-      parentRoute: typeof AuthreservationsReservationsImport
-    }
-    "/_auth/(settings)/settings/application": {
-      id: "/_auth/(settings)/settings/application"
-      path: "/application"
-      fullPath: "/settings/application"
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationImport
-      parentRoute: typeof AuthsettingsSettingsImport
-    }
-    "/_auth/(settings)/settings/profile": {
-      id: "/_auth/(settings)/settings/profile"
-      path: "/profile"
-      fullPath: "/settings/profile"
-      preLoaderRoute: typeof AuthsettingsSettingsProfileImport
-      parentRoute: typeof AuthsettingsSettingsImport
-    }
-    "/_auth/(settings)/settings/rates-and-charges": {
-      id: "/_auth/(settings)/settings/rates-and-charges"
-      path: "/rates-and-charges"
-      fullPath: "/settings/rates-and-charges"
-      preLoaderRoute: typeof AuthsettingsSettingsRatesAndChargesImport
-      parentRoute: typeof AuthsettingsSettingsImport
-    }
-    "/_auth/(settings)/settings/runtime-configuration": {
-      id: "/_auth/(settings)/settings/runtime-configuration"
-      path: "/runtime-configuration"
-      fullPath: "/settings/runtime-configuration"
-      preLoaderRoute: typeof AuthsettingsSettingsRuntimeConfigurationImport
-      parentRoute: typeof AuthsettingsSettingsImport
-    }
-    "/_auth/(settings)/settings/vehicles-and-categories": {
-      id: "/_auth/(settings)/settings/vehicles-and-categories"
-      path: "/vehicles-and-categories"
-      fullPath: "/settings/vehicles-and-categories"
-      preLoaderRoute: typeof AuthsettingsSettingsVehiclesAndCategoriesImport
-      parentRoute: typeof AuthsettingsSettingsImport
-    }
-    "/_auth/(agreements)/agreements/": {
-      id: "/_auth/(agreements)/agreements/"
-      path: "/"
-      fullPath: "/agreements/"
-      preLoaderRoute: typeof AuthagreementsAgreementsIndexImport
-      parentRoute: typeof AuthagreementsAgreementsImport
-    }
-    "/_auth/(customers)/customers/": {
-      id: "/_auth/(customers)/customers/"
-      path: "/"
-      fullPath: "/customers/"
-      preLoaderRoute: typeof AuthcustomersCustomersIndexImport
-      parentRoute: typeof AuthcustomersCustomersImport
-    }
-    "/_auth/(fleet)/fleet/": {
-      id: "/_auth/(fleet)/fleet/"
-      path: "/"
-      fullPath: "/fleet/"
-      preLoaderRoute: typeof AuthfleetFleetIndexImport
-      parentRoute: typeof AuthfleetFleetImport
-    }
-    "/_auth/(reports)/reports/": {
-      id: "/_auth/(reports)/reports/"
-      path: "/reports"
-      fullPath: "/reports"
-      preLoaderRoute: typeof AuthreportsReportsIndexImport
-      parentRoute: typeof AuthImport
-    }
-    "/_auth/(reservations)/reservations/": {
-      id: "/_auth/(reservations)/reservations/"
-      path: "/"
-      fullPath: "/reservations/"
-      preLoaderRoute: typeof AuthreservationsReservationsIndexImport
-      parentRoute: typeof AuthreservationsReservationsImport
+    "/_auth/(agreements)/agreements": {
+      id: "/_auth/(agreements)/agreements"
+      path: "/agreements"
+      fullPath: "/agreements"
+      preLoaderRoute: typeof AuthagreementsAgreementsRouteImport
+      parentRoute: typeof AuthRoute
     }
     "/_auth/(settings)/settings/": {
       id: "/_auth/(settings)/settings/"
       path: "/"
       fullPath: "/settings/"
-      preLoaderRoute: typeof AuthsettingsSettingsIndexImport
-      parentRoute: typeof AuthsettingsSettingsImport
+      preLoaderRoute: typeof AuthsettingsSettingsIndexRouteImport
+      parentRoute: typeof AuthsettingsSettingsRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId/_details": {
-      id: "/_auth/(agreements)/agreements/$agreementId/_details"
-      path: ""
-      fullPath: "/agreements/$agreementId"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
+    "/_auth/(reservations)/reservations/": {
+      id: "/_auth/(reservations)/reservations/"
+      path: "/"
+      fullPath: "/reservations/"
+      preLoaderRoute: typeof AuthreservationsReservationsIndexRouteImport
+      parentRoute: typeof AuthreservationsReservationsRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId/check-in": {
-      id: "/_auth/(agreements)/agreements/$agreementId/check-in"
-      path: "/check-in"
-      fullPath: "/agreements/$agreementId/check-in"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdCheckInImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
+    "/_auth/(reports)/reports/": {
+      id: "/_auth/(reports)/reports/"
+      path: "/reports"
+      fullPath: "/reports"
+      preLoaderRoute: typeof AuthreportsReportsIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId/edit": {
-      id: "/_auth/(agreements)/agreements/$agreementId/edit"
-      path: "/edit"
-      fullPath: "/agreements/$agreementId/edit"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdEditImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdImport
+    "/_auth/(fleet)/fleet/": {
+      id: "/_auth/(fleet)/fleet/"
+      path: "/"
+      fullPath: "/fleet/"
+      preLoaderRoute: typeof AuthfleetFleetIndexRouteImport
+      parentRoute: typeof AuthfleetFleetRoute
     }
-    "/_auth/(customers)/customers/$customerId/_details": {
-      id: "/_auth/(customers)/customers/$customerId/_details"
-      path: ""
-      fullPath: "/customers/$customerId"
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdImport
+    "/_auth/(customers)/customers/": {
+      id: "/_auth/(customers)/customers/"
+      path: "/"
+      fullPath: "/customers/"
+      preLoaderRoute: typeof AuthcustomersCustomersIndexRouteImport
+      parentRoute: typeof AuthcustomersCustomersRoute
     }
-    "/_auth/(customers)/customers/$customerId/edit": {
-      id: "/_auth/(customers)/customers/$customerId/edit"
-      path: "/edit"
-      fullPath: "/customers/$customerId/edit"
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdEditImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdImport
+    "/_auth/(agreements)/agreements/": {
+      id: "/_auth/(agreements)/agreements/"
+      path: "/"
+      fullPath: "/agreements/"
+      preLoaderRoute: typeof AuthagreementsAgreementsIndexRouteImport
+      parentRoute: typeof AuthagreementsAgreementsRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId/_details": {
-      id: "/_auth/(fleet)/fleet/$vehicleId/_details"
-      path: ""
-      fullPath: "/fleet/$vehicleId"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsImport
-      parentRoute: typeof AuthfleetFleetVehicleIdImport
+    "/_auth/(settings)/settings/vehicles-and-categories": {
+      id: "/_auth/(settings)/settings/vehicles-and-categories"
+      path: "/vehicles-and-categories"
+      fullPath: "/settings/vehicles-and-categories"
+      preLoaderRoute: typeof AuthsettingsSettingsVehiclesAndCategoriesRouteImport
+      parentRoute: typeof AuthsettingsSettingsRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId/edit": {
-      id: "/_auth/(fleet)/fleet/$vehicleId/edit"
-      path: "/edit"
-      fullPath: "/fleet/$vehicleId/edit"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdEditImport
-      parentRoute: typeof AuthfleetFleetVehicleIdImport
+    "/_auth/(settings)/settings/runtime-configuration": {
+      id: "/_auth/(settings)/settings/runtime-configuration"
+      path: "/runtime-configuration"
+      fullPath: "/settings/runtime-configuration"
+      preLoaderRoute: typeof AuthsettingsSettingsRuntimeConfigurationRouteImport
+      parentRoute: typeof AuthsettingsSettingsRoute
     }
-    "/_auth/(reservations)/reservations/$reservationId/_details": {
-      id: "/_auth/(reservations)/reservations/$reservationId/_details"
-      path: ""
+    "/_auth/(settings)/settings/rates-and-charges": {
+      id: "/_auth/(settings)/settings/rates-and-charges"
+      path: "/rates-and-charges"
+      fullPath: "/settings/rates-and-charges"
+      preLoaderRoute: typeof AuthsettingsSettingsRatesAndChargesRouteImport
+      parentRoute: typeof AuthsettingsSettingsRoute
+    }
+    "/_auth/(settings)/settings/profile": {
+      id: "/_auth/(settings)/settings/profile"
+      path: "/profile"
+      fullPath: "/settings/profile"
+      preLoaderRoute: typeof AuthsettingsSettingsProfileRouteImport
+      parentRoute: typeof AuthsettingsSettingsRoute
+    }
+    "/_auth/(settings)/settings/application": {
+      id: "/_auth/(settings)/settings/application"
+      path: "/application"
+      fullPath: "/settings/application"
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationRouteImport
+      parentRoute: typeof AuthsettingsSettingsRoute
+    }
+    "/_auth/(reservations)/reservations/new": {
+      id: "/_auth/(reservations)/reservations/new"
+      path: "/new"
+      fullPath: "/reservations/new"
+      preLoaderRoute: typeof AuthreservationsReservationsNewRouteImport
+      parentRoute: typeof AuthreservationsReservationsRoute
+    }
+    "/_auth/(reservations)/reservations/$reservationId": {
+      id: "/_auth/(reservations)/reservations/$reservationId"
+      path: "/$reservationId"
       fullPath: "/reservations/$reservationId"
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdImport
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdRouteImport
+      parentRoute: typeof AuthreservationsReservationsRoute
     }
-    "/_auth/(reservations)/reservations/$reservationId/edit": {
-      id: "/_auth/(reservations)/reservations/$reservationId/edit"
-      path: "/edit"
-      fullPath: "/reservations/$reservationId/edit"
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdEditImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdImport
+    "/_auth/(fleet)/fleet/new": {
+      id: "/_auth/(fleet)/fleet/new"
+      path: "/new"
+      fullPath: "/fleet/new"
+      preLoaderRoute: typeof AuthfleetFleetNewRouteImport
+      parentRoute: typeof AuthfleetFleetRoute
     }
-    "/_auth/(settings)/settings/application/locations": {
-      id: "/_auth/(settings)/settings/application/locations"
-      path: "/locations"
-      fullPath: "/settings/application/locations"
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationLocationsImport
-      parentRoute: typeof AuthsettingsSettingsApplicationImport
+    "/_auth/(fleet)/fleet/$vehicleId": {
+      id: "/_auth/(fleet)/fleet/$vehicleId"
+      path: "/$vehicleId"
+      fullPath: "/fleet/$vehicleId"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdRouteImport
+      parentRoute: typeof AuthfleetFleetRoute
     }
-    "/_auth/(settings)/settings/application/permissions-and-roles": {
-      id: "/_auth/(settings)/settings/application/permissions-and-roles"
-      path: "/permissions-and-roles"
-      fullPath: "/settings/application/permissions-and-roles"
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationPermissionsAndRolesImport
-      parentRoute: typeof AuthsettingsSettingsApplicationImport
+    "/_auth/(customers)/customers/new": {
+      id: "/_auth/(customers)/customers/new"
+      path: "/new"
+      fullPath: "/customers/new"
+      preLoaderRoute: typeof AuthcustomersCustomersNewRouteImport
+      parentRoute: typeof AuthcustomersCustomersRoute
     }
-    "/_auth/(settings)/settings/application/store-hours-and-holidays": {
-      id: "/_auth/(settings)/settings/application/store-hours-and-holidays"
-      path: "/store-hours-and-holidays"
-      fullPath: "/settings/application/store-hours-and-holidays"
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysImport
-      parentRoute: typeof AuthsettingsSettingsApplicationImport
+    "/_auth/(customers)/customers/$customerId": {
+      id: "/_auth/(customers)/customers/$customerId"
+      path: "/$customerId"
+      fullPath: "/customers/$customerId"
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdRouteImport
+      parentRoute: typeof AuthcustomersCustomersRoute
     }
-    "/_auth/(settings)/settings/application/users": {
-      id: "/_auth/(settings)/settings/application/users"
-      path: "/users"
-      fullPath: "/settings/application/users"
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationUsersImport
-      parentRoute: typeof AuthsettingsSettingsApplicationImport
+    "/_auth/(agreements)/agreements/new": {
+      id: "/_auth/(agreements)/agreements/new"
+      path: "/new"
+      fullPath: "/agreements/new"
+      preLoaderRoute: typeof AuthagreementsAgreementsNewRouteImport
+      parentRoute: typeof AuthagreementsAgreementsRoute
     }
-    "/_auth/(reports)/reports/$reportId/": {
-      id: "/_auth/(reports)/reports/$reportId/"
-      path: "/reports/$reportId"
-      fullPath: "/reports/$reportId"
-      preLoaderRoute: typeof AuthreportsReportsReportIdIndexImport
-      parentRoute: typeof AuthImport
+    "/_auth/(agreements)/agreements/$agreementId": {
+      id: "/_auth/(agreements)/agreements/$agreementId"
+      path: "/$agreementId"
+      fullPath: "/agreements/$agreementId"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdRouteImport
+      parentRoute: typeof AuthagreementsAgreementsRoute
     }
     "/_auth/(settings)/settings/application/": {
       id: "/_auth/(settings)/settings/application/"
       path: "/"
       fullPath: "/settings/application/"
-      preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexImport
-      parentRoute: typeof AuthsettingsSettingsApplicationImport
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationIndexRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId/_details/exchanges": {
-      id: "/_auth/(agreements)/agreements/$agreementId/_details/exchanges"
-      path: "/exchanges"
-      fullPath: "/agreements/$agreementId/exchanges"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsExchangesImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    "/_auth/(reports)/reports/$reportId/": {
+      id: "/_auth/(reports)/reports/$reportId/"
+      path: "/reports/$reportId"
+      fullPath: "/reports/$reportId"
+      preLoaderRoute: typeof AuthreportsReportsReportIdIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId/_details/notes": {
-      id: "/_auth/(agreements)/agreements/$agreementId/_details/notes"
-      path: "/notes"
-      fullPath: "/agreements/$agreementId/notes"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsNotesImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    "/_auth/(settings)/settings/application/users": {
+      id: "/_auth/(settings)/settings/application/users"
+      path: "/users"
+      fullPath: "/settings/application/users"
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationUsersRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId/_details/summary": {
-      id: "/_auth/(agreements)/agreements/$agreementId/_details/summary"
-      path: "/summary"
-      fullPath: "/agreements/$agreementId/summary"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsSummaryImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    "/_auth/(settings)/settings/application/store-hours-and-holidays": {
+      id: "/_auth/(settings)/settings/application/store-hours-and-holidays"
+      path: "/store-hours-and-holidays"
+      fullPath: "/settings/application/store-hours-and-holidays"
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationRoute
     }
-    "/_auth/(customers)/customers/$customerId/_details/notes": {
-      id: "/_auth/(customers)/customers/$customerId/_details/notes"
-      path: "/notes"
-      fullPath: "/customers/$customerId/notes"
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsNotesImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
+    "/_auth/(settings)/settings/application/permissions-and-roles": {
+      id: "/_auth/(settings)/settings/application/permissions-and-roles"
+      path: "/permissions-and-roles"
+      fullPath: "/settings/application/permissions-and-roles"
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationPermissionsAndRolesRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationRoute
     }
-    "/_auth/(customers)/customers/$customerId/_details/summary": {
-      id: "/_auth/(customers)/customers/$customerId/_details/summary"
-      path: "/summary"
-      fullPath: "/customers/$customerId/summary"
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsSummaryImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
+    "/_auth/(settings)/settings/application/locations": {
+      id: "/_auth/(settings)/settings/application/locations"
+      path: "/locations"
+      fullPath: "/settings/application/locations"
+      preLoaderRoute: typeof AuthsettingsSettingsApplicationLocationsRouteImport
+      parentRoute: typeof AuthsettingsSettingsApplicationRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId/_details/agreements": {
-      id: "/_auth/(fleet)/fleet/$vehicleId/_details/agreements"
-      path: "/agreements"
-      fullPath: "/fleet/$vehicleId/agreements"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsAgreementsImport
-      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    "/_auth/(reservations)/reservations/$reservationId/edit": {
+      id: "/_auth/(reservations)/reservations/$reservationId/edit"
+      path: "/edit"
+      fullPath: "/reservations/$reservationId/edit"
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdEditRouteImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId/_details/notes": {
-      id: "/_auth/(fleet)/fleet/$vehicleId/_details/notes"
-      path: "/notes"
-      fullPath: "/fleet/$vehicleId/notes"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsNotesImport
-      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    "/_auth/(reservations)/reservations/$reservationId/_details": {
+      id: "/_auth/(reservations)/reservations/$reservationId/_details"
+      path: ""
+      fullPath: "/reservations/$reservationId"
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsRouteImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId/_details/reservations": {
-      id: "/_auth/(fleet)/fleet/$vehicleId/_details/reservations"
-      path: "/reservations"
-      fullPath: "/fleet/$vehicleId/reservations"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsReservationsImport
-      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    "/_auth/(fleet)/fleet/$vehicleId/edit": {
+      id: "/_auth/(fleet)/fleet/$vehicleId/edit"
+      path: "/edit"
+      fullPath: "/fleet/$vehicleId/edit"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdEditRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId/_details/summary": {
-      id: "/_auth/(fleet)/fleet/$vehicleId/_details/summary"
-      path: "/summary"
-      fullPath: "/fleet/$vehicleId/summary"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsSummaryImport
-      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    "/_auth/(fleet)/fleet/$vehicleId/_details": {
+      id: "/_auth/(fleet)/fleet/$vehicleId/_details"
+      path: ""
+      fullPath: "/fleet/$vehicleId"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdRoute
     }
-    "/_auth/(reservations)/reservations/$reservationId/_details/notes": {
-      id: "/_auth/(reservations)/reservations/$reservationId/_details/notes"
-      path: "/notes"
-      fullPath: "/reservations/$reservationId/notes"
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsNotesImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
+    "/_auth/(customers)/customers/$customerId/edit": {
+      id: "/_auth/(customers)/customers/$customerId/edit"
+      path: "/edit"
+      fullPath: "/customers/$customerId/edit"
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdEditRouteImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdRoute
     }
-    "/_auth/(reservations)/reservations/$reservationId/_details/summary": {
-      id: "/_auth/(reservations)/reservations/$reservationId/_details/summary"
-      path: "/summary"
-      fullPath: "/reservations/$reservationId/summary"
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsSummaryImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
+    "/_auth/(customers)/customers/$customerId/_details": {
+      id: "/_auth/(customers)/customers/$customerId/_details"
+      path: ""
+      fullPath: "/customers/$customerId"
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsRouteImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdRoute
     }
-    "/_auth/(agreements)/agreements/$agreementId/_details/": {
-      id: "/_auth/(agreements)/agreements/$agreementId/_details/"
-      path: "/"
-      fullPath: "/agreements/$agreementId/"
-      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsIndexImport
-      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsImport
+    "/_auth/(agreements)/agreements/$agreementId/edit": {
+      id: "/_auth/(agreements)/agreements/$agreementId/edit"
+      path: "/edit"
+      fullPath: "/agreements/$agreementId/edit"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdEditRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdRoute
     }
-    "/_auth/(customers)/customers/$customerId/_details/": {
-      id: "/_auth/(customers)/customers/$customerId/_details/"
-      path: "/"
-      fullPath: "/customers/$customerId/"
-      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsIndexImport
-      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsImport
+    "/_auth/(agreements)/agreements/$agreementId/check-in": {
+      id: "/_auth/(agreements)/agreements/$agreementId/check-in"
+      path: "/check-in"
+      fullPath: "/agreements/$agreementId/check-in"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdCheckInRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdRoute
     }
-    "/_auth/(fleet)/fleet/$vehicleId/_details/": {
-      id: "/_auth/(fleet)/fleet/$vehicleId/_details/"
-      path: "/"
-      fullPath: "/fleet/$vehicleId/"
-      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsIndexImport
-      parentRoute: typeof AuthfleetFleetVehicleIdDetailsImport
+    "/_auth/(agreements)/agreements/$agreementId/_details": {
+      id: "/_auth/(agreements)/agreements/$agreementId/_details"
+      path: ""
+      fullPath: "/agreements/$agreementId"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdRoute
     }
     "/_auth/(reservations)/reservations/$reservationId/_details/": {
       id: "/_auth/(reservations)/reservations/$reservationId/_details/"
       path: "/"
       fullPath: "/reservations/$reservationId/"
-      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsIndexImport
-      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsImport
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsIndexRouteImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsRoute
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/": {
+      id: "/_auth/(fleet)/fleet/$vehicleId/_details/"
+      path: "/"
+      fullPath: "/fleet/$vehicleId/"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsIndexRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsRoute
+    }
+    "/_auth/(customers)/customers/$customerId/_details/": {
+      id: "/_auth/(customers)/customers/$customerId/_details/"
+      path: "/"
+      fullPath: "/customers/$customerId/"
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsIndexRouteImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsRoute
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/": {
+      id: "/_auth/(agreements)/agreements/$agreementId/_details/"
+      path: "/"
+      fullPath: "/agreements/$agreementId/"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsIndexRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsRoute
+    }
+    "/_auth/(reservations)/reservations/$reservationId/_details/summary": {
+      id: "/_auth/(reservations)/reservations/$reservationId/_details/summary"
+      path: "/summary"
+      fullPath: "/reservations/$reservationId/summary"
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsSummaryRouteImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsRoute
+    }
+    "/_auth/(reservations)/reservations/$reservationId/_details/notes": {
+      id: "/_auth/(reservations)/reservations/$reservationId/_details/notes"
+      path: "/notes"
+      fullPath: "/reservations/$reservationId/notes"
+      preLoaderRoute: typeof AuthreservationsReservationsReservationIdDetailsNotesRouteImport
+      parentRoute: typeof AuthreservationsReservationsReservationIdDetailsRoute
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/summary": {
+      id: "/_auth/(fleet)/fleet/$vehicleId/_details/summary"
+      path: "/summary"
+      fullPath: "/fleet/$vehicleId/summary"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsSummaryRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsRoute
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/reservations": {
+      id: "/_auth/(fleet)/fleet/$vehicleId/_details/reservations"
+      path: "/reservations"
+      fullPath: "/fleet/$vehicleId/reservations"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsReservationsRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsRoute
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/notes": {
+      id: "/_auth/(fleet)/fleet/$vehicleId/_details/notes"
+      path: "/notes"
+      fullPath: "/fleet/$vehicleId/notes"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsNotesRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsRoute
+    }
+    "/_auth/(fleet)/fleet/$vehicleId/_details/agreements": {
+      id: "/_auth/(fleet)/fleet/$vehicleId/_details/agreements"
+      path: "/agreements"
+      fullPath: "/fleet/$vehicleId/agreements"
+      preLoaderRoute: typeof AuthfleetFleetVehicleIdDetailsAgreementsRouteImport
+      parentRoute: typeof AuthfleetFleetVehicleIdDetailsRoute
+    }
+    "/_auth/(customers)/customers/$customerId/_details/summary": {
+      id: "/_auth/(customers)/customers/$customerId/_details/summary"
+      path: "/summary"
+      fullPath: "/customers/$customerId/summary"
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsSummaryRouteImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsRoute
+    }
+    "/_auth/(customers)/customers/$customerId/_details/notes": {
+      id: "/_auth/(customers)/customers/$customerId/_details/notes"
+      path: "/notes"
+      fullPath: "/customers/$customerId/notes"
+      preLoaderRoute: typeof AuthcustomersCustomersCustomerIdDetailsNotesRouteImport
+      parentRoute: typeof AuthcustomersCustomersCustomerIdDetailsRoute
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/summary": {
+      id: "/_auth/(agreements)/agreements/$agreementId/_details/summary"
+      path: "/summary"
+      fullPath: "/agreements/$agreementId/summary"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsRoute
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/notes": {
+      id: "/_auth/(agreements)/agreements/$agreementId/_details/notes"
+      path: "/notes"
+      fullPath: "/agreements/$agreementId/notes"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsNotesRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsRoute
+    }
+    "/_auth/(agreements)/agreements/$agreementId/_details/exchanges": {
+      id: "/_auth/(agreements)/agreements/$agreementId/_details/exchanges"
+      path: "/exchanges"
+      fullPath: "/agreements/$agreementId/exchanges"
+      preLoaderRoute: typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRouteImport
+      parentRoute: typeof AuthagreementsAgreementsAgreementIdDetailsRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface AuthagreementsAgreementsAgreementIdDetailsRouteChildren {
   AuthagreementsAgreementsAgreementIdDetailsExchangesRoute: typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
@@ -1266,368 +1549,10 @@ const PublicRouteChildren: PublicRouteChildren = {
 const PublicRouteWithChildren =
   PublicRoute._addFileChildren(PublicRouteChildren)
 
-export interface FileRoutesByFullPath {
-  "": typeof PublicRouteWithChildren
-  "/dev": typeof PublicDevRoute
-  "/logged-out": typeof PublicLoggedOutRoute
-  "/login": typeof PublicLoginRoute
-  "/logout": typeof PublicLogoutRoute
-  "/oidc-callback": typeof PublicOidcCallbackRoute
-  "/agreements": typeof AuthagreementsAgreementsRouteWithChildren
-  "/customers": typeof AuthcustomersCustomersRouteWithChildren
-  "/fleet": typeof AuthfleetFleetRouteWithChildren
-  "/reservations": typeof AuthreservationsReservationsRouteWithChildren
-  "/settings": typeof AuthsettingsSettingsRouteWithChildren
-  "/": typeof AuthdashboardIndexRoute
-  "/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren
-  "/agreements/new": typeof AuthagreementsAgreementsNewRoute
-  "/customers/$customerId": typeof AuthcustomersCustomersCustomerIdDetailsRouteWithChildren
-  "/customers/new": typeof AuthcustomersCustomersNewRoute
-  "/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdDetailsRouteWithChildren
-  "/fleet/new": typeof AuthfleetFleetNewRoute
-  "/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdDetailsRouteWithChildren
-  "/reservations/new": typeof AuthreservationsReservationsNewRoute
-  "/settings/application": typeof AuthsettingsSettingsApplicationRouteWithChildren
-  "/settings/profile": typeof AuthsettingsSettingsProfileRoute
-  "/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
-  "/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
-  "/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
-  "/agreements/": typeof AuthagreementsAgreementsIndexRoute
-  "/customers/": typeof AuthcustomersCustomersIndexRoute
-  "/fleet/": typeof AuthfleetFleetIndexRoute
-  "/reports": typeof AuthreportsReportsIndexRoute
-  "/reservations/": typeof AuthreservationsReservationsIndexRoute
-  "/settings/": typeof AuthsettingsSettingsIndexRoute
-  "/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
-  "/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
-  "/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
-  "/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
-  "/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
-  "/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
-  "/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
-  "/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
-  "/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
-  "/reports/$reportId": typeof AuthreportsReportsReportIdIndexRoute
-  "/settings/application/": typeof AuthsettingsSettingsApplicationIndexRoute
-  "/agreements/$agreementId/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
-  "/agreements/$agreementId/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
-  "/agreements/$agreementId/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
-  "/customers/$customerId/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
-  "/customers/$customerId/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
-  "/fleet/$vehicleId/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
-  "/fleet/$vehicleId/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
-  "/fleet/$vehicleId/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
-  "/fleet/$vehicleId/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
-  "/reservations/$reservationId/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
-  "/reservations/$reservationId/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
-  "/agreements/$agreementId/": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
-  "/customers/$customerId/": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
-  "/fleet/$vehicleId/": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
-  "/reservations/$reservationId/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
-}
-
-export interface FileRoutesByTo {
-  "": typeof PublicRouteWithChildren
-  "/dev": typeof PublicDevRoute
-  "/logged-out": typeof PublicLoggedOutRoute
-  "/login": typeof PublicLoginRoute
-  "/logout": typeof PublicLogoutRoute
-  "/oidc-callback": typeof PublicOidcCallbackRoute
-  "/": typeof AuthdashboardIndexRoute
-  "/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
-  "/agreements/new": typeof AuthagreementsAgreementsNewRoute
-  "/customers/$customerId": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
-  "/customers/new": typeof AuthcustomersCustomersNewRoute
-  "/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
-  "/fleet/new": typeof AuthfleetFleetNewRoute
-  "/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
-  "/reservations/new": typeof AuthreservationsReservationsNewRoute
-  "/settings/profile": typeof AuthsettingsSettingsProfileRoute
-  "/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
-  "/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
-  "/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
-  "/agreements": typeof AuthagreementsAgreementsIndexRoute
-  "/customers": typeof AuthcustomersCustomersIndexRoute
-  "/fleet": typeof AuthfleetFleetIndexRoute
-  "/reports": typeof AuthreportsReportsIndexRoute
-  "/reservations": typeof AuthreservationsReservationsIndexRoute
-  "/settings": typeof AuthsettingsSettingsIndexRoute
-  "/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
-  "/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
-  "/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
-  "/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
-  "/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
-  "/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
-  "/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
-  "/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
-  "/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
-  "/reports/$reportId": typeof AuthreportsReportsReportIdIndexRoute
-  "/settings/application": typeof AuthsettingsSettingsApplicationIndexRoute
-  "/agreements/$agreementId/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
-  "/agreements/$agreementId/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
-  "/agreements/$agreementId/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
-  "/customers/$customerId/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
-  "/customers/$customerId/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
-  "/fleet/$vehicleId/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
-  "/fleet/$vehicleId/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
-  "/fleet/$vehicleId/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
-  "/fleet/$vehicleId/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
-  "/reservations/$reservationId/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
-  "/reservations/$reservationId/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  "/_auth": typeof AuthRouteWithChildren
-  "/_public": typeof PublicRouteWithChildren
-  "/_public/dev": typeof PublicDevRoute
-  "/_public/logged-out": typeof PublicLoggedOutRoute
-  "/_public/login": typeof PublicLoginRoute
-  "/_public/logout": typeof PublicLogoutRoute
-  "/_public/oidc-callback": typeof PublicOidcCallbackRoute
-  "/_auth/(agreements)/agreements": typeof AuthagreementsAgreementsRouteWithChildren
-  "/_auth/(customers)/customers": typeof AuthcustomersCustomersRouteWithChildren
-  "/_auth/(fleet)/fleet": typeof AuthfleetFleetRouteWithChildren
-  "/_auth/(reservations)/reservations": typeof AuthreservationsReservationsRouteWithChildren
-  "/_auth/(settings)/settings": typeof AuthsettingsSettingsRouteWithChildren
-  "/_auth/(dashboard)/": typeof AuthdashboardIndexRoute
-  "/_auth/(agreements)/agreements/$agreementId": typeof AuthagreementsAgreementsAgreementIdRouteWithChildren
-  "/_auth/(agreements)/agreements/new": typeof AuthagreementsAgreementsNewRoute
-  "/_auth/(customers)/customers/$customerId": typeof AuthcustomersCustomersCustomerIdRouteWithChildren
-  "/_auth/(customers)/customers/new": typeof AuthcustomersCustomersNewRoute
-  "/_auth/(fleet)/fleet/$vehicleId": typeof AuthfleetFleetVehicleIdRouteWithChildren
-  "/_auth/(fleet)/fleet/new": typeof AuthfleetFleetNewRoute
-  "/_auth/(reservations)/reservations/$reservationId": typeof AuthreservationsReservationsReservationIdRouteWithChildren
-  "/_auth/(reservations)/reservations/new": typeof AuthreservationsReservationsNewRoute
-  "/_auth/(settings)/settings/application": typeof AuthsettingsSettingsApplicationRouteWithChildren
-  "/_auth/(settings)/settings/profile": typeof AuthsettingsSettingsProfileRoute
-  "/_auth/(settings)/settings/rates-and-charges": typeof AuthsettingsSettingsRatesAndChargesRoute
-  "/_auth/(settings)/settings/runtime-configuration": typeof AuthsettingsSettingsRuntimeConfigurationRoute
-  "/_auth/(settings)/settings/vehicles-and-categories": typeof AuthsettingsSettingsVehiclesAndCategoriesRoute
-  "/_auth/(agreements)/agreements/": typeof AuthagreementsAgreementsIndexRoute
-  "/_auth/(customers)/customers/": typeof AuthcustomersCustomersIndexRoute
-  "/_auth/(fleet)/fleet/": typeof AuthfleetFleetIndexRoute
-  "/_auth/(reports)/reports/": typeof AuthreportsReportsIndexRoute
-  "/_auth/(reservations)/reservations/": typeof AuthreservationsReservationsIndexRoute
-  "/_auth/(settings)/settings/": typeof AuthsettingsSettingsIndexRoute
-  "/_auth/(agreements)/agreements/$agreementId/_details": typeof AuthagreementsAgreementsAgreementIdDetailsRouteWithChildren
-  "/_auth/(agreements)/agreements/$agreementId/check-in": typeof AuthagreementsAgreementsAgreementIdCheckInRoute
-  "/_auth/(agreements)/agreements/$agreementId/edit": typeof AuthagreementsAgreementsAgreementIdEditRoute
-  "/_auth/(customers)/customers/$customerId/_details": typeof AuthcustomersCustomersCustomerIdDetailsRouteWithChildren
-  "/_auth/(customers)/customers/$customerId/edit": typeof AuthcustomersCustomersCustomerIdEditRoute
-  "/_auth/(fleet)/fleet/$vehicleId/_details": typeof AuthfleetFleetVehicleIdDetailsRouteWithChildren
-  "/_auth/(fleet)/fleet/$vehicleId/edit": typeof AuthfleetFleetVehicleIdEditRoute
-  "/_auth/(reservations)/reservations/$reservationId/_details": typeof AuthreservationsReservationsReservationIdDetailsRouteWithChildren
-  "/_auth/(reservations)/reservations/$reservationId/edit": typeof AuthreservationsReservationsReservationIdEditRoute
-  "/_auth/(settings)/settings/application/locations": typeof AuthsettingsSettingsApplicationLocationsRoute
-  "/_auth/(settings)/settings/application/permissions-and-roles": typeof AuthsettingsSettingsApplicationPermissionsAndRolesRoute
-  "/_auth/(settings)/settings/application/store-hours-and-holidays": typeof AuthsettingsSettingsApplicationStoreHoursAndHolidaysRoute
-  "/_auth/(settings)/settings/application/users": typeof AuthsettingsSettingsApplicationUsersRoute
-  "/_auth/(reports)/reports/$reportId/": typeof AuthreportsReportsReportIdIndexRoute
-  "/_auth/(settings)/settings/application/": typeof AuthsettingsSettingsApplicationIndexRoute
-  "/_auth/(agreements)/agreements/$agreementId/_details/exchanges": typeof AuthagreementsAgreementsAgreementIdDetailsExchangesRoute
-  "/_auth/(agreements)/agreements/$agreementId/_details/notes": typeof AuthagreementsAgreementsAgreementIdDetailsNotesRoute
-  "/_auth/(agreements)/agreements/$agreementId/_details/summary": typeof AuthagreementsAgreementsAgreementIdDetailsSummaryRoute
-  "/_auth/(customers)/customers/$customerId/_details/notes": typeof AuthcustomersCustomersCustomerIdDetailsNotesRoute
-  "/_auth/(customers)/customers/$customerId/_details/summary": typeof AuthcustomersCustomersCustomerIdDetailsSummaryRoute
-  "/_auth/(fleet)/fleet/$vehicleId/_details/agreements": typeof AuthfleetFleetVehicleIdDetailsAgreementsRoute
-  "/_auth/(fleet)/fleet/$vehicleId/_details/notes": typeof AuthfleetFleetVehicleIdDetailsNotesRoute
-  "/_auth/(fleet)/fleet/$vehicleId/_details/reservations": typeof AuthfleetFleetVehicleIdDetailsReservationsRoute
-  "/_auth/(fleet)/fleet/$vehicleId/_details/summary": typeof AuthfleetFleetVehicleIdDetailsSummaryRoute
-  "/_auth/(reservations)/reservations/$reservationId/_details/notes": typeof AuthreservationsReservationsReservationIdDetailsNotesRoute
-  "/_auth/(reservations)/reservations/$reservationId/_details/summary": typeof AuthreservationsReservationsReservationIdDetailsSummaryRoute
-  "/_auth/(agreements)/agreements/$agreementId/_details/": typeof AuthagreementsAgreementsAgreementIdDetailsIndexRoute
-  "/_auth/(customers)/customers/$customerId/_details/": typeof AuthcustomersCustomersCustomerIdDetailsIndexRoute
-  "/_auth/(fleet)/fleet/$vehicleId/_details/": typeof AuthfleetFleetVehicleIdDetailsIndexRoute
-  "/_auth/(reservations)/reservations/$reservationId/_details/": typeof AuthreservationsReservationsReservationIdDetailsIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ""
-    | "/dev"
-    | "/logged-out"
-    | "/login"
-    | "/logout"
-    | "/oidc-callback"
-    | "/agreements"
-    | "/customers"
-    | "/fleet"
-    | "/reservations"
-    | "/settings"
-    | "/"
-    | "/agreements/$agreementId"
-    | "/agreements/new"
-    | "/customers/$customerId"
-    | "/customers/new"
-    | "/fleet/$vehicleId"
-    | "/fleet/new"
-    | "/reservations/$reservationId"
-    | "/reservations/new"
-    | "/settings/application"
-    | "/settings/profile"
-    | "/settings/rates-and-charges"
-    | "/settings/runtime-configuration"
-    | "/settings/vehicles-and-categories"
-    | "/agreements/"
-    | "/customers/"
-    | "/fleet/"
-    | "/reports"
-    | "/reservations/"
-    | "/settings/"
-    | "/agreements/$agreementId/check-in"
-    | "/agreements/$agreementId/edit"
-    | "/customers/$customerId/edit"
-    | "/fleet/$vehicleId/edit"
-    | "/reservations/$reservationId/edit"
-    | "/settings/application/locations"
-    | "/settings/application/permissions-and-roles"
-    | "/settings/application/store-hours-and-holidays"
-    | "/settings/application/users"
-    | "/reports/$reportId"
-    | "/settings/application/"
-    | "/agreements/$agreementId/exchanges"
-    | "/agreements/$agreementId/notes"
-    | "/agreements/$agreementId/summary"
-    | "/customers/$customerId/notes"
-    | "/customers/$customerId/summary"
-    | "/fleet/$vehicleId/agreements"
-    | "/fleet/$vehicleId/notes"
-    | "/fleet/$vehicleId/reservations"
-    | "/fleet/$vehicleId/summary"
-    | "/reservations/$reservationId/notes"
-    | "/reservations/$reservationId/summary"
-    | "/agreements/$agreementId/"
-    | "/customers/$customerId/"
-    | "/fleet/$vehicleId/"
-    | "/reservations/$reservationId/"
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | ""
-    | "/dev"
-    | "/logged-out"
-    | "/login"
-    | "/logout"
-    | "/oidc-callback"
-    | "/"
-    | "/agreements/$agreementId"
-    | "/agreements/new"
-    | "/customers/$customerId"
-    | "/customers/new"
-    | "/fleet/$vehicleId"
-    | "/fleet/new"
-    | "/reservations/$reservationId"
-    | "/reservations/new"
-    | "/settings/profile"
-    | "/settings/rates-and-charges"
-    | "/settings/runtime-configuration"
-    | "/settings/vehicles-and-categories"
-    | "/agreements"
-    | "/customers"
-    | "/fleet"
-    | "/reports"
-    | "/reservations"
-    | "/settings"
-    | "/agreements/$agreementId/check-in"
-    | "/agreements/$agreementId/edit"
-    | "/customers/$customerId/edit"
-    | "/fleet/$vehicleId/edit"
-    | "/reservations/$reservationId/edit"
-    | "/settings/application/locations"
-    | "/settings/application/permissions-and-roles"
-    | "/settings/application/store-hours-and-holidays"
-    | "/settings/application/users"
-    | "/reports/$reportId"
-    | "/settings/application"
-    | "/agreements/$agreementId/exchanges"
-    | "/agreements/$agreementId/notes"
-    | "/agreements/$agreementId/summary"
-    | "/customers/$customerId/notes"
-    | "/customers/$customerId/summary"
-    | "/fleet/$vehicleId/agreements"
-    | "/fleet/$vehicleId/notes"
-    | "/fleet/$vehicleId/reservations"
-    | "/fleet/$vehicleId/summary"
-    | "/reservations/$reservationId/notes"
-    | "/reservations/$reservationId/summary"
-  id:
-    | "__root__"
-    | "/_auth"
-    | "/_public"
-    | "/_public/dev"
-    | "/_public/logged-out"
-    | "/_public/login"
-    | "/_public/logout"
-    | "/_public/oidc-callback"
-    | "/_auth/(agreements)/agreements"
-    | "/_auth/(customers)/customers"
-    | "/_auth/(fleet)/fleet"
-    | "/_auth/(reservations)/reservations"
-    | "/_auth/(settings)/settings"
-    | "/_auth/(dashboard)/"
-    | "/_auth/(agreements)/agreements/$agreementId"
-    | "/_auth/(agreements)/agreements/new"
-    | "/_auth/(customers)/customers/$customerId"
-    | "/_auth/(customers)/customers/new"
-    | "/_auth/(fleet)/fleet/$vehicleId"
-    | "/_auth/(fleet)/fleet/new"
-    | "/_auth/(reservations)/reservations/$reservationId"
-    | "/_auth/(reservations)/reservations/new"
-    | "/_auth/(settings)/settings/application"
-    | "/_auth/(settings)/settings/profile"
-    | "/_auth/(settings)/settings/rates-and-charges"
-    | "/_auth/(settings)/settings/runtime-configuration"
-    | "/_auth/(settings)/settings/vehicles-and-categories"
-    | "/_auth/(agreements)/agreements/"
-    | "/_auth/(customers)/customers/"
-    | "/_auth/(fleet)/fleet/"
-    | "/_auth/(reports)/reports/"
-    | "/_auth/(reservations)/reservations/"
-    | "/_auth/(settings)/settings/"
-    | "/_auth/(agreements)/agreements/$agreementId/_details"
-    | "/_auth/(agreements)/agreements/$agreementId/check-in"
-    | "/_auth/(agreements)/agreements/$agreementId/edit"
-    | "/_auth/(customers)/customers/$customerId/_details"
-    | "/_auth/(customers)/customers/$customerId/edit"
-    | "/_auth/(fleet)/fleet/$vehicleId/_details"
-    | "/_auth/(fleet)/fleet/$vehicleId/edit"
-    | "/_auth/(reservations)/reservations/$reservationId/_details"
-    | "/_auth/(reservations)/reservations/$reservationId/edit"
-    | "/_auth/(settings)/settings/application/locations"
-    | "/_auth/(settings)/settings/application/permissions-and-roles"
-    | "/_auth/(settings)/settings/application/store-hours-and-holidays"
-    | "/_auth/(settings)/settings/application/users"
-    | "/_auth/(reports)/reports/$reportId/"
-    | "/_auth/(settings)/settings/application/"
-    | "/_auth/(agreements)/agreements/$agreementId/_details/exchanges"
-    | "/_auth/(agreements)/agreements/$agreementId/_details/notes"
-    | "/_auth/(agreements)/agreements/$agreementId/_details/summary"
-    | "/_auth/(customers)/customers/$customerId/_details/notes"
-    | "/_auth/(customers)/customers/$customerId/_details/summary"
-    | "/_auth/(fleet)/fleet/$vehicleId/_details/agreements"
-    | "/_auth/(fleet)/fleet/$vehicleId/_details/notes"
-    | "/_auth/(fleet)/fleet/$vehicleId/_details/reservations"
-    | "/_auth/(fleet)/fleet/$vehicleId/_details/summary"
-    | "/_auth/(reservations)/reservations/$reservationId/_details/notes"
-    | "/_auth/(reservations)/reservations/$reservationId/_details/summary"
-    | "/_auth/(agreements)/agreements/$agreementId/_details/"
-    | "/_auth/(customers)/customers/$customerId/_details/"
-    | "/_auth/(fleet)/fleet/$vehicleId/_details/"
-    | "/_auth/(reservations)/reservations/$reservationId/_details/"
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  AuthRoute: typeof AuthRouteWithChildren
-  PublicRoute: typeof PublicRouteWithChildren
-}
-
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
